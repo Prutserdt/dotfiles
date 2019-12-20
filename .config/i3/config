@@ -1,0 +1,244 @@
+# ~/.config/i3/config
+# ___ _____    ____             __ _       
+#|_ _|___ /   / ___|___  _ __  / _(_) __ _ 
+# | |  |_ \  | |   / _ \| '_ \| |_| |/ _` |
+# | | ___) | | |__| (_) | | | |  _| | (_| |
+#|___|____/   \____\___/|_| |_|_| |_|\__, |
+#                                    |___/ 
+# Modified by Prutserdt, 05DEC19
+
+# Left tux key: modkey
+set $mod Mod4
+
+# Font
+font pango: System San Francisco Display 8
+
+# Thin borders
+hide_edge_borders both
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Additions of icons and numbers to workspaces
+set $menu1 "1: "
+set $menu2 "2: "
+set $menu3 "3: "
+set $menu4 "4: "
+set $menu5 "5: "
+set $menu6 "6: "
+set $menu7 "7: "
+set $menu8 "8"
+set $menu9 "9"
+set $menu10 "10"
+
+# Remove titels of containers. Needed for gaps.
+for_window [class=".*"] border pixel 1
+# Default gaps of 15
+gaps inner 15
+gaps outer 0
+
+# Set colors
+set $bg-color 	         #f3f4f5
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676E7D
+set $urgent-bg-color     #E53935
+
+# Select window colors
+#                       border              background         text                 indicator
+client.focused          $bg-color           $bg-color          $text-color          #00ff00
+client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
+client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
+
+# Start i3bar to display a workspace bar 
+# (plus the system information i3status finds out, if available)
+bar {
+        status_command i3status
+}
+
+
+#################################################################
+#                         Key-bindings                          #
+#################################################################
+
+
+# Change focus
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+# Vim like bindings
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Move focused window
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+# Vim like bindings
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j  move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Open containers horizontally/vertically
+bindsym $mod+Shift+v split h
+bindsym $mod+v split v
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Resize the container
+bindsym $mod+Control+Right resize shrink width  5 px or 5 ppt
+bindsym $mod+Control+Left  resize grow   width  5 px or 5 ppt
+bindsym $mod+Control+Down  resize shrink height 5 px or 5 ppt
+bindsym $mod+Control+Up    resize grow   height 5 px or 5 ppt
+# VIM keybindings
+bindsym $mod+Control+l     resize shrink width  5 px or 5 ppt
+bindsym $mod+Control+h     resize grow   width  5 px or 5 ppt
+bindsym $mod+Control+j     resize shrink height 5 px or 5 ppt
+bindsym $mod+Control+k     resize grow   height 5 px or 5 ppt
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# Focus the child container
+#bindsym $mod+d focus child
+
+# Gaps. Requires installation of i3-gaps
+bindsym $mod+plus gaps inner current plus 5
+bindsym $mod+minus gaps inner current minus 5
+bindsym $mod+shift+plus gaps outer current plus 5
+bindsym $mod+shift+minus gaps outer current minus 5
+bindsym $mod+bracketleft gaps inner current set 0; gaps outer current set 0
+bindsym $mod+bracketright gaps inner current set 15; gaps outer current set 0
+
+# Switch to workspace.
+bindsym $mod+1 workspace $menu1
+bindsym $mod+2 workspace $menu2
+bindsym $mod+3 workspace $menu3
+bindsym $mod+4 workspace $menu4
+bindsym $mod+5 workspace $menu5
+bindsym $mod+6 workspace $menu6
+bindsym $mod+7 workspace $menu7
+bindsym $mod+8 workspace $menu8
+bindsym $mod+9 workspace $menu9 
+bindsym $mod+0 workspace $menu10 
+
+# Move focused container to workspace.
+bindsym $mod+Shift+1 move container to workspace $menu1
+bindsym $mod+Shift+2 move container to workspace $menu2
+bindsym $mod+Shift+3 move container to workspace $menu3
+bindsym $mod+Shift+4 move container to workspace $menu4
+bindsym $mod+Shift+5 move container to workspace $menu5
+bindsym $mod+Shift+6 move container to workspace $menu6
+bindsym $mod+Shift+7 move container to workspace $menu7
+bindsym $mod+Shift+8 move container to workspace $menu8
+bindsym $mod+Shift+9 move container to workspace $menu9
+bindsym $mod+Shift+0 move container to workspace $menu10
+
+# Reload the configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 inplace (preserves your layout/session, can be 
+# used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# Exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Ahhh joh! Waarom afsluiten?' -b 'Wil je me verlaten ;-(' 'i3-msg exit'"
+
+#Close container
+bindsym $mod+Shift+q kill
+
+# Start rofi in window mode
+bindsym mod1+Tab exec rofi -show window -i -lines 10 -eh 1 -width 50 -padding 50 -opacity "85" -font "Droid Sans 16"
+
+# Open terminal (+sb to remove the scrollbar)
+#bindsym $mod+Return exec xfce4-terminal --hide-menubar --hide-scrollbar
+bindsym $mod+Return exec urxvt +sb
+
+# dmenu
+bindsym $mod+d exec dmenu_run -l 56 -nb black
+bindsym $mod+z exec i3-dmenu-desktop --dmenu='rofi -dmenu -i -lines 10 -eh 1 -width 50 -padding 50 -opacity "85" -font "Droid Sans 16"'  
+
+# Ducky go keyboard, special keys (commandline xev to find the 
+# names :-) )
+bindsym Print			exec xfce4-screenshooter
+bindsym XF86AudioMute		exec "amixer -q sset Master 3%- unmute"
+bindsym XF86AudioLowerVolume	exec "amixer -q sset Master 3%+ unmute"
+bindsym XF86AudioRaiseVolume	exec "amixer -q sset Master,0 toggle"
+# Opens commandline calculator. Not optimal since the containers
+# will jump for a fraction of a second.
+bindsym XF86Calculator		exec "urxvt +sb -e bc"; exec "bash -c 'sleep 0.1s;i3-msg floating enable;i3-msg resize set 800px 400px;i3-msg move position center'"
+
+
+#################################################################
+#         Super_R keybindings (settings in .Xmodmap)            #
+#################################################################
+
+
+# Uses the right menu key on my keyboard to open applications 
+# (changed the Super-R tux keycap to a menu cap)
+
+bindsym mod3+Shift+c	exec mousepad ~/Stack/Command_line/cmdTRIX.html
+bindsym mod3+c 		    exec "urxvt +sb -e vim ~/Stack/Command_line/commands_05DEC19.md"
+bindsym mod3+f		    exec firefox
+bindsym mod3+g 		    exec gimp
+bindsym mod3+i 		    exec "urxvt +sb -e vim ~/.config/i3/config"
+bindsym mod3+Shift+i	exec mousepad ~/.config/i3/config
+bindsym mod3+k 		    exec keepass
+# cmus does not work yet: bindsym mod3+m 		exec "urxvt +sb -e bash cmus"
+bindsym mod3+t   		exec thunar
+bindsym mod3+v   		exec "urxvt +sb -e vim ~/.vimrc"
+bindsym mod3+r  		exec "urxvt +sb -e bash -c ranger"
+bindsym mod3+s   		exec spotifyd
+
+
+#################################################################
+#                   Autostart applications                      #
+#################################################################
+
+
+# Load wallpaper en bijbehorende kleuren
+exec --no-startup-id wal -R
+# Remark: a little script called Pywal (wal) is used to change the
+# colour scheme automatically from the selected wallpaper and it 
+# also sets the wallpaper which makes the 
+# "exec_always feh --bg-scale wallpaper" autostart redundant. 
+# old example:
+# exec_always feh --bg-scale ~/women-arch-linux-wallpaper.jpg
+
+# A little hack for VIM. The Caps_Lock becomes the Escape key and
+# vice versa. Remark: this takes a little getting used to since
+# it is set permanently in i3wm. Tip: change the keycaps :-)
+exec --no-startup-id xmodmap ~/.Xmodmap
+#
+# Loads compton which is making buttersmooth screen transitions.
+exec --no-startup-id compton --config ~/.config/i3/compton.conf -b
+
+# Switches the numlock on.
+exec_always --no-startup-id numlockx on
+
+# Load the stack storage sync client application
+exec --no-startup-id stack-cloud
+
+# Start with three opening terminals
+# Show the system monitoring (glances in terminal)
+exec "urxvt +sb -e glances "
+# Show the i3-log in the terminal
+exec "urxvt +sb -e find  ~/i3_log/ -type f -mmin -10 -exec tail -f {} +"
