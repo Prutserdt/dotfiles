@@ -5,7 +5,7 @@
 # | | ___) | | |__| (_) | | | |  _| | (_| |
 #|___|____/   \____\___/|_| |_|_| |_|\__, |
 #                                    |___/ 
-# Modified by Prutserdt, 05DEC19
+# Modified by Prutserdt
 
 # Left tux key: modkey
 set $mod Mod4
@@ -195,8 +195,7 @@ bindsym XF86Calculator		exec "urxvt +sb -e bc"; exec "bash -c 'sleep 0.1s;i3-msg
 # Uses the right menu key on my keyboard to open applications 
 # (changed the Super-R tux keycap to a menu cap)
 
-bindsym mod3+Shift+c	exec mousepad ~/Stack/Command_line/cmdTRIX.html
-bindsym mod3+c 		    exec "urxvt +sb -e vim ~/Stack/Command_line/commands_05DEC19.md"
+bindsym mod3+c 		    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
 bindsym mod3+f		    exec firefox
 bindsym mod3+g 		    exec gimp
 bindsym mod3+i 		    exec "urxvt +sb -e vim ~/.config/i3/config"
@@ -228,16 +227,16 @@ exec --no-startup-id wal -R
 # it is set permanently in i3wm. Tip: change the keycaps :-)
 exec --no-startup-id xmodmap ~/.Xmodmap
 #
-# Loads compton which is making buttersmooth screen transitions.
+# Loads compton, for ricing
 exec --no-startup-id compton --config ~/.config/i3/compton.conf -b
 
-# Switches the numlock on.
+# Switches the numlock on
 exec_always --no-startup-id numlockx on
 
 # Load the stack storage sync client application
 exec --no-startup-id stack-cloud
 
-# Start with three opening terminals
+# Opening two terminals
 # Show the system monitoring (glances in terminal)
 exec "urxvt +sb -e glances "
 # Show the i3-log in the terminal
