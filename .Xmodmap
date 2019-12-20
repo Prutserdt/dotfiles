@@ -6,7 +6,7 @@
 ! /  \| | | | | | (_) | (_| | | | | | | (_| | |_) |
 !/_/\_\_| |_| |_|\___/ \__,_|_| |_| |_|\__,_| .__/ 
 !                                           |_|
-! Modified by Prutserdt, 10AUG19
+! Modified by Prutserdt,20DEC19
 ! This dotfile is autostarted in i3wm ~/.config/i3/config
 
 ! Super_R key is set to mod3, this button is used for keybindings to apps in i3wm, see ~/.config/i3/config
