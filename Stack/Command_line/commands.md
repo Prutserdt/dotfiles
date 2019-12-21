@@ -1136,6 +1136,12 @@ config push
 
 config add .bashrc .Xmodmap
 config commit -m "Add my .bashrc"
+config push --force (dit is een uitzondering, niet doen)
+
+config commit -m "Updates toegevoegd, datum verwijderd"
+config push
+
+
 ```
 
 ### Distros        
