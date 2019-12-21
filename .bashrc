@@ -13,5 +13,3 @@ screenfetch
 
 # Voor de bare repository voor dotfiles (zie commandline doc)
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
- 
- 

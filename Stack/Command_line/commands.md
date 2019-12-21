@@ -1109,37 +1109,38 @@ Instellen Git
 git config --global user.email "walter@elffrink.nl"
 git config --global user.name "Prutserdt"
 ```
-Zorg dat je in de /dotfiles directory staat!
+Automatisch wegschrijven van dotfiles in Github.
+Dit gaat via de procedure van https://www.atlassian.com/git/tutorials/dotfiles
+en https://www.youtube.com/watch?v=tBoLDpTWVOM. Aanmaken van de bare repository op de locale pc. Zorg dat je in de ~/dotfiles directory staat en voer het volgende in:
 ```
 git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
 git push dotfiles
 git push --set-upstream dotfiles master
-```
-Nu wordt voor username en wachtwoord gevraagd en daarna werkt het!
-
-Automatisch wegschrijven van dotfiles in Github.
-Dit gaat via de procedure van https://www.atlassian.com/git/tutorials/dotfiles
-en https://www.youtube.com/watch?v=tBoLDpTWVOM.
-Aanmaken van de bare repository op de locale pc:
-```
 git init --bare $HOME/dotfiles
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add this alias to .bashrc)
 bash
 config config --local status.showUntrackedFiles no
 ```
-Je kunt nu dotfiles toevoegen of direct committen via:
-
+Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
+aan deze bare repo:
 ```
 config add .bashrc
 config commit -m "Add my .bashrc"
 config push
 ```
-Updaten van aangepaste files, allemaal tegelijk:
+De bovenstaande procedure doe je voor al je dotfiles en text bestanden.
+Als alles is toegevoegd en je hebt aanpassingen aan de files gedaan, dan kun je
+updaten via de onderstaande procedure voor alle aangepaste files voor de bare
+repository:
 ```
 config add -u :/
 config commit -m "Updated"
 config push
 
+```
+Handige command om status te checken:
+```
+config status
 ```
 
 ### Distros        
