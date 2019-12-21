@@ -1,15 +1,15 @@
-<!Dit is de ~/README.md file voor mijn dotfile Github/>
+<!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
 # Dotfiles repo! 
 Here I store my dotfiles and other text files. :godmode:
 
 The files of this repo can be found in the list above this readme file.
 
 ### Commit and push to the repo: `dotfiles`
-If one or more of the files of this repo are changed on a local machine, then the bare GitHub repository can be updated by a single command:
+If one or more of the files of this repo are changed on a local machine, then this bare GitHub repository can be updated by a single command:
 ```
 dotfiles
 ````
-This `dotfiles` command is set on the local machine as alias in .bashrc and consists of the following lines:
+This `dotfiles` command is set on the local machine as an alias in .bashrc and consists of the following lines:
 ```
 config add -u :/ -v
 config commit -m "Updated"
@@ -35,7 +35,7 @@ config config --local status.showUntrackedFiles no
 ### Short manual how to automatically login to GitHub
 ?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-
 ### References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
+- :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
