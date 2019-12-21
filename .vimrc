@@ -10,7 +10,7 @@
 "\ \ / / | '_ ` _ \| '__/ __|
 " \ V /| | | | | | | | | (__ 
 "  \_/ |_|_| |_| |_|_|  \___|
-" Modified by Prutserdt, 15DEC19
+" Modified by Prutserdt
 "
 "------------------------------------------------------------------------------
 " Vundle (plugin management)
@@ -46,7 +46,7 @@ filetype plugin indent on    " required
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 
-" Gebruik het Github markdown dialect met markdown-preview.nvim
+" Use the Github markdown dialect with the plugin markdown-preview.nvim
 let g:mkdp_markdown_css = '/home/archie/.local/lib/github-markdown.css'
 
 " specify browser to open preview page

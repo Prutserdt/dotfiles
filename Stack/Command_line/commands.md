@@ -1824,8 +1824,3 @@ in programming mode, it will back to normal mode.
 #### Gergo keyboard
      
 "https://github.com/Prutserdt"
-
------------------------------------------------------------------------
-#### Email en elffrink.nl domein
-elffrink.nl domein
-Aangeschaft in 01DEC19: elffrink.nl via transip

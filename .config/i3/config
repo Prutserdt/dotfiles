@@ -57,11 +57,9 @@ bar {
         status_command i3status
 }
 
-
 #################################################################
 #                         Key-bindings                          #
 #################################################################
-
 
 # Change focus
 bindsym $mod+Left  focus left
@@ -117,9 +115,6 @@ bindsym $mod+space focus mode_toggle
 # focus the parent container
 bindsym $mod+a focus parent
 
-# Focus the child container
-#bindsym $mod+d focus child
-
 # Gaps. Requires installation of i3-gaps
 bindsym $mod+plus gaps inner current plus 5
 bindsym $mod+minus gaps inner current minus 5
@@ -160,7 +155,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # Exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Ahhh joh! Waarom afsluiten?' -b 'Wil je me verlaten ;-(' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Ahhh joh! Waarom afsluiten?' -b 'Afsluiten, zoals u beveeld.' 'i3-msg exit'"
 
 #Close container
 bindsym $mod+Shift+q kill
@@ -178,22 +173,19 @@ bindsym $mod+z exec i3-dmenu-desktop --dmenu='rofi -dmenu -i -lines 10 -eh 1 -wi
 
 # Ducky go keyboard, special keys (commandline xev to find the 
 # names :-) )
-bindsym Print			exec xfce4-screenshooter
-bindsym XF86AudioMute		exec "amixer -q sset Master 3%- unmute"
+bindsym Print			        exec xfce4-screenshooter
+bindsym XF86AudioMute	    	exec "amixer -q sset Master 3%- unmute"
 bindsym XF86AudioLowerVolume	exec "amixer -q sset Master 3%+ unmute"
 bindsym XF86AudioRaiseVolume	exec "amixer -q sset Master,0 toggle"
-# Opens commandline calculator. Not optimal since the containers
-# will jump for a fraction of a second.
+# Opens commandline calculator in a small floating mode.
 bindsym XF86Calculator		exec "urxvt +sb -e bc"; exec "bash -c 'sleep 0.1s;i3-msg floating enable;i3-msg resize set 800px 400px;i3-msg move position center'"
-
 
 #################################################################
 #         Super_R keybindings (settings in .Xmodmap)            #
 #################################################################
 
-
 # Uses the right menu key on my keyboard to open applications 
-# (changed the Super-R tux keycap to a menu cap)
+# The Super-R tux keycap was changed to a menu cap)
 
 bindsym mod3+c 		    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
 bindsym mod3+f		    exec firefox
@@ -201,19 +193,16 @@ bindsym mod3+g 		    exec gimp
 bindsym mod3+i 		    exec "urxvt +sb -e vim ~/.config/i3/config"
 bindsym mod3+Shift+i	exec mousepad ~/.config/i3/config
 bindsym mod3+k 		    exec keepass
-# cmus does not work yet: bindsym mod3+m 		exec "urxvt +sb -e bash cmus"
 bindsym mod3+t   		exec thunar
 bindsym mod3+v   		exec "urxvt +sb -e vim ~/.vimrc"
 bindsym mod3+r  		exec "urxvt +sb -e bash -c ranger"
 bindsym mod3+s   		exec spotifyd
 
-
 #################################################################
 #                   Autostart applications                      #
 #################################################################
 
-
-# Load wallpaper en bijbehorende kleuren
+# Load wallpaper and fitting color scheme
 exec --no-startup-id wal -R
 # Remark: a little script called Pywal (wal) is used to change the
 # colour scheme automatically from the selected wallpaper and it 
@@ -223,8 +212,7 @@ exec --no-startup-id wal -R
 # exec_always feh --bg-scale ~/women-arch-linux-wallpaper.jpg
 
 # A little hack for VIM. The Caps_Lock becomes the Escape key and
-# vice versa. Remark: this takes a little getting used to since
-# it is set permanently in i3wm. Tip: change the keycaps :-)
+# vice versa.
 exec --no-startup-id xmodmap ~/.Xmodmap
 #
 # Loads compton, for ricing
@@ -237,7 +225,7 @@ exec_always --no-startup-id numlockx on
 exec --no-startup-id stack-cloud
 
 # Opening two terminals
-# Show the system monitoring (glances in terminal)
+# System monitoring:
 exec "urxvt +sb -e glances "
-# Show the i3-log in the terminal
+# i3-log:
 exec "urxvt +sb -e find  ~/i3_log/ -type f -mmin -10 -exec tail -f {} +"

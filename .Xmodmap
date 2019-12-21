@@ -1,5 +1,4 @@
 !.Xmodmap
-
 !__  __                    _                       
 !\ \/ /_ __ ___   ___   __| |_ __ ___   __ _ _ __  
 ! \  /| '_ ` _ \ / _ \ / _` | '_ ` _ \ / _` | '_ \ 
@@ -14,8 +13,6 @@ remove mod4 = Super_R
 add mod3 = Super_R
 
 ! A little hack for VIM. The Caps_Lock becomes the Escape key and vice versa.
-! This way the change is permanent; also outside vim. Alternatively this could be modified in the
-! vimrc file.
 remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
