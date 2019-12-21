@@ -1124,22 +1124,41 @@ config config --local status.showUntrackedFiles no
 **Ik wil instellen dat de GIT repo direct werkt met een handshake, zonder
 handmatig een password, dat ga ik nog regelen.**
 
+Zorg eerst dat je een public SSH key hebt (had ik al)
+sudo pacman -S xclip
+xclip -sel clip < ~/.ssh/id_rsa.pub
+Plak de key in de webpagina van Github, settings/ssh key en geef het de naam van de computer
+Daarna voer je in de terminal in:
+```
+ssh -T git@github.com
+```
+Selecteer `yes`, 
+
+[archie@archPC ~]$ ssh -T git@github.com
+The authenticity of host 'github.com (140.82.118.3)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com,140.82.118.3' (RSA) to the list of known hosts.
+Hi Prutserdt! You've successfully authenticated, but GitHub does not provide shell access.
+
+HET WERKT DUS NOG NIET!!!!
+
+eval "$(ssh-agent -s)"
+ssh-add
+
+
+
+
+
+
+
+
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
 ```
 config add .bashrc
 config commit -m "Add my .bashrc"
-config push
-```
-De bovenstaande procedure doorloop je voor al je dotfiles en text bestanden die je
-wilt toevoegen.Als je klaar bent dan kun je updaten via de onderstaande procedure 
-voor alle aangepaste files van de bare repository:
-```
-dotfiles
-```
-De bovenstaande alias staat in .bashrc en ziet er zo uit:
-```
-alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'*.
+
 ```
 Deze bestaat uit de volgende commando's
 ```
