@@ -1133,14 +1133,14 @@ Als alles is toegevoegd en je hebt aanpassingen aan de files gedaan, dan kun je
 updaten via de onderstaande procedure voor alle aangepaste files voor de bare
 repository:
 ```
-config add -u :/
+config add -u :/ -v
 config commit -m "Updated"
-config push
-
+config push -v
 ```
 Handige command om status te checken:
 ```
 config status
+config push --force (deze wil je eigenlijk niet gebruiken)
 ```
 
 ### Distros        
