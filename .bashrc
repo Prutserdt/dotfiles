@@ -2,6 +2,7 @@
 # ~/.bashrc
 # Modified by Prutserdt
 
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
