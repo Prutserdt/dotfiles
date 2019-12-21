@@ -1133,14 +1133,12 @@ Je kunt nu dotfiles toevoegen of direct committen via:
 config add .bashrc
 config commit -m "Add my .bashrc"
 config push
-
-config add .bashrc .Xmodmap
-config commit -m "Add my .bashrc"
-config push --force (dit is een uitzondering, niet doen)
-
-config commit -m "Updates toegevoegd, datum verwijderd"
+```
+Updaten van aangepaste files, allemaal tegelijk:
+```
+config add -u :/
+config commit -m "Updated"
 config push
-
 
 ```
 
