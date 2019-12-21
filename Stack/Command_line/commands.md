@@ -1106,7 +1106,7 @@ pkg install -forge statistics
 #### Git (en dotfiles procedure)
 Instellen Git
 ```
-git config --global user.email "walter@elffrink.nl"
+git config --global user.email "firstname@lastname.nl"
 git config --global user.name "Prutserdt"
 ```
 Automatisch wegschrijven van dotfiles in Github.
@@ -1121,6 +1121,9 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add thi
 bash
 config config --local status.showUntrackedFiles no
 ```
+**Ik wil instellen dat de GIT repo direct werkt met een handshake, zonder
+handmatig een password, dat ga ik nog regelen.**
+
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
 ```
@@ -1128,21 +1131,28 @@ config add .bashrc
 config commit -m "Add my .bashrc"
 config push
 ```
-De bovenstaande procedure doe je voor al je dotfiles en text bestanden.
-Als alles is toegevoegd en je hebt aanpassingen aan de files gedaan, dan kun je
-updaten via de onderstaande procedure voor alle aangepaste files voor de bare
-repository:
+De bovenstaande procedure doorloop je voor al je dotfiles en text bestanden die je
+wilt toevoegen.Als je klaar bent dan kun je updaten via de onderstaande procedure 
+voor alle aangepaste files van de bare repository:
+```
+dotfiles
+```
+De bovenstaande alias staat in .bashrc en ziet er zo uit:
+```
+alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'*.
+```
+Deze bestaat uit de volgende commando's
 ```
 config add -u :/ -v
 config commit -m "Updated"
 config push -v
 ```
-Handige command om status te checken:
+
+Git command line examples
 ```
 config status
 config push --force (deze wil je eigenlijk niet gebruiken)
 ```
-
 ### Distros        
      
 #### XFCE tricks
