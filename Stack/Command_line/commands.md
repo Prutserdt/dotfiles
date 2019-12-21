@@ -638,8 +638,6 @@ vncpasswd
     Look up the target computer's public (external) IP address.
     Enter the public IP address in VNC Viewer to establish a connection.
 
-     
-
 #### Manipuleren van GE UNICORN
 Installeren van packages die nodig zijn (oa een hex editor)
 sudo pacman -S python2-pip python-pip python2-matplotlib python2-xlsxwriter 
@@ -1104,7 +1102,7 @@ het statistics pakket :(.
 ```
 pkg install -forge io
 pkg install -forge statistics
-
+```
 #### Git (en dotfiles procedure)
 Instellen Git
 ```
@@ -1121,7 +1119,7 @@ Nu wordt voor username en wachtwoord gevraagd en daarna werkt het!
 
 Automatisch wegschrijven van dotfiles in Github.
 Dit gaat via de procedure van https://www.atlassian.com/git/tutorials/dotfiles
-en https://www.youtube.com/watch?v=tBoLDpTWVOM
+en https://www.youtube.com/watch?v=tBoLDpTWVOM.
 Aanmaken van de bare repository op de locale pc:
 ```
 git init --bare $HOME/dotfiles
@@ -1136,43 +1134,37 @@ config add .bashrc
 config commit -m "Add my .bashrc"
 config push
 
+config add .bashrc .Xmodmap
+config commit -m "Add my .bashrc"
 ```
 
-
-```
----
 ### Distros        
      
 #### XFCE tricks
 XFCE4 in desktop achtergrond terminal services laten draaien.
 Filename: wallterm.sh
 maak executable:
+```
 chmod a+x /path/to/wallterm.sh
-
+```
+Voeg dit toe aan de file walltem.sh:
+```
 !/bin/bash
 Dit script zorgt ervoor dat er terminals in de desktop komen...
-
-xfce4-terminal -e htop --hide-borders --hide-toolbar --hide-menubar --title=dt1 --geometry=70x30+1420+610 &
-xfce4-terminal -e nload --hide-borders --hide-toolbar --hide-menubar --title=dt2 --geometry=70x30+1420+100 &
-sleep 5
-wmctrl -r dt1 -b add,skip_pager,skip_taskbar
-wmctrl -r dt2 -b add,skip_pager,skip_taskbar
-xfce4-terminal -e nload --hide-borders --hide-toolbar --hide-menubar --title=dt2 --geometry=70x30+1420+200 &
-xfce4-terminal -e htop --hide-borders --hide-toolbar --hide-menubar --title=dt3 --geometry=70x30+1420+610 &
-sleep 5
-wmctrl -r dt3 -b add,skip_pager,skip_taskbar 
-wmctrl -r dt2 -b add,skip_pager,skip_taskbar
 
 xfce4-terminal -e nload --hide-borders --hide-toolbar --hide-menubar --title=dt1 --geometry=70x25+1420+190 &
 xfce4-terminal -e htop --hide-borders --hide-toolbar --hide-menubar --title=dt2 --geometry=70x30+1420+610 &
 sleep 5
 wmctrl -r dt2 -b add,skip_pager,skip_taskbar 
 wmctrl -r dt1 -b add,skip_pager,skip_taskbar
-
-Autostart app, ga naar: 
+```
+Autostart de wallterm.sh in XFCE4 door dit te doen: 
+```
 XFCE4-Settings-Session and Startup-Application Autostart 
 --> add wallterm --> command: /home/icefly/wallterm.sh
-andere opties
+```
+Andere opties die interessant kunnen zijn voor monitoring:
+```
 vmstat
 sudo tcpdump -i enp3s0
 sudo tcpdump -c 5 -i enp3s0
@@ -1185,6 +1177,7 @@ monitorix
 (yaourt -S monitorix, vorige keer niet geinstalleerd)
 nmon
 sudo iptraf-ng
+```
 
 Maak de windows meer snappy, meer tiling window manager achtig...
 XFCE4-Settings-Window manager --> advanced
@@ -1196,6 +1189,7 @@ maximaliseren F11)
 XFCE4-Settings-Window manager --> Keyboard
 Het staat in een text file maar dat is minder goed leesbaar:
 ~/.config/xfce4/xfconf/xfce-perchannel-xml\xfce4-keyboard-shortcuts.xml
+```
 Maximize window									Alt+5
 Tile window to the top								Alt+8
 Tile window to the bottom							Alt+2
@@ -1205,7 +1199,7 @@ Tile window to the top-left							Alt+7
 Tile window to the top-right							Alt+9
 Tile window to the bottom-left							Alt+1
 Tile window to the bottom-right							Alt+3
-asd
+```
 Aanmaken van keyboard shortcuts
 XFCE4-Settings-Keyboard --> Application shortcuts
 (Ook dit staat in de text file die hierboven staat, maar dat is minder goed leesbaar)
@@ -1218,6 +1212,7 @@ thunar sftp://icefly@149.210.233.43/home/icefly/Downloads/			Ctrl+Alt+T
 amixer set Master 5%-								XF86AudioLowerVolume
 amixer set Master 5%+								XF86Audiomute
 KCalc										XF86Calculator
+
 sh -c "xfce4-terminal --title=ssh_icefly@149.210.233.43 --geometry=93x29+1420+0 && thunar sftp://icefly@149.210.233.43/home/icefly/Downloads/"	Ctrl+Alt+I
 
 Gebruik autokey voor assignen van macros aan keys (zoiets als autohotkey)
@@ -1279,36 +1274,46 @@ Daarvoor eerst de default .xinitrc kopieren
 
 Delete de regels van het bestand maar laat de laatste tekstblok staan 
 en voeg exec i3 toe (plus onderstaande voor logging)
+```
 exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
 twm &
 xclock -geometry 50x50-1+1 &y
 xterm -geometry 80x50+494+51 &
 xterm -geometry 80x20+494-0 &
 exec xterm -geometry 80x66+0+0 -name login
-Start i3, login als archie en run
+Start i3 (login als archie)
 startx
-
+```
 Je kunt de config file aanmaken met 
 (locatie /home/archie/.config/i3/config)
+```
 i3-config-wizard
+```
 Customize de config
+```
 nano /home/archie/.config/i3/config
-
+```
 Verander look and feel met lxappearance. Kies bijv. xfce-dusk
 lxappearance
 
 Mooi lettertype: system-san-francisco-font-git
+```
 yaourt -S system-san-francisco-font-git
+```
 De font wordt weegegeven in de lijst: 
 fc-list : file
 Open lxappearnce, verander de fontsize, klik op apply.
 Nu is een .gtk file aangemaakt, vind het bestand (.gtkrc-2.0)
+```
 ls -al
+```
 Pas fontawesome-webfont.ttf de eigenschappen aan in nano, ook in gtk-3. 
 Open de bestanden en verander gtk-font-name="Cantarell 13" naar 
 gtk-font-name="System San Francisco Display "
+```
 nano .gtkrc-2.0
 nano ~/.config/gtk-3.0/settings.ini
+```
 Het werkt, ook is dit font is toegevoegd aan /home/archie/.config/i3/config 
 (font pango: System San Francisco Display 10)
 Het is ook mogelijk om de font te kiezen in lxappearance, het heet daar 
@@ -1318,37 +1323,51 @@ SFNS display, maar dit geeft een slechte rendering.
 Pas het i3status.conf file aan, save het in de user directory voor gebruik 
 voor alleen deze gebruiker
 Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
+```
 mkdir .config/i3status
 cp /etc/i3status.conf .config/i3status/config
 nano .config/i3status/config
+```
 
 Zet icons op tabs. 
 Download Font-Awesome Release 4.4 op webpagina:
 https://github.com/FortAwesome/Font-Awesome/releases
 Pak de fontawesome-webfont.ttf uit de zipfile en verplaats naar .fonts:
+```
 mv fontawesome-webfont.ttf ~/.fonts/
+```
 Kopier bijvoorbeeld de firefox afbeelding op de onderstaande webpagina
 https://fontawesome.com/cheatsheet
 Plak het icoon, , in de tekstfile
+```
 nano /home/archie/.config/i3/config
+```
 Forceer een applicatie om te openen op een vast tab blad met 
 Vind de class van een applicatie door naast de applicatie een terminal te
 openen en daarin xprop te starten en op de applicatie te klikken:
 (assign [class="Firefox"] $workspace3)
+```
 xprop
+```
 Mooi icon theme. Instellen via lxappearance/Icon theme/Moka
+```
 yaourt -S moka-icon-theme
+```
 Save layout of workspace, dit zou de layout moeten wegschrijven, waarnaar
 je het na modificatie kunt wegschrijven, niet eenvoudig en lukt me nog 
 niet...  https://i3wm.org/docs/layout-saving.html EditingLayoutFiles: 
+```
 i3-save-tree --workspace 2 > ~/.config/i3/workspace-2.json
-
-Zet numlock aan. numlockx
+```
+Zet numlock aan:
+```
 sudo pacman -S numlockx
 exec_always --no-startup-id numlockx off
+```
 
 Een paar commands (meer staat in onderstaande config file!).
 Let op mod: super key!
+```
 $mod+Enter	Open terminal
 $mod+1		Selecteer space 1 (1-9 kun je kiezen)
 $mod+Shift+e	Logout i3
@@ -1358,9 +1377,8 @@ $mod+d		Choose application
 $mod+z		Choose application
 $mod+r		Rescale container (met pijltjes, escape om uit rescale te gaan)
 $mod+shift+1	Verplaats container naar een andere workspace (in dit geval 1)
-$mod+Shift+Left	Verplaats container op workspace naar andere positie 
-                met pijltjes
-
+$mod+Shift+Left	Verplaats container op workspace naar andere positie met pijltjes
+```
 Instellen van Super_R als applications launcher en Capslock als escape
 voor VIM. Wat is de default setting van mijn Ducky keyboard:
 [archie@archPC ~]$ xmodmap -pm
@@ -1527,7 +1545,6 @@ AllowUsers archie icefly
 Verander de MaxStartups niet want dit kan in errors resulteren, in mijn geval 
 bij MaxStartups 3:50:10
 
-   
 Instellen server in Thunar filebrowser
      
      Instellen link in thunar filebrowser
