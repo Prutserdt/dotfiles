@@ -1,29 +1,28 @@
 <!Dit is de ~/README.md file voor mijn dotfile Github/>
-# Dotfile repo! 
+# Dotfiles repo! 
 Here I store my dotfiles and other text files. :godmode:
 
-The current list of files in this repo can be found in the list above this
-readme file.
+The files of this repo can be found in the list above this readme file.
 
 ### Commit and push to the repo: `dotfiles`
-If one or more of the files of this repo are changed locally, then the bare GitHub repository can be updated by a single command:
+If one or more of the files of this repo are changed on a local machine, then the bare GitHub repository can be updated by a single command:
 ```
 dotfiles
 ````
-This command is set as alias in .bashrc and consists of the following lines:
+This `dotfiles` command is set on the local machine as alias in .bashrc and consists of the following lines:
 ```
 config add -u :/ -v
 config commit -m "Updated"
 config push -v
 ```
-### Add an additional file to this repo
+### Add an additional dotfile to this repo
 ```
 config add .example
 config commit -m "Add my .example"
 config push -v
 ```
-### Short manual how to setup a dotfile repo
-First create a dotfiles directory at ~/ then enter from ~/;
+### Short manual how to setup a dotfiles repo
+First create a dotfiles directory at ~/ then enter from ~/:
 ```
 git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
 git push dotfiles
@@ -33,6 +32,9 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add thi
 bash
 config config --local status.showUntrackedFiles no
 ```
+### Short manual how to automatically login to GitHub
+?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
+
 
 ### References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
