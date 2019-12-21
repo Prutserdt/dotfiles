@@ -1,3 +1,4 @@
+<!Dit is de ~/README.md file voor mijn dotfile Github/>
 # Dotfile repo!
 Here I store my dotfiles and other text files.
 ### Current list of files:
@@ -11,7 +12,7 @@ Here I store my dotfiles and other text files.
 * .config/i3/config
 * Stack/Command_line/commands.md
 ### Commit and push to the repo
-If one or more of these files from the list  are changed the bare GitHub repository can be updated by:
+If one or more of these files from the list  are changed locally, then the bare GitHub repository can be updated by:
 ```
 config add -u :/ -v
 config commit -m "Updated"
@@ -23,7 +24,7 @@ config add .voorbeeld
 config commit -m "Add my .voorbeeld"
 config push -v
 ```
-Remember to update the current list of files in the README.md file! :-)
+** Remember to update the current list of files in the README.md file!** :wink:
 
 ### Short manual how to setup a dotfile repo
 First create a Dotfiles directory at home then;
@@ -38,5 +39,5 @@ config config --local status.showUntrackedFiles no
 ```
 
 References:
-* https://www.atlassian.com/git/tutorials/dotfiles
-* https://www.youtube.com/watch?v=tBoLDpTWVOM. 
+- https://www.atlassian.com/git/tutorials/dotfiles
+- https://www.youtube.com/watch?v=tBoLDpTWVOM.
