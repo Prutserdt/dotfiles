@@ -39,6 +39,6 @@ bash
 config config --local status.showUntrackedFiles no
 ```
 
-References:
+### References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM

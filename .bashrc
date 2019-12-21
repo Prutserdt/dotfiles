@@ -13,5 +13,5 @@ screenfetch
 
 # Voor de bare repository voor dotfiles (zie commandline doc)
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
- 
- 
+# Voor eenvoudig updaten van dotfiles
+alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'
