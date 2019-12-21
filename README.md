@@ -2,27 +2,24 @@
 # Dotfile repo!# 
 Here I store my dotfiles and other text files. :godmode:
 
-### Current list of files:
-* .Xdefaults
-* .Xmodmap
-* .Xresources
-* .bashrc
-* .vimrc
-* .xinitrc
-* README.md
-* .config/i3/config
-* Stack/Command_line/commands.md
-### Commit and push to the repo
-If one or more of these files from the list  are changed locally, then the bare GitHub repository can be updated by:
+The current list of files in this repo can be found in the list above this
+readme file.
+
+### Commit and push to the repo: `dotfiles`
+If one or more of these files from the list  are changed locally, then the bare GitHub repository can be updated by a single command:
+```
+dotfiles
+````
+This command is set as alias in .bashrc and consists of the following lines:
 ```
 config add -u :/ -v
 config commit -m "Updated"
 config push -v
 ```
-### Add a file to this repo
+### Add an additional file to this repo
 ```
-config add .voorbeeld
-config commit -m "Add my .voorbeeld"
+config add .example
+config commit -m "Add my .example"
 config push -v
 ```
 *Remember to update the current list of files in the README.md file!* :wink:
