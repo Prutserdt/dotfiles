@@ -6,7 +6,7 @@
          | |___| | | | | |_| |>  <  | |_| |  | | (__|   <\__ \
          |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
 ---
-### Inhoud 
+## Inhoud 
 #### Command line tricks
 * Rechten bestanden
 * Grafische problemen
@@ -65,19 +65,20 @@ less longfile.txt
 cat /etc/fstab |less
      
 **more** command. Een ander manier om grote files te laten zien
-more longfile.txt
-cat longfile.txt | more
+
+    more longfile.txt
+    cat longfile.txt | more
 
 Op systemen waar **root user disabled** is, bijv. Ubuntu. Dan kun je 
-toch inloggen door gebruik te maken van: `sudo -s`
+toch inloggen door gebruik te maken van: `sudo -s`.
 
 **Start gnome** programma (wireshark, gparted, unetbootin); `gksu gparted WIFI`
 
 **Switch user**. Ga naar juiste home directory: `su username`.
 
-Vindt alle **system users**: `compgen -u`
+Vindt alle **system users**: `compgen -u`.
 
-Herstart het systeem: `sudo reboot`
+Herstart het systeem: `sudo reboot`.
 
 Midnight Commander als super user gebruiken, bijvoorbeeld voor het 
 wegschrijven op de 1 Terabyte drive: `su` en daarna `mc`.
@@ -101,30 +102,29 @@ geeft usb devices weer
 lsusb
 
 #### Weergave hard drive, formatting, dd, etc
-```
-sudo fdisk -l
-sudo parted -l
-lsblk
-```
+
+    sudo fdisk -l
+    sudo parted -l
+    lsblk
+
 Clonen van harde schijf naar andere partitie: `sudo dd if=/dev/sda1 of=/dev/sda5 bs=4096 conv=notrunc,noerror`. 
 Maak een backup/clone in twee stappen (is veiliger dan direct).
 bijvoorbeeld een usb stick. Door status=progres zie je wat er gebeurd:
 `sudo dd if=/dev/sdd of=Backup_USBstick_arch_30DEC18.img status=progress`
 
 Daarna "brand" je de image naar een usb stick met:
-```
-sudo dd if=Backup_USBstick_arch_20JUL17.img of=/dev/sdd status=progress
-sudo dd if=//home/archie/Downloads/clonezilla-live-20170626-zesty-amd64.iso of=/dev/sdd status=progress
-sudo dd if=//home/archie/Downloads/linuxmint-18.2-xfce-64bit.iso of=/dev/sdd status=progress
-sudo dd if=/dev/sdd of=Backup_USBstick_arch_21AUG19.img status=progress
-```
+
+    sudo dd if=Backup_USBstick_arch_20JUL17.img of=/dev/sdd status=progress
+    sudo dd if=//home/archie/Downloads/clonezilla-live-20170626-zesty-amd64.iso of=/dev/sdd status=progress
+    sudo dd if=//home/archie/Downloads/linuxmint-18.2-xfce-64bit.iso of=/dev/sdd status=progress
+    sudo dd if=/dev/sdd of=Backup_USBstick_arch_21AUG19.img status=progress
 
 #### Multiple linux distros on one USB:
-Hiermee kun je meerdere USB  distros op een enkele pendrive zetten :-)
-```
-yay multibootusb-git
-sudo multibootusb
-```
+Hiermee kun je meerdere USB  distros op een enkele pendrive zetten. :-)
+
+    yay multibootusb-git
+    sudo multibootusb
+
 Overschrijf hard disk door random data:`dd if=/dev/urandom of=/dev/sdb status=progress`
 
 Vind de naam van harddrives UUID door: `sudo blkid`
@@ -149,33 +149,39 @@ blocks=$(isosize -d 2048 /dev/sr0)
 Voor de grap: kijken hoe groot het bestand is dmv berekenen aantal blocks gedeeld door 
 512.
 
-Schrijf de iso weg: `echo "That would be $(expr $blocks / 512) MB"`
-`dd if=/dev/sr0 of=isoimage.iso bs=2048 count=$blocks  status=progress`
+Schrijf de iso weg:
+
+    echo "That would be $(expr $blocks / 512) MB"
+    dd if=/dev/sr0 of=isoimage.iso bs=2048 count=$blocks  status=progress
+
 Eenvoudiger (externe harde schijf iso)
-`sudo dd if=/dev/sdc of=MacCindy.iso status=progress`
+
+    sudo dd if=/dev/sdc of=MacCindy.iso status=progress
 
 alternatief formateren (fat32)
-```
-dmesg | tail
-sudo umount /dev/sdb
-sudo mkdosfs -F 32 -n 'Label' -I /dev/sdb
-```
+
+    dmesg | tail
+    sudo umount /dev/sdb
+    sudo mkdosfs -F 32 -n 'Label' -I /dev/sdb
 
 Mount iso bestand: 
-```
-sudo mkdir /mnt/iso
-sudo mount -o loop /home/archie/akta_docs.iso /mnt/iso
-```
+
+    sudo mkdir /mnt/iso
+    sudo mount -o loop /home/archie/akta_docs.iso /mnt/iso
+
 
 Nieuw bestand aanmaken in commandline, inclusief inhoud: `echo dhcpcd > /home/icefly/info`.
 Nieuw welkom scherm voor terminal toevoegen aan bashrc: `nano ~/.bashrc`.
 Voeg de volgende twee lijnen toe: 
 
 Welkomstekst nieuwe terminal:
-`echo "Welcome back commander"`
-Geeft arch logo in asci art plus wat extra info: `screenfetch`
-Welkom tekst voor login venster: `sudo nano etc/issue`
-Voeg bijvoorbeeld deze tekst toe:
+
+    echo "Welcome back commander"
+
+Geeft arch logo in asci art plus wat extra info: `screenfetch`.
+
+Welkom tekst voor login venster instellen in: `sudo nano etc/issue`
+Voeg toe:
 ```
 |-----------------------------------------|
 |        Welcome back commander           |
@@ -192,15 +198,18 @@ Arch Linux \r (\l)
 ```
 
 Roteren van het scherm (0,1,2,3 zijn de richtingen, of left/right/normal)
-```
-xrandr -o 1
-xrandr -o right
-zoeken connected displays
-xrandr --query
-```
+
+    xrandr -o 1
+    xrandr -o right
+
+Zoeken connected displays
+
+    xrandr --query
+
 Specifieke setup in Synthon, twee monitoren, breedbeeld in A4 en extra beeldscherm,
 gecorrigeerd voor hoogte
-`xrandr --output VGA-1 --mode 1280x1024 --pos 1050x195 --output DP-1 --mode 1680x1050 --rotate left --pos 0x0`
+
+    xrandr --output VGA-1 --mode 1280x1024 --pos 1050x195 --output DP-1 --mode 1680x1050 --rotate left --pos 0x0
 
 Jan 12 22:23:32 archPC kernel: [Firmware Bug]: TSC_DEADLINE disabled due to Errata; 
 please update microcode to version: 0x22 (or later). Opgelost door een
@@ -216,46 +225,50 @@ APPEND root=/dev/sda1 rw
 INITRD ../initramfs-linux.img
 ```
 
-Firefox customization: verander skins per website met Stylish
+Firefox customization: verander skins per website met Stylish.
 
-Change system time: `timedatectl set-time "2017-01-06 22:27:49"`
+Change system time: `timedatectl set-time "2017-01-06 22:27:49"`.
 
-Check time: `sudo hwclock --debug`
+Check time: `sudo hwclock --debug`.
 
-Probleem gehad met een uur tijdsverschil, opgelost met: `timedatectl set-ntp true`
+Probleem gehad met een uur tijdsverschil, opgelost met: `timedatectl set-ntp true`.
 
-View all the groups: `cat /etc/group`
-Bekijke groups van enkele user: `groups icefly`
+View all the groups: `cat /etc/group`.
+Bekijke groups van enkele user: `groups icefly`.
 
-add group (audio) to user (icefly): `sudo gpasswd -a icefly audio`
+add group (audio) to user (icefly): `sudo gpasswd -a icefly audio`.
 
 Check running programs/close programs.
-see processes:
-ps waux
-find PID of program:
-pidof firefox
-ps aux | grep  firefox
-(tweede kolom is PID, je kunt trouwens zoeken met wildcards*)
-sudo kill -9 <ur process id> 
-sudo killall firefox
+See processes: `ps waux`
+Find PID of program:
 
-MD5: `md5sum file.txt`
+    pidof firefox
+ps aux | grep  firefox
+
+*(tweede kolom is PID, je kunt trouwens zoeken met wildcards)*
+
+    sudo kill -9 <ur process id> 
+    sudo killall firefox
+
+MD5: `md5sum file.txt`.
 
 Video fragment cutting. T: begin in seconden. D: lengte van clip in sec:
-```
-ffmpeg -i input -ss T -t D -c copy -fflags +genpts output
-ffmpeg -i Film.mp4 -ss 309 -t 105 -c copy -fflags +genpts Filmpje.mp4
+
+    ffmpeg -i input -ss T -t D -c copy -fflags +genpts output
+    ffmpeg -i Film.mp4 -ss 309 -t 105 -c copy -fflags +genpts Filmpje.mp4
+
 Frame by frame (Duurt wel langer. Als het bovenstaande niet goed werkt.):
-ffmpeg -i Film.mp4 -ss 308 -t 111 -fflags +genpts Filmpje.mp4
-```
-Vind de code van keys van keyboard (toetsenbord): `xev`
+
+    ffmpeg -i Film.mp4 -ss 308 -t 111 -fflags +genpts Filmpje.mp4
+
+Vind de code van keys van keyboard (toetsenbord): `xev`.
      
 #### Rechten bestanden
      
-Bekijk rechten: `ls -l` `ls -a -l`
+Bekijk rechten: `ls -l` `ls -a -l` 'ls -al' 'ls la'
 Bekijk hidden directories
 `ls -a`
-uitleg output:
+Uitleg output:
 r: read, w: file can be modified, x: file can be executed, s:setUID bit, t: sticky
 voorbeeld:
 -rw-r--r-- 1 root   root    426 Feb 13 14:21 info
@@ -265,78 +278,89 @@ r: groups permission: read
 r: all the other users
 root: gebruiker
 root: groep
-Verander rechten directory naar 
-chmod u=rwx filename
-chmod go=rx filename
-chmod 755 Afbeeldingen
-chmod 755 test.py nu is het executable
-Verander ownership file met chown
-chown archie filename
-Bulk verander rechten, incl. subdirectories :-)
-find Afbeeldingen -type d -exec chmod 755 {} +
 
-Aanmaken directory voor meerdere users (in dit geval, DATA in /home) 
-sudo groupadd project
-sudo usermod -a -G project icefly
-sudo usermod -a -G project synthon
-sudo chgrp -R project /home/DATA/
-sudo chmod -R 2775 /home/DATA/ 
-     
-Grafische problemen
-     
-     Check grafische kaart
-lspci
-lspci -v
-lspci -v | less
-lspci | grep -i --color 'vga'
-lshw -class display
-find /dev -group video
-glxinfo | grep -i vendor
-egrep -i " connected|card detect|primary dev|Setting driver"
-        /var/log/Xorg.0.log
-/var/log/Xorg.0.log
-/etc/X11/xorg.conf
-     
+Verander rechten directory naar:
+
+    chmod u=rwx filename
+    chmod go=rx filename
+    chmod 755 Afbeeldingen
+    chmod 755 test.py nu is het executable
+
+Verander ownership file met chown: 'chown archie filename'.
+Bulk verander rechten, incl. subdirectories :-):
+
+    find Afbeeldingen -type d -exec chmod 755 {} +
+
+Aanmaken directory voor meerdere users (in dit geval, DATA in /home):
+
+    sudo groupadd project
+    sudo usermod -a -G project icefly
+    sudo usermod -a -G project synthon
+    sudo chgrp -R project /home/DATA/
+    sudo chmod -R 2775 /home/DATA/
+
+**Grafische problemen**
+
+Check grafische kaart
+
+    lspci
+    lspci -v
+    lspci -v | less
+    lspci | grep -i --color 'vga'
+    lshw -class display
+    find /dev -group video
+    glxinfo | grep -i vendor
+    egrep -i " connected|card detect|primary dev|Setting driver"
+    /var/log/Xorg.0.log
+    /var/log/Xorg.0.log
+    /etc/X11/xorg.conf
+ 
 #### Logging
      
 journalctl
 Zoeken in tijd
-journalctl -b  #current boot
-journalctl --since "2017-02-11 17:00:00"
-journalctl --since "2015-01-10" --until "2015-01-11
-        03:00"e
-journalctl --since yesterday
-journalctl --since 09:00 --until "1 hour ago"
+
+    journalctl -b  #current boot
+    journalctl --since "2017-02-11 17:00:00"
+    journalctl --since "2015-01-10" --until "2015-01-11 03:00"
+    journalctl --since yesterday
+    journalctl --since 09:00 --until "1 hour ago"
+
 Zoeken op unit
-journalctl -u nginx.service
-journalctl -u nginx.service --since today
-journalctl -u nginx.service -u php-fpm.service --since
-        today
+
+    journalctl -u nginx.service
+    journalctl -u nginx.service --since today
+    journalctl -u nginx.service -u php-fpm.service --since today
 Zoeken op process, users, groupID
-journalctl _PID=8088
-journalctl _UID=33 --since today
+
+    journalctl _PID=8088
+    journalctl _UID=33 --since today
+
 Kernel messages
-journalctl -k #from the current boot
-journalctl -k -b -5 #messages from 5 boots ago
+
+    journalctl -k #from the current boot
+    journalctl -k -b -5 #messages from 5 boots ago
+
 Zoeken naar fouten -p=sort by priority
-journalctl -p err -b #Gives all error, critical, alert, or
-        emergency. 
+
+    journalctl -p err -b #Gives all error, critical, alert, or emergency. 
 
 Log live volgen:
-journalctl -f
+    journalctl -f
 
-groote log
-journalctl --disk-usage
+groote log:
 
-De command line history staat hier: /home/icefly/.bash_history
+    journalctl --disk-usage
+
+De command line history staat hier: `/home/icefly/.bash_history`.
 Zoeken in de history naar bijv. ssh gaat alsvolgt:
-ctrl R
-history | grep ssh
-cat
-Maak text bestand aan, daarna typ je text en sluit je met CTR+z om te
-saven.
-cat > text.txt
 
+    ctrl R
+    history | grep ssh
+    cat
+
+Maak text bestand aan, daarna typ je text en sluit je met CTR+z om te saven:
+`cat > text.txt`.
      
 #### Linux keyboard shortcuts
 Lijstje met allelei keyboard shortcuts.
@@ -565,10 +589,12 @@ mac adress vast internet desktop pc
 eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT qlen 1000
 link/ether 00:1a:4d:5d:fe:4c brd ff:ff:ff:ff:ff:ff
 Mijn ip address 82.174.98.248
-
+```
 sudo ip link set dev eth0 down
 sudo ip link set dev eth0 address 00:23:4E:00:00:00
 sudo ip link set dev eth0 up
+```
+Verander mac address wlan0 en wlan1 via onderstaande shell script
 ```
 #!/bin/sh\
 machack.sh: deze shell veranderd mac address van wlan0 en wlan1
@@ -587,7 +613,9 @@ sudo ip link set dev wlan0 up
 sudo ip link set dev wlan1 down
 sudo ip link set dev wlan1 address 00:23:4E:11:11:11
 sudo ip link set dev wlan1 up
-
+```
+Verander mac address wlan0 en wlan1 via onderstaande shell script terug
+```
 #!/bin/sh
 macback.sh: deze shell veranderd mac address van wlan0 en wlan1
             naar android device en alfa USB wifi
@@ -645,49 +673,48 @@ sudo pacman -S python2-pip python-pip python2-matplotlib python2-xlsxwriter
 sudo pacman -S python-matplotlib python-xlsxwriter ghex
 Downloaden pycorn v 0.18 script, en daarna dit python script installeren 
 via:
-```
-sudo pip install pycorn
-```
+
+    sudo pip install pycorn
+
 Run het script via voorbeelden uit 
 */usr/lib/python3.6/site-packages/pycorn/docs/USAGE_pycorn-bin.txt*:
-```
-pycorn-bin.py -p /home/DATA/'HESP preproduct001.res'
-pycorn-bin.py -p -r 3 /home/DATA/'HESP preproduct001.res'
-pycorn-bin.py -e xlsx /home/DATA/'HESP preproduct001.res'
-pycorn-bin.py -p csv /home/DATA/'HESP preproduct001.res'
-```
+
+    pycorn-bin.py -p /home/DATA/'HESP preproduct001.res'
+    pycorn-bin.py -p -r 3 /home/DATA/'HESP preproduct001.res'
+    pycorn-bin.py -e xlsx /home/DATA/'HESP preproduct001.res'
+    pycorn-bin.py -p csv /home/DATA/'HESP preproduct001.res'
+
 Run het script via:
 `pycorn-bin.py -2 csv /home/DATA/'HESP preproduct001.res'`
 Geen output... waar is de csv file???
 
 Volgende geeft geen output...:
-```
-cd /usr/lib/python3.6/site-packages/pycorn
-pycorn.py /home/DATA/'HESP preproduct001.res
-```
+
+    cd /usr/lib/python3.6/site-packages/pycorn
+    pycorn.py /home/DATA/'HESP preproduct001.res
+
 
 Batch script voor het maken van een pdf file van *.res in de huidige directory (WERKEND!):
-```
-for i in *.res;do pycorn-bin.py -p "$i";done
-```
+
+    for i in *.res;do pycorn-bin.py -p "$i";done
+
 Proberen om data te lezen van een res file. Handmatig zonder de pycorn 
 script. Uitleg opbouw van .res files staat in het onderstaande document.
 Ik wil de sensor data uitlezen. Dit bevat de volgende informatie (twee 
 locaties)
-```
-nano /home/synthon/Downloads/PyCORN-master/pycorn/docs/RES_files_layout.txt
-nano /usr/lib/python3.6/site-packages/pycorn/docs/RES_files_layout.txt
 
-Structure of sensor data
-8 bytes per pair
-4 bytes sig/int	Accumulated volume, divide by 100 to obtain value in ml
-4 bytes sig/int	Sensor value, divide by 1000/100/10 depending on sensor
-type. 
+    nano /home/synthon/Downloads/PyCORN-master/pycorn/docs/RES_files_layout.txt
+    nano /usr/lib/python3.6/site-packages/pycorn/docs/RES_files_layout.txt
 
-Bekijken file:
-ghex /home/synthon/Downloads/PyCORN-master/samples/sample1.res
-ghex /home/DATA/'HESP preproduct001.res'
-```
+    Structure of sensor data
+    8 bytes per pair
+    4 bytes sig/int	Accumulated volume, divide by 100 to obtain value in ml
+    4 bytes sig/int	Sensor value, divide by 1000/100/10 depending on sensor type. 
+
+    Bekijken file:
+    ghex /home/synthon/Downloads/PyCORN-master/samples/sample1.res
+    ghex /home/DATA/'HESP preproduct001.res'
+
 ......to be continued....
 
      
@@ -696,36 +723,36 @@ ghex /home/DATA/'HESP preproduct001.res'
 Geprobeerd aan de gang te krijgen: 07MAY18.
 
 Install
-```
-yaourt -S bluez bluez-utils
-modinfo btusb
-```
+
+    yaourt -S bluez bluez-utils
+    modinfo btusb
+
 Output:
-```
-modinfo
-ERROR: Module aliaa btusb not found
-```
+
+    modinfo
+    ERROR: Module aliaa btusb not found
+
 Dus de module maar geladen:
-```
-modprobe btusb
-```
+
+    modprobe btusb
+
 Output: 
-```
-modprobe
-FATAL: Module btusb not found in directory
-/lib/modules/4.16.6-1-ARCH.  To load a module by filename (i.e. one that
-is not installed in /usr/lib/modules/$(uname -r)/): insmod filename [args]
-insmod filename [args]
 
-modprobe -c | grep btusb
-output: options btusb reset=1
-Then start the bluetooth.service systemd unit.
-You can enable it to start automatically at boot time. 
+    modprobe
+    FATAL: Module btusb not found in directory
+    /lib/modules/4.16.6-1-ARCH.  To load a module by filename (i.e. one that
+    is not installed in /usr/lib/modules/$(uname -r)/): insmod filename [args]
+    insmod filename [args]
 
-sudo systemctl start bluetooth.service
+    modprobe -c | grep btusb
+    output: options btusb reset=1
+    Then start the bluetooth.service systemd unit.
+    You can enable it to start automatically at boot time. 
 
-modinfo btusb
-```
+    sudo systemctl start bluetooth.service
+
+    modinfo btusb
+
 Deze keer wel output
 dmenu Bluetooth manager: Bluez daemon is no running, blueman-manager cannot
 continue.
@@ -797,92 +824,93 @@ vim ~/.vimrc
 My personal manual :)
 
 Switching modes:
-```
-Esc     : Exit open mode
-i       : Insert mode
-I       : Insert mode, en ga naar het begin van de regel
-A       : Insert mode, en start aan het einde van de regel
-a       : Insert mode, en start 1 cursor stap naar rechts
-v       : Visual mode
-V       : Visual line
-```
-Navigation(direct commands):
-```
-h       : left
-j       : down
-k       : up
-l       : right
-CTRL+b  : page up
-CTRL+f  : page down
-CTRL+e  : scrolls down (snelheid kun in in ./.vimrc instellen)
-CTRL+y  : scrolls up (snelheid kun in in ./.vimrc instellen)
-CTRL+f  : scrolls down one page
-CTRL+b  : scrolls up  one page
-H       : verplaats cursor naar top pagina
-M       : verplaats cursor naar top pagina
-L       : verplaats cursor bodem van de pagina
-gg      : verplaats cursor naar start document
-G       : verplaats cursor naar einde document
-z       : ?
-e       : verplaats naar einde van het woord (einde: volgende woord)
-b       : verplaats cursor naar einde van het woord (einde: volgende woord)
-w       : verplaats volgend woord
-A       : einde van laatste woord
-```
-Modifiers
-```
-i       : inner
-s       : surround
-p       : paragraph
-.       : perform the last
-```
-Search stuff
-```
-/string : search string. 
-n       : next word
-N       : previous word
-```
-Replace stuff
-```
-r       : Replace a single character
-R       : Replace until we tell it to stop
-c       : Changes whatever specified (modifier)
-C       : Changes until the end of a line
-```
-Delete stuff
-```
-x       : Delete single character after the cursor
-X       : Delete single character before the cursor
-d       : delete whatever specified (modifiers)
-D       : delete until the end of the line
-```
-Yank (copy) stuff
-```
-y       : yanks whatever specified (modifiers)
-Y       : yanks current line completely
 
-:reg    : Show the register
-"aY     : Yank line to register B
-```
+    Esc     : Exit open mode
+    i       : Insert mode
+    I       : Insert mode, en ga naar het begin van de regel
+    A       : Insert mode, en start aan het einde van de regel
+    a       : Insert mode, en start 1 cursor stap naar rechts
+    v       : Visual mode
+    V       : Visual line
+
+Navigation(direct commands):
+
+    h       : left
+    j       : down
+    k       : up
+    l       : right
+    CTRL+b  : page up
+    CTRL+f  : page down
+    CTRL+e  : scrolls down (snelheid kun in in ./.vimrc instellen)
+    CTRL+y  : scrolls up (snelheid kun in in ./.vimrc instellen)
+    CTRL+f  : scrolls down one page
+    CTRL+b  : scrolls up  one page
+    H       : verplaats cursor naar top pagina
+    M       : verplaats cursor naar top pagina
+    L       : verplaats cursor bodem van de pagina
+    gg      : verplaats cursor naar start document
+    G       : verplaats cursor naar einde document
+    z       : ?
+    e       : verplaats naar einde van het woord (einde: volgende woord)
+    b       : verplaats cursor naar einde van het woord (einde: volgende woord)
+    w       : verplaats volgend woord
+    A       : einde van laatste woord
+
+Modifiers
+
+    i       : inner
+    s       : surround
+    p       : paragraph
+    .       : perform the last
+
+Search stuff
+
+    /string : search string. 
+    n       : next word
+    N       : previous word
+
+Replace stuff
+
+    r       : Replace a single character
+    R       : Replace until we tell it to stop
+    c       : Changes whatever specified (modifier)
+    C       : Changes until the end of a line
+
+Delete stuff
+
+    x       : Delete single character after the cursor
+    X       : Delete single character before the cursor
+    d       : delete whatever specified (modifiers)
+    D       : delete until the end of the line
+
+Yank (copy) stuff
+
+    y       : yanks whatever specified (modifiers)
+    Y       : yanks current line completely
+
+    :reg    : Show the register
+    "aY     : Yank line to register B
+
 Pasting stuff
-```
-p       : pastes from vim buffer after cursor
-"ap     : paste  from registry entry a (:reg)
-```
+
+    p       : pastes from vim buffer after cursor
+    "ap     : paste  from registry entry a (:reg)
+
 Working with macros
-```
-qa      : Record a macro and save it to register a
-q       : Stop recording macro
-1@a     : Play 1 time macro a (:reg)
-```
+
+    qa      : Record a macro and save it to register a
+           : Stop recording macro
+    @a     : Play 1 time macro a (:reg)
+`
 Editing an existing macro(in dit geval a)
-```
-:new
-"ap
+
+    :new
+    "ap
 Pas de macro aan en Escape
-"ayy
-dd
-```
+
+    "ayy
+    dd
+
 Zoek en vervang (search and replace), enkele keer: `:s/hot/cold/g`
 Search and replace whole file: `:%s/hot/cold/g`
 Search and replace,  wissen tekst: `:%s/Links naar bestanden op eigen pagina://g`
@@ -890,33 +918,33 @@ Search and replace, wissen tekst, zoeken met wildcard(</small>): `:%s/<.small>//
 Saving macros separately, since :reg can be overwritten: `let @a='0fa'`
 
 Voorbeelden
-```
-4w      : 4 woorden verder
-6k      : 6 regels omhoog
-d2w     : delete the next two words
-ciw     : change inner word
-ysiw"   : Onduidelijk wat ik hiermee kan doen ... ?
-```
-Navigation(command combination examples):
-```
-???    : verplaats cursor naar lijn nummer 42
-???    : verplaats cursor 10 lijnen omhoog
-```
-Doornummeren voorbeeld. Maak van dit:
-```
-[00:01.24]
-[00:00.24]
-[00:00.24]
-[00:00.24]
 
-```
+    4w      : 4 woorden verder
+    6k      : 6 regels omhoog
+    d2w     : delete the next two words
+    ciw     : change inner word
+    ysiw"   : Onduidelijk wat ik hiermee kan doen ... ?
+
+Navigation(command combination examples):
+
+    ???    : verplaats cursor naar lijn nummer 42
+    ???    : verplaats cursor 10 lijnen omhoog
+
+Doornummeren voorbeeld. Maak van dit:
+
+    [00:01.24]
+    [00:00.24]
+    [00:00.24]
+    [00:00.24]
+
+
 Het volgende:
-```
-[00:01.24]
-[00:01.24]
-[00:01.24]
-[00:01.24]
-```
+
+    [00:01.24]
+    [00:01.24]
+    [00:01.24]
+    [00:01.24]
+
 Verander dit:
 ```
 Commandl line
@@ -936,14 +964,13 @@ Door het volgende te typen:`qdI'Esc'A'Esc'0jq`
 Speel de macro af met: `2@d`
 
 The command line command: :
-```
-:q!                                 : Quit without saving
-:wq                                 : Quit with saving
-:w naam                             : Save file as naam
-:new                                : Open een nieuw scherm
-:verbose setlocal syntax? filetype? : Vind de syntax van bestand
-:set syntax:conf                    : Tijdelijke Verandering syntax 
-```
+
+    :q!                                 : Quit without saving
+    :wq                                 : Quit with saving
+    :w naam                             : Save file as naam
+    :new                                : Open een nieuw scherm
+    :verbose setlocal syntax? filetype? : Vind de syntax van bestand
+    :set syntax:conf                    : Tijdelijke Verandering syntax 
 
 VIM; editen van markdown en live preview in browser met de
 `iamcco/makrdown-preview.nvim` plugin.
@@ -953,27 +980,28 @@ Open een markdown file: `:MarkdownPreview`
 
 Instellen van image preview in ranger.
 https://github.com/ranger/ranger/wiki/Image-Previews
-Installeer w3m web browser. En voeg
-sudo pacman -S w3m
-Voeg toe "set preview_images true" aan ~/.config/ranger/rc.conf
+Installeer w3m web browser: `sudo pacman -S w3m`
+Voeg toe "set preview_images true" aan in  ~/.config/ranger/rc.conf: 
 nano ~/.config/ranger/rc.conf
 Tips voor gebruik Ranger
-Stoppen is net als VIM, 
-:q!
-Ranger manual (je kunt ook ranger man gebruiken :-)
-z 
-zh #toggle hidden files on/off
-zd #sort directives first
+Stoppen is net als VIM: `:q!`.
+
+Belangrijke commands in Ranger (je kunt ook ranger man gebruiken):
+
+    z 
+    zh #toggle hidden files on/off
+    zd #sort directives first
 
 #### figlet
-Maak asci word art van een woord in command line
-sudo pacman -S figlet
+Maak asci word art van een woord in command line: `sudo pacman -S figlet`
 
 
 #### vifm
 Een terminal file manager die gebruikt maakt van VI bindings :-)
 Ik heb van Distro Tube de volgende twee files toegevoegd aan 
 vi ~/.config/vifm/scripts/vifmimg
+
+```
 #!/usr/bin/env bash
 	readonly ID_PREVIEW="preview"
 	if [ -e "$FIFO_UEBERZUG" ]; then
@@ -988,6 +1016,7 @@ vi ~/.config/vifm/scripts/vifmimg
 	    fi
 	fi
     vi ~/.config/vifm/scripts/vifmrun
+
 #!/usr/bin/env bash
 	export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
 	function cleanup {
@@ -1000,32 +1029,29 @@ vi ~/.config/vifm/scripts/vifmimg
 	tail --follow "$FIFO_UEBERZUG" | ueberzug layer --silent --parser bash &
 	vifm
 	cleanup
+```
+Wat je ook nodig hebt is het python script Ueberzug:
 
-Wat je ook nodig hebt is het python script Ueberzug
-yay python-ueberzug
+    yay python-ueberzug
+
 Om alles te laten lopen moet je het script ~/.config/vifm/scripts/vifmrun
-starten.
-Verander de rechten van het bestand om executable te maken
-chmod u=rwx vifmrun
-Bekijk rechten
-ls -a -l
+starten. Verander de rechten van het bestand om executable te maken:
 
-less longfile.txt
-test
-
+    chmod u=rwx vifmrun
+    ls -a -l (Bekijk rechten)
+    less longfile.txt
+    test
 
 Nu start je het script door in te voeren.  ~/.config/vifm/scripts/vifmrun
 ./vifmrun
+```
 opmerking: ik zie geen enkele preview....
 opmerking: er is geen transparancy...
 opmerking: files worden niet juist geopenE; niet leesbare afbeeldingen # opmerking: 
 opmerking: vifmrun: export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
 opmerking: deze directory bestaat niet... Er klopt iets niet
 opmerking: wel ik ueberzug geinstalleerd: mod+d laat het zien
-opmerking: 
-opmerking: 
-
-    
+```
 
 #### urxvt (lightweight terminal). Kleurenschema kun je met pywal instellen :-)
 
@@ -1035,9 +1061,9 @@ Open nano
 nano ~/.defaults
 Plak daarin de onderstaande regels om de transparantie en font in te 
 stellen, plus extra's die in de comments worden beschreven.
- Created to rice the urxvt terminal.
+Created to rice the urxvt terminal.
 
- Set transparancy
+Set transparancy
 
 URxvt.transparent:	        true
 URxvt.shading:		        30
@@ -1100,28 +1126,28 @@ Dit werkt in Ubuntu 16.10 (mijn VPS)
 Geinstalleerd via pacman. Octave-forge packages geinstalleerd via Octave met de
 onderstaande commando's in Octave. Helaas mis ik Matlab functionaliteit, ook in
 het statistics pakket :(.
-```
-pkg install -forge io
-pkg install -forge statistics
-```
+
+    pkg install -forge io
+    pkg install -forge statistics
+
 #### Git (en dotfiles procedure)
 Instellen Git
-```
-git config --global user.email "firstname@lastname.nl"
-git config --global user.name "Prutserdt"
-```
+
+    git config --global user.email "firstname@lastname.nl"
+    git config --global user.name "Prutserdt"
+
 Automatisch wegschrijven van dotfiles in Github.
 Dit gaat via de procedure van https://www.atlassian.com/git/tutorials/dotfiles
 en https://www.youtube.com/watch?v=tBoLDpTWVOM. Aanmaken van de bare repository op de locale pc. Zorg dat je in de ~/dotfiles directory staat en voer het volgende in:
-```
-git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
-git push dotfiles
-git push --set-upstream dotfiles master
-git init --bare $HOME/dotfiles
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add this alias to .bashrc)
-bash
-config config --local status.showUntrackedFiles no
-```
+
+    git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
+    git push dotfiles
+    git push --set-upstream dotfiles master
+    git init --bare $HOME/dotfiles
+    alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add this alias to .bashrc)
+    bash
+    config config --local status.showUntrackedFiles no
+
 **Ik wil instellen dat de GIT repo direct werkt met een handshake, zonder
 handmatig een password, dat ga ik nog regelen.**
 
@@ -1130,9 +1156,9 @@ sudo pacman -S xclip
 xclip -sel clip < ~/.ssh/id_rsa.pub
 Plak de key in de webpagina van Github, settings/ssh key en geef het de naam van de computer
 Daarna voer je in de terminal in:
-```
-ssh -T git@github.com
-```
+
+    ssh -T git@github.com
+
 Selecteer `yes`, 
 
 [archie@archPC ~]$ ssh -T git@github.com
@@ -1156,32 +1182,31 @@ ssh-add
 
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
-```
-config add .bashrc
-config commit -m "Add my .bashrc"
 
-```
+    config add .bashrc
+    config commit -m "Add my .bashrc"
+
 Deze bestaat uit de volgende commando's
-```
-config add -u :/ -v
-config commit -m "Updated"
-config push -v
-```
+
+    config add -u :/ -v
+    config commit -m "Updated"
+    config push -v
+
 
 Git command line examples
-```
-config status
-config push --force (deze wil je eigenlijk niet gebruiken)
-```
+
+    config status
+    config push --force (deze wil je eigenlijk niet gebruiken)
+
 ### Distros        
      
 #### XFCE tricks
 XFCE4 in desktop achtergrond terminal services laten draaien.
 Filename: wallterm.sh
 maak executable:
-```
-chmod a+x /path/to/wallterm.sh
-```
+
+    chmod a+x /path/to/wallterm.sh
+
 Voeg dit toe aan de file walltem.sh:
 ```
 !/bin/bash
@@ -1199,24 +1224,22 @@ XFCE4-Settings-Session and Startup-Application Autostart
 --> add wallterm --> command: /home/icefly/wallterm.sh
 ```
 Andere opties die interessant kunnen zijn voor monitoring:
-```
-vmstat
-sudo tcpdump -i enp3s0
-sudo tcpdump -c 5 -i enp3s0
-sudo tcpdump -XX -i enp3s0
-sudo iftop
-sudo xfce4-terminal -e iftop --hide-borders --hide-toolbar --hide-menubar --title=dt5 --geometry=70x30+720+10 &
-sleep 5
-wmctrl -r dt5 -b add,skip_pager,skip_taskbar 
-monitorix 
-(yaourt -S monitorix, vorige keer niet geinstalleerd)
-nmon
-sudo iptraf-ng
-```
+
+    vmstat
+    sudo tcpdump -i enp3s0
+    sudo tcpdump -c 5 -i enp3s0
+    sudo tcpdump -XX -i enp3s0
+    sudo iftop
+    sudo xfce4-terminal -e iftop --hide-borders --hide-toolbar --hide-menubar --title=dt5 --geometry=70x30+720+10 & 
+    sleep 5 wmctrl -r dt5 -b add,skip_pager,skip_taskbar 
+    monitorix 
+    yaourt -S monitorix ( vorige keer niet geinstalleerd)
+    nmon
+    sudo iptraf-ng
 
 Maak de windows meer snappy, meer tiling window manager achtig...
 XFCE4-Settings-Window manager --> advanced
-Windows snapping: to screen border en To other windows, distance:
+    Windows snapping: to screen border en To other windows, distance:
 halverwege small-Wide
 
 Quickbuttons voor verplaatsen van tiles (met alt knop) (quickbutton 
@@ -1224,17 +1247,17 @@ maximaliseren F11)
 XFCE4-Settings-Window manager --> Keyboard
 Het staat in een text file maar dat is minder goed leesbaar:
 ~/.config/xfce4/xfconf/xfce-perchannel-xml\xfce4-keyboard-shortcuts.xml
-```
-Maximize window									Alt+5
-Tile window to the top								Alt+8
-Tile window to the bottom							Alt+2
-Tile window to the left								Alt+4
-Tile window to the right							Alt+6
-Tile window to the top-left							Alt+7
-Tile window to the top-right							Alt+9
-Tile window to the bottom-left							Alt+1
-Tile window to the bottom-right							Alt+3
-```
+
+    Maximize window					Alt+5
+    Tile window to the top				Alt+8
+    Tile window to the bottom			Alt+2
+    Tile window to the left				Alt+4
+    Tile window to the right			Alt+6
+    Tile window to the top-left			Alt+7
+    Tile window to the top-right	    	        Alt+9
+    Tile window to the bottom-left	        	Alt+1
+    Tile window to the bottom-right	        	Alt+3
+
 Aanmaken van keyboard shortcuts
 XFCE4-Settings-Keyboard --> Application shortcuts
 (Ook dit staat in de text file die hierboven staat, maar dat is minder goed leesbaar)
@@ -1309,46 +1332,46 @@ Daarvoor eerst de default .xinitrc kopieren
 
 Delete de regels van het bestand maar laat de laatste tekstblok staan 
 en voeg exec i3 toe (plus onderstaande voor logging)
-```
-exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
-twm &
-xclock -geometry 50x50-1+1 &y
-xterm -geometry 80x50+494+51 &
-xterm -geometry 80x20+494-0 &
-exec xterm -geometry 80x66+0+0 -name login
-Start i3 (login als archie)
-startx
-```
+
+    exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
+    twm &
+    xclock -geometry 50x50-1+1 &y
+    xterm -geometry 80x50+494+51 &
+    xterm -geometry 80x20+494-0 &
+    exec xterm -geometry 80x66+0+0 -name login
+    Start i3 (login als archie)
+    startx
+
 Je kunt de config file aanmaken met 
 (locatie /home/archie/.config/i3/config)
-```
-i3-config-wizard
-```
+
+    i3-config-wizard
+
 Customize de config
-```
-nano /home/archie/.config/i3/config
-```
+
+    nano /home/archie/.config/i3/config
+
 Verander look and feel met lxappearance. Kies bijv. xfce-dusk
 lxappearance
 
 Mooi lettertype: system-san-francisco-font-git
-```
-yaourt -S system-san-francisco-font-git
-```
+
+    yaourt -S system-san-francisco-font-git
+
 De font wordt weegegeven in de lijst: 
 fc-list : file
 Open lxappearnce, verander de fontsize, klik op apply.
 Nu is een .gtk file aangemaakt, vind het bestand (.gtkrc-2.0)
-```
-ls -al
-```
+
+    ls -al
+
 Pas fontawesome-webfont.ttf de eigenschappen aan in nano, ook in gtk-3. 
 Open de bestanden en verander gtk-font-name="Cantarell 13" naar 
 gtk-font-name="System San Francisco Display "
-```
-nano .gtkrc-2.0
-nano ~/.config/gtk-3.0/settings.ini
-```
+
+    nano .gtkrc-2.0
+    nano ~/.config/gtk-3.0/settings.ini
+
 Het werkt, ook is dit font is toegevoegd aan /home/archie/.config/i3/config 
 (font pango: System San Francisco Display 10)
 Het is ook mogelijk om de font te kiezen in lxappearance, het heet daar 
@@ -1358,62 +1381,62 @@ SFNS display, maar dit geeft een slechte rendering.
 Pas het i3status.conf file aan, save het in de user directory voor gebruik 
 voor alleen deze gebruiker
 Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
-```
-mkdir .config/i3status
-cp /etc/i3status.conf .config/i3status/config
-nano .config/i3status/config
-```
+
+    mkdir .config/i3status
+    cp /etc/i3status.conf .config/i3status/config
+    nano .config/i3status/config
+
 
 Zet icons op tabs. 
 Download Font-Awesome Release 4.4 op webpagina:
 https://github.com/FortAwesome/Font-Awesome/releases
 Pak de fontawesome-webfont.ttf uit de zipfile en verplaats naar .fonts:
-```
-mv fontawesome-webfont.ttf ~/.fonts/
-```
+
+    mv fontawesome-webfont.ttf ~/.fonts/
+
 Kopier bijvoorbeeld de firefox afbeelding op de onderstaande webpagina
 https://fontawesome.com/cheatsheet
 Plak het icoon, , in de tekstfile
-```
-nano /home/archie/.config/i3/config
-```
+
+    nano /home/archie/.config/i3/config
+
 Forceer een applicatie om te openen op een vast tab blad met 
 Vind de class van een applicatie door naast de applicatie een terminal te
 openen en daarin xprop te starten en op de applicatie te klikken:
 (assign [class="Firefox"] $workspace3)
-```
-xprop
-```
+
+    xprop
+
 Mooi icon theme. Instellen via lxappearance/Icon theme/Moka
-```
-yaourt -S moka-icon-theme
-```
+
+    yaourt -S moka-icon-theme
+
 Save layout of workspace, dit zou de layout moeten wegschrijven, waarnaar
 je het na modificatie kunt wegschrijven, niet eenvoudig en lukt me nog 
 niet...  https://i3wm.org/docs/layout-saving.html EditingLayoutFiles: 
-```
-i3-save-tree --workspace 2 > ~/.config/i3/workspace-2.json
-```
+
+    i3-save-tree --workspace 2 > ~/.config/i3/workspace-2.json
+
 Zet numlock aan:
-```
-sudo pacman -S numlockx
-exec_always --no-startup-id numlockx off
-```
+
+    sudo pacman -S numlockx
+    exec_always --no-startup-id numlockx off
+
 
 Een paar commands (meer staat in onderstaande config file!).
 Let op mod: super key!
-```
-$mod+Enter	Open terminal
-$mod+1		Selecteer space 1 (1-9 kun je kiezen)
-$mod+Shift+e	Logout i3
-$mod+Shift+q	Close container
-$mod+f		Toggle full screen 
-$mod+d		Choose application
-$mod+z		Choose application
-$mod+r		Rescale container (met pijltjes, escape om uit rescale te gaan)
-$mod+shift+1	Verplaats container naar een andere workspace (in dit geval 1)
-$mod+Shift+Left	Verplaats container op workspace naar andere positie met pijltjes
-```
+
+    $mod+Enter	Open terminal
+    $mod+1		Selecteer space 1 (1-9 kun je kiezen)
+    $mod+Shift+e	Logout i3
+    $mod+Shift+q	Close container
+    $mod+f		Toggle full screen 
+    $mod+d		Choose application
+    $mod+z		Choose application
+    $mod+r		Rescale container (met pijltjes, escape om uit rescale te gaan)
+    $mod+shift+1	Verplaats container naar een andere workspace (in dit geval 1)
+    $mod+Shift+Left	Verplaats container op workspace naar andere positie met pijltjes
+
 Instellen van Super_R als applications launcher en Capslock als escape
 voor VIM. Wat is de default setting van mijn Ducky keyboard:
 [archie@archPC ~]$ xmodmap -pm
