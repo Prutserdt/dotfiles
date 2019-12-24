@@ -124,6 +124,9 @@ Hiermee kun je meerdere USB  distros op een enkele pendrive zetten. :-)
 
     yay multibootusb-git
     sudo multibootusb
+Het lukt me niet in i3 om multibootusb te gebruiken (ook niet met gksu, niet
+als super user).
+
 
 Overschrijf hard disk door random data:`dd if=/dev/urandom of=/dev/sdb status=progress`
 
@@ -789,7 +792,38 @@ VPN configuration. Gekozen: vpnbook, de4 server
 
 
 Automatiseren van 200 muis klikken om de 50 ms:
-xdotool click --delay 50 --repeat 20 1
+
+    xdotool click --delay 50 --repeat 20 1
+
+
+
+
+#### Samba instellen
+Het onderstaande werkt helaas nog niet.
+
+`sudo yaourt -S samba`
+daarna een smb.conf file aangemaakt in /etc/samba
+gekopieerd van :https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default
+aangepast: `workgroup = WORKGROUP`
+aangepast: `log file = /var/log/samba/%m.log.`
+scannen locaties: `smbtree`
+
+onderstaande werkt niet:
+[user@USBdistro /]$ sudo mount -t cifs -o username=labuserbio \\nlnijsynthfcvs3\biodata \media
+mount.cifs: bad UNC (\nlnijsynthfcsv3biodata)
+[user@USBdistro /]$ sudo mount -t cifs -o username=labuserbio \\nlnijsynthfcsv3 \media
+mount.cifs: bad UNC (\nlnijsynthfcsv3)
+werkt ook niet met corporate adressen...
+
+installed: 
+gvfs
+gvfs-smb
+sshfs
+smb://nlnijsynthfcv1.nl.corporate.synthon-group.com/
+smb://nlnijsynthfcsv3.nl.corporate.synthon-group.com/
+smb://nlnijsynthfcvs1.nl.corporate.synthon-group.com/
+
+
 
 ---
 ### Applications (Command line and GUIs)
@@ -975,6 +1009,12 @@ The command line command: :
 VIM; editen van markdown en live preview in browser met de
 `iamcco/makrdown-preview.nvim` plugin.
 Open een markdown file: `:MarkdownPreview`
+
+#### fzf (fuzzy finder)
+Command line zoek programma.
+`fzf`
+
+
 
 #### Ranger (terminal filebrowser)
 
