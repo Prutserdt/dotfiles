@@ -1,0 +1,26 @@
+# /.config/applications
+#
+# This file consist a list of the programs that are required to
+# run the i3 configuration (together with my dotfiles)
+#
+# This can be used during an install on a new system
+#
+
+yay
+i3
+dmenu
+feh
+system-san-francisco-font-git
+moka-icon-theme
+ranger
+vifm
+firefox
+glances
+fzf
+gvim
+git
+python-pywal
+vundle-git
+figlet
+python-ueberzug
+thunar
