@@ -795,9 +795,6 @@ Automatiseren van 200 muis klikken om de 50 ms:
 
     xdotool click --delay 50 --repeat 20 1
 
-
-
-
 #### Samba instellen
 Het onderstaande werkt helaas nog niet.
 
@@ -1871,6 +1868,20 @@ wlan0 is de alfa usb wifi... waar is de interne wifi...
 sudo apt-get update
 sudo apt-get upgrade
 
+
+#### Install  i3 Arch op Synthon pc (december 2020), via dotfile en GIT
+*Installatie* 
+Eerst met dd de harde schijf gecomprimeerd en opgeslagen, zodat ik deze
+terug kan zetten.
+Daarna Arch linux via een USB drive geinstalleerd. Helaas ging dat niet zo
+eenvoudig en heb ik het kunnen installeren via de USB drive na opstarten
+en root account door het onderstaande script te downloaden (als root) en
+het shell script te starten. Dit lijkt op de oude Arch installer:
+
+    wget archfi.sf.net/archfi
+    sh archfi
+
+**
          
 ---
 ### Keebs         

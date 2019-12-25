@@ -1,10 +1,17 @@
 # /.config/applications
+#                   _ _           _   _                 
+#  __ _ _ __  _ __ | (_) ___ __ _| |_(_) ___  _ __  ___ 
+# / _` | '_ \| '_ \| | |/ __/ _` | __| |/ _ \| '_ \/ __|
+#| (_| | |_) | |_) | | | (_| (_| | |_| | (_) | | | \__ \
+# \__,_| .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|___/
+#      |_|   |_|                                     #
+#
+# Modified by Prutserdt
 #
 # This file consist a list of the programs that are required to
-# run the i3 configuration (together with my dotfiles)
+# run my i3 configuration (combined with my dotfiles)
 #
 # This can be used during an install on a new system
-#
 
 yay
 i3
@@ -24,3 +31,5 @@ vundle-git
 figlet
 python-ueberzug
 thunar
+urxvt
+stack-cloud-client
