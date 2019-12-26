@@ -1037,7 +1037,6 @@ Maak asci word art van een woord in command line: `sudo pacman -S figlet`
 Een terminal file manager die gebruikt maakt van VI bindings :-)
 Ik heb van Distro Tube de volgende twee files toegevoegd aan 
 vi ~/.config/vifm/scripts/vifmimg
-
 ```
 #!/usr/bin/env bash
 	readonly ID_PREVIEW="preview"
@@ -1052,8 +1051,9 @@ vi ~/.config/vifm/scripts/vifmimg
 	            > "$FIFO_UEBERZUG"
 	    fi
 	fi
-    vi ~/.config/vifm/scripts/vifmrun
-
+```
+vi ~/.config/vifm/scripts/vifmrun
+```
 #!/usr/bin/env bash
 	export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
 	function cleanup {
@@ -1067,9 +1067,10 @@ vi ~/.config/vifm/scripts/vifmimg
 	vifm
 	cleanup
 ```
-Wat je ook nodig hebt is het python script Ueberzug:
+Wat je ook nodig hebt is het python script Ueberzug en pillow:
 
     yay python-ueberzug
+    yay pillow
 
 Om alles te laten lopen moet je het script ~/.config/vifm/scripts/vifmrun
 starten. Verander de rechten van het bestand om executable te maken:
@@ -1081,14 +1082,8 @@ starten. Verander de rechten van het bestand om executable te maken:
 
 Nu start je het script door in te voeren.  ~/.config/vifm/scripts/vifmrun
 ./vifmrun
-```
-opmerking: ik zie geen enkele preview....
-opmerking: er is geen transparancy...
-opmerking: files worden niet juist geopenE; niet leesbare afbeeldingen # opmerking: 
-opmerking: vifmrun: export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
-opmerking: deze directory bestaat niet... Er klopt iets niet
-opmerking: wel ik ueberzug geinstalleerd: mod+d laat het zien
-```
+
+Dit is toegevoegd als hotkey in i3: mod+v
 
 #### urxvt (lightweight terminal). Kleurenschema kun je met pywal instellen :-)
 

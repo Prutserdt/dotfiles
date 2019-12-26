@@ -187,16 +187,37 @@ bindsym XF86Calculator		exec "urxvt +sb -e bc"; exec "bash -c 'sleep 0.1s;i3-msg
 # Uses the right menu key on my keyboard to open applications 
 # The Super-R tux keycap was changed to a menu cap)
 
-bindsym mod3+c 		    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
+
+#onderstaande is oud, ik bewaar dit even zodat ik het eenvoudig terug kan
+#zetten
+#bindsym mod3+c 		    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
+#bindsym mod3+f		    exec firefox
+#bindsym mod3+g 		    exec gimp
+#bindsym mod3+i 		    exec "urxvt +sb -e vim ~/.config/i3/config"
+#bindsym mod3+Shift+i	exec mousepad ~/.config/i3/config
+#bindsym mod3+k 		    exec keepass
+#bindsym mod3+t   		exec thunar
+#bindsym mod3+v   		exec "urxvt +sb -e vim ~/.vimrc"
+#
+#
+#
+#
+#bindsym mod3+r  		exec "urxvt +sb -e bash -c ranger"
+#bindsym mod3+s   		exec spotifyd
+
+# Open applications
 bindsym mod3+f		    exec firefox
 bindsym mod3+g 		    exec gimp
-bindsym mod3+i 		    exec "urxvt +sb -e vim ~/.config/i3/config"
-bindsym mod3+Shift+i	exec mousepad ~/.config/i3/config
 bindsym mod3+k 		    exec keepass
 bindsym mod3+t   		exec thunar
-bindsym mod3+v   		exec "urxvt +sb -e vim ~/.vimrc"
+bindsym mod3+v  		exec "urxvt +sb -e bash -c ~/.config/vifm/scripts/vifmrun"
 bindsym mod3+r  		exec "urxvt +sb -e bash -c ranger"
-bindsym mod3+s   		exec spotifyd
+
+# Open files
+bindsym mod3+Shift+c    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
+bindsym mod3+Shift+i    exec "urxvt +sb -e vim ~/.config/i3/config"
+bindsym mod3+Shift+v	exec "urxvt +sb -e vim ~/.vimrc"
+
 
 #################################################################
 #                   Autostart applications                      #

@@ -33,3 +33,16 @@ python-ueberzug
 thunar
 urxvt
 stack-cloud-client
+screenfetch
+keepass
+compton
+rofi
+w3m
+#Optional applications:
+urxvt-perls
+urxvt-resize-font-giti
+blocks
+i3lock
+htop
+gksu
+etherape
