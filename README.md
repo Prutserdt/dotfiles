@@ -1,21 +1,24 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
 # Dotfiles repo! 
-Here I store my dotfiles and other text files. :godmode:
+Here I store my dotfiles and other text files of my Arch Linux i3wm system. :godmode:
 
 The files of this repo can be found in the list above this readme file.
+
+The applications needed to run my i3 config can be found in
+*./config/applications.md*.
 
 ### Commit and push to the repo: `dotfiles`
 If one or more of the files of this repo are changed on a local machine, then this bare GitHub repository can be updated by a single command:
 ```
 dotfiles
 ````
-This `dotfiles` command is set on the local machine as an alias in .bashrc and consists of the following lines:
+This `dotfiles` command is set on the local machine as an alias in .bashrc and consists of the following line:
 ```
 alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'
 ```
 The `config` alias is also set in the .bashrc as:
 ```
-/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 ```
 ### Add an additional dotfile from the local pc to this repo
 ```
