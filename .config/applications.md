@@ -1,4 +1,5 @@
 <!Modified by Prutserdt, /home/archie/.applications.md>
+# .applications.md
 
 This file consist a list of the programs that are required to
 run my Arch Linux i3wm configuration (combined with my dotfiles).
