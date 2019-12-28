@@ -11,11 +11,13 @@ dotfiles
 ````
 This `dotfiles` command is set on the local machine as an alias in .bashrc and consists of the following lines:
 ```
-config add -u :/ -v
-config commit -m "Updated"
-config push -v
+alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'
 ```
-### Add an additional dotfile to this repo
+The `config` alias is also set in the .bashrc as:
+```
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+```
+### Add an additional dotfile from the local pc to this repo
 ```
 config add .example
 config commit -m "Add my .example"

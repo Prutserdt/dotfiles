@@ -265,7 +265,7 @@ Frame by frame (Duurt wel langer. Als het bovenstaande niet goed werkt.):
     ffmpeg -i Film.mp4 -ss 308 -t 111 -fflags +genpts Filmpje.mp4
 
 Vind de code van keys van keyboard (toetsenbord): `xev`.
-     
+    
 #### Rechten bestanden
      
 Bekijk rechten: `ls -l` `ls -a -l` 'ls -al' 'ls la'
@@ -1498,6 +1498,40 @@ bindsym mod3+f exec firefox
 exec --no-startup-id xmodmap ~/.Xmodmap
 Het werkt. Nu kan de rechter superkey worden gebruikt als applicatie
 launcher :-)
+
+IK WIL DIT AAN PASSEN DENK IK, DAT KAN VIA DE ONDERDTAANDE MODIFICATIE DIE
+ERVOOR ZORGT DAT ALLEEN DEZE KEYBINDING GEBRUIKT WORDT VOOR VIM
+https://stackoverflow.com/questions/2176532/how-to-map-caps-lock-key-in-vim
+
+PROBLEEM: ALS IK MIJN KEYBOARD UNPLUG DAN WERKEN DE XMODMAP KEYBINDINGS NIET
+MEER DIT IS IRRITANT OMDAT DAN DE ESCAPE/CAPSLOCK EN "MENU" KNOP NIET MEER
+WERKENG. OPLOSSING:
+maak de dotfile `~/.kbswitch` en zet daarin
+```
+!.kbswitch
+! _    _                  _ _       _     
+!| | _| |__  _____      _(_) |_ ___| |__  
+!| |/ / '_ \/ __\ \ /\ / / | __/ __| '_ \ 
+!|   <| |_) \__ \\ V  V /| | || (__| | | |
+!|_|\_\_.__/|___/ \_/\_/ |_|\__\___|_| |_|
+!                                         
+! Modified by Prutserdt
+! This dotfile can be triggered by the .bashrc and by
+! entering xmodmap ~/kbswitch
+
+! Super_R key is set to mod3, this button is used for keybindings to apps in i3wm, see ~/.config/i3/config
+remove mod4 = Super_R
+add mod3 = Super_R
+
+! A little hack for VIM. The Caps_Lock becomes the Escape key and vice versa.
+remove Lock = Caps_Lock
+keysym Escape = Caps_Lock
+keysym Caps_Lock = Escape
+add Lock = Caps_Lock
+```
+
+xmodmap ~/.keyboardswitch
+
 
 To do list:
 pagina 2 wil ik monitors op vaste plaatsen zetten...

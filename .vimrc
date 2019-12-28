@@ -1,4 +1,4 @@
-" .vimrc
+" ~/.vimrc
 " Based on gistfile1.txt (default settings)
 " 
 " Remark: install gvim instead of vim. This will add copy/paste in/out of vim 
@@ -9,7 +9,8 @@
 "__   _(_)_ __ ___  _ __ ___ 
 "\ \ / / | '_ ` _ \| '__/ __|
 " \ V /| | | | | | | | | (__ 
-"  \_/ |_|_| |_| |_|_|  \___|
+"(_)_/ |_|_| |_| |_|_|  \___|
+"
 " Modified by Prutserdt
 "
 "------------------------------------------------------------------------------

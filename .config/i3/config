@@ -185,38 +185,40 @@ bindsym XF86Calculator		exec "urxvt +sb -e bc"; exec "bash -c 'sleep 0.1s;i3-msg
 #################################################################
 
 # Uses the right menu key on my keyboard to open applications 
-# The Super-R tux keycap was changed to a menu cap)
-
-
-#onderstaande is oud, ik bewaar dit even zodat ik het eenvoudig terug kan
-#zetten
-#bindsym mod3+c 		    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
-#bindsym mod3+f		    exec firefox
-#bindsym mod3+g 		    exec gimp
-#bindsym mod3+i 		    exec "urxvt +sb -e vim ~/.config/i3/config"
-#bindsym mod3+Shift+i	exec mousepad ~/.config/i3/config
-#bindsym mod3+k 		    exec keepass
-#bindsym mod3+t   		exec thunar
-#bindsym mod3+v   		exec "urxvt +sb -e vim ~/.vimrc"
-#
-#
-#
-#
-#bindsym mod3+r  		exec "urxvt +sb -e bash -c ranger"
-#bindsym mod3+s   		exec spotifyd
+# (The Super-R tux keycap was changed to a menu cap)
 
 # Open applications
+bindsym mod3+a          exec "urxvt +sb -e bash -c alsamixer"
+bindsym mod3+b          exec blender
+#bindsym mod3+c		    exec
+bindsym mod3+d		    exec dosbox
 bindsym mod3+f		    exec firefox
-bindsym mod3+g 		    exec gimp
-bindsym mod3+k 		    exec keepass
-bindsym mod3+t   		exec thunar
-bindsym mod3+v  		exec "urxvt +sb -e bash -c ~/.config/vifm/scripts/vifmrun"
-bindsym mod3+r  		exec "urxvt +sb -e bash -c ranger"
+bindsym mod3+g		    exec gimp
+bindsym mod3+h		    exec "urxvt +sb -e bash -c htop"
+#bindsym mod3+i		    exec 
+#bindsym mod3+j		    exec
+bindsym mod3+k		    exec keepass
+bindsym mod3+l		    exec libreoffice
+bindsym mod3+m		    exec mousepad
+bindsym mod3+n		    exec nautilus
+bindsym mod3+o		    exec octave
+#bindsym mod3+p		    exec 
+#bindsym mod3+q		    exec 
+bindsym mod3+r		    exec "urxvt +sb -e bash -c ranger"
+bindsym mod3+s		    exec spotifyd
+bindsym mod3+t		    exec thunar
+#bindsym mod3+u		    exec 
+bindsym mod3+v		    exec "urxvt +sb -e bash -c ~/.config/vifm/scripts/vifmrun"
+#bindsym mod3+w		    exec
+#bindsym mod3+x		    exec 
+#bindsym mod3+y		    exec 
+#bindsym mod3+z		    exec 
 
 # Open files
 bindsym mod3+Shift+c    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
 bindsym mod3+Shift+i    exec "urxvt +sb -e vim ~/.config/i3/config"
 bindsym mod3+Shift+v	exec "urxvt +sb -e vim ~/.vimrc"
+bindsym mod3+Shift+t	exec "urxvt +sb -e vim ~/.config/ranger/rc.conf"
 
 
 #################################################################

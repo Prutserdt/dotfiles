@@ -1,13 +1,14 @@
 !.kbswitch
-! _    _                  _ _       _     
-!| | _| |__  _____      _(_) |_ ___| |__  
-!| |/ / '_ \/ __\ \ /\ / / | __/ __| '_ \ 
-!|   <| |_) \__ \\ V  V /| | || (__| | | |
-!|_|\_\_.__/|___/ \_/\_/ |_|\__\___|_| |_|
+!   _    _                  _ _       _     
+!  | | _| |__  _____      _(_) |_ ___| |__  
+!  | |/ / '_ \/ __\ \ /\ / / | __/ __| '_ \ 
+! _|   <| |_) \__ \\ V  V /| | || (__| | | |
+!(_)_|\_\_.__/|___/ \_/\_/ |_|\__\___|_| |_|
 !                                         
 ! Modified by Prutserdt
-! This dotfile can be triggered by the .bashrc and by
-! entering xmodmap ~/kbswitch
+! This dotfile can be triggered from the terminal
+! by: `xmodmap ~/kbswitch`, or by entering `kbswitch`
+! from terminal (see .bashrc alias)
 
 ! Super_R key is set to mod3, this button is used for keybindings to apps in i3wm, see ~/.config/i3/config
 remove mod4 = Super_R
@@ -18,4 +19,3 @@ remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
-
