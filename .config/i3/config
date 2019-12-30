@@ -205,7 +205,7 @@ bindsym mod3+o		    exec octave
 #bindsym mod3+p		    exec 
 #bindsym mod3+q		    exec 
 bindsym mod3+r		    exec "urxvt +sb -e bash -c ranger"
-bindsym mod3+s		    exec spotifyd
+#bindsym mod3+s		    exec 
 bindsym mod3+t		    exec thunar
 #bindsym mod3+u		    exec 
 bindsym mod3+v		    exec "urxvt +sb -e bash -c ~/.config/vifm/scripts/vifmrun"
@@ -214,12 +214,14 @@ bindsym mod3+v		    exec "urxvt +sb -e bash -c ~/.config/vifm/scripts/vifmrun"
 #bindsym mod3+y		    exec 
 #bindsym mod3+z		    exec 
 
-# Open files
+# Open files in Vim
+bindsym mod3+Shift+a    exec "urxvt +sb -e vim ~/.config/applications.md"
+bindsym mod3+Shift+b    exec "urxvt +sb -e vim ~/.bashrc"
 bindsym mod3+Shift+c    exec "urxvt +sb -e vim ~/Stack/Command_line/commands.md"
 bindsym mod3+Shift+i    exec "urxvt +sb -e vim ~/.config/i3/config"
-bindsym mod3+Shift+v	exec "urxvt +sb -e vim ~/.vimrc"
+bindsym mod3+Shift+r    exec "urxvt +sb -e vim ~/README.md"
 bindsym mod3+Shift+t	exec "urxvt +sb -e vim ~/.config/ranger/rc.conf"
-
+bindsym mod3+Shift+v	exec "urxvt +sb -e vim ~/.vimrc"
 
 #################################################################
 #                   Autostart applications                      #

@@ -7,6 +7,7 @@ The files of this repo can be found in the list above this readme file.
 The applications needed to run my i3 config can be found in
 *./config/applications.md*.
 
+## The dotfiles command and how to manage this bare GitHub repo
 ### Commit and push to the repo: `dotfiles`
 If one or more of the files of this repo are changed on a local machine, then this bare GitHub repository can be updated by a single command:
 ```
@@ -20,14 +21,21 @@ The `config` alias is also set in the .bashrc as:
 ```
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 ```
-### Add an additional dotfile from the local pc to this repo
+### Add an additional dotfile to this repo
 ```
 config add .example
 config commit -m "Add my .example"
 config push -v
 ```
+
+### Remove an existing dotfile from the repo
+```
+config rm .example
+config commit -m "Add my .example"
+config push -v
+```
 ### Short manual how to setup a dotfiles repo
-First create a dotfiles directory at ~/ then enter from ~/:
+First create a `dotfiles` directory at ~/ then enter from ~/:
 ```
 git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
 git push dotfiles

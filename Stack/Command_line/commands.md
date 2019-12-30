@@ -1,5 +1,4 @@
-<!Modified by Prutserdt, /home/archie/Stack/Command_line/>
-         
+<!Modified by Prutserdt, /home/archie/Stack/Command_line/commands.md>
           _     _                    _        _      _        
          | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____ 
          | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
@@ -948,6 +947,8 @@ Search and replace,  wissen tekst: `:%s/Links naar bestanden op eigen pagina://g
 Search and replace, wissen tekst, zoeken met wildcard(</small>): `:%s/<.small>//g`
 Saving macros separately, since :reg can be overwritten: `let @a='0fa'`
 
+Alfabetisch Sorteren: `:sort`.
+
 Voorbeelden
 
     4w      : 4 woorden verder
@@ -958,23 +959,11 @@ Voorbeelden
 
 Navigation(command combination examples):
 
-    ???    : verplaats cursor naar lijn nummer 42
-    ???    : verplaats cursor 10 lijnen omhoog
-
-Doornummeren voorbeeld. Maak van dit:
-
-    [00:01.24]
-    [00:00.24]
-    [00:00.24]
-    [00:00.24]
-
-
-Het volgende:
-
-    [00:01.24]
-    [00:01.24]
-    [00:01.24]
-    [00:01.24]
+    :42    : verplaats cursor naar lijn nummer 42
+    10k    : verplaats cursor 10 lijnen omhoog
+    10-    : verplaats cursor 10 lijnen omhoog
+    10j    : verplaats cursor 10 lijnen omlaag
+    10+    : verplaats cursor 10 lijnen omlaag
 
 Verander dit:
 ```
@@ -1083,7 +1072,7 @@ starten. Verander de rechten van het bestand om executable te maken:
 Nu start je het script door in te voeren.  ~/.config/vifm/scripts/vifmrun
 ./vifmrun
 
-Dit is toegevoegd als hotkey in i3: mod+v
+Dit is toegevoegd als hotkey in i3: `mod+v`
 
 #### urxvt (lightweight terminal). Kleurenschema kun je met pywal instellen :-)
 
@@ -1094,7 +1083,7 @@ nano ~/.defaults
 Plak daarin de onderstaande regels om de transparantie en font in te 
 stellen, plus extra's die in de comments worden beschreven.
 Created to rice the urxvt terminal.
-
+```
 Set transparancy
 
 URxvt.transparent:	        true
@@ -1119,17 +1108,14 @@ URxvt.resize-font.smaller:  C-j
 URxvt.resize-font.bigger:   C-k 
  Keyboard select. Je gaat erin met Mod+ESC en eruit met Esc:
 URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
+```
 
 #### cmus. Terminal musicplayer
 Begin door het toevoegen van een direcotory, waar het prog. muziek in gaat
 zoeken.
 :add ~/Stack
 Het programma heeft VIM bindings. Type 7 om de keybindinglijst te zien:
-7
-j:
-k:
-
-the j and k keys.
+`7`
 
 #### cava
 Een audio visualizer voor in de commandline.
@@ -1204,13 +1190,6 @@ HET WERKT DUS NOG NIET!!!!
 
 eval "$(ssh-agent -s)"
 ssh-add
-
-
-
-
-
-
-
 
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
@@ -1358,7 +1337,7 @@ sudo pacman -S  thunar-media-tags-plugin
 Tips: https://www.youtube.com/watch?v=8-S0cWnLBKg
 
 Nieuwe installatie:
-sudo pacman -S ill3 dmenu feh
+sudo pacman -S i3status i3gaps dmenu feh
 Start i3 via startx (oftewel .xinitrc in home directory
 Daarvoor eerst de default .xinitrc kopieren
 
@@ -1499,14 +1478,11 @@ exec --no-startup-id xmodmap ~/.Xmodmap
 Het werkt. Nu kan de rechter superkey worden gebruikt als applicatie
 launcher :-)
 
-IK WIL DIT AAN PASSEN DENK IK, DAT KAN VIA DE ONDERDTAANDE MODIFICATIE DIE
-ERVOOR ZORGT DAT ALLEEN DEZE KEYBINDING GEBRUIKT WORDT VOOR VIM
-https://stackoverflow.com/questions/2176532/how-to-map-caps-lock-key-in-vim
 
 PROBLEEM: ALS IK MIJN KEYBOARD UNPLUG DAN WERKEN DE XMODMAP KEYBINDINGS NIET
 MEER DIT IS IRRITANT OMDAT DAN DE ESCAPE/CAPSLOCK EN "MENU" KNOP NIET MEER
 WERKENG. OPLOSSING:
-maak de dotfile `~/.kbswitch` en zet daarin
+maak de dotfile `~/.kbswitch` en zet daarin:
 ```
 !.kbswitch
 ! _    _                  _ _       _     
@@ -1516,8 +1492,8 @@ maak de dotfile `~/.kbswitch` en zet daarin
 !|_|\_\_.__/|___/ \_/\_/ |_|\__\___|_| |_|
 !                                         
 ! Modified by Prutserdt
-! This dotfile can be triggered by the .bashrc and by
-! entering xmodmap ~/kbswitch
+! This dotfile triggered by the .bashrc and by
+! entering: xmodmap ~/.bswitch
 
 ! Super_R key is set to mod3, this button is used for keybindings to apps in i3wm, see ~/.config/i3/config
 remove mod4 = Super_R
@@ -1529,6 +1505,7 @@ keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
 ```
+
 
 xmodmap ~/.keyboardswitch
 
@@ -1955,5 +1932,11 @@ in programming mode, it will back to normal mode.
 
      
 #### Gergo keyboard
-     
-"https://github.com/Prutserdt"
+Een Gergo keyboard gekocht zonder switches.  
+
+Op Ali express low profile  Kail Choc switches gekocht (rood en wit) plus
+keycaps.
+
+Gesoldeerd, het werkt met default preconfigurated settings.
+Nu nog de firmware updaten naar een eigen configuratie, want ik heb een betere
+layout voor mijn i3wm.
