@@ -25,4 +25,4 @@ alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'
 # Change keyboard mapping
 # The dotfile .kbswitch changes Esc/Caps and the Super_R to mod3
 # (Esc/Caps for vim, and Super_R as an extra shortcut button in i3)
-alias kbswitch='xmodmap ~/.bswitch'
+alias kbswitch='xmodmap ~/.kbswitch'
