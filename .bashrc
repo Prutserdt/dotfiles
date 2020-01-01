@@ -26,3 +26,21 @@ alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'
 # The dotfile .kbswitch changes Esc/Caps and the Super_R to mod3
 # (Esc/Caps for vim, and Super_R as an extra shortcut button in i3)
 alias kbswitch='xmodmap ~/.config/kbswitch'
+
+# Dit is een test.
+# Ik wil config status geven van de dotfiles
+# En daaronder tekstopties geven voor pull of push
+# (of kan ik er twee opties van maken?)
+alias test='config status; 
+            echo "------------------------------------------------------------------";
+            echo "If files are changed than they can be pulled or pushed by commands";
+            echo "";
+            echo "If your branch is up to date with dotfiles/master and";
+            echo "there are no greyed out files present then do nothing.";
+            echo "";
+            echo "Commit and push all of the dotfiles at once by:";
+            echo "config add -u :/ -v; config commit -m "Updated";config push -v";
+            echo "";
+            echo "The newest dotfiles from the repo can be cpulled by:";
+            echo "config pull";
+            echo "------------------------------------------------------------------"'

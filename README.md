@@ -43,10 +43,6 @@ and pushed to the repo than this file can be added by:
 
 If there are new versions, then they will be updated.
 
-
-
-
-
 ### How to setup a new dotfiles repo
 First create a `dotfiles` directory at ~/ then enter from ~/:
 ```
@@ -58,10 +54,7 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add thi
 bash
 config config --local status.showUntrackedFiles no
 ```
-
-test
-
-#### How to add the dotfiles of this repo to a new Linux pc.
+### How to add the dotfiles of this repo to a new Linux pc.
 
 Make sure that git is installed and add a name and email:
 
@@ -73,7 +66,7 @@ Add the following alias to .bashrc:
     alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
     echo "dotfiles" >> .gitignore
 
-Now clone your dotfiles into a bare repository in a "dot" folder of your $HOME:
+Now clone your dotfiles into a bare repository in a "dotfiles" folder of your $HOME:
 
     git clone --bare https://github.com/Prutserdt/dotfiles.git $HOME/dotfiles
 
@@ -96,8 +89,7 @@ Re-run the check out if you had problems:
 
     config checkout
 
-Probably not everything is in the correct subdirectory, therefore adde
-the following dirs:
+Probably not everything is in the correct subdirectory, therefore add the following dirs:
 ```
 mkdir .config-backup/.config
 mkdir .config-backup/.config/i3
@@ -108,12 +100,12 @@ mkdir .config-backup/.config/i3status
 mkdir .config-backup/Stack
 mkdir .config-backup/Stack/Command_line
 ```
-And then perform the same commands:
+And then perform the same previously performed commands:
 
     config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
     xargs -I{} mv {} .config-backup/{}
 
-Now re-run the check out if you had problems:
+Now re-run the check and find out if there are still issues:
 
     config checkout
 
@@ -128,7 +120,23 @@ If needed use:
 ### How to automatically login to GitHub
 ?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-### References:
+## References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
+
+### To do list
+Hieronder is een lijst van dingen die nog aangepast/verbeterd moeten worden.
+
+### Automatisch eerst een pull doen en daarna het uitvoeren van 'dotfiles'
+Ik wil een enkele commando gebruiken om de nieuwste dotfiles te downloaden en
+die daarna een commit/push doet als de locale pc nieuwere dotifles heeft.
+Dus een combinatie van;
+
+    config pull
+    dotfiles
+
+Wat ik ook kan doen is alles anders doen.
+dotfiles: --> run config status
+plus geef als output wat te doen voor pull en push:
+
