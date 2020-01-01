@@ -1389,14 +1389,12 @@ Het is ook mogelijk om de font te kiezen in lxappearance, het heet daar
 SFNS display, maar dit geeft een slechte rendering.
 ....yosemity font gecopierd naar ~/.fonts
 
-Pas het i3status.conf file aan, save het in de user directory voor gebruik 
-voor alleen deze gebruiker
+Pas het i3status.conf file aan, save het in de user directory voor gebruik voor alleen deze gebruiker
 Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
 
     mkdir .config/i3status
     cp /etc/i3status.conf .config/i3status/config
-    nano .config/i3status/config
-
+    vim .config/i3status/config
 
 Zet icons op tabs. 
 Download Font-Awesome Release 4.4 op webpagina:

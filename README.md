@@ -28,13 +28,13 @@ config commit -m "Add my .example"
 config push -v
 ```
 
-### Remove an existing dotfile from the repo
+### Remove an existing dotfile from this repo
 ```
 config rm .example
 config commit -m "Add my .example"
 config push -v
 ```
-### Short manual how to setup a dotfiles repo
+### How to setup a dotfiles repo
 First create a `dotfiles` directory at ~/ then enter from ~/:
 ```
 git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
@@ -45,7 +45,7 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add thi
 bash
 config config --local status.showUntrackedFiles no
 ```
-### Short manual how to automatically login to GitHub
+### How to automatically login to GitHub
 ?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
 ### References:

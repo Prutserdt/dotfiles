@@ -1,5 +1,5 @@
-<!Modified by Prutserdt, /home/archie/.applications.md>
-# .applications.md
+<!Modified by Prutserdt, /home/archie/applications.md>
+# applications.md
 
 This file consist a list of the programs that are required to
 run my Arch Linux i3wm configuration (combined with my dotfiles).
@@ -9,13 +9,10 @@ run my Arch Linux i3wm configuration (combined with my dotfiles).
 compton
 dmenu
 feh
-figlet
-firefox
-fzf
 git
-glances
 gvim
 i3-gaps
+i3status
 keepass
 moka-icon-theme
 numlockx
@@ -26,7 +23,6 @@ rofi
 screenfetch
 stack-cloud-client
 system-san-francisco-font-git
-thunar
 urxvt
 vifm
 vundle-git
@@ -36,9 +32,15 @@ yay
 **Optional applications:**
 ```
 blocks
+fzf
+glances
+gksu
+figlet
+firefox
 gksu
 htop
 i3block
+thunar
 urxvt-perls
 urxvt-resize-font-git
 ```
