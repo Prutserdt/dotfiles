@@ -140,3 +140,4 @@ Wat ik ook kan doen is alles anders doen.
 dotfiles: --> run config status
 plus geef als output wat te doen voor pull en push:
 
+echo "If files are changed than they can be pulled or pushed by commands"
