@@ -1477,10 +1477,9 @@ Het werkt. Nu kan de rechter superkey worden gebruikt als applicatie
 launcher :-)
 
 
-PROBLEEM: ALS IK MIJN KEYBOARD UNPLUG DAN WERKEN DE XMODMAP KEYBINDINGS NIET
-MEER DIT IS IRRITANT OMDAT DAN DE ESCAPE/CAPSLOCK EN "MENU" KNOP NIET MEER
-WERKENG. OPLOSSING:
-maak de dotfile `~/.kbswitch` en zet daarin:
+PROBLEEM: Als ik mijn keyboard unplug dan werken de xmodmap keybindings niet
+meer. Dat is irritant omdat de Esc/Capslock en "Menu" knop niet meer werken.
+De oplossing is om een dotfile aan te maken `~/.config/kbswitch` en zet daarin:
 ```
 !.kbswitch
 ! _    _                  _ _       _     
@@ -1503,29 +1502,8 @@ keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
 ```
-
-
-xmodmap ~/.keyboardswitch
-
-
-To do list:
-pagina 2 wil ik monitors op vaste plaatsen zetten...
-Links boven: command line
-$mod+enter
-Linksonder monitoring:
-glances 
-Rechter helft laat de 'live' log zien:
-tail -f -s 4 ~/i3_log/i3log-2019-07-25-21-09-49 4 sec updates
-find  ~/i3_log/i3log-2019-07-25-21-09-49 -type f -mmin -10 -exec tail -f {} +
-find  ~/i3_log/ -type f -mmin -10 -exec tail -f {} +
-
-De output van de log (laatste bestand in ~/i3_log en laatste entries)
-Dit niet toevoegen: nload -a 3000, sudo iftop, htop sudo jnettop
-* de border iets minder fel wit maken dan hij nu is
-* In de config een keybinding maken die een script runt die door wallpapers
-  cycled,
-* automatisch achtergrond veranderen en kleurenpallet
-* maak een  wal -i walpapernaam script
+In .bashrc is een alias aangemaakt die deze xmodmap laat lopen:
+alias kbswitch='xmodmap ~/.config/kbswitch'
 
 #### Install on persistent USB feb2017                    
      

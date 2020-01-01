@@ -11,6 +11,7 @@ The applications needed to run my i3 config can be found in
 ### Commit and push to the repo: `dotfiles`
 If one or more of the files of this repo are changed on a local machine, then this bare GitHub repository can be updated by a single command:
 ```
+
 dotfiles
 ````
 This `dotfiles` command is set on the local machine as an alias in .bashrc and consists of the following line:
@@ -34,7 +35,19 @@ config rm .example
 config commit -m "Add my .example"
 config push -v
 ```
-### How to setup a dotfiles repo
+### Pull from the GitHub repo
+If one or more of the dotfiles were modified on another computer and committed
+and pushed to the repo than this file can be added by:
+
+    config pull
+
+If there are new versions, then they will be updated.
+
+
+
+
+
+### How to setup a new dotfiles repo
 First create a `dotfiles` directory at ~/ then enter from ~/:
 ```
 git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
@@ -48,43 +61,44 @@ config config --local status.showUntrackedFiles no
 
 test
 
-#### Voeg mijn dotfiles bestanden van GitHub toe aan een nieuwe computer
+#### How to add the dotfiles of this repo to a new Linux pc.
 
-Zorg dat git geinstalleerd is en voeg naam en email toe:
+Make sure that git is installed and add a name and email:
 
     git config --global user.email "firstname@lastname.nl"
     git config --global user.name "Prutserdt"
 
-De omschrijving staat hier: `https://www.atlassian.com/git/tutorials/dotfiles`
+Add the following alias to .bashrc:
 
-Voeg toe aan .bashrc (als het er nog niet staat):
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-echo "dotfiles" >> .gitignore
+    alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+    echo "dotfiles" >> .gitignore
 
 Now clone your dotfiles into a bare repository in a "dot" folder of your $HOME:
-git clone --bare https://github.com/Prutserdt/dotfiles.git $HOME/dotfiles
 
-(nu voer je de naam en wachtwoord in voor GitHub)
+    git clone --bare https://github.com/Prutserdt/dotfiles.git $HOME/dotfiles
 
 Define the alias in the current shell scope:
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+
+    alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 
 Checkout the actual content from the bare repository to your $HOME:
-config checkout
 
-Daarna komt er een foutmelding dat deze files al bestaan.
-Voeg in de terminal de volgende toe om de files op te slaan
-in de ~/.config-backup directory:
+    config checkout
 
+Probably there is an error message that some files are already excisting.
+It's a good idea to make backup of the dotfiles in the ~/.config-backup directory:
+```
 mkdir -p .config-backup && \
 config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
 xargs -I{} mv {} .config-backup/{}
-
+```
 Re-run the check out if you had problems:
-config checkout
 
-Ik had nog steeds enkele bestanden die niet weggeschreven zijn, deze
-heb ik handmatig verplaatst door bijv. dit te doen:
+    config checkout
+
+Probably not everything is in the correct subdirectory, therefore adde
+the following dirs:
+```
 mkdir .config-backup/.config
 mkdir .config-backup/.config/i3
 mkdir .config-backup/.config/i3status
@@ -93,21 +107,23 @@ mkdir .config-backup/.config/vifm
 mkdir .config-backup/.config/i3status
 mkdir .config-backup/Stack
 mkdir .config-backup/Stack/Command_line
+```
+And then perform the same commands:
 
-config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
-xargs -I{} mv {} .config-backup/{}
+    config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \
+    xargs -I{} mv {} .config-backup/{}
 
-Re-run the check out if you had problems:
-config checkout
+Now re-run the check out if you had problems:
+
+    config checkout
 
 Set the flag showUntrackedFiles to no on this specific (local) repository:
-config config --local status.showUntrackedFiles no
 
-Het lukt om te pullen!
-Ga ik ~/dotfiles staan (weet niet zeker of dit nodig is) en voer in:
-config pull
-daarna worden nieuwe versies gepulled!
+    config config --local status.showUntrackedFiles no
 
+If needed use:
+
+    config checkout -f
 
 ### How to automatically login to GitHub
 ?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
