@@ -117,33 +117,30 @@ If needed use:
 
     config checkout -f
 
-### How to automatically login to GitHub
-?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
-
 ## References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-## To do list :bulb:, almost there :smirk: :tada:
-Hieronder is een lijst van dingen die nog aangepast/verbeterd moeten worden.
+----
+----
+----
+## To do list, nice idea :bulb:, not there yet :smirk:, potentially :tada:
+A list of potential improvements
 
-### Automatisch eerst een pull doen en daarna het uitvoeren van 'dotfiles'
-Ik wil een enkele commando gebruiken om de nieuwste dotfiles te downloaden en
-die daarna een commit/push doet als de locale pc nieuwere dotifles heeft.
-Dus een combinatie van;
+### How to automatically login to GitHub
+?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-    config pull
-    dotfiles
+### Change the dotfiles procedure....
+I'm now using my system on several pc's. Not only pusing files, but also
+pulling, to update new files.....
+I already added a "test" alias to my .batchrc.
+This performs a `config status` and give some information about how to proceed, 
+ie perform a pull/commit push.
+This could be automated as well...
 
-Wat ik ook kan doen is alles anders doen.
-dotfiles: --> run config status
-plus geef als output wat te doen voor pull en push:
+### Saving my personal Vim dictionary
+Location: `/home/archie/.vim/spell`
 
-echo "If files are changed than they can be pulled or pushed by commands"
-
-### Opslaan van mijn VIM dictionary
-Locatie: `/home/archie/.vim/spell`
-
-*** Opslaan van Firefox links
+*** Saving personal Firefox links
 Locatie: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`
