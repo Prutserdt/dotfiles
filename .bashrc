@@ -44,3 +44,6 @@ alias test='config status;
             echo "The newest dotfiles from the repo can be cpulled by:";
             echo "config pull";
             echo "------------------------------------------------------------------"'
+
+# Nog een test. Ik wil "dotfiles" anders gaan gebruiken.
+alias dotfilez='~/.config/dotfiles.sh'
