@@ -7,7 +7,7 @@ The applications needed to run my i3 config can be found in *./config/applicatio
 ## The `dotfiles` command
 This alias from the .bashrc is running the shell script *~/.config/dotfiles.sh*.
 This script will first check the status of the dotfiles and after that a commit/push 
-or pull can be made to the repo. Yes, this is all done from one command! :godmode:.
+or pull can be made to the repo. Yes, this is all done from one command! :godmode:
 
 Remember: if the local dotfiles are newer than the rep : push. If the local dotfiles 
 are older than the repo: pull.
@@ -32,14 +32,14 @@ are older than the repo: pull.
 ----
 ----
 ----
-## To do list, nice ideas :bulb:, not there yet :smirk:, potentially :tada:
-A list of potential improvements
+## To do list :smirk:, potentially :tada:
 
-### How to automatically login to GitHub
-?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
+### Automatically login to GitHub
+I cannot get this to work so far. I. MUST. BE. STUPID. :man_facepalming: :boom:
+See: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
 ### Saving personal Firefox links
-Locatie: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`
+Location: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`
 
 ### Automating the dotfiles command
 The choice to push or pull could be automated...
