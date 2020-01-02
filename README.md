@@ -125,7 +125,7 @@ If needed use:
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-### To do list
+## To do list :bulb:, almost there :smirk: :tada:
 Hieronder is een lijst van dingen die nog aangepast/verbeterd moeten worden.
 
 ### Automatisch eerst een pull doen en daarna het uitvoeren van 'dotfiles'
@@ -141,3 +141,9 @@ dotfiles: --> run config status
 plus geef als output wat te doen voor pull en push:
 
 echo "If files are changed than they can be pulled or pushed by commands"
+
+### Opslaan van mijn VIM dictionary
+Locatie: `/home/archie/.vim/spell`
+
+*** Opslaan van Firefox links
+Locatie: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`

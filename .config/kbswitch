@@ -1,5 +1,4 @@
-!.kbswitch   (de volgende tekst heb ik toegevoegd vanuit mijn eigen
-! pc, om te kijken of deze file vernieuwd wordt op de Synthon pc)
+!.kbswitch
 !   _    _                  _ _       _     
 !  | | _| |__  _____      _(_) |_ ___| |__  
 !  | |/ / '_ \/ __\ \ /\ / / | __/ __| '_ \ 
@@ -8,7 +7,7 @@
 !                                         
 ! Modified by Prutserdt
 ! This dotfile can be triggered from the terminal
-! by: `xmodmap ~/.kbswitch`, or by entering `kbswitch`
+! by: `xmodmap ~/.config/kbswitch`, or by entering `kbswitch`
 ! from terminal (see .bashrc for the alias)
 
 ! Super_R key is set to mod3, this button is used for keybindings to apps in i3wm, see ~/.config/i3/config

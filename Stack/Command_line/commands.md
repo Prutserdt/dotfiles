@@ -91,7 +91,7 @@ Stel je wilt toch afsluiten terwijl je de afsluit timer hebt gezet: `sudo shutdo
 **bleachbit**. Schoonmaken van het systeem. Je kunt kiezen welke files van 
 welke apps je  wilt wissen: `bleachbit`
 
-Probleem: te weinig capaciteit tmp dir, en virtueel geheugen. Ccheck verdeling van geheugen:`df -H`
+Probleem: te weinig capaciteit tmp dir, en virtueel geheugen. Check verdeling van geheugen:`df -H`
 
 Vergroten tmp directory: sudo mount -t tmpfs tmpfs /tmp -o size=2000M,mode=1777,remount
 
@@ -236,7 +236,7 @@ Check time: `sudo hwclock --debug`.
 Probleem gehad met een uur tijdsverschil, opgelost met: `timedatectl set-ntp true`.
 
 View all the groups: `cat /etc/group`.
-Bekijke groups van enkele user: `groups icefly`.
+Bekijken groups van enkele user: `groups icefly`.
 
 add group (audio) to user (icefly): `sudo gpasswd -a icefly audio`.
 
@@ -350,7 +350,7 @@ Zoeken naar fouten -p=sort by priority
 Log live volgen:
     journalctl -f
 
-groote log:
+Grootte log:
 
     journalctl --disk-usage
 
@@ -365,7 +365,7 @@ Maak text bestand aan, daarna typ je text en sluit je met CTR+z om te saven:
 `cat > text.txt`.
      
 #### Linux keyboard shortcuts
-Lijstje met allelei keyboard shortcuts.
+Lijstje met allerlei keyboard shortcuts.
 
     Grafische omgeving shortcuts:
     F10				Shows menubar/Switch to menubar
@@ -428,7 +428,7 @@ Lijstje met allelei keyboard shortcuts.
 #### Batch rename image files
 
 Batch rename. Verander de naam van bestanden. Zet eerst de foto's in 
-directories met nummer van dag v.d. vakantie en lokatie. Ga in de main 
+directories met nummer van dag v.d. vakantie en locatie. Ga in de main 
 directory. Dit scriptje VERPLAATST alleen bestanden uit de directory naar
 de main directory met als begin de naam van de directory waar het in stond
 start=$PWD
@@ -443,7 +443,7 @@ In command line:
 start=$PWD; for directory in *; do cd "$directory"; for filename in *; do mv "$filename" ../"$directory $filename"; done; cd "$start"; done
 
 Batch rename. Verander de naam van bestanden. Zet foto's in directories met nummer van 
-dag v.d. vakantie en lokatie. Ga in de main directory. Dit scriptje KOPIEERD alle 
+dag v.d. vakantie en locatie. Ga in de main directory. Dit scriptje KOPIEERT alle 
 bestanden uit de directory naar de main directory met als begin de naam van de 
 directory waar het in stond.
 PWD = print working directory
@@ -483,7 +483,7 @@ Find datum van foto metadata:
 identify -format %[EXIF:DateTimeOrginal]
         IMG_1923.JPG
 
-Kopier bestand in dezelfde directory met andere naam:
+Kopieer bestand in dezelfde directory met andere naam:
 cp IMG_1923.JPG test.JPG
 
 Vind datum van foto en gebruik dit voor het hernamen van de foto (test.jpg
@@ -760,7 +760,7 @@ dmenu Bluetooth manager: Bluez daemon is no running, blueman-manager cannot
 continue.
 sudo modprobe btusb
 dmenu Bluetooth manager geen foutmelding maar er gebeurt niets.
-Daaro blueberry, met gui, geinstalleerd
+Daaro blueberry, met gui, geïnstalleerd
 
 sudo pacman -S blueberry
 In Blueberry, gestart in commandline, staat er een x bij devices no 
@@ -778,7 +778,7 @@ sudo lsusb |grep Bluetooth
 Aangemeld bij ProtonVPN via werk email. ProtonVPN gebruikt openvpn.
 Ingelogd op de website. Daar bij account staat de OpenVPN/IKEv2 username
 Transip, rechtsonder networkmanager, add connection, VPN, 
-Het probleem is dat ik geen secure core configs kan dowloaden. Er werd
+Het probleem is dat ik geen secure core configs kan downloaden. Er werd
 aangegeven dat er drie servers beschikbaar waren voor de gratis versie. 
 Maar waar kan ik deze vinden en hoe krijg ik een config file....
 Aangemeld voor protonmail...
@@ -848,7 +848,7 @@ Helaas werkt het niet als ik op CTR-P druk, er wordt wel een command gegeven:
 
 De manual, ook te openen in vim met :help 
 man vim
-Personificeer vimrc
+Personifieer vimrc
 vim ~/.vimrc
 
 My personal manual :)
@@ -996,13 +996,30 @@ VIM; editen van markdown en live preview in browser met de
 `iamcco/makrdown-preview.nvim` plugin.
 Open een markdown file: `:MarkdownPreview`
 
+##### Spell checking in Vim
+This functionality is alreadey build into Vim! Start it by entering:
+
+    :set spell!
+
+List of keystrokes (about spell checking)
+```
+]s                      Next misspelled word
+[s                      Previous misspelled word
+z=                      Give autocorrection suggestions
+zg                      Add word to dictionary
+:set spelllang=en_us,nl Set two spelling dictionaries
+
+```
+
+
+
 #### fzf (fuzzy finder)
 Command line zoek programma.
 `fzf`
 
 
 
-#### Ranger (terminal filebrowser)
+#### Ranger (terminal file browser)
 
 Instellen van image preview in ranger.
 https://github.com/ranger/ranger/wiki/Image-Previews
@@ -1084,7 +1101,7 @@ Plak daarin de onderstaande regels om de transparantie en font in te
 stellen, plus extra's die in de comments worden beschreven.
 Created to rice the urxvt terminal.
 ```
-Set transparancy
+Set transparency
 
 URxvt.transparent:	        true
 URxvt.shading:		        30
@@ -1110,7 +1127,7 @@ URxvt.resize-font.bigger:   C-k
 URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
 ```
 
-#### cmus. Terminal musicplayer
+#### cmus. Terminal music player
 Begin door het toevoegen van een direcotory, waar het prog. muziek in gaat
 zoeken.
 :add ~/Stack
