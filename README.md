@@ -1,6 +1,6 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# Dotfiles repo:exclamation::metal:
-Here I store my dotfiles and other text files of my Arch Linux i3wm system.
+# :sparkles:Dotfiles:sparkles: repo:bangbang::metal:
+Here I store my dotfiles and other text files of my Arch :penguin: i3wm :computer:.
 
 The applications needed to run my i3 config can be found in *./config/applications.md*.
 
@@ -12,13 +12,13 @@ or pull can be made to the repo. Yes, this is all done from one command! :godmod
 Remember: if the local dotfiles are newer than the rep : push. If the local dotfiles 
 are older than the repo: pull.
 
-### Add an additional dotfile to this repo
+### Add an additional dotfile to this repo:inbox_tray:
 
     config add .example
     config commit -m "Add my .example"
     config push -v
 
-### Remove an existing dotfile from this repo
+### Remove an existing dotfile from this repo:outbox_tray:
 
     config rm .example
     config commit -m "Remove my .example"
@@ -32,7 +32,7 @@ are older than the repo: pull.
 ----
 ----
 ----
-## To do list :smirk:, potentially :tada:
+## To do list :smirk:, potentially :tada::boom::sunglasses:
 
 ### Automatically login to GitHub
 I cannot get this to work so far. I. MUST. BE. STUPID. :man_facepalming: :boom:
@@ -40,6 +40,7 @@ See: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-log
 
 ### Saving personal Firefox links
 Location: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`
+Not sure if this is a good idea. Could be handy though :bowtie:
 
 ### Automating the dotfiles command
 The choice to push or pull could be automated...
