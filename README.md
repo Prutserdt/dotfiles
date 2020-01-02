@@ -12,19 +12,19 @@ or pull can be made to the repo. Yes, this is all done from one command! :godmod
 Remember: if the local dotfiles are newer than the repo: push. If the local dotfiles 
 are older than the repo: pull.
 
-### :high_brightness:Add an additional dotfile to this repo :inbox_tray:
+### :eight_pointed_black_star:Add an additional dotfile to this repo :inbox_tray:
 
     config add .example
     config commit -m "Add my .example"
     config push -v
 
-### :high_brightness:Remove an existing dotfile from this repo :outbox_tray:
+### :eight_pointed_black_star:Remove an existing dotfile from this repo :outbox_tray:
 
     config rm .example
     config commit -m "Remove my .example"
     config push -v
 
-## :large_orange_diamond:References:
+## :eight_pointed_black_star:References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
@@ -32,15 +32,15 @@ are older than the repo: pull.
 ----
 ----
 ----
-## :arrow_right:To do list :smirk:, potentially :tada::boom::sunglasses:
+## :eight_pointed_black_star:To do list :smirk:, potentially :tada::boom::sunglasses:
 
-### :arrow_right:Automatically login to GitHub
+### :fast_forward:Automatically login to GitHub
 I cannot get this to work so far. I. MUST. BE. STUPID. :man_facepalming: :boom:
 See: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-### :arrow_right:Saving personal Firefox links
+### :fast_forward:Saving personal Firefox links
 Location: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`
 Not sure if this is a good idea. Could be handy though :smiling_imp:
 
-### :arrow_right:Automating the dotfiles command
+### :fast_forward:Automating the dotfiles command
 The choice to push or pull could be automated...:shipit:
