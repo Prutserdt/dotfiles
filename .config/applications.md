@@ -1,7 +1,7 @@
 <!Modified by Prutserdt, /home/archie/applications.md>
 # :sparkles:applications.md:sparkles:
 
-This file consist a list of the programs that are required to
+This file consist of a list of the programs that are required to
 run my Arch :penguin: i3wm configuration.:metal:
 
 :large_orange_diamond: **Essential applications**:exclamation:

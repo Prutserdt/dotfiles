@@ -2,11 +2,12 @@
 # :sparkles:Dotfiles:sparkles: repo:bangbang::metal:
 Here I store my  :sparkles:dotfiles:sparkles: and other text files of my Arch :penguin: i3wm :computer:.
 
-The applications needed to run my i3 config can be found in *./config/applications.md*.
-
+The applications needed to run my i3 config can be found in *[./config/applications.md](https://github.com/Prutserdt/dotfiles/blob/master/.config/applications.md)*.
 ## :eight_pointed_black_star:The `dotfiles` command
-This alias from the .bashrc is running the shell script *~/.config/dotfiles.sh*.
-This script will first check the status of the dotfiles and after that a commit/push 
+This alias from the *[.bashrc](https://github.com/Prutserdt/dotfiles/blob/master/.bashrc)*
+is running the shell script 
+*[./config/dotfiles.sh](https://github.com/Prutserdt/dotfiles/blob/master/.config/dotfiles.sh)*
+.This script will first check the status of the dotfiles and after that a commit/push 
 or pull can be made to the repo. Yes, this is all done from one command! :godmode:
 
 Remember: if the local dotfiles are newer than the repo: push. If the local dotfiles 
