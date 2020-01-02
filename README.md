@@ -1,5 +1,5 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# Dotfiles repo :exclamation: :metal:
+# Dotfiles repo:exclamation::metal:
 Here I store my dotfiles and other text files of my Arch Linux i3wm system.
 
 The applications needed to run my i3 config can be found in *./config/applications.md*.
@@ -21,7 +21,7 @@ are older than the repo: pull.
 ### Remove an existing dotfile from this repo
 
     config rm .example
-    config commit -m "Add my .example"
+    config commit -m "Remove my .example"
     config push -v
 
 ## References:
