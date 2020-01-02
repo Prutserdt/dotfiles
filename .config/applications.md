@@ -1,10 +1,10 @@
 <!Modified by Prutserdt, /home/archie/applications.md>
-# applications.md
+# :sparkles:applications.md:sparkles:
 
 This file consist a list of the programs that are required to
-run my Arch Linux i3wm configuration.
+run my Arch :penguin: i3wm configuration.
 
-**Essential applications** :exclamation:
+:white_flower:**Essential applications** :exclamation:
 ```
 compton
 dmenu
@@ -29,7 +29,7 @@ vundle-git
 w3m
 yay
 ```
-**Optional applications:** :grey_exclamation:
+:white_flower:**Optional applications:** :grey_exclamation:
 ```
 blocks
 fzf
