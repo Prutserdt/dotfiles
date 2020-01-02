@@ -29,7 +29,7 @@ vundle-git
 w3m
 yay
 ```
-:large_orange_diamond: **Optional applications:**:grey_exclamation:
+:large_orange_diamond: **Optional applications**:grey_exclamation:
 ```
 blocks
 fzf

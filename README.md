@@ -1,30 +1,30 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
 # :sparkles:Dotfiles:sparkles: repo:bangbang::metal:
-Here I store my dotfiles and other text files of my Arch :penguin: i3wm :computer:.
+Here I store my  :sparkles:dotfiles:sparkles: and other text files of my Arch :penguin: i3wm :computer:.
 
 The applications needed to run my i3 config can be found in *./config/applications.md*.
 
-## The `dotfiles` command
+## :eight_pointed_black_star:The `dotfiles` command
 This alias from the .bashrc is running the shell script *~/.config/dotfiles.sh*.
 This script will first check the status of the dotfiles and after that a commit/push 
 or pull can be made to the repo. Yes, this is all done from one command! :godmode:
 
-Remember: if the local dotfiles are newer than the rep : push. If the local dotfiles 
+Remember: if the local dotfiles are newer than the repo: push. If the local dotfiles 
 are older than the repo: pull.
 
-### Add an additional dotfile to this repo:inbox_tray:
+### :high_brightness:Add an additional dotfile to this repo :inbox_tray:
 
     config add .example
     config commit -m "Add my .example"
     config push -v
 
-### Remove an existing dotfile from this repo:outbox_tray:
+### :high_brightness:Remove an existing dotfile from this repo :outbox_tray:
 
     config rm .example
     config commit -m "Remove my .example"
     config push -v
 
-## References:
+## :large_orange_diamond:References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
@@ -32,15 +32,15 @@ are older than the repo: pull.
 ----
 ----
 ----
-## To do list :smirk:, potentially :tada::boom::sunglasses:
+## :arrow_right:To do list :smirk:, potentially :tada::boom::sunglasses:
 
-### Automatically login to GitHub
+### :arrow_right:Automatically login to GitHub
 I cannot get this to work so far. I. MUST. BE. STUPID. :man_facepalming: :boom:
 See: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-### Saving personal Firefox links
+### :arrow_right:Saving personal Firefox links
 Location: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`
-Not sure if this is a good idea. Could be handy though :bowtie:
+Not sure if this is a good idea. Could be handy though :smiling_imp:
 
-### Automating the dotfiles command
-The choice to push or pull could be automated...
+### :arrow_right:Automating the dotfiles command
+The choice to push or pull could be automated...:shipit:
