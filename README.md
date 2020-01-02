@@ -125,22 +125,11 @@ If needed use:
 ----
 ----
 ----
-## To do list, nice idea :bulb:, not there yet :smirk:, potentially :tada:
+## To do list, nice ideas :bulb:, not there yet :smirk:, potentially :tada:
 A list of potential improvements
 
 ### How to automatically login to GitHub
 ?? work in progress https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
-
-### Change the dotfiles procedure....
-I'm now using my system on several pc's. Not only pusing files, but also
-pulling, to update new files.....
-I already added a "test" alias to my .batchrc.
-This performs a `config status` and give some information about how to proceed, 
-ie perform a pull/commit push.
-This could be automated as well...
-
-### Saving my personal Vim dictionary
-Location: `/home/archie/.vim/spell`
 
 *** Saving personal Firefox links
 Locatie: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`

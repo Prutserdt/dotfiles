@@ -12,6 +12,7 @@
 # computer compared to the GitHub repo. 
 # After that it gives the options to perform a push or 
 # a pull.
+# It can be called from the alias "dotfiles" in .bashrc
 
 function Push()
 {
