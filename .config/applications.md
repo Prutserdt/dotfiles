@@ -2,9 +2,9 @@
 # :sparkles:applications.md:sparkles:
 
 This file consist a list of the programs that are required to
-run my Arch :penguin: i3wm configuration.
+run my Arch :penguin: i3wm configuration.:metal:
 
-:white_flower:**Essential applications** :exclamation:
+:large_orange_diamond: **Essential applications**:exclamation:
 ```
 compton
 dmenu
@@ -29,7 +29,7 @@ vundle-git
 w3m
 yay
 ```
-:white_flower:**Optional applications:** :grey_exclamation:
+:large_orange_diamond: **Optional applications:**:grey_exclamation:
 ```
 blocks
 fzf
