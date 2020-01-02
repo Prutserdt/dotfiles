@@ -5,7 +5,7 @@
 ! _|   <| |_) \__ \\ V  V /| | || (__| | | |
 !(_)_|\_\_.__/|___/ \_/\_/ |_|\__\___|_| |_|
 !                                         
-! Modified by Prutserdt
+! Created by Prutserdt
 ! This dotfile can be triggered from the terminal
 ! by: `xmodmap ~/.config/kbswitch`, or by entering `kbswitch`
 ! from terminal (see .bashrc for the alias)

@@ -2,9 +2,9 @@
 # applications.md
 
 This file consist a list of the programs that are required to
-run my Arch Linux i3wm configuration (combined with my dotfiles).
+run my Arch Linux i3wm configuration.
 
-**Essential applications**
+**Essential applications** :exclamation:
 ```
 compton
 dmenu
@@ -29,7 +29,7 @@ vundle-git
 w3m
 yay
 ```
-**Optional applications:**
+**Optional applications:** :grey_exclamation:
 ```
 blocks
 fzf
