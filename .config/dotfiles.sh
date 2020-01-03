@@ -38,13 +38,14 @@ If the branch is not up to date: PULL.
 
 If the 'Changes not staged for commit' shows greyed out area: PUSH.
 
-Are you sure you want to exchange (PULL or PUSH) with the dotfiles bare GitHub repo? [y/N]> " answer
+Are you sure you want to Pull and/or Push to the dotfiles bare GitHub repo? [y/N]> " answer
 case ${answer:0:1} in
     y|Y )
         read -p "
 -------------------------------------------------------------------------------------------
 
 OK, let's continue then!
+(Remember: you can enter faulty login to exit out of the pull/push)
 
 Do you want to make a push to the GitHub repo? [y/N]> " answer2
         case ${answer2:0:1} in
