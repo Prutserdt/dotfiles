@@ -14,9 +14,9 @@
 # a pull.
 # It can be called from the alias "dotfiles" in .bashrc
 
+   
 function Push()
 {
-/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull;
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v; 
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m "Updated";
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push -v 
@@ -49,6 +49,7 @@ OK, let's continue then!
 Do you want to make a push to the GitHub repo? [y/N]> " answer2
         case ${answer2:0:1} in
             y|Y )
+            Pull
             Push
             ;;
             * )
