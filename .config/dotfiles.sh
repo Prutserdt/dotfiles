@@ -16,6 +16,7 @@
 
 function Push()
 {
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull;
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v; 
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m "Updated";
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push -v 
