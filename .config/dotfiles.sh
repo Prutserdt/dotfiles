@@ -10,11 +10,11 @@
 #
 # This script checks the status of the dotfiles on this 
 # computer compared to the GitHub repo. 
-# After that it gives the options to perform a push or 
-# a pull.
-# It can be called from the alias "dotfiles" in .bashrc
+# After that it gives options to continue. 
+# 
+# This shell can be called from the alias "dotfiles" in .bashrc
 
-   
+
 function Push()
 {
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v; 
@@ -27,57 +27,50 @@ function Pull()
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull
 }
 
+# Clear screen and check the status of dotfiles
 clear &&
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status &&
-read -p "
--------------------------------------------------------------------------------------------
 
-Please carefully check the output that is printed above.....
+# Give a menu (choose push/pull etc)
+echo -n "--------------------------------------------------
 
-If the branch is not up to date: PULL.
+Please read the status of the dotfiles carefully above.
 
-If the 'Changes not staged for commit' shows greyed out area: PUSH.
 
-Are you sure you want to Pull and/or Push to the dotfiles bare GitHub repo? [y/N]> " answer
-case ${answer:0:1} in
-    y|Y )
-        read -p "
--------------------------------------------------------------------------------------------
+Options:
 
-OK, let's continue then!
-(Remember: you can enter faulty login to exit out of the pull/push)
+1 commit/push 
+2 pull 
+3 pull and a commit/push
+4 exit
 
-Do you want to make a push to the GitHub repo? [y/N]> " answer2
-        case ${answer2:0:1} in
-            y|Y )
-            Pull
-            Push
-            ;;
-            * )
-            read -p "
--------------------------------------------------------------------------------------------
-
-OK, clear. You apparently do not want to push to the Github repo.
-
-Do you want to make a pull to the GitHub repo perhaps? (y/N)> " answer3
-            case ${answer3:0:1} in
-                y|Y )
+[$USER@github.com/Prutserdt/dotfiles ~]:> "
+read PullPush
+case $PullPush in
+            [1]) 
+                echo --------------------------------------------------
+                echo
+                Push 
+                ;;
+            [2]) 
+                echo --------------------------------------------------
+                echo
                 Pull
-                    ;;
-                * )
-                 echo -------------------------------------------------------------------------------------------
-                 echo
-                 echo Alrightly then. If you say so. Exiting!
-                 echo
-                 ;;
-            esac    
+                ;;
+            [3]) 
+                echo --------------------------------------------------
+                echo
+                Pull
+                Push
+                ;;
+            [4]) 
+                echo --------------------------------------------------
+                echo
+                echo As you whish: exiting
+                ;;
+
+            *)  echo --------------------------------------------------
+                echo
+                echo "Invalid input, exiting"
             ;;
-        esac
-    ;;
-    * )
-        echo -------------------------------------------------------------------------------------------
-        echo 
-        echo Hellz no! Thanks for getting me outta here!
-        echo
-    ;;
 esac
