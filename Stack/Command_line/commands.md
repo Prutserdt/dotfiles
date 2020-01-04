@@ -929,8 +929,8 @@ Pasting stuff
 Working with macros
 
     qa      : Record a macro and save it to register a
-           : Stop recording macro
-    @a     : Play 1 time macro a (:reg)
+    q       : Stop recording macro
+    @a      : Play 1 time macro a (:reg)
 `
 Editing an existing macro(in dit geval a)
 
@@ -995,6 +995,12 @@ The command line command: :
 VIM; editen van markdown en live preview in browser met de
 `iamcco/makrdown-preview.nvim` plugin.
 Open een markdown file: `:MarkdownPreview`
+
+#### Batch renaming in vim/vifm
+Open een directory in vifm en tag de namen die je wil veranderen met 't'.
+Selecteer een block met CTRL-v en geef daarna shift-I (insert tekst) Esc om 
+het over het hele block toe te voegen.
+Je kunt ook een blok doornummeren (na CTRL-v) door g CTRL-a te toetsen!
 
 ##### Spell checking in Vim
 This functionality is alreadey build into Vim! Start it by entering:

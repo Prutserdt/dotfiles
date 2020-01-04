@@ -1,6 +1,6 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
 # :sparkles:Dotfiles:sparkles: repo:bangbang::metal:
-Here I store my  :sparkles:dotfiles:sparkles: and other text files of my Arch :penguin: i3wm :computer:.
+Here I store the :sparkles:dotfiles:sparkles: of my Arch :penguin: i3wm :computer:. Also *[wallpapers](https://github.com/Prutserdt/dotfiles/blob/master/Stack/Afbeeldingen/Wallpapers)* and some text files.
 
 The applications needed to run my i3 config can be found in *[./config/applications.md](https://github.com/Prutserdt/dotfiles/blob/master/.config/applications.md)*.
 ## :eight_pointed_black_star:The `dotfiles` command
