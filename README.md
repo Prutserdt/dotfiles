@@ -32,16 +32,3 @@ are older than the repo: pull.
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-----
-## :eight_pointed_black_star:To do list :smirk:, potentially :tada::boom::sunglasses:
-
-### :eight_pointed_black_star:Automatically login to GitHub
-I cannot get this to work so far. I. MUST. BE. STUPID. :man_facepalming: :boom:
-See: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
-
-### :eight_pointed_black_star:Saving personal Firefox links
-Location: `/home/archie/.mozilla/firefox/1aa2cc3p.default-1466333760664`
-Not sure if this is a good idea. Could be handy though :smiling_imp:
-
-### :eight_pointed_black_star:Automating the dotfiles command
-The choice to push or pull could be automated... :shipit:
