@@ -36,6 +36,7 @@
 #### Keebs
 * Ducky one mechanical keyboard.
 * Vortex 90M mechanical keyboard
+* Gergo mechanical ortholinear keyboard
 ---
 ### Command line tricks
 #### Allerlei
@@ -1016,17 +1017,13 @@ zg                      Add word to dictionary
 :set spelllang=en_us,nl Set two spelling dictionaries
 
 ```
-
-
-
 #### fzf (fuzzy finder)
-Command line zoek programma.
-`fzf`
-
-
+Command line zoek programma. Je kunt er in de huidige directory naar bestanden
+zoeken met`fzf`. Dit is perfect voor piping. Bijvoorbeeld `cat * | fzf`
+genereerd een tekst bestand van alle files in de directory waar je nu met fzf
+in kunt zoeken.
 
 #### Ranger (terminal file browser)
-
 Instellen van image preview in ranger.
 https://github.com/ranger/ranger/wiki/Image-Previews
 Installeer w3m web browser: `sudo pacman -S w3m`
@@ -2017,7 +2014,7 @@ Every key can program up to 32 key strokes.If there is no key pressed for 15 sec
 in programming mode, it will back to normal mode.
 
      
-#### Gergo keyboard
+#### Gergo mechanical ortholinear keyboard
 Een Gergo keyboard gekocht zonder switches.  
 
 Op Ali express low profile  Kail Choc switches gekocht (rood en wit) plus

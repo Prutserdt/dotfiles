@@ -8,7 +8,7 @@ This alias from the *[.bashrc](https://github.com/Prutserdt/dotfiles/blob/master
 is running the shell script 
 *[./config/dotfiles.sh](https://github.com/Prutserdt/dotfiles/blob/master/.config/dotfiles.sh)*
 .This script will first check the status of the dotfiles and after that a commit/push 
-or pull can be made to the repo. Yes, this is all done from one command! :godmode:
+or pull can be made to the repo, all from one command! :godmode:
 
 Remember: if the local dotfiles are newer than the repo: push. If the local dotfiles 
 are older than the repo: pull.
@@ -32,8 +32,6 @@ are older than the repo: pull.
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
 
-----
-----
 ----
 ## :eight_pointed_black_star:To do list :smirk:, potentially :tada::boom::sunglasses:
 
