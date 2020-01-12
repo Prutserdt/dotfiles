@@ -10,11 +10,20 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
 
 # Display arch logo (asci art) and additional info in terminal
 screenfetch
+
+##############
+# Alias list #
+##############
+
+alias ls='ls --color=auto'
+alias q="exit"
+alias c="clear"
+alias cls="clear;ls"
+alias h="history | fzf"
 
 # Dotfile repository settings
 # config: simplifying communication with GIT

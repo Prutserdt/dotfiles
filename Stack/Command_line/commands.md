@@ -1612,6 +1612,18 @@ add Lock = Caps_Lock
 In .bashrc is een alias aangemaakt die deze xmodmap laat lopen:
 alias kbswitch='xmodmap ~/.config/kbswitch'
 
+# Swap toegevoegd 12JAN20
+# manually 
+fallocate -l 8G /mnt/sdc1/swapfile
+chmod 600 /mnt/sdc1/swapfile
+mkswap /mnt/sdc1/swapfile
+swapon /mnt/sdc1/swapfile
+/etc/fstab
+# toegevoegd:
+/mnt/sdc1/swapfile none swap defaults 0 0
+
+
+
 #### Install on persistent USB feb2017                    
      
 Twee partities aangemaakt in GPARTED: 12.6 GB ext4 en 2.1 GB FAT32
