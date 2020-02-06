@@ -820,8 +820,20 @@ smb://nlnijsynthfcv1.nl.corporate.synthon-group.com/
 smb://nlnijsynthfcsv3.nl.corporate.synthon-group.com/
 smb://nlnijsynthfcvs1.nl.corporate.synthon-group.com/
 
+#### Fonts installeren
+Double_Feature.ttf file gedownload, deze wil ik nu installeren.
+Maak deze directory: 
 
+    mkdir -p ~/.local/share/fonts
+Kopieer de ttf file:
 
+    cp ~/Downloads/*.ttf ~/.local/share/fonts
+Verfris fc-cache:
+
+    fc-cache -f -v 
+Kijken of de font erbij staat:
+
+    fc-list | grep Double
 ---
 ### Applications (Command line and GUIs)
 
@@ -1622,6 +1634,30 @@ swapon /mnt/sdc1/swapfile
 # toegevoegd:
 /mnt/sdc1/swapfile none swap defaults 0 0
 
+
+### Emojis in dmenu
+Geschreven volgens Luke Smith: https://www.youtube.com/watch?v=UCEXY46t3OA
+
+ONderstaande unicode file gemaakt als test
+~/.config/unicode
+😀 grinning face
+😃 grinning face with big eyes
+
+Helaas geeft dit permission problemen. Opgelost door:
+chmod 755  ~/.config/unicode
+Nu werkt het volgende wel:
+cat ~/.config/unicode | dmenu -i -l 30
+Een script ervan gemaakt, ~/.config/unicode.sh, executable gemaakt, de alias u
+aangemaakt (u). Dit werkt. Alleen de unicode lijst nog aanvullen....
+Ook toegevoegd aan de i3 config, zodat menu-U het script runt.
+Ik heb ttf-ancient-fonts van de AUR geinstalleerd, en nu zijn de meeste icons
+zichtbaar. De unicod font lijst heb ik gevonden op: 
+https://unicode.org/Public/emoji/13.0/emoji-test.txt
+Het werkt nog niet perfect.
+if you add the following line to the script that he showed:
+xdotool key "ctrl+shift+v"
+it will automatically insert the emoji into the focused program (like browser or terminal), making this
+dmenu setup act like an emoji keyboard for quick insertion
 
 
 #### Install on persistent USB feb2017                    

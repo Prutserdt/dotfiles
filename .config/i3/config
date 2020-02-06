@@ -211,7 +211,9 @@ bindsym mod3+o		    exec octave
 bindsym mod3+r		    exec "urxvt +sb -e bash -c ranger"
 #bindsym mod3+s		    exec 
 bindsym mod3+t		    exec thunar
-#bindsym mod3+u		    exec 
+# Make sure that the unicode file in in the ~/.config/unicode file...
+bindsym mod3+u		    exec "cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard"
+#bindsym mod3+u		    exec "cat ~/.config/unicode | fzf | awk '{print $1}'| xclip -selection clipboard"
 bindsym mod3+v		    exec "urxvt +sb -e bash -c ~/.config/vifm/scripts/vifmrun"
 #bindsym mod3+w		    exec
 #bindsym mod3+x		    exec 
