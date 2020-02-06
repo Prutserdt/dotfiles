@@ -14,10 +14,6 @@ URxvt.shading:		        30
 # Choose a decent font.
 URxvt.font:                 xft:bitstream Vera Sans Mono:size=9:antialias=true
 URxvt.boldFont:             xft:bitstream Vera Sans Mono:bold:size=9:antialias=true
-
-# emojis are still not visible, does not work.... :-(
-# URxvt.font:               xft:Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
-#
 URxvt*letterSpace: -0 
 
 # Orange cursor

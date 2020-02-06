@@ -10,9 +10,6 @@ is running the shell script
 .This script will first check the status of the dotfiles and after that a commit/push 
 or pull can be made to the repo, all from one command! :godmode:
 
-Remember: if the local dotfiles are newer than the repo: push. If the local dotfiles 
-are older than the repo: pull.
-
 ## :eight_pointed_black_star:Add an additional dotfile to this repo :inbox_tray:
 (`config` is an alias from *[.bashrc](https://github.com/Prutserdt/dotfiles/blob/master/.bashrc)*)
 
