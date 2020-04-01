@@ -5,11 +5,12 @@
          | |___| | | | | |_| |>  <  | |_| |  | | (__|   <\__ \
          |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
 ---
-## Inhoud 
+## Content
 #### Command line tricks
 * Rechten bestanden
 * Grafische problemen
 * Logging
+* Wissen van regels in meerdere bestanden die een bepaals woord bevatten.
 * Linux keyboard shortcuts
 * Batch rename image files
 * PACMAN/YAOURT/YAY
@@ -18,6 +19,7 @@
 * Manipuleren van GE UNICORN files
 * Bluetooth instellen
 * VPN
+* Corona script
 #### Applications (Command line and GUIs)
 * Vim
 * Nano
@@ -119,6 +121,36 @@ Daarna "brand" je de image naar een usb stick met:
     sudo dd if=//home/archie/Downloads/linuxmint-18.2-xfce-64bit.iso of=/dev/sdd status=progress
     sudo dd if=/dev/sdd of=Backup_USBstick_arch_21AUG19.img status=progress
 
+
+#### Memory stick niet zichtbaar met lsblk
+Achterhaal eerst met lsusb voor en na het inpluggen van de stick welk ID het
+heeft, bijvoorbeeld:
+'Bus 001 Device 016: ID 058f:6387 Alcor Micro Corp. Flash Drive'
+Zoek met dmesg naar meer informatie (058f:6387 zoeken):
+'dmesg | less | fzf'
+De output is bijvoorbeeld:
+'[2664293.306101] usb 1-1.1: New USB device found, idVendor=058f, idProduct=6387, bcdDevice= 1.01'
+
+Alternatief voor lsusb:
+'sudo fdisk -l'
+'usb-devices'
+Output voorbeeld van 'usb-devices':
+
+    T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#= 17 Spd=480 MxCh= 0
+    D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+    P:  Vendor=058f ProdID=6387 Rev=01.01
+    S:  Manufacturer=Generic
+    S:  Product=Mass Storage
+    S:  SerialNumber=4D55D1EC
+    C:  #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=100mA
+    I:  If#=0x0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
+
+Ander alternatief voor meer info:
+'sudo blkid'
+Output daarvan (gedeelte):
+'1Bus 001 Device 016: ID 058f:6387 Alcor Micro Corp. Flash Drive'
+'sudo fdisk -l'
+
 #### Multiple linux distros on one USB:
 Hiermee kun je meerdere USB  distros op een enkele pendrive zetten. :-)
 
@@ -173,6 +205,7 @@ Mount iso bestand:
     sudo mount -o loop /home/archie/akta_docs.iso /mnt/iso
 
 
+
 Nieuw bestand aanmaken in commandline, inclusief inhoud: `echo dhcpcd > /home/icefly/info`.
 Nieuw welkom scherm voor terminal toevoegen aan bashrc: `nano ~/.bashrc`.
 Voeg de volgende twee lijnen toe: 
@@ -209,7 +242,7 @@ Zoeken connected displays
 
     xrandr --query
 
-Specifieke setup in Synthon, twee monitoren, breedbeeld in A4 en extra beeldscherm,
+Specifieke setup op werk, twee monitoren, breedbeeld in A4 en extra beeldscherm,
 gecorrigeerd voor hoogte
 
     xrandr --output VGA-1 --mode 1280x1024 --pos 1050x195 --output DP-1 --mode 1680x1050 --rotate left --pos 0x0
@@ -298,7 +331,7 @@ Aanmaken directory voor meerdere users (in dit geval, DATA in /home):
 
     sudo groupadd project
     sudo usermod -a -G project icefly
-    sudo usermod -a -G project synthon
+    sudo usermod -a -G project werk
     sudo chgrp -R project /home/DATA/
     sudo chmod -R 2775 /home/DATA/
 
@@ -339,6 +372,7 @@ Zoeken op process, users, groupID
     journalctl _PID=8088
     journalctl _UID=33 --since today
 
+
 Kernel messages
 
     journalctl -k #from the current boot
@@ -364,7 +398,40 @@ Zoeken in de history naar bijv. ssh gaat alsvolgt:
 
 Maak text bestand aan, daarna typ je text en sluit je met CTR+z om te saven:
 `cat > text.txt`.
-     
+
+Zoeken in i3_log directory onderstaande werkt niet....!!!! nog optimaliseren
+Wat ik wil: selecteer meest recente log en gooi deze in fzf
+exec "urxvt +sb -e find  ~/i3_log/ -type f -mmin -10 -exec tail -f {} +"
+~/i3_log | fzf
+
+ls -Art | tail -n 1
+dit geeft de meest recente file
+onderstaande werkt niet
+ls -Art ~/i3_log | tail -n 1|fzf
+
+dit wil ik:
+ cat ~/i3_log/i3log-2020-01-12-22-14-41|fzf 
+maar dan dynamisch door te zoeken met
+ls -Art | tail -n 1
+iets als dit, maar dan werkend:
+cat ~/i3_log/{ls -Art ~/i3_log | tail -n 1}|fzf
+
+
+#### Wissen van regels in meerdere bestanden die een bepaals woord bevatten.
+
+Je kunt natuurlijk handmatig zoeken met fuzzyfind (bijv "wismij"):
+cat i3log-2020-02-16-22-09-48 |fzf
+Voorbeeld van het verwijderen van een single file:
+grep -v "wismij" i3log-2020-02-16-22-09-48 > i3log_tmp ; mv i3log_tmp i3log-2020-02-16-22-09-48
+Voorbeeld van verwijderen van regels van alle bestanden i3log* in directory
+for thefile in i3log* ; do grep -v "wismij" $thefile > $thefile.$$.tmp; mv $thefile.$$.tmp $thefile; done
+
+Bovenstaande commando werkt niet voor de eerste negen uren van de dag dat het
+logfile is aangemaaakt, want dan komt er een spatie in de naam en  volgt er een
+"ambiguous redirect" foutmelding. Dit is handmatig te herstellen in vifm: ga
+naar de directory en hernoem deze files met cw.
+
+
 #### Linux keyboard shortcuts
 Lijstje met allerlei keyboard shortcuts.
 
@@ -492,6 +559,45 @@ Vind datum van foto en gebruik dit voor het hernamen van de foto (test.jpg
 werkt goed. metadat blijft intact.
 exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)
 
+29MAR20: Rename pictures
+Step 1, rename files by metadata:
+exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)
+Step 2: Change *.jpeg to *.jpg
+rename .jpeg .jpg *.jpeg
+Step 3: rename with location info
+rename 20190511 20190511_Schiphol *.jpg
+
+make a list:
+rename 20190511 20190511_Schiphol *.jpg
+rename 20190512 20190512_Bangkok *.jpg
+rename 20190513 20190513_Bangkok *.jpg
+rename 20190514 20190514_Bangkok *.jpg
+rename 20190515 20190515_Chiang_Mai *.jpg
+rename 20190516 20190516_Chiang_Mai *.jpg
+rename 20190517 20190517_Chiang_Mai *.jpg
+rename 20190518 20190518_Chiang_Mai *.jpg
+rename 20190519 20190519_Chiang_Mai *.jpg
+rename 20190520 20190520_Koh_Yao_Noi *.jpg
+rename 20190521 20190521_Koh_Yao_Noi *.jpg
+rename 20190522 20190522_Koh_Yao_Noi *.jpg
+rename 20190523 20190523_Kao_Sok *.jpg
+rename 20190524 20190524_Kao_Sok *.jpg
+rename 20190525 20190525_Kao_Sok *.jpg
+rename 20190526 20190526_Koh_Tao *.jpg
+rename 20190527 20190527_Koh_Tao *.jpg
+rename 20190528 20190528_Koh_Tao *.jpg
+rename 20190529 20190529_Koh_Samui *.jpg
+rename 20190530 20190530_Ang_Thong *.jpg
+rename 20190531 20190531_Koh_Samui *.jpg
+rename 20190601 20190601_Bangkok *.jpg
+rename 20190602 20190602_Schiphol *.jpg
+rename 20190603 20190603_Schiphol *.jpg
+
+Combine to one line:
+
+rename 20190511 20190511_Schiphol *.jpg; rename 20190512 20190512_Bangkok*.jpg; rename 20190513 20190513_Bangkok *.jpg; rename 20190514 20190514_Bangkok *.jpg; rename 20190515 20190515_Chiang_Mai *.jpg; rename 20190516 20190516_Chiang_Mai *.jpg; rename 20190517 20190517_Chiang_Mai *.jpg; rename 20190518 20190518_Chiang_Mai *.jpg; rename 20190519 20190519_Chiang_Mai *.jpg; rename 20190520 20190520_Koh_Yao_Noi *.jpg; rename 20190521 20190521_Koh_Yao_Noi *.jpg; rename 20190522 20190522_Koh_Yao_Noi *.jpg; rename 20190523 20190523_Kao_Sok *.jpg; rename 20190524 20190524_Kao_Sok *.jpg; rename 20190525 20190525_Kao_Sok *.jpg; rename 20190526 20190526_Koh_Tao *.jpg; rename 20190527 20190527_Koh_Tao *.jpg; rename 20190528 20190528_Koh_Tao *.jpg; rename 20190529 20190529_Koh_Samui *.jpg; rename 20190530 20190530_Ang_Thong *.jpg; rename 20190531 20190531_Koh_Samui *.jpg; rename 20190601 20190601_Bangkok *.jpg
+
+
 #### PACMAN/YAOURT/YAY    
      
 Info staat in /etc/pacman.conf en /etc/pacman.d/mirrorlist
@@ -527,6 +633,8 @@ sudo pacman -Rns $(pacman -Qtdq)
 number of applications
 sudo pacman -Q | wc -l
 sudo pacman -Qet | wc -l
+List number of applications by size
+sudo pacman -Qi | egrep '^(Name|Installed)' | cut -f2 -d':' | paste - - | column -t | sort -nrk 2 | grep MiB | less 
 all apps:
 sudo pacman -Qe
 check orphan packages
@@ -706,7 +814,7 @@ script. Uitleg opbouw van .res files staat in het onderstaande document.
 Ik wil de sensor data uitlezen. Dit bevat de volgende informatie (twee 
 locaties)
 
-    nano /home/synthon/Downloads/PyCORN-master/pycorn/docs/RES_files_layout.txt
+    nano /home/werk/Downloads/PyCORN-master/pycorn/docs/RES_files_layout.txt
     nano /usr/lib/python3.6/site-packages/pycorn/docs/RES_files_layout.txt
 
     Structure of sensor data
@@ -715,7 +823,7 @@ locaties)
     4 bytes sig/int	Sensor value, divide by 1000/100/10 depending on sensor type. 
 
     Bekijken file:
-    ghex /home/synthon/Downloads/PyCORN-master/samples/sample1.res
+    ghex /home/werk/Downloads/PyCORN-master/samples/sample1.res
     ghex /home/DATA/'HESP preproduct001.res'
 
 ......to be continued....
@@ -805,20 +913,10 @@ aangepast: `workgroup = WORKGROUP`
 aangepast: `log file = /var/log/samba/%m.log.`
 scannen locaties: `smbtree`
 
-onderstaande werkt niet:
-[user@USBdistro /]$ sudo mount -t cifs -o username=labuserbio \\nlnijsynthfcvs3\biodata \media
-mount.cifs: bad UNC (\nlnijsynthfcsv3biodata)
-[user@USBdistro /]$ sudo mount -t cifs -o username=labuserbio \\nlnijsynthfcsv3 \media
-mount.cifs: bad UNC (\nlnijsynthfcsv3)
-werkt ook niet met corporate adressen...
-
 installed: 
 gvfs
 gvfs-smb
 sshfs
-smb://nlnijsynthfcv1.nl.corporate.synthon-group.com/
-smb://nlnijsynthfcsv3.nl.corporate.synthon-group.com/
-smb://nlnijsynthfcvs1.nl.corporate.synthon-group.com/
 
 #### Fonts installeren
 Double_Feature.ttf file gedownload, deze wil ik nu installeren.
@@ -834,12 +932,61 @@ Verfris fc-cache:
 Kijken of de font erbij staat:
 
     fc-list | grep Double
+
+
+#### SQlite3 database
+https://www.tutorialspoint.com/sqlite/sqlite_select_query.htm
+Locatie database: /home/archie/domoticz/domoticz.db
+Met de applicatie sqlitebrowser zie je dat de column Humidity staat in Table: Temperature
+
+Command line; open database:
+'sqlite3'
+Nu zit je in 'sqlite3>' shell!
+'.open domoticz.db'
+select * from Temperature;
+select Humidity from Temperature;
+select Humidity, Date from Temperature;
+
+csv export sqlite (volg door tussendoor '.show'):
+.mode csv
+.output test.csv
+select Humidity, Date from Temperature;
+.output stdout
+
 ---
+
+### Corona script
+Procedure gepikt van Luke Smith
+curl https://corona-stats.online
+curl https://corona-stats.online/netherlands > ~/.cache/corona
+Script aangemaakt in ~/.local genaamd corona, executable gemaakt door:
+chmod +x ~/.local/corona
+Inhoud script:
+```
+#!/bin/sh
+# 
+# This script imports a corona dataset
+# on a daily basis and gives output in
+# the i3 bar
+
+
+#If not downloaded today, then download
+[ "$(stat -c %y ~/.cache/corona | cut -d' ' -f1)" != "$(date '+%Y-%m-%d')" ] &&
+curl -s https://corona-stats.online/netherlands > ~/.cache/corona
+
+# Fetch information and give output with emojis
+grep "Netherlands" ~/.cache/corona |
+    sed "s/\s*//g ; s/║//g ; s/│/;/g" |
+    awk -F';' '{print "😷" $3 "("$4")" "☠️" $5 "("$6")"    ud script:
+```
+PROBLEEM: nu heb ik een goed script, maar hoe voeg ik dit toe aan i3bar.
+Aan i3status kun je geen script hangen... (vim ~/.config/i3status/config)
+
 ### Applications (Command line and GUIs)
 
 #### Vim
 Installeer gvim, niet om te gebruiken maar om clipboard functionaliteit
-te kunnen gebruiken :)
+tekunnen gebruiken :)
 sudo pacman -S gvim
 
 Kleuren in vim
@@ -1394,9 +1541,9 @@ XFCE4-Settings-Keyboard --> Application shortcuts
 sh -c "mousepad && thunar "							Twee commands :-)
 mousepad /mousepad /home/archie/Stack/Command_line/commands_2018_12_31.txt	Ctrl+Alt+M
 firefox	https://facebook.com							Ctrl+Alt+F
-firefox https://webmaileu.synthon.com/OWA/					Ctrl+Alt+S
-firefox firefox https://login.yahoo.com						Ctrl+Alt+Y
-thunar sftp://icefly@149.210.233.43/home/icefly/Downloads/			Ctrl+Alt+T
+firefox https://webmaileu.werk.com/OWA/	    			Ctrl+Alt+S
+firefox firefox https://login.yahoo.com					Ctrl+Alt+Y
+thunar sftp://icefly@IP VPS                 			Ctrl+Alt+T
 amixer set Master 5%-								XF86AudioLowerVolume
 amixer set Master 5%+								XF86Audiomute
 KCalc										XF86Calculator
@@ -1744,7 +1891,7 @@ instellen timezone:
 timedatectl set-timezone Europe/Amsterdam
 
 Let op: de laatste backup is gemaakt op 30DEC18.
-(er is sinds 20JUL17 een tweede useraccounts en setup voor bij Synthon).
+(er is sinds 20JUL17 een tweede useraccounts en setup voor op het werk).
 
 #### Ubuntu 16.10 server en network
 
@@ -2006,7 +2153,7 @@ sudo apt-get update
 sudo apt-get upgrade
 
 
-#### Install  i3 Arch op Synthon pc (december 2020), via dotfile en GIT
+#### Install  i3 Arch op werk pc (december 2020), via dotfile en GIT
 *Installatie* 
 Eerst met dd de harde schijf gecomprimeerd en opgeslagen, zodat ik deze
 terug kan zetten.
@@ -2063,11 +2210,5 @@ in programming mode, it will back to normal mode.
 
      
 #### Gergo mechanical ortholinear keyboard
-Een Gergo keyboard gekocht zonder switches.  
-
-Op Ali express low profile  Kail Choc switches gekocht (rood en wit) plus
-keycaps.
-
-Gesoldeerd, het werkt met default preconfigurated settings.
-Nu nog de firmware updaten naar een eigen configuratie, want ik heb een betere
-layout voor mijn i3wm.
+I purchased a Gergo keyboard without switches. More details can be found on my
+personal Github page about the keyboards.

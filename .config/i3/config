@@ -51,8 +51,9 @@ client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-co
 client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
 
-# Start i3bar to display a workspace bar 
+# Start i3bar to display a workspace bar
 # (plus the system information i3status finds out, if available)
+# Location i3status file: ~/.config/i3status/config
 bar {
         status_command i3status
 }
@@ -89,6 +90,14 @@ bindsym $mod+v split v
 
 # Enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
+
+# Search emojis with dmenu. Location  unicode file: ~/.confg/unicode
+# Unfortunately only auto pastes in terminal apps. Works perfectly there though 😀
+#bindsym $mod+u exec "cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard"; exec "xdotool sleep 2 click 1 key ctrl+v"
+#bindsym $mod+u exec "cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard| xdotool sleep 2 click 1 key ctrl+v"
+#bindsym $mod+u exec cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard && xdotool type "$(xclip -o -selection clipboard)"
+#bindsym $mod+u exec cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard && xdotool click 1 sleep 5 type "$(xclip -o -selection clipboard)"
+bindsym $mod+u exec cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard && xdotool type "$(xclip -o -selection clipboard)"
 
 # Resize the container
 bindsym $mod+Control+Right resize shrink width  5 px or 5 ppt
@@ -196,6 +205,7 @@ bindsym mod3+a          exec "urxvt +sb -e bash -c alsamixer"
 bindsym mod3+b          exec blender
 #bindsym mod3+c		    exec
 bindsym mod3+d		    exec dosbox
+#bindsym mod3+e		    exec 
 bindsym mod3+f		    exec firefox
 bindsym mod3+g		    exec gimp
 bindsym mod3+h		    exec "urxvt +sb -e bash -c htop"
@@ -211,9 +221,7 @@ bindsym mod3+o		    exec octave
 bindsym mod3+r		    exec "urxvt +sb -e bash -c ranger"
 #bindsym mod3+s		    exec 
 bindsym mod3+t		    exec thunar
-# Make sure that the unicode file in in the ~/.config/unicode file...
-bindsym mod3+u		    exec "cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard"
-#bindsym mod3+u		    exec "cat ~/.config/unicode | fzf | awk '{print $1}'| xclip -selection clipboard"
+#bindsym mod3+u 	    exec 
 bindsym mod3+v		    exec "urxvt +sb -e bash -c ~/.config/vifm/scripts/vifmrun"
 #bindsym mod3+w		    exec
 #bindsym mod3+x		    exec 
@@ -235,17 +243,15 @@ bindsym mod3+Shift+v	exec "urxvt +sb -e vim ~/.vimrc"
 
 # Load wallpaper and fitting color scheme
 exec --no-startup-id wal -R
-# Remark: a little script called Pywal (wal) is used to change the
+# A little script called Pywal (wal) is used to change the
 # colour scheme automatically from the selected wallpaper and it 
 # also sets the wallpaper which makes the 
-# "exec_always feh --bg-scale wallpaper" autostart redundant. 
-# old example:
-# exec_always feh --bg-scale ~/women-arch-linux-wallpaper.jpg
+# exec_always feh --bg-scale ~/wallpaper.jpg" autostart redundant. 
 
 # A little hack for VIM. The Caps_Lock becomes the Escape key and
-# vice versa.
+# vice versa. Note: can also be triggered by alias: kbswitch
 exec --no-startup-id xmodmap ~/.Xmodmap
-#
+
 # Loads compton, for ricing
 exec --no-startup-id compton --config ~/.config/i3/compton.conf -b
 

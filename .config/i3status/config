@@ -19,10 +19,19 @@ general {
         interval = 5
 }
 
+#de volgende regel toegevoegd 26mar20, hopelijks breekt er niets:
+#order += "corona"
 order += "volume master"
 order += "disk /"
 #order += "ethernet _first_"
 order += "tztime local"
+
+#corona {
+##werkt niet:
+##command="/bin/bash -c ~/.local/corona"
+##format="sh  ~/.local/corona"
+#format="sh  ~/.local/corona"
+#}
 
 volume master {
 	device = "default"
