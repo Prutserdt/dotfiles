@@ -49,3 +49,8 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 # alias kbswitch='xmodmap ~/.config/kbswitch'
 # Lazy man's kbswitch command (I will switch to this permanently when used to it
 alias k='xmodmap ~/.config/kbswitch'
+
+# Change the size of the bash history to 5000 in memory (500 is default) 
+# and the total amount of maximally saved lines
+HISTSIZE=5000
+HISTFILESIZE=10000
