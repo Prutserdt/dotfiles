@@ -1580,14 +1580,10 @@ config add .example
 
 config add ~/suckless/dwm/LICENSE
 
-
 copy from vifm:
 remove stuff by
-open output in vim and run
-:%s/\s\+$//e
-
-
-vanitygaps.c  
+open output in vim, ctrl v block selection, copy, and removing white space at
+the end by :%s/\s\+$//e
 
 config add ~/suckless/dwm/config.h &&
 config add ~/suckless/dwm/config.mk &&
@@ -1605,70 +1601,50 @@ config add ~/suckless/dwm/util.h &&
 config add ~/suckless/dwm/util.o &&
 config add ~/suckless/dwm/vanitygaps.c &&
 config add ~/suckless/dwm/log/diff_log
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  LICENSE                                                         1.5 K   *log/                                                              4 K
-  Makefile                                                        1.7 K    LICENSE                                                         1.9 K
-  README                                                          475 B    Makefile                                                        1.1 K
-  arg.h                                                          1011 B    README                                                          1.1 K
-  config.def.h                                                    892 B    config.h                                                         17 K
-  config.h                                                        938 B    config.mk                                                       816 B
-  config.mk                                                       744 B    drw.c                                                            10 K
-  dmenu                                                            43 K    drw.h                                                           1.7 K
-  dmenu.1                                                         3.1 K    drw.o                                                            10 K
-  dmenu.c                                                          18 K    dwm                                                              85 K
-  dmenu.o                                                          32 K    dwm.1                                                           5.2 K
-  dmenu_path                                                      240 B    dwm.c                                                            59 K
-  dmenu_run                                                        58 B    dwm.o                                                            75 K
-  drw.c                                                            10 K    dwm.png                                                         373 B
-  drw.h                                                           1.7 K    layouts.c                                                       806 B
-  drw.o                                                            10 K    transient.c                                                     847 B
-  stest                                                            17 K    util.c                                                          517 B
-  stest.1                                                         1.5 K    util.h                                                          305 B
-  stest.c                                                         3.2 K    util.o                                                          2.3 K
-  stest.o                                                         5.2 K    vanitygaps.c                                                     10 K
-  util.c                                                          517 B
-  util.h                                                          305 B
-  util.o                                                          2.3 K
-
-
-
-
-
-
-
-
-
-
-
-;
+config add ~/suckless/dmenu/LICENSE &&
+config add ~/suckless/dmenu/Makefile &&
+config add ~/suckless/dmenu/README &&
+config add ~/suckless/dmenu/arg.h &&
+config add ~/suckless/dmenu/config.def.h &&
+config add ~/suckless/dmenu/config.h &&
+config add ~/suckless/dmenu/config.mk &&
+config add ~/suckless/dmenu/dmenu.1 &&
+config add ~/suckless/dmenu/dmenu.c &&
+config add ~/suckless/dmenu/dmenu.o &&
+config add ~/suckless/dmenu/dmenu_path &&
+config add ~/suckless/dmenu/dmenu_run &&
+config add ~/suckless/dmenu/drw.c &&
+config add ~/suckless/dmenu/drw.h &&
+config add ~/suckless/dmenu/drw.o &&
+config add ~/suckless/dmenu/stest &&
+config add ~/suckless/dmenu/stest.1 &&
+config add ~/suckless/dmenu/stest.c &&
+config add ~/suckless/dmenu/stest.o &&
+config add ~/suckless/dmenu/util.c &&
+config add ~/suckless/dmenu/util.h
+config add ~/suckless/dmenu/log/diff_log
+config add ~/suckless/st/FAQ
+config add ~/suckless/st/LEGACY &&
+config add ~/suckless/st/LICENSE &&
+config add ~/suckless/st/Makefile &&
+config add ~/suckless/st/README &&
+config add ~/suckless/st/TODO &&
+config add ~/suckless/st/arg.h &&
+config add ~/suckless/st/config.h &&
+config add ~/suckless/st/config.mk &&
+config add ~/suckless/st/st.1 &&
+config add ~/suckless/st/st.c &&
+config add ~/suckless/st/st.h &&
+config add ~/suckless/st/st.info &&
+config add ~/suckless/st/st.o &&
+config add ~/suckless/st/win.h &&
+config add ~/suckless/st/x.c &&
+config add ~/suckless/st/x.o &&
+config add ~/suckless/st/log/diff_log
 
 #### Tox
 Android: Antox
 desktop: qtox
-
 
 #### SXIV
 Assign keyboard shortcuts (https://wiki.archlinux.org/index.php/Sxiv)
@@ -1692,10 +1668,6 @@ done
 ```
 Als je nu in SXIV een image als achtergrond wilt instellen klik je op
 CTRL-x (voor key handler mode) en CTRL-w. :-).
-
-
-
-
 
 
 ### Distros        
