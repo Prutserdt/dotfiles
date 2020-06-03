@@ -1,34 +1,33 @@
-st - simple terminal
---------------------
-st is a simple terminal emulator for X which sucks less.
+ __  __         ____ _____   _           _ _     _
+|  \/  |_   _  / ___|_   _| | |__  _   _(_) | __| |
+| |\/| | | | | \___ \ | |   | '_ \| | | | | |/ _` |
+| |  | | |_| |  ___) || |   | |_) | |_| | | | (_| |
+|_|  |_|\__, | |____/ |_|   |_.__/ \__,_|_|_|\__,_|
+        |___/
+Created by Prutserdt
 
+This is my build of st, a simple terminal emulator for X which sucks less.
+Check the log directory for the applied patches.
 
-Requirements
-------------
-In order to build st you need the Xlib header files.
-
-
-Installation
-------------
-Edit config.mk to match your local setup (st is installed into
-the /usr/local namespace by default).
-
-Afterwards enter the following command to build and install st (if
-necessary as root):
+My builds are made in my home direcotory (~/suckless/st) and I'm not using
+GIT. Go to that directory and enter as normal user:
 
     make clean install
 
+ST patching
+------------
+1. Download a patch from suckless.org and place the patch at a set location 
+   (~/Stack/suckless/st/patches/test)
+2. Run from command line the .bashrc alias: stpatch
 
-Running st
-----------
-If you did not install st with make clean install, you must compile
-the st terminfo entry with the following command:
+Safe as stable version
+------------
+1. Run from command line the .bashrc alias: stbackup
 
-    tic -sx st.info
+Restore stable version
+------------
+1. Run from command line the .bashrc alias: ststable
 
-See the man page for additional details.
-
-Credits
--------
-Based on Aurélien APTEL <aurelien dot aptel at gmail dot com> bt source code.
-
+Run vanilla dwm
+------------
+1. Run from command line the .bashrc alias: stvanilla

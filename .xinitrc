@@ -15,7 +15,7 @@ xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to m
 # Uncomment the next line to start i3wm and writes in the log:
 # exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
 
-# give menu bar
+# Menu bar
 ~/.config/dwmbar.sh &
 # Switch numlock on
 numlockx &

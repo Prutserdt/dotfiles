@@ -17,13 +17,13 @@ static const char normbgcol[]       = "#000000";                /* Color of back
 static const char normbordercol[]   = "#111111";                /* Color of not selected borders */
 static const char normfgcol[]       = "#999999";                /* Color of foreground, menubar text color not selected, incl rigth */
 static const char selfgcol[]        = "#eeeeee";                /* Color of selected foreground*/
-static const char selbgcol[]        = "#111111";                /* Color of menubar*  */
+static const char selbgcol[]        = "#000000";                /* Color of menubar*  */
 static const char selbordercol[]    = "#770000";                /* Color of selected window border */
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { normfgcol, normbgcol, normbordercol },
-	[SchemeSel]  = { selfgcol,  selbgcol,  selbordercol },      /* Als ik de kleuren laat zoals nu dan kan dit vereenvoudigd worden...*/
+	[SchemeSel]  = { selfgcol,  selbgcol,  selbordercol },      /* This can be simplified if I will continue to use this simple color scheme.*/
 };
 
 /* tagging */
