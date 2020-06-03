@@ -1568,7 +1568,8 @@ If needed use:
 
     config checkout -f
 
-
+### Force update from local to github repo:
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push -f
 
 #### Tox
 Android: Antox
