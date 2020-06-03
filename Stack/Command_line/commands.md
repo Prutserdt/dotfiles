@@ -1581,54 +1581,77 @@ config add .example
 config add ~/suckless/dwm/LICENSE
 
 
+copy from vifm:
+remove stuff by
+open output in vim and run
+:%s/\s\+$//e
 
 
- LICENSE                                                         1.9 K    LICENSE                                                         1.9 K
-  Makefile                                                        1.1 K    Makefile                                                        1.1 K
-  README                                                          1.1 K    README                                                          1.1 K
-  config.h                                                         17 K    config.h                                                         17 K
-  config.mk                                                       816 B    config.mk                                                       816 B
-  drw.c                                                            10 K    drw.c                                                            10 K
-  drw.h                                                           1.7 K    drw.h                                                           1.7 K
-  drw.o                                                            10 K    drw.o                                                            10 K
-  dwm                                                              85 K    dwm                                                              85 K
-  dwm.1                                                           5.2 K    dwm.1                                                           5.2 K
-  dwm.c                                                            59 K    dwm.c                                                            59 K
-  dwm.o                                                            75 K    dwm.o                                                            75 K
-  dwm.png                                                         373 B    dwm.png                                                         373 B
-  layouts.c                                                       806 B    layouts.c                                                       806 B
-  transient.c                                                     847 B    transient.c                                                     847 B
-  util.c                                                          517 B    util.c                                                          517 B
-  util.h                                                          305 B    util.h                                                          305 B
-  util.o                                                          2.3 K    util.o                                                          2.3 K
-  vanitygaps.c                                                     10 K    vanitygaps.c                                                     10 K
-
-
-
-
-
-
-
-LICENSE        
-Makefile      
-README        
-config.h      
-config.mk     
-drw.c         
-drw.h         
-drw.o         
-dwm           
-dwm.1         
-dwm.c         
-dwm.o         
-dwm.png       
-layouts.c     
-transient.c   
-util.c        
-util.h        
-util.o        
 vanitygaps.c  
 
+config add ~/suckless/dwm/config.h &&
+config add ~/suckless/dwm/config.mk &&
+config add ~/suckless/dwm/drw.c &&
+config add ~/suckless/dwm/drw.h &&
+config add ~/suckless/dwm/drw.o &&
+config add ~/suckless/dwm/dwm.1 &&
+config add ~/suckless/dwm/dwm.c &&
+config add ~/suckless/dwm/dwm.o &&
+config add ~/suckless/dwm/dwm.png &&
+config add ~/suckless/dwm/layouts.c &&
+config add ~/suckless/dwm/transient.c &&
+config add ~/suckless/dwm/util.c &&
+config add ~/suckless/dwm/util.h &&
+config add ~/suckless/dwm/util.o &&
+config add ~/suckless/dwm/vanitygaps.c &&
+config add ~/suckless/dwm/log/diff_log
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  LICENSE                                                         1.5 K   *log/                                                              4 K
+  Makefile                                                        1.7 K    LICENSE                                                         1.9 K
+  README                                                          475 B    Makefile                                                        1.1 K
+  arg.h                                                          1011 B    README                                                          1.1 K
+  config.def.h                                                    892 B    config.h                                                         17 K
+  config.h                                                        938 B    config.mk                                                       816 B
+  config.mk                                                       744 B    drw.c                                                            10 K
+  dmenu                                                            43 K    drw.h                                                           1.7 K
+  dmenu.1                                                         3.1 K    drw.o                                                            10 K
+  dmenu.c                                                          18 K    dwm                                                              85 K
+  dmenu.o                                                          32 K    dwm.1                                                           5.2 K
+  dmenu_path                                                      240 B    dwm.c                                                            59 K
+  dmenu_run                                                        58 B    dwm.o                                                            75 K
+  drw.c                                                            10 K    dwm.png                                                         373 B
+  drw.h                                                           1.7 K    layouts.c                                                       806 B
+  drw.o                                                            10 K    transient.c                                                     847 B
+  stest                                                            17 K    util.c                                                          517 B
+  stest.1                                                         1.5 K    util.h                                                          305 B
+  stest.c                                                         3.2 K    util.o                                                          2.3 K
+  stest.o                                                         5.2 K    vanitygaps.c                                                     10 K
+  util.c                                                          517 B
+  util.h                                                          305 B
+  util.o                                                          2.3 K
 
 
 
