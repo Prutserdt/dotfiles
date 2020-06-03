@@ -6,7 +6,7 @@ My dwm build is a work in progress.
 
 The applications needed to run my i3 config can be found in *[./config/applications.md](https://github.com/Prutserdt/dotfiles/blob/master/.config/applications.md)*.
 
-This repo  also contains *[wallpapers](https://github.com/Prutserdt/dotfiles/blob/master/Stack/Afbeeldingen/Wallpapers)* and some text files.
+This repo  also contains *[wallpapers link not working!](https://github.com/Prutserdt/dotfiles/blob/master/Stack/Afbeeldingen/Wallpapers)* and some text files.
 
 ## :eight_pointed_black_star:The `dotfiles` command
 This alias from the *[.bashrc](https://github.com/Prutserdt/dotfiles/blob/master/.bashrc)*

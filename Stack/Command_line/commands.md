@@ -1571,6 +1571,77 @@ If needed use:
 ### Force update from local to github repo:
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push -f
 
+### Add my suckless utilities to my repo:
+
+
+config add .example
+    config commit -m "Add my .example"
+    config push -v
+
+config add ~/suckless/dwm/LICENSE
+
+
+
+
+ LICENSE                                                         1.9 K    LICENSE                                                         1.9 K
+  Makefile                                                        1.1 K    Makefile                                                        1.1 K
+  README                                                          1.1 K    README                                                          1.1 K
+  config.h                                                         17 K    config.h                                                         17 K
+  config.mk                                                       816 B    config.mk                                                       816 B
+  drw.c                                                            10 K    drw.c                                                            10 K
+  drw.h                                                           1.7 K    drw.h                                                           1.7 K
+  drw.o                                                            10 K    drw.o                                                            10 K
+  dwm                                                              85 K    dwm                                                              85 K
+  dwm.1                                                           5.2 K    dwm.1                                                           5.2 K
+  dwm.c                                                            59 K    dwm.c                                                            59 K
+  dwm.o                                                            75 K    dwm.o                                                            75 K
+  dwm.png                                                         373 B    dwm.png                                                         373 B
+  layouts.c                                                       806 B    layouts.c                                                       806 B
+  transient.c                                                     847 B    transient.c                                                     847 B
+  util.c                                                          517 B    util.c                                                          517 B
+  util.h                                                          305 B    util.h                                                          305 B
+  util.o                                                          2.3 K    util.o                                                          2.3 K
+  vanitygaps.c                                                     10 K    vanitygaps.c                                                     10 K
+
+
+
+
+
+
+
+LICENSE        
+Makefile      
+README        
+config.h      
+config.mk     
+drw.c         
+drw.h         
+drw.o         
+dwm           
+dwm.1         
+dwm.c         
+dwm.o         
+dwm.png       
+layouts.c     
+transient.c   
+util.c        
+util.h        
+util.o        
+vanitygaps.c  
+
+
+
+
+
+
+
+
+
+
+
+
+;
+
 #### Tox
 Android: Antox
 desktop: qtox
