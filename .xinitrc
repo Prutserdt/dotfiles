@@ -8,6 +8,22 @@
 #(_)_/\_\_|_| |_|_|\__|_|  \___|
 #                               
 # Modified by Prutserdt
-# Executed by startx. Starts i3wm and writes in the log:
+# Executed by startx. 
 #
-exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
+xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3
+#
+# Uncomment the next line to start i3wm and writes in the log:
+# exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
+
+# give menu bar
+~/.config/dwmbar.sh &
+# Switch numlock on
+numlockx &
+# Set wallpaper
+wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg
+# Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
+exec dwm
+# if dwm exits 0, restart -- this allows hot reloading of config.h
+while type dwm >/dev/null ; do dwm && continue || break ; done
+# Run Vanilla dwm-6.2, ~/Stack/dwm/dwm-6.2_200512_vanilla
+# exec dwm_vanilla

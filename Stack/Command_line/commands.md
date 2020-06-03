@@ -7,6 +7,7 @@
 ---
 ## Content
 #### Command line tricks
+* Allerlei
 * Rechten bestanden
 * Grafische problemen
 * Logging
@@ -27,6 +28,7 @@
 * Octave
 * Git (en dotfiles procedure)
 * Tox
+* SXIV
 #### Distros
 * XFCE tricks
 * i3 window manager
@@ -41,6 +43,8 @@
 * Ducky one mechanical keyboard.
 * Vortex 90M mechanical keyboard
 * Gergo mechanical ortholinear keyboard
+#### dwm
+#### st
 ---
 ### Command line tricks
 #### Allerlei
@@ -104,6 +108,19 @@ Bekijk routers naar adres met: mtr: `mtr --report-wide --curses www.google.com`
 
 geeft usb devices weer
 lsusb
+
+History bashrc. Dit staat in ~/.bash_history. Verwijder duplicates met het
+volgende commando:
+
+    sort .bash_history | uniq > .bash_history_shortened
+
+Voeg het volgende toe aan .bashrc om een grotere en meer cleane history file te
+krijgen:
+```
+HISTSIZE=5000
+HISTFILESIZE=10000
+HISTCONTROL=ignoreboth:erasedups
+```
 
 #### Weergave hard drive, formatting, dd, etc
 
@@ -216,22 +233,24 @@ Welkomstekst nieuwe terminal:
 
     echo "Welcome back commander"
 
-Geeft arch logo in asci art plus wat extra info: `screenfetch`.
+Geeft arch logo in asci art plus wat extra info: `screenfetch`. Je kunt ook
+neofetch gebruiken. Beide opties zijn bloat. Daarom is pfetch beter. Meer
+minimalistich. Deze heb ik ingesteld in mijn .bashrc.
+
 
 Welkom tekst voor login venster instellen in: `sudo nano etc/issue`
 Voeg toe:
 ```
-|-----------------------------------------|
-|        Welcome back commander           |
-|-----------------------------------------|
-|                                         |
-| User:        archie/vanilla             |
-|                                         |
-| Start xfce4: startxfce4                 |
-| Start i3:    startx                     |
-|                                         |
-|-----------------------------------------|
-
+|--------------------------|
+|  Welcome Back Commander  |
+|--------------------------|
+|    User      : icefly    |
+|                          |
+|     Modify .xinitrc      |
+|     to choose window     |
+|     manager and run      |
+|     startx               |
+|--------------------------|
 Arch Linux \r (\l)
 ```
 
@@ -337,6 +356,11 @@ Aanmaken directory voor meerdere users (in dit geval, DATA in /home):
     sudo chgrp -R project /home/DATA/
     sudo chmod -R 2775 /home/DATA/
 
+Veranderen van rechten, van root root naar icefly users.
+(username groupname)
+chown icefly:users *.*
+
+
 **Grafische problemen**
 
 Check grafische kaart, video card
@@ -409,11 +433,12 @@ Grootte log:
     journalctl --disk-usage
 
 De command line history staat hier: `/home/icefly/.bash_history`.
-Zoeken in de history naar bijv. ssh gaat alsvolgt:
+Zoeken in de history naar bijv. ssh gaat alsvolgt (zie ook fzf en aliases .bashrc):
 
     ctrl R
     history | grep ssh
     cat
+
 
 Maak text bestand aan, daarna typ je text en sluit je met CTR+z om te saven:
 `cat > text.txt`.
@@ -1026,7 +1051,6 @@ https://www.bol.com/nl/p/asus-r5230-sl-1gd3-l-radeon-r5-230-1gb-gddr3-videokaart
 
 
 
-
 ### Applications (Command line and GUIs)
 
 #### Vim
@@ -1201,6 +1225,12 @@ VIM; editen van markdown en live preview in browser met de
 `iamcco/makrdown-preview.nvim` plugin.
 Open een markdown file: `:MarkdownPreview`
 
+Visual block rename tekst:
+Control v, selecteer het blok dat je wil aanpassen
+r, en hierna tekst invoeren wat je erover wilt schrijven
+esc esc, om eruit te gaan en aan te passen.
+
+
 #### Batch renaming in vim/vifm
 Open een directory in vifm en tag de namen die je wil veranderen met 't'.
 Selecteer een block met CTRL-v en geef daarna shift-I (insert tekst) Esc om 
@@ -1298,6 +1328,15 @@ Nu start je het script door in te voeren.  ~/.config/vifm/scripts/vifmrun
 
 Dit is toegevoegd als hotkey in i3: `mod+v`
 
+Hernoemen van filenames in vifm in huidige directory(%: files in directory).
+Ik wil de whitespaces vervangen door underscored:
+:%rename
+:%s/ /_/g
+:wq
+Het kan nog eenvoudiger!!! In vifm voer in:
+:%s/ /_/g
+
+
 #### urxvt (lightweight terminal). Kleurenschema kun je met pywal instellen :-)
 
 Make Xdefault file, typ regel en druk op CTR+z
@@ -1354,6 +1393,15 @@ Destilleer de kleuren uit de wallpaper, deze veranderd ook direct de
 wallpaper :-)
 wal -i women-arch-linux-wallpaper.jpg
 wal -i wallpaper2.JPEG
+
+Het wal commando veranderd de huidige kleuren in terminal. Je kunt de kleurselectie 
+permanent maken door het volgende in .bashrc te zetten:
+# Import colorscheme from 'wal' asynchronously
+# &   # Run the process in the background.
+# ( ) # Hide shell job control messages.
+(cat ~/.cache/wal/sequences &)
+# To add support for TTYs this line can be optionally added.
+source ~/.cache/wal/colors-tty.sh
 
 #### Nano
 Pid van nano in gebruik... heel irritant als je bijv.
@@ -1527,6 +1575,32 @@ Android: Antox
 desktop: qtox
 
 
+#### SXIV
+Assign keyboard shortcuts (https://wiki.archlinux.org/index.php/Sxiv)
+Kopieer het voorbeeld in de de wiki in de file
+~/.config/sxiv/exec/key-handler en maak deze executable.
+```
+#!/bin/sh
+while read file
+do
+        case "$1" in
+#        "C-d")
+#                mv "$file" ~/.trash ;;
+        "C-r")
+                convert -rotate 90 "$file" "$file" ;;
+        "C-c")
+                echo -n "$file" | xclip -selection clipboard ;;
+        "C-w")
+                wal -i "$file" ;;
+        esac
+done
+```
+Als je nu in SXIV een image als achtergrond wilt instellen klik je op
+CTRL-x (voor key handler mode) en CTRL-w. :-).
+
+
+
+
 
 
 ### Distros        
@@ -1651,7 +1725,15 @@ balk.
 
 Edit mp3 tags in Thunar, door onderstaande plugin:
 sudo pacman -S  thunar-media-tags-plugin
-     
+
+After a minimal install (dwm) also install lxappearance and themes, for
+example: breeze, nordic, juno, candy-icons, Papirus, equilux-theme, dark-olympic enz.
+
+Toevoegen van directories bij PLACES; rechtermuis op directory en sent to: side pane.
+
+Toevoegen plugin voor het extracten: thunar-archive-plugin
+Plugin voor toevoegen mounted drives: thunar-volman
+
 #### i3 window manager   
      
 Tips: https://www.youtube.com/watch?v=8-S0cWnLBKg
@@ -1859,6 +1941,10 @@ if you add the following line to the script that he showed:
 xdotool key "ctrl+shift+v"
 it will automatically insert the emoji into the focused program (like browser or terminal), making this
 dmenu setup act like an emoji keyboard for quick insertion
+
+
+    /*{ MENUKEY,                    XK_u,      spawn,          SHCMD("cat ~/.config/unicode | dmenu -i -l 20 -fn unifont-08| awk '{print $1}'| xclip -selection clipboard") },*/
+    /*cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard && xdotool type "$(xclip -o -selection clipboard)" */
 
 
 #### Install on persistent USB feb2017                    
@@ -2266,3 +2352,240 @@ in programming mode, it will back to normal mode.
 #### Gergo mechanical ortholinear keyboard
 I purchased a Gergo keyboard without switches. More details can be found on my
 personal Github page about the keyboards.
+
+#### dwm
+ ______        ____  __
+|  _ \ \      / /  \/  |
+| | | \ \ /\ / /| |\/| |
+| |_| |\ V  V / | |  | |
+|____/  \_/\_/  |_|  |_|
+
+## Installatie
+Procedure: https://www.youtube.com/watch?v=KaSuYdkV6Bg
+Download de tarbal en run in deze directory in  terminal:
+'tar -xvf ./dwm-6.2.tar.gz'
+'make'
+Nu is er een executable file gemaakt: dwm
+Verplaats de bestanden naar de ~/dwm directory.
+Maak directory "bin" aan in home directory:
+'mkdir ~/bin'
+Maak een symbolic link
+'ln -s /home/icefly/dwm/dwm /home/icefly/bin/dwm'
+Voeg toe aan bashrc:
+'PATH="$HOME/bin:$PATH"'
+Pas .xinitrc aan (exec dwm). Reboot en startx!
+
+    #!/bin/sh
+    #
+    # ~/.xinitrc
+    #        _       _ _            
+    #  __  _(_)_ __ (_) |_ _ __ ___ 
+    #  \ \/ / | '_ \| | __| '__/ __|
+    # _ >  <| | | | | | |_| | | (__ 
+    #(_)_/\_\_|_| |_|_|\__|_|  \___|
+    #                               
+    # Modified by Prutserdt
+    # Executed by startx. 
+    #
+    xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3
+    #
+    # Uncomment the next line to start i3wm and writes in the log:
+    #exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
+    
+    # give menu bar and start dwm
+    while true
+    do
+    #  xsetroot -name "`date +"%d%h%y %H:%M"` `amixer -c 1 get Master | sed '5!d'`"
+    # xsetroot -name "`amixer -c 1 get Master | sed '5!d'` `date +"%d%h%y %H:%M"`"
+    xsetroot -name "`awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master)` `date +"%d%h%y %H:%M"`"
+    
+      sleep 1
+    done &
+    numlockx &
+    wal -i /home/icefly/Downloads/gekibbel.jpg
+    exec dwm
+    # if dwm exits 0, restart -- this allows hot reloading of config.h
+    while type dwm >/dev/null ; do dwm && continue || break ; done
+
+## Vervang de huidige dwm installatie voor vanilla dwm: dwmrestore (staat in .bashrc)
+Het commando "dwmrestore" geeft een vanilla install terug! Het kopieerd data.
+alias dwmrestore="cp -i ~/Stack/dwm/dwm-6.2_200512_vanilla/* ~/dwm-6.2 && cd ~/dwm-6.2 && c && l"
+
+## Maak symbolic link om eenvoudig te starten via startx (.xinitrc)
+Let op: maak symlink aan in ~/bin. Vergeet niet dat het pad aan bashrc moet staan.
+'ln -s -v /home/icefly/dwm/dwm /home/icefly/bin/dwm'
+Of overschrijf een symlink:
+`ln -f -s /home/icefly/Stack/dmw/dwmx /home/icefly/bin/dwm_x`
+Nu kun je via het executable kiezen in .xinitrc: exec dwm_vanilla voor startx.
+
+## De laatste stabiele backup installeren:
+## Vervang de huidige dwm installatie door: dwmstable (.bashrc alias)
+Het commando "dwmstable" geeft een install van de laatste stabiele dwm versie terug!
+Let op: LET OP DIT VERWIJDERD DE HUIDIGE VERSIE!!
+
+
+# Automatische patching via de volgende .bashrc alias procedure:
+# alias dwmpatch = "dwmstable && cp ~/dwm/config.h ~/dwm/config.def.h && rm ~/dwm/config.h &&
+#                  patch -p1 < ~/Stack/dwm/patches/test/*.diff && make clean install"
+# Stap 1: verwijdern files in test direcotory:
+rm ~/Stack/dwm/patches/test/*
+# Stap 2: Zet je diff file op de volgend locatie: ~/Stack/dwm/patches/test en run 
+# Stap 3: run .bashrc alias:
+dmwpatch
+
+# Een complete walkthrough van een nieuwe installatie, vanuit vanilla (dwmvanilla)
+#1: gridmode, via dwmpatch, werkt eenvoudig. :-)
+#2: fakefullscreen, via dwmpatch :-)
+#3: centered master. niet via dwmpatch. :-(. Onderstaande procedure werkt wel. :-)
+dwmstable
+Toevoeging aan config.def.h:
+	{ "[M]",      monocle },
+	{ "|M|",      centeredmaster },
+	{ ">M>",      centeredfloatingmaster },
+.....
+	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[5]} },
+Daarna:
+rm config.h
+patch -p1 < ~/Stack/dwm/patches/test/*.diff
+Foutmeldingen, maar gewoon doorgaan, rej en orig file verwijderen en:
+make clean install
+reboot: werkt!
+#4: restartsig, via dmwpatch :-)
+Let op pas aan de .xinitrc:
+    # if dwm exits 0, restart -- this allows hot reloading of config.h
+    while type dwm >/dev/null ; do dwm && continue || break ; done
+#5: Verander modkey in ~/dwm/config.h:
+Veranderen van modkey. 
+    define MODKEY Mod4Mask
+cp config.h config.def.h
+make clean install
+Restart in place (super+ctrl+shift+q), dwmbackup
+#6: defaulttransparency, werkt niet via  dwmpatch :-(
+Toegevoegd aan config.def.h:
+     static const Bool topbar            = True;     /* False means bottom bar */
+    +static const double defaultopacity  = 0.75;
+    ...
+     	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+    +	{ MODKEY|ShiftMask,		XK_s,	   spawn,	   SHCMD("transset-df -a --dec .1") },
+    +	{ MODKEY|ShiftMask,		XK_d,	   spawn,	   SHCMD("transset-df -a --inc .1") },
+    +	{ MODKEY|ShiftMask,		XK_f,	   spawn,	   SHCMD("transset-df -a .75") },
+Daarna:
+rm config.h
+patch -p1 < ~/Stack/dwm/patches/test/*.diff
+make clean install
+Restart in place (super+ctrl+shift+q), dwmbackup
+hmmm hoe zit het eigenlijk, ik zie geen transparancy...
+Helaas heb ik een dwmbackup gemaakt en zit deze nu in mijn stable built...
+#7: attachbottom, werkt via dwmpatch :-)
+dwmbackup
+#8: (bottomstack.. dit is geen bruikbare patch en gebruik ik niet.)
+#8: (Cyclelayouts. Cycle door de layouts met MOD-CTRL, handig, ga ik later
+#8:                installeren, gaat niet met dwmpatch.)
+#8: Inplacerotate, gaat goed via dwmpatch.
+Super handig voor cycling zonder dat de ordering veranders.
+dwmbackup
+#9: Sticky. werkt via dwmpatch :-). Handig, mod s om te togglen.
+dwmbacup
+#10: Swallow, werkt niet via dwmpatch. dwm.c moet je aanpassen:
++	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow;
++	pid_t pid;
++	Client *swallowing;
++static pid_t getparentprocess(pid_t p);
+
++static int isdescprocess(pid_t p, pid_t c);
++	Client *c, *t, *term = NULL;
++	c->pid = winpid(w);
++		term = termforwin(c);
++	if (c->swallowing) {
++		unswallow(c);
++		return;
++	}
++
++	Client *s = swallowingclient(c->win);
++	if (s) {
++		free(s->swallowing);
++		s->swallowing = NULL;
++		arrange(m);
++	if (!(xcon = XGetXCBConnection(dpy)))
++		die("dwm: cannot get xcb connection\n");
++        focus(NULL);
++		return;
++	}
+# Gelukt en saved dmv dmwbackup, plus een extra backup gemaakt dwm-6.2_stable_200517.
+
+
+#fonts instellen
+# font ingesteld voor config.def.h:
+Aangepast in config.def.h:
+orgineel:
+    static const char *fonts[]          = { "monospace:size=10" };
+veranderd in:
+    static const char *fonts[]          = { "unifont:size=9" };
+make clean install
+Andere geinstalleerde en geprobeerde fonts:
+inconsolata Dina profont ttf-monaco ttf-hack
+
+# XF86XK buttons aanpassen
+https://github.com/kusk/dwm/blob/master/config.h
+/* commands */
+	{ 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+") },
+	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%-") },
+	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle, NULL") }, 
+    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") }, 
+    { 0,            XK_Print,   		   spawn,		   SHCMD("xfce4-screenshooter") }, 
+
+	{ MENUKEY,                      XK_u,      spawn,          SHCMD("cat ~/.config/unicode | dmenu -i -l 25 -fn unifont-10| awk '{print $1}'| xclip -selection clipboard") },
+    /*{ MENUKEY,                    XK_w,      spawn,          SHCMD("ls ~/Stack/Afbeeldingen/Wallpapers/ | dmenu -i -l 20 -fn unifont-08| awk '{print $1}'| xclip -selection clipboard && wal -i "$(xclip -o -selection clipboard)"") },*/
+
+# color emojis
+Installeer: yay libxft-bgra
+Open het bestand genaamd: drw.c. En verwijder het gedeelte over
+iscol (do  not allow using color fonts). Doe dit ook voor dmenu, in
+drw.c. Daarna werkt het helaas nog niet. Alleen een gedeelte van de
+emojis zijn te zien en alleen in zwart-wit.
+Ik heb ttf-ancient-fonts geinstalleerd maar helaas zie ik nog steeds geen
+emojis.
+noto-fonts-emoji
+ttf-joypixel
+ttf-symbola (geeft de eenvoudige monochrome fonts, niet installeren!)
+Na de-installeren symbola zie ik emojis in dmenu!
+
+#### st
+     _   
+ ___| |_ 
+/ __| __|
+\__ \ |_ 
+|___/\__|
+#st mijn eigen build!
+# ik ga st in mijn dwm folder zetten en deze mee ontwikkelen met mijn huidige
+# laten we kijken of dit goed werkt.
+
+## Installatie en gebruik .bashrc aliases
+Download de suckless.org tarbal en run in deze directory in  terminal:
+'tar -xvf st-0.8.3.tar.gz'
+'make'
+Nu is er een executable file gemaakt: st. 
+Verplaats de bestanden naar de ~/st directory.
+Maak directory "bin" aan in home directory(als deze er nog niet is):
+'mkdir ~/bin'
+Maak een symbolic link
+'ln -s /home/icefly/st/st /home/icefly/bin/st'
+'ln -s /home/icefly/Stack/st-0.8.3_vanilla/st /home/icefly/bin/st_vanilla'
+Voeg toe aan bashrc (hoeft niet als hij er al is):
+'PATH="$HOME/bin:$PATH"'
+
+
+
+
+
+
+
+
+
+
+
+
+
+

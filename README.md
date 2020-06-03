@@ -1,8 +1,13 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# :sparkles:Dotfiles:sparkles: repo:bangbang::metal:
-Here I store the :sparkles:dotfiles:sparkles: of my Arch :penguin: i3wm :computer:. It also contains *[wallpapers](https://github.com/Prutserdt/dotfiles/blob/master/Stack/Afbeeldingen/Wallpapers)* and some text files.
+# :sparkles:Dotfiles:sparkles: repo:bangbang::metal: (i3sm and dwm)
+Here I store the :sparkles:dotfiles:sparkles: of my Arch system plus some other stuff. I use two window manager: i3-gaps and dwm.
+
+My dwm build is a work in progress.
 
 The applications needed to run my i3 config can be found in *[./config/applications.md](https://github.com/Prutserdt/dotfiles/blob/master/.config/applications.md)*.
+
+This repo  also contains *[wallpapers](https://github.com/Prutserdt/dotfiles/blob/master/Stack/Afbeeldingen/Wallpapers)* and some text files.
+
 ## :eight_pointed_black_star:The `dotfiles` command
 This alias from the *[.bashrc](https://github.com/Prutserdt/dotfiles/blob/master/.bashrc)*
 is running the shell script 
@@ -28,4 +33,3 @@ or pull can be made to the repo, all from one command! :godmode:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
 - :book: https://stackoverflow.com/questions/1595848/configuring-git-over-ssh-to-login-once
-

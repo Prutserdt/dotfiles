@@ -1,9 +1,6 @@
 " ~/.vimrc
 " Based on gistfile1.txt (default settings)
 " 
-" Remark: install gvim instead of vim. This will add copy/paste in/out of vim 
-" functionality :-)
-" 
 " Remark: Vundle is used for plugin management
 "       _                    
 "__   _(_)_ __ ___  _ __ ___ 
@@ -55,9 +52,9 @@ let g:mkdp_browser = '/usr/bin/firefox'
 
 " see :h vundle for more details or wiki for FAQ
 
-"Non-Plugin stuff :-)
 "------------------------------------------------------------------------------
-
+" Non-Plugin stuff
+"------------------------------------------------------------------------------
 set relativenumber  " Set current line to 0.
 
 set tabstop=4       " Number of spaces that a <Tab> in the file counts for.
@@ -128,6 +125,11 @@ set background=dark " When set to "dark", Vim will try to use colors that look
                     " Any other value is illegal.
  
 set mouse=a         " Enable the use of the mouse.
- 
+
+" sets default clipboard to the system clipboard (requires gvim/nvim/vim-x11 installed)
+set clipboard=unnamedplus
+vnoremap <C-c> "+y
+map <C-p> "+P
+
 filetype plugin indent on
 syntax on
