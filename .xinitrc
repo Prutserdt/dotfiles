@@ -11,6 +11,10 @@
 # Executed by startx. 
 #
 xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3
+
+# Set keyboard rate quicker
+xset r rate 300 80
+
 #
 # Uncomment the next line to start i3wm and writes in the log:
 # exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1

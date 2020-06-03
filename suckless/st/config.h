@@ -5,7 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+/*static char *font = "monaco:pixelsize=12:antialias=true:autohint=true";*/
+static char *font = "Hack:pixelsize=13:antialias=true;autohint=true";
 static int borderpx = 2;
 
 /*
@@ -109,7 +110,7 @@ static const char *colorname[] = {
   [15] = "#ffffff", /* white   */
 
   /* special colors */
-  [256] = "#111111", /* background */
+  [256] = "#000000", /* background */
 /*  [256] = "#282a36",*/ /* background */
   [257] = "#f8f8f2", /* foreground */
 };
@@ -142,17 +143,12 @@ unsigned int defaultunderline = 7;
  * 7: Snowman ("☃")
  */
 static unsigned int cursorstyle = 1;
-
-/*
- * Default columns and rows numbers
- */
+/* Default columns and rows numbers */
 
 static unsigned int cols = 80;
 static unsigned int rows = 24;
 
-/*
- * Default colour and shape of the mouse cursor
- */
+/* Default colour and shape of the mouse cursor */
 static unsigned int mouseshape = XC_xterm;
 static unsigned int mousefg = 7;
 static unsigned int mousebg = 0;
