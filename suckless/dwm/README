@@ -1,48 +1,44 @@
-dwm - dynamic window manager
-============================
-dwm is an extremely fast, small, and dynamic window manager for X.
+ __  __         ______        ____  __   _           _ _     _
+|  \/  |_   _  |  _ \ \      / /  \/  | | |__  _   _(_) | __| |
+| |\/| | | | | | | | \ \ /\ / /| |\/| | | '_ \| | | | | |/ _` |
+| |  | | |_| | | |_| |\ V  V / | |  | | | |_) | |_| | | | (_| |
+|_|  |_|\__, | |____/  \_/\_/  |_|  |_| |_.__/ \__,_|_|_|\__,_|
+        |___/
+Created by Prutserdt
 
+This is my build of dwm - dynamic window manager. An extremely fast, small, 
+and dynamic window manager for X.
 
-Requirements
-------------
-In order to build dwm you need the Xlib header files.
+Check the log directory for the applied patches.
+Check the config.h file for my key bindings.
 
+My builds are made in my home direcotory (~/suckless/dwm). 
+Go to that directory and enter as normal user:
+make clean install
 
-Installation
-------------
-Edit config.mk to match your local setup (dwm is installed into
-the /usr/local namespace by default).
-
-Afterwards enter the following command to build and install dwm (if
-necessary as root):
-
-    make clean install
-
+Make a symlink to ~/bin
+'ln -s -v /home/icefly/suckless/dwm/dwm /home/icefly/bin/dwm'
 
 Running dwm
 -----------
 Add the following line to your .xinitrc to start dwm using startx:
+exec dwm
 
-    exec dwm
+dwm patching
+------------
+1. Download a patch from suckless.org and place the patch at a set location 
+   (~/Stack/suckless/dwm/patches/test)
+2. Run from command line the .bashrc alias: dwmpatch
+3. If the patch is usefull then safe as a stable version.
 
-In order to connect dwm to a specific display, make sure that
-the DISPLAY environment variable is set correctly, e.g.:
+Safe as stable version
+------------
+Run from command line the .bashrc alias: dwmbackup
 
-    DISPLAY=foo.bar:1 exec dwm
+Restore stable version
+------------
+Run from command line the .bashrc alias: dwmstable
 
-(This will start dwm on display :1 of the host foo.bar.)
-
-In order to display status info in the bar, you can do something
-like this in your .xinitrc:
-
-    while xsetroot -name "`date` `uptime | sed 's/.*,//'`"
-    do
-    	sleep 1
-    done &
-    exec dwm
-
-
-Configuration
--------------
-The configuration of dwm is done by creating a custom config.h
-and (re)compiling the source code.
+Run vanilla dwm
+------------
+Run from command line the .bashrc alias: dwmvanilla

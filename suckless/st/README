@@ -9,12 +9,14 @@ Created by Prutserdt
 This is my build of st, a simple terminal emulator for X which sucks less.
 Check the log directory for the applied patches.
 
-My builds are made in my home direcotory (~/suckless/st) and I'm not using
-GIT. Go to that directory and enter as normal user:
+My builds are made in my home direcotory (~/suckless/st).
+Go to that directory and enter as user (no root):
+make clean install
 
-    make clean install
+Make a symlink to ~/bin
+'ln -s -v /home/icefly/suckless/st/st /home/icefly/bin/st'
 
-ST patching
+st patching
 ------------
 1. Download a patch from suckless.org and place the patch at a set location 
    (~/Stack/suckless/st/patches/test)
@@ -22,12 +24,12 @@ ST patching
 
 Safe as stable version
 ------------
-1. Run from command line the .bashrc alias: stbackup
+Run from command line the .bashrc alias: stbackup
 
 Restore stable version
 ------------
-1. Run from command line the .bashrc alias: ststable
+Run from command line the .bashrc alias: ststable
 
-Run vanilla dwm
+Run vanilla st
 ------------
-1. Run from command line the .bashrc alias: stvanilla
+Run from command line the .bashrc alias: stvanilla
