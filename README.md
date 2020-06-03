@@ -1,7 +1,7 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# :sparkles:Dotfiles:sparkles: repo, plus suckless builds:bangbang: (dwm, suckless utilities and i3-gaps)
+# :sparkles:Dotfiles:sparkles: repo, plus suckless builds:bangbang:
 Here I store the :sparkles:dotfiles:sparkles: of my Arch system plus some other stuff.
-My dwm build is a work in progress. i3 gaps is still a part of this repo although I do not use it anymore.
+My dwm build is a work in progress. i3 gaps config files are still a part of this repo although I do not use it anymore.
 
 The applications needed to run my i3 config can be found in *[./config/applications.md](https://github.com/Prutserdt/dotfiles/blob/master/.config/applications.md)*.
 
