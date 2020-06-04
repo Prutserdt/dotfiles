@@ -1,19 +1,18 @@
 #!/bin/sh
 
-# Script taken from Luke Smith github Voidrice
-# The famous "get a menu of emojis to copy" script.
+# Script taken from Luke Smith github Voidrice and modified
 
 # Get user selection via dmenu from emoji file.
-chosen=$(cut -d ';' -f1 ~/.config/unicode | dmenu -i -l 30 | sed "s/ .*//")
+# Requirement: dmenu and the center patch that gives the dmenu -c option.
+chosen=$(cut -d ';' -f1 ~/.config/unicode | dmenu -i -c -l 30 | sed "s/ .*//")
 
 # Exit if none chosen.
 [ -z "$chosen" ] && exit
 
 # If you run this command with an argument, it will automatically insert the
-# character. Otherwise, show a message that the emoji has been copied.
+# character. Otherwise, copy the emoji to the clipboard.
 if [ -n "$1" ]; then
 	xdotool type "$chosen"
 else
-	echo "$chosen" | tr -d '\n' | xclip -selection clipboard
-	notify-send "'$chosen' copied to clipboard." &
+	echo "$chosen" | tr -d '\n' | xclip -selection clipboard &
 fi

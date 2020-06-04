@@ -100,6 +100,7 @@ static Key keys[] = {
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 /* txt: .xinitrc */
 
                                                                                                                                 /****   Right super key to open applications   ****/
+	{ MENUKEY,                      XK_d,      spawn,          SHCMD("dmenu_run") },                                             /* Application: dmenu */
     { MENUKEY,                      XK_f,      spawn,          SHCMD("firefox") },                                              /* Application: Firefox */
 	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 /* Application: gimp */
 	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              /* Application: keepass */

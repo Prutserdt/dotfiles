@@ -150,7 +150,7 @@ alias stpatch="ststable && ls ~/Stack/suckless/st/patches/test/*.diff >> ~/suckl
 # Make the current dmenu the stable version
 alias dmenubackup="rm -r ~/Stack/suckless/dmenu/dmenu-4.9_stable && mkdir ~/Stack/suckless/dmenu/dmenu-4.9_stable && cp -r ~/suckless/dmenu/* ~/Stack/suckless/dmenu/dmenu-4.9_stable"
 # Go back to vanilla st. DESTROYS CURRENT dmenu!
-alias dmenuvanilla="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -i ~/Stack/suckless/dmenu/dmenu-4.9_vanilla/* ~/suckless/dmenu && cd ~/suckless/dmenu && clear && ls -al"
+alias dmenuvanilla="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -r ~/Stack/suckless/dmenu/dmenu-4.9_vanilla/* ~/suckless/dmenu && cd ~/suckless/dmenu && clear && ls -al"
 # Go back to stable dmenu. DESTROYS CURRENT dmenu!
 alias dmenustable="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -r ~/Stack/suckless/dmenu/dmenu-4.9_stable/* ~/suckless/dmenu && cd ~/suckless/dmenu && clear && ls -al"
 
