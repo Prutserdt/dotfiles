@@ -16,8 +16,8 @@ Go to that directory and enter as normal user:
 make clean install
 
 Make a symlink to ~/bin
-ln -s -v /home/icefly/suckless/surf/surf /home/icefly/bin/surf
-ln -s -v /home/icefly/suckless/surf/surf-open.sh /home/icefly/bin/surf-open.sh
+ln -s -v ~/suckless/surf/surf ~/bin/surf
+ln -s -v ~/suckless/surf/surf-open.sh ~/bin/surf-open.sh
 
 surf patching
 ------------

@@ -2,7 +2,7 @@
 # :sparkles:Dotfiles:sparkles: repo, including my suckless builds:bangbang:
 Here I store the :sparkles:dotfiles:sparkles: of my Arch system plus some other stuff.
 
-*[This directory](https://github.com/Prutserdt/dotfiles/blob/suckless/) contains my suckless builds, including DWM. 
+[This directory](https://github.com/Prutserdt/dotfiles/tree/master/suckless) contains my suckless builds, including DWM. 
 
 Some 'essential' applications
 * vifm
@@ -12,8 +12,7 @@ Some 'essential' applications
 * python-pywall
 * python-ueberzug
 * sxiv
-* vundle-git (vim plugin manager)
-* w3m
+* vundle-git 
 * yay
 * fzf
 * glances

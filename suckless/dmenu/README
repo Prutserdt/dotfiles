@@ -6,7 +6,6 @@
         |___/
 Created by Prutserdt
 
-
 This is my build of dmenu - dynamic menu, dmenu is an efficient dynamic menu for X.
 
 My builds are made in my home direcotory (~/suckless/dmenu).
@@ -14,7 +13,7 @@ Go to that directory and enter as user (no root):
 make clean install
 
 Make a symlink to ~/bin
-'ln -s -v /home/icefly/suckless/dmenu/dmenu /home/icefly/bin/dmenu'
+'ln -s -v ~/suckless/dmenu/dmenu ~/bin/dmenu'
 
 dmenu patching
 ------------

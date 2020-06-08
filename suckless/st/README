@@ -14,7 +14,7 @@ Go to that directory and enter as user (no root):
 make clean install
 
 Make a symlink to ~/bin
-'ln -s -v /home/icefly/suckless/st/st /home/icefly/bin/st'
+'ln -s -v ~/suckless/st/st ~/bin/st'
 
 st patching
 ------------

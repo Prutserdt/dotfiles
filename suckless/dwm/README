@@ -10,19 +10,31 @@ This is my build of dwm - dynamic window manager. An extremely fast, small,
 and dynamic window manager for X.
 
 Check the log directory for the applied patches.
-Check the config.h file for my key bindings.
+Check the config.h file for my key bindings. Super_R and Alt_R buttons are set
+by .Xmodmap.
 
 My builds are made in my home direcotory (~/suckless/dwm). 
 Go to that directory and enter as normal user:
 make clean install
 
 Make a symlink to ~/bin
-'ln -s -v /home/icefly/suckless/dwm/dwm /home/icefly/bin/dwm'
+'ln -s -v ~/suckless/dwm/dwm ~/bin/dwm'
 
 Running dwm
 -----------
-Add the following line to your .xinitrc to start dwm using startx:
+Add the following lines to your .xinitrc:
+
+# Menu bar
+~/.config/dwmbar.sh &
+# Start picom, for transparancy
+picom -b
+# Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
 exec dwm
+# if dwm exits 0, restart -- this allows hot reloading of config.h
+# aka: Ctrl-Super-Shift-Q to restart in place.
+while type dwm >/dev/null ; do dwm && continue || break ; done
+
+Run 'startx' from commandline.
 
 dwm patching
 ------------

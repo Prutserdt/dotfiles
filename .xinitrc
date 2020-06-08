@@ -12,10 +12,9 @@
 #
 xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3
 
-# Set keyboard rate quicker
+# Move around quicker (increase keyboard rate)
 xset r rate 300 80
 
-#
 # Uncomment the next line to start i3wm and writes in the log:
 # exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
 
@@ -30,6 +29,7 @@ picom -b
 # Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
 exec dwm
 # if dwm exits 0, restart -- this allows hot reloading of config.h
+# aka: Ctrl-Super-Shift-Q to restart in place.
 while type dwm >/dev/null ; do dwm && continue || break ; done
 # Run Vanilla dwm-6.2, ~/Stack/dwm/dwm-6.2_200512_vanilla
 # exec dwm_vanilla
