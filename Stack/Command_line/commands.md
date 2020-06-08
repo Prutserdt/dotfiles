@@ -1230,6 +1230,13 @@ Control v, selecteer het blok dat je wil aanpassen
 r, en hierna tekst invoeren wat je erover wilt schrijven
 esc esc, om eruit te gaan en aan te passen.
 
+#### Renaming in vim (fout --> goed)
+/fout
+cgn
+goed
+Escape
+n
+.
 
 #### Batch renaming in vim/vifm
 Open een directory in vifm en tag de namen die je wil veranderen met 't'.
@@ -2582,6 +2589,9 @@ dwmbacup
 +	}
 # Gelukt en saved dmv dmwbackup, plus een extra backup gemaakt dwm-6.2_stable_200517.
 
+Transparancy werkt als je picom insteld in xinitrc:
+# Start picom, for transparancy
+picom -b
 
 #fonts instellen
 # font ingesteld voor config.def.h:

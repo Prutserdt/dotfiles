@@ -1,18 +1,23 @@
 /* See LICENSE file for copyright and license details. */
+/*
+* ______        ____  __   ____             _                    _ _
+*|  _ \ \      / /  \/  | |  _ \ _ __ _   _| |_ ___  ___ _ __ __| | |_
+*| | | \ \ /\ / /| |\/| | | |_) | '__| | | | __/ __|/ _ \ '__/ _` | __|
+*| |_| |\ V  V / | |  | | |  __/| |  | |_| | |_\__ \  __/ | | (_| | |_
+*|____/  \_/\_/  |_|  |_| |_|   |_|   \__,_|\__|___/\___|_|  \__,_|\__|
+*/
 
 /* appearance                                                      comments*/
 static const unsigned int borderpx  = 2;                        /* border pixel of windows */
 static const unsigned int snap      = 32;                       /* snap pixel */
-static const unsigned int gappih    = 10;                       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 10;                       /* vert inner gap between windows */
-static const unsigned int gappoh    = 10;                       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 10;                       /* vert outer gap between windows and screen edge */
+static const unsigned int gappih    = 60;                       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 60;                       /* vert inner gap between windows */
+static const unsigned int gappoh    = 50;                       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 50;                       /* vert outer gap between windows and screen edge */
 static const int smartgaps          = 1;                        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;                        /* 0 means no bar */
 static const int topbar             = 1;                        /* 0 means bottom bar */
-static const double defaultopacity  = 0.75;                     /* Set the opacity of windows */
-static const char *fonts[]          = { "monospace:size=8" };   /* Font of statusbar */
-static const char dmenufont[]       = "monospace:size=10";      /* Font of dmenu*/
+static const char *fonts[]          = { "hack:size=9" };       /* Font of statusbar */
 static const char normbgcol[]       = "#000000";                /* Color of background*/
 static const char normbordercol[]   = "#111111";                /* Color of not selected borders */
 static const char normfgcol[]       = "#999999";                /* Color of foreground, menubar text color not selected, incl rigth */
@@ -73,21 +78,16 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-/* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcol, "-nf", normfgcol, "-sb", selbgcol, "-sf", selbordercol, NULL };
-
 #include <X11/XF86keysym.h>
 static Key keys[] = {
 	/* modifier                     key        function        argument                                                            comments */
-                                                                                                                                /****   XF86XK keys   ****/
+/* XF86XK keys */
 	{ 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+ & ~/.config/updatebar.sh") },    /* Volume up. Update statusbar */
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%- & ~/.config/updatebar.sh") },    /* Volume down. Update statusbar */
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle, NULL") },                    /* Toggle mute */
     { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") },                                          /* Calculator */
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter") },                                  /* Print screen */
-
-                                                                                                                                /* Right alt key to open textfiles */
+/* Right alt key to open textfiles */
 	{ MENUFILE,                     XK_a,      spawn,          SHCMD("st -e vim ~/.config/applications.md") },                  /* txt: used application for my Arch linux build */
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("st -e vim ~/.bashrc") },                                  /* txt: .bashrc */
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("st -e vim ~/Stack/Command_line/commands.md") },           /* txt: personal notes and comments about Linux */
@@ -98,9 +98,9 @@ static Key keys[] = {
 	{ MENUFILE,                     XK_s,      spawn,          SHCMD("st -e vim ~/suckless/st/config.h") },                     /* txt: st 'config' file */
 	{ MENUFILE,                     XK_v,      spawn,          SHCMD("st -e vim ~/.config/vifm/vifmrc") },                      /* txt: vifm 'config' file */
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 /* txt: .xinitrc */
-
-                                                                                                                                /****   Right super key to open applications   ****/
-	{ MENUKEY,                      XK_d,      spawn,          SHCMD("dmenu_run") },                                             /* Application: dmenu */
+	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              /* txt: .Xresources */
+/* Right super key to open applications */
+	{ MENUKEY,                      XK_d,      spawn,          SHCMD("dmenu_run") },                                            /* Application: dmenu */
     { MENUKEY,                      XK_f,      spawn,          SHCMD("firefox") },                                              /* Application: Firefox */
 	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 /* Application: gimp */
 	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              /* Application: keepass */
@@ -109,15 +109,9 @@ static Key keys[] = {
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            /* Application: Insert emojis */
 	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm */
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Application: Change wallpaper by dmenu */
-
-                                                                                                                                /****   Left super as modkey  ****/    
-	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },                                              /**/
+/* Left super as modkey */    
 	{ MODKEY,                       XK_b,      togglebar,      {0} },                                                           /**/
 	{ MODKEY,                       XK_Return, spawn,	       SHCMD("st") },                                                   /**/
-
-	{ MODKEY|ShiftMask,		        XK_s,	   spawn,	       SHCMD("transset-df -a --dec .1") },                              /**/
-	{ MODKEY|ShiftMask,		        XK_d,	   spawn,	       SHCMD("transset-df -a --inc .1") },                              /**/
-	{ MODKEY|ShiftMask,		        XK_f,	   spawn,	       SHCMD("transset-df -a .75") },                                   /**/
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },                                                    /**/
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },                                                    /* InPlaceRotate: */
 	{ MODKEY|ShiftMask,             XK_j,      inplacerotate,  {.i = +1} },                                                     /* InPlaceRotate: */
@@ -155,17 +149,16 @@ static Key keys[] = {
 	{ MODKEY,                       XK_equal,  incrgaps,       {.i = +2 } },                                                    /* Vanity gaps: increase gaps */
     { MODKEY,                       XK_minus,  incrgaps,       {.i = -2 } },                                                    /* Vanity gaps: decrease gaps */
 	{ MODKEY,                       XK_0,      togglegaps,     {0} },                                                           /* Vanity gaps: toggle gaps on/of */
-
-                                                                        /*Tagkeys*/
-	TAGKEYS(                        XK_1,                      0)       /*1*/
-	TAGKEYS(                        XK_2,                      1)       /*2*/
-	TAGKEYS(                        XK_3,                      2)       /*3*/
-	TAGKEYS(                        XK_4,                      3)       /*4*/
-	TAGKEYS(                        XK_5,                      4)       /*5*/
-	TAGKEYS(                        XK_6,                      5)       /*6*/
-	TAGKEYS(                        XK_7,                      6)       /*7*/
-	TAGKEYS(                        XK_8,                      7)       /*8*/
-	TAGKEYS(                        XK_9,                      8)       /*9*/
+/* Tagkeys */
+	TAGKEYS(                        XK_1,                      0)
+	TAGKEYS(                        XK_2,                      1)
+	TAGKEYS(                        XK_3,                      2)
+	TAGKEYS(                        XK_4,                      3)
+	TAGKEYS(                        XK_5,                      4)
+	TAGKEYS(                        XK_6,                      5)
+	TAGKEYS(                        XK_7,                      6)
+	TAGKEYS(                        XK_8,                      7)
+	TAGKEYS(                        XK_9,                      8)
 };
 
 /* button definitions */

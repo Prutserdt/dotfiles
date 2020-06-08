@@ -63,7 +63,7 @@
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
-       NetWMWindowsOpacity, NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+       NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
@@ -179,7 +179,6 @@ static void drawbars(void);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static Client *findbefore(Client *c);
-static void opacity(Client *c, double opacity);
 static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
@@ -894,18 +893,7 @@ expose(XEvent *e)
 		drawbar(m);
 }
 
-void
-opacity(Client *c, double opacity)
-{
-	if(opacity >= 0 && opacity <= 1) {
-		unsigned long real_opacity[] = { opacity * 0xffffffff };
-		XChangeProperty(dpy, c->win, netatom[NetWMWindowsOpacity], XA_CARDINAL,
-				32, PropModeReplace, (unsigned char *)real_opacity,
-				1);
-	} else
-		XDeleteProperty(dpy, c->win, netatom[NetWMWindowsOpacity]);
-}
-
+/* Moet hier niet void staan eigenlijk???? */
 Client *
 findbefore(Client *c)
 {
@@ -1167,7 +1155,6 @@ manage(Window w, XWindowAttributes *wa)
 	c->h = c->oldh = wa->height;
 	c->oldbw = wa->border_width;
 	updatetitle(c);
-    opacity(c, defaultopacity);
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;
@@ -1681,7 +1668,6 @@ setup(void)
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
-    netatom[NetWMWindowsOpacity] = XInternAtom(dpy, "_NET_WM_WINDOW_OPACITY", False);
 	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
@@ -1769,11 +1755,10 @@ sigterm(int unused)
 	quit(&a);
 }
 
+
 void
 spawn(const Arg *arg)
 {
-	if (arg->v == dmenucmd)
-		dmenumon[0] = '0' + selmon->num;
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
@@ -1784,6 +1769,27 @@ spawn(const Arg *arg)
 		exit(EXIT_SUCCESS);
 	}
 }
+
+/*
+ * onderstaande verwijderd want ik wil dmenucmd niet gebruiken.
+ *
+ */
+/* void */
+/* spawn(const Arg *arg) */
+/* { */
+/* 	if (arg->v == dmenucmd) */
+/* 		dmenumon[0] = '0' + selmon->num; */
+/* 	if (fork() == 0) { */
+/* 		if (dpy) */
+/* 			close(ConnectionNumber(dpy)); */
+/* 		setsid(); */
+/* 		execvp(((char **)arg->v)[0], (char **)arg->v); */
+/* 		fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[0]); */
+/* 		perror(" failed"); */
+/* 		exit(EXIT_SUCCESS); */
+/* 	} */
+/* } */
+
 
 void
 tag(const Arg *arg)

@@ -27,7 +27,13 @@ HISTCONTROL=ignoreboth:erasedups
 #        Alias list       #
 ###########################
 # Helpfile to show all of the aliases if this .bashrc in shell
-alias ?="grep -e alias*=* ~/.bashrc | grep -v '#'"
+alias ?="echo --------------------------------------------------- &&
+echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc && 
+echo --------------------------------------------------- &&
+grep -e alias*=* ~/.bashrc | grep -v '#' &&
+echo ---------------------------------------------------"
+
+#alias ?="grep -e alias*=* ~/.bashrc | grep -v '#'"
 
 # Colored output when possible
 alias ls='ls --color=auto'
@@ -49,9 +55,10 @@ alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)'
 # Fuzzy find in the most recent i3_log file 
 alias fzlog='fzf < ~/i3_log/"$(ls -Art ~/i3_log | tail -n1)"'
 # sxiv shortcut: open thumbnail mode in current directory and show jpeg, jpg,
-# gif, and png files. Give output if files are selected (m).
-#alias s="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv * -fbto"
-alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv -ftio"
+# gif, and png files. Sort by name and give output if files are selected (m).
+# alias s="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv * -fbto"
+alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | sxiv -ftio"
+
 # Including underlaying subdirectories
 alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv -ftio"
 
@@ -70,6 +77,8 @@ alias ddw="cd ~/suckless/dwm && pwd"
 alias dsdw="cd ~/Stack/suckless/dwm && pwd"
 alias dst="cd ~/suckless/st && pwd"
 alias dsst="cd ~/Stack/suckless/st && pwd"
+alias dsu="cd ~/suckless/surf && pwd"
+alias dssu="cd ~/Stack/suckless/surf && pwd"
 alias ddm="cd ~/suckless/dmenu && pwd"
 alias dsdm="cd ~/Stack/suckless/dmenu && pwd"
 
@@ -159,3 +168,20 @@ alias dmenustable="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -r ~/S
 # 2: Place the diff file to be tested in the test directory: cp  ~/Stack/dwm/patches/example.diff ~/Stack/dwm/patches/test*
 # 3: Run the dwmpatch command to test the patch
 alias dmenupatch="dmenustable && ls ~/Stack/suckless/dmenu/patches/test/*.diff >> ~/suckless/dmenu/log/diff_log && cp -r ~/suckless/dmenu/config.h ~/suckless/dmenu/config.def.h && rm ~/suckless/dmenu/config.h && patch -p1 < ~/Stack/suckless/dmenu/patches/test/*.diff && make clean install"
+###########################
+#           surf          # 
+###########################
+# ~/bin was addet to path, makes locale install of surf possible via .xinitrc,
+# see the dwm part of this .bashrc
+# Make the current surf the stable version
+alias surfbackup="rm -r ~/Stack/suckless/surf/surf-2.0_stable && mkdir ~/Stack/suckless/surf/surf-2.0_stable && cp -r ~/suckless/surf/* ~/Stack/suckless/surf/surf-2.0_stable"
+# Go back to vanilla st. DESTROYS CURRENT surf!
+alias surfvanilla="rm -r ~/suckless/surf && mkdir ~/suckless/surf && cp -r ~/Stack/suckless/surf/surf-2.0_vanilla/* ~/suckless/surf && cd ~/suckless/surf && clear && ls -al"
+# Go back to stable surf. DESTROYS CURRENT surf!
+alias surfstable="rm -r ~/suckless/surf && mkdir ~/suckless/surf && cp -r ~/Stack/suckless/surf/surf-2.0_stable/* ~/suckless/surf && cd ~/suckless/surf && clear && ls -al"
+
+# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
+# 1: delete files in test directory: rm ~/Stack/suckless/surf/patches/test/*  
+# 2: Place the diff file to be tested in the test directory: cp ~/Stack/suckless/surf/patches/example.diff ~/Stack/dwm/patches/test*
+# 3: Run the dwmpatch command to test the patch
+alias surfpatch="surfstable && ls ~/Stack/suckless/surf/patches/test/*.diff >> ~/suckless/surf/log/diff_log && cp -r ~/suckless/surf/config.h ~/suckless/surf/config.def.h && rm ~/suckless/surf/config.h && patch -p1 < ~/Stack/suckless/surf/patches/test/*.diff && make clean install"

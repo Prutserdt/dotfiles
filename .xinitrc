@@ -24,7 +24,9 @@ xset r rate 300 80
 # Switch numlock on
 numlockx &
 # Set wallpaper
-wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg
+wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg &
+# Start picom, for transparancy
+picom -b
 # Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
 exec dwm
 # if dwm exits 0, restart -- this allows hot reloading of config.h

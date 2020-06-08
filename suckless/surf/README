@@ -1,0 +1,35 @@
+ __  __         ____  _   _ ____  _____   ____        _ _     _
+|  \/  |_   _  / ___|| | | |  _ \|  ___| | __ ) _   _(_) | __| |
+| |\/| | | | | \___ \| | | | |_) | |_    |  _ \| | | | | |/ _` |
+| |  | | |_| |  ___) | |_| |  _ <|  _|   | |_) | |_| | | | (_| |
+|_|  |_|\__, | |____/ \___/|_| \_\_|     |____/ \__,_|_|_|\__,_|
+        |___/
+Created by Prutserdt
+
+This is my build of surf - simple webkit-based browser based on WebKit/GTK+.
+
+Check the log directory for the applied patches.
+Check the config.h file for my key bindings.
+
+My builds are made in my home direcotory (~/suckless/surf). 
+Go to that directory and enter as normal user:
+make clean install
+
+Make a symlink to ~/bin
+ln -s -v /home/icefly/suckless/surf/surf /home/icefly/bin/surf
+ln -s -v /home/icefly/suckless/surf/surf-open.sh /home/icefly/bin/surf-open.sh
+
+surf patching
+------------
+1. Download a patch from suckless.org and place the patch at a set location 
+   (~/Stack/suckless/surf/patches/test)
+2. Run from command line the .bashrc alias: surfpatch
+3. If the patch is usefull then safe as a stable version.
+
+Safe as stable version
+------------
+Run from command line the .bashrc alias: surfbackup
+
+Restore stable version
+------------
+Run from command line the .bashrc alias: surfstable

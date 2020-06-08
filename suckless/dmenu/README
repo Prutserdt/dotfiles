@@ -1,24 +1,35 @@
-dmenu - dynamic menu
-====================
-dmenu is an efficient dynamic menu for X.
+ __  __         ____  __  __ _____ _   _ _   _   ____        _ _     _
+|  \/  |_   _  |  _ \|  \/  | ____| \ | | | | | | __ ) _   _(_) | __| |
+| |\/| | | | | | | | | |\/| |  _| |  \| | | | | |  _ \| | | | | |/ _` |
+| |  | | |_| | | |_| | |  | | |___| |\  | |_| | | |_) | |_| | | | (_| |
+|_|  |_|\__, | |____/|_|  |_|_____|_| \_|\___/  |____/ \__,_|_|_|\__,_|
+        |___/
+Created by Prutserdt
 
 
-Requirements
+This is my build of dmenu - dynamic menu, dmenu is an efficient dynamic menu for X.
+
+My builds are made in my home direcotory (~/suckless/dmenu).
+Go to that directory and enter as user (no root):
+make clean install
+
+Make a symlink to ~/bin
+'ln -s -v /home/icefly/suckless/dmenu/dmenu /home/icefly/bin/dmenu'
+
+dmenu patching
 ------------
-In order to build dmenu you need the Xlib header files.
+1. Download a patch from suckless.org and place the patch at a set location 
+   (~/Stack/suckless/dmenu/patches/test)
+2. Run from command line the .bashrc alias: dmenupatch
 
-
-Installation
+Safe as stable version
 ------------
-Edit config.mk to match your local setup (dmenu is installed into
-the /usr/local namespace by default).
+Run from command line the .bashrc alias: dmenubackup
 
-Afterwards enter the following command to build and install dmenu
-(if necessary as root):
+Restore stable version
+------------
+Run from command line the .bashrc alias: dmenustable
 
-    make clean install
-
-
-Running dmenu
--------------
-See the man page for details.
+Run vanilla st
+------------
+Run from command line the .bashrc alias: dmenuvanilla
