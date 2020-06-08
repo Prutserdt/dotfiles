@@ -1,9 +1,30 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# :sparkles:Dotfiles:sparkles: repo, plus suckless builds:bangbang:
+# :sparkles:Dotfiles:sparkles: repo, including my suckless builds:bangbang:
 Here I store the :sparkles:dotfiles:sparkles: of my Arch system plus some other stuff.
-My dwm build is a work in progress. i3 gaps config files are still a part of this repo although I do not use it anymore.
 
-The applications needed to run my i3 config can be found in *[./config/applications.md](https://github.com/Prutserdt/dotfiles/blob/master/.config/applications.md)*.
+*[This directory](https://github.com/Prutserdt/dotfiles/blob/suckless/) contains my suckless builds, including DWM. 
+
+Some 'essential' applications
+* vifm
+* keepass
+* numlockx
+* vim
+* python-pywall
+* python-ueberzug
+* sxiv
+* vundle-git (vim plugin manager)
+* w3m
+* yay
+* fzf
+* glances
+* htop
+* firefox
+* thunar
+* pfetch
+* figlet
+* Hack font
+
+My i3 gaps config files are still a part of this repo although I do not use it anymore.
 
 ## :eight_pointed_black_star:The `dotfiles` command
 This alias from the *[.bashrc](https://github.com/Prutserdt/dotfiles/blob/master/.bashrc)*
