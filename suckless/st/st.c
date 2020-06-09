@@ -1,8 +1,10 @@
 /* See LICENSE for license details. */
+#include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <math.h>
 #include <pwd.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -17,6 +19,8 @@
 #include <unistd.h>
 #include <wchar.h>
 
+
+#include "term.h"
 #include "st.h"
 #include "win.h"
 
@@ -35,7 +39,7 @@
 #define ESC_ARG_SIZ   16
 #define STR_BUF_SIZ   ESC_BUF_SIZ
 #define STR_ARG_SIZ   ESC_ARG_SIZ
-#define HISTSIZE      2000
+#define HISTSIZE      2500
 
 /* macros */
 #define IS_SET(flag)		((term.mode & (flag)) != 0)
@@ -43,6 +47,7 @@
 #define ISCONTROLC1(c)		(BETWEEN(c, 0x80, 0x9f))
 #define ISCONTROL(c)		(ISCONTROLC0(c) || ISCONTROLC1(c))
 #define ISDELIM(u)		(u && wcschr(worddelimiters, u))
+#define INTERVAL(x, a, b)	(x) < (a) ? (a) : (x) > (b) ? (b) : (x)
 #define TLINE(y)		((y) < term.scr ? term.hist[((y) + term.histi - \
 				term.scr + HISTSIZE + 1) % HISTSIZE] : \
 				term.line[(y) - term.scr])
@@ -90,17 +95,17 @@ enum escape_state {
 	ESC_DCS        =128,
 };
 
-typedef struct {
-	Glyph attr; /* current char attributes */
-	int x;
-	int y;
-	char state;
-} TCursor;
+/*typedef struct {*/
+	/*Glyph attr; [> current char attributes <]*/
+	/*int x;*/
+	/*int y;*/
+	/*char state;*/
+/*} TCursor;*/
 
-typedef struct {
-	int mode;
-	int type;
-	int snap;
+/*typedef struct {*/
+	/*int mode;*/
+	/*int type;*/
+	/*int snap;*/
 	/*
 	 * Selection variables:
 	 * nb – normalized coordinates of the beginning of the selection
@@ -108,35 +113,34 @@ typedef struct {
 	 * ob – original coordinates of the beginning of the selection
 	 * oe – original coordinates of the end of the selection
 	 */
-	struct {
-		int x, y;
-	} nb, ne, ob, oe;
 
-	int alt;
-} Selection;
+	/*struct {*/
+		/*int x, y;*/
+	/*} nb, ne, ob, oe;*/
 
-/* Internal representation of the screen */
-typedef struct {
-	int row;      /* nb row */
-	int col;      /* nb col */
-	Line *line;   /* screen */
-	Line *alt;    /* alternate screen */
-	Line hist[HISTSIZE]; /* history buffer */
-	int histi;    /* history index */
-	int scr;      /* scroll back */
-	int *dirty;   /* dirtyness of lines */
-	TCursor c;    /* cursor */
-	int ocx;      /* old cursor col */
-	int ocy;      /* old cursor row */
-	int top;      /* top    scroll limit */
-	int bot;      /* bottom scroll limit */
-	int mode;     /* terminal mode flags */
-	int esc;      /* escape state flags */
-	char trantbl[4]; /* charset table translation */
-	int charset;  /* current charset */
-	int icharset; /* selected charset for sequence */
-	int *tabs;
-} Term;
+	/*int alt;*/
+/*} Selection;*/
+
+/*[> Internal representation of the screen <]*/
+/*typedef struct {*/
+	/*int row;      [> nb row <]*/
+    /*int col;      [> nb col <]*/
+	/*Line *line;   [> screen <]*/
+	/*Line *alt;    [> alternate screen <]*/
+	/*int *dirty;   [> dirtyness of lines <]*/
+	/*TCursor c;    [> cursor <]*/
+	/*int ocx;      [> old cursor col <]*/
+	/*int ocy;      [> old cursor row <]*/
+	/*int top;      [> top    scroll limit <]*/
+	/*int bot;      [> bottom scroll limit <]*/
+	/*int mode;     [> terminal mode flags <]*/
+	/*int esc;      [> escape state flags <]*/
+	/*char trantbl[4]; [> charset table translation <]*/
+	/*int charset;  [> current charset <]*/
+	/*int icharset; [> selected charset for sequence <]*/
+	/*int *tabs;*/
+	/*Rune lastc;   [> last printed char outside of sequence, 0 if control <]*/
+/*} Term;*/
 
 /* CSI Escape sequence structs */
 /* ESC '[' [[ [<priv>] <arg> [;]] <mode> [<mode>]] */
@@ -159,6 +163,8 @@ typedef struct {
 	char *args[STR_ARG_SIZ];
 	int narg;              /* nb of args */
 } STREscape;
+
+void tfulldirt(void);
 
 static void execsh(char *, char **);
 static void stty(char **);
@@ -196,12 +202,10 @@ static void tscrollup(int, int, int);
 static void tscrolldown(int, int, int);
 static void tsetattr(int *, int);
 static void tsetchar(Rune, Glyph *, int, int);
-static void tsetdirt(int, int);
 static void tsetscroll(int, int);
 static void tswapscreen(void);
 static void tsetmode(int, int, int *, int);
 static int twrite(const char *, int, int);
-static void tfulldirt(void);
 static void tcontrolcode(uchar );
 static void tdectest(char );
 static void tdefutf8(char);
@@ -215,8 +219,6 @@ static void selnormalize(void);
 static void selscroll(int, int);
 static void selsnap(int *, int *, int);
 
-static size_t utf8decode(const char *, Rune *, size_t);
-static Rune utf8decodebyte(char, size_t *);
 static char utf8encodebyte(Rune, size_t);
 static size_t utf8validate(Rune *, size_t);
 
@@ -226,8 +228,8 @@ static char base64dec_getc(const char **);
 static ssize_t xwrite(int, const char *, size_t);
 
 /* Globals */
-static Term term;
-static Selection sel;
+Term term;
+Selection sel;
 static CSIEscape csiescseq;
 static STREscape strescseq;
 static int iofd = 1;
@@ -432,7 +434,12 @@ tlinelen(int y)
 }
 
 void
-selstart(int col, int row, int snap)
+xselstart(int col, int row, int snap) {
+	selstart(col, row, term.scr, snap);
+}
+
+void
+selstart(int col, int row, int scroll, int snap)
 {
 	selclear();
 	sel.mode = SEL_EMPTY;
@@ -441,6 +448,7 @@ selstart(int col, int row, int snap)
 	sel.snap = snap;
 	sel.oe.x = sel.ob.x = col;
 	sel.oe.y = sel.ob.y = row;
+	sel.oe.scroll = sel.ob.scroll = scroll;
 	selnormalize();
 
 	if (sel.snap != 0)
@@ -449,10 +457,13 @@ selstart(int col, int row, int snap)
 }
 
 void
-selextend(int col, int row, int type, int done)
-{
-	int oldey, oldex, oldsby, oldsey, oldtype;
+xselextend(int col, int row, int type, int done) {
+	selextend(col, row, term.scr, type, done);
+}
 
+void
+selextend(int col, int row, int scroll, int type, int done)
+{
 	if (sel.mode == SEL_IDLE)
 		return;
 	if (done && sel.mode == SEL_EMPTY) {
@@ -460,18 +471,22 @@ selextend(int col, int row, int type, int done)
 		return;
 	}
 
-	oldey = sel.oe.y;
-	oldex = sel.oe.x;
-	oldsby = sel.nb.y;
-	oldsey = sel.ne.y;
-	oldtype = sel.type;
+	int const oldey = sel.oe.y;
+	int const oldex = sel.oe.x;
+	int const oldscroll = sel.oe.scroll;
+	int const oldsby = sel.nb.y;
+	int const oldsey = sel.ne.y;
+	int const oldtype = sel.type;
 
 	sel.oe.x = col;
 	sel.oe.y = row;
+	sel.oe.scroll = scroll;
+
 	selnormalize();
 	sel.type = type;
 
-	if (oldey != sel.oe.y || oldex != sel.oe.x || oldtype != sel.type || sel.mode == SEL_EMPTY)
+	if (oldey != sel.oe.y || oldex != sel.oe.x || oldscroll != sel.oe.scroll
+			|| oldtype != sel.type || sel.mode == SEL_EMPTY)
 		tsetdirt(MIN(sel.nb.y, oldsby), MAX(sel.ne.y, oldsey));
 
 	sel.mode = done ? SEL_IDLE : SEL_READY;
@@ -480,17 +495,21 @@ selextend(int col, int row, int type, int done)
 void
 selnormalize(void)
 {
-	int i;
-
-	if (sel.type == SEL_REGULAR && sel.ob.y != sel.oe.y) {
-		sel.nb.x = sel.ob.y < sel.oe.y ? sel.ob.x : sel.oe.x;
-		sel.ne.x = sel.ob.y < sel.oe.y ? sel.oe.x : sel.ob.x;
+	sel.nb.y = INTERVAL(sel.ob.y + term.scr - sel.ob.scroll, 0, term.bot);
+	sel.ne.y = INTERVAL(sel.oe.y + term.scr - sel.oe.scroll, 0, term.bot);
+	if (sel.type == SEL_REGULAR && sel.nb.y != sel.ne.y) {
+		sel.nb.x = sel.nb.y < sel.ne.y ? sel.ob.x : sel.oe.x;
+		sel.ne.x = sel.nb.y < sel.ne.y ? sel.oe.x : sel.ob.x;
 	} else {
 		sel.nb.x = MIN(sel.ob.x, sel.oe.x);
 		sel.ne.x = MAX(sel.ob.x, sel.oe.x);
 	}
-	sel.nb.y = MIN(sel.ob.y, sel.oe.y);
-	sel.ne.y = MAX(sel.ob.y, sel.oe.y);
+
+	if (sel.nb.y > sel.ne.y) {
+		int32_t const tmp = sel.nb.y;
+		sel.nb.y = sel.ne.y;
+		sel.ne.y = tmp;
+	}
 
 	selsnap(&sel.nb.x, &sel.nb.y, -1);
 	selsnap(&sel.ne.x, &sel.ne.y, +1);
@@ -498,7 +517,7 @@ selnormalize(void)
 	/* expand selection over line breaks */
 	if (sel.type == SEL_RECTANGULAR)
 		return;
-	i = tlinelen(sel.nb.y);
+	int i = tlinelen(sel.nb.y);
 	if (i < sel.nb.x)
 		sel.nb.x = i;
 	if (tlinelen(sel.ne.y) <= sel.ne.x)
@@ -604,11 +623,19 @@ getsel(void)
 	if (sel.ob.x == -1)
 		return NULL;
 
-	bufsize = (term.col+1) * (sel.ne.y-sel.nb.y+1) * UTF_SIZ;
+	int32_t syb = sel.ob.y - sel.ob.scroll + term.scr;
+	int32_t sye = sel.oe.y - sel.oe.scroll + term.scr;
+	if (syb > sye) {
+		int32_t tmp = sye;
+		sye = syb;
+		syb = tmp;
+	}
+
+	bufsize = (term.col+1) * (sye - syb + 1) * UTF_SIZ;
 	ptr = str = xmalloc(bufsize);
 
 	/* append every set & selected glyph to the selection */
-	for (y = sel.nb.y; y <= sel.ne.y; y++) {
+	for (y = syb; y <= sye; y++) {
 		if ((linelen = tlinelen(y)) == 0) {
 			*ptr++ = '\n';
 			continue;
@@ -618,8 +645,10 @@ getsel(void)
 			gp = &TLINE(y)[sel.nb.x];
 			lastx = sel.ne.x;
 		} else {
-			gp = &TLINE(y)[sel.nb.y == y ? sel.nb.x : 0];
-			lastx = (sel.ne.y == y) ? sel.ne.x : term.col-1;
+/*			gp = &TLINE(y)[sel.nb.y == y ? sel.nb.x : 0];    voor vim browse patch  */
+/*			lastx = (sel.ne.y == y) ? sel.ne.x : term.col-1; voor vim patch  */
+			gp = &TLINE(y)[syb == y ? sel.nb.x : 0];
+			lastx = (sye == y) ? sel.ne.x : term.col-1;
 		}
 		last = &TLINE(y)[MIN(lastx, linelen-1)];
 		while (last >= gp && last->u == ' ')
@@ -1164,7 +1193,9 @@ selscroll(int orig, int n)
 		return;
 
 	if (BETWEEN(sel.ob.y, orig, term.bot) || BETWEEN(sel.oe.y, orig, term.bot)) {
+/*		if ((sel.ob.y += n) > term.bot || (sel.oe.y += n) < term.top) {  voor de vimbrowse patch*/
 		if ((sel.ob.y += n) > term.bot || (sel.oe.y += n) < term.top) {
+/*		sel.oe.scroll = sel.ob.scroll = term.scr;   Die moet ik toevoegen aan bovenstaande, voor vimbrowse maar ik weet niet hoe....*/
 			selclear();
 			return;
 		}
@@ -1199,6 +1230,12 @@ tnewline(int first_col)
 	}
 	tmoveto(first_col ? 0 : term.c.x, y);
 }
+int
+currentLine(int x, int y)
+{
+	return (x == term.c.x || y == term.c.y);
+}
+
 
 void
 csiparse(void)
@@ -1252,6 +1289,8 @@ tmoveto(int x, int y)
 	term.c.state &= ~CURSOR_WRAPNEXT;
 	term.c.x = LIMIT(x, 0, term.col-1);
 	term.c.y = LIMIT(y, miny, maxy);
+	// Set the last position in order to restore after normal mode exits.
+	onMove();
 }
 
 void
@@ -2361,7 +2400,7 @@ tputc(Rune u)
 {
 	char c[UTF_SIZ];
 	int control;
-	int width, len;
+	int width = 0, len;
 	Glyph *gp;
 
 	control = ISCONTROL(u);
@@ -2585,6 +2624,14 @@ tresize(int col, int row)
 		}
 	}
 
+	for (i = 0; i < HISTSIZE; i++) {
+		term.hist[i] = xrealloc(term.hist[i], col * sizeof(Glyph));
+		for (j = mincol; j < col; j++) {
+			term.hist[i][j] = term.c.attr;
+			term.hist[i][j].u = ' ';
+		}
+	}
+
 	/* resize each row to new width, zero-pad if needed */
 	for (i = 0; i < minrow; i++) {
 		term.line[i] = xrealloc(term.line[i], col * sizeof(Glyph));
@@ -2665,8 +2712,8 @@ draw(void)
 
 	drawregion(0, 0, term.col, term.row);
 	if (term.scr == 0)
-		xdrawcursor(cx, term.c.y, term.line[term.c.y][cx],
-			term.ocx, term.ocy, term.line[term.ocy][term.ocx]);
+	xdrawcursor(cx, term.c.y, TLINE(term.c.y)[cx],
+			term.ocx, term.ocy, TLINE(term.ocy)[term.ocx]);
 	term.ocx = cx;
 	term.ocy = term.c.y;
 	xfinishdraw();
