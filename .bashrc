@@ -13,7 +13,6 @@
 PS1='[\u@\h \W]\$ '
 
 # Display arch logo (asci art) and additional info in terminal
-#screenfetch # bloat, takes too much system resources
 pfetch
 
 # Change the size of the bash history to 5000 in memory (500 is default) 
@@ -27,13 +26,10 @@ HISTCONTROL=ignoreboth:erasedups
 #        Alias list       #
 ###########################
 # Helpfile to show all of the aliases if this .bashrc in shell
-alias ?="echo --------------------------------------------------- &&
-echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc && 
+alias ?="echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc && 
 echo --------------------------------------------------- &&
-grep -e alias*=* ~/.bashrc | grep -v '#' &&
+grep -e alias*=* ~/.bashrc | grep -v '#'| sed -e 's/\<alias\>//g'
 echo ---------------------------------------------------"
-
-#alias ?="grep -e alias*=* ~/.bashrc | grep -v '#'"
 
 # Colored output when possible
 alias ls='ls --color=auto'
@@ -58,10 +54,8 @@ alias fzlog='fzf < ~/i3_log/"$(ls -Art ~/i3_log | tail -n1)"'
 # gif, and png files. Sort by name and give output if files are selected (m).
 # alias s="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv * -fbto"
 alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | sxiv -ftio"
-
 # Including underlaying subdirectories
 alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv -ftio"
-
 # Jump to direcotories
 alias da="cd ~/Stack/Afbeeldingen && pwd"
 alias daw="cd ~/Stack/Afbeeldingen/Wallpapers && pwd"
@@ -81,7 +75,6 @@ alias dsu="cd ~/suckless/surf && pwd"
 alias dssu="cd ~/Stack/suckless/surf && pwd"
 alias ddm="cd ~/suckless/dmenu && pwd"
 alias dsdm="cd ~/Stack/suckless/dmenu && pwd"
-
 # Dotfiles repository.
 # Starts with a status check and after that gives some options to push/pull.
 alias dotfiles='~/.config/dotfiles.sh'
@@ -97,16 +90,6 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 # (Esc/Caps for vim, and Super_R as an extra shortcut button for i3/dwm)
 # Triggered by the alias k
 alias k='xmodmap ~/.config/kbswitch'
-
-###########################
-#      pywal settings     #
-###########################
-# Import colorscheme from 'wal' asynchronously 
-# &   # Run the process in the background.
-# ( ) # Hide shell job control messages.
-# (cat ~/.cache/wal/sequences &)
-# To add support for TTYs this line can be optionally added.
-#source ~/.cache/wal/colors-tty.sh
 
 ###########################
 #           dwm           # 

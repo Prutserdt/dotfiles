@@ -1380,6 +1380,44 @@ URxvt.resize-font.bigger:   C-k
 URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
 ```
 
+# .Xdefaults
+#  __  __   _       __             _ _       
+#  \ \/ /__| | ___ / _| __ _ _   _| | |_ ___ 
+#   \  // _` |/ _ \ |_ / _` | | | | | __/ __|
+# _ /  \ (_| |  __/  _| (_| | |_| | | |_\__ \
+#(_)_/\_\__,_|\___|_|  \__,_|\__,_|_|\__|___/
+#                                            
+# Modified by Prutserdt
+# Created to rice and improve functionality of the URxvt terminal.
+
+## Set transparancy
+URxvt.transparent:	        true
+URxvt.shading:		        30
+# Choose a decent font.
+URxvt.font:                 xft:bitstream Vera Sans Mono:size=12:antialias=true
+URxvt.boldFont:             xft:bitstream Vera Sans Mono:bold:size=12:antialias=true
+Rxvt*letterSpace: -0 
+
+# Orange cursor
+URxvt.cursorColor:           orange
+
+# Used extentions, requires: urxvt-perls resize-font-git
+URxvt.perl-ext-common:      default,matcher,resize-font,url-select,keyboard-select
+
+# url-select, werkt helaas nog niet... :-(
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.url-select.underline: true
+URxvt.url-select.launcher:  "/usr/bin/firefox"
+
+# Keyboard select. 
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-s:           perl:keyboard-select:search
+URxvt.keysym.M-c:           perl:clipboard:copy
+
+
+
+
+
 #### cmus. Terminal music player
 Begin door het toevoegen van een direcotory, waar het prog. muziek in gaat
 zoeken.

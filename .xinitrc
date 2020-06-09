@@ -15,9 +15,6 @@ xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to m
 # Move around quicker (increase keyboard rate)
 xset r rate 300 80
 
-# Uncomment the next line to start i3wm and writes in the log:
-# exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
-
 # Menu bar
 ~/.config/dwmbar.sh &
 # Switch numlock on
@@ -33,3 +30,6 @@ exec dwm
 while type dwm >/dev/null ; do dwm && continue || break ; done
 # Run Vanilla dwm-6.2, ~/Stack/dwm/dwm-6.2_200512_vanilla
 # exec dwm_vanilla
+
+# Uncomment the next line to start i3wm and writes in the log:
+# exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1

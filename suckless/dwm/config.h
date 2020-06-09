@@ -17,7 +17,7 @@ static const unsigned int gappov    = 50;                       /* vert outer ga
 static const int smartgaps          = 1;                        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;                        /* 0 means no bar */
 static const int topbar             = 1;                        /* 0 means bottom bar */
-static const char *fonts[]          = { "hack:size=9" };       /* Font of statusbar */
+static const char *fonts[]          = { "hack:size=9" };        /* Font of statusbar */
 static const char normbgcol[]       = "#000000";                /* Color of background*/
 static const char normbordercol[]   = "#111111";                /* Color of not selected borders */
 static const char normfgcol[]       = "#999999";                /* Color of foreground, menubar text color not selected, incl rigth */
@@ -82,7 +82,7 @@ static const Layout layouts[] = {
 static Key keys[] = {
 	/* modifier                     key        function        argument                                                            comments */
 /* XF86XK keys */
-	{ 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+ & ~/.config/updatebar.sh") },    /* Volume up. Update statusbar */
+    { 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+ & ~/.config/updatebar.sh") },    /* Volume up. Update statusbar */
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%- & ~/.config/updatebar.sh") },    /* Volume down. Update statusbar */
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle, NULL") },                    /* Toggle mute */
     { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") },                                          /* Calculator */
