@@ -85,7 +85,8 @@ static Key keys[] = {
     { 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+ & ~/.config/updatebar.sh") },    /* Volume up. Update statusbar */
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%- & ~/.config/updatebar.sh") },    /* Volume down. Update statusbar */
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle, NULL") },                    /* Toggle mute */
-    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") },                                          /* Calculator */
+/*    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") },               */                     /* Calculator */
+    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("deepin-calculator") },                                    /* Calculator */
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter") },                                  /* Print screen */
 /* Right alt key to open textfiles */
 	{ MENUFILE,                     XK_a,      spawn,          SHCMD("st -e vim ~/.config/applications.md") },                  /* txt: used application for my Arch linux build */
@@ -106,6 +107,7 @@ static Key keys[] = {
 	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              /* Application: keepass */
 	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             /* Application: mousepad */
 	{ MENUKEY,                      XK_t,      spawn,          SHCMD("thunar") },                                               /* Application: thunar */
+	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             /* Application: thunar */
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            /* Application: Insert emojis */
 	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm */
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Application: Change wallpaper by dmenu */

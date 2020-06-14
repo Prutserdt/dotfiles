@@ -26,7 +26,7 @@ HISTCONTROL=ignoreboth:erasedups
 #        Alias list       #
 ###########################
 # Helpfile to show all of the aliases if this .bashrc in shell
-alias ?="echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc && 
+alias ?="c && echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc && 
 echo --------------------------------------------------- &&
 grep -e alias*=* ~/.bashrc | grep -v '#'| sed -e 's/\<alias\>//g'
 echo ---------------------------------------------------"
