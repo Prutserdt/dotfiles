@@ -85,7 +85,6 @@ static Key keys[] = {
     { 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+ & ~/.config/updatebar.sh") },    /* Volume up. Update statusbar */
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%- & ~/.config/updatebar.sh") },    /* Volume down. Update statusbar */
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle, NULL") },                    /* Toggle mute */
-/*    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") },               */                     /* Calculator */
     { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("deepin-calculator") },                                    /* Calculator */
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter") },                                  /* Print screen */
 /* Right alt key to open textfiles */
@@ -101,13 +100,16 @@ static Key keys[] = {
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 /* txt: .xinitrc */
 	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              /* txt: .Xresources */
 /* Right super key to open applications */
-	{ MENUKEY,                      XK_d,      spawn,          SHCMD("dmenu_run") },                                            /* Application: dmenu */
-    { MENUKEY,                      XK_f,      spawn,          SHCMD("firefox") },                                              /* Application: Firefox */
+/*	{ MENUKEY,                      XK_d,      spawn,          SHCMD("dmenu_run") },           */                               /* Application: dmenu */
+	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               /* Application: dmenu */
+    { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              /* Application: Firefox */
+    { MENUKEY,                      XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           /* Application: Firefox */
 	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 /* Application: gimp */
 	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              /* Application: keepass */
 	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             /* Application: mousepad */
-	{ MENUKEY,                      XK_t,      spawn,          SHCMD("thunar") },                                               /* Application: thunar */
-	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             /* Application: thunar */
+    { MENUKEY,                      XK_s,      spawn,          SHCMD("~/.config/dmenusurf.sh") },                               /* Application: surf */
+	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               /* Application: thunar */
+	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             /* Application: thunar */
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            /* Application: Insert emojis */
 	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm */
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Application: Change wallpaper by dmenu */
@@ -146,8 +148,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },                                                    /**/
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },                                                    /**/
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },                                                    /**/
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },                                                           /* Exiting dwm */
-	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} },                                                           /* Exiting dwm, and restart inplacee */
+/*	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },                        */                                 /* Exiting dwm, default way, no options */
+	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("st -e ~/.config/exitdwm.sh") },                           /* Exiting dwm and give a y/n option */
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} },                                                           /* Restart dwm inplace */
 	{ MODKEY,                       XK_equal,  incrgaps,       {.i = +2 } },                                                    /* Vanity gaps: increase gaps */
     { MODKEY,                       XK_minus,  incrgaps,       {.i = -2 } },                                                    /* Vanity gaps: decrease gaps */
 	{ MODKEY,                       XK_0,      togglegaps,     {0} },                                                           /* Vanity gaps: toggle gaps on/of */

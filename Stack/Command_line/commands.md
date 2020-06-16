@@ -22,6 +22,7 @@
 * VPN
 * Corona script
 * Video card information
+* Create superfast ramdisk
 #### Applications (Command line and GUIs)
 * Vim
 * Nano
@@ -1049,6 +1050,10 @@ Ga ik gewoon een ultrawide kopen, of zal ga ik ook een betere video card kopen?
 Een nieuwe amd card die zou werken kost 50 euro:
 https://www.bol.com/nl/p/asus-r5230-sl-1gd3-l-radeon-r5-230-1gb-gddr3-videokaart/9200000027686779/?bltgh=lAYrxB4tzY134OkTkbpF-w.1_4.5.ProductPage
 
+### Superfast ramdisk
+Tijdelijke ramdisk creeren. Bijvoorbeeld voor snel schrijven.
+mkdir -p /mnt/ram
+mount -t tmpfs tmpfs /mnt/ram -o size=8192M
 
 
 ### Applications (Command line and GUIs)
@@ -2692,15 +2697,24 @@ Voeg toe aan bashrc (hoeft niet als hij er al is):
 'PATH="$HOME/bin:$PATH"'
 
 
+#### dmenu
+error na starten van dmenu_run
+/home/icefly/bin/dmenu_run: line 2: dmenu_path: command not found
+Ik heb daarna dmenu_path als symlink toegevoegd
+'ln -s -v /home/icefly/dmenu/dmenu_path /home/icefly/bin/dmenu_path'
+Helaas werkt dit niet, nog steeds dezelfde foutmelding, verkeerde directory...
+Verwijderen symlink:
+rm dmenu_path
+Nieuwe symlink:
+'ln -s -v /home/icefly/suckless/dmenu/dmenu_path /home/icefly/bin/dmenu_path'
+Helaas, werkt nog niet, maar..... een andere dezelfde foutmelding:
+/home/icefly/bin/dmenu_run: line 2: /home/icefly/bin/dmenu_path: Permission denied
+Opgelost door met het script ~/.config/dmenuapps.sh:
 
+#!/bin/sh
 
-
-
-
-
-
-
-
-
-
+# Script to open applications (~/.cache/dmenu_run) by dmenu.
+# It opens: ~/.cache/dmenu_run
+# This required the dmenu patch: center, which gives the dmenu -c option.
+cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
 
