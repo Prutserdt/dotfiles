@@ -10,5 +10,5 @@
 #
 # Script to open applications (~/.cache/dmenu_run) by dmenu.
 # It opens: ~/.cache/dmenu_run.
-# This required the dmenu patch: center, which gives the dmenu -c option.
+# This requires the dmenu patch: center, which gives the dmenu -c option.
 cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}

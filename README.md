@@ -4,7 +4,15 @@ Here I store the :sparkles:dotfiles:sparkles: of my Arch system plus some other 
 
 [This directory](https://github.com/Prutserdt/dotfiles/tree/master/suckless) contains my suckless builds, including DWM. 
 
-Some 'essential' applications
+This is how my dwm desktop can look like:
+![full rice](dwm.jpg)
+This is how I use it:
+![productivity](dwm2.jpg)
+
+Some preferred applications:
+* dwm
+* st
+* dmenu
 * vifm
 * keepass
 * numlockx

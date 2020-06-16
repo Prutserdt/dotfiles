@@ -9,7 +9,7 @@
 #
 # Script to select webpages (~/.config/urls) in Firefox by dmenu.
 # It opens: ~/.config/urls
-# This required the dmenu patch: center, which gives the dmenu -c option.
+# This requires the dmenu patch: center, which gives the dmenu -c option.
 #cat ~/.config/urls | dmenu -i -c -l 30 | awk '{print $1}'| xclip -selection clipboard && firefox "$(xclip -o -selection clipboard)"
 chosen=$(cat ~/.config/urls | dmenu -i -c -l 30)
 
