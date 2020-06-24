@@ -30,6 +30,7 @@
 * Git (en dotfiles procedure)
 * Tox
 * SXIV
+* Neomutt
 #### Distros
 * XFCE tricks
 * i3 window manager
@@ -1050,13 +1051,19 @@ Ga ik gewoon een ultrawide kopen, of zal ga ik ook een betere video card kopen?
 Een nieuwe amd card die zou werken kost 50 euro:
 https://www.bol.com/nl/p/asus-r5230-sl-1gd3-l-radeon-r5-230-1gb-gddr3-videokaart/9200000027686779/?bltgh=lAYrxB4tzY134OkTkbpF-w.1_4.5.ProductPage
 
-### Superfast ramdisk
+### Create Superfast ramdisk
 Tijdelijke ramdisk creeren. Bijvoorbeeld voor snel schrijven.
 mkdir -p /mnt/ram
 mount -t tmpfs tmpfs /mnt/ram -o size=8192M
 
+### RSS stuff
+sudo pacman -S newsboat
+Add RSS feeds in the file: ~/.newsboat/urls
+Create a config file: ~/.newsboat/config
+I based it on Luke Smith: https://github.com/LukeSmithxyz/voidrice/blob/master/.config/newsboat/config
 
-### Applications (Command line and GUIs)
+
+#### Applications (Command line and GUIs)
 
 #### Vim
 Installeer gvim, niet om te gebruiken maar om clipboard functionaliteit
@@ -1718,6 +1725,21 @@ done
 ```
 Als je nu in SXIV een image als achtergrond wilt instellen klik je op
 CTRL-x (voor key handler mode) en CTRL-w. :-).
+
+#### Neomutt
+Text based email client
+Installation 18JUN20, alleen neomutt geinstalleerd en ~/.mutt/muttrc
+aangemaakt...
+
+
+
+
+
+
+
+
+
+
 
 
 ### Distros        

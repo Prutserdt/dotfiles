@@ -33,6 +33,8 @@ static const char *colors[][3]      = {
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char scratchpadname[] = "scratchpad";
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -113,7 +115,8 @@ static Key keys[] = {
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            /* Application: Insert emojis */
 	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm */
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Application: Change wallpaper by dmenu */
-/* Left super as modkey */    
+/* Left super as modkey */   
+	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },                                         /* Open/hide scratchpad. Works on active tag*/
 	{ MODKEY,                       XK_b,      togglebar,      {0} },                                                           /**/
 	{ MODKEY,                       XK_Return, spawn,	       SHCMD("st") },                                                   /**/
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },                                                    /**/
@@ -128,7 +131,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.02} },                                                  /* */
 	{ MODKEY,                       XK_space,  zoom,           {0} },                                                           /* */
 	{ MODKEY,                       XK_Tab,    view,           {0} },                                                           /* Switch to previous tag */
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },                                                           /**/
+	{ MODKEY,                       XK_q,      killclient,     {0} },                                                           /* Kill the selected window*/
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[0]} },                                            /* Layout: centeredmaster */
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[1]} },                                            /* Layout: tile */
 	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[2]} },                                            /* Layout: */

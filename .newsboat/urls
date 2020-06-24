@@ -1,0 +1,26 @@
+#                         _                 _                _
+# _ __   _____      _____| |__   ___   __ _| |_   _   _ _ __| |___
+#| '_ \ / _ \ \ /\ / / __| '_ \ / _ \ / _` | __| | | | | '__| / __|
+#| | | |  __/\ V  V /\__ \ |_) | (_) | (_| | |_  | |_| | |  | \__ \
+#|_| |_|\___| \_/\_/ |___/_.__/ \___/ \__,_|\__|  \__,_|_|  |_|___/
+#                                              Created by Prutserdt
+"--- NEWS ---"
+http://feeds.nos.nl/nosnieuwsopmerkelijk
+https://www.nrc.nl/feed
+https://www.nu.nl/feeds/rss/algemeen.rss
+" "
+"--- TECH ---"
+https://www.archlinux.org/feeds/news/
+https://rss.xiffy.nl/foksuk.php
+https://lukesmith.xyz/rss.xml
+https://github.com/lukesmithxyz/voidrice/commits/master.atom
+https://github.com/Prutserdt/dotfiles/commits/master.atom
+" "
+"--- YOUTUBE ---"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA
+" "
+"--- PODCASTS ---"
+https://notrelated.libsyn.com/rss
+" "
+"--- MISC ---"
+https://rss.xiffy.nl/foksuk.php
