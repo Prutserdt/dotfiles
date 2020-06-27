@@ -1,26 +1,78 @@
+# ~/.newsboat/config
 #                         _                 _                _
 # _ __   _____      _____| |__   ___   __ _| |_   _   _ _ __| |___
 #| '_ \ / _ \ \ /\ / / __| '_ \ / _ \ / _` | __| | | | | '__| / __|
 #| | | |  __/\ V  V /\__ \ |_) | (_) | (_| | |_  | |_| | |  | \__ \
 #|_| |_|\___| \_/\_/ |___/_.__/ \___/ \__,_|\__|  \__,_|_|  |_|___/
 #                                              Created by Prutserdt
-"--- NEWS ---"
-http://feeds.nos.nl/nosnieuwsopmerkelijk
-https://www.nrc.nl/feed
-https://www.nu.nl/feeds/rss/algemeen.rss
-" "
-"--- TECH ---"
-https://www.archlinux.org/feeds/news/
-https://rss.xiffy.nl/foksuk.php
-https://lukesmith.xyz/rss.xml
-https://github.com/lukesmithxyz/voidrice/commits/master.atom
-https://github.com/Prutserdt/dotfiles/commits/master.atom
-" "
-"--- YOUTUBE ---"
-https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA
 " "
 "--- PODCASTS ---"
-https://notrelated.libsyn.com/rss
+# Interest
+http://feed.nashownotes.com/rss.xml                                                         # No Agenda podcast
+https://notrelated.libsyn.com/rss                                                           # Luke Smith podcast
+# MMA
+http://joeroganexp.joerogan.libsynpro.com/rss                                               # Joe Rogan Experience podcast
+https://fightsgoneby.libsyn.com/rss                                                         # Fight Gone By, Jack Slack, podcast
+https://heavyhands.libsyn.com/rss                                                           # Heavy hands podcast
+https://comainevent.libsyn.com/rss                                                          # Co-main event podcast
+https://kesting.libsyn.com/rss                                                              # Stepphan Kesting podcast
+# Tech
+https://feeds.pacific-content.com/commandlineheroes                                         # Command Line heroes podcast
+https://feeds.soundcloud.com/users/soundcloud:users:172452163/sounds.rss                    # That's not metal podcast
+# Dutch
+https://feeds.soundcloud.com/users/soundcloud:users:264167152/sounds.rss                    # De Rudi & Freddie show podcast
+https://rss.art19.com/een-podcast-over-media                                                # Een podcast over media podcast
+https://podcast.npo.nl/feed/brexit-de-podcast.xml                                           # Europa draaid door podcast
+" "
+"--- YOUTUBE ---"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA                # Luke Smith
+https://www.youtube.com/feeds/videos.xml?channel_id=UCld68syR8Wi-GY_n4CaoJGA                # Brodie Robertson
+https://www.youtube.com/feeds/videos.xml?channel_id=UCrUL8K81R4VBzm-KOYwrcxQ                # Enigneer man
+https://www.youtube.com/feeds/videos.xml?user=MentalOutlawStudios                           # Mental Outlaw
+https://www.youtube.com/feeds/videos.xml?user=BryanLunduke                                  # Bryan Lunduke
+https://www.youtube.com/feeds/videos.xml?user=PowerfulJRE                                   # Joe Rogan Experience
+https://www.youtube.com/feeds/videos.xml?user=FightTipsVideos                               # Fight Tips for the underdogs
+https://www.youtube.com/feeds/videos.xml?user=balletman                                     # Ramsey Dewey
+https://www.youtube.com/feeds/videos.xml?user=kloozen                                       # Institute Krav Maga the Netherlands
+https://www.youtube.com/feeds/videos.xml?user=FactoryBJJ                                    # BJJ factory
+https://www.youtube.com/feeds/videos.xml?channel_id=UCNrIUvaEj-9RIvKyJXZQ7Jg                # Crossfit Nijmegen
+" "
+"--- NEWS ---"
+http://feeds.nos.nl/nosnieuwsopmerkelijk                                                    # Nos opmerkelijk news
+https://www.nrc.nl/feed                                                                     # NRC news
+https://www.nu.nl/feeds/rss/algemeen.rss                                                    # Nu.nl news
+https://podcast.npo.nl/feed/argos.xml
+" "
+"--- TECH ---"
+https://www.archlinux.org/feeds/news/                                                       # Arch linux news
+https://lukesmith.xyz/rss.xml                                                               # Luke Smith blog
+https://github.com/lukesmithxyz/voidrice/commits/master.atom  "~Luke Smith voidrice repo"   # Luke Smith github
+https://github.com/Prutserdt/dotfiles/commits/master.atom  "~Prutserdt dotfiles repo"       # Prutserdt github
+" "
+"--- REDDIT ---"
+# Tech
+https://www.reddit.com/r/linux.rss                                                          # linux subreddit
+https://www.reddit.com/r/archlinux.rss                                                      # archlinux subreddit
+https://www.reddit.com/r/commandline.rss                                                    # commandline subreddit
+https://www.reddit.com/r/dwm.rss                                                            # dwm subreddit
+https://www.reddit.com/r/GPDPocket.rss                                                      # GPDPocket subreddit
+https://www.reddit.com/r/Psychedelics.rss                                                   # Psychedelics subreddit
+https://www.reddit.com/r/skeptic.rss                                                        # skeptic subreddit
+https://www.reddit.com/r/ultrawidemasterrace.rss                                            # ultrawidemasterrace subreddit
+https://www.reddit.com/r/unixporn.rss                                                       # unixporn subreddit
+https://www.reddit.com/r/vim.rss                                                            # vim subreddit
+https://www.reddit.com/u/kolerezooi.rss                                                     # kolerezooi useri
+# MMA
+https://www.reddit.com/r/wrestling.rss                                                      # wrestling subreddit
+https://www.reddit.com/r/jiujitsu.rss                                                       # jiujitsu subreddit
+https://www.reddit.com/r/martialarts.rss                                                    # martialarts subreddit
+https://www.reddit.com/u/fightsgoneby.rss                                                   # fightsgoneby user
+https://www.reddit.com/r/MMA.rss                                                            # MMA subreddit
+https://www.reddit.com/r/mmamemes.rss                                                       # mmamemes subreddit
+# Misc
+https://www.reddit.com/r/nederlands.rss                                                     # nederlands subreddit
+https://www.reddit.com/u/iceman_hof.rss                                                     # iceman_hof user
+
 " "
 "--- MISC ---"
-https://rss.xiffy.nl/foksuk.php
+https://rss.xiffy.nl/foksuk.php                                                             # Fokke en Sukke comics

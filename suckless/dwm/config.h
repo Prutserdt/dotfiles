@@ -95,6 +95,8 @@ static Key keys[] = {
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("st -e vim ~/Stack/Command_line/commands.md") },           /* txt: personal notes and comments about Linux */
 	{ MENUFILE,                     XK_d,      spawn,          SHCMD("st -e vim ~/suckless/dwm/config.h") },                    /* txt: dwm 'config* file */
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("st -e vim ~/.config/i3/config") },                        /* txt: i3 config file */
+	{ MENUFILE,                     XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/urls") },                           /* txt: newsboat urls file */
+	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/config") },                         /* txt: newsboat config file */
 	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("st -e vim ~/README.md") },                                /* txt: my github dotfiles README file */
 	{ MENUFILE,                     XK_r,      spawn,          SHCMD("st -e vim ~/.config/ranger/rc.conf") },                   /* txt: ranger config file */
 	{ MENUFILE,                     XK_s,      spawn,          SHCMD("st -e vim ~/suckless/st/config.h") },                     /* txt: st 'config' file */
@@ -109,11 +111,12 @@ static Key keys[] = {
 	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 /* Application: gimp */
 	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              /* Application: keepass */
 	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             /* Application: mousepad */
+	{ MENUKEY,                      XK_n,      spawn,          SHCMD("st -e newsboat") },                                       /* Application: newsboat, open in st */
     { MENUKEY,                      XK_s,      spawn,          SHCMD("~/.config/dmenusurf.sh") },                               /* Application: surf */
 	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               /* Application: thunar */
 	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             /* Application: thunar */
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            /* Application: Insert emojis */
-	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm */
+	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm, open in st */
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Application: Change wallpaper by dmenu */
 /* Left super as modkey */   
 	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },                                         /* Open/hide scratchpad. Works on active tag*/

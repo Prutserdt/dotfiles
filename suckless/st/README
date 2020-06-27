@@ -8,7 +8,7 @@
 This is my build of st, a simple terminal emulator for X which sucks less.
 Check the log directory for the applied patches.
 
-My builds are made in my home direcotory (~/suckless/st).
+My builds are made in my home directory (~/suckless/st).
 Go to that directory and enter as user (no root):
 make clean install
 

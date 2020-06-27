@@ -1061,6 +1061,9 @@ sudo pacman -S newsboat
 Add RSS feeds in the file: ~/.newsboat/urls
 Create a config file: ~/.newsboat/config
 I based it on Luke Smith: https://github.com/LukeSmithxyz/voidrice/blob/master/.config/newsboat/config
+The macro menu can be called by pressing "."
+To download youtube.dll the tsp program is needed which can be installed by the
+package called ts
 
 
 #### Applications (Command line and GUIs)

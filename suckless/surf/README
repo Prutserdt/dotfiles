@@ -10,7 +10,7 @@ This is my build of surf - simple webkit-based browser based on WebKit/GTK+.
 Check the log directory for the applied patches.
 Check the config.h file for my key bindings.
 
-My builds are made in my home direcotory (~/suckless/surf). 
+My builds are made in my home directory (~/suckless/surf). 
 Go to that directory and enter as normal user:
 make clean install
 

@@ -7,7 +7,7 @@
 
 This is my build of dmenu - dynamic menu, dmenu is an efficient dynamic menu for X.
 
-My builds are made in my home direcotory (~/suckless/dmenu).
+My builds are made in my home directory (~/suckless/dmenu).
 Go to that directory and enter as user (no root):
 make clean install
 
