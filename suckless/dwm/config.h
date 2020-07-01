@@ -31,10 +31,22 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { selfgcol,  selbgcol,  selbordercol },      /* This can be simplified if I will continue to use this simple color scheme.*/
 };
 
+typedef struct {
+	const char *name;
+	const void *cmd;
+} Sp;
+const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
+const char *spcmd2[] = {"st", "-n", "spfm", "-g", "144x41", "-e", "ranger", NULL };
+const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "58x40", "-e", "deepin-calculator", NULL };
+static Sp scratchpads[] = {
+	/* name          cmd  */
+	{"spterm",      spcmd1},
+	{"spranger",    spcmd2},
+	{"spcalc",      spcmd3},
+};
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -45,6 +57,16 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       NULL,       0,            1,           0,         0,        -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,         0,        -1 },
 	{ "st",       NULL,       NULL,       0,            0,           1,         1,        -1 },
+	{ NULL,		  "spterm",   NULL,		  SPTAG(0),		1,			 1,         1,        -1 },
+	{ NULL,		  "spfm",	  NULL,		  SPTAG(1),		1,			 1,         1,        -1 },
+	{ NULL,		  "spcalc",	  NULL,		  SPTAG(2),		1,			 1,         1,        -1 },
+
+ 	/* class      instance    title       tags mask     isfloating   monitor */
+/*+	{ "Gimp",	  NULL,			NULL,		0,				1,			 -1 },*/
+/*+	{ "Firefox",  NULL,			NULL,		1 << 8,			0,			 -1 },*/
+/*+	{ NULL,		  "spterm",		NULL,		SPTAG(0),		1,			 -1 },*/
+/*+	{ NULL,		  "spfm",		NULL,		SPTAG(1),		1,			 -1 },*/
+/*+	{ NULL,		  "keepassxc",	NULL,		SPTAG(2),		0,			 -1 },*/
 };
 
 /* layout(s) */
@@ -94,6 +116,8 @@ static Key keys[] = {
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("st -e vim ~/.bashrc") },                                  /* txt: .bashrc */
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("st -e vim ~/Stack/Command_line/commands.md") },           /* txt: personal notes and comments about Linux */
 	{ MENUFILE,                     XK_d,      spawn,          SHCMD("st -e vim ~/suckless/dwm/config.h") },                    /* txt: dwm 'config* file */
+	{ MENUFILE,                     XK_f,      spawn,          SHCMD("st -e vim ~/.config/urls") },                             /* txt: firefox url list, used in dmenuinternet.sh */
+	{ MENUFILE|ShiftMask,           XK_f,      spawn,          SHCMD("st -e vim ~/.config/dmenuinternet.sh") },                 /* txt: dmenu to open url list in firefox */
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("st -e vim ~/.config/i3/config") },                        /* txt: i3 config file */
 	{ MENUFILE,                     XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/urls") },                           /* txt: newsboat urls file */
 	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/config") },                         /* txt: newsboat config file */
@@ -116,10 +140,9 @@ static Key keys[] = {
 	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               /* Application: thunar */
 	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             /* Application: thunar */
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            /* Application: Insert emojis */
-	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm, open in st */
+	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           /* Application: vifm */
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Application: Change wallpaper by dmenu */
-/* Left super as modkey */   
-	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },                                         /* Open/hide scratchpad. Works on active tag*/
+/* Left super as modkey */    
 	{ MODKEY,                       XK_b,      togglebar,      {0} },                                                           /**/
 	{ MODKEY,                       XK_Return, spawn,	       SHCMD("st") },                                                   /**/
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },                                                    /**/
@@ -134,7 +157,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.02} },                                                  /* */
 	{ MODKEY,                       XK_space,  zoom,           {0} },                                                           /* */
 	{ MODKEY,                       XK_Tab,    view,           {0} },                                                           /* Switch to previous tag */
-	{ MODKEY,                       XK_q,      killclient,     {0} },                                                           /* Kill the selected window*/
+	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },                                                           /**/
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[0]} },                                            /* Layout: centeredmaster */
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[1]} },                                            /* Layout: tile */
 	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[2]} },                                            /* Layout: */
@@ -160,6 +183,10 @@ static Key keys[] = {
 	{ MODKEY,                       XK_equal,  incrgaps,       {.i = +2 } },                                                    /* Vanity gaps: increase gaps */
     { MODKEY,                       XK_minus,  incrgaps,       {.i = -2 } },                                                    /* Vanity gaps: decrease gaps */
 	{ MODKEY,                       XK_0,      togglegaps,     {0} },                                                           /* Vanity gaps: toggle gaps on/of */
+/*under construction: scratchpad functionality*/
+    { MODKEY,            			XK_y,  	   togglescratch,  {.ui = 0 } },                                                    /* Open st in scratchpad*/
+	{ MODKEY,            			XK_r,	   togglescratch,  {.ui = 1 } },                                                    /* Open ranger in scratchpad*/
+	{ MODKEY,            			XK_x,	   togglescratch,  {.ui = 2 } },                                                    /* Open calculator in scratchpad, if handy replace the calculator hotkey by scratchpad*/
 /* Tagkeys */
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
@@ -182,7 +209,8 @@ static Button buttons[] = {
 /*	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },  */  /*Ik weet eigenlijk niet de functionaliteit hiervan, weggehaald omdat ik termcmd niet gebruik*/
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },                  /**/
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },                  /**/
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },                  /**/
+/*	{ ClkClientWin,         MODKEY,         Button1,        resizemouse,    {0} },  setting of scratchpads     */
+	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
 	{ ClkTagBar,            0,              Button1,        view,           {0} },                  /**/
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },                  /**/
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },                  /**/
