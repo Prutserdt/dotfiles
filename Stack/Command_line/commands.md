@@ -31,6 +31,7 @@
 * Tox
 * SXIV
 * Neomutt
+* Steam
 #### Distros
 * XFCE tricks
 * i3 window manager
@@ -1735,14 +1736,28 @@ Installation 18JUN20, alleen neomutt geinstalleerd en ~/.mutt/muttrc
 aangemaakt...
 
 
-
-
-
-
-
-
-
-
+#### Steam
+Install July 2020: enable multilib in /etc/pacman.conf, install steam iwth
+repository option 4: vulkan-radeon (other options: amdvlk, nvidia-utils,
+vulkan-intel)
+Repository multilib:  1) lib32-amdvlk  2) lib32-nvidia-utils  3) lib32-vulkan-intel  4) lib32-vulkan-radeon
+gekozen: 4
+Daarna gedownload (installed size: 353MB!)
+Na het starten in commandline: steam
+Fatal Error: Failed to load steamui.so
+ Corrupt package file (/home/icefly/.local/share/Steam/package/webkit_ubuntu12.zip.vz.6f52fc663b60660500b356e9cf11098f56e312ef_55107636)
+Failed to load steamui.so - dlerror(): steamui.so: cannot open shared object file: No such file or directory
+Afgesloten en opnieuw opgestart met dezelfde foutmelding.
+Deinstalled 
+pacman -Rs steam
+Geinstalleerd met optie 1 (amdvlk)en 4(lib32-vulkan-radeon)
+Weer dezelfde foutmelding na starten steam in commmand line.
+Nu geinstalleerd met optie 4 (vulkan-radeon) en 1 (lib43-amdvlk)
+Wederom dezelfde foutmelding.
+Daarna steamcmd geinstalleerd van de AUR
+yay steamcmd
+Dit werkt ook niet zo goed.
+Ik heb gedeinstalleerd met yay.
 
 
 ### Distros        

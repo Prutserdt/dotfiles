@@ -7,7 +7,8 @@
 # \___/_/\_\_|\__\__,_| \_/\_/ |_| |_| |_(_)___/_| |_|
 #                                 Created by Prutserdt
 #
-# This script gives yes/no options before exiting dwm.
+# This script gives yes/no option before exiting dwm.
+# It is called in config.h of dwm.
 echo -n "Do you wish to exit DWM violently now and kill everything? (y/n) "
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
