@@ -73,45 +73,46 @@ char *termname = "st-256color";
 unsigned int tabspaces = 8;
 
 /* bg opacity */
+//float alpha = 0.8;
 float alpha = 0.8;
 
 /* Terminal colors (16 first used in escape sequence) */
 /* orgineel voor wit: [7] = "#bbbbbb",  white   */
 
+//Gruvbox colorscheme
 static const char *colorname[] = {
-	/* 8 normal colors */
-  [0] = "#000000", /* black   */
-  [1] = "#ff5555", /* red     */
-  [2] = "#50fa7b", /* green   */
-  [3] = "#f1fa8c", /* yellow  */
-  [4] = "#bd93f9", /* blue    */
-  [5] = "#ff79c6", /* magenta */
-  [6] = "#8be9fd", /* cyan    */
-  [7] = "#777777", /* white   */
-
-  /* 8 bright colors */
-  [8]  = "#44475a", /* black   */
-  [9]  = "#ff5555", /* red     */
-  [10] = "#50fa7b", /* green   */
-  [11] = "#f1fa8c", /* yellow  */
-  [12] = "#bd93f9", /* blue    */
-  [13] = "#ff79c6", /* magenta */
-  [14] = "#8be9fd", /* cyan    */
-  [15] = "#ffffff", /* white   */
-
-  /* special colors */
-  [256] = "#000000", /* background */
-/*  [256] = "#282a36",*/ /* background */
-  [257] = "#f8f8f2", /* foreground */
+"#1d2021",
+"#cc241d",
+"#98971a",
+"#d79921",
+"#458588",
+"#b16286",
+"#689d6a",
+"#a89984",
+"#928374",
+"#fb4934",
+"#b8bb26",
+"#fabd2f",
+"#83a598",
+"#d3869b",
+"#8ec07c",
+"#ebdbb2",
+[255] = 0,
+/* more colors can be added after 255 to use with DefaultXX */
+"#add8e6", /* 256 -> cursor */
+"#555555", /* 257 -> rev cursor*/
+//"#111111", /* 258 -> bg */
+"#000000", /* 258 -> bg, pitch black background */
+"#ebdbb2", /* 259 -> fg */
 };
 /*
  * Default colors (colorname index)
- * foreground, background, cursor 
+ * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 257;
-unsigned int defaultbg = 256;
-static unsigned int defaultcs = 257;
-static unsigned int defaultrcs = 257;
+unsigned int defaultfg = 259;
+unsigned int defaultbg = 258;
+unsigned int defaultcs = 256;
+unsigned int defaultrcs = 257;
 
 /* Colors used, when the specific fg == defaultfg. So in reverse mode this
  * will reverse too. Another logic would only make the simple feature too
@@ -157,7 +158,8 @@ static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
 	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
 	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
-	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
+//  { XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
+	{ XK_ANY_MOD,           Button2, clippaste,       {.i = 0},      1 },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 };
@@ -177,10 +179,12 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
-	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+//	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+	{ TERMMOD,              XK_Y,           clippaste,       {.i =  0} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
-	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
+//	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
+	{ ShiftMask,            XK_Insert,      clippaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 };
 

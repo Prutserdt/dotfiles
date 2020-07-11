@@ -23,6 +23,8 @@
 * Corona script
 * Video card information
 * Create superfast ramdisk
+#### C programming tricks
+* Allerlei
 #### Applications (Command line and GUIs)
 * Vim
 * Nano
@@ -322,7 +324,11 @@ Frame by frame (Duurt wel langer. Als het bovenstaande niet goed werkt.):
     ffmpeg -i Film.mp4 -ss 308 -t 111 -fflags +genpts Filmpje.mp4
 
 Vind de code van keys van keyboard (toetsenbord): `xev`.
-    
+   
+Zet de key repeat snelheid hoger, increase key repeat rate,
+modify .xinitrc:
+xset r rate 300 80
+
 #### Rechten bestanden
      
 Bekijk rechten: `ls -l` `ls -a -l` 'ls -al' 'ls la'
@@ -1066,6 +1072,14 @@ The macro menu can be called by pressing "."
 To download youtube.dll the tsp program is needed which can be installed by the
 package called ts
 
+#### C programming
+
+De meest simpele manier om snel een C programma te draaien:
+creeer een file in vim, bijv: test.c
+Compile deze file met:
+gcc test.c -o test
+STart de C binary met:
+./test
 
 #### Applications (Command line and GUIs)
 
@@ -1086,7 +1100,7 @@ yay vundle-git
   beschreven in de manual.
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
  Je zet de plugin in .vimrc en installeerd plugins in Vim via:
-:Plugininstall
+:PluginInstall
 Helaas werkt het niet als ik op CTR-P druk, er wordt wel een command gegeven:
 :call Vim_Markdown_Preview()
  maar er opent geen webpage.

@@ -8,7 +8,7 @@
 ! Modified by Prutserdt
 !
 !! Transparency (0-1):
-*.alpha:0.2 
+*.alpha:0.5 
 
 !! Set a default font and font size as below:
 *.font: hack:size=13
@@ -24,41 +24,43 @@
 /* white	7	15 */
 
 !! gruvbox:
-/**.color0: #1d2021*/
-/**.color1: #cc241d */
-/**.color2: #98971a*/
-/**.color3: #d79921*/
-/**.color4: #458588*/
-/**.color5: #b16286*/
-/**.color6: #689d6a*/
-/**.color7: #a89984*/
-/**.color8: #928374*/
-/**.color9: #fb4934*/
-/**.color10: #b8bb26*/
-/**.color11: #fabd2f*/
-/**.color12: #83a598*/
-/**.color13: #d3869b*/
-/**.color14: #8ec07c*/
-/**.color15: #ebdbb2*/
-/**.color256: #1d2021*/
-/**.color257: #ebdbb2*/
+*.color0: #1d2021
+*.color1: #cc241d
+*.color2: #98971a
+*.color3: #d79921
+*.color4: #458588
+*.color5: #b16286
+*.color6: #689d6a
+*.color7: #a89984
+*.color8: #928374
+*.color9: #fb4934
+*.color10: #b8bb26
+*.color11: #fabd2f
+*.color12: #83a598
+*.color13: #d3869b
+*.color14: #8ec07c
+*.color15: #ebdbb2
+*.color256: #1d2021
+*.color257: #ebdbb2
 
-!! Dracula, modified by Prutserd (actual black):
-*.color0: #000000
-*.color1: #ff5555
-*.color2: #50fa7b
-*.color3: #f1fa8c
-*.color4: #bd93f9
-*.color5: #ff79c6
-*.color6: #8be9fd
-*.color7: #777777
-*.color8: #44475a
-*.color9: #ff5555
-*.color10: #50fa7b
-*.color11: #f1fa8c
-*.color12: #bd93f9
-*.color13: #ff79c6
-*.color14: #8be9fd
-*.color15: #ffffff
-*.color256: #000000
-*.color257: #f8f8f2
+/!! Dracula, modified by Prutserd (actual black):
+/*.color0: #000000
+/*.color1: #ff5555
+/*.color2: #ff1071
+/*.color3: #f1fa8c
+/*.color4: #bd93f9
+/*.color5: #ff79c6
+/*.color6: #8be9fd
+/*.color7: #777777
+/*.color8: #44475a
+/*.color9: #ff5555
+/*.color10: #50aa7d
+/*.color11: #f1aa8c
+/*.color12: #bd13f9
+/*.color13: #ff90dd
+/*.color14: #8be9af
+/*.color15: #ef1eee
+/*.color256: #000000
+/*.color257: #f8f8f2
+//*.color15: #ffffff
+/*.color2: #50fa7b

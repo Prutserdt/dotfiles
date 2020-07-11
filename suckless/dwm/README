@@ -12,7 +12,7 @@ Check the log directory for the applied patches.
 Check the config.h file for my key bindings. Super_R and Alt_R buttons are set
 by .Xmodmap.
 
-My builds are made in my home direcotory (~/suckless/dwm). 
+My builds are made in my home directory (~/suckless/dwm). 
 Go to that directory and enter as normal user:
 make clean install
 

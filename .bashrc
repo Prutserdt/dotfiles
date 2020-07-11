@@ -65,6 +65,7 @@ alias dd="cd ~/Downloads && pwd"
 alias dh="cd ~/ && pwd"
 alias ds="cd ~/Stack && pwd"
 alias dw="cd ~/Stack/Afbeeldingen/Wallpapers && pwd"
+alias de="cd ~/Stack/Documenten/Studie/C_programming_training_Dartmouth && pwd"
 # Jump to suckless applications, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
 alias dss="cd ~/Stack/suckless && pwd"
 alias ddw="cd ~/suckless/dwm && pwd"

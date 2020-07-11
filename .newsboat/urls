@@ -47,6 +47,7 @@ https://www.nu.nl/feeds/rss/algemeen.rss                                        
 https://podcast.npo.nl/feed/argos.xml
 " "
 "--- TECH ---"
+https://suckless.org/atom.xml                                                               # suckless news
 https://www.archlinux.org/feeds/news/                                                       # Arch linux news
 https://lukesmith.xyz/rss.xml                                                               # Luke Smith blog
 https://github.com/lukesmithxyz/voidrice/commits/master.atom  "~Luke Smith voidrice repo"   # Luke Smith github
