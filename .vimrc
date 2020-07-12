@@ -9,23 +9,18 @@
 set nocompatible              " Don't try to be vi compatible
 filetype off                  " Helps plugins to load correctly in case of errors
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Plugged
-" :PlugList       - lists configured plugins
-" :PlugInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" Plugged plugin manager. :PlugList :PlugInstall
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin('~/.vim/plugged')   " start Plug section, about plugins, managed by plug
+call plug#begin('~/.vim/plugged')   " start plugged section, about plugins, managed by plug
 Plug 'godlygeek/tabular'            " Select visually, enter :Tab /=, to analign to = character
 Plug 'frazrepo/vim-rainbow'         " Colored Parentheses
 Plug 'itchyny/lightline.vim'        " Lightline statusbar
 Plug 'ap/vim-css-color'             " Shows color of css color coding in vim: yellow, 503fa9
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Conquer of Completion plugin, autocomplete!
-""Plug 'morhetz/gruvbox'
 Plug 'sainnhe/gruvbox-material'
-call plug#end()                     " End of the plug section
+call plug#end()                     " End of the plugged section
 """"""""""""""""""""""""""""""  Configuration of the statubar plugin lightline
 let g:lightline = {'colorscheme' : 'gruvbox_material'}
-""let g:lightline = {'colorscheme': 'jellybeans'}
-""let g:rehash256 = 1      " Allows 256 colorscheme, required 256 colors in terminal 
 """"""""""""""""""""""""""""""  Configuration of plugin vim-rainbow. Otherwise plugin make vim super slow! 
 let g:rainbow_active = 1
 let g:rainbow_load_separately = [
@@ -88,12 +83,9 @@ set formatoptions=c,q,r,t " This is a sequence of letters which describes how
                           " to comments)
 set ruler                 " Show the line and column number of the cursor position
 set background=dark       " dark/white: use colors that look good on a dark/white
-let g:gruvbox_material_background = 'hard'
+
+let g:gruvbox_material_background = 'hard' "material/mix/original soft/medium/hard
 colorscheme gruvbox-material
-""highlight Normal     ctermbg=NONE guibg=NONE
-""highlight LineNr     ctermbg=NONE guibg=NONE
-""highlight SignColumn ctermbg=NONE guibg=NONE
-""hi NonText ctermbg=NONE guibg=NONE
 set mouse=a               " Enable the use of the mouse.
 set colorcolumn=80        " Show the 80 boundary
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

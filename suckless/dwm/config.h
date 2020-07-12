@@ -17,17 +17,16 @@ static const int smartgaps          = 1;                        // 1 means no ou
 static const int showbar            = 1;                        // 0 means no bar
 static const int topbar             = 1;                        // 0 means bottom bar
 static const char *fonts[]          = { "hack:size=9" };        // Font of statusbar
-static const char normbgcol[]       = "#000000";                // Color of background
+static const char black[]           = "#000000";                // Color of background
 static const char normbordercol[]   = "#111111";                // Color of not selected borders
-static const char normfgcol[]       = "#999999";                // Color of foreground, menubar text color not selected, incl rigth
-static const char selfgcol[]        = "#eeeeee";                // Color of selected foreground
-static const char selbgcol[]        = "#000000";                // Color of menubar
-static const char selbordercol[]    = "#770000";                // Color of selected window border
+static const char normfgcol[]       = "#98971a";                // Color of foreground, menubar text color not selected, incl rigth
+static const char selfgcol[]        = "#fb4934";                // Color of selected foreground
+static const char selbordercol[]    = "#d79921";                // Color of selected window border
 
 static const char *colors[][3]      = {
-//  name             fg         bg         border
-	[SchemeNorm] = { normfgcol, normbgcol, normbordercol },
-	[SchemeSel]  = { selfgcol,  selbgcol,  selbordercol },      // normbgcol and selbgcol are the same: seems redundant, will keep it as is to be able to switch later 
+//  name             fg         bg      border
+	[SchemeNorm] = { normfgcol, black,  normbordercol },
+	[SchemeSel]  = { selfgcol,  black,  selbordercol },      
 };
 
 typedef struct {
