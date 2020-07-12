@@ -9,7 +9,7 @@ contains my suckless builds, including my window manager (dwm) and my terminal (
 This is how my dwm desktop can look like:
 ![full rice](dwm.jpg)
 This is how I use it:
-![productivity](dwm333.jpg)
+![productivity](dwm3.jpg)
 
 Some preferred applications: dmenu, vifm, keepass, numlockx, vim, 
 python-pywall, python-ueberzug, sxiv, yay, fzf, glances, htop, firefox, thunar,
