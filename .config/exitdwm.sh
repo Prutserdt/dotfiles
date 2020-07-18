@@ -8,8 +8,8 @@
 #                                 Created by Prutserdt
 #
 # This script gives yes/no option before exiting dwm.
-# It is called in config.h of dwm.
-echo -n "Do you wish to exit DWM violently now and kill everything? (y/n) "
+# It is set in config.h of dwm.
+echo -n "Do you wish to violently exit DWM now and    kill em all?   (y/n) "
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
 if [ "$answer" != "${answer#[Yy]}" ] ;then

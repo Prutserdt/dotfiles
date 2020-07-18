@@ -4,8 +4,7 @@
 #  | '_ \ / _` / __| '_ \| '__/ __|
 # _| |_) | (_| \__ \ | | | | | (__ 
 #(_)_.__/ \__,_|___/_| |_|_|  \___|
-#
-# Modified by Prutserdt
+#             Modified by Prutserdt
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -20,7 +19,9 @@ pfetch
 HISTSIZE=5000
 HISTFILESIZE=10000
 # Do not add duplicate entries and no spaces; erase duplicates
-HISTCONTROL=ignoreboth:erasedups
+HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 
 ###########################
 #        Alias list       #
@@ -30,7 +31,6 @@ alias ?="c && echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc &&
 echo --------------------------------------------------- &&
 grep -e alias*=* ~/.bashrc | grep -v '#'| sed -e 's/\<alias\>//g'
 echo ---------------------------------------------------"
-
 # Colored output when possible
 alias ls='ls --color=auto'
 alias diff="diff --color=auto"
@@ -82,33 +82,20 @@ alias dotfiles='~/.config/dotfiles.sh'
 # OLD
 # config: simplifying communication with GIT
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-# alias dotfiles='config add -u :/ -v; config commit -m "Updated";config push -v'
-
-###########################
-# Change keyboard mapping #
-###########################
-# The dotfile .kbswitch changes Esc/Caps and the Super_R to mod3
-# (Esc/Caps for vim, and Super_R as an extra shortcut button for i3/dwm)
-# Triggered by the alias k
-alias k='xmodmap ~/.config/kbswitch'
+# Reset keyboard modkeys and swap Caps/Esc, plus blazingly fast key repeats.
+# After hotswapping keyboards the settings can be restored by this alias.
+alias k='xmodmap ~/.config/kbswitch && xset r rate 300 80'
 
 ###########################
 #           dwm           # 
 ###########################
-# ~/bin was addet to path, makes locale install of dwm possible via .xinitrc.
-PATH="$HOME/bin:$PATH"
-
+PATH="$HOME/bin:$PATH" # ~/bin was addet to path, makes locale install of dwm possible via .xinitrc.
 # Make the current dwm the stable version
 alias dwmbackup="rm -r ~/Stack/suckless/dwm/dwm-6.2_stable/* && cp -r ~/suckless/dwm/* ~/Stack/suckless/dwm/dwm-6.2_stable"
 # Go back to vanilla dwm. DESTROYS CURRENT dwm!
 alias dwmvanilla="rm -r ~/suckless/dwm && mkdir ~/suckless/dwm && cp -r ~/Stack/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/suckless/dwm && cd ~/suckless/dwm && clear && ls -al"
 # Go back to stable dwm. DESTROYS CURRENT dwm!
 alias dwmstable="rm -r ~/suckless/dwm && mkdir ~/suckless/dwm && mkdir ~/suckless/dwm/log && cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/suckless/dwm && cd ~/suckless/dwm && clear && ls -al"
-# Create a backup of current dwm
-#alias dwmbackup="cp -r ~/dwm ~/Stack/dwm/dwm-6.2_$(date +%Y%m%d_%H%M)"
-# Make the current dwm the stable version
-#alias dwmbackup="rm -r ~/Stack/dwm/dwm-6.2_stable && mkdir ~/Stack/dwm/dwm-6.2_stable && cp -r ~/dwm/* ~/Stack/dwm/dwm-6.2_stable"
-
 # Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
 # 1: delete files in test directory: rm ~/Stack/dwm/patches/test/*  
 # 2: Place the diff file to be tested in the test directory: cp  ~/Stack/dwm/patches/example.diff ~/Stack/dwm/patches/test*
@@ -119,51 +106,45 @@ alias dwmpatch="dwmstable && ls ~/Stack/suckless/dwm/patches/test/*.diff >> ~/su
 ###########################
 #           st            # 
 ###########################
-# ~/bin was addet to path, makes locale install of st possible via .xinitrc,
-# see the dwm part of this .bashrc
+# requirement: PATH="$HOME/bin:$PATH" 
 # Make the current st the stable version
 alias stbackup="rm -r ~/Stack/suckless/st/st-0.8.3_stable && mkdir ~/Stack/suckless/st/st-0.8.3_stable && cp -r ~/suckless/st/* ~/Stack/suckless/st/st-0.8.3_stable"
 # Go back to vanilla st. DESTROYS CURRENT st!
 alias stvanilla="rm -r ~/suckless/st && mkdir ~/suckless/st && cp -r ~/Stack/suckless/st/st-0.8.3_vanilla/* ~/suckless/st && cd ~/suckless/st && clear && ls -al"
 # Go back to stable st. DESTROYS CURRENT st!
 alias ststable="rm -r ~/suckless/st && mkdir ~/suckless/st && cp -r ~/Stack/suckless/st/st-0.8.3_stable/* ~/suckless/st && cd ~/suckless/st && clear && ls -al"
-
 # Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
 # 1: delete files in test directory: rm ~/Stack/dwm/patches/test/*  
 # 2: Place the diff file to be tested in the test directory: cp  ~/Stack/dwm/patches/example.diff ~/Stack/dwm/patches/test*
 # 3: Run the dwmpatch command to test the patch
 alias stpatch="ststable && ls ~/Stack/suckless/st/patches/test/*.diff >> ~/suckless/st/log/diff_log && cp -r ~/suckless/st/config.h ~/suckless/st/config.def.h && rm ~/suckless/st/config.h && patch -p1 < ~/Stack/suckless/st/patches/test/*.diff && make clean install"
 
-
 ###########################
 #           dmenu         # 
 ###########################
-# ~/bin was addet to path, makes locale install of dmenu possible via .xinitrc,
-# see the dwm part of this .bashrc
+# requirement: PATH="$HOME/bin:$PATH" 
 # Make the current dmenu the stable version
 alias dmenubackup="rm -r ~/Stack/suckless/dmenu/dmenu-4.9_stable && mkdir ~/Stack/suckless/dmenu/dmenu-4.9_stable && cp -r ~/suckless/dmenu/* ~/Stack/suckless/dmenu/dmenu-4.9_stable"
 # Go back to vanilla st. DESTROYS CURRENT dmenu!
 alias dmenuvanilla="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -r ~/Stack/suckless/dmenu/dmenu-4.9_vanilla/* ~/suckless/dmenu && cd ~/suckless/dmenu && clear && ls -al"
 # Go back to stable dmenu. DESTROYS CURRENT dmenu!
 alias dmenustable="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -r ~/Stack/suckless/dmenu/dmenu-4.9_stable/* ~/suckless/dmenu && cd ~/suckless/dmenu && clear && ls -al"
-
 # Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
 # 1: delete files in test directory: rm ~/Stack/dwm/patches/test/*  
 # 2: Place the diff file to be tested in the test directory: cp  ~/Stack/dwm/patches/example.diff ~/Stack/dwm/patches/test*
 # 3: Run the dwmpatch command to test the patch
 alias dmenupatch="dmenustable && ls ~/Stack/suckless/dmenu/patches/test/*.diff >> ~/suckless/dmenu/log/diff_log && cp -r ~/suckless/dmenu/config.h ~/suckless/dmenu/config.def.h && rm ~/suckless/dmenu/config.h && patch -p1 < ~/Stack/suckless/dmenu/patches/test/*.diff && make clean install"
+
 ###########################
 #           surf          # 
 ###########################
-# ~/bin was addet to path, makes locale install of surf possible via .xinitrc,
-# see the dwm part of this .bashrc
+# requirement: PATH="$HOME/bin:$PATH" 
 # Make the current surf the stable version
 alias surfbackup="rm -r ~/Stack/suckless/surf/surf-2.0_stable && mkdir ~/Stack/suckless/surf/surf-2.0_stable && cp -r ~/suckless/surf/* ~/Stack/suckless/surf/surf-2.0_stable"
 # Go back to vanilla st. DESTROYS CURRENT surf!
 alias surfvanilla="rm -r ~/suckless/surf && mkdir ~/suckless/surf && cp -r ~/Stack/suckless/surf/surf-2.0_vanilla/* ~/suckless/surf && cd ~/suckless/surf && clear && ls -al"
 # Go back to stable surf. DESTROYS CURRENT surf!
 alias surfstable="rm -r ~/suckless/surf && mkdir ~/suckless/surf && cp -r ~/Stack/suckless/surf/surf-2.0_stable/* ~/suckless/surf && cd ~/suckless/surf && clear && ls -al"
-
 # Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
 # 1: delete files in test directory: rm ~/Stack/suckless/surf/patches/test/*  
 # 2: Place the diff file to be tested in the test directory: cp ~/Stack/suckless/surf/patches/example.diff ~/Stack/dwm/patches/test*

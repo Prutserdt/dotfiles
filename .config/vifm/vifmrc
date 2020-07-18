@@ -1,29 +1,20 @@
+" ~/.config/vifm/vifmrc
 " vim: filetype=vifm:
 "       _  __                    
 "__   _(_)/ _|_ __ ___  _ __ ___ 
 "\ \ / / | |_| '_ ` _ \| '__/ __|
 " \ V /| |  _| | | | | | | | (__ 
 "  \_/ |_|_| |_| |_| |_|_|  \___|
-"
-" Modified by Prutserd
+"           Modified by Prutserdt
 " ------------------------------------------------------------------------------
-
-
 set vicmd=vim
 
 set syscalls
 
 " Trash Directory
-" The default is to move files that are deleted with dd or :d to
-" the trash directory.  If you change this you will not be able to move
-" files by deleting them and then using p to put the file in the new location.
-" I recommend not changing this until you are familiar with vifm.
-" This probably shouldn't be an option.
-
 set trash
 
 " This is how many directories to store in the directory history.
-
 set history=100
 
 " Automatically resolve symbolic links on l or Enter.
@@ -55,7 +46,8 @@ set norunexec
 
 " Selected color scheme
 
-colorscheme zenburn 
+"colorscheme zenburn 
+colorscheme gruvbox 
 
 " Format for displaying time in file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
@@ -102,9 +94,7 @@ endif
 " Set custom status line look
 
 set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
-
 " ------------------------------------------------------------------------------
-
 " :mark mark /full/directory/path [filename]
 
 mark D ~/Stack/dwm/
@@ -117,9 +107,7 @@ mark h ~/
 mark o ~/Downloads/
 mark s ~/st/
 mark v ~/.config/vifm/
-
 " ------------------------------------------------------------------------------
-
 " :com[mand][!] command_name action
 " The following macros can be used in a command
 " %a is replaced with the user arguments.
@@ -140,9 +128,7 @@ command! make !!make %a
 command! mkcd :mkdir %a | cd %a
 command! vgrep vim "+grep %a"
 command! reload :write | restart
-
 " ------------------------------------------------------------------------------
-
 " The file type is for the default programs to be used with
 " a file extension.
 " :filetype pattern1,pattern2 defaultprogram,program2
@@ -183,7 +169,6 @@ fileviewer *.pdf
         \ %pc
         \ vifmimg clear
         " \ pdftotext -nopgbrk %c -
-
 
 " PostScript
 filextype *.ps,*.eps,*.ps.gz
@@ -413,14 +398,11 @@ filextype */
 " filetype * start, explorer
 
 " ------------------------------------------------------------------------------
-
 " What should be saved automatically between vifm sessions.  Drop "savedirs"
 " value if you don't want vifm to remember last visited directories for you.
 set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
     \phistory,fhistory,dirstack,registers,bookmarks,bmarks
-
 " ------------------------------------------------------------------------------
-
 " Examples of configuring both panels
 
 " Customize view columns a bit (enable ellipsis for truncated file names)
@@ -430,9 +412,7 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
 " Filter-out build and temporary files
 "
 " filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
-
 " ------------------------------------------------------------------------------
-
 " Sample mappings
 
 " Start shell in current directory
@@ -496,9 +476,7 @@ nnoremap <f5> :copy<cr>
 nnoremap <f6> :move<cr>
 nnoremap <f7> :mkdir<space>
 nnoremap <f8> :delete<cr>
-
 " ------------------------------------------------------------------------------
-
 " Various customization examples
 
 " Use ag (the silver searcher) instead of grep

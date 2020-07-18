@@ -19,9 +19,9 @@ static const int topbar             = 1;                        // 0 means botto
 static const char *fonts[]          = { "hack:size=9" };        // Font of statusbar
 static const char black[]           = "#000000";                // Color of background
 static const char normbordercol[]   = "#111111";                // Color of not selected borders
-static const char normfgcol[]       = "#98971a";                // Color of foreground, menubar text color not selected, incl rigth
-static const char selfgcol[]        = "#fb4934";                // Color of selected foreground
-static const char selbordercol[]    = "#d79921";                // Color of selected window border
+static const char normfgcol[]       = "#444444";                // Color of menubar text color not selected
+static const char selfgcol[]        = "#8ec07c";                // Color of selected foreground
+static const char selbordercol[]    = "#8ec07c";                // Color of selected window border
 
 static const char *colors[][3]      = {
 //  name             fg         bg      border
@@ -36,11 +36,13 @@ typedef struct {
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spfm", "-g", "144x41", "-e", "ranger", NULL };
 const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "58x40", "-e", "deepin-calculator", NULL };
+const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
 static Sp scratchpads[] = {
 //   name           cmd        Scratchpads, to show/hide apps in floating mode
 	{"spterm",      spcmd1}, // terminal
 	{"spranger",    spcmd2}, // ranger
 	{"spcalc",      spcmd3}, // calculator
+	{"spexit",      spcmd4}, // exit dwm
 };
 
 /* tagging */
@@ -59,10 +61,11 @@ static const Rule rules[] = {
 	{ NULL,		  "spterm",   NULL,		  SPTAG(0),		1,			 1,         1,        -1 },     // st: as scratchpad
 	{ NULL,		  "spfm",	  NULL,		  SPTAG(1),		1,			 1,         1,        -1 },     // ranger: as scratchpad 
 	{ NULL,		  "spcalc",	  NULL,		  SPTAG(2),		1,			 1,         1,        -1 },     // calculator: as scratchpad
+	{ NULL,		  "spexit",	  NULL,		  SPTAG(3),		1,			 1,         1,        -1 },     // exit dwm: as scratchpad
 };
 
 /* layout(s) */
-static const float mfact     = 0.4; // factor of master area size [0.05..0.95]
+static const float mfact     = 0.5; // factor of master area size [0.05..0.95]
 static const int nmaster     = 1;   // number of clients in master area
 static const int resizehints = 0;   // 1 means respect size hints in tiled resizals
 
@@ -101,7 +104,7 @@ static Key keys[] = {
     { 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+ & ~/.config/updatebar.sh") },    // Volume up. Update statusbar
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%- & ~/.config/updatebar.sh") },    // Volume down. Update statusbar
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle & ~/.config/updatebar.sh") }, // Toggle mute
-    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("deepin-calculator") },                                    // Calculator
+//    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("deepin-calculator") },                                    // Calculator
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter") },                                  // Print screen
 // Right alt key to open textfiles
 	{ MENUFILE,                     XK_a,      spawn,          SHCMD("st -e vim ~/.config/applications.md") },                  // txt: used application for my Arch linux build
@@ -169,7 +172,6 @@ static Key keys[] = {
 	{ MODKEY|ControlMask|ShiftMask, XK_period, focusmon,       {.i = +1 } },                                                    // Not used, single monitor system
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },                                                    // Not used, single monitor system
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },                                                    // Not used, single monitor system
-	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("st -e ~/.config/exitdwm.sh") },                           // Exiting dwm and give a y/n option
 	{ MODKEY|ControlMask|ShiftMask, XK_q,      quit,           {1} },                                                           // Restart dwm inplace
 	{ MODKEY,                       XK_equal,  incrgaps,       {.i = +2 } },                                                    // Vanity gaps: increase gaps
     { MODKEY,                       XK_minus,  incrgaps,       {.i = -2 } },                                                    // Vanity gaps: decrease gaps
@@ -177,7 +179,9 @@ static Key keys[] = {
 // under construction: scratchpad functionality
     { MODKEY,            			XK_y,  	   togglescratch,  {.ui = 0 } },                                                    // Open st in scratchpad
 	{ MODKEY,            			XK_r,	   togglescratch,  {.ui = 1 } },                                                    // Open ranger in scratchpad
-	{ MODKEY,            			XK_x,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator in scratchpad, if handy replace the calculator hotkey by scratchpad
+    { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // open calculator
+	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // exit dwm with y/n options, in a small centered floating window
+        
 // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)

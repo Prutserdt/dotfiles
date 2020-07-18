@@ -117,14 +117,19 @@ lsusb
 History bashrc. Dit staat in ~/.bash_history. Verwijder duplicates met het
 volgende commando:
 
-    sort .bash_history | uniq > .bash_history_shortened
+sort .bash_history | uniq > .bash_history_shortened
 
 Voeg het volgende toe aan .bashrc om een grotere en meer cleane history file te
 krijgen:
 ```
+# Change the size of the bash history to 5000 in memory (500 is default) 
+# and the total amount of maximally saved lines
 HISTSIZE=5000
 HISTFILESIZE=10000
-HISTCONTROL=ignoreboth:erasedups
+# Do not add duplicate entries and no spaces; erase duplicates
+HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 ```
 
 #### Weergave hard drive, formatting, dd, etc
@@ -2024,7 +2029,7 @@ voor VIM. Wat is de default setting van mijn Ducky keyboard:
 [archie@archPC ~]$ xmodmap -pm
 xmodmap:  up to 3 keys per modifier, (keycodes in parentheses):
 shift       Shift_L (0x32),  Shift_R (0x3e)
-lock        Caps_Lock (0x42)
+Hellock        Caps_Lock (0x42)
 control     Control_L (0x25),  Control_R (0x69)
 mod1        Alt_L (0x40),  Alt_R (0x6c),  Meta_L (0xcd)
 mod2        Num_Lock (0x4d)
@@ -2077,6 +2082,14 @@ add Lock = Caps_Lock
 ```
 In .bashrc is een alias aangemaakt die deze xmodmap laat lopen:
 alias kbswitch='xmodmap ~/.config/kbswitch'
+
+Helaas werkt deze oplossing niet helemaal en niet altijd. 
+Het kan ook via: setxkbmap -option ctrl:swapcaps
+https://bbs.archlinux.org/viewtopic.php?id=172421
+In mijn geval wordt het
+https://bbs.archlinux.org/viewtopic.php?id=172421
+
+
 
 # Swap toegevoegd 12JAN20
 # manually 
