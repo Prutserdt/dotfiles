@@ -1099,7 +1099,8 @@ Vind het filetype die vim heeft gedetecteerd:
 Verander tijdelijk de syntax naar conf type:
 :set syntax:conf
 
- Vim plugins beheer ik via Vundle
+ Vim plugins beheerde ik via Vundle (nu is het plug, want vundle is niet
+ onderhouden)
 yay vundle-git
  volg de manual op github: clone de repo en voeg de toe aan ~.vimrc zoals
   beschreven in de manual.
@@ -1721,6 +1722,23 @@ config add ~/suckless/st/win.h &&
 config add ~/suckless/st/x.c &&
 config add ~/suckless/st/x.o &&
 config add ~/suckless/st/log/diff_log
+
+config add ~/.config/dmenubackup.sh &&
+config add ~/.config/dmenupatch.sh &&
+config add ~/.config/dmenustable.sh &&
+config add ~/.config/dmenuvanilla.sh &&
+config add ~/.config/dwmbackup.sh &&
+config add ~/.config/dwmpatch.sh &&
+config add ~/.config/dwmstable.sh &&
+config add ~/.config/dwmvanilla.sh &&
+config add ~/.config/surfbackup.sh &&
+config add ~/.config/surfpatch.sh &&
+config add ~/.config/surfstable.sh &&
+config add ~/.config/surfvanilla.sh &&
+config add ~/.config/stbackup.sh &&
+config add ~/.config/stpatch.sh &&
+config add ~/.config/ststable.sh &&
+config add ~/.config/stvanilla.sh 
 
 #### Tox
 Android: Antox
@@ -2536,6 +2554,49 @@ in programming mode, it will back to normal mode.
 #### Gergo mechanical ortholinear keyboard
 I purchased a Gergo keyboard without switches. More details can be found on my
 personal Github page about the keyboards.
+
+
+###############################################################################
+Zomer 2020. Nieuwe poging om de firmware van de Gergo te updaten.
+Nieuwe pc en nieuwe arch install zou misschien kunnen werken.
+
+Ik heb de oude files gezet in ~/Downloads/Gergo_keyboard
+online: https://qmk.fm/
+daar heb ik geupload: noobmonkey.json
+en op compile gedrukt.
+Daarna download Full source gesaved op ~/Downloads/qmk_firmware-gergo-noobmonkey.zip
+en download Firmware gesaved op: ~/Downloads/gergo_noobmonkey.hex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #### dwm
  ______        ____  __

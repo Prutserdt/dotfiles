@@ -5,58 +5,39 @@
 # _| |_) | (_| \__ \ | | | | | (__ 
 #(_)_.__/ \__,_|___/_| |_|_|  \___|
 #             Modified by Prutserdt
-
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
+[[ $- != *i* ]] && return           # If not running interactively, don't do anything
 PS1='[\u@\h \W]\$ '
-
-# Display arch logo (asci art) and additional info in terminal
-pfetch
-
-# Change the size of the bash history to 5000 in memory (500 is default) 
-# and the total amount of maximally saved lines
-HISTSIZE=5000
-HISTFILESIZE=10000
-# Do not add duplicate entries and no spaces; erase duplicates
-HISTCONTROL=ignoredups:erasedups
+pfetch                              # Display arch logo (asci art) and additional info in terminal
+HISTSIZE=5000                       # Make size of bash history 5000 (500= default) 
+HISTFILESIZE=10000                  # and the total amount of maximally saved lines
+HISTCONTROL=ignoredups:erasedups    # Do not add duplicate entries and no spaces
 shopt -s histappend
 PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
-
 ###########################
 #        Alias list       #
 ###########################
-# Helpfile to show all of the aliases if this .bashrc in shell
 alias ?="c && echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc && 
 echo --------------------------------------------------- &&
 grep -e alias*=* ~/.bashrc | grep -v '#'| sed -e 's/\<alias\>//g'
 echo ---------------------------------------------------"
-# Colored output when possible
-alias ls='ls --color=auto'
+alias ls='ls --color=auto'          # Colored output when possible
 alias diff="diff --color=auto"
-# Lazy man's ls
-alias l='ls -al'
-# Exiting quickly
-alias q="exit"
-# Clear screen quickly
-alias c="clear"
-# Clear screen and show content
-alias cls="clear;ls"
-# Clear screen and show content
-alias cl="clear;l"
-# Fuzzy find history
-alias h="history | fzf"
-# History executable. https://superuser.com/questions/7414/how-can-i-search-the-bash-history-and-rerun-a-command
-alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)'
-# Fuzzy find in the most recent i3_log file 
-alias fzlog='fzf < ~/i3_log/"$(ls -Art ~/i3_log | tail -n1)"'
-# sxiv shortcut: open thumbnail mode in current directory and show jpeg, jpg,
-# gif, and png files. Sort by name and give output if files are selected (m).
-# alias s="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv * -fbto"
+alias l='ls -al'                    # Lazy man's ls
+alias q="exit"                      #  Exiting quickly
+alias c="clear"                     # Clear screen quickly
+alias cls="clear;ls"                # Clear screen and show content
+alias cl="clear;l"                  # Clear screen and show content
+alias h="history | fzf"             # Fuzzy find history
+alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # History executable
+alias fzlog='fzf < ~/i3_log/"$(ls -Art ~/i3_log | tail -n1)"' # Fuzzy find in the most recent i3_log file 
+# sxiv: thumbnail mode current directory. Sort by name and give output if files are selected (m).
 alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | sxiv -ftio"
-# Including underlaying subdirectories
+# sxiv: including underlaying subdirectories
 alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv -ftio"
-# Jump to direcotories
+alias dotfiles='~/.config/dotfiles.sh'                                  # Dotfiles repository Github
+alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github simpification
+alias k='xmodmap ~/.config/kbswitch && xset r rate 300 80'              # Change modkeys, Caps/Esc and fast key repeats
+# Jump to directories
 alias da="cd ~/Stack/Afbeeldingen && pwd"
 alias daw="cd ~/Stack/Afbeeldingen/Wallpapers && pwd"
 alias dav="cd ~/Stack/Afbeeldingen/Vakantie && pwd"
@@ -76,85 +57,33 @@ alias dsu="cd ~/suckless/surf && pwd"
 alias dssu="cd ~/Stack/suckless/surf && pwd"
 alias ddm="cd ~/suckless/dmenu && pwd"
 alias dsdm="cd ~/Stack/suckless/dmenu && pwd"
-# Dotfiles repository.
-# Starts with a status check and after that gives some options to push/pull.
-alias dotfiles='~/.config/dotfiles.sh'
-# OLD
-# config: simplifying communication with GIT
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-# Reset keyboard modkeys and swap Caps/Esc, plus blazingly fast key repeats.
-# After hotswapping keyboards the settings can be restored by this alias.
-alias k='xmodmap ~/.config/kbswitch && xset r rate 300 80'
-
 ###########################
 #           dwm           # 
 ###########################
 PATH="$HOME/bin:$PATH" # ~/bin was addet to path, makes locale install of dwm possible via .xinitrc.
-alias dwmbackup='~/.config/dwmbackup.sh'    # Make the current dwm the stable version
-alias dwmvanilla='~/.config/dwmvanilla.sh'  # Go back to vanilla dwm. DESTROYS CURRENT dwm!
-alias dwmstable='~/.config/dwmstable.sh'    # Go back to stable dwm. DESTROYS CURRENT dwm!
-alias dwmpatch='~/.config/dwmpatch.sh'      # Restore dwmstable and run the patch on it.
-
+alias dwmbackup='~/.config/dwmbackup.sh'        # Make the current dwm the stable version
+alias dwmvanilla='~/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTROYS CURRENT dwm!
+alias dwmstable='~/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
+alias dwmpatch='~/.config/dwmpatch.sh'          # Restore dwmstable and run the patch on it.
 ###########################
 #           st            # 
-###########################
-# requirement: PATH="$HOME/bin:$PATH"
-alias stbackup='~/.config/stbackup.sh'      # Make the current st the stable version
-alias stvanilla= '~/.config/stvanilla.sh'   # Go back to vanilla st. DESTROYS CURRENT st!
-alias ststable= '~/.config/ststable.sh'     # Go back to stable st. DESTROYS CURRENT st!
-alias stpatch= '~/.config/stpatch.sh'       # Restore ststable and run the patch on it.
-
-# Make the current st the stable version
-#alias stbackup="rm -r ~/Stack/suckless/st/st-0.8.3_stable && mkdir ~/Stack/suckless/st/st-0.8.3_stable && cp -r ~/suckless/st/* ~/Stack/suckless/st/st-0.8.3_stable"
-# Go back to vanilla st. DESTROYS CURRENT st!
-#alias stvanilla="rm -r ~/suckless/st && mkdir ~/suckless/st && cp -r ~/Stack/suckless/st/st-0.8.3_vanilla/* ~/suckless/st && cd ~/suckless/st && clear && ls -al"
-# Go back to stable st. DESTROYS CURRENT st!
-#alias ststable="rm -r ~/suckless/st && mkdir ~/suckless/st && cp -r ~/Stack/suckless/st/st-0.8.3_stable/* ~/suckless/st && cd ~/suckless/st && clear && ls -al"
-# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
-# 1: delete files in test directory: rm ~/Stack/dwm/patches/test/*  
-# 2: Place the diff file to be tested in the test directory: cp  ~/Stack/dwm/patches/example.diff ~/Stack/dwm/patches/test*
-# 3: Run the dwmpatch command to test the patch
-#alias stpatch="ststable && ls ~/Stack/suckless/st/patches/test/*.diff >> ~/suckless/st/log/diff_log && cp -r ~/suckless/st/config.h ~/suckless/st/config.def.h && rm ~/suckless/st/config.h && patch -p1 < ~/Stack/suckless/st/patches/test/*.diff && make clean install"
-
+########################### requirement: PATH="$HOME/bin:$PATH"
+alias stbackup='~/.config/stbackup.sh'          # Make the current st the stable version
+alias stvanilla='~/.config/stvanilla.sh'        # Restore to vanilla st
+alias ststable='~/.config/ststable.sh'          # Restore ststable
+alias stpatch='~/.config/stpatch.sh'            # Patch the stable version of st
+#alias stpatch= '~/.config/stpatch.sh'          # Restore ststable and run the patch on it.
 ###########################
 #           dmenu         # 
-###########################
-# requirement: PATH="$HOME/bin:$PATH" 
+########################### requirement: PATH="$HOME/bin:$PATH" 
 alias dmenubackup='~/.config/dmenubackup.sh'    # Make the current dmenu the stable version
-alias dmenuvanilla='~/.config/dmenuvanilla.sh'   # Go back to vanilla st. DESTROYS CURRENT dmenu!
+alias dmenuvanilla='~/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROYS CURRENT dmenu!
 alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
-alias dmenupatch='~/.config/dmenupatch.sh'     # 3: Run the dwmpatch command to test the patch
-
-# requirement: PATH="$HOME/bin:$PATH" 
-# Make the current dmenu the stable version
-#alias dmenubackup="rm -r ~/Stack/suckless/dmenu/dmenu-4.9_stable && mkdir ~/Stack/suckless/dmenu/dmenu-4.9_stable && cp -r ~/suckless/dmenu/* ~/Stack/suckless/dmenu/dmenu-4.9_stable"
-# Go back to vanilla st. DESTROYS CURRENT dmenu!
-#alias dmenuvanilla="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -r ~/Stack/suckless/dmenu/dmenu-4.9_vanilla/* ~/suckless/dmenu && cd ~/suckless/dmenu && clear && ls -al"
-# Go back to stable dmenu. DESTROYS CURRENT dmenu!
-#alias dmenustable="rm -r ~/suckless/dmenu && mkdir ~/suckless/dmenu && cp -r ~/Stack/suckless/dmenu/dmenu-4.9_stable/* ~/suckless/dmenu && cd ~/suckless/dmenu && clear && ls -al"
-# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
-# 1: delete files in test directory: rm ~/Stack/dwm/patches/test/*  
-# 2: Place the diff file to be tested in the test directory: cp  ~/Stack/dwm/patches/example.diff ~/Stack/dwm/patches/test*
-# 3: Run the dwmpatch command to test the patch
-#alias dmenupatch="dmenustable && ls ~/Stack/suckless/dmenu/patches/test/*.diff >> ~/suckless/dmenu/log/diff_log && cp -r ~/suckless/dmenu/config.h ~/suckless/dmenu/config.def.h && rm ~/suckless/dmenu/config.h && patch -p1 < ~/Stack/suckless/dmenu/patches/test/*.diff && make clean install"
-
+alias dmenupatch='~/.config/dmenupatch.sh'      # 3: Run the dwmpatch command to test the patch
 ###########################
 #           surf          # 
-###########################
-# requirement: PATH="$HOME/bin:$PATH"
-alias surfbackup='~/.config/surfbackup.sh'   # Make the current surf the stable version
-alias surfvanilla='~/.config/surfvanilla.sh' # Go back to vanilla st. DESTROYS CURRENT surf!
-alias surfstable='~/.config/surfstable.sh'   # Go back to stable surf. DESTROYS CURRENT surf!
-alias surfpatch='~/.config/surfpatch.sh'     # 3: Run the dwmpatch command to test the patch
-
-# Make the current surf the stable version
-#alias surfbackup="rm -r ~/Stack/suckless/surf/surf-2.0_stable && mkdir ~/Stack/suckless/surf/surf-2.0_stable && cp -r ~/suckless/surf/* ~/Stack/suckless/surf/surf-2.0_stable"
-# Go back to vanilla st. DESTROYS CURRENT surf!
-#alias surfvanilla="rm -r ~/suckless/surf && mkdir ~/suckless/surf && cp -r ~/Stack/suckless/surf/surf-2.0_vanilla/* ~/suckless/surf && cd ~/suckless/surf && clear && ls -al"
-# Go back to stable surf. DESTROYS CURRENT surf!
-#alias surfstable="rm -r ~/suckless/surf && mkdir ~/suckless/surf && cp -r ~/Stack/suckless/surf/surf-2.0_stable/* ~/suckless/surf && cd ~/suckless/surf && clear && ls -al"
-# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
-# 1: delete files in test directory: rm ~/Stack/suckless/surf/patches/test/*  
-# 2: Place the diff file to be tested in the test directory: cp ~/Stack/suckless/surf/patches/example.diff ~/Stack/dwm/patches/test*
-# 3: Run the dwmpatch command to test the patch
-#alias surfpatch="surfstable && ls ~/Stack/suckless/surf/patches/test/*.diff >> ~/suckless/surf/log/diff_log && cp -r ~/suckless/surf/config.h ~/suckless/surf/config.def.h && rm ~/suckless/surf/config.h && patch -p1 < ~/Stack/suckless/surf/patches/test/*.diff && make clean install"
+########################### requirement: PATH="$HOME/bin:$PATH"
+alias surfbackup='~/.config/surfbackup.sh'      # Make the current surf the stable version
+alias surfvanilla='~/.config/surfvanilla.sh'    # Go back to vanilla st. DESTROYS CURRENT surf!
+alias surfstable='~/.config/surfstable.sh'      # Go back to stable surf. DESTROYS CURRENT surf!
+alias surfpatch='~/.config/surfpatch.sh'        # 3: Run the dwmpatch command to test the patch

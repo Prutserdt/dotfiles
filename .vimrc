@@ -104,7 +104,10 @@ inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set clipboard=unnamedplus " Sets default clipboard to the system clipboard (requires gvim/nvim/vim-x11 installed)
-vnoremap <C-c> "+y
+set clipboard^=unnamed,unnamedplus "set clipboard to system clipboard (required gvim) AND primary selection!
+"set clipboard=unnamedplus " Sets default clipboard to the system clipboard (requires gvim/nvim/vim-x11 installed)
+
+vnoremap <C-c> "*y :let @+=@*<CR> 
+"CTRL-C puts selection in clipboard
 map <C-p> "+P
 syntax enable             " Enables syntax highlighting. An alternative to 'syntax on'

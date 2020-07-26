@@ -6,32 +6,15 @@
 #  \ \/ / | '_ \| | __| '__/ __|
 # _ >  <| | | | | | |_| | | (__ 
 #(_)_/\_\_|_| |_|_|\__|_|  \___|
-#                               
-# Modified by Prutserdt
+#          Modified by Prutserdt
 # Executed by startx. 
 #
-xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3
-
-
-#Toegevoegd 10JUL20 om Xresources te laten
+xmodmap ~/.Xmodmap &    # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
-
-# Move around quicker (increase keyboard rate)
-xset r rate 300 80
-
-# Menu bar
-~/.config/dwmbar.sh &
-# Switch numlock on
-numlockx &
-# Set wallpaper
-wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg &
-# Start picom, for transparancy
-picom -b
-# Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
-exec dwm
-# if dwm exits 0, restart -- this allows hot reloading of config.h
-# ()Ctrl-Super-Shift-Q to restart in place)
-while type dwm >/dev/null ; do dwm && continue || break ; done
-
-# Uncomment the next line to start i3wm and writes in the log:
-# exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
+xset r rate 300 80      # Move around quicker (increase keyboard rate)
+~/.config/dwmbar.sh &   # Menu bar
+numlockx &              # Switch numlock on
+wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg & # Set wallpaper
+picom -b                # Start picom, for transparancy
+exec dwm                # Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
+while type dwm >/dev/null ; do dwm && continue || break ; done # to restart in place

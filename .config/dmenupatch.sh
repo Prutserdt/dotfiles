@@ -25,7 +25,6 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     cp -r ~/Stack/suckless/dmenu/dmenu-4.9_stable/* ~/suckless/dmenu &&
     cd ~/suckless/dmenu &&
     clear && ls -al
-    dmenustable && 
     ls ~/Stack/suckless/dmenu/patches/test/*.diff >> ~/suckless/dmenu/log/diff_log &&
     cp -r ~/suckless/dmenu/config.h ~/suckless/dmenu/config.def.h &&
     rm ~/suckless/dmenu/config.h &&
