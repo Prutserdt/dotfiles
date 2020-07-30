@@ -22,22 +22,24 @@ static const char normbordercol[]   = "#111111";                // Color of not 
 static const char normfgcol[]       = "#555555";                // Color of menubar text color not selected
 static const char selfgcol[]        = "#8ec07c";                // Color of selected foreground
 
-static const char *colors[][3]      = {
-   //name             fg         bg      border
+static const char *colors[][3]      =
+{
+    //name           fg         bg      border
 	[SchemeNorm] = { normfgcol, black,  normbordercol },
 	[SchemeSel]  = { selfgcol,  black,  selfgcol },      
 };
 
-typedef struct {
+typedef struct 
+{
 	const char *name;
 	const void *cmd;
 } Sp;
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
-//const char *spcmd2[] = {"st", "-n", "spfm", "-g", "144x41", "-e", "ranger", NULL };
 const char *spcmd2[] = {"st", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
-const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "58x40", "-e", "deepin-calculator", NULL };
+const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
 const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
-static Sp scratchpads[] = {
+static Sp scratchpads[] = 
+{
     //name          cmd         Scratchpads, to show/hide apps in floating mode
 	{"spterm",      spcmd1}, // terminal
 	{"spvifm",      spcmd2}, // vifm
@@ -48,8 +50,9 @@ static Sp scratchpads[] = {
 // Tagging
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }; /* Nine tags available */
 
-static const Rule rules[] = {
-// xprop(1): WM_CLASS(STRING) = instance, class,  WM_NAME(STRING) = title
+static const Rule rules[] =
+{
+    // xprop(1): WM_CLASS(STRING) = instance, class,  WM_NAME(STRING) = title
     //class       instance    title       tags mask     isfloating   isterminal noswallow monitor      comment
 	{ "Gimp",     NULL,       NULL,       0,            1,           0,         0,        -1 },     // Gimp: floating 
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,         0,        -1 },     // Firefox: on tag 1
@@ -62,13 +65,14 @@ static const Rule rules[] = {
 };
 
 // Layout(s)
-static const float mfact     = 0.5; // factor of master area size [0.05..0.95]
-static const int nmaster     = 1;   // number of clients in master area
-static const int resizehints = 0;   // 1 means respect size hints in tiled resizals
+static const float mfact     = 0.5;         // factor of master area size [0.05..0.95]
+static const int nmaster     = 1;           // number of clients in master area
+static const int resizehints = 0;           // 1 means respect size hints in tiled resizals
 
 #include "layouts.c"
 #include "vanitygaps.c"
-static const Layout layouts[] = {
+static const Layout layouts[] =
+{
 	// symbol     arrange function             comments
 	{ "|M|",      centeredmaster },         // First one is default layout. Masters horizontally in middle, slaves on sides horizontally
 	{ "[]=",      tile },                   // Tile layout. Master left horizontally, slaves right horizontally
@@ -81,9 +85,9 @@ static const Layout layouts[] = {
 };
 
 // Key definitions
-#define MODKEY Mod4Mask     // Left Superkey : MODKEY
-#define MENUFILE Mod5Mask   // Right Superkey: open applications
-#define MENUKEY Mod3Mask    // Right Alt key : open text files in VIM
+#define MODKEY Mod4Mask                     // Left Superkey : MODKEY
+#define MENUFILE Mod5Mask                   // Right Superkey: open applications
+#define MENUKEY Mod3Mask                    // Right Alt key : open text files in VIM
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -94,14 +98,15 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 #include <X11/XF86keysym.h>
-static Key keys[] = {
+static Key keys[] =
+{
 	// modifier                     key        function        argument                                                            comments
-// XF86XK keys
+    // XF86XK keys
     { 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+ & ~/.config/updatebar.sh") },    // Volume up. Update statusbar
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%- & ~/.config/updatebar.sh") },    // Volume down. Update statusbar
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle & ~/.config/updatebar.sh") }, // Toggle mute
-    { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter") },                                  // Print screen
-// Right alt key to open textfiles
+    { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter -r -s ~/Downloads") },                // Select by mouse what to print from screen
+    // Right alt key to open textfiles
 	{ MENUFILE,                     XK_a,      spawn,          SHCMD("st -e vim ~/.config/applications.md") },                  // txt: used application for my Arch linux build
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("st -e vim ~/.bashrc") },                                  // txt: .bashrc
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("st -e vim ~/Stack/Command_line/commands.md") },           // txt: personal notes and comments about Linux
@@ -118,7 +123,7 @@ static Key keys[] = {
 	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("st -e vim ~/.config/vifm/vifmrc") },                      // txt: vifm 'config' file
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 // txt: .xinitrc
 	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              // txt: .Xresources
-// Right super key to open applications
+    // Right super as application mod key
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // Application: dmenu
     { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              // Application: Firefox
     { MENUKEY,                      XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // Application: Firefox
@@ -132,7 +137,7 @@ static Key keys[] = {
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            // Application: Insert emojis
 	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           // Application: vifm
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          // Application: Change wallpaper by dmenu
-// Left super as modkey 
+    // Left super as modkey 
 	{ MODKEY,                       XK_b,      togglebar,      {0} },                                                           // Toggle the visibility of the bar
 	{ MODKEY,                       XK_Return, spawn,	       SHCMD("st") },                                                   // Open terminal
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },                                                    // Select another window, direction: up the stack
@@ -171,12 +176,12 @@ static Key keys[] = {
 	{ MODKEY,                       XK_equal,  incrgaps,       {.i = +2 } },                                                    // Vanity gaps: increase gaps
     { MODKEY,                       XK_minus,  incrgaps,       {.i = -2 } },                                                    // Vanity gaps: decrease gaps
 	{ MODKEY,                       XK_0,      togglegaps,     {0} },                                                           // Vanity gaps: toggle gaps on/of
-// under construction: scratchpad functionality
+    // scratchpads
     { MODKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    // Open st in scratchpad
 	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad
-    { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // open calculator
-	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // exit dwm with y/n options, in a small centered floating window
-// Tagkeys
+    { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator
+	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window
+    // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -189,7 +194,8 @@ static Key keys[] = {
 };
 
 // Button definitions, for instance: ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, ClkRootWin
-static Button buttons[] = {
+static Button buttons[] = 
+{
     //click                 event mask      button          function        argument                comments
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },                  //
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },   //

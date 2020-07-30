@@ -8,6 +8,7 @@
 [[ $- != *i* ]] && return           # If not running interactively, don't do anything
 PS1='[\u@\h \W]\$ '
 pfetch                              # Display arch logo (asci art) and additional info in terminal
+cowthink $(fortune)                 # Let the cow quote! (requires conwsay and fortune-mod)
 HISTSIZE=5000                       # Make size of bash history 5000 (500= default) 
 HISTFILESIZE=10000                  # and the total amount of maximally saved lines
 HISTCONTROL=ignoredups:erasedups    # Do not add duplicate entries and no spaces
@@ -18,7 +19,7 @@ PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 ###########################
 alias ?="c && echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc && 
 echo --------------------------------------------------- &&
-grep -e alias*=* ~/.bashrc | grep -v '#'| sed -e 's/\<alias\>//g'
+grep -e alias*=* ~/.bashrc | sed -e 's/\<alias\>//g'
 echo ---------------------------------------------------"
 alias ls='ls --color=auto'          # Colored output when possible
 alias diff="diff --color=auto"
@@ -64,7 +65,7 @@ PATH="$HOME/bin:$PATH" # ~/bin was addet to path, makes locale install of dwm po
 alias dwmbackup='~/.config/dwmbackup.sh'        # Make the current dwm the stable version
 alias dwmvanilla='~/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTROYS CURRENT dwm!
 alias dwmstable='~/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
-alias dwmpatch='~/.config/dwmpatch.sh'          # Restore dwmstable and run the patch on it.
+alias dwmpatch='~/.config/dwmpatch.sh'          # Restore dwmstable and run the patch on it
 ###########################
 #           st            # 
 ########################### requirement: PATH="$HOME/bin:$PATH"
@@ -72,7 +73,6 @@ alias stbackup='~/.config/stbackup.sh'          # Make the current st the stable
 alias stvanilla='~/.config/stvanilla.sh'        # Restore to vanilla st
 alias ststable='~/.config/ststable.sh'          # Restore ststable
 alias stpatch='~/.config/stpatch.sh'            # Patch the stable version of st
-#alias stpatch= '~/.config/stpatch.sh'          # Restore ststable and run the patch on it.
 ###########################
 #           dmenu         # 
 ########################### requirement: PATH="$HOME/bin:$PATH" 

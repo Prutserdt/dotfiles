@@ -5,12 +5,10 @@
 # / _` |/ _ \| __| |_| | |/ _ \/ __| / __| '_ \ 
 #| (_| | (_) | |_|  _| | |  __/\__ \_\__ \ | | |
 # \__,_|\___/ \__|_| |_|_|\___||___(_)___/_| |_|
-#                                               
-# Created by Prutserdt
+#                           Created by Prutserdt
 #
-# This script checks the status of the dotfiles on this 
-# computer compared to the GitHub repo. 
-# After that it gives options to continue. 
+# This silly script checks the status of the dotfiles on this 
+# computer compared to the bare GitHub repo and gives options. 
 # 
 # This shell can be called from the alias "dotfiles" in .bashrc
 

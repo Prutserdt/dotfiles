@@ -76,7 +76,10 @@ which firefox
 erdoor lopen.
 less longfile.txt
 cat /etc/fstab |less
-     
+
+Vind router adres, bijv 1923169.2.245, router adres, internet:
+ip link show
+
 **more** command. Een ander manier om grote files te laten zien
 
     more longfile.txt
@@ -333,6 +336,24 @@ Vind de code van keys van keyboard (toetsenbord): `xev`.
 Zet de key repeat snelheid hoger, increase key repeat rate,
 modify .xinitrc:
 xset r rate 300 80
+
+#### Converteren van pdf naar een tekstfile en verwijderen van bagger en
+veranderen van komma naar punt. 
+Vier stappen: 
+1: Via command line utililty poppler (pdftotext)
+2: maak subdir, verplaats txt files en ga naar subdir
+3: Alleen de regels 'br' (afkorting voor bar) wegschrijven.
+4: Verwijder overtollige spaties (meer dan 1)
+5: Verander komma's naar punten
+
+    for file in *.pdf; do pdftotext -layout "$file"; done
+    mkdir test && mv *.txt test && cd test
+    for file in *; do grep br "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done
+    for file in *; do cat "$file"| tr -s ' ' > "$file"_tmp && mv "$file"_tmp "$file"; done
+    for file in *; do sed 's/,/./g' "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done
+
+sed 's/,/./g' '
+
 
 #### Rechten bestanden
      
@@ -1767,6 +1788,8 @@ done
 Als je nu in SXIV een image als achtergrond wilt instellen klik je op
 CTRL-x (voor key handler mode) en CTRL-w. :-).
 
+play animated gif: CTRL+space 
+a
 #### Neomutt
 Text based email client
 Installation 18JUN20, alleen neomutt geinstalleerd en ~/.mutt/muttrc
@@ -2799,6 +2822,29 @@ noto-fonts-emoji
 ttf-joypixel
 ttf-symbola (geeft de eenvoudige monochrome fonts, niet installeren!)
 Na de-installeren symbola zie ik emojis in dmenu!
+
+26JUL20: emojis zijn al een tijd niet meer zichtbaar. Onduidelijk waarom....
+ttf-symbola is niet geinstalleerd, zoals ik dacht dat het moest.
+Ik heb vervolgens de volgende fonts geinstalleerd want ik wil ook emojis in st
+terminal: https://github.com/LukeSmithxyz/voidrice/issues/284
+ttf-symbola
+Nu werkt dmenu unicode veel sneller, maar het is nog steeds niet in full color.
+ttf-linux-libertine
+Geen verschil na deze install
+ttf-inconsolata 
+Deze had ik al geinstalleerd
+ttf-emojione
+Helaas is het nog steeds monochrome.
+Ik heb vervolgens in dmenu de font veranderd naar monochrome: geen verandering:
+geen colored emojis.
+Vervolgens de font in dwm op monospace gezet, maar helaas nog steeds geen
+colored emojis....
+Ik heb monospace als font gezet in : ~/.config/dmenuunicode.sh en ook het font
+verwijderd, waarbij de default dmenu wordt gebruikt, maar....
+Helaas, dit werkt ook niet.
+Hierna heb ik dwm en dmenu weer hack als font gezet (en unicode zonder font
+select, dus default dmenu font wat nu hack is)
+
 
 #### st
      _   

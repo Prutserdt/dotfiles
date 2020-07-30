@@ -13,43 +13,43 @@ Check the config.h file for my key bindings. Super_R and Alt_R buttons are set
 by .Xmodmap.
 
 My builds are made in my home directory (~/suckless/dwm). 
-Go to that directory and enter as normal user:
+Place the files of this dwm build in that directory and enter as normal user:
 make clean install
 
 Make a symlink to ~/bin
 'ln -s -v ~/suckless/dwm/dwm ~/bin/dwm'
 
+-----------
 Running dwm
 -----------
-Add the following lines to your .xinitrc:
+Add the following lines to your ~/.xinitrc:
 
-# Menu bar
-~/.config/dwmbar.sh &
-# Start picom, for transparancy
-picom -b
-# Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
-exec dwm
-# if dwm exits 0, restart -- this allows hot reloading of config.h
-# aka: Ctrl-Super-Shift-Q to restart in place.
-while type dwm >/dev/null ; do dwm && continue || break ; done
+    ~/.config/dwmbar.sh &   # Menu bar (see dotfiles repo: .config)
+    picom -b                # Start picom, for transparancy
+    exec dwm                # Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
+    while type dwm >/dev/null ; do dwm && continue || break ; done # to restart in place
 
-Run 'startx' from commandline.
+Now start dwm by running 'startx' from commandline.
 
+-----------
 dwm patching
 ------------
 1. Download a patch from suckless.org and place the patch at a set location 
    (~/Stack/suckless/dwm/patches/test)
 2. Run from command line the .bashrc alias: dwmpatch
-3. If the patch is usefull then safe as a stable version.
+3. If the patch is usefull then safe dwm as a stable version.
 
+-----------
 Safe as stable version
 ------------
 Run from command line the .bashrc alias: dwmbackup
 
+-----------
 Restore stable version
 ------------
 Run from command line the .bashrc alias: dwmstable
 
+-----------
 Run vanilla dwm
 ------------
 Run from command line the .bashrc alias: dwmvanilla
