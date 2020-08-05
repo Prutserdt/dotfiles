@@ -38,13 +38,15 @@ const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
 const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
 const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
-static Sp scratchpads[] = 
+const char *spcmd5[] = {"st", "-n", "spkeepass", "-g", "120x34", "-e", "keepass", NULL };
+static Sp scratchpads[] =
 {
     //name          cmd         Scratchpads, to show/hide apps in floating mode
 	{"spterm",      spcmd1}, // terminal
 	{"spvifm",      spcmd2}, // vifm
 	{"spcalc",      spcmd3}, // calculator
 	{"spexit",      spcmd4}, // exit dwm
+	{"spkeepass",   spcmd5}, // keepass
 };
 
 // Tagging
@@ -58,10 +60,12 @@ static const Rule rules[] =
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,         0,        -1 },     // Firefox: on tag 1
 	{ "st",       NULL,       NULL,       0,            0,           1,         1,        -1 },     // st: swallowing
     { "Steam",    NULL,       NULL,       0,            1,           0,         0,        -1 },     // Steam
+    { "keepass",  NULL,       NULL,       0,            1,           0,         0,        -1 },     // keepass, does not work, after login switching to tiling...
 	{ NULL,		  "spterm",   NULL,		  SPTAG(0),		1,			 1,         1,        -1 },     // st: as scratchpad
 	{ NULL,		  "spvifm",	  NULL,		  SPTAG(1),		1,			 1,         1,        -1 },     // vifm: as scratchpad 
 	{ NULL,		  "spcalc",	  NULL,		  SPTAG(2),		1,			 1,         1,        -1 },     // calculator: as scratchpad
 	{ NULL,		  "spexit",	  NULL,		  SPTAG(3),		1,			 1,         1,        -1 },     // exit dwm: as scratchpad
+	{ NULL,		  "spkeepass",NULL,		  SPTAG(4),		1,			 1,         1,        -1 },     // keepass: as scratchpad
 };
 
 // Layout(s)
@@ -116,8 +120,8 @@ static Key keys[] =
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("st -e vim ~/.config/i3/config") },                        // txt: i3 config file
 	{ MENUFILE,                     XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/urls") },                           // txt: newsboat urls file
 	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/config") },                         // txt: newsboat config file
-	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("st -e vim ~/README.md") },                                // txt: my github dotfiles README file
 	{ MENUFILE,                     XK_r,      spawn,          SHCMD("st -e vim ~/.config/ranger/rc.conf") },                   // txt: ranger config file
+	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("st -e vim ~/README.md") },                                // txt: my github dotfiles README file
 	{ MENUFILE,                     XK_s,      spawn,          SHCMD("st -e vim ~/suckless/st/config.h") },                     // txt: st 'config' file
 	{ MENUFILE,                     XK_v,      spawn,          SHCMD("st -e vim ~/.vimrc") },                                   // txt: vim 'config' file
 	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("st -e vim ~/.config/vifm/vifmrc") },                      // txt: vifm 'config' file
@@ -125,15 +129,14 @@ static Key keys[] =
 	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              // txt: .Xresources
     // Right super as application mod key
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // Application: dmenu
-    { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              // Application: Firefox
     { MENUKEY,                      XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // Application: Firefox
+    { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              // Application: Firefox
 	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 // Application: gimp
-	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              // Application: keepass
 	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             // Application: mousepad
 	{ MENUKEY,                      XK_n,      spawn,          SHCMD("st -e newsboat") },                                       // Application: newsboat, open in st
     { MENUKEY,                      XK_s,      spawn,          SHCMD("~/.config/dmenusurf.sh") },                               // Application: surf
-	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               // Application: thunar
 	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             // Application: thunar
+	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               // Application: thunar
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            // Application: Insert emojis
 	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           // Application: vifm
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          // Application: Change wallpaper by dmenu
@@ -181,6 +184,8 @@ static Key keys[] =
 	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad
     { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator
 	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window
+	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Exit dwm with y/n options, in a small centered floating window
+//	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              // Application: keepass
     // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)

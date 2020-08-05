@@ -2590,36 +2590,20 @@ en op compile gedrukt.
 Daarna download Full source gesaved op ~/Downloads/qmk_firmware-gergo-noobmonkey.zip
 en download Firmware gesaved op: ~/Downloads/gergo_noobmonkey.hex
 
+#### Ik wil een ergodox EZ lopen.
+1.) Add arrow keys to hjkl on Layer 2. You won't have to bring your hand down to the bottom keys to use arrows. Instead, with your pinky you hold semicolon down and use hjkl (index for hj)
 
+2.) Now you freed up the (Up) arrow key (at 4:27)  at the right hand bottom where the column 7 is. Make that a Layer 1 key. Now use your thumb to hold down layer 1 and you're free to type numbers. Change 0 and put it where asterisk is (at 4:39) on layer 1. This felt the most comfortable since it's easy to slide your pinky to the 0.
 
+3.) Since typing numbers is better with the keypad and I'm a vim user, flip all numbers at the top so they are shifted, therefore you don't have to press shift to get !@#$%^&*
 
+4.) The 3 brackets sets on ERDFCV are great, but take the right arrow key (at 4:27) and make that the Layer 1 switch. This way you can use your thumb. It's way more comfortable and you avoid RSI with your pinky.
 
+5.) Put Delete (at 4:27) and put it anywhere else, and put Esc there. That's in my opinion, the optimal position for anyone who uses the terminal/vim, since it's a similar motion that you're probably used to.
 
+6.) For #2 and #4 to be comfortable, since you're using your thumbs, search around the corners of the ergodox for a key that is angled steeply and that you probably won't use much. Put them on these new layer activation keys at an angle that conforms to your thumb better. It's weird using your thumbs to hold down modifiers at first but once you get used to, man it's great.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+I have a few more suggestions regarding super, alt, and shift but I'll leave it at that for now. Hope this helps.
 
 #### dwm
  ______        ____  __
