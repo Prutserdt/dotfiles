@@ -10,7 +10,7 @@
 static const unsigned int borderpx  = 2;                        // Border pixel of windows
 static const unsigned int snap      = 32;                       // Snap pixel
 static const unsigned int gappih    = 60;                       // Horiz inner gap between windows
-static const unsigned int gappiv    = 60;                       //Vert inner gap between windows
+static const unsigned int gappiv    = 60;                       // Vert inner gap between windows
 static const unsigned int gappoh    = 50;                       // Horiz outer gap between windows and screen edge
 static const unsigned int gappov    = 50;                       // Vert outer gap between windows and screen edge
 static const int smartgaps          = 1;                        // 1 means no outer gap when there is only one window
@@ -18,15 +18,14 @@ static const int showbar            = 1;                        // 0 means no ba
 static const int topbar             = 1;                        // 0 means bottom bar
 static const char *fonts[]          = { "hack:size=9" };        // Font of statusbar
 static const char black[]           = "#000000";                // Color of background
-static const char normbordercol[]   = "#111111";                // Color of not selected borders
-static const char normfgcol[]       = "#555555";                // Color of menubar text color not selected
-static const char selfgcol[]        = "#8ec07c";                // Color of selected foreground
-
+static const char dark_gray[]       = "#111111";                // Color of not selected borders
+static const char gray[]            = "#555555";                // Color of (not selected) menubar text
+static const char green[]           = "#8ec07c";                // Gruvbox color: slightly desaturaded green
 static const char *colors[][3]      =
 {
-    //name           fg         bg      border
-	[SchemeNorm] = { normfgcol, black,  normbordercol },
-	[SchemeSel]  = { selfgcol,  black,  selfgcol },      
+    //name           fg     bg      border
+	[SchemeNorm] = { gray,  black,  dark_gray},
+	[SchemeSel]  = { green, black,  green},      
 };
 
 typedef struct 
@@ -56,11 +55,11 @@ static const Rule rules[] =
 {
     // xprop(1): WM_CLASS(STRING) = instance, class,  WM_NAME(STRING) = title
     //class       instance    title       tags mask     isfloating   isterminal noswallow monitor      comment
-	{ "Gimp",     NULL,       NULL,       0,            1,           0,         0,        -1 },     // Gimp: floating 
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,         0,        -1 },     // Firefox: on tag 1
+	{ "Gimp",     NULL,       NULL,       0,            1,           0,         0,        -1 },     // gimp, floating 
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,         0,        -1 },     // firefox: on tag 1
 	{ "st",       NULL,       NULL,       0,            0,           1,         1,        -1 },     // st: swallowing
-    { "Steam",    NULL,       NULL,       0,            1,           0,         0,        -1 },     // Steam
-    { "keepass",  NULL,       NULL,       0,            1,           0,         0,        -1 },     // keepass, does not work, after login switching to tiling...
+    { "Steam",    NULL,       NULL,       0,            1,           0,         0,        -1 },     // steam
+    { "keepass",  NULL,       NULL,       0,            1,           0,         0,        -1 },     // keepass, floating
 	{ NULL,		  "spterm",   NULL,		  SPTAG(0),		1,			 1,         1,        -1 },     // st: as scratchpad
 	{ NULL,		  "spvifm",	  NULL,		  SPTAG(1),		1,			 1,         1,        -1 },     // vifm: as scratchpad 
 	{ NULL,		  "spcalc",	  NULL,		  SPTAG(2),		1,			 1,         1,        -1 },     // calculator: as scratchpad
@@ -110,37 +109,37 @@ static Key keys[] =
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%- & ~/.config/updatebar.sh") },    // Volume down. Update statusbar
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle & ~/.config/updatebar.sh") }, // Toggle mute
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter -r -s ~/Downloads") },                // Select by mouse what to print from screen
-    // Right alt key to open textfiles
-	{ MENUFILE,                     XK_a,      spawn,          SHCMD("st -e vim ~/.config/applications.md") },                  // txt: used application for my Arch linux build
-	{ MENUFILE,                     XK_b,      spawn,          SHCMD("st -e vim ~/.bashrc") },                                  // txt: .bashrc
-	{ MENUFILE,                     XK_c,      spawn,          SHCMD("st -e vim ~/Stack/Command_line/commands.md") },           // txt: personal notes and comments about Linux
-	{ MENUFILE,                     XK_d,      spawn,          SHCMD("st -e vim ~/suckless/dwm/config.h") },                    // txt: dwm config file
-	{ MENUFILE,                     XK_f,      spawn,          SHCMD("st -e vim ~/.config/urls") },                             // txt: firefox url list, used in dmenuinternet.sh
-	{ MENUFILE|ShiftMask,           XK_f,      spawn,          SHCMD("st -e vim ~/.config/dmenuinternet.sh") },                 // txt: dmenu to open url list in firefox
-	{ MENUFILE,                     XK_i,      spawn,          SHCMD("st -e vim ~/.config/i3/config") },                        // txt: i3 config file
-	{ MENUFILE,                     XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/urls") },                           // txt: newsboat urls file
-	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/config") },                         // txt: newsboat config file
-	{ MENUFILE,                     XK_r,      spawn,          SHCMD("st -e vim ~/.config/ranger/rc.conf") },                   // txt: ranger config file
-	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("st -e vim ~/README.md") },                                // txt: my github dotfiles README file
-	{ MENUFILE,                     XK_s,      spawn,          SHCMD("st -e vim ~/suckless/st/config.h") },                     // txt: st 'config' file
-	{ MENUFILE,                     XK_v,      spawn,          SHCMD("st -e vim ~/.vimrc") },                                   // txt: vim 'config' file
-	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("st -e vim ~/.config/vifm/vifmrc") },                      // txt: vifm 'config' file
-	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 // txt: .xinitrc
-	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              // txt: .Xresources
-    // Right super as application mod key
-	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // Application: dmenu
-    { MENUKEY,                      XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // Application: Firefox
-    { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              // Application: Firefox
-	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 // Application: gimp
-	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             // Application: mousepad
-	{ MENUKEY,                      XK_n,      spawn,          SHCMD("st -e newsboat") },                                       // Application: newsboat, open in st
-    { MENUKEY,                      XK_s,      spawn,          SHCMD("~/.config/dmenusurf.sh") },                               // Application: surf
-	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             // Application: thunar
-	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               // Application: thunar
-	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            // Application: Insert emojis
-	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           // Application: vifm
-	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          // Application: Change wallpaper by dmenu
-    // Left super as modkey 
+    // Right alt key to open textfiles                                                                                             Open textfile in vim:
+	{ MENUFILE,                     XK_a,      spawn,          SHCMD("st -e vim ~/.config/applications.md") },                  // used application for my Arch linux build
+	{ MENUFILE,                     XK_b,      spawn,          SHCMD("st -e vim ~/.bashrc") },                                  // .bashrc
+	{ MENUFILE,                     XK_c,      spawn,          SHCMD("st -e vim ~/Stack/Command_line/commands.md") },           // personal notes and comments about Linux
+	{ MENUFILE,                     XK_d,      spawn,          SHCMD("st -e vim ~/suckless/dwm/config.h") },                    // dwm config file
+	{ MENUFILE,                     XK_f,      spawn,          SHCMD("st -e vim ~/.config/urls") },                             // firefox url list, used in dmenuinternet.sh
+	{ MENUFILE|ShiftMask,           XK_f,      spawn,          SHCMD("st -e vim ~/.config/dmenuinternet.sh") },                 // dmenu to open url list in firefox
+	{ MENUFILE,                     XK_i,      spawn,          SHCMD("st -e vim ~/.config/i3/config") },                        // i3 config file
+	{ MENUFILE,                     XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/urls") },                           // newsboat urls file
+	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/config") },                         // newsboat config file
+	{ MENUFILE,                     XK_r,      spawn,          SHCMD("st -e vim ~/.config/ranger/rc.conf") },                   // ranger config file
+	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("st -e vim ~/README.md") },                                // my github dotfiles README file
+	{ MENUFILE,                     XK_s,      spawn,          SHCMD("st -e vim ~/suckless/st/config.h") },                     // st 'config' file
+	{ MENUFILE,                     XK_v,      spawn,          SHCMD("st -e vim ~/.vimrc") },                                   // vim 'config' file
+	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("st -e vim ~/.config/vifm/vifmrc") },                      // vifm 'config' file
+	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 // .xinitrc
+	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              // .Xresources
+    // Right super as application modkey                                                                                           Open application:
+	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // dmenu
+    { MENUKEY,                      XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // dmenuinternet
+    { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              // Firefox
+	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 // gimp
+	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             // mousepad
+	{ MENUKEY,                      XK_n,      spawn,          SHCMD("st -e newsboat") },                                       // newsboat, open in st
+    { MENUKEY,                      XK_s,      spawn,          SHCMD("~/.config/dmenusurf.sh") },                               // surf
+	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             // thunar
+	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               // thunar
+	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            // Insert emojis
+	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           // vifm
+	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          // Change wallpaper by dmenu
+    // Left super as modkey                                                                                                        dwm related (modkey):
 	{ MODKEY,                       XK_b,      togglebar,      {0} },                                                           // Toggle the visibility of the bar
 	{ MODKEY,                       XK_Return, spawn,	       SHCMD("st") },                                                   // Open terminal
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },                                                    // Select another window, direction: up the stack
@@ -179,13 +178,12 @@ static Key keys[] =
 	{ MODKEY,                       XK_equal,  incrgaps,       {.i = +2 } },                                                    // Vanity gaps: increase gaps
     { MODKEY,                       XK_minus,  incrgaps,       {.i = -2 } },                                                    // Vanity gaps: decrease gaps
 	{ MODKEY,                       XK_0,      togglegaps,     {0} },                                                           // Vanity gaps: toggle gaps on/of
-    // scratchpads
+    // scratchpads                                                                                                                 Scratchpads
     { MODKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    // Open st in scratchpad
 	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad
     { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator
 	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window
 	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Exit dwm with y/n options, in a small centered floating window
-//	{ MENUKEY,                      XK_k,      spawn,          SHCMD("keepass") },                                              // Application: keepass
     // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
@@ -201,15 +199,15 @@ static Key keys[] =
 // Button definitions, for instance: ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, ClkRootWin
 static Button buttons[] = 
 {
-    //click                 event mask      button          function        argument                comments
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },                  //
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },   //
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },                  //
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },                  //
-	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },                  //
-	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },                  //
-	{ ClkTagBar,            0,              Button1,        view,           {0} },                  //
-	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },                  //
-	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },                  //
-	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },                  //
+    //click                 event mask      button          function        argument
+	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
+	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+	{ ClkTagBar,            0,              Button1,        view,           {0} },
+	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
+	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
+	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
