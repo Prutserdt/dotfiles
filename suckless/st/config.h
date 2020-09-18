@@ -6,16 +6,22 @@
  * |____/ |_|   |_|   |_|   \__,_|\__|___/\___|_|  \__,_|\__|
  */
 
-/* appearance */
-static char *font = "Hack:pixelsize=13:antialias=true;autohint=true";
+/*
+ * appearance
+ *
+ * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
+ */
+static char *font = "Hack:pixelsize=13:antialias=true:autohint=true";
 static int borderpx = 2;
 
-/* What program is execed by st depends of these precedence rules:
+/*
+ * What program is execed by st depends of these precedence rules:
  * 1: program passed with -e
  * 2: scroll and/or utmp
  * 3: SHELL environment variable
  * 4: value of shell in /etc/passwd
- * 5: value of shell in config.h  */
+ * 5: value of shell in config.h
+ */
 static char *shell = "/bin/sh";
 char *utmp = NULL;
 /* scroll program: to enable use a string like "scroll" */
@@ -29,7 +35,11 @@ char *vtiden = "\033[?6c";
 static float cwscale = 1.0;
 static float chscale = 1.0;
 
-/* word delimiter string. More advanced example: L" `'\"()[]{}" */
+/*
+ * word delimiter string
+ *
+ * More advanced example: L" `'\"()[]{}"
+ */
 wchar_t *worddelimiters = L" ";
 
 /* selection timeouts (in milliseconds) */
@@ -39,30 +49,47 @@ static unsigned int tripleclicktimeout = 600;
 /* alt screens */
 int allowaltscreen = 1;
 
-/* frames per second st should at maximum draw to the screen */
-static unsigned int xfps = 120;
-static unsigned int actionfps = 30;
+/* allow certain non-interactive (insecure) window operations such as:
+   setting the clipboard text */
+int allowwindowops = 0;
 
-/* blinking timeout (set to 0 to disable blinking) for the terminal blinking
-   attribute. */
+/*
+ * draw latency range in ms - from new content/keypress/etc until drawing.
+ * within this range, st draws when content stops arriving (idle). mostly it's
+ * near minlatency, but it waits longer for slow updates to avoid partial draw.
+ * low minlatency will tear/flicker more, as it can "detect" idle too early.
+ */
+static double minlatency = 8;
+static double maxlatency = 33;
+
+/*
+ * blinking timeout (set to 0 to disable blinking) for the terminal blinking
+ * attribute.
+ */
 static unsigned int blinktimeout = 400;
 
-/* thickness of underline and bar cursors */
+/*
+ * thickness of underline and bar cursors
+ */
 static unsigned int cursorthickness = 2;
 
-/* bell volume. It must be a value between -100 and 100. Use 0 for disabling it */
+/*
+ * bell volume. It must be a value between -100 and 100. Use 0 for disabling
+ * it
+ */
 static int bellvolume = 0;
 
 /* default TERM value */
 char *termname = "st-256color";
 
-/* spaces per tab
+/*
+ * spaces per tab
  *
  * When you are changing this value, don't forget to adapt the »it« value in
  * the st.info and appropriately install the st.info in the environment where
  * you use this st version.
  *
- * it#$tabspaces,
+ *	it#$tabspaces,
  *
  * Secondly make sure your kernel is not expanding tabs. When running `stty
  * -a` »tab0« should appear. You can tell the terminal to not expand tabs by
@@ -73,51 +100,45 @@ char *termname = "st-256color";
 unsigned int tabspaces = 8;
 
 /* bg opacity */
-float alpha = 0.8;
+float alpha = 0.5;
 
 /* Terminal colors (16 first used in escape sequence) */
-/* orgineel voor wit: [7] = "#bbbbbb",  white   */
-
-//Gruvbox colorscheme
 static const char *colorname[] = {
-"#1d2021",
-"#cc241d",
-"#98971a",
-"#d79921",
-"#458588",
-"#b16286",
-"#689d6a",
-"#a89984",
-"#928374",
-"#fb4934",
-"#b8bb26",
-"#fabd2f",
-"#83a598",
-"#d3869b",
-"#8ec07c",
-"#ebdbb2",
-[255] = 0,
-/* more colors can be added after 255 to use with DefaultXX */
-//"#add8e6", /* 256 -> cursor */
-"#f79921", /* 256 -> cursor */
-"#555555", /* 257 -> rev cursor*/
-"#000000", /* 258 -> bg, pitch black background */
-"#ebdbb2", /* 259 -> fg */
+
+  /* 8 normal colors */
+//  [0] = "#282828", /* hard contrast: #1d2021 / soft contrast: #32302f */
+  [0] = "#1d2021", /* hard contrast: #1d2021 / soft contrast: #32302f */
+  [1] = "#cc241d", /* red     */
+  [2] = "#98971a", /* green   */
+  [3] = "#d79921", /* yellow  */
+  [4] = "#458588", /* blue    */
+  [5] = "#b16286", /* magenta */
+  [6] = "#689d6a", /* cyan    */
+  [7] = "#a89984", /* white   */
+
+  /* 8 bright colors */
+  [8]  = "#928374", /* black   */
+  [9]  = "#fb4934", /* red     */
+  [10] = "#b8bb26", /* green   */
+  [11] = "#fabd2f", /* yellow  */
+  [12] = "#83a598", /* blue    */
+  [13] = "#d3869b", /* magenta */
+  [14] = "#8ec07c", /* cyan    */
+  [15] = "#ebdbb2", /* white   */
+ "black" // added for the alpha patch
 };
+
 /*
  * Default colors (colorname index)
- * foreground, background, cursor, reverse cursor
+ * foreground, background, cursor
  */
-unsigned int defaultfg = 259;
-unsigned int defaultbg = 258;
-unsigned int defaultcs = 256;
-unsigned int defaultrcs = 257;
+unsigned int defaultfg = 15;
+// unsigned int defaultbg = 0; // removed for alpha patch
+unsigned int defaultbg = 258; // added for alpha patch
 
-/* Colors used, when the specific fg == defaultfg. So in reverse mode this
- * will reverse too. Another logic would only make the simple feature too
- * complex. */
-unsigned int defaultitalic = 7;
-unsigned int defaultunderline = 7;
+static unsigned int defaultcs = 11; // modidified from default 15, for orange cursor!
+static unsigned int defaultrcs = 257;
+
 /*
  * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h4-Functions-using-CSI-_-ordered-by-the-final-character-lparen-s-rparen:CSI-Ps-SP-q.1D81
  * Default style of cursor
@@ -131,41 +152,50 @@ unsigned int defaultunderline = 7;
  * 7: Snowman ("☃")
  */
 static unsigned int cursorstyle = 1;
-/* Default columns and rows numbers */
+
+/*
+ * Default columns and rows numbers
+ */
 
 static unsigned int cols = 80;
 static unsigned int rows = 24;
 
-/* Default colour and shape of the mouse cursor */
+/*
+ * Default colour and shape of the mouse cursor
+ */
 static unsigned int mouseshape = XC_xterm;
 static unsigned int mousefg = 7;
 static unsigned int mousebg = 0;
 
-/* Color used to display font attributes when fontconfig selected a font which
- * doesn't match the ones requested. */
+/*
+ * Color used to display font attributes when fontconfig selected a font which
+ * doesn't match the ones requested.
+ */
 static unsigned int defaultattr = 11;
 
-/* Force mouse select/shortcuts while mask is active (when MODE_MOUSE is set).
+/*
+ * Force mouse select/shortcuts while mask is active (when MODE_MOUSE is set).
  * Note that if you want to use ShiftMask with selmasks, set this to an other
  * modifier, set to 0 to not use it.
  */
 static uint forcemousemod = ShiftMask;
 
-/* Internal mouse shortcuts.
- * Beware that overloading Button1 will disable the selection. */
+/*
+ * Internal mouse shortcuts.
+ * Beware that overloading Button1 will disable the selection.
+ */
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
-	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
-	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
-//  { XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
-	{ XK_ANY_MOD,           Button2, clippaste,       {.i = 0},      1 },
+	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
+	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
+	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 };
 
 /* Internal keyboard shortcuts. */
 #define MODKEY Mod1Mask
-#define TERMMOD (Mod1Mask|ShiftMask)
+#define TERMMOD (ControlMask|ShiftMask)
 
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
@@ -178,12 +208,8 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
-//	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
-	{ TERMMOD,              XK_Y,           clippaste,       {.i =  0} },
-	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
-	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
-//	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
-	{ ShiftMask,            XK_Insert,      clippaste,       {.i =  0} },
+	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 };
 
@@ -208,16 +234,22 @@ static Shortcut shortcuts[] = {
  * position for a key.
  */
 
-/* If you want keys other than the X11 function keys (0xFD00 - 0xFFFF)
-   to be mapped below, add them to this array. */
+/*
+ * If you want keys other than the X11 function keys (0xFD00 - 0xFFFF)
+ * to be mapped below, add them to this array.
+ */
 static KeySym mappedkeys[] = { -1 };
 
-/* State bits to ignore when matching key or button events.  By default,
-   numlock (Mod2Mask) and keyboard layout (XK_SWITCH_MOD) are ignored. */
+/*
+ * State bits to ignore when matching key or button events.  By default,
+ * numlock (Mod2Mask) and keyboard layout (XK_SWITCH_MOD) are ignored.
+ */
 static uint ignoremod = Mod2Mask|XK_SWITCH_MOD;
 
-/* This is the huge key array which defines all compatibility to the Linux
-   world. Please decide about changes wisely. */
+/*
+ * This is the huge key array which defines all compatibility to the Linux
+ * world. Please decide about changes wisely.
+ */
 static Key key[] = {
 	/* keysym           mask            string      appkey appcursor */
 	{ XK_KP_Home,       ShiftMask,      "\033[2J",       0,   -1},
@@ -257,9 +289,6 @@ static Key key[] = {
 	{ XK_KP_Delete,     ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_KP_Delete,     ShiftMask,      "\033[3;2~",    +1,    0},
 	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[P",       -1,    0},
-	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[3~",      +1,    0},
-	{ XK_KP_Delete,     Mod1Mask,       "\033\033[P",   -1,    0},//toegevoegd
-	{ XK_KP_Delete,     Mod1Mask,       "\033\033[3~",  +1,    0},//toegevoegd
 	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_KP_Multiply,   XK_ANY_MOD,     "\033Oj",       +2,    0},
 	{ XK_KP_Add,        XK_ANY_MOD,     "\033Ok",       +2,    0},
@@ -327,8 +356,6 @@ static Key key[] = {
 	{ XK_Delete,        ControlMask,    "\033[3;5~",    +1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[3;2~",    +1,    0},
-	{ XK_Delete,        Mod1Mask,       "\033\033[P",   -1,    0},//toegevoegd
-	{ XK_Delete,        Mod1Mask,       "\033\033[3~",  +1,    0},//toegevoegd
 	{ XK_Delete,        XK_ANY_MOD,     "\033[P",       -1,    0},
 	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_BackSpace,     XK_NO_MOD,      "\177",          0,    0},
@@ -436,17 +463,21 @@ static Key key[] = {
 	{ XK_F35,           XK_NO_MOD,      "\033[23;5~",    0,    0},
 };
 
-/* Selection types' masks.
+/*
+ * Selection types' masks.
  * Use the same masks as usual.
  * Button1Mask is always unset, to make masks match between ButtonPress.
  * ButtonRelease and MotionNotify.
- * If no match is found, regular selection is used.  */
+ * If no match is found, regular selection is used.
+ */
 static uint selmasks[] = {
 	[SEL_RECTANGULAR] = Mod1Mask,
 };
 
-/* Printable characters in ASCII, used to estimate the advance width
- * of single wide characters. */
+/*
+ * Printable characters in ASCII, used to estimate the advance width
+ * of single wide characters.
+ */
 static char ascii_printable[] =
 	" !\"#$%&'()*+,-./0123456789:;<=>?"
 	"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"

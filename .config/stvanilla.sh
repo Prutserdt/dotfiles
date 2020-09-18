@@ -15,7 +15,7 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/suckless/st &&
     mkdir ~/suckless/st &&
-    cp -r ~/Stack/suckless/st/st-0.8.3_vanilla/* ~/suckless/st &&
+    cp -r ~/Stack/suckless/st/st-0.8.4_vanilla/* ~/suckless/st &&
     cd ~/suckless/st &&
     clear && ls -al
 else

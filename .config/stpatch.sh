@@ -22,7 +22,7 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/suckless/st &&
     mkdir ~/suckless/st &&
-    cp -r ~/Stack/suckless/st/st-0.8.3_stable/* ~/suckless/st &&
+    cp -r ~/Stack/suckless/st/st-0.8.4_stable/* ~/suckless/st &&
     cd ~/suckless/st &&
     clear && ls -al &&
     ls ~/Stack/suckless/st/patches/test/*.diff >> ~/suckless/st/log/diff_log &&

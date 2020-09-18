@@ -743,7 +743,13 @@ Creation Date                   : 2019:06:01 14:09:27+07:00
 
 
 #### PACMAN/YAOURT/YAY    
-     
+
+Je kunt downgraden naar een andere datum (terug in de tijd!) door 
+replacing your /etc/pacman.d/mirrorlist with the following content:
+Server=https://archive.archlinux.org/repos/2014/03/30/$repo/os/$arch
+Then update the database and force downgrade:
+# pacman -Syyuu
+
 Info staat in /etc/pacman.conf en /etc/pacman.d/mirrorlist
 Yaourt --> pas pacman.conf aan, toelaten van franse server:
 [archlinuxfr]
@@ -2380,11 +2386,11 @@ mkswap /mnt/sdc1/swapfile
 swapon /mnt/sdc1/swapfile
 /etc/fstab
 ```
-# toegevoegd:
+# 12sep20 toegevoegd /etc/fstab:
 ```
-/mnt/sdc1/swapfile none swap defaults 0 0
+/swapfile none swap default 0 0
 ```
-
+Hierna werkt het nog niet, want error bij opstarten
 
 ### Emojis in dmenu
 Geschreven volgens Luke Smith: https://www.youtube.com/watch?v=UCEXY46t3OA

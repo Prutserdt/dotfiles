@@ -124,8 +124,10 @@ static Key keys[] =
 	{ MENUFILE,                     XK_s,      spawn,          SHCMD("st -e vim ~/suckless/st/config.h") },                     // st 'config' file
 	{ MENUFILE,                     XK_v,      spawn,          SHCMD("st -e vim ~/.vimrc") },                                   // vim 'config' file
 	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("st -e vim ~/.config/vifm/vifmrc") },                      // vifm 'config' file
+	{ MENUFILE,                     XK_space,  spawn,          SHCMD("~/.config/wololo.sh") },                                  // Keystroke cheat for 0ad: enter wololo enter
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 // .xinitrc
 	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              // .Xresources
+
     // Right super as application modkey                                                                                           Open application:
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // dmenu
     { MENUKEY,                      XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // dmenuinternet
