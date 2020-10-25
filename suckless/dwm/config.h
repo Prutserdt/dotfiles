@@ -130,14 +130,14 @@ static Key keys[] =
 
     // Right super as application modkey                                                                                           Open application:
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // dmenu
-    { MENUKEY,                      XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // dmenuinternet
-    { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              // Firefox
+    { MENUKEY,                      XK_f,      spawn,          SHCMD("firefox") },                                              // Firefox
+    { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // dmenuinternet, select url by dmenu
 	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 // gimp
 	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             // mousepad
 	{ MENUKEY,                      XK_n,      spawn,          SHCMD("alacritty -e newsboat") },                                       // newsboat, open in st
     { MENUKEY,                      XK_s,      spawn,          SHCMD("~/.config/dmenusurf.sh") },                               // surf
-	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             // thunar
-	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               // thunar
+	{ MENUKEY,                      XK_t,      spawn,          SHCMD("thunar") },                                               // thunar
+	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             // thunar
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            // Insert emojis
 	{ MENUKEY,                      XK_v,      spawn,          SHCMD("alacritty -e vifm") },                                    // vifm
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          // Change wallpaper by dmenu
@@ -193,7 +193,7 @@ static Key keys[] =
 	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad !!Does not work!!
     { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator !!Does not work!!
 //	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window !! Does not work!!
-	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e vim ~/.Xresources") },                       // Exit dwm with y/n options. This works, although not in desired floating mode... 
+	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e ~/.config/exitdwm.sh")},                                   // Exit dwm with y/n options. This works, although not in desired floating mode... 
 	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Open keepass in scratchpad !!Does not work!! 
     // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
