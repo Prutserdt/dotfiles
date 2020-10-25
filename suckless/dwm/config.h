@@ -33,11 +33,11 @@ typedef struct
 	const char *name;
 	const void *cmd;
 } Sp;
-const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
-const char *spcmd2[] = {"st", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
-const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
-const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
-const char *spcmd5[] = {"st", "-n", "spkeepass", "-g", "120x34", "-e", "keepass", NULL };
+const char *spcmd1[] = {"alacritty", "-n", "spterm", "-g", "120x34", NULL };
+const char *spcmd2[] = {"alacritty", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
+const char *spcmd3[] = {"alacritty", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
+const char *spcmd4[] = {"alacritty", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
+const char *spcmd5[] = {"alacritty", "-n", "spkeepass", "-g", "120x34", "-e", "keepass", NULL };
 static Sp scratchpads[] =
 {
     //name          cmd         Scratchpads, to show/hide apps in floating mode
@@ -57,8 +57,8 @@ static const Rule rules[] =
     //class       instance    title       tags mask     isfloating   isterminal noswallow monitor      comment
 	{ "Gimp",     NULL,       NULL,       0,            1,           0,         0,        -1 },     // gimp, floating 
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,         0,        -1 },     // firefox: on tag 1
-	{ "st",       NULL,       NULL,       0,            0,           1,         1,        -1 },     // st: swallowing
-    { "Steam",    NULL,       NULL,       0,            1,           0,         0,        -1 },     // steam
+	{ "alacritty",NULL,       NULL,       0,            0,           1,         1,        -1 },     // alacritty: swallowing
+    { "steam",    NULL,       NULL,       0,            1,           0,         0,        -1 },     // steam
     { "keepass",  NULL,       NULL,       0,            1,           0,         0,        -1 },     // keepass, floating
 	{ NULL,		  "spterm",   NULL,		  SPTAG(0),		1,			 1,         1,        -1 },     // st: as scratchpad
 	{ NULL,		  "spvifm",	  NULL,		  SPTAG(1),		1,			 1,         1,        -1 },     // vifm: as scratchpad 
@@ -110,23 +110,23 @@ static Key keys[] =
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle & ~/.config/updatebar.sh") }, // Toggle mute
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter -r -s ~/Downloads") },                // Select by mouse what to print from screen
     // Right alt key to open textfiles                                                                                             Open textfile in vim:
-	{ MENUFILE,                     XK_a,      spawn,          SHCMD("st -e vim ~/.config/applications.md") },                  // used application for my Arch linux build
-	{ MENUFILE,                     XK_b,      spawn,          SHCMD("st -e vim ~/.bashrc") },                                  // .bashrc
-	{ MENUFILE,                     XK_c,      spawn,          SHCMD("st -e vim ~/Stack/Command_line/commands.md") },           // personal notes and comments about Linux
-	{ MENUFILE,                     XK_d,      spawn,          SHCMD("st -e vim ~/suckless/dwm/config.h") },                    // dwm config file
-	{ MENUFILE,                     XK_f,      spawn,          SHCMD("st -e vim ~/.config/urls") },                             // firefox url list, used in dmenuinternet.sh
-	{ MENUFILE|ShiftMask,           XK_f,      spawn,          SHCMD("st -e vim ~/.config/dmenuinternet.sh") },                 // dmenu to open url list in firefox
-	{ MENUFILE,                     XK_i,      spawn,          SHCMD("st -e vim ~/.config/i3/config") },                        // i3 config file
-	{ MENUFILE,                     XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/urls") },                           // newsboat urls file
-	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("st -e vim ~/.newsboat/config") },                         // newsboat config file
-	{ MENUFILE,                     XK_r,      spawn,          SHCMD("st -e vim ~/.config/ranger/rc.conf") },                   // ranger config file
-	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("st -e vim ~/README.md") },                                // my github dotfiles README file
-	{ MENUFILE,                     XK_s,      spawn,          SHCMD("st -e vim ~/suckless/st/config.h") },                     // st 'config' file
-	{ MENUFILE,                     XK_v,      spawn,          SHCMD("st -e vim ~/.vimrc") },                                   // vim 'config' file
-	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("st -e vim ~/.config/vifm/vifmrc") },                      // vifm 'config' file
+	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/applications.md") },           // used application for my Arch linux build
+	{ MENUFILE,                     XK_b,      spawn,          SHCMD("alacritty -e vim ~/.bashrc") },                           // .bashrc
+	{ MENUFILE,                     XK_c,      spawn,          SHCMD("alacritty -e vim ~/Stack/Command_line/commands.md") },    // personal notes and comments about Linux
+	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/suckless/dwm/config.h") },             // dwm config file
+	{ MENUFILE,                     XK_f,      spawn,          SHCMD("alacritty -e vim ~/.config/urls") },                      // firefox url list, used in dmenuinternet.sh
+	{ MENUFILE|ShiftMask,           XK_f,      spawn,          SHCMD("alacritty -e vim ~/.config/dmenuinternet.sh") },          // dmenu to open url list in firefox
+	{ MENUFILE,                     XK_i,      spawn,          SHCMD("alacritty -e vim ~/.config/i3/config") },                 // i3 config file
+	{ MENUFILE,                     XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/urls") },                    // newsboat urls file
+	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/config") },                  // newsboat config file
+	{ MENUFILE,                     XK_r,      spawn,          SHCMD("alacritty -e vim ~/.config/ranger/rc.conf") },            // ranger config file
+	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("alacritty -e vim ~/README.md") },                         // my github dotfiles README file
+	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/suckless/st/config.h") },              // st 'config' file
+	{ MENUFILE,                     XK_v,      spawn,          SHCMD("alacritty -e vim ~/.vimrc") },                            // vim 'config' file
+	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("alacritty -e vim ~/.config/vifm/vifmrc") },               // vifm 'config' file
 	{ MENUFILE,                     XK_space,  spawn,          SHCMD("~/.config/wololo.sh") },                                  // Keystroke cheat for 0ad: enter wololo enter
-	{ MENUFILE,                     XK_x,      spawn,          SHCMD("st -e vim ~/.xinitrc") },                                 // .xinitrc
-	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("st -e vim ~/.Xresources") },                              // .Xresources
+	{ MENUFILE,                     XK_x,      spawn,          SHCMD("alacritty -e vim ~/.xinitrc") },                          // .xinitrc
+	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("alacritty -e vim ~/.Xresources") },                       // .Xresources
 
     // Right super as application modkey                                                                                           Open application:
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // dmenu
@@ -134,16 +134,16 @@ static Key keys[] =
     { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("firefox") },                                              // Firefox
 	{ MENUKEY,                      XK_g,      spawn,          SHCMD("gimp") },                                                 // gimp
 	{ MENUKEY,                      XK_m,      spawn,          SHCMD("mousepad") },                                             // mousepad
-	{ MENUKEY,                      XK_n,      spawn,          SHCMD("st -e newsboat") },                                       // newsboat, open in st
+	{ MENUKEY,                      XK_n,      spawn,          SHCMD("alacritty -e newsboat") },                                       // newsboat, open in st
     { MENUKEY,                      XK_s,      spawn,          SHCMD("~/.config/dmenusurf.sh") },                               // surf
 	{ MENUKEY,                      XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             // thunar
 	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("thunar") },                                               // thunar
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            // Insert emojis
-	{ MENUKEY,                      XK_v,      spawn,          SHCMD("st -e vifm") },                                           // vifm
+	{ MENUKEY,                      XK_v,      spawn,          SHCMD("alacritty -e vifm") },                                    // vifm
 	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          // Change wallpaper by dmenu
     // Left super as modkey                                                                                                        dwm related (modkey):
 	{ MODKEY,                       XK_b,      togglebar,      {0} },                                                           // Toggle the visibility of the bar
-	{ MODKEY,                       XK_Return, spawn,	       SHCMD("st") },                                                   // Open terminal
+	{ MODKEY,                       XK_Return, spawn,	       SHCMD("alacritty") },                                            // Open terminal
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },                                                    // Select another window, direction: up the stack
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },                                                    // Select another window, direction: down the stack
 	{ MODKEY|ShiftMask,             XK_j,      inplacerotate,  {.i = +1} },                                                     // InPlaceRotate:
@@ -181,11 +181,20 @@ static Key keys[] =
     { MODKEY,                       XK_minus,  incrgaps,       {.i = -2 } },                                                    // Vanity gaps: decrease gaps
 	{ MODKEY,                       XK_0,      togglegaps,     {0} },                                                           // Vanity gaps: toggle gaps on/of
     // scratchpads                                                                                                                 Scratchpads
-    { MODKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    // Open st in scratchpad
-	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad
-    { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator
-	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window
-	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Exit dwm with y/n options, in a small centered floating window
+//
+//
+//
+//Work in progress... I switched from st to alacritty. The scratchpad
+//functionality does not work at the moment.....
+//
+//
+//
+    { MODKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    // Open alacritty in scratchpad !!Does not work!!
+	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad !!Does not work!!
+    { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator !!Does not work!!
+//	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window !! Does not work!!
+	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e vim ~/.Xresources") },                       // Exit dwm with y/n options. This works, although not in desired floating mode... 
+	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Open keepass in scratchpad !!Does not work!! 
     // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)

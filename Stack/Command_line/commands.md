@@ -1,4 +1,4 @@
-<!Modified by Prutserdt, /home/archie/Stack/Command_line/commands.md>
+<!Modified by Prutserdt, ~/Stack/Command_line/commands.md>
           _     _                    _        _      _        
          | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____ 
          | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
@@ -366,6 +366,13 @@ for file in *; do sed 's/,/./g' "$file" > "$file"_tmp && mv "$file"_tmp "$file";
 ```
 sed 's/,/./g' '
 
+#### Calender
+Show Calender this month:
+cal 
+Show Calender whole year:
+cal -y
+Show Calender year:
+cal 1999
 
 #### Rechten bestanden
 
@@ -594,6 +601,16 @@ Esc				Stop loading the current page
 
 #### Batch rename image files
 
+Imagemagick, simpel verkleinen, comprimeren en renamen van files in directory.
+resize: pixel size, quality: compression, en daarachter naamverandering
+```
+for f in *.JPG
+  do
+  echo "Converting $f."
+  convert "$f" -resize 3000x2000 -quality 60% "${f/.JPG/-resized.JPG}"
+done
+```
+-------
 Batch rename. Verander de naam van bestanden. Zet eerst de foto's in 
 directories met nummer van dag v.d. vakantie en locatie. Ga in de main 
 directory. Dit scriptje VERPLAATST alleen bestanden uit de directory naar
