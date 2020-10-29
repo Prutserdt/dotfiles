@@ -2916,8 +2916,10 @@ sh archfi
 
 #### Ducky one mechanical keyboard
 
-Fn + NumLk Bestuur de muis met de keypad. linker muis knop: ) 
-rechter: Del Scrol: - +
+Fn + NumLk: keypad bestuurd de muis aan/uit Fn + NumLk. 
+linker muis knop: 0 ins 
+rechter: Del 
+Scrol: - +
 
 Fn+2 --> activeer profile #2. Indicator lights will flash twice.
 Fn+Ctrl vasthouden 3 secondes om macro op te nemen. Indicator lights will flash slowly.

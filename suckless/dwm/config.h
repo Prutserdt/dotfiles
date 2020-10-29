@@ -20,12 +20,14 @@ static const char *fonts[]          = { "hack:size=9" };        // Font of statu
 static const char black[]           = "#000000";                // Color of background
 static const char dark_gray[]       = "#111111";                // Color of not selected borders
 static const char gray[]            = "#555555";                // Color of (not selected) menubar text
+static const char pink[]            = "#d3869b";
+//static const char pink[]            = "#fb4934"; // '#d3869b'
 static const char green[]           = "#8ec07c";                // Gruvbox color: slightly desaturaded green
 static const char *colors[][3]      =
 {
     //name           fg     bg      border
 	[SchemeNorm] = { gray,  black,  dark_gray},
-	[SchemeSel]  = { green, black,  green},      
+	[SchemeSel]  = { green, black,  pink},      
 };
 
 typedef struct 
@@ -110,7 +112,7 @@ static Key keys[] =
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle & ~/.config/updatebar.sh") }, // Toggle mute
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter -r -s ~/Downloads") },                // Select by mouse what to print from screen
     // Right alt key to open textfiles                                                                                             Open textfile in vim:
-	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/applications.md") },           // used application for my Arch linux build
+	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/alacritty/alacritty.yml") },   // alacritty config file
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("alacritty -e vim ~/.bashrc") },                           // .bashrc
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("alacritty -e vim ~/Stack/Command_line/commands.md") },    // personal notes and comments about Linux
 	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/suckless/dwm/config.h") },             // dwm config file

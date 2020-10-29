@@ -85,13 +85,13 @@
   # Set this to `None` to use the default theme variant.
   #gtk_theme_variant: None
 
-#scrolling:
+scrolling:
   # Maximum number of lines in the scrollback buffer.
   # Specifying '0' will disable scrolling.
-  #history: 10000
+   history: 10000
 
   # Scrolling distance multiplier.
-  #multiplier: 3
+   multiplier: 5
 
 # Font configuration
 font:
@@ -233,33 +233,57 @@ font:
   # Normal colors
   #normal:
   #  black:   '#1d1f21'
-  black:   '#1d1f21'
   #  red:     '#cc6666'
-  red:     '#fb4934'
   #  green:   '#b5bd68'
-  green:   '#98971a'
   #  yellow:  '#f0c674'
-  yellow:  '#fabd2f'
   #  blue:    '#81a2be'
-  blue:    '#458588'
   #  magenta: '#b294bb'
-  magenta: '#a89984'
   #  cyan:    '#8abeb7'
-  cyan:    '#689d6a'
   #  white:   '#c5c8c6'
-  white:   '#ebdbb2'
+
+  #black:   '#000000'
+  #red:     '#fb4934'
+  #green:   '#98971a'
+  #yellow:  '#fabd2f'
+  #blue:    '#458588'
+  #magenta: '#a89984'
+  #cyan:    '#689d6a'
+  #white:   '#ebdbb2'
+ 
+# Colors (Gruvbox dark, heavily modified)
+colors:
+  # Default colors
+  primary:
+    # hard contrast: background = '#1d2021'
+    background: '#000000'
+      #    background: '#282828'
+    # soft contrast: background = '#32302f'
+    foreground: '#999999'
+#    foreground: '#ebdbb2'
+
+  # Normal colors
+  normal:
+    black:   '#000000'
+    red:     '#cc241d'
+    green:   '#b8bb26'
+#   yellow:  '#d79921'
+    yellow:  '#fabd2f'
+    blue:    '#8ec07c'
+    magenta: '#b16286'
+    cyan:    '#689d6a'
+    white:   '#a89984'
 
   # Bright colors
-  #bright:
-  #  black:   '#666666'
-  #  red:     '#d54e53'
-  #  green:   '#b9ca4a'
-  #  yellow:  '#e7c547'
-  yellow:  '#fabd2f'
-  #  blue:    '#7aa6da'
-  #  magenta: '#c397d8'
-  #  cyan:    '#70c0b1'
-  #  white:   '#eaeaea'
+  bright:
+    black:   '#000000'
+    red:     '#fb4934'
+    green:   '#b8bb26'
+    yellow:  '#fabd2f'
+#   blue:    '#8ec07c'
+    blue:    '#81a2be'
+    magenta: '#d3869b'
+    cyan:    '#8ec07c'
+    white:   '#ebdbb2'
 
   # Dim colors
   #
@@ -330,7 +354,7 @@ font:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.9
+background_opacity: 0.8
 
 #selection:
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"

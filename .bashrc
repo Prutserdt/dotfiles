@@ -53,10 +53,6 @@ alias de="cd ~/Stack/Documenten/Studie/C_programming_training_Dartmouth && pwd"
 alias dss="cd ~/Stack/suckless && pwd"
 alias ddw="cd ~/suckless/dwm && pwd"
 alias dsdw="cd ~/Stack/suckless/dwm && pwd"
-alias dst="cd ~/suckless/st && pwd"
-alias dsst="cd ~/Stack/suckless/st && pwd"
-alias dsu="cd ~/suckless/surf && pwd"
-alias dssu="cd ~/Stack/suckless/surf && pwd"
 alias ddm="cd ~/suckless/dmenu && pwd"
 alias dsdm="cd ~/Stack/suckless/dmenu && pwd"
 ###########################
@@ -68,23 +64,9 @@ alias dwmvanilla='~/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTRO
 alias dwmstable='~/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
 alias dwmpatch='~/.config/dwmpatch.sh'          # Restore dwmstable and run the patch on it
 ###########################
-#           st            # 
-########################### requirement: PATH="$HOME/bin:$PATH"
-alias stbackup='~/.config/stbackup.sh'          # Make the current st the stable version
-alias stvanilla='~/.config/stvanilla.sh'        # Restore to vanilla st
-alias ststable='~/.config/ststable.sh'          # Restore ststable
-alias stpatch='~/.config/stpatch.sh'            # Patch the stable version of st
-###########################
 #           dmenu         # 
 ########################### requirement: PATH="$HOME/bin:$PATH" 
 alias dmenubackup='~/.config/dmenubackup.sh'    # Make the current dmenu the stable version
 alias dmenuvanilla='~/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROYS CURRENT dmenu!
 alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
 alias dmenupatch='~/.config/dmenupatch.sh'      # 3: Run the dwmpatch command to test the patch
-###########################
-#           surf          # 
-########################### requirement: PATH="$HOME/bin:$PATH"
-alias surfbackup='~/.config/surfbackup.sh'      # Make the current surf the stable version
-alias surfvanilla='~/.config/surfvanilla.sh'    # Go back to vanilla st. DESTROYS CURRENT surf!
-alias surfstable='~/.config/surfstable.sh'      # Go back to stable surf. DESTROYS CURRENT surf!
-alias surfpatch='~/.config/surfpatch.sh'        # 3: Run the dwmpatch command to test the patch
