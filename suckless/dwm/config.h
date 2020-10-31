@@ -188,12 +188,12 @@ static Key keys[] =
 // The -n option is not in alacritty and the size cannot be set as in st with
 // -g. For now I will use st for the scratchpads. 
 //
-    { MODKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    // Open alacritty in scratchpad !!Does not work!!
-	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad !!Does not work!!
-    { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator !!Does not work!!
-	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window !! Does not work!!
-//	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e ~/.config/exitdwm.sh")},                     // Exit dwm with y/n options. This works, although not in desired floating mode... 
-	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Open keepass in scratchpad !!Does not work!! 
+    { MODKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    // Open alacritty in scratchpad
+	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad
+    { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator
+	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window
+//	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e ~/.config/exitdwm.sh")},                     // Exit dwm with y/n options. This works, although not in desired floating mode...
+	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Open keepass in scratchpad 
     // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
