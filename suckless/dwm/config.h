@@ -35,11 +35,11 @@ typedef struct
 	const char *name;
 	const void *cmd;
 } Sp;
-const char *spcmd1[] = {"alacritty", "-n", "spterm", "-g", "120x34", NULL };
-const char *spcmd2[] = {"alacritty", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
-const char *spcmd3[] = {"alacritty", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
-const char *spcmd4[] = {"alacritty", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
-const char *spcmd5[] = {"alacritty", "-n", "spkeepass", "-g", "120x34", "-e", "keepass", NULL };
+const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
+const char *spcmd2[] = {"st", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
+const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
+const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
+const char *spcmd5[] = {"st", "-n", "spkeepass", "-g", "120x34", "-e", "keepass", NULL };
 static Sp scratchpads[] =
 {
     //name          cmd         Scratchpads, to show/hide apps in floating mode
@@ -184,18 +184,15 @@ static Key keys[] =
 	{ MODKEY,                       XK_0,      togglegaps,     {0} },                                                           // Vanity gaps: toggle gaps on/of
     // scratchpads                                                                                                                 Scratchpads
 //
-//
-//
-//Work in progress... I switched from st to alacritty. The scratchpad
-//functionality does not work at the moment.....
-//
-//
+// Hmmmmm. I want to use alacritty for scradpads. How to get this to work....
+// The -n option is not in alacritty and the size cannot be set as in st with
+// -g. For now I will use st for the scratchpads. 
 //
     { MODKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    // Open alacritty in scratchpad !!Does not work!!
 	{ MODKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    // Open vifm in scratchpad !!Does not work!!
     { 0,               XF86XK_Calculator,	   togglescratch,  {.ui = 2 } },                                                    // Open calculator !!Does not work!!
-//	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window !! Does not work!!
-	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e ~/.config/exitdwm.sh")},                                   // Exit dwm with y/n options. This works, although not in desired floating mode... 
+	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    // Exit dwm with y/n options, in a small centered floating window !! Does not work!!
+//	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e ~/.config/exitdwm.sh")},                     // Exit dwm with y/n options. This works, although not in desired floating mode... 
 	{ MENUKEY,                      XK_k,      togglescratch,  {.ui = 4 } },                                                    // Open keepass in scratchpad !!Does not work!! 
     // Tagkeys
 	TAGKEYS(                        XK_1,                      0)
