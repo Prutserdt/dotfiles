@@ -3,7 +3,7 @@
 Here I store the :sparkles:dotfiles:sparkles: of my GNU/Linux system plus some 
 other stuff.
 
-My build of dwm, a dynamic window manager, can be found [here](https://github.com/Prutserdt/dotfiles/tree/master/suckless/dwm). Some dotfiles of this repo are: alacritty, newsboat, vifm, vim.
+My build of dwm, a dynamic window manager, can be found [here](https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm). Some dotfiles of this repo are: alacritty, newsboat, vifm, vim.
 
 This is how my dwm desktop can look like:
 ![full rice](dwm.jpg)
