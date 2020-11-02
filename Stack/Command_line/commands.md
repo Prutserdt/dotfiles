@@ -3053,6 +3053,7 @@ Let op: maak symlink aan in ~/bin. Vergeet niet dat het pad aan bashrc moet staa
 `ln -s -v /home/icefly/dwm/dwm /home/icefly/bin/dwm`
 Of overschrijf een symlink:
 `ln -f -s /home/icefly/Stack/dmw/dwmx /home/icefly/bin/dwm_x`
+`ln -f -s /home/icefly/.config//dwm/dwm /home/icefly/bin/dwm`
 Nu kun je via het executable kiezen in .xinitrc: exec dwm_vanilla voor startx.
 
 ## De laatste stabiele backup installeren:

@@ -20,8 +20,7 @@ static const char *fonts[]          = { "hack:size=9" };        // Font of statu
 static const char black[]           = "#000000";                // Color of background
 static const char dark_gray[]       = "#111111";                // Color of not selected borders
 static const char gray[]            = "#555555";                // Color of (not selected) menubar text
-static const char pink[]            = "#d3869b";
-//static const char pink[]            = "#fb4934"; // '#d3869b'
+static const char pink[]            = "#d3869b";                // Gruvbox pink. Alternative colors: #fb4934 #d3869b
 static const char green[]           = "#8ec07c";                // Gruvbox color: slightly desaturaded green
 static const char *colors[][3]      =
 {

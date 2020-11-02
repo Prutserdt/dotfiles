@@ -15,7 +15,7 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/Stack/suckless/dmenu/dmenu-4.9_stable &&
     mkdir ~/Stack/suckless/dmenu/dmenu-4.9_stable &&
-    cp -r ~/suckless/dmenu/* ~/Stack/suckless/dmenu/dmenu-4.9_stable
+    cp -r ~/.config/suckless/dmenu/* ~/Stack/suckless/dmenu/dmenu-4.9_stable
 else
     echo No
 fi

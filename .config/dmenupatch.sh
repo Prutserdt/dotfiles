@@ -20,14 +20,14 @@ RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the 
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/suckless/dmenu &&
-    mkdir ~/suckless/dmenu &&
-    cp -r ~/Stack/suckless/dmenu/dmenu-4.9_stable/* ~/suckless/dmenu &&
-    cd ~/suckless/dmenu &&
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
     clear && ls -al
-    ls ~/Stack/suckless/dmenu/patches/test/*.diff >> ~/suckless/dmenu/log/diff_log &&
-    cp -r ~/suckless/dmenu/config.h ~/suckless/dmenu/config.def.h &&
-    rm ~/suckless/dmenu/config.h &&
+    ls ~/Stack/suckless/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
+    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
+    rm ~/.config/suckless/dmenu/config.h &&
     patch -p1 < ~/Stack/suckless/dmenu/patches/test/*.diff &&
     make clean install
 else

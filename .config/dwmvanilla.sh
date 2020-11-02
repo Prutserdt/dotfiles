@@ -13,11 +13,16 @@ echo -n "Are you sure you want to restore to vanilla dwm and DELETE the current 
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/suckless/dwm &&
-    mkdir ~/suckless/dwm &&
-    cp -r ~/Stack/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/suckless/dwm &&
-    cd ~/suckless/dwm &&
+    rm -r ~/.config/suckless/dwm &&
+    mkdir ~/.config/suckless/dwm &&
+    cp -r ~/Stack/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/.config/suckless/dwm &&
+    cd ~/.config/suckless/dwm &&
     clear && ls -al
+#    rm -r ~/suckless/dwm &&
+#    mkdir ~/suckless/dwm &&
+#    cp -r ~/Stack/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/suckless/dwm &&
+#    cd ~/suckless/dwm &&
+#    clear && ls -al
 else
     echo No
 fi

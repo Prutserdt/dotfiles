@@ -19,17 +19,28 @@ echo -n "Are you sure you want to patch the current dwm system? This will first:
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/suckless/dwm &&
-    mkdir ~/suckless/dwm &&
-    mkdir ~/suckless/dwm/log &&
-    cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/suckless/dwm && 
-    cd ~/suckless/dwm &&
+    rm -r ~/.config/suckless/dwm &&
+    mkdir ~/.config/suckless/dwm &&
+    mkdir ~/.config/suckless/dwm/log &&
+    cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm && 
+    cd ~/.config/suckless/dwm &&
     clear && ls -al &&
-    ls ~/Stack/suckless/dwm/patches/test/*.diff >> ~/suckless/dwm/log/diff_log && 
-    cp -r ~/suckless/dwm/config.h ~/suckless/dwm/config.def.h && 
-    rm ~/suckless/dwm/config.h && 
+    ls ~/Stack/suckless/dwm/patches/test/*.diff >> ~/.config/suckless/dwm/log/diff_log && 
+    cp -r ~/.config/suckless/dwm/config.h ~/.config/suckless/dwm/config.def.h && 
+    rm ~/.config/suckless/dwm/config.h && 
     patch -p1 < ~/Stack/suckless/dwm/patches/test/*.diff &&
     make clean install
+#    rm -r ~/suckless/dwm &&
+#    mkdir ~/suckless/dwm &&
+#    mkdir ~/suckless/dwm/log &&
+#    cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/suckless/dwm && 
+#    cd ~/suckless/dwm &&
+#    clear && ls -al &&
+#    ls ~/Stack/suckless/dwm/patches/test/*.diff >> ~/suckless/dwm/log/diff_log && 
+#    cp -r ~/suckless/dwm/config.h ~/suckless/dwm/config.def.h && 
+#    rm ~/suckless/dwm/config.h && 
+#    patch -p1 < ~/Stack/suckless/dwm/patches/test/*.diff &&
+#    make clean install
 else
     echo No
 fi

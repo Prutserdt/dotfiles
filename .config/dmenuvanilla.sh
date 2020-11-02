@@ -13,10 +13,10 @@ echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the curren
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/suckless/dmenu &&
-    mkdir ~/suckless/dmenu &&
-    cp -r ~/Stack/suckless/dmenu/dmenu-4.9_vanilla/* ~/suckless/dmenu &&
-    cd ~/suckless/dmenu &&
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/suckless/dmenu/dmenu-4.9_vanilla/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
     clear && ls -al
 else
     echo No
