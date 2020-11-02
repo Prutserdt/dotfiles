@@ -1,0 +1,34 @@
+ __  __         ____ _____   _           _ _     _
+|  \/  |_   _  / ___|_   _| | |__  _   _(_) | __| |
+| |\/| | | | | \___ \ | |   | '_ \| | | | | |/ _` |
+| |  | | |_| |  ___) || |   | |_) | |_| | | | (_| |
+|_|  |_|\__, | |____/ |_|   |_.__/ \__,_|_|_|\__,_|
+        |___/                  Created by Prutserdt
+
+This is my build of st-0.8.4, a simple terminal emulator for X which sucks less.
+Check the log directory for the applied patches.
+
+My builds are made in my home directory (~/suckless/st).
+Go to that directory and enter as user (no root):
+make clean install
+
+Make a symlink to ~/bin
+'ln -s -v ~/suckless/st/st ~/bin/st'
+
+st patching
+------------
+1. Download a patch from suckless.org and place the patch at a set location 
+   (~/Stack/suckless/st/patches/test)
+2. Run from command line the .bashrc alias: stpatch
+
+Safe as stable version
+------------
+Run from command line the .bashrc alias: stbackup
+
+Restore stable version
+------------
+Run from command line the .bashrc alias: ststable
+
+Run vanilla st
+------------
+Run from command line the .bashrc alias: stvanilla
