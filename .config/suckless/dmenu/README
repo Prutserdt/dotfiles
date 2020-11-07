@@ -7,12 +7,12 @@
 
 This is my build of dmenu - dynamic menu, an efficient dynamic menu for X.
 
-My builds are made in my home directory (~/suckless/dmenu).
+My builds are made in my home directory (~/.config/suckless/dmenu).
 Go to that directory and enter as user (no root):
 make clean install
 
 Make a symlink to ~/bin
-'ln -s -v /home/icefly/suckless/dmenu/dmenu /home/icefly/bin/dmenu'
+'ln -s -v /home/icefly/.config/suckless/dmenu/dmenu /home/icefly/bin/dmenu'
 
 dmenu patching
 ------------

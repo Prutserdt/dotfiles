@@ -12,12 +12,12 @@ Check the log directory for the applied patches.
 Check the config.h file for my key bindings. Super_R and Alt_R buttons are set
 by .Xmodmap.
 
-My builds are made in my home directory (~/suckless/dwm). 
+My builds are made in my home directory (~/.config/suckless/dwm). 
 Place the files of this dwm build in that directory and enter as normal user:
 make clean install
 
 Make a symlink to ~/bin
-'ln -s -v ~/suckless/dwm/dwm ~/bin/dwm'
+'ln -s -v ~/.config/suckless/dwm/dwm ~/bin/dwm'
 
 -----------
 Running dwm

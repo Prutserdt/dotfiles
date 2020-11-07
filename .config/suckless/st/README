@@ -8,12 +8,12 @@
 This is my build of st-0.8.4, a simple terminal emulator for X which sucks less.
 Check the log directory for the applied patches.
 
-My builds are made in my home directory (~/suckless/st).
+My builds are made in my home directory (~/.config/suckless/st).
 Go to that directory and enter as user (no root):
 make clean install
 
 Make a symlink to ~/bin
-'ln -s -v ~/suckless/st/st ~/bin/st'
+'ln -s -v ~/.config/suckless/st/st ~/bin/st'
 
 st patching
 ------------
