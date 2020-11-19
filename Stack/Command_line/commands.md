@@ -23,7 +23,7 @@
 * Corona script
 * Video card information
 * Create superfast ramdisk
-#### C programming tricks
+* C programming tricks
 * Allerlei
 #### Applications (Command line and GUIs)
 * Vim
@@ -34,6 +34,10 @@
 * SXIV
 * Neomutt
 * Steam
+* Stack (transip)
+* Copy pictures of mac to linux
+* VPN
+* Virtualbox and Whonix
 #### Distros
 * XFCE tricks
 * i3 window manager
@@ -705,8 +709,10 @@ exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)
 ```
 Step 2: Change *.jpeg to *.jpg in directory
 ```
-rename .jpeg .jpg *.jpeg
-Step 3: rename with location info example
+find -name '*.JPG' -exec rename .JPG .jpg {} \;
+find -name '*.jpeg' -exec rename .jpeg .jpg {} \;
+```
+Step 3: rename with location info
 rename 20190511 20190511_Schiphol *.jpg
 ```
 
@@ -757,9 +763,104 @@ exiftool -time:all IMG_4074.mov
 Create Date                     : 2020:02:16 15:39:55
 Creation Date                   : 2019:06:01 14:09:27+07:00
 ```
+--------------------------------------------------------------
+November 2020, wederom vakantiefotos sorteren.
+Een van de devices lag 66 minuten achter. Daardoor werkte dit niet:
+```
+exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)
+```
+De fotos stonden daarna namelijk niet goed chronologisch. Dit is opgelost door 
+de fotos van het device in een directory te zetten (pro tip: mount het geheugen
+om extra snel te kunnen werken) en het volgende:
+```
+exifftool -DateTimeOriginal+='0:00:0 1:06:0' *.*
+rm *original
+
+```
+en daarna alle foto's bij elkaar te zetten en in te voeren:
+```
+exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls) ``` Nu wil ik nog de .jpeg en .JPG files omzetten naar .jpg.  Doe dit met: ```
+find -name '*.JPG' -exec rename .JPG .jpg {} \;
+find -name '*.jpeg' -exec rename .jpeg .jpg {} \;
+```
+Nu wil ik nog de locatie toevoegen voor elke foto. 
+Dat doen we per dag en daar zetten we een locatie bij.
+Dat gaat handig via vim.
+creer eerst een lijst met de dagen:
+```
+20201008
+20201009
+20201010
+20201011
+20201012
+20201013
+20201014
+20201015
+20201016
+```
+En verander dit in vim in de volgende lijst:
+```
+rename 20201007 20201007_Roma *.jpg;
+rename 20201008 20201008_Roma *.jpg;
+rename 20201009 20201009_Roma *.jpg;
+rename 20201010 20201010_Roma *.jpg;
+rename 20201011 20201011_Napoli *.jpg;
+rename 20201012 20201012_Napoli *.jpg;
+rename 20201013 20201013_Napoli *.jpg;
+rename 20201014 20201014_Napoli *.jpg;
+rename 20201015 20201015_Positano *.jpg;
+rename 20201016 20201016_Schiphol *.jpg;
 
 
-#### PACMAN/YAOURT/YAY    
+rename 20201007 20201007_Roma *.jpg; rename 20201008 20201008_Roma *.jpg; rename 20201009 20201009_Roma *.jpg; rename 20201010 20201010_Roma *.jpg; rename 20201011 20201011_Napoli *.jpg; rename 20201012 20201012_Napoli *.jpg; rename 20201013 20201013_Napoli *.jpg; rename 20201014 20201014_Napoli *.jpg; rename 20201015 20201015_Positano *.jpg; rename 20201016 20201016_Schiphol *.jpg;
+```
+En samenvoegen in vim tot de volgend commandline die je laat lopen
+Opmerking: het gaf foutmeldingen, omdat het te snel gaat ofzo, onduidelijk, het
+is wss beter om de bovenstaande commandos afzonderlijk te laten lopen, of er
+een microbreak tussen zetten ofzo:
+```
+rename 20201007 20201007_Roma *.jpg; rename 20201008 20201008_Roma *.jpg; rename 20201009 20201009_Roma *.jpg; rename 20201010 20201010_Roma *.jpg; rename 20201011 20201011_Napoli *.jpg; rename 20201012 20201012_Napoli *.jpg; rename 20201013 20201013_Napoli *.jpg; rename 20201014 20201014_Napoli *.jpg; rename 20201015 20201015_Positano *.jpg; rename 20201016 20201016_Schiphol *.jpg;
+
+```
+Mac image format heic conversion
+Conversion of .heic to jpg:
+```
+for file in *.heic; do heif-convert $file ${file/%.heic/.jpg}; done
+```
+Roteren van afbeeldingen dmv exif informatie
+Correct rotation image by exif data:
+het volgende werkt NIET:
+```
+jhead -autorot *.jpg
+```
+andere optie: exiftran
+WERKT OOK NIET:
+```
+exiftran -ai *.jpg
+```
+Geef exif informatie:
+```
+identify -verbose 20201008_Roma-1022_IMG_6383.jpg | grep "exif:"""
+```
+Informatie is te zien via:
+```
+exiftool -Orientation -S IMG_0049.heic
+exiftool -Orientation -S -n a IMG_0049.heic #(output als getal)
+
+```
+WAT EEN GEDOE! DAN MAAR IN VIM VERWERKEN!!!!!!
+Eerst orientatie zoeken via:
+exiftool -Orientation -S *
+Daarna deze output gecopieerd naar vim en de verschillende orientaties in
+apparte dirs gezet (dmv commandline cp files.jpg file2.jpg dirnaam).
+Daarna in deze dirs de bestanden gedraaid met de volgende commandos:
+
+
+
+
+
+--------------------------------------------------------------
+### PACMAN/YAOURT/YAY    
 
 Je kunt downgraden naar een andere datum (terug in de tijd!) door 
 replacing your /etc/pacman.d/mirrorlist with the following content:
@@ -842,9 +943,13 @@ opschonen cache en outdated packages
 ```
 sudo pacman -Scc
 ```
-pacman icoontje bij downloaden repo's. Zet in misc. gedeelte:
+pacman.conf instellen
+/etc/pacman.conf
+Zet in misc. gedeelte:
 ```
-ILoveCandy
+Color        # commenting out
+CheckSpace   # commenting out
+ILoveCandy   # Toegevoegd voor pacman animatie tijdens download
 ```
 grafische info over pacman
 ```
@@ -1242,10 +1347,14 @@ Een nieuwe amd card die zou werken kost 50 euro:
 https://www.bol.com/nl/p/asus-r5230-sl-1gd3-l-radeon-r5-230-1gb-gddr3-videokaart/9200000027686779/?bltgh=lAYrxB4tzY134OkTkbpF-w.1_4.5.ProductPage
 
 ### Create Superfast ramdisk
-Tijdelijke ramdisk creeren. Bijvoorbeeld voor snel schrijven.
+Tijdelijke ramdisk creeren. Bijvoorbeeld voor snel schrijven
+Check eerst beschikbare ram met free -g!
+onderaan staat de umount.
 ```
+free -g
 mkdir -p /mnt/ram
 mount -t tmpfs tmpfs /mnt/ram -o size=8192M
+umount tmpfs /mnt/ram
 ```
 
 ### RSS stuff
@@ -1257,7 +1366,7 @@ The macro menu can be called by pressing "."
 To download youtube.dll the tsp program is needed which can be installed by the
 package called ts
 
-#### C programming
+### C programming
 
 De meest simpele manier om snel een C programma te draaien:
 creeer een file in vim, bijv: test.c
@@ -1466,6 +1575,8 @@ r, en hierna tekst invoeren wat je erover wilt schrijven
 esc esc, om eruit te gaan en aan te passen.
 
 #### Renaming in vim (fout --> goed)
+
+
 ```
 /fout
 cgn
@@ -1474,6 +1585,11 @@ Escape
 n
 .
 ```
+
+#### Sorting in vim
+alfabetsch sorteren vim document:
+:sort /\s\+/
+
 
 #### Batch renaming in vim/vifm
 Open een directory in vifm en tag de namen die je wil veranderen met 't'.
@@ -2050,6 +2166,53 @@ yay steamcmd
 Dit werkt ook niet zo goed.
 Ik heb gedeinstalleerd met yay.
 
+#### Stack (transip)
+Installeer stack via de aur:
+```
+yay stack-client
+```
+Configureren van stack in dwm. command line: stack-client geeft
+een scherm met wat instellingen. Na een reboot en opnieuw stack-client in
+command line krijg je meer opties, wat je wilt syncen enz.
+Het werkt goed, even kijken of ik het als service wil draaien of bij
+startx of zoiets.... meer uitleg volgt nog....
+https://www.transip.nl/knowledgebase/artikel/283-de-desktopapplicatie-van-stack/
+
+Koppel stack aan thunar door het volgende adres in browse network in te voeren:
+davs://icefly.stackstorage.com/remote.php/webdav/
+Daarna wordt naar username en password gevraagd en staat het in thunar
+ingesteld.:
+
+#### Copy pictures of mac to linux
+Connect old imac hard drive connected to a usb connector with powersupply to 
+new imac pc by the usb C hub. Open the photos application of mac and select
+pictures and copy them to the harddrive (somewhere in top bar this can be
+selected).
+Then connnect the drive to the LINUX PC and reboot. Do a 
+sudo mount /dev/sdc2 /mnt/USBdrive
+Get super user rights:
+su
+Open vicd and copypasta
+Change user rights of files, because it is now superuser
+sudo chown icefly:users *.* 
+go directory and:
+sudo chown icefly:users directoryname
+
+#### VPN
+Many options...
+surfshark
+torguard
+protonvpn
+
+#### Virtualbox en Whonix
+Installation:
+sudo pacman -S virtualbox
+choose: virtualbox-host-modules-arch
+run:
+modprobe vboxdrv
+
+whonix virtualbox image downloaded, imported in virtualbox. Could not start
+First run the gateway, after that the workstation.
 
 ### Distros
 
@@ -2971,20 +3134,22 @@ en op compile gedrukt.
 Daarna download Full source gesaved op ~/Downloads/qmk_firmware-gergo-noobmonkey.zip
 en download Firmware gesaved op: ~/Downloads/gergo_noobmonkey.hex
 
-#### Ik wil een ergodox EZ lopen.
-1.) Add arrow keys to hjkl on Layer 2. You won't have to bring your hand down to the bottom keys to use arrows. Instead, with your pinky you hold semicolon down and use hjkl (index for hj)
+#### Redox keyboard, falba teck (NOV2020)
+Binnen gekomen 19NOV20.
+Ik mis wel toetsen. geen rechter alt. dus dwm config aanpassen...
+Eerst eens zien welke toetsen er standaar op zitten.
+Linker alt: keycode 63 (keysym 0xffaa, KP_Multiply))
+Linker ctrl: keycode 37 (keysym 0xffe3, Control_L)
+Rechter alt: keycode 108 (keysym 0xffea, Alt_R))
 
-2.) Now you freed up the (Up) arrow key (at 4:27)  at the right hand bottom where the column 7 is. Make that a Layer 1 key. Now use your thumb to hold down layer 1 and you're free to type numbers. Change 0 and put it where asterisk is (at 4:39) on layer 1. This felt the most comfortable since it's easy to slide your pinky to the 0.
+Verbeteringen toetsenbord layout:
+De layer 2 knoppen functioneel maken, bijv. prntscrn en cal.
+Verder wil ik ook de mute en volume knoppen rechtsboven plaatsen daarvoor moet
+de lt2 knoppen omlaag,ik zit te denken om deze bij esc en " te zetten...
 
-3.) Since typing numbers is better with the keypad and I'm a vim user, flip all numbers at the top so they are shifted, therefore you don't have to press shift to get !@#$%^&*
 
-4.) The 3 brackets sets on ERDFCV are great, but take the right arrow key (at 4:27) and make that the Layer 1 switch. This way you can use your thumb. It's way more comfortable and you avoid RSI with your pinky.
+...
 
-5.) Put Delete (at 4:27) and put it anywhere else, and put Esc there. That's in my opinion, the optimal position for anyone who uses the terminal/vim, since it's a similar motion that you're probably used to.
-
-6.) For #2 and #4 to be comfortable, since you're using your thumbs, search around the corners of the ergodox for a key that is angled steeply and that you probably won't use much. Put them on these new layer activation keys at an angle that conforms to your thumb better. It's weird using your thumbs to hold down modifiers at first but once you get used to, man it's great.
-
-I have a few more suggestions regarding super, alt, and shift but I'll leave it at that for now. Hope this helps.
 
 #### dwm
  ______        ____  __
@@ -3322,3 +3487,7 @@ Opgelost door met het script ~/.config/dmenuapps.sh:
 ```
 cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
 ```
+Probleem is dat nieuwe apps nu niet bij dmenu_run worden toegevoegd.
+Doe dat handmatig door:
+sudo pacman -Qe
+copypasta in vim in ~/.cache/dmenu_run

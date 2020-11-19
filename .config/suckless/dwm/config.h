@@ -38,6 +38,12 @@ const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
 const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
 const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
+//
+//lukt niet zonder het hele adres. hmmm waarom niet, nog uitfigulieren....
+//const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", ~/.config/exitdwm.sh, NULL };
+//const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "~/.config/exitdwm.sh", NULL };
+//const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", ~/.config/exitdwm.sh, NULL };
+//
 const char *spcmd5[] = {"st", "-n", "spkeepass", "-g", "120x34", "-e", "keepass", NULL };
 static Sp scratchpads[] =
 {
@@ -114,7 +120,7 @@ static Key keys[] =
 	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/alacritty/alacritty.yml") },   // alacritty config file
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("alacritty -e vim ~/.bashrc") },                           // .bashrc
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("alacritty -e vim ~/Stack/Command_line/commands.md") },    // personal notes and comments about Linux
-	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/suckless/dwm/config.h") },             // dwm config file
+	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/dwm/config.h") },             // dwm config file
 	{ MENUFILE,                     XK_f,      spawn,          SHCMD("alacritty -e vim ~/.config/urls") },                      // firefox url list, used in dmenuinternet.sh
 	{ MENUFILE|ShiftMask,           XK_f,      spawn,          SHCMD("alacritty -e vim ~/.config/dmenuinternet.sh") },          // dmenu to open url list in firefox
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("alacritty -e vim ~/.config/i3/config") },                 // i3 config file
@@ -122,13 +128,12 @@ static Key keys[] =
 	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/config") },                  // newsboat config file
 	{ MENUFILE,                     XK_r,      spawn,          SHCMD("alacritty -e vim ~/.config/ranger/rc.conf") },            // ranger config file
 	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("alacritty -e vim ~/README.md") },                         // my github dotfiles README file
-	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/suckless/st/config.h") },              // st 'config' file
+	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/st/config.h") },              // st 'config' file
 	{ MENUFILE,                     XK_v,      spawn,          SHCMD("alacritty -e vim ~/.vimrc") },                            // vim 'config' file
 	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("alacritty -e vim ~/.config/vifm/vifmrc") },               // vifm 'config' file
 	{ MENUFILE,                     XK_space,  spawn,          SHCMD("~/.config/wololo.sh") },                                  // Keystroke cheat for 0ad: enter wololo enter
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("alacritty -e vim ~/.xinitrc") },                          // .xinitrc
 	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("alacritty -e vim ~/.Xresources") },                       // .Xresources
-
     // Right super as application modkey                                                                                           Open application:
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // dmenu
     { MENUKEY,                      XK_f,      spawn,          SHCMD("firefox") },                                              // Firefox

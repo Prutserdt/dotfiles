@@ -39,10 +39,12 @@ alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -
 alias dotfiles='~/.config/dotfiles.sh'                                  # Dotfiles repository Github
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github simpification
 alias k='xmodmap ~/.config/kbswitch && xset r rate 300 80'              # Change modkeys, Caps/Esc and fast key repeats
-# Jump to directories
-alias da="cd ~/Stack/Afbeeldingen && pwd"
-alias daw="cd ~/Stack/Afbeeldingen/Wallpapers && pwd"
+alias r='xmodmap ~/.config/rdxswitch && xset r rate 300 80'             # Change to redox kb, alt-r modkeys, and fast key repeats
+# Jump to directories/
+alias daa="cd ~/Stack/Documenten/Aandelen && pwd"
+alias daf="cd ~/Stack/Afbeeldingen && pwd"
 alias dav="cd ~/Stack/Afbeeldingen/Vakantie && pwd"
+alias daw="cd ~/Stack/Afbeeldingen/Wallpapers && pwd"
 alias dc="cd ~/.config && pwd"
 alias dd="cd ~/Downloads && pwd"
 alias dh="cd ~/ && pwd"
