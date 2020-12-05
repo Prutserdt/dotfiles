@@ -13,14 +13,17 @@
 ! or run as: xmodmap ~/.config/rdxswitch
 
 ! Redox kb has escape at the right position: next to a. So switching is not 
-! needed, but should be corrected:
-keysym Escape = Escape 
+! needed, but should be corrected, since probably previously remapped.
 
-! Unfortunatelythe redox kb does not consist of a super-R
+remove Lock = Caps_Lock
+keysym Escape = Escape
+keysym Caps_Lock = Caps_Lock
+add Lock = Caps_Lock
+
+
+
+! With my custom redox build there is a Super-R
 ! Remove right super key and make it another mod key (for opening apps)
-! remove mod4 = Super_R
-! add mod3 = S
+remove mod4 = Super_R
+add mod3 = Super_R
 
-! Remove Alt_R and make it another mod key (for opening txt files)
-remove mod1 = Alt_R
-add mod5 = Alt_R

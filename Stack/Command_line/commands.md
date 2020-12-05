@@ -1590,7 +1590,9 @@ n
 alfabetsch sorteren vim document:
 :sort /\s\+/
 
+#### Veranderen van tabbing naar spaces
 
+:retab
 #### Batch renaming in vim/vifm
 Open een directory in vifm en tag de namen die je wil veranderen met 't'.
 Selecteer een block met CTRL-v en geef daarna shift-I (insert tekst) Esc om 
@@ -2839,8 +2841,7 @@ arch vanuit usb gestart (01MAY18 22:18)
 start met delete knop ingedruk, en boot from USB
 ```
 ip link set wlp1s0 up
-ip link
-output: wlp1s0 ... UP
+ip linkoutput: wlp1s0 ... UP
 wifi-menu
 Voer alvast het wachtwoord in
 modprobe -r brcmfmac
@@ -3143,12 +3144,134 @@ Linker ctrl: keycode 37 (keysym 0xffe3, Control_L)
 Rechter alt: keycode 108 (keysym 0xffea, Alt_R))
 
 Verbeteringen toetsenbord layout:
-De layer 2 knoppen functioneel maken, bijv. prntscrn en cal.
-Verder wil ik ook de mute en volume knoppen rechtsboven plaatsen daarvoor moet
-de lt2 knoppen omlaag,ik zit te denken om deze bij esc en " te zetten...
+hotkey voor reset redox: linker control+Q
+ 
+Volgens reddit moet je beide delen van kb individueel en appart flashen.
+https://www.reddit.com/r/olkb/comments/jq76hn/cant_flash_redox_keyboard/
+https://www.reddit.com/r/olkb/comments/cgsih1/unable_to_flash_redox_keyboard
+
+https://docs.qmk.fm/#/newbs_getting_started
+Software geinstalleerd als beschreven en het volgende commando gestart:
+python -m pip install --user qmk
+
+Daarna de volgende warnings:
+
+```
+Installing collected packages: argcomplete, milc, hjson, mccabe, pycodestyle, pyflakes, flake8, coverage, nose2, yapf, qmk
+  WARNING: The script pycodestyle is installed in '/home/icefly/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script pyflakes is installed in '/home/icefly/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script flake8 is installed in '/home/icefly/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts coverage, coverage-3.8 and coverage3 are installed in '/home/icefly/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts nose2 and nose2-3.6 are installed in '/home/icefly/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script yapf is installed in '/home/icefly/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script qmk is installed in '/home/icefly/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+Successfully installed argcomplete-1.12.2 coverage-5.3 flake8-3.8.4 hjson-3.0.2 mccabe-0.6.1 milc-1.0.10 nose2-0.9.2 pycodestyle-2.6.0 pyflakes-2.2.0 qmk-0.0.36 yapf-0.30.0
+```
+echo 'PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc && source $HOME/.bashrc
+
+qmk setup
+
+Would you like to clone qmk/qmk_firmware to /home/icefly/qmk_firmware? [y/n] y]
+... output, zonder comments, dat is goed!...
+
+Would you like to set /home/icefly/qmk_firmware as your QMK home? [y/n] y
+
+Ψ Wrote configuration to /home/icefly/.config/qmk/qmk.ini
+Ψ QMK Doctor is checking your environment.
+Ψ Detected Linux.
+⚠ Missing or outdated udev rules for 'atmel-dfu' boards. Run 'sudo cp cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/'.
+⚠ Missing or outdated udev rules for 'kiibohd' boards. Run 'sudo cp cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/'.
+⚠ Missing or outdated udev rules for 'stm32' boards. Run 'sudo cp cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/'.
+⚠ Missing or outdated udev rules for 'bootloadhid' boards. Run 's sudo cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/'.
+⚠ Missing or outdated udev rules for 'usbasploader' boards. Run 'sudo cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/'.
+⚠ Missing or outdated udev rules for 'massdrop' boards. Run 'sudo cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/'.
+⚠ Missing or outdated udev rules for 'caterina' boards. Run 'sudo cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/'.
+Ψ QMK home: /home/icefly/qmk_firmware
+Ψ All dependencies are installed.
+Ψ Found arm-none-eabi-gcc version 10.2.0
+Ψ Found avr-gcc version 10.2.0
+⚠ We do not recommend avr-gcc newer than 8. Downgrading to 8.x is
+recommended.
+Ψ Found avrdude version 6.3
+Ψ Found dfu-util version 0.9
+Ψ Found dfu-programmer version 0.7.2
+Ψ Submodules are up to date.
+Ψ QMK is ready to go, but minor problems were foun
+
+Volgens mij heb ik dfu nodig dus ingevoerd:
+
+sudo cp /home/icefly/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
 
 
-...
+Nu testen of compileren werkt met:
+qmk compile -kb redox -km default
+Ja het werkt!
+
+Configureren build environment:
+qmk config user.keyboard=redox/rev1
+Github username erbij zetten:
+qmk config user.keymap=Prutserdt
+
+We zijn hier aangekomen:
+https://docs.qmk.fm/#/newbs_building_firmware
+
+create a new keymap:
+qmk new keymap
+Output:
+Prutserdt keymap directory created in:/home/icefly/qmk_firmware/keyboards/redox/keymaps/Prutserdt
+Compile a firmware with your new keymap by typing:
+    qmk compile -kb redox/rev1 -km Prutserdt
+
+Hier ben ik gebleven. Ik kan de keymap.c aanpassen die nu is aangemaakt in
+~/qmk_firmware/keyboards/redox/keymaps/Prutserdt
+Ik weet niet of ik de .hex file op de een of andere manier kan gebruiken om te
+gaan compileren, dat zou handig zijn....
+En hier staat de firmware vanuit qmk configurator, hoe kun je dit gebruiken?
+/home/icefly/Downloads/redox_walter_qmk_configurator/qmk_firmware/keyboards/redox/
+
+
+Het kan ook via via!!!! Redox staat in de lijst.
+
+via-bin, in yay
+Is geinstalleerd want het staat in local:
+
+[icefly@archlinux ~]$ pacman -Qs via
+local/via-bin 1.3.1-0
+
+    Helaas lukt het niet om via te starten in Linux, werkt wel in windows
+    Yasara pc op het werk. Eerst hex file van via downloaden en firmware
+    flashen en dan in qmk toolkit flashen, eerst links, daarna rechts, en
+    daarna is het via via te configureren. 
+    In linux heb ik qmk configurator de json keymap gemaakt en gedownload en
+    met 'qmk json2c' omgezet naar een keymap.c file die ik heb aangepast.
+
+nu kijken of ik kan flashen in linux.
+
+
+qmk compile -kb redox/rev1 -km Prutserdt 
+
+Nu flashen door eerst het board te resetten eerst links dan afzonderlijk rechts
+
+qmk flash -kb redox/rev1 -km Prutserdt 
+
+daarna opnieuw geflashed met:
+
+qmk compile -kb redox/rev1 -km Prutserdt 
+
+
+Na een pacman upgrade werkt qmk_cli niet meer. Wat is de Oorzaak?
+
+Ik heb nu geen pip install gedaan maar:
+yay qmk-git
+En daarna (omdat dit package miste)
+sudo pacman -S python-milc 
 
 
 #### dwm
