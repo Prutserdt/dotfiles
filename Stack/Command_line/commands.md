@@ -2180,11 +2180,18 @@ Het werkt goed, even kijken of ik het als service wil draaien of bij
 startx of zoiets.... meer uitleg volgt nog....
 https://www.transip.nl/knowledgebase/artikel/283-de-desktopapplicatie-van-stack/
 
+Het geeft foutmeldingen, daarom maar de appimage gebruikt:
+https://mirror.transip.net/stack/software/appimage/stack-2.6.5-20200909-x86_64.AppImage
+Na het downloaden kun je hem uitvoerbaar maken met:
+chmod +x stack-2.6.5-20200909-x86_64.AppImage
+En starten met:
+./stack-2.6.5-20200909-x86_64.AppImage
+Nu werk het wel (voorlopig 05DEC20)
+
 Koppel stack aan thunar door het volgende adres in browse network in te voeren:
 davs://icefly.stackstorage.com/remote.php/webdav/
 Daarna wordt naar username en password gevraagd en staat het in thunar
 ingesteld.:
-
 #### Copy pictures of mac to linux
 Connect old imac hard drive connected to a usb connector with powersupply to 
 new imac pc by the usb C hub. Open the photos application of mac and select
