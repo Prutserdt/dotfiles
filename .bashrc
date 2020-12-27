@@ -52,6 +52,7 @@ alias ds="cd ~/Stack && pwd"
 alias dw="cd ~/Stack/Afbeeldingen/Wallpapers && pwd"
 alias de="cd ~/Stack/Documenten/Studie/C_programming_training_Dartmouth && pwd"
 alias dr="cd ~/qmk_firmware/keyboards/redox/keymaps/Prutserdt && pwd"
+alias dg="cd ~/qmk_firmware/keyboards/gergo/keymaps/Prutserdt && pwd"
 # Jump to suckless applications, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
 alias dss="cd ~/Stack/suckless && pwd"
 alias ddw="cd ~/.config/suckless/dwm && pwd"
@@ -75,3 +76,4 @@ alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTR
 alias dmenupatch='~/.config/dmenupatch.sh'      # 3: Run the dwmpatch command to test the patch
 ###########################
 PATH="$HOME/.local/bin:$PATH"                   # Added for qmk stuff
+

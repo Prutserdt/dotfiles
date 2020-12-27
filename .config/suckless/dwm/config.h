@@ -88,7 +88,7 @@ static const Layout layouts[] =
 	{ "[]=",      tile },                   // Tile layout. Master left horizontally, slaves right horizontally
 	{ "><>",      NULL },                   // Floating mode, no layout function
 	{ "[M]",      monocle },                // All windows on top of eachother
-	{ "HHH",      grid },                   // Grid layout, no discrimination master/slave
+	                 // Grid layout, no discrimination master/slave
 	{ ">M>",      centeredfloatingmaster }, // As centered master, but then the master floats
 	{ "TTT",      bstack },                 // Master on top vertically, slave on bottom verticall
 	{ "|||",      col },                    // Column layout. Master left vertically, slaves right horizontally
