@@ -76,4 +76,3 @@ alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTR
 alias dmenupatch='~/.config/dmenupatch.sh'      # 3: Run the dwmpatch command to test the patch
 ###########################
 PATH="$HOME/.local/bin:$PATH"                   # Added for qmk stuff
-
