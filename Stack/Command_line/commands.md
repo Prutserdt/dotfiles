@@ -2176,8 +2176,6 @@ yay steamcmd
 Dit werkt ook niet zo goed.
 Ik heb gedeinstalleerd met yay.
 
-#### Stack (transip)
-Installeer stack via de aur:
 ```
 yay stack-client
 ```
@@ -2192,9 +2190,14 @@ Het geeft foutmeldingen, daarom maar de appimage gebruikt:
 https://mirror.transip.net/stack/software/appimage/stack-2.6.5-20200909-x86_64.AppImage
 Na het downloaden kun je hem uitvoerbaar maken met:
 chmod +x stack-2.6.5-20200909-x86_64.AppImage
-En starten met:
+
+En starten door eerst in de webap in te loggen, dan naar de downloads
+directory te  gaan en de appimage te starten:
+https://icefly.stackstorage.com/files
+cd /Downloads
 ./stack-2.6.5-20200909-x86_64.AppImage
-Nu werk het wel (voorlopig 05DEC20)
+Nu vraagt de applicatie om in te loggen in de webapp, doe dit met de link die
+gegeven wordt. Daarna werkt het :-) (09JAN21)
 
 Koppel stack aan thunar door het volgende adres in browse network in te voeren:
 davs://icefly.stackstorage.com/remote.php/webdav/
