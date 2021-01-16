@@ -3557,6 +3557,8 @@ Opgelost door met het script ~/.config/dmenuapps.sh:
 cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
 ```
 Probleem is dat nieuwe apps nu niet bij dmenu_run worden toegevoegd.
-Doe dat handmatig door:
-sudo pacman -Qe
-copypasta in vim in ~/.cache/dmenu_run
+Doe dat door:
+rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run
+
+Het bovenstaande werkt, maar wel met directory structuur wat lelijk is maar
+verder geen probleem.

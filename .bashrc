@@ -24,7 +24,7 @@ grep -e alias*=* ~/.bashrc | sed -e 's/\<alias\>//g'
 echo ---------------------------------------------------"
 alias ls='ls --color=auto'          # Colored output when possible
 alias diff="diff --color=auto"
-alias l='ls -al'                    # Lazy man's ls
+alias l='ls -alh'                    # Lazy man's ls
 alias q="exit"                      #  Exiting quickly
 alias c="clear"                     # Clear screen quickly
 alias cls="clear;ls"                # Clear screen and show content
