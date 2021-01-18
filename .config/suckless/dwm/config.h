@@ -120,7 +120,7 @@ static Key keys[] =
 	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/alacritty/alacritty.yml") },   // alacritty config file
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("alacritty -e vim ~/.bashrc") },                           // .bashrc
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("alacritty -e vim ~/Stack/Command_line/commands.md") },    // personal notes and comments about Linux
-	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/dwm/config.h") },             // dwm config file
+	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/dwm/config.h") },     // dwm config file
 	{ MENUFILE,                     XK_f,      spawn,          SHCMD("alacritty -e vim ~/.config/urls") },                      // firefox url list, used in dmenuinternet.sh
 	{ MENUFILE|ShiftMask,           XK_f,      spawn,          SHCMD("alacritty -e vim ~/.config/dmenuinternet.sh") },          // dmenu to open url list in firefox
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("alacritty -e vim ~/.config/i3/config") },                 // i3 config file
@@ -128,7 +128,7 @@ static Key keys[] =
 	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/config") },                  // newsboat config file
 	{ MENUFILE,                     XK_r,      spawn,          SHCMD("alacritty -e vim ~/.config/ranger/rc.conf") },            // ranger config file
 	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("alacritty -e vim ~/README.md") },                         // my github dotfiles README file
-	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/st/config.h") },              // st 'config' file
+	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/st/config.h") },      // st 'config' file
 	{ MENUFILE,                     XK_v,      spawn,          SHCMD("alacritty -e vim ~/.vimrc") },                            // vim 'config' file
 	{ MENUFILE|ShiftMask,           XK_v,      spawn,          SHCMD("alacritty -e vim ~/.config/vifm/vifmrc") },               // vifm 'config' file
 	{ MENUFILE,                     XK_space,  spawn,          SHCMD("~/.config/wololo.sh") },                                  // Keystroke cheat for 0ad: enter wololo enter

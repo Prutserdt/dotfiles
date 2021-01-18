@@ -22,6 +22,10 @@ alias ?="c && echo AN OVERVIEW OF ALL OF THE ALIASES DEFINED IN .basrc &&
 echo --------------------------------------------------- &&
 grep -e alias*=* ~/.bashrc | sed -e 's/\<alias\>//g'
 echo ---------------------------------------------------"
+alias .1='cd ..'
+alias .2='cd ../.. && pwd'
+alias .3='cd ../../.. && pwd'
+alias .4='cd ../../../.. && pwd'
 alias ls='ls --color=auto'          # Colored output when possible
 alias diff="diff --color=auto"
 alias l='ls -alh'                    # Lazy man's ls
@@ -62,7 +66,7 @@ alias dsdm="cd ~/Stack/suckless/dmenu && pwd"
 ###########################
 #           dwm           # 
 ###########################
-PATH="$HOME/bin:$PATH" # ~/bin was addet to path, makes locale install of dwm possible via .xinitrc.
+#PATH="$HOME/bin:$PATH" # ~/bin was addet to path, makes locale install of dwm possible via .xinitrc.
 alias dwmbackup='~/.config/dwmbackup.sh'        # Make the current dwm the stable version
 alias dwmvanilla='~/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTROYS CURRENT dwm!
 alias dwmstable='~/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
@@ -75,4 +79,4 @@ alias dmenuvanilla='~/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROY
 alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
 alias dmenupatch='~/.config/dmenupatch.sh'      # 3: Run the dwmpatch command to test the patch
 ###########################
-PATH="$HOME/.local/bin:$PATH"                   # Added for qmk stuff
+#PATH="$HOME/.local/bin:$PATH"                   # Added for qmk stuff

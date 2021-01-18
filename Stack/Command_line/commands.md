@@ -105,6 +105,10 @@ wegschrijven op de 1 Terabyte drive: `su` en daarna `mc`.
 
 Vind de **beeldscherm resolution**: `xdpyinfo | grep dimensions`
 
+Open applicatie in command line en ga daarna door met command line, dat gaat
+via '&'. Zie als voorbeeld:
+/home/icefly/Downloads ; ./stack-2.6.5-20200909-x86_64.AppImage &
+
 Afsluiten systeem, direct:`sudo shutdown -h now`
 Afsluiten systeem over 15 minuten:`sudo shutdown -h 15`
 Stel je wilt toch afsluiten terwijl je de afsluit timer hebt gezet: `sudo shutdown -c`
@@ -2176,21 +2180,12 @@ yay steamcmd
 Dit werkt ook niet zo goed.
 Ik heb gedeinstalleerd met yay.
 
-```
-yay stack-client
-```
-Configureren van stack in dwm. command line: stack-client geeft
-een scherm met wat instellingen. Na een reboot en opnieuw stack-client in
-command line krijg je meer opties, wat je wilt syncen enz.
-Het werkt goed, even kijken of ik het als service wil draaien of bij
-startx of zoiets.... meer uitleg volgt nog....
+#### Stack client
+Stack staat in de AUR maar dit kun je beter niet gebruiken (geen: yay stack-client)
 https://www.transip.nl/knowledgebase/artikel/283-de-desktopapplicatie-van-stack/
-
-Het geeft foutmeldingen, daarom maar de appimage gebruikt:
 https://mirror.transip.net/stack/software/appimage/stack-2.6.5-20200909-x86_64.AppImage
 Na het downloaden kun je hem uitvoerbaar maken met:
 chmod +x stack-2.6.5-20200909-x86_64.AppImage
-
 En starten door eerst in de webap in te loggen, dan naar de downloads
 directory te  gaan en de appimage te starten:
 https://icefly.stackstorage.com/files
@@ -2198,11 +2193,16 @@ cd /Downloads
 ./stack-2.6.5-20200909-x86_64.AppImage
 Nu vraagt de applicatie om in te loggen in de webapp, doe dit met de link die
 gegeven wordt. Daarna werkt het :-) (09JAN21)
+Het aanmelden gaat het eenvoudigste via een single command line:
+/home/icefly/Downloads ; ./stack-2.6.5-20200909-x86_64.AppImage &
+Je moet wel even wachten en de link in de browser openen, even daarna kun je de
+terminal weer verder gebruiken.
 
 Koppel stack aan thunar door het volgende adres in browse network in te voeren:
 davs://icefly.stackstorage.com/remote.php/webdav/
 Daarna wordt naar username en password gevraagd en staat het in thunar
-ingesteld.:
+ingesteld.
+
 #### Copy pictures of mac to linux
 Connect old imac hard drive connected to a usb connector with powersupply to 
 new imac pc by the usb C hub. Open the photos application of mac and select

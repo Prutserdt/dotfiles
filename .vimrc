@@ -16,7 +16,7 @@ Plug 'godlygeek/tabular'            " Select visually, enter :Tab /=, to analign
 Plug 'frazrepo/vim-rainbow'         " Colored Parentheses
 Plug 'itchyny/lightline.vim'        " Lightline statusbar
 Plug 'ap/vim-css-color'             " Shows color of css color coding in vim: yellow, 503fa9
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " Conquer of Completion plugin, autocomplete!
+""Plug 'neoclide/coc.nvim', {'branch': 'release'} " Conquer of Completion plugin, autocomplete!
 Plug 'sainnhe/gruvbox-material'     " Gruvbox color schemes, with several options
 Plug 'statox/FYT.vim'               " Flash yanked text
 call plug#end()                     " End of the plugged section
