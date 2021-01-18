@@ -1873,6 +1873,7 @@ git config --global user.email "firstname@lastname.nl"
 git config --global user.name "Prutserdt"
 ```
 
+
 Automatisch wegschrijven van dotfiles in Github.
 Dit gaat via de procedure van https://www.atlassian.com/git/tutorials/dotfiles
 en https://www.youtube.com/watch?v=tBoLDpTWVOM. Aanmaken van de bare repository op de locale pc. Zorg dat je in de ~/dotfiles directory staat en voer het volgende in:
