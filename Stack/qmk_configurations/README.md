@@ -3,6 +3,6 @@
 Redox and Gergo are awesome ortholinear split ergonomic keyboards. These are my
 qmk configurations.
 
-The directory locations are:
+The directory locations where those files are located are:
 - ~/qmk_firmware/keyboards/redox/keymaps/redox
 - ~/qmk_firmware/keyboards/gergo/keymaps/gergo
