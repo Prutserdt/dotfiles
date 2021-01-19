@@ -1,5 +1,5 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# :sparkles:Dotfiles:sparkles: repo, including my dwm build:bangbang:
+# :sparkles:Dotfiles:sparkles: repo, including my dwm build and my qmk Redox and Gergo keyboard configurations:bangbang:
 Here I store the :sparkles:dotfiles:sparkles: of my GNU/Linux system plus some 
 other stuff.
 
