@@ -1,4 +1,5 @@
 <!This is the  ~/qmk_firmware/keyboards/redox/keymaps/Prutserdt/README.md file for the dotfile bare Github repo/>
+![Redox keyboard](keycaps.JPG)
 # :sparkles:Redox keyboard qmk configuration:sparkles:
 
 My configuration has a qwerty layout and 4 additional layers. The CTRL SUPER
@@ -7,3 +8,5 @@ The arrow keys layer and the mouse layer is also in the home row (right side).
 There is also a F-keys and backlight layer. Layer switching can be done by
 keeping a left thumbkey pressed or by tripple clicking for a sticky layer. Go 
 ahead and check the keymap.c and config.h files!
+
+![Redox keyboard](Redox_keyboard.JPG)
