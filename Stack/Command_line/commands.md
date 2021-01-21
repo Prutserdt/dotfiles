@@ -1854,8 +1854,7 @@ in de directory van het bestand dat je wilt openen dus in dit geval:
 `cd /etc/ssh` `ls *.swp` `sudo rm .sshd_config.swp` of direct:
 ```
 sudo rm /.sshd_config.swp
-```
-Dit werkt in Ubuntu 16.10 (mijn VPS)
+```Dit werkt in Ubuntu 16.10 (mijn VPS)
 
 #### Octave
 Geinstalleerd via pacman. Octave-forge packages geinstalleerd via Octave met de
@@ -1890,6 +1889,10 @@ config config --local status.showUntrackedFiles no
 **Ik wil instellen dat de GIT repo direct werkt met een handshake, zonder
 handmatig een password, dat ga ik nog regelen.**
 
+
+
+
+
 Zorg eerst dat je een public SSH key hebt (had ik al)
 ```
 sudo pacman -S xclip
@@ -1914,6 +1917,57 @@ HET WERKT DUS NOG NIET!!!!
 
 eval "$(ssh-agent -s)"
 ssh-add
+
+### Nieuwe poging tot het toevoegen van een key aan github, 19JAN21:
+
+Ik heb een ~/.ssh directory maar daar staat geen key in.
+Generate a key:
+ssh-keygen -t rsa -b 4096 -C email@email.com
+Daarna heb ik alle vragen leeg gelaten en door 'geentered'(bijv empty
+passphrase)
+Bekijk of de keys zijn aangemaakt door:
+ls -al ~/.ssh
+Ja het staat er!
+Nu ssh-agent laten lopen door:
+eval "$(ssh-agent -s))"
+Yes! De pid is aangemaakt dus het programma loopt.
+Then, add your private key to ssh-agent with:
+ssh-add ~/.ssh/id_rsa
+Print the contents of your public key to the console with
+cat ~/.ssh/id_rsa.pub
+Copy de output en paste het hieronder:
+___
+ssh-rsa
+AA....
+email@email.com
+___
+Open de webpagina:
+https://github.com/settings/keys
+Kies New ssh key.
+Title: Arch pc
+Plak daarin bovenstaande key (incl ssh-rsa....==)
+Klik op Add SSH key.
+Nu voer in commandline:
+ssh -T git@github.com
+Nu heb ik ssh juist ingesteld, maar het werkt niet want ik moet nog eea
+aanpassen, want er wordt geen ssh gebruikt maar .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
@@ -1952,7 +2006,7 @@ config push -v
 ### How to setup a new dotfiles repo
 First create a `dotfiles` directory at ~/ then enter from ~/:
 ```
-git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
+git remote add dotfiles https://githubc /Prutserdt/dotfiles.git
 git push dotfiles
 git push --set-upstream dotfiles master
 git init --bare $HOME/dotfiles

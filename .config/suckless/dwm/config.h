@@ -36,6 +36,8 @@ typedef struct
 } Sp;
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
+// scratchpad does not work with alacritty, at least not with these options
+//const char *spcmd2[] = {"alacritty", "-n", "spvifm", "-g", "144x41", "-e", "vifm", NULL };
 const char *spcmd3[] = {"st", "-n", "spcalc", "-g", "95x35", "-e", "qalculate-gtk", NULL };
 const char *spcmd4[] = {"st", "-n", "spexit", "-g", "15x10", "-e", "/home/icefly/.config/exitdwm.sh", NULL };
 //
@@ -135,6 +137,7 @@ static Key keys[] =
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("alacritty -e vim ~/.xinitrc") },                          // .xinitrc
 	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("alacritty -e vim ~/.Xresources") },                       // .Xresources
     // Right super as application modkey                                                                                           Open application:
+    { MENUKEY,                      XK_b,      spawn,          SHCMD("brave") },                                                // Brave
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               // dmenu
     { MENUKEY,                      XK_f,      spawn,          SHCMD("firefox") },                                              // Firefox
     { MENUKEY|ShiftMask,            XK_f,      spawn,          SHCMD("~/.config/dmenuinternet.sh") },                           // dmenuinternet, select url by dmenu
