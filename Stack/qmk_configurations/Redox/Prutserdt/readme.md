@@ -2,11 +2,11 @@
 ![Redox keyboard](keycaps.JPG)
 # :sparkles:Redox keyboard qmk configuration:sparkles:
 
+![Redox keyboard](Redox_keyboard.JPG)
 My configuration has a qwerty layout and 4 additional layers. The CTRL SUPER
 ALT buttons are part of the home row. The numpad layer is in home row (right side). 
 The arrow keys layer and the mouse layer is also in the home row (right side). 
 There is also a F-keys and backlight layer. Layer switching can be done by
 keeping a left thumbkey pressed or by tripple clicking for a sticky layer. Go 
 ahead and check the keymap.c and config.h files!
-
-![Redox keyboard](Redox_keyboard.JPG)
+![Redox layers](Layers.JPG)
