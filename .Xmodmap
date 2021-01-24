@@ -13,8 +13,6 @@ remove mod4 = Super_R
 add mod3 = Super_R
 
 ! Alt_R key is set to mod5, this is a hotkey to open textfiles in dwm
-!remove mod1 = Alt_R
-!add mod5 = Alt_R
 remove mod1 = Alt_R
 add mod5 = Alt_R
 

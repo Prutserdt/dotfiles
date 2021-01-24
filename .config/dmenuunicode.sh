@@ -10,7 +10,8 @@
 # Simple script to paste emojis via dmenu.
 # Requirement: dmenu and the center patch that gives the dmenu -c option.
 #cat ~/.config/unicode | dmenu -i -l 45 -fn hack-34| awk '{print $1}'| xclip -selection clipboard &&
-cat ~/.config/unicode | dmenu -i -l 45| awk '{print $1}'| xclip -selection clipboard &&
+#cat ~/.config/unicode | dmenu -i -l 45| awk '{print $1}'| xclip -selection clipboard &&
+cat ~/.config/unicode | dmenu -i -c -l 45| awk '{print $1}'| xclip -selection clipboard &&
 #cat ~/.config/unicode | dmenu -i -l 45 -fn monospace-20| awk '{print $1}'| xclip -selection clipboard &&
 #cat ~/.config/unicode | dmenu -i -l 45 -fn hack-34| awk '{print $1}'| xclip -selection clipboard &&
 # Backspace is needed to remove the nextline

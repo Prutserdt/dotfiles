@@ -15,7 +15,7 @@ xset r rate 300 80      # Move around quicker (increase keyboard rate)
 ~/.config/dwmbar.sh &   # Menu bar
 numlockx &              # Switch numlock on
 wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg & # Set wallpaper
-picom -b                # Start picom, for transparancy
+#picom -b               # Start picom, for transparancy
 exec dwm                # Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
 while type dwm >/dev/null ; do dwm && continue || break ; done # to restart in place
 #twm &

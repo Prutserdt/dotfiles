@@ -169,11 +169,12 @@ static Key keys[] =
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[0]} },                                            // Layout: centeredmaster
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[1]} },                                            // Layout: tile
 	{ MODKEY|ShiftMask,             XK_t,      setlayout,      {.v = &layouts[2]} },                                            // Layout: floating
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[3]} },                                            // Layout: monocle
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[3]} },                                            // Layout: monocle
 	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[4]} },                                            // Layout: grid
 	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[5]} },                                            // Layout: centeredfloatingmaster
 	{ MODKEY,                       XK_p,      setlayout,      {.v = &layouts[6]} },                                            // Layout: bottomstack
 	{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[7]} },                                            // Layout: column
+	{ MODKEY,                       XK_f,      fullscreen,     {0} },                                                           // Fullscreen patch (monocle is still needed!)
 	{ MODKEY,                       XK_a,      setlayout,      {0} },                                                           // Toggle between previous layout and current one back/forth
 	{ MODKEY,		                XK_comma,  cyclelayout,    {.i = -1 } },                                                    // Cycle layout: backward
 	{ MODKEY,                       XK_period, cyclelayout,    {.i = +1 } },                                                    // Cycle layout: forward

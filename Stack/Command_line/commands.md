@@ -2250,6 +2250,9 @@ Nu vraagt de applicatie om in te loggen in de webapp, doe dit met de link die
 gegeven wordt. Daarna werkt het :-) (09JAN21)
 Het aanmelden gaat het eenvoudigste via een single command line:
 /home/icefly/Downloads ; ./stack-2.6.5-20200909-x86_64.AppImage &
+Alternatief kun je dmenu gebruiken, voeg de volgende regel toe aan
+~/.cache/dmenu_run
+/home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage
 Je moet wel even wachten en de link in de browser openen, even daarna kun je de
 terminal weer verder gebruiken.
 

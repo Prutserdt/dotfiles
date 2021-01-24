@@ -42,7 +42,6 @@
 #include <X11/Xft/Xft.h>
 #include <X11/Xlib-xcb.h>
 #include <xcb/res.h>
-
 #include "drw.h"
 #include "util.h"
 
@@ -219,6 +218,7 @@ static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
+static void fullscreen(const Arg *arg);
 static void setgaps(int oh, int ov, int ih, int iv);
 static void incrgaps(const Arg *arg);
 static void togglegaps(const Arg *arg);
@@ -1404,12 +1404,24 @@ void
 resizeclient(Client *c, int x, int y, int w, int h)
 {
 	XWindowChanges wc;
+    unsigned int n;
+    Client *nbc;
 
 	c->oldx = c->x; c->x = wc.x = x;
 	c->oldy = c->y; c->y = wc.y = y;
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
 	wc.border_width = c->bw;
+
+    for (n = 0, nbc = nexttiled(selmon->clients); nbc; nbc = nexttiled(nbc->next), n++);
+
+    if (c->isfloating || selmon->lt[selmon->sellt]->arrange == NULL) {
+    } else {
+           if (selmon->lt[selmon->sellt]->arrange == monocle || n == 1) {
+               wc.border_width = 0;
+           }
+    }
+
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
 	XSync(dpy, False);
@@ -1609,6 +1621,22 @@ setfullscreen(Client *c, int fullscreen)
 	}
 }
 
+Layout *last_layout;
+void
+fullscreen(const Arg *arg)
+{
+	if (selmon->showbar) {
+		for(last_layout = (Layout *)layouts; last_layout != selmon->lt[selmon->sellt]; last_layout++);
+		setlayout(&((Arg) { .v = &layouts[3] }));
+        // origineel van fullscreen patch:	setlayout(&((Arg) { .v = &layouts[2] }));
+        // deze heb ik aangepast naar het bovenstaande, want in mijn dwm build
+        // staat monocle in layout[3]
+	} else {
+		setlayout(&((Arg) { .v = last_layout }));
+	}
+	togglebar(arg);
+}
+
 void
 setlayout(const Arg *arg)
 {
@@ -1802,7 +1830,6 @@ spawn(const Arg *arg)
 /* 		exit(EXIT_SUCCESS); */
 /* 	} */
 /* } */
-
 
 void
 tag(const Arg *arg)

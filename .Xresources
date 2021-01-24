@@ -8,7 +8,7 @@
 ! Modified by Prutserdt
 !
 !! Transparency (0-1):
-*.alpha:0.5 
+! *.alpha:0.5 
 
 !! Set a default font and font size as below:
 *.font: hack:size=13

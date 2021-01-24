@@ -17,4 +17,4 @@ chosen=$(cat ~/.config/urls | dmenu -i -c -l 30)
 [ -z "$chosen" ] && exit
 
 # If you run this command with an argument, it will automatically open
-firefox $chosen
+brave $chosen
