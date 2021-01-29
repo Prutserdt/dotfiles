@@ -66,7 +66,7 @@ alias dsdm="cd ~/Stack/suckless/dmenu && pwd"
 ###########################
 #           dwm           # 
 ###########################
-#PATH="$HOME/bin:$PATH" # ~/bin was addet to path, makes locale install of dwm possible via .xinitrc.
+PATH="$HOME/bin:$PATH" # ~/bin was addet to path, makes locale install of dwm possible via .xinitrc.
 alias dwmbackup='~/.config/dwmbackup.sh'        # Make the current dwm the stable version
 alias dwmvanilla='~/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTROYS CURRENT dwm!
 alias dwmstable='~/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
@@ -79,4 +79,4 @@ alias dmenuvanilla='~/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROY
 alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
 alias dmenupatch='~/.config/dmenupatch.sh'      # 3: Run the dwmpatch command to test the patch
 ###########################
-#PATH="$HOME/.local/bin:$PATH"                   # Added for qmk stuff
+#exec dwm                # Run dwm, a sym link in  ~/bin, and the path was set in .bashrc

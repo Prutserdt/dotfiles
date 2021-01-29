@@ -1,7 +1,7 @@
 <!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# :sparkles:Dotfiles:sparkles: repo, including my dwm build and my qmk Redox and Gergo keyboard configurations:bangbang:
+# :sparkles:Dotfiles:sparkles: repo, including my dwm build and my qmk Redox and Gergo keyboard configurations
 Here I store the :sparkles:dotfiles:sparkles: of my GNU/Linux system plus some 
-other stuff. Some dotfiles of this repo are: alacritty, newsboat, vifm, vim.
+other stuff. Some of my dotfiles are: alacritty, newsboat, vifm, vim.
 
 My build of dwm, a dynamic window manager, can be found [here](https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm). 
 

@@ -1375,9 +1375,6 @@ Play youtube and other sources automatically by mpv in firefox.
 First set the ff2mpv extension in firefox and then install:
 yay ff2mpv-native-messaging-host-git
 
-
-
-
 ### C programming
 
 De meest simpele manier om snel een C programma te draaien:
@@ -1390,6 +1387,10 @@ STart de C binary met:
 ```
 ./test
 ```
+### ZSH en Oh-my-zhs
+Na oh-my-zsh-git installatie via yay maak een config via:
+cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
+Nu beginnen met configureren.
 
 #### Applications (Command line and GUIs)
 
@@ -1625,6 +1626,10 @@ List of keystrokes (about spell checking)
 z=                      Give autocorrection suggestions
 zg                      Add word to dictionary
 :set spelllang=en_us,nl Set two spelling dictionaries
+
+Save the current document under another name:
+:w ~/.config/suckless/dwm/config.h
+
 
 ```
 #### fzf (fuzzy finder)
@@ -2261,6 +2266,8 @@ davs://icefly.stackstorage.com/remote.php/webdav/
 Daarna wordt naar username en password gevraagd en staat het in thunar
 ingesteld.
 
+Zie dmenu onderaan om te zien hoe je appimage koppeld aan dmenu_run
+
 #### Copy pictures of mac to linux
 Connect old imac hard drive connected to a usb connector with powersupply to 
 new imac pc by the usb C hub. Open the photos application of mac and select
@@ -2291,6 +2298,16 @@ modprobe vboxdrv
 
 whonix virtualbox image downloaded, imported in virtualbox. Could not start
 First run the gateway, after that the workstation.
+
+#### Arduino
+De arduino applicatie kreeg ik aan de gang na installatie van arduino
+(community) toegang tot de groep uucp en installatie van arduino-avr-core.
+```
+sudo arduino
+```
+en selecteer: tools board: Arduino uno . port: ttyACM0
+firmware is te uploaden, het werkt!
+
 
 ### Distros
 
@@ -3615,8 +3632,21 @@ Opgelost door met het script ~/.config/dmenuapps.sh:
 cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
 ```
 Probleem is dat nieuwe apps nu niet bij dmenu_run worden toegevoegd.
-Doe dat door:
-rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run
+Doe dat door eerst de file te deleten:
+```
+rm ~/.cache/dmenu_run
+```
+Daarna de lijst opnieuw te maken:
+```
+ls /usr/bin/* > ~/.cache/dmenu_run
+```
+En handmatig de appimage toevoegen:
+```
+sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run
+```
+Dit allemaal tegelijk:
+
+rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run; sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run
 
 Het bovenstaande werkt, maar wel met directory structuur wat lelijk is maar
 verder geen probleem.

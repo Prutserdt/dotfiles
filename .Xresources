@@ -42,25 +42,3 @@
 *.color15: #ebdbb2
 *.color256: #1d2021
 *.color257: #ebdbb2
-
-/!! Dracula, modified by Prutserd (stay black my friends):
-/*.color0: #000000
-/*.color1: #ff5555
-/*.color2: #ff1071
-/*.color3: #f1fa8c
-/*.color4: #bd93f9
-/*.color5: #ff79c6
-/*.color6: #8be9fd
-/*.color7: #777777
-/*.color8: #44475a
-/*.color9: #ff5555
-/*.color10: #50aa7d
-/*.color11: #f1aa8c
-/*.color12: #bd13f9
-/*.color13: #ff90dd
-/*.color14: #8be9af
-/*.color15: #ef1eee
-/*.color256: #000000
-/*.color257: #f8f8f2
-//*.color15: #ffffff
-/*.color2: #50fa7b

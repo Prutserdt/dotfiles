@@ -5,7 +5,7 @@
 |_|  |_|\__, | |____/  \_/\_/  |_|  |_| |_.__/ \__,_|_|_|\__,_|
         |___/                              Created by Prutserdt
 
-This is my build of dwm - dynamic window manager. An extremely fast, small, 
+This is my build of dwm 6.2 - dynamic window manager. An extremely fast, small, 
 and dynamic window manager for X.
 
 Check the log directory for the applied patches.
@@ -42,5 +42,5 @@ dwm patching
 -----------
 Safe as stable version: dwmbackup (an .bashrc alias) in command line
 Restore stable version: dwmstable (an .bashrc alias) in command line
-Run vanilla dwm:        dwmvanilla (an .bashrc alias) in command line
+Restore vanilla dwm:    dwmvanilla (an .bashrc alias) in command line
 -----------
