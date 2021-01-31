@@ -13,8 +13,9 @@
 
 // Next line modified by Prutserdt. Switch to layer after three taps, instead of 
 // the default of five taps.
-// Two taps lead to unintentional switching, which is annoying
-#define TAPPING_TOGGLE 3
+// Two taps led to unintentional switching, which is annoying
+// Threej taps led to unintentional switching, which is annoying
+#define TAPPING_TOGGLE 4
 // The rest of this config is untouched.
 
 /* Use I2C or Serial, not both */

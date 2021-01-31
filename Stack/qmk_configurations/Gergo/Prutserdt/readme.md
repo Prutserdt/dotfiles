@@ -1,16 +1,10 @@
-<!This is the  ~/qmk_firmware/keyboards/redox/keymaps/Prutserdt/README.md file for the dotfile bare Github repo/>
-![Redox keyboard](keycaps.JPG)
-# :sparkles:Redox keyboard qmk configuration:sparkles:
+# [Gergo! By g Heavy Industries](http://gboards.ca)
 
-![Redox keyboard](Redox_keyboard.JPG)
-My configuration has a qwerty layout and 5 additional layers. The CTRL SUPER
-ALT buttons are part of the home row. The numpad layer is in home row (right side). 
-There is another number layer where the numbers are at the home row (left and right).
-The arrow keys layer and the mouse layer is also in the home row (right side). 
-There is also a F-keys and backlight layer. Layer switching can be done by
-keeping a thumbkey pressed or by tripple clicking for a sticky layer. Go ahead
-and check the keymap.c and config.h files!
-![Redox layers](Layers.JPG)
-Note: my layout is not a finished product yet and is changed frequently, the
-picture could be different from the actual current layout, see the keymap.c
-file. 
+![Gergo image](https://4.bp.blogspot.com/-889nMXxgSM0/XCNxwnO5kUI/AAAAAAAA6mI/tZbWgZVCBW0dyZOCGJDkjN06DVax7j8XwCLcBGAs/s1600/48422820_967732713413298_485744639215665152_n.jpg)
+
+This is the default keymap for Gergo, it's based heavily off of the naps62 ErgoDox layout and is aimed at a programmer friendly keymap.
+
+## Settings
+To edit various settings, enable the 1u trackball and whatnot please modify /keyboards/gergo/keymaps/default/rules.mk
+
+Ideally you should copy this directory and make your changes there. If you come up with a good layout submit a PR!
