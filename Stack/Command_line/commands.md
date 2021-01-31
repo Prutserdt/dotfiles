@@ -1957,23 +1957,6 @@ ssh -T git@github.com
 Nu heb ik ssh juist ingesteld, maar het werkt niet want ik moet nog eea
 aanpassen, want er wordt geen ssh gebruikt maar .
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
 ```

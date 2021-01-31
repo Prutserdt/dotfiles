@@ -1,4 +1,4 @@
-/* Copyright Prutserdt 2021. Free software, GNU General Public Licence, see http:.gnu.org/licences  */
+/* Free software, GNU General Public Licence, see http:.gnu.org/licences  */
 
 #include QMK_KEYBOARD_H
 
