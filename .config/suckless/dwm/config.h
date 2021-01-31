@@ -131,6 +131,7 @@ static Key keys[] =
 	{ MENUFILE,                     XK_space,  spawn,          SHCMD("~/.config/wololo.sh") },                                  /* Keystroke cheat for 0ad: enter wololo enter */
 	{ MENUFILE,                     XK_x,      spawn,          SHCMD("alacritty -e vim ~/.xinitrc") },                          /* .xinitrc */
 	{ MENUFILE|ShiftMask,           XK_x,      spawn,          SHCMD("alacritty -e vim ~/.Xresources") },                       /* .Xresources */
+	{ MENUFILE,                     XK_z,      spawn,          SHCMD("alacritty -e vim ~/.zshrc") },                            /* .bashrc */
     /* Right super as application modkey                                                                                           Open application: */
     { MENUKEY,                      XK_b,      spawn,          SHCMD("brave") },                                                /* Brave */
 	{ MENUKEY,                      XK_d,      spawn,          SHCMD("~/.config/dmenuapps.sh") },                               /* dmenu */
