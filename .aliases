@@ -1,0 +1,70 @@
+# ~/.aliases
+#         _ _
+#    __ _| (_) __ _ ___  ___  ___
+#   / _` | | |/ _` / __|/ _ \/ __|
+#  | (_| | | | (_| \__ \  __/\__ \
+# (_)__,_|_|_|\__,_|___/\___||___/
+#             created by Prutserdt
+
+alias .1='cd ..'
+alias .2='cd ../.. && pwd'
+alias .3='cd ../../.. && pwd'
+alias .4='cd ../../../.. && pwd'
+alias ls='ls --color=auto'      # Colored output when possible
+alias l='ls -alh'               # Lazy man's ls
+alias la='ls -lAFh'             # Long list
+alias diff="diff --color=auto"
+alias q="exit"                  # Exiting quickly
+alias c='printf "\e[H\e[2J"'    # Clear screen, CTL-L for scrollback
+alias cls="c;ls"                # Clear screen, scrollback and 'ls --color=auto'
+alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
+alias rm='rm -i'                # Ask for permission, for safety
+alias cp='cp -i'                # Ask for permission, for safety
+alias mv='mv -i'                # Ask for permission, for safety
+
+# TODO uitzoeken hoe history te gebruiken met , misschien bash en zsh sourcen?
+##alias h="history | fzf"         # Fuzzy find history
+alias h="/home/icefly/.zsh_history | fzf"         # Fuzzy find history
+alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # History executable
+alias fzlog='fzf < ~/i3_log/"$(ls -Art ~/i3_log | tail -n1)"' # Fuzzy find in the most recent i3_log file 
+# sxiv: thumbnail mode current directory. Sort by name and give output if files are selected (m)
+alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | sxiv -ftio"
+# sxiv: including underlaying subdirectories
+alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv -ftio"
+alias dotfiles='~/.config/dotfiles.sh'                                  # Dotfiles repository Github
+alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github simplification
+alias k='xmodmap ~/.config/kbswitch && xset r rate 300 80'              # Change modkeys, Caps/Esc and fast key repeats
+alias r='xmodmap ~/.config/rdxswitch && xset r rate 300 80'             # Change to redox kb, alt-r modkeys, and fast key repeats
+# Jump to directories
+alias daa="cd ~/Stack/Documenten/Aandelen"
+alias daf="cd ~/Stack/Afbeeldingen"
+alias dav="cd ~/Stack/Afbeeldingen/Vakantie"
+alias daw="cd ~/Stack/Afbeeldingen/Wallpapers"
+alias dc="cd ~/.config"
+alias dd="cd ~/Downloads"
+alias dh="cd ~/"
+alias ds="cd ~/Stack"
+alias dw="cd ~/Stack/Afbeeldingen/Wallpapers"
+alias de="cd ~/Stack/Documenten/Studie/C_programming_training_Dartmouth"
+alias dr="cd ~/qmk_firmware/keyboards/redox/keymaps/Prutserdt"
+alias dg="cd ~/qmk_firmware/keyboards/gergo/keymaps/Prutserdt"
+# Jump to suckless app dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
+alias dss="cd ~/Stack/suckless"
+alias ddw="cd ~/.config/suckless/dwm"
+alias dsdw="cd ~/Stack/suckless/dwm"
+alias ddm="cd ~/.config/suckless/dmenu"
+alias dsdm="cd ~/Stack/suckless/dmenu"
+# dwm aliases. dwm requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
+alias dwmbackup='~/.config/dwmbackup.sh'        # Make the current dwm the stable version
+alias dwmvanilla='~/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTROYS CURRENT dwm!
+alias dwmstable='~/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
+alias dwmpatch='~/.config/dwmpatch.sh'          # Restore dwmstable and run the patch on it
+# dmenu aliases. dmenu requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
+alias dmenubackup='~/.config/dmenubackup.sh'    # Make the current dmenu the stable version
+alias dmenuvanilla='~/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROYS CURRENT dmenu!
+alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
+alias dmenupatch='~/.config/dmenupatch.sh'      # Run the dwmpatch command to test the patch
+alias dmenuupdate='~/.config/dmenuUpdate.sh'     # Update the application list for dmenu
+# zsh aliases
+alias ze="vim ~/.zshrc"
+alias zs="source ~/.zshrc"

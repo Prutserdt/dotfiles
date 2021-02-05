@@ -38,6 +38,7 @@
 * Copy pictures of mac to linux
 * VPN
 * Virtualbox and Whonix
+* Arduino
 #### Distros
 * XFCE tricks
 * i3 window manager
@@ -2282,7 +2283,7 @@ modprobe vboxdrv
 whonix virtualbox image downloaded, imported in virtualbox. Could not start
 First run the gateway, after that the workstation.
 
-#### Arduino
+#### Arduino probleem oplossen
 De arduino applicatie kreeg ik aan de gang na installatie van arduino
 (community) toegang tot de groep uucp en installatie van arduino-avr-core.
 ```
@@ -2290,6 +2291,97 @@ sudo arduino
 ```
 en selecteer: tools board: Arduino uno . port: ttyACM0
 firmware is te uploaden, het werkt!
+
+Werken met Arduino via de tty met arduino-cli
+```
+arduino-cli board list
+```
+Port         Type              Board Name  FQBN            Core
+/dev/ttyACM0 Serial Port (USB) Arduino Uno arduino:avr:uno arduino:avr)
+
+```
+arduino-cli core list
+```
+ID          Installed Latest Name
+Arduino:avr 1.8.3     1.8.3  Arduino AVR Boards
+
+Maken van een sketch via:
+```
+arduino-cli sketch new Naam
+Programmeer de sketch, ga in deze dir  en compileer daarna met
+```
+arduino-cli compile -b arduino:avr:uno -v
+
+ik zie dat de hex file en bin file niet in de home dir worden gezet
+maar in /tmp/arduino-sketch.....
+Ik heb alle files in die dir gecopieerd naar de dir waar de sketch in staat,
+oftewel waar de .ino in staat met: cp *.* ~/FirstSketchWalter
+en daarna:
+```
+arduino-cli upload -b arduino:avr:uno -p /dev/ttyACM0 -v
+
+```
+Makkelijker maken van door boardname
+```
+arduino-cli board attach /dev/ttyACM0 -v
+```
+Het gaat niet helemaal goed want hier wordt aangegeven dan config file not
+found. Opgelost door een config aan te maken met:
+```
+arduino-cli config init
+```
+En nu geeft het bovenstaande attach commando een goede output.
+
+arduino-cli compile --fqbn arduino:avr:uno FirstSketchWalter.ino -v
+arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchWalter.ino
+
+#### Arduino
+3 stappen voor Arduino programmeren:
+1: programmeer sketch genaamd FirstSketchWalter.ino
+2: compileer in directory sketch:
+arduino-cli compile --fqbn arduino:avr:uno FirstSketchWalter.ino -v
+3: upload naar de uno, et voila
+arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchWalter.ino -v
+(remark: de hex files staan in een temp dir, maar dat maakt niet uit verder.)
+
+#### ESP32 CAM
+De volgende packages geinstalleerd:
+```
+sudo pacman -S --needed gcc git make flex bison gperf python-pip cmake ninja ccache dfu-util
+```
+Daarna een git clone van de ESP-IDF (Internet of things Design Framework)
+```
+mkdir ~/esp
+cd ~/esp
+git clone -b v4.2 --recursive https://github.com/espressif/esp-idf.git
+```
+Setup the tools:
+```
+cd ~/esp/esp-idf
+./install.sh
+```
+Run it in downloads/ESP32_cam
+```
+cd ~/Downloads/ESP32_cam
+. $HOME/esp/esp-idf/export.sh
+```
+Starten van een project
+```
+cd ~/esp
+cp -r $IDF_PATH/examples/get-started/hello_world .
+```
+Connect met poort, door het onderstaande commando, daarna inpluggen usb kabel
+en daarna hetzelfde commando
+```
+ls /dev/tty*
+```
+Het board wordt herkend als: /dev/ttyUSB0
+Je moet rechten hebben als user in uucp group in Arch (zie 'groups' in tty)
+Installeer putty
+
+tot hier gekomen in deze website:
+https://www.howtogeek.com/439736/how-to-create-aliases-and-shell-functions-on-linux/
+
 
 
 ### Distros

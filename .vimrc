@@ -92,6 +92,16 @@ set colorcolumn=80        " Show the 80 boundary
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :let mapleader = "-"
 :nnoremap <leader>d dd
+
+" ctrl backspace for removing previous word in insert mode 
+noremap! <C-BS> <C-w>
+noremap! <C-h> <C-w>
+inoremap <C-w> <C-\><C-o>dB
+inoremap <C-BS> <C-\><C-o>db
+
+" Would like ctrl del also to work for dw in insert mode"
+"map <C-Del> <C-O>dw 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Auto parentheses. Automatically add closing signs to parentheses.
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
