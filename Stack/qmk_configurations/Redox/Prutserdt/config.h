@@ -11,12 +11,8 @@
 #define TAPPING_TERM 400
 #define IGNORE_MOD_TAP_INTERRUPT
 
-// Next line modified by Prutserdt. Switch to layer after three taps, instead of 
-// the default of five taps.
-// Two taps led to unintentional switching, which is annoying
-// Threej taps led to unintentional switching, which is annoying
+// Four taps are needed. Two and tree led to a lot of unintentional layer switching
 #define TAPPING_TOGGLE 4
-// The rest of this config is untouched.
 
 /* Use I2C or Serial, not both */
 #define USE_SERIAL

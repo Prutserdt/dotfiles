@@ -1,9 +1,10 @@
- /!Modified by Prutserdt, ~/Stack/Command_line/commands.md>
+ <! ~/Stack/Command_line/commands.md>
           _     _                    _        _      _        
          | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____ 
          | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
          | |___| | | | | |_| |>  <  | |_| |  | | (__|   <\__ \
          |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
+                                          Created by Prutserdt
 ---
 ## Content
 #### Command line tricks
@@ -39,6 +40,7 @@
 * VPN
 * Virtualbox and Whonix
 * Arduino
+* ESP32 cam
 #### Distros
 * XFCE tricks
 * i3 window manager
@@ -72,8 +74,10 @@ file. Bijvoorbeeld: md5, sha-1 of sh256. Dit doe je met: `md5sum`, `sha1sum` en
 
 kali-linux-rolling-pocket+20180207-1_oud.iso
 
-Which command. Vind locatie van applicatie.
+Which command. Vind locatie van applicatie. Find application location directory.
 which firefox
+Om te kijken waar het van uigevoerd word kun je dit proberen:
+find / -name firefox 2> /dev/null
 
 **cat** command. Laat txt files zien: `cat /etc/fstab`
 
@@ -234,9 +238,7 @@ dd if=/dev/sr0 of=isoimage.iso bs=2048 count=$blocks  status=progress
 ```
 
 Eenvoudiger (externe harde schijf iso)
-```
-sudo dd if=/dev/sdc of=MacCindy.iso status=progress
-```
+`sudo dd if=/dev/sdc of=MacCindy.iso status=progress`
 
 alternatief formateren (fat32)
 ```
@@ -288,15 +290,11 @@ xrandr -o right
 ```
 
 Zoeken connected displays
-```
-xrandr --query
-```
+`xrandr --query`
 
 Specifieke setup op werk, twee monitoren, breedbeeld in A4 en extra beeldscherm,
 gecorrigeerd voor hoogte
-```
-xrandr --output VGA-1 --mode 1280x1024 --pos 1050x195 --output DP-1 --mode 1680x1050 --rotate left --pos 0x0
-```
+`xrandr --output VGA-1 --mode 1280x1024 --pos 1050x195 --output DP-1 --mode 1680x1050 --rotate left --pos 0x0`
 
 Jan 12 22:23:32 archPC kernel: [Firmware Bug]: TSC_DEADLINE disabled due to Errata; 
 please update microcode to version: 0x22 (or later). Opgelost door een
@@ -348,9 +346,7 @@ ffmpeg -i Film.mp4 -ss 309 -t 105 -c copy -fflags +genpts Filmpje.mp4
 ```
 
 Frame by frame (Duurt wel langer. Als het bovenstaande niet goed werkt.):
-```
-ffmpeg -i Film.mp4 -ss 308 -t 111 -fflags +genpts Filmpje.mp4
-```
+`ffmpeg -i Film.mp4 -ss 308 -t 111 -fflags +genpts Filmpje.mp4`
 
 Vind de code van keys van keyboard (toetsenbord): `xev`.
    
@@ -409,9 +405,7 @@ chmod 755 test.py nu is het executable
 
 Verander ownership file met chown: `chown archie filename`.
 Bulk verander rechten, incl. subdirectories :-):
-```
-find Afbeeldingen -type d -exec chmod 755 {} +
-```
+`find Afbeeldingen -type d -exec chmod 755 {} +`
 
 Aanmaken directory voor meerdere users (in dit geval, DATA in /home):
 ```
@@ -421,6 +415,9 @@ sudo usermod -a -G project werk
 sudo chgrp -R project /home/DATA/
 sudo chmod -R 2775 /home/DATA/
 ```
+sudo chmod -R 
+
+
 
 Veranderen van rechten, van root root naar icefly users.
 (username groupname)
@@ -488,19 +485,13 @@ journalctl -k #from the current boot
 journalctl -k -b -5 #messages from 5 boots ago
 ```
 Zoeken naar fouten -p=sort by priority
-```
-journalctl -p err -b #Gives all error, critical, alert, or emergency. 
-```
+`journalctl -p err -b #Gives all error, critical, alert, or emergency. `
 
 Log live volgen:
-```
-journalctl -f
-```
+`journalctl -f`
 
 Grootte log:
-```
-journalctl --disk-usage
-```
+`journalctl --disk-usage`
 
 De command line history staat hier: `/home/icefly/.bash_history`.
 Zoeken in de history naar bijv. ssh gaat alsvolgt (zie ook fzf en aliases .bashrc):
@@ -685,33 +676,23 @@ start=$PWD; for directory in *; do cd "$directory"; for filename in *; do for i 
 ```
 
 werkt redelijk, maar niet super want de tijd wordt 3 keer herhaald (original+digitized+modified) Haakjes in naam werkt niet. .mov --> no exif data found in the file. 
-```
-for i in $(ls *.*); do exiv2 -r '%Y%m%d-%H%M-:basename:' rename $i; done
-```
+`for i in $(ls *.*); do exiv2 -r '%Y%m%d-%H%M-:basename:' rename $i; done`
 
 Find datum van foto metadata:
-```
-identify -format %[EXIF:DateTimeOrginal]
-```
+`identify -format %[EXIF:DateTimeOrginal]`
 IMG_1923.JPG
 
 Kopieer bestand in dezelfde directory met andere naam:
-```
-cp IMG_1923.JPG test.JPG
-```
+`cp IMG_1923.JPG test.JPG`
 
 Vind datum van foto en gebruik dit voor het hernamen van de foto (test.jpg
 --> 20150516-1935_test.jpg)
 werkt goed. metadat blijft intact.
-```
-exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)
-```
+`exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)`
 
 29MAR20: Rename pictures
 Step 1, rename files by metadata in directory:
-```
-exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)
-```
+`exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)`
 Step 2: Change *.jpeg to *.jpg in directory
 ```
 find -name '*.JPG' -exec rename .JPG .jpg {} \;
@@ -769,11 +750,10 @@ Create Date                     : 2020:02:16 15:39:55
 Creation Date                   : 2019:06:01 14:09:27+07:00
 ```
 --------------------------------------------------------------
+```
 November 2020, wederom vakantiefotos sorteren.
 Een van de devices lag 66 minuten achter. Daardoor werkte dit niet:
-```
-exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)
-```
+`exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)`
 De fotos stonden daarna namelijk niet goed chronologisch. Dit is opgelost door 
 de fotos van het device in een directory te zetten (pro tip: mount het geheugen
 om extra snel te kunnen werken) en het volgende:
@@ -829,24 +809,18 @@ rename 20201007 20201007_Roma *.jpg; rename 20201008 20201008_Roma *.jpg; rename
 ```
 Mac image format heic conversion
 Conversion of .heic to jpg:
-```
-for file in *.heic; do heif-convert $file ${file/%.heic/.jpg}; done
-```
+`for file in *.heic; do heif-convert $file ${file/%.heic/.jpg}; done`
+
 Roteren van afbeeldingen dmv exif informatie
 Correct rotation image by exif data:
 het volgende werkt NIET:
-```
-jhead -autorot *.jpg
-```
+`jhead -autorot *.jpg`
+
 andere optie: exiftran
 WERKT OOK NIET:
-```
-exiftran -ai *.jpg
-```
+`exiftran -ai *.jpg`
 Geef exif informatie:
-```
-identify -verbose 20201008_Roma-1022_IMG_6383.jpg | grep "exif:"""
-```
+`identify -verbose 20201008_Roma-1022_IMG_6383.jpg | grep "exif:"""`
 Informatie is te zien via:
 ```
 exiftool -Orientation -S IMG_0049.heic
@@ -859,10 +833,6 @@ exiftool -Orientation -S *
 Daarna deze output gecopieerd naar vim en de verschillende orientaties in
 apparte dirs gezet (dmv commandline cp files.jpg file2.jpg dirnaam).
 Daarna in deze dirs de bestanden gedraaid met de volgende commandos:
-
-
-
-
 
 --------------------------------------------------------------
 ### PACMAN/YAOURT/YAY    
@@ -888,34 +858,22 @@ yaourt -Syyu --debug
 ```
 To remove a package, which is required by another package, without 
 removing the  dependent package:
-```
-yaourt -Rdd
-```
+`yaourt -Rdd`
 Als een file corrupted is, dan forceer het opnieuw installeren:
-```
-yaourt -S --force
-```
+`yaourt -S --force`
 
 Ignore package, stel dat een package een probleem geeft, dan kun je dit
 ignoren...
-```
-sudo pacman -Syu --ignore fontconfig
-```
+`sudo pacman -Syu --ignore fontconfig`
 
 Forcefull install package (liever niet forceren, alleen bij uitzondering)
-```
-sudo pacman -S --force packagename 
-```
+`sudo pacman -S --force packagename `
 Installeer alles geforceerd, alleen bij uitzondering, zorg voor een 
 volledige backup van het systeem voor de zekerheid
-```
-sudo pacman -Syu --force 
-```
+`sudo pacman -Syu --force `
 
 For recursively removing orphans and their configuration files
-```
-sudo pacman -Rns $(pacman -Qtdq)
-```
+`sudo pacman -Rns $(pacman -Qtdq)`
 
 number of applications
 ```
@@ -923,31 +881,19 @@ sudo pacman -Q | wc -l
 sudo pacman -Qet | wc -l
 ```
 List number of applications by size
-```
-sudo pacman -Qi | egrep '^(Name|Installed)' | cut -f2 -d':' | paste - - | column -t | sort -nrk 2 | grep MiB | less 
-```
+`sudo pacman -Qi | egrep '^(Name|Installed)' | cut -f2 -d':' | paste - - | column -t | sort -nrk 2 | grep MiB | less `
 all apps:
-```
-sudo pacman -Qe
-```
+`sudo pacman -Qe`
 check orphan packages
-```
-sudo pacman -Qdt  
-```
+`sudo pacman -Qdt  `
 Remove the application + orphan packages
-```
-sudo pacman -Rns packagename  
-```
+`sudo pacman -Rns packagename  `
 combineren van bovenstaande 2 commands, verwijderd automatisch de orphan 
 packages
-```
-sudo pacman -Rns $(pacman -Qdtq)
-```
+`sudo pacman -Rns $(pacman -Qdtq)`
 
 opschonen cache en outdated packages
-```
-sudo pacman -Scc
-```
+`sudo pacman -Scc`
 pacman.conf instellen
 /etc/pacman.conf
 Zet in misc. gedeelte:
@@ -957,9 +903,7 @@ CheckSpace   # commenting out
 ILoveCandy   # Toegevoegd voor pacman animatie tijdens download
 ```
 grafische info over pacman
-```
-sudo pacman --version
-```
+`sudo pacman --version`
 Display clever insults when an incorrect password is entered instead of
 printing the default "wrong password" message. Find /etc/sudoers and 
 append "insults"
@@ -1009,25 +953,15 @@ ip addr show laat ip addres zien (en andere
         info)
 ```
 Discovery of access points
-```
-iwlist wlan0 scanning | less
-```
+`iwlist wlan0 scanning | less`
 Check current mac adress
-```
-ip link show eth0
-```
+`ip link show eth0`
 Bring network interface down
-```
-ip link set dev eth0 down
-```
+`ip link set dev eth0 down`
 Change mac adress
-```
-ip link set dev eth0 address XX:XX:XX:XX:XX:XX
-```
+`ip link set dev eth0 address XX:XX:XX:XX:XX:XX`
 Bring network interface back up
-```
-ip link set dev eth0 up
-```
+`ip link set dev eth0 up`
 
 mac adress vast internet desktop pc
 eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT qlen 1000
@@ -1094,15 +1028,11 @@ sudo chmod 700 ~/.vnc
 vncserver
 ```
 of
-```
-vncserver -geometry 1920x1080 -alwaysshared -dpi 96-localhost :1
-```
+`vncserver -geometry 1920x1080 -alwaysshared -dpi 96-localhost :1`
 Mobieltje het lukt om in te loggen zonder ssh met androidVCN:
 192.168.31.100:1 geeft login.. geen ssh
 stoppen server
-```
-vncserver -kill :1
-```
+`vncserver -kill :1`
 Vinden open vnc applicaties 
 ```
 ps -A |grep vnc
@@ -1110,9 +1040,7 @@ kill -SIGKILL <PID>
 kill -9 <PID>
 ```
 Running directly from X0vncserver (werkt ook!)
-```
-x0vncserver -display :0 -passwordfile ~/.vnc/passwd
-```
+`x0vncserver -display :0 -passwordfile ~/.vnc/passwd`
 Aanpassen wachtwoord (ww in keepass)
 ```
 vncpasswd
@@ -1130,9 +1058,7 @@ sudo pacman -S python-matplotlib python-xlsxwriter ghex
 ```
 Downloaden pycorn v 0.18 script, en daarna dit python script installeren 
 via:
-```
-sudo pip install pycorn
-```
+`sudo pip install pycorn`
 
 Run het script via voorbeelden uit 
 */usr/lib/python3.6/site-packages/pycorn/docs/USAGE_pycorn-bin.txt*:
@@ -1154,9 +1080,7 @@ pycorn.py /home/DATA/'HESP preproduct001.res
 ```
 
 Batch script voor het maken van een pdf file van *.res in de huidige directory (WERKEND!):
-```
-for i in *.res;do pycorn-bin.py -p "$i";done
-```
+`for i in *.res;do pycorn-bin.py -p "$i";done`
 Proberen om data te lezen van een res file. Handmatig zonder de pycorn 
 script. Uitleg opbouw van .res files staat in het onderstaande document.
 Ik wil de sensor data uitlezen. Dit bevat de volgende informatie (twee 
@@ -1175,7 +1099,10 @@ ghex /home/werk/Downloads/PyCORN-master/samples/sample1.res
 ghex /home/DATA/'HESP preproduct001.res'
 ```
 ......to be continued....
-     
+    
+#### Perform google search from commandline: tuxi
+tuxi wie is de mol
+
 #### Bluetooth instellen   
 
 Geprobeerd aan de gang te krijgen: 07MAY18.
@@ -1192,9 +1119,7 @@ ERROR: Module aliaa btusb not found
 ```
 
 Dus de module maar geladen:
-```
-modprobe btusb
-```
+`modprobe btusb`
 
 Output: 
 ```
@@ -1248,9 +1173,7 @@ Ga naar rechtsonder network manager, add connection, vpn, import a saved
 VPN configuration. Gekozen: vpnbook, de4 server
 
 Automatiseren van 200 muis klikken om de 50 ms:
-```
-xdotool click --delay 50 --repeat 20 1
-```
+`xdotool click --delay 50 --repeat 20 1`
 
 #### Samba instellen
 Het onderstaande werkt helaas nog niet.
@@ -1270,22 +1193,10 @@ sshfs
 
 #### Fonts installeren
 Double_Feature.ttf file gedownload, deze wil ik nu installeren.
-Maak deze directory: 
-```
-mkdir -p ~/.local/share/fonts
-```
-Kopieer de ttf file:
-```
-cp ~/Downloads/*.ttf ~/.local/share/fonts
-```
-Verfris fc-cache:
-```
-fc-cache -f -v 
-```
-Kijken of de font erbij staat:
-```
-fc-list | grep Double
-```
+Maak deze directory: `mkdir -p ~/.local/share/fonts`
+Kopieer de ttf file: `cp ~/Downloads/*.ttf ~/.local/share/fonts`
+Verfris fc-cache: `fc-cache -f -v `
+Kijken of de font erbij staat: `fc-list | grep Double`
 
 #### SQlite3 database
 https://www.tutorialspoint.com/sqlite/sqlite_select_query.htm
@@ -1306,9 +1217,7 @@ csv export sqlite (volg door tussendoor '.show'):
 .output test.csv
 ```
 select Humidity, Date from Temperature;
-```
-.output stdout
-```
+`.output stdout`
 ---
 ### Corona script
 Procedure gepikt van Luke Smith
@@ -1317,9 +1226,7 @@ curl https://corona-stats.online
 curl https://corona-stats.online/netherlands > ~/.cache/corona
 ```
 Script aangemaakt in ~/.local genaamd corona, executable gemaakt door:
-```
-chmod +x ~/.local/corona
-```
+`chmod +x ~/.local/corona`
 Inhoud script:
 ```
 #!/bin/sh
@@ -1381,70 +1288,60 @@ yay ff2mpv-native-messaging-host-git
 De meest simpele manier om snel een C programma te draaien:
 creeer een file in vim, bijv: test.c
 Compile deze file met:
-```
-gcc test.c -o test
-```
-STart de C binary met:
-```
-./test
-```
+`gcc test.c -o test`
+Start de C binary met:
+`./test`
+
 ### ZSH en Oh-my-zhs
 Na oh-my-zsh-git installatie via yay maak een config via:
 cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
 Nu beginnen met configureren.
+
+Mijn history staat in ~/.histfile. Verwijder duplicates kan met het onderstaande
+`cat -n .histfile | sort -t ';' -uk2 | sort -nk1 | cut -f2- >.histfile`
+
+### Downgrade, downgraden van pacakges met de applicatie downgrade
+Installeren van downgrade via: `yay -S downgrade`
+Downgrade applicatie binutils: `sudo downgrade --ala-only binutils`
+Daarna heb je de keuze over beschikbare downgrades, en daarna wordt gevraagd of
+je de package wil ignoren, waarbij je beter nee kunt kiezen. Let wel dat de
+volgende update de downgrade gaat overschrijven.
+
 
 #### Applications (Command line and GUIs)
 
 #### Vim
 Installeer gvim, niet om te gebruiken maar om clipboard functionaliteit
 tekunnen gebruiken :)
-```
-sudo pacman -S gvim
-```
+`sudo pacman -S gvim`
 
 Kleuren in vim
 Vind het filetype die vim heeft gedetecteerd:
-```
-:verbose setlocal syntax? filetype?
-```
+`:verbose setlocal syntax? filetype?`
 Verander tijdelijk de syntax naar conf type:
-```
-:set syntax:conf
-```
+`:set syntax:conf`
 
  Vim plugins beheerde ik via Vundle (nu is het plug, want vundle is niet
  onderhouden)
-```
-yay vundle-git
-```
+`yay vundle-git`
  volg de manual op github: clone de repo en voeg de toe aan ~.vimrc zoals
   beschreven in de manual.
-```
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-```
+`git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim`
  Je zet de plugin in .vimrc en installeerd plugins in Vim via:
-```
-:PluginInstall
-```
+`:PluginInstall`
 Helaas werkt het niet als ik op CTR-P druk, er wordt wel een command gegeven:
-```
-:call Vim_Markdown_Preview()
-```
+`:call Vim_Markdown_Preview()`
  maar er opent geen webpage.
 
 De manual, ook te openen in vim met :help 
-```
-man vim
-```
+`man vim`
 Personifieer vimrc
-```
-vim ~/.vimrc
-```
+`vim ~/.vimrc`
 
 My personal manual :)
-```
 Switching modes:
 
+```
 Esc: Exit open mode
 i: Insert mode
 I: Insert mode, en ga naar het begin van de regel
@@ -1452,8 +1349,10 @@ A: Insert mode, en start aan het einde van de regel
 a: Insert mode, en start 1 cursor stap naar rechts
 v: Visual mode
 V: Visual line
+```
 
 Navigation(direct commands):
+```
 h: left
 j: down
 k: up
@@ -1474,53 +1373,64 @@ e: verplaats naar einde van het woord (einde: volgende woord)
 b: verplaats cursor naar einde van het woord (einde: volgende woord)
 w: verplaats volgend woord
 A: einde van laatste woord
-
+```
 Modifiers
+```
 i: inner
 s: surround
 p: paragraph
 .: perform the last
-
+```
 Search stuff
+```
 /string : search string. 
 n: next word
 N: previous word
-
+```
 Replace stuff
+```
 r: Replace a single character
 R: Replace until we tell it to stop
 c: Changes whatever specified (modifier)
 C: Changes until the end of a line
-
+```
 Delete stuff
+```
 x: Delete single character after the cursor
 X: Delete single character before the cursor
 d: delete whatever specified (modifiers)
 D: delete until the end of the line
-
+```
 Yank (copy) stuff
+```
 y: yanks whatever specified (modifiers)
 Y: yanks current line completely
-
+```
+```
 :reg: Show the register
 "aY: Yank line to register B
-
+```
 Pasting stuff
+```
 p: pastes from vim buffer after cursor
 "ap: paste  from registry entry a (:reg)
-
+```
 Working with macros
-
+```
 qa: Record a macro and save it to register a
 q: Stop recording macro
 @a: Play 1 time macro a (:reg)
 
+```
 Editing an existing macro(in dit geval a)
 
+```
 :new
 "ap
+```
 Pas de macro aan en Escape
 
+```
 "ayy
 dd
 ```
@@ -1616,9 +1526,7 @@ Je kunt ook een blok doornummeren (na CTRL-v) door g CTRL-a te toetsen!
 ##### Spell checking in Vim
 This functionality is alreadey build into Vim! Start it by entering:
 
-```
-:set spell!
-```
+`:set spell!`
 
 List of keystrokes (about spell checking)
 ```
@@ -1630,9 +1538,12 @@ zg                      Add word to dictionary
 
 Save the current document under another name:
 :w ~/.config/suckless/dwm/config.h
-
-
 ```
+
+Piping into vim, met | vim -
+`sudo pacman -Qkk | vim -`
+
+
 #### fzf (fuzzy finder)
 Command line zoek programma. Je kunt er in de huidige directory naar bestanden
 zoeken met`fzf`. Dit is perfect voor piping. Bijvoorbeeld `cat * | fzf`
@@ -1721,21 +1632,15 @@ Ik wil de whitespaces vervangen door underscored:
 :wq
 ```
 Het kan nog eenvoudiger!!! In vifm voer in:
-```
-:%s/ /_/g
-```
+`:%s/ /_/g`
 
 
 #### urxvt (lightweight terminal). Kleurenschema kun je met pywal instellen :-)
 
 Make Xdefault file, typ regel en druk op CTR+z
-```
-cat > .Xdefaults
-```
+`cat > .Xdefaults`
 Open nano
-```
-nano ~/.defaults
-```
+`nano ~/.defaults`
 Plak daarin de onderstaande regels om de transparantie en font in te 
 stellen, plus extra's die in de comments worden beschreven.
 Created to rice the urxvt terminal.
@@ -1788,14 +1693,10 @@ URxvt.boldFont:             xft:bitstream Vera Sans Mono:bold:size=12:antialias=
 Rxvt*letterSpace: -0 
 ```
 # Orange cursor
-```
-URxvt.cursorColor:           orange
-```
+`URxvt.cursorColor:           orange`
 
 # Used extentions, requires: urxvt-perls resize-font-git
-```
-URxvt.perl-ext-common:      default,matcher,resize-font,url-select,keyboard-select
-```
+`URxvt.perl-ext-common:      default,matcher,resize-font,url-select,keyboard-select`
 # url-select, werkt helaas nog niet... :-(
 ```
 URxvt.keysym.M-u:           perl:url-select:select_next
@@ -1813,25 +1714,19 @@ URxvt.keysym.M-c:           perl:clipboard:copy
 #### cmus. Terminal music player
 Begin door het toevoegen van een direcotory, waar het prog. muziek in gaat
 zoeken.
-```
-:add ~/Stack
-```
+`:add ~/Stack`
 Het programma heeft VIM bindings. Type 7 om de keybindinglijst te zien:
 `7`
 
 #### cava
 Een audio visualizer voor in de commandline.
-```
-yay cava
+`yay cava`
 
-```
 #### Pywal.
 Een script die in commandline van een foto een colorscheme maakte van
 16 kleuren. Dit wordt de Xdefault. Op deze manier kun je eenvoudig switchen.
 Installeer het script:
-```
-sudo pacman -S python-pywal
-```
+`sudo pacman -S python-pywal`
 Destilleer de kleuren uit de wallpaper, deze veranderd ook direct de 
 wallpaper :-)
 ```
@@ -1844,13 +1739,9 @@ permanent maken door het volgende in .bashrc te zetten:
 # Import colorscheme from 'wal' asynchronously
 # &   # Run the process in the background.
 # ( ) # Hide shell job control messages.
-```
-(cat ~/.cache/wal/sequences &)
-```
+`(cat ~/.cache/wal/sequences &)`
 # To add support for TTYs this line can be optionally added.
-```
-source ~/.cache/wal/colors-tty.sh
-```
+`source ~/.cache/wal/colors-tty.sh`
 
 #### Nano
 Pid van nano in gebruik... heel irritant als je bijv.
@@ -1858,9 +1749,7 @@ Pid van nano in gebruik... heel irritant als je bijv.
 de PID niet werkt (zie allerlei), dan verwijder de swapfile. Deze staat 
 in de directory van het bestand dat je wilt openen dus in dit geval:
 `cd /etc/ssh` `ls *.swp` `sudo rm .sshd_config.swp` of direct:
-```
-sudo rm /.sshd_config.swp
-```Dit werkt in Ubuntu 16.10 (mijn VPS)
+`sudo rm /.sshd_config.swp` Dit werkt in Ubuntu 16.10 (mijn VPS)
 
 #### Octave
 Geinstalleerd via pacman. Octave-forge packages geinstalleerd via Octave met de
@@ -1895,10 +1784,6 @@ config config --local status.showUntrackedFiles no
 **Ik wil instellen dat de GIT repo direct werkt met een handshake, zonder
 handmatig een password, dat ga ik nog regelen.**
 
-
-
-
-
 Zorg eerst dat je een public SSH key hebt (had ik al)
 ```
 sudo pacman -S xclip
@@ -1906,11 +1791,9 @@ xclip -sel clip < ~/.ssh/id_rsa.pub
 ```
 Plak de key in de webpagina van Github, settings/ssh key en geef het de naam van de computer
 Daarna voer je in de terminal in:
-```
-ssh -T git@github.com
-```
+`ssh -T git@github.com`
 
-Selecteer `yes`, 
+Selecteer `yes` 
 
 [archie@archPC ~]$ ssh -T git@github.com
 The authenticity of host 'github.com (140.82.118.3)' can't be established.
@@ -1942,11 +1825,11 @@ ssh-add ~/.ssh/id_rsa
 Print the contents of your public key to the console with
 cat ~/.ssh/id_rsa.pub
 Copy de output en paste het hieronder:
-___
+
 ssh-rsa
 AA....
 email@email.com
-___
+
 Open de webpagina:
 https://github.com/settings/keys
 Kies New ssh key.
@@ -2286,22 +2169,16 @@ First run the gateway, after that the workstation.
 #### Arduino probleem oplossen
 De arduino applicatie kreeg ik aan de gang na installatie van arduino
 (community) toegang tot de groep uucp en installatie van arduino-avr-core.
-```
-sudo arduino
-```
+`sudo arduino`
 en selecteer: tools board: Arduino uno . port: ttyACM0
 firmware is te uploaden, het werkt!
 
 Werken met Arduino via de tty met arduino-cli
-```
-arduino-cli board list
-```
+`arduino-cli board list`
 Port         Type              Board Name  FQBN            Core
 /dev/ttyACM0 Serial Port (USB) Arduino Uno arduino:avr:uno arduino:avr)
 
-```
-arduino-cli core list
-```
+`arduino-cli core list`
 ID          Installed Latest Name
 Arduino:avr 1.8.3     1.8.3  Arduino AVR Boards
 
@@ -2317,19 +2194,12 @@ maar in /tmp/arduino-sketch.....
 Ik heb alle files in die dir gecopieerd naar de dir waar de sketch in staat,
 oftewel waar de .ino in staat met: cp *.* ~/FirstSketchWalter
 en daarna:
-```
-arduino-cli upload -b arduino:avr:uno -p /dev/ttyACM0 -v
-
-```
+`arduino-cli upload -b arduino:avr:uno -p /dev/ttyACM0 -v`
 Makkelijker maken van door boardname
-```
-arduino-cli board attach /dev/ttyACM0 -v
-```
+`arduino-cli board attach /dev/ttyACM0 -v`
 Het gaat niet helemaal goed want hier wordt aangegeven dan config file not
 found. Opgelost door een config aan te maken met:
-```
-arduino-cli config init
-```
+`arduino-cli config init`
 En nu geeft het bovenstaande attach commando een goede output.
 
 arduino-cli compile --fqbn arduino:avr:uno FirstSketchWalter.ino -v
@@ -2344,11 +2214,90 @@ arduino-cli compile --fqbn arduino:avr:uno FirstSketchWalter.ino -v
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchWalter.ino -v
 (remark: de hex files staan in een temp dir, maar dat maakt niet uit verder.)
 
-#### ESP32 CAM
+
+
+#### ESP32 cam, setup esp32 libs, via Arduino-cli
+https://www.survivingwithandroid.com/arduino-cli-compile-upload-manage-libraries-cores-boards/
+Werken met Arduino via de tty met arduino-cli
+`arduino-cli board list`
+Port         Type              Board Name  FQBN            Core
+/dev/ttyACM0 Serial Port (USB) Arduino Uno arduino:avr:uno arduino:avr)
+/dev/ttyUSB0 Serial Port (USB) Unknow)
+`arduino-cli core list`
+ID          Installed Latest Name
+Arduino:avr 1.8.3     1.8.3  Arduino AVR Boards
+
+
+We moeten ESP32 eerst installeren, dat doen we in de bestaande yaml file,
+`vim arduino-cli.yaml. ~/.arduino15/arduino-cli.yaml`
+Voeg de volgende regels toe onder additonal_urls:
+```
+    - https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+```
+Now we can install the ESP32
+```
+arduino-cli core search esp32
+arduino-cli core install esp32:esp32
+```
+update core list:
+`arduino-cli core update-index`
+listing all boards:
+`arduino-cli board listall`
+Yes, de libraries staan erbij! Ik ben verder gegaan met de Arduino IDE.
+
+
+#### ESP32 CAM, via arduino IDE
+
+Open CameraWebServer sketch, via de IDE: File-Examples-ESP32-Camera-CameraWebServer
+Nu staat de CameraWebServer in de sketch IDE, deze moet aangepast worden, en
+uncomment het volgende en geef ssid en password voor wifi in sketch:
+//#define CAMERA_MODEL_AI_THINKER
+Klik op het save icoontje.
+Nu krijg ik een foutmelding: error compiling for board Nano32
+
+Dat komt omdat er onder Tools-board de verkeerde is geselecteerd.
+Helaas kan ik in Arduino IDE niet deze manual volgen: 
+https://dronebotworkshop.com/esp32-cam-intro/
+want Tools-Board-Boardmanager geeft een wit scherm dat niet te lezen is... 
+
+Onderaan de pagina staat een voorbeeld van wifiscan. dit ga ik proberen met
+esp32 wrover module, geselecteerd via: 
+Kies Tools-Board-ESP32Arduino-ESP32 wrover module
+File-examples-wifi-wifiscan
+Klik op verify in de IDE.
+Helaas weer een foutmelding. error compiling for board wrover module.
+
+Is deze module de juiste? Denk het niet, dat is de fout. Ik moet eerst de
+juiste board kunnen kiezen...
+
+AI thinker AI cam gekozen en bovenstaande sketch en aanpassing gedaan, helaas
+weer met fout, maar dit opgelost na installatie van Pyserial via:
+yay python-pyserial
+
+Compileren gaat iig goed. Klik op de upload button in de IDE. Het schrijven 
+duurt even. Melding in IDE: Done uploading
+USB kabel eruit trekken en de jumper voor flashen verwijderen.
+Daarna usb weer aansluiten, in de IDE klikken op Tools-serial monitor, en daarna 
+de reset button klikken op de ESP32. Zet de baudrate naar 115200.
+`Brownout detector was triggered`
+Dit heb ik opgelost door 5V aan te sluiten vanuit de usb pin, en ook de jumper
+op de usb adapter op 5V te zetten.
+
+De module werkt en geeft beeld!
+
+
+HIER GEBLEVEN
+https://dronebotworkshop.com/esp32-cam-intro/
+Mijn CameraWebServer_06FEB21 heb ik bewaard
+
+
+
+
+
+#### ESP32 CAM, alleen voor  installatie
+Hieronder staan de stappen die ik heb genomen om ESP32 aan de gang te krijgen.
 De volgende packages geinstalleerd:
-```
-sudo pacman -S --needed gcc git make flex bison gperf python-pip cmake ninja ccache dfu-util
-```
+`sudo pacman -S --needed gcc git make flex bison gperf python-pip cmake ninja ccache dfu-util`
 Daarna een git clone van de ESP-IDF (Internet of things Design Framework)
 ```
 mkdir ~/esp
@@ -2360,29 +2309,6 @@ Setup the tools:
 cd ~/esp/esp-idf
 ./install.sh
 ```
-Run it in downloads/ESP32_cam
-```
-cd ~/Downloads/ESP32_cam
-. $HOME/esp/esp-idf/export.sh
-```
-Starten van een project
-```
-cd ~/esp
-cp -r $IDF_PATH/examples/get-started/hello_world .
-```
-Connect met poort, door het onderstaande commando, daarna inpluggen usb kabel
-en daarna hetzelfde commando
-```
-ls /dev/tty*
-```
-Het board wordt herkend als: /dev/ttyUSB0
-Je moet rechten hebben als user in uucp group in Arch (zie 'groups' in tty)
-Installeer putty
-
-tot hier gekomen in deze website:
-https://www.howtogeek.com/439736/how-to-create-aliases-and-shell-functions-on-linux/
-
-
 
 ### Distros
 
@@ -2391,9 +2317,7 @@ XFCE4 in desktop achtergrond terminal services laten draaien.
 Filename: wallterm.sh
 maak executable:
 
-```
-chmod a+x /path/to/wallterm.sh
-```
+`chmod a+x /path/to/wallterm.sh`
 
 Voeg dit toe aan de file walltem.sh:
 ```
@@ -2453,9 +2377,7 @@ Tile window to the bottom-right	   	Alt+3
 Aanmaken van keyboard shortcuts
 XFCE4-Settings-Keyboard --> Application shortcuts
 (Ook dit staat in de text file die hierboven staat, maar dat is minder goed leesbaar)
-```
-sh -c "mousepad && thunar "							Twee commands :-)
-```
+`sh -c "mousepad && thunar "							Twee commands :-)`
 mousepad /mousepad /home/archie/Stack/Command_line/commands_2018_12_31.txt	Ctrl+Alt+M
 firefox	https://facebook.com							Ctrl+Alt+F
 firefox https://webmaileu.werk.com/OWA/	    			Ctrl+Alt+S
@@ -2468,9 +2390,7 @@ KCalc										XF86Calculator
 sh -c "xfce4-terminal --title=ssh_icefly@149.210.233.43 --geometry=93x29+1420+0 && thunar sftp://icefly@149.210.233.43/home/icefly/Downloads/"	Ctrl+Alt+I
 
 Gebruik autokey voor assignen van macros aan keys (zoiets als autohotkey)
-```
-yaourt -S autokey
-```
+`yaourt -S autokey`
 
 Gebruik windows key voor XFCE menu:
  XFCE4-Settings-Window manager --> keyboard --> Applications Shortcuts --> 
@@ -2499,9 +2419,7 @@ Daarna de home xfce4 directory verwijderd ~/.config/xfce4, helaas kwam de
 default setting NIET terug...
 Ook geprobeerd om de default settings /xdg/xfce4/xfconf te kopieren 
 naar ~/.config/xfce4
-```
-cp -r /etc/xdg/xfce4 /home/archie/.config
-```
+`cp -r /etc/xdg/xfce4 /home/archie/.config`
 Daarna xfce4 gedeinstalleerd, en opnieuw geinstalleerd:
 ```
 sudo pacman -Rdd xfce4
@@ -2519,9 +2437,7 @@ Of, veel simpeler, klik op CTR-M om het menu aan/uit te zetten in de Thunar
 balk.
 
 Edit mp3 tags in Thunar, door onderstaande plugin:
-```
-sudo pacman -S  thunar-media-tags-plugin
-```
+`sudo pacman -S  thunar-media-tags-plugin`
 
 After a minimal install (dwm) also install lxappearance and themes, for
 example: breeze, nordic, juno, candy-icons, Papirus, equilux-theme, dark-olympic enz.
@@ -2555,30 +2471,22 @@ startx
 
 Je kunt de config file aanmaken met 
 (locatie /home/archie/.config/i3/config)
-```
-i3-config-wizard
-```
+`i3-config-wizard`
 
 Customize de config
-```
-nano /home/archie/.config/i3/config
-```
+`nano /home/archie/.config/i3/config`
 
 Verander look and feel met lxappearance. Kies bijv. xfce-dusk
 lxappearance
 
 Mooi lettertype: system-san-francisco-font-git
-```
-yaourt -S system-san-francisco-font-git
-```
+`yaourt -S system-san-francisco-font-git`
 
 De font wordt weegegeven in de lijst: 
 fc-list : file
 Open lxappearnce, verander de fontsize, klik op apply.
 Nu is een .gtk file aangemaakt, vind het bestand (.gtkrc-2.0)
-```
-ls -al
-```
+`ls -al`
 
 Pas fontawesome-webfont.ttf de eigenschappen aan in nano, ook in gtk-3. 
 Open de bestanden en verander gtk-font-name="Cantarell 13" naar 
@@ -2606,36 +2514,26 @@ Zet icons op tabs.
 Download Font-Awesome Release 4.4 op webpagina:
 https://github.com/FortAwesome/Font-Awesome/releases
 Pak de fontawesome-webfont.ttf uit de zipfile en verplaats naar .fonts:
-```
-mv fontawesome-webfont.ttf ~/.fonts/
-```
+`mv fontawesome-webfont.ttf ~/.fonts/`
 
 Kopier bijvoorbeeld de firefox afbeelding op de onderstaande webpagina
 https://fontawesome.com/cheatsheet
 Plak het icoon, , in de tekstfile
-```
-nano /home/archie/.config/i3/config
-```
+`nano /home/archie/.config/i3/config`
 
 Forceer een applicatie om te openen op een vast tab blad met 
 Vind de class van een applicatie door naast de applicatie een terminal te
 openen en daarin xprop te starten en op de applicatie te klikken:
 (assign [class="Firefox"] $workspace3)
-```
-xprop
-```
+`xprop`
 
 Mooi icon theme. Instellen via lxappearance/Icon theme/Moka
-```
-yaourt -S moka-icon-theme
-```
+`yaourt -S moka-icon-theme`
 
 Save layout of workspace, dit zou de layout moeten wegschrijven, waarnaar
 je het na modificatie kunt wegschrijven, niet eenvoudig en lukt me nog 
 niet...  https://i3wm.org/docs/layout-saving.html EditingLayoutFiles: 
-```
-i3-save-tree --workspace 2 > ~/.config/i3/workspace-2.json
-```
+`i3-save-tree --workspace 2 > ~/.config/i3/workspace-2.json`
 
 Zet numlock aan:
 
@@ -2737,9 +2635,7 @@ swapon /mnt/sdc1/swapfile
 /etc/fstab
 ```
 # 12sep20 toegevoegd /etc/fstab:
-```
-/swapfile none swap default 0 0
-```
+`/swapfile none swap default 0 0`
 Hierna werkt het nog niet, want error bij opstarten
 
 ### Emojis in dmenu
@@ -2751,26 +2647,18 @@ ONderstaande unicode file gemaakt als test
 😃 grinning face with big eyes
 
 Helaas geeft dit permission problemen. Opgelost door:
-```
-chmod 755  ~/.config/unicode
-```
+`chmod 755  ~/.config/unicode`
 Nu werkt het volgende wel:
-```
-cat ~/.config/unicode | dmenu -i -l 30
-```
+`cat ~/.config/unicode | dmenu -i -l 30`
 Een script ervan gemaakt, ~/.config/unicode.sh, executable gemaakt, de alias u
 aangemaakt (u). Dit werkt. Alleen de unicode lijst nog aanvullen....
 Ook toegevoegd aan de i3 config, zodat menu-U het script runt.
 Ik heb ttf-ancient-fonts van de AUR geinstalleerd, en nu zijn de meeste icons
 zichtbaar. De unicod font lijst heb ik gevonden op: 
-```
-https://unicode.org/Public/emoji/13.0/emoji-test.txt
-```
+`https://unicode.org/Public/emoji/13.0/emoji-test.txt`
 Het werkt nog niet perfect.
 if you add the following line to the script that he showed:
-```
-xdotool key "ctrl+shift+v"
-```
+`xdotool key "ctrl+shift+v"`
 it will automatically insert the emoji into the focused program (like browser or terminal), making this
 dmenu setup act like an emoji keyboard for quick insertion
 
@@ -2790,53 +2678,30 @@ sudo mkdir /mnt/boot
 sudo mount /dev/sdd2 /mnt/boot
 ```
 Installeer scripts (oa pacstrap) indien nodig
-```
-yaourt -S arch-install-scripts
-```
+`yaourt -S arch-install-scripts`
 pacstrap het basissysteem naar de usb stick (/mnt)
-```
-sudo pacstrap /mnt base
-```
+`sudo pacstrap /mnt base`
 Generate an fstab file (use -U or -L to define by UUID or labels, respectively):
-```
-genfstab -U /mnt >> /mnt/etc/fstab
-```
+`genfstab -U /mnt >> /mnt/etc/fstab`
 Check the resulting file in /mnt/etc/fstab afterwards, and edit it in case of errors.
 Change root into the new system:
-```
-sudo arch-chroot /mnt
-```
+`sudo arch-chroot /mnt`
 Set the time zone:
-```
-ln -sf /usr/share/zoneinfo/Region/City /etc/localtime
-```
+`ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`
 Run hwclock(8) to generate /etc/adjtime:
-```
-hwclock --systohc
-```
+`hwclock --systohc`
 Set the LANG variable in locale.conf(5) accordingly, for example, 
 in Nano toevoegen: LANG=en_US.UTF-8:
-```
-nano /etc/locale.conf
-```
+`nano /etc/locale.conf`
 hostname aanmaken
-```
-echo USBdistro > /etc/hostname
-```
+`echo USBdistro > /etc/hostname`
 Set the root password:
-```
-passwd
-```
+`passwd`
 Install syslinux
-```
-pacman -S syslinux
-syslinux-install_update -i -a -m
-```
+`pacman -S syslinuxslinux-install_update -i -a -m`
 Pas de sda drives aan in /boot/syslinux/syslinux.cfg
 Install XFCE4
-```
-pacman -S xfce4
-```
+`pacman -S xfce4`
 Exit chroot en reboot.
 Hmmmm, na inloggen starte linux mint op en liep daarna vast...
 aangepast:
@@ -2910,13 +2775,9 @@ ssh-keygen -t rsa #geen passprase
 ```
 
 genereer keygen op thuis computer
-```
-ssh-keygen -t rsa #geen passprase
-```
+`ssh-keygen -t rsa #geen passprase`
 verstuur nu vanuit thuis computer de key naar de host:
-```
-ssh-copy-id icefly@149.210.233.43
-```
+`ssh-copy-id icefly@149.210.233.43`
 nu moet je wachtwoord vd server intypen.. 
 (daarom staat passwordauthentificatino aan!)
 PAS DAARNA naar de server sshd_config aanpassen, backup maken van file
@@ -2934,13 +2795,9 @@ Instellen server in Thunar filebrowser
 
 Instellen link in thunar filebrowser
 Eerst in commandline
-```
-ssh icefly@149.210.233.43
-```
+`ssh icefly@149.210.233.43`
 Daarna in thunar, network
-```
-sftp://icefly@149.210.233.43/home/icefly/
-```
+`sftp://icefly@149.210.233.43/home/icefly/`
 
 Ubuntu updaten
 Via ssh het ubuntu systeem updaten, of via de https console:
@@ -2965,19 +2822,13 @@ process that cannot be reversed.
 Oplossing: op beide kanten openssh uninstallen, client en server. 
 Files op ~/.shh verwijderen aan beide kanten.
 Opnieuw installeren beide kanten. Daarna aan beide kanten keygen doen:
-```
-ssh-keygen -t rsa
-```
+`ssh-keygen -t rsa`
 Alleen op lokale pc:
-```
-ssh-copy-id icefly@149.210.233.43
-```
+`ssh-copy-id icefly@149.210.233.43`
 Nu moet je wachtwoord vd server intypen.. 
 (daarom staat passwordauthentificatino aan!)
 PAS DAARNA naar de server sshd_config aanpassen...
-```
-sudo nano /etc/ssh/sshd_config
-```
+`sudo nano /etc/ssh/sshd_config`
 Verander: PasswordAuthentication no
 Vul in onderaan AllowUsers archie@81.174.98.248
 Inloggen werkt hierna weer goed! :-)
@@ -2988,9 +2839,7 @@ Inloggen werkt hierna weer goed! :-)
 Ubuntu Mate 18.04.2 LTS (Bionic) 
 De iso gedownload op via torrent (https://ubuntu-mate.org/download/)
 en op een usb stick gezet.
-```
-sudo dd if=//home/archie/Downloads/ubuntu-mate-18.04.2-desktop-amd64-gpd-pocket.iso of=/dev/sdd status=progress
-```
+`sudo dd if=//home/archie/Downloads/ubuntu-mate-18.04.2-desktop-amd64-gpd-pocket.iso of=/dev/sdd status=progress`
 
 Accessing GPD boot menus
 Switch the GPD Pocket on, immediately hold the Fn key and tapping the F7 key until the Boot Manager screen appears.
@@ -3048,9 +2897,7 @@ mount /dev/mmcblk0p1 /mnt/boot
 ```
 ....
 alles gedaan zoals beschreven in:
-```
-https://wiki.archlinux.org/index.php/GPD_WIN
-```
+`https://wiki.archlinux.org/index.php/GPD_WIN`
 
 opstarten lukt. nog geen netwerk
 
@@ -3073,9 +2920,7 @@ ip link set wlp1s0 up
 ip link
 ```
 output: wlp1s0 ... UP
-```
-wifi-menu
-```
+`wifi-menu`
 Voer alvast het wifi wachtwoord in
 ```
 modprobe -r brcmfmac
@@ -3090,21 +2935,13 @@ ip link set wlp1s0 up
 ip link
 ```
 output: wlp1s0 ... UP
-```
-wifi-menu
-```
+`wifi-menu`
 Voer alvast het wifi wachtwoord in
-```
-ip link
-```
+`ip link`
 output: wlp1s0 ... UP
-```
-pacman -Syy
-```
+`pacman -Syy`
 veel foutmeldingen voor syncen.
-```
-nano /etc/pacman.conf
-```
+`nano /etc/pacman.conf`
 Toegevoegd (rest laten staan)
 [gpd-pocket-arch]
 ```
@@ -3116,32 +2953,22 @@ modprobe brcmfmac
 ip link 
 ```
 Nu is de device aanwezig, en up.
-```
-pacman -Syy 
-```
+`pacman -Syy `
 werk nog steeds niet.
-```
-ip link 
-```
+`ip link `
 Nu is de device aanwezig, maar niet up. Maar weer up gezet:
 ```
 ip link set wlp1s0 up
 pacman -Syy 
 ```
 werk nog steeds niet.
-```
-ip link
-```
+`ip link`
 Nu is de device aanwezig, maar wel up.
 modprobe brcmfmac
 2 root wordt weergegeven
-```
-ip link
-```
+`ip link`
 Nog steeds is de device aanwezig, en up.
-```
-pacman -Syy 
-```
+`pacman -Syy `
 werk nog steeds niet.
 ```
 modprobe -r brcmfmac
@@ -3183,9 +3010,7 @@ resulteerde in een niet werkend systeem.
 De iso gedownload op https://whitedome.com.au/re4son/pocket-parrot/
 en op een usb stick gezet.
 
-```
-sudo dd if=//home/archie/Downloads/Parrot-home-3.11-Re4son-Pocket_amd64.iso of=/dev/sdd status=progress
-```
+`sudo dd if=//home/archie/Downloads/Parrot-home-3.11-Re4son-Pocket_amd64.iso of=/dev/sdd status=progress`
 
 De GPD pocket aangezet en F7 ingedrukt, toen geboot via usb en Installation 
 gekozen. Toen kwam er een old school installer (Debian). Daar doorheen 
@@ -3215,9 +3040,7 @@ tijdens de upgrade heb ik yes en yes gekozen (incl bootscreen) ipv default N
 na reboot stond bootscreen gedraaid en werkt de wifi niet meer
 dus de volgende keer niet yes yes kiezen...
 wel werkt mijn alfa wifi adapter.
-```
-ip link
-```
+`ip link`
 wlan0 is de alfa usb wifi... waar is de interne wifi...
 
 25APR19. Wifi werkt nog steeds niet, wel alfa wifi adapter
@@ -3241,9 +3064,7 @@ wget archfi.sf.net/archfi
 sh archfi
 ```
 
-**
 
----
 ### Keebs
 
 #### Ducky one mechanical keyboard
@@ -3295,7 +3116,7 @@ Zomer 2020. Nieuwe poging om de firmware van de Gergo te updaten.
 Nieuwe pc en nieuwe arch install zou misschien kunnen werken.
 
 Ik heb de oude files gezet in ~/Downloads/Gergo_keyboard
-online: https://qmk.fm/
+online: https://mk.fm/
 daar heb ik geupload: noobmonkey.json
 en op compile gedrukt.
 Daarna download Full source gesaved op ~/Downloads/qmk_firmware-gergo-noobmonkey.zip
@@ -3363,11 +3184,12 @@ daarna opnieuw geflashed met:
 
 qmk compile -kb redox/rev1 -km Prutserdt 
 
-Na een pacman upgrade werkt qmk_cli niet meer. Wat is de Oorzaak?
-Ik heb nu geen pip install gedaan maar:
-yay qmk-git
-En daarna (omdat dit package miste)
-sudo pacman -S python-milc 
+Na een pacman upgrade werkt qmk_cli niet meer. Dit komt door een depencency
+probleem (24FEB21) die op te lossen is.
+De oplossing is om een downgrade te doen naar binutils <v36. Zie uitleg voor de
+applicatie downgrade ver hierboven.
+
+
 
 
 #### dwm
@@ -3561,9 +3383,7 @@ dwmbacup
 
 Transparancy werkt als je picom insteld in xinitrc:
 # Start picom, for transparancy
-```
-picom -b
-```
+`picom -b`
 
 #fonts instellen
 # font ingesteld voor config.def.h:
@@ -3619,17 +3439,11 @@ terminal: https://github.com/LukeSmithxyz/voidrice/issues/284
 ttf-symbola
 ```
 Nu werkt dmenu unicode veel sneller, maar het is nog steeds niet in full color.
-```
-ttf-linux-libertine
-```
+`ttf-linux-libertine`
 Geen verschil na deze install
-```
-ttf-inconsolata 
-```
+`ttf-inconsolata `
 Deze had ik al geinstalleerd
-```
-ttf-emojione
-```
+`ttf-emojione`
 Helaas is het nog steeds monochrome.
 Ik heb vervolgens in dmenu de font veranderd naar monochrome: geen verandering:
 geen colored emojis.
@@ -3661,41 +3475,29 @@ make
 Nu is er een executable file gemaakt: st. 
 Verplaats de bestanden naar de ~/st directory.
 Maak directory "bin" aan in home directory(als deze er nog niet is):
-```
-mkdir ~/bin
-```
+`mkdir ~/bin`
 Maak een symbolic link
 ```
 ln -s /home/icefly/st/st /home/icefly/bin/st
 ln -s /home/icefly/Stack/st-0.8.3_vanilla/st /home/icefly/bin/st_vanilla
 ```
 Voeg toe aan bashrc (hoeft niet als hij er al is):
-```
-PATH="$HOME/bin:$PATH"
-```
+`PATH="$HOME/bin:$PATH"`
 
 #### dmenu
 error na starten van dmenu_run
-```
-/home/icefly/bin/dmenu_run: line 2: dmenu_path: command not found
-```
+`/home/icefly/bin/dmenu_run: line 2: dmenu_path: command not found`
 Ik heb daarna dmenu_path als symlink toegevoegd
 ```
 ln -s -v /home/icefly/dmenu/dmenu_path /home/icefly/bin/dmenu_path
 ```
 Helaas werkt dit niet, nog steeds dezelfde foutmelding, verkeerde directory...
 Verwijderen symlink:
-```
-rm dmenu_path
-```
+`rm dmenu_path`
 Nieuwe symlink:
-```
-ln -s -v /home/icefly/suckless/dmenu/dmenu_path /home/icefly/bin/dmenu_path
-```
+`ln -s -v /home/icefly/suckless/dmenu/dmenu_path /home/icefly/bin/dmenu_path`
 Helaas, werkt nog niet, maar..... een andere dezelfde foutmelding:
-```
-/home/icefly/bin/dmenu_run: line 2: /home/icefly/bin/dmenu_path: Permission denied
-```
+`/home/icefly/bin/dmenu_run: line 2: /home/icefly/bin/dmenu_path: Permission denied`
 Opgelost door met het script ~/.config/dmenuapps.sh:
 
 #!/bin/sh
@@ -3703,22 +3505,14 @@ Opgelost door met het script ~/.config/dmenuapps.sh:
 # Script to open applications (~/.cache/dmenu_run) by dmenu.
 # It opens: ~/.cache/dmenu_run
 # This required the dmenu patch: center, which gives the dmenu -c option.
-```
-cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
-```
+`cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}`
 Probleem is dat nieuwe apps nu niet bij dmenu_run worden toegevoegd.
 Doe dat door eerst de file te deleten:
-```
-rm ~/.cache/dmenu_run
-```
+`rm ~/.cache/dmenu_run`
 Daarna de lijst opnieuw te maken:
-```
-ls /usr/bin/* > ~/.cache/dmenu_run
-```
+`ls /usr/bin/* > ~/.cache/dmenu_run`
 En handmatig de appimage toevoegen:
-```
-sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run
-```
+`sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run`
 Dit allemaal tegelijk:
 
 rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run; sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run
