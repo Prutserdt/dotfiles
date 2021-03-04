@@ -371,6 +371,30 @@ for file in *; do sed 's/,/./g' "$file" > "$file"_tmp && mv "$file"_tmp "$file";
 ```
 sed 's/,/./g' '
 
+#### Removing of password of pdf. Met package xpdf.
+Verwijder wachtwoord uit een pdf en save de pdf onder een andere naam:
+`pdftops -upw password WachtwoordBeveiligd.pdf ZonderWachtwoord.pdf`
+
+pdftops -upw Ikwil1glas PDA\ Standaar\ 04-2021.pdf PDA_bacteriophages_for_VF.pdf
+
+
+#### Removing size of pdf. Shrinking size by ghostscript package:
+`gs -sDEVICE=pdfwrite \
+     -dCompatibilityLevel=1.4 \
+     -dDownsampleColorImages=true \
+     -dColorImageResolution=150 \
+     -dNOPAUSE \
+     -dBATCH \
+     -sOutputFile=output3.pdf
+     PDA_bacteriophages_for_VF.pdf`
+
+Volgend is minder effectief:
+
+`gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default \
+    -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages \
+    -dCompressFonts=true -r150 -sOutputFile=output.pdf PDA_bacteriophages_for_VF.pdf`
+
+
 #### Calender
 Show Calender this month:
 cal 
@@ -3131,6 +3155,13 @@ Ik ben niet tot flashen gekomen....
 
 qmk flash -kb gergo -km Prutserdt 
 
+You can enter programming mode by holding the Rightmost-Lower 1.5u (Right Shift) and plugging Gergo in (or pressing the reset)
+
+Ik heb een nieuwe keyboard layout die er goed uitziet en die geflashed kan
+worden maar helaas kan ik het bord niet resetten via right shift ingedrukt
+houden en daarna inpluggen. Het zou kunnen dat dit door de software niet lukt
+ofzo. 
+
 
 #### Redox keyboard, falba teck (NOV2020)
 Binnen gekomen 19NOV20.
@@ -3188,6 +3219,28 @@ Na een pacman upgrade werkt qmk_cli niet meer. Dit komt door een depencency
 probleem (24FEB21) die op te lossen is.
 De oplossing is om een downgrade te doen naar binutils <v36. Zie uitleg voor de
 applicatie downgrade ver hierboven.
+Doe voortaan de upgrade zonder binutils package via:
+`sudo pacman -Syu --ignore fontconfig`
+
+Nu (02MAR21) is er weer een andere foutmelding na compileren:
+Compiling: quantum/command.c
+[OK]
+Linking: .build/redox_rev1_Prutserdt.elf
+[ERRORS]
+| /usr/bin/avr-ld: /usr/lib/libctf.so.0: version `LIBCTF_1.1' not found
+(required by /usr/bin/avr-ld)
+ collect2: error: ld returned 1 exit status
+|
+make[1]: *** [tmk_core/rules.mk:320: .build/redox_rev1_Prutserdt.elf] Error
+1
+Make finished with errors
+make: *** [Makefile:523: redox/rev1:Prutserdt] Error 1]]])']]
+
+Het is niet duidelijk wat de oplossing is voor dit probleem. In Manjaro VM kan
+ik gewoon compileren. Daarna heb ik het systeem van mijn Manjaro VM geupdate 
+(zonder binutils)
+
+/usr/bin/avr-ld: /usr/lib/libctf.so.0: version `LIBCTF_1.1' not found (required by /usr/bin/avr-ld)
 
 
 
