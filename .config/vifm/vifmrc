@@ -97,15 +97,16 @@ set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 " ------------------------------------------------------------------------------
 " :mark mark /full/directory/path [filename]
 
-mark D ~/Stack/dwm/
-mark S ~/Stack/st/
+mark D ~/.config/suckless/dwm/
+mark S ~/.config/suckless//st/
 mark a ~/Stack/Afbeeldingen/
 mark b ~/bin/
 mark c ~/.config/
-mark d ~/dwm/
+mark d ~/Downloads/
+mark g ~/qmk_firmware/keyboards/gergo/keymaps/Prutserdt/
 mark h ~/
-mark o ~/Downloads/
-mark s ~/st/
+mark r ~/qmk_firmware/keyboards/redox/keymaps/Prutserdt/
+mark s ~/Stack/
 mark v ~/.config/vifm/
 " ------------------------------------------------------------------------------
 " :com[mand][!] command_name action

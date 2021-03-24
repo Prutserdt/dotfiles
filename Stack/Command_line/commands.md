@@ -118,6 +118,11 @@ Afsluiten systeem, direct:`sudo shutdown -h now`
 Afsluiten systeem over 15 minuten:`sudo shutdown -h 15`
 Stel je wilt toch afsluiten terwijl je de afsluit timer hebt gezet: `sudo shutdown -c`
 
+#### Zoeken van een textstring in meerder files met grep
+Zoekt naar Layer_state in alle directories recursively onder ../keymaps
+grep -rnw '/home/icefly/qmk_firmware/keyboards/planck/keymaps/' -e "layer_state"
+
+
 **bleachbit**. Schoonmaken van het systeem. Je kunt kiezen welke files van 
 welke apps je  wilt wissen: `bleachbit`
 
@@ -1330,6 +1335,13 @@ Downgrade applicatie binutils: `sudo downgrade --ala-only binutils`
 Daarna heb je de keuze over beschikbare downgrades, en daarna wordt gevraagd of
 je de package wil ignoren, waarbij je beter nee kunt kiezen. Let wel dat de
 volgende update de downgrade gaat overschrijven.
+
+### Vergelijken van twee textfiles. Comparing two text files.
+diff file1.txt file2.txt
+
+### Electrum, crypto wallet
+AppImage electrum-4.0.9-x86_64.AppImage
+Deze aan dmenu toevoegen (~/.cache/dmenu_run).
 
 
 #### Applications (Command line and GUIs)

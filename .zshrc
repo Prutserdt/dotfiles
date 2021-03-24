@@ -1,5 +1,4 @@
-# ~/.zshrc
-#           _
+# ~/.zshrc #           _
 #   _______| |__  _ __ ___
 #  |_  / __| '_ \| '__/ __|
 # _ / /\__ \ | | | | | (__
@@ -44,9 +43,12 @@ plugins=(
   colored-man-pages # Increase readibility of man pages, by...
   vi-mode           # Vi-like bindings. (Esc: normal mode, i: insert, etc)
   fzf               # fuzzy find
+#  zsh-autosuggestions # Does not work, gitinstall performed by github oh my zsh procedure, after a git clone and adding this line...
   )
 
 bindkey -v          # enabling vi bindings, dependency: vi-mode plugin
+# VI_MODE_SET_CURSOR=true # change cursor style after switching input mode,
+# does not work... strange...
 
 export FZF_BASE=/usr/share/fzf
 
@@ -63,7 +65,7 @@ setopt COMPLETE_ALIASES #autocomplete command line switches for aliases
 zstyle ':completion::complete:*' gain-privileges 1 #autocomplete for sudo
 
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
-if [[ ! -d $ZSH_CACHE_DIR ]]; then
+if [[ ! -d $ZSH_CACHE_DIR ]]; then 
   mkdir $ZSH_CACHE_DIR
 fi
 ###########################
@@ -74,3 +76,4 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 source $HOME/.aliases
 # zsh-autosuggestions. Leads to cursor vanishing in alacrity. Strange....
 ##source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+

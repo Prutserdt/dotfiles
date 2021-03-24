@@ -21,13 +21,9 @@
 /* Custom keycodes */
 enum custom_keycodes {
   HAPPY,
-  xxx, /* Weird error. If this keycode is removed the next one will not work... */
+  xxx, /* Weird bug. If this line is removed the next one will not work... */
   YOLO,
   SAD,
-  /* The next three lines screw up b, c  and a. Another bug? */
-  HAPPY_a,
-  YOLO_a,
-  SAD_a
   };
 
 /* Send custom strings */
@@ -35,35 +31,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
   case HAPPY:
     if (record->event.pressed) {
-        SEND_STRING(":-) ");
+        SEND_STRING(":-)");
     }
     break;
   case YOLO:
     if (record->event.pressed) {
-        SEND_STRING(":-P ");
+        SEND_STRING(":-P");
     }
     break;
   case SAD:
     if (record->event.pressed) {
-        SEND_STRING(":-( ");
+        SEND_STRING(":-(");
     }
     break;
-    /* Weird bug. Screws up b, c, and a keys 
-     *  case HAPPY_a:
-     *    if (record->event.pressed) {
-     *        SEND_STRING(";-) ");
-     *    }
-     *    break;
-     *  case YOLO_a:
-     *    if (record->event.pressed) {
-     *        SEND_STRING(";-P ");
-     *    }
-     *    break;
-     *  case SAD_a:
-     *    if (record->event.pressed) {
-     *        SEND_STRING(";-( ");
-     *    }
-     *    break;*/
   }
   return true;
 }
@@ -75,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      KC_TAB,        KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_HOME,                          KC_PGUP,        KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,            KC_EQL,
      KC_ESC,        LCTL_T(KC_A),   LGUI_T(KC_S),   LALT_T(KC_D),   KC_F,           KC_G,           KC_END,                           KC_PGDN,        KC_H,           KC_J,           RALT_T(KC_K),   RGUI_T(KC_L),   RCTL_T(KC_SCLN), KC_QUOT, 
      KC_LSFT,       KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,           KC_LBRC,   KC_RBRC,   KC_PSCR,    KC_BSLS,        KC_N,           KC_M,           KC_COMM,        KC_DOT,         KC_SLSH,         KC_RSFT,
-     DYN_MACRO_PLAY1,DYN_MACRO_PLAY2,RGB_M_K,       TT(4),          TT(1),          KC_BSPC,        KC_DEL,                           KC_ENT,         KC_SPC,         TT(2),          TT(3),          DYN_REC_STOP,   DYN_REC_START2,  DYN_REC_START1 
+     DYN_MACRO_PLAY1,DYN_MACRO_PLAY2,TT(5),         TT(4),          TT(1),          KC_BSPC,        KC_DEL,                           KC_ENT,         KC_SPC,         TT(2),          TT(3),          DYN_REC_STOP,   DYN_REC_START2,  DYN_REC_START1 
   ),
 
   [1] = LAYOUT(
@@ -103,11 +83,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [4] = LAYOUT(
-     _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        YOLO_a,         SAD_a,          HAPPY_a,          _______, 
+     _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
      _______,       _______,        _______,        _______,        _______,        _______,        KC_WH_U,                          KC_BTN5,        _______,        _______,        YOLO,           SAD,            HAPPY,           _______,
      _______,       _______,        _______,        _______,        _______,        _______,        KC_WH_D,                          KC_BTN4,        KC_MS_L,        KC_MS_D,        KC_MS_U,        KC_MS_R,        _______,         _______,
      _______,       _______,        _______,        _______,        _______,        KC_ACL0,        KC_ACL1,   KC_ACL2,    _______,   _______,        _______,        _______,        _______,        _______,        _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          KC_BTN1,        KC_BTN2,        KC_BTN3,        _______,        _______,        _______,         _______
   ),
+
+  [5] = LAYOUT(
+     _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
+     _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        KC_7,           KC_8,           KC_9,           _______,         _______,
+     _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        KC_4,           KC_5,           KC_6,           _______,         _______,
+     _______,       _______,        _______,        _______,        _______,        _______,        _______,   _______,    _______,   _______,        _______,        KC_1,           KC_2,           KC_3,           _______,         _______,
+     _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        _______,        KC_DOT,         _______,         _______
+  )
 
 };

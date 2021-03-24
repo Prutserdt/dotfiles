@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details.
+ /* See LICENSE file for copyright and license details.
  * ______        ____  __   ____             _                    _ _
  *|  _ \ \      / /  \/  | |  _ \ _ __ _   _| |_ ___  ___ _ __ __| | |_
  *| | | \ \ /\ / /| |\/| | | |_) | '__| | | | __/ __|/ _ \ '__/ _` | __|
@@ -154,7 +154,7 @@ static Key keys[] =
 	{ MODKEY|ShiftMask,             XK_q,      togglescratch,  {.ui = 3 } },                                                    /* Exit dwm with y/n options in scratchpad */
 /*	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("alacritty -e ~/.config/exitdwm.sh")},   */                /* Exit dwm with y/n options. This works, although not in desired floating mode... */
 
-/* Hmmmmm. I want to use alacritty for scradpads. How to get this to work....
+/* Hmmmmm. TODO: use alacritty for scradpads. How to get this to work....
  * The -n option is not in alacritty and the size cannot be set as in st with
  * -g. For now I will use st for the scratchpads. 
  */
@@ -162,6 +162,18 @@ static Key keys[] =
     /* Left super as modkey                                                             dwm related (modkey): */
 	{ MODKEY,                       XK_b,      togglebar,      {0} },                /* Toggle the visibility of the bar */
 	{ MODKEY,                       XK_Return, spawn,	       SHCMD("alacritty") }, /* Open terminal */
+/* TODO: I want to use focusstack to work properly with centeredmaster and not switch
+ * left and right all the time	
+ * adding 2 does not work unfortunately
+ * inplacerotate in dwm.c has some if staements for arg 2 and -2, this is
+ * probably a way to solve the problem...
+ *
+ * there is a fork of dwm that uses focusstack values of +2 and 2, see:
+ * https://github.com/bakkeby/dawn/blob/master/dawn.c
+ *
+ *	{ MODKEY,                       XK_comma,  focusstack,     {.i = +2 } },
+ *	{ MODKEY,                       XK_period, focusstack,     {.i = -2 } },
+ */	
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },         /* Select another window, direction: up the stack */
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },         /* Select another window, direction: down the stack */
 	{ MODKEY|ShiftMask,             XK_j,      inplacerotate,  {.i = +1} },          /* InPlaceRotate: */

@@ -26,3 +26,5 @@ PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
+
+export NNN_BMS='h:~;r=~/qmk_firmware/keyboards/redox/keymaps/Prutserdt'
