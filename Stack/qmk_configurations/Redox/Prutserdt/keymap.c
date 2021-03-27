@@ -3,19 +3,17 @@
 #include QMK_KEYBOARD_H
 
 /* Layer    Comments
- * 0        Base layer including dynamic macro record/play buttons and a smiley
- *          button.
+ * 0        Base layer including dynamic macro record/play buttons
  * 1        hjkl as arrows, qwerty row as numbers plus some multimedia and application keys
- * 2        qwerty row as shift numbers. Start/stop dynamic macro recording
+ * 2        qwerty row for symbols (as shift numbers).
  * 3        Function keys and rgb layer
  * 4        Mouse layer and asci emojis (weird behaviour, see comments below)
- *
+ * 5        Numpad
  * This layout is experimental and not a finished product.
  *
  * TODO: couple a led colour/breathing to a layer, to make it more visual.
  *       Really quick red led blinking for macro recording for instance
  *       https://docs.qmk.fm/#/custom_quantum_functions?id=example-layer_state_set_-implementation
- *
  */
 
 /* Custom keycodes */
