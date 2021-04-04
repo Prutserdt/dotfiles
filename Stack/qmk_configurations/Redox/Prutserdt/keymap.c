@@ -3,12 +3,13 @@
 #include QMK_KEYBOARD_H
 
 /* Layer    Comments
- * 0        Base layer including dynamic macro record/play buttons
- * 1        hjkl as arrows, qwerty row as numbers plus some multimedia and application keys
- * 2        qwerty row for symbols (as shift numbers).
- * 3        Function keys and rgb layer
+ * 0        Base qwerty layer including dynamic macro record/play buttons
+ * 1        hjkl: arrows, qwerty row as numbers (for combination with quantum keys
+ *          (ctrl/gui/alt on home row) plus some multimedia and application keys.
+ * 2        home row: numbers and qwerty row for symbols (shift numbers).
+ * 3        hjkl: home-page down-page up-end, function keys on qwerty row and rgb layer
  * 4        Mouse layer and asci emojis (weird behaviour, see comments below)
- * 5        Numpad
+ * 5        Numpad and some rarely used keys
  * This layout is experimental and not a finished product.
  *
  * TODO: couple a led colour/breathing to a layer, to make it more visual.
@@ -67,17 +68,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [2] = LAYOUT(
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
      KC_TILD,       KC_EXLM,        KC_AT,          KC_HASH,        KC_DLR,         KC_PERC,        _______,                          _______,        KC_CIRC,        KC_AMPR,        KC_ASTR,        KC_LPRN,        KC_RPRN,         KC_PMNS,
-     _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        _______,        _______,        _______,         _______,
+     _______,       KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           _______,                          _______,        KC_6,           KC_7,           KC_8,           KC_9,           KC_0,            _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,   _______,    _______,   _______,        _______,        _______,        _______,        _______,        _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        _______,        _______,        _______,         _______
   ),
 
   [3] = LAYOUT(
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______,
-     _______,       KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          RGB_SAD,                          RGB_VAI,        KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,          _______,
-     _______,       RESET,          _______,        _______,        _______,        _______,        RGB_SAI,                          RGB_VAD,        _______,        RGB_HUD,        RGB_HUI,        _______,        _______,         _______,
-     _______,       _______,        _______,        _______,        _______,        _______,        _______,   _______,    _______,   _______,        _______,        RGB_SPD,        RGB_SPI,        _______,        _______,         _______,
-     RGB_M_K,       RGB_M_SN,       RGB_M_SW,       RGB_M_X,        RGB_M_G,        RGB_M_T,        RGB_M_P,                          RGB_TOG,        RGB_MOD,        RGB_RMOD,       _______,        RGB_M_B,        RGB_M_B,         _______
+     _______,       KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          RGB_SAD,                          _______,        KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,          KC_F11,
+     _______,       RESET,          RGB_TOG,        RGB_MOD,        RGB_RMOD,       RGB_M_B,        RGB_SAI,                          _______,        KC_HOME,        KC_PGDN,        KC_PGUP,        KC_END,         _______,         KC_F12,
+     RGB_HUD,       RGB_HUI,        RGB_VAI,        RGB_VAD,        RGB_SPD,        RGB_SPI,        _______,   _______,    _______,   _______,        _______,        _______,        _______,        _______,        _______,         _______,
+     RGB_M_K,       RGB_M_SN,       RGB_M_SW,       RGB_M_X,        RGB_M_G,        RGB_M_T,        RGB_M_P,                          _______,        _______,        _______,        _______,        _______,        _______,         _______
   ),
 
   [4] = LAYOUT(
@@ -90,10 +91,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [5] = LAYOUT(
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
-     _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        KC_7,           KC_8,           KC_9,           _______,         _______,
+     _______,       KC_APP,         KC_SLCK,        KC_PAUS,        KC_INS,         KC_NLCK,        _______,                          _______,        _______,        KC_7,           KC_8,           KC_9,           _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        KC_4,           KC_5,           KC_6,           _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,   _______,    _______,   _______,        _______,        KC_1,           KC_2,           KC_3,           _______,         _______,
-     _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        _______,        KC_DOT,         _______,         _______
+     _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        KC_0,           KC_DOT,         _______,         _______
   )
 
 };
