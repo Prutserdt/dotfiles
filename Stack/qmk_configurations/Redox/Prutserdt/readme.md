@@ -9,6 +9,7 @@ layer and also a number layer on the home row.
 The arrow keys layer and the mouse layer are on the home row (right side). 
 There is also a F-keys and backlight layer. Layer switching can be done by 
 keeping a thumbkey pressed or by tripple clicking for a sticky layer. 
+The backlight changes color with each layer.
 Note; there is another number layer, on the qwerty row. This is meant for
 the quantum keys (ctrl/gui/alt) that are on the home row and are overlapping.
 Go ahead and check the keymap.c and config.h files!

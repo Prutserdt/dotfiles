@@ -1,31 +1,30 @@
-/* Free software, GNU General Public Licence, see http:.gnu.org/licences  */
+/* Free software, GNU General Public Licence, see http:.gnu.org/licences
+ * This layout is experimental and not a finished product */
 
 #include QMK_KEYBOARD_H
 
-/* Layer    Comments
- * 0        Base qwerty layer including dynamic macro record/play buttons
- * 1        hjkl: arrows, qwerty row as numbers (for combination with quantum keys
- *          (ctrl/gui/alt on home row) plus some multimedia and application keys.
- * 2        home row: numbers and qwerty row for symbols (shift numbers).
- * 3        hjkl: home-page down-page up-end, function keys on qwerty row and rgb layer
- * 4        Mouse layer and asci emojis (weird behaviour, see comments below)
- * 5        Numpad and some rarely used keys
- * This layout is experimental and not a finished product.
- *
- * TODO: couple a led colour/breathing to a layer, to make it more visual.
- *       Really quick red led blinking for macro recording for instance
- *       https://docs.qmk.fm/#/custom_quantum_functions?id=example-layer_state_set_-implementation
- */
+/* Make layer readable by naming the layer number */
+#define _QWERTY 0
+#define _ARROWS 1
+#define _SYMBOL 2
+#define _FUNC 3
+#define _MOUSE 4
+#define _NUMPAD 5
 
-/* Custom keycodes */
+/* Custom keycodes, emoji and layer name declarations */
 enum custom_keycodes {
   HAPPY,
-  xxx, /* Weird bug. If this line is removed the next one will not work... */
   YOLO,
   SAD,
+  QWERTY,
+  ARROWS,
+  SYMBOL,
+  FUNC,
+  MOUSE,
+  NUMPAD
   };
 
-/* Send custom strings */
+/* Send custom strings, in this case simple text emojis */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
   case HAPPY:
@@ -49,7 +48,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  [0] = LAYOUT(
+  [_QWERTY] = LAYOUT(
+  /* QWERTY (qwerty layer, ctrl/gui/alt in homerow and dynamic macro recording/recording stop/play buttons)
+   * ,-----------------------------------------.                                    ,-----------------------------------------.
+   * |  `~  |  1!  |  2@  |  3#  |  4$  |  5%  |                                    |  6^  |  7&  |  8*  |  9(  |  0)  |  -_  |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * | Tab  |   Q  |   W  |   E  |   R  |   T  |  Home |                    | PgUp  |   Y  |   U  |   I  |   O  |   P  |  =+  |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * | ESC  |LCTL/A|LGui/S|LALT/D|   F  |   G  |  End  |                    | PgDn  |   H  |   J  |RALT/K|RGUI/L|RCTL/;|  '"  |
+   * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
+   * | Shift|   Z  |   X  |   C  |   V  |   B  '----------------,  ,----------------'   N  |   M  |   ,  |   .  |   /  | Shift|
+   * |-----------------------------------------/  {[   /  ]}   /    \ PrScr \   \|  \-----------------------------------------|
+   * |Macro1|Macro2|NUMPAD|MOUSE |    /ARROWS /-------/-------/      \-------\-------\ SYMBOL\    | FUNC |Macro |Macro2|Macro1|
+   * | play | play |Layer |Layer |   / Layer /       /       /        \       \       \ Layer \   |Layer |stopre|  rec | rec  |
+   * `---------------------------'  '-------/  BkSp / Enter /          \ Enter \ Space \-------'  '---------------------------'
+   *                                        '--------------'            '--------------'
+   */
      KC_GRV,        KC_1,           KC_2,           KC_3,           KC_4,           KC_5,                                                             KC_6,           KC_7,           KC_8,           KC_9,           KC_0,            KC_MINS,
      KC_TAB,        KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           KC_HOME,                          KC_PGUP,        KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,            KC_EQL,
      KC_ESC,        LCTL_T(KC_A),   LGUI_T(KC_S),   LALT_T(KC_D),   KC_F,           KC_G,           KC_END,                           KC_PGDN,        KC_H,           KC_J,           RALT_T(KC_K),   RGUI_T(KC_L),   RCTL_T(KC_SCLN), KC_QUOT, 
@@ -57,7 +71,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      DYN_MACRO_PLAY1,DYN_MACRO_PLAY2,TT(5),         TT(4),          TT(1),          KC_BSPC,        KC_DEL,                           KC_ENT,         KC_SPC,         TT(2),          TT(3),          DYN_REC_STOP,   DYN_REC_START2,  DYN_REC_START1 
   ),
 
-  [1] = LAYOUT(
+  [_ARROWS] = LAYOUT(
+  /* ARROWS (arrow keys at hjkl, numbers in qwerty row, capslock and some media keys)
+   * ,-----------------------------------------.                                    ,-----------------------------------------.
+   * |      |      |      |      |      |      |                                    |      |      | Calc | Mute | Vol- | Vol+ |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      |  1!  |  2@  |  3#  |  4$  |  5%  |       |                    |Nxttrck|  6^  |  7&  |  8*  |  9(  |  0)  |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      |      |      |      |      |      |       |                    |Previos| left | down |  up  | right|      |      |
+   * |------+------+------+------+------+------|       |                    |track  |------+------+------+------+------+------|
+   * |      |      |      |Cpslck|      |      '----------------,  ,----------------'      |      |      |      |      |      |
+   * |-----------------------------------------/   (   /   )   /    \       \       \-----------------------------------------|
+   * |      |      |      |      |    /       /-------/-------/      \-------\-------\       \    |      |      |      |      |
+   * |      |      |      |      |   /       /       /       /        \       \       \       \   |      |      |      |      |
+   * `---------------------------'  '-------/       /       /          \       \       \-------'  '---------------------------'
+   *                                        '--------------'            '--------------'
+   */
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        KC_CALC,        KC_MUTE,        KC_VOLD,         KC_VOLU, 
      _______,       KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           _______,                          KC_MNXT,        KC_6,           KC_7,           KC_8,           KC_9,           KC_0,            _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          KC_MPRV,        KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       _______,         _______,
@@ -65,7 +94,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        _______,        _______,        _______,         _______
   ),
 
-  [2] = LAYOUT(
+
+  [_SYMBOL] = LAYOUT(
+  /* SYM (number keys in home row, symbols in qwerty row)
+   * ,-----------------------------------------.                                    ,-----------------------------------------.
+   * |      |      |      |      |      |      |                                    |      |      |      |      |      |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |   ~  |   !  |   @  |   #  |   $  |   %  |       |                    |       |   ^  |   &  |   *  |   (  |   )  |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      |  1!  |  2@  |  3#  |  4$  |  5%  |       |                    |       |  6^  |  7&  |  8*  |  9(  |  0)  |      |
+   * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
+   * |      |      |      |      |      |      '----------------,  ,----------------'      |      |      |      |      |      |
+   * |-----------------------------------------/   (   /   )   /    \       \       \-----------------------------------------|
+   * |      |      |      |      |    /       /-------/-------/      \-------\-------\       \    |      |      |      |      |
+   * |      |      |      |      |   /       /       /       /        \       \       \       \   |      |      |      |      |
+   * `---------------------------'  '-------/       /       /          \       \       \-------'  '---------------------------'
+   *                                        '--------------'            '--------------'
+   */
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
      KC_TILD,       KC_EXLM,        KC_AT,          KC_HASH,        KC_DLR,         KC_PERC,        _______,                          _______,        KC_CIRC,        KC_AMPR,        KC_ASTR,        KC_LPRN,        KC_RPRN,         KC_PMNS,
      _______,       KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           _______,                          _______,        KC_6,           KC_7,           KC_8,           KC_9,           KC_0,            _______,
@@ -73,15 +118,45 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        _______,        _______,        _______,         _______
   ),
 
-  [3] = LAYOUT(
+  [_FUNC] = LAYOUT(
+  /* FUNC (Function keys, home/pgup/pgdn/end on hjkl and RGB)
+   * ,-----------------------------------------.                                    ,-----------------------------------------.
+   * |      |      |      |      |      |      |                                    |      |      |      |      |      |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      |  F1  |  F2  |  F3  |  F4  |  F5  | R Sad |                    |       |  F6  |  F7  |  F8  |  F9  |  F10 |  F11 |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |R M R | Reset|R Tog |R Mod |R Rmod|R M B | R Sai |                    |       | Home | PgDn | PgUp |  End |      |  F12 |
+   * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
+   * |R HUD |R Hui |R Vai |R Vad |R Spd |R Spi '----------------,  ,----------------'      |      |      |      |      |      |
+   * |-----------------------------------------/   (   /   )   /    \       \       \-----------------------------------------|
+   * |      |      |      |      |    /       /-------/-------/      \-------\-------\       \    |      |      |      |      |
+   * |R M K |R M SN|R M SW|R M X |   / R M G /       /       /        \       \       \       \   |      |      |      |      |
+   * `---------------------------'  '-------/ R M T / R M P /          \       \       \-------'  '---------------------------'
+   *                                        '--------------'            '--------------'
+   */
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______,
      _______,       KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          RGB_SAD,                          _______,        KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,          KC_F11,
-     _______,       RESET,          RGB_TOG,        RGB_MOD,        RGB_RMOD,       RGB_M_B,        RGB_SAI,                          _______,        KC_HOME,        KC_PGDN,        KC_PGUP,        KC_END,         _______,         KC_F12,
+     RGB_M_R,       RESET,          RGB_TOG,        RGB_MOD,        RGB_RMOD,       RGB_M_B,        RGB_SAI,                          _______,        KC_HOME,        KC_PGDN,        KC_PGUP,        KC_END,         _______,         KC_F12,
      RGB_HUD,       RGB_HUI,        RGB_VAI,        RGB_VAD,        RGB_SPD,        RGB_SPI,        _______,   _______,    _______,   _______,        _______,        _______,        _______,        _______,        _______,         _______,
      RGB_M_K,       RGB_M_SN,       RGB_M_SW,       RGB_M_X,        RGB_M_G,        RGB_M_T,        RGB_M_P,                          _______,        _______,        _______,        _______,        _______,        _______,         _______
   ),
 
-  [4] = LAYOUT(
+  [_MOUSE] = LAYOUT(
+  /* MOUSE (Mouse navigation/scrolling/buttons/speed and emojis)
+   * ,-----------------------------------------.                                    ,-----------------------------------------.
+   * |      |      |      |      |      |      |                                    |      |      |      |      |      |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      |      |      |      |      |      |ScrlUp |                    |Mbtn5  |      |      |  :-P |  :-( |  :-) |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      |      |      |      |      |      |ScrlDn |                    |Mbtn4  |  6^  |  7&  |  8*  |  9(  |  0)  |      |
+   * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
+   * |      |      |      |      |      |Macc0 '----------------,  ,----------------'      |      |      |      |      |      |
+   * |-----------------------------------------/ Macc1 / Macc2 /    \       \       \-----------------------------------------|
+   * |      |      |      |      |    /       /-------/-------/      \-------\-------\       \    |      |      |      |      |
+   * |      |      |      |      |   /       /       /       /        \       \       \ Mbtn3 \   |      |      |      |      |
+   * `---------------------------'  '-------/       /       /          \ Mbtn1 \ Mbtn2 \-------'  '---------------------------'
+   *                                        '--------------'            '--------------'
+   */
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
      _______,       _______,        _______,        _______,        _______,        _______,        KC_WH_U,                          KC_BTN5,        _______,        _______,        YOLO,           SAD,            HAPPY,           _______,
      _______,       _______,        _______,        _______,        _______,        _______,        KC_WH_D,                          KC_BTN4,        KC_MS_L,        KC_MS_D,        KC_MS_U,        KC_MS_R,        _______,         _______,
@@ -89,12 +164,57 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          KC_BTN1,        KC_BTN2,        KC_BTN3,        _______,        _______,        _______,         _______
   ),
 
-  [5] = LAYOUT(
+  [_NUMPAD] = LAYOUT(
+  /* NUMPAD (Numpad and some extra rarely used keys)
+   * ,-----------------------------------------.                                    ,-----------------------------------------.
+   * |      |      |      |      |      |      |                                    |      |      |      |      |      |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      | Menu |SclLck| Pause|  Ins | NLck |       |                    |       |      |  7&  |  8*  |  9(  |      |      |
+   * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
+   * |      |      |      |      |      |      |       |                    |       |      |  4$  |  5%  |  6^  |      |      |
+   * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
+   * |      |      |      |      |      |      '----------------,  ,----------------'      |  1!  |  2@  |  3#  |      |      |
+   * |-----------------------------------------/   (   /   )   /    \       \       \-----------------------------------------|
+   * |      |      |      |      |    /       /-------/-------/      \-------\-------\       \    |  0)  |  .>  |      |      |
+   * |      |      |      |      |   /       /       /       /        \       \       \       \   |      |      |      |      |
+   * `---------------------------'  '-------/       /       /          \       \       \-------'  '---------------------------'
+   *                                        '--------------'            '--------------'
+   */
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
      _______,       KC_APP,         KC_SLCK,        KC_PAUS,        KC_INS,         KC_NLCK,        _______,                          _______,        _______,        KC_7,           KC_8,           KC_9,           _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        KC_4,           KC_5,           KC_6,           _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,   _______,    _______,   _______,        _______,        KC_1,           KC_2,           KC_3,           _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        KC_0,           KC_DOT,         _______,         _______
   )
+};
 
+
+/* Change LED colors depending on the layer.
+ * TODO: red led blinking for dynamic macro recording
+ *       Sources:
+ *       https://docs.qmk.fm/#/custom_quantum_functions?id=example-layer_state_set_-implementation
+ *       redox/jeherve/keymap.c */ 
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+    case _ARROWS:
+//        rgblight_setrgb (0x00,  0x00, 0xFF);
+        rgblight_mode(25); //Christmas
+        break;
+    case _SYMBOL:
+        rgblight_setrgb (0x00,  0xFF, 0x00); //green
+        break;
+    case _FUNC:
+        rgblight_mode(30);
+        break;
+    case _MOUSE:
+        rgblight_setrgb (0x7A,  0x00, 0xFF);
+        break;
+    case _NUMPAD:
+        rgblight_mode(27);//snake?
+        break;
+    default: //  for any other layers, or the default layer
+        rgblight_setrgb (0xFF,  0x00, 0x00); //red
+        break;
+    }
+  return state;
 };
