@@ -3,7 +3,7 @@
 
 #include QMK_KEYBOARD_H
 
-/* Make layer readable by naming the layer number */
+/* Make layers readable by naming them */
 #define _QWERTY 0
 #define _ARROWS 1
 #define _SYMBOL 2
@@ -11,9 +11,10 @@
 #define _MOUSE 4
 #define _NUMPAD 5
 
-/* Custom keycodes, emoji and layer name declarations */
+/* Custom keycodes */
 enum custom_keycodes {
   HAPPY,
+  xxx, /* Weird bug. If this line is removed the next one (YOLO) will not work... */
   YOLO,
   SAD,
   QWERTY,
@@ -24,7 +25,7 @@ enum custom_keycodes {
   NUMPAD
   };
 
-/* Send custom strings, in this case simple text emojis */
+/* Send custom strings */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
   case HAPPY:
@@ -59,8 +60,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
    * | Shift|   Z  |   X  |   C  |   V  |   B  '----------------,  ,----------------'   N  |   M  |   ,  |   .  |   /  | Shift|
    * |-----------------------------------------/  {[   /  ]}   /    \ PrScr \   \|  \-----------------------------------------|
-   * |Macro1|Macro2|NUMPAD|MOUSE |    /ARROWS /-------/-------/      \-------\-------\ SYMBOL\    | FUNC |Macro |Macro2|Macro1|
-   * | play | play |Layer |Layer |   / Layer /       /       /        \       \       \ Layer \   |Layer |stopre|  rec | rec  |
+   * |Macro1|Macro2|NUMPAD|MOUSE |    /ARROWS /-------/-------/      \-------\-------\  SYM  \    | FUNC |Macro |Macro2|Macro1|
+   * | play | play |Layer5|Layer4|   /Layer1 /       /       /        \       \       \ Layer2\   |Layer3|stopre|  rec | rec  |
    * `---------------------------'  '-------/  BkSp / Enter /          \ Enter \ Space \-------'  '---------------------------'
    *                                        '--------------'            '--------------'
    */
@@ -71,8 +72,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      DYN_MACRO_PLAY1,DYN_MACRO_PLAY2,TT(5),         TT(4),          TT(1),          KC_BSPC,        KC_DEL,                           KC_ENT,         KC_SPC,         TT(2),          TT(3),          DYN_REC_STOP,   DYN_REC_START2,  DYN_REC_START1 
   ),
 
-  [_ARROWS] = LAYOUT(
-  /* ARROWS (arrow keys at hjkl, numbers in qwerty row, capslock and some media keys)
+  [_ARROWS ] = LAYOUT(
+  /* ARROWS (arrow keys at hjkl, numbers in qwerty row, capslock  and some media keys)
    * ,-----------------------------------------.                                    ,-----------------------------------------.
    * |      |      |      |      |      |      |                                    |      |      | Calc | Mute | Vol- | Vol+ |
    * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
@@ -94,9 +95,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        _______,        _______,        _______,        _______,         _______
   ),
 
-
   [_SYMBOL] = LAYOUT(
-  /* SYM (number keys in home row, symbols in qwerty row)
+  /* SYMBOL (number keys in home row, symbols in qwerty row)
    * ,-----------------------------------------.                                    ,-----------------------------------------.
    * |      |      |      |      |      |      |                                    |      |      |      |      |      |      |
    * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
@@ -105,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |      |  1!  |  2@  |  3#  |  4$  |  5%  |       |                    |       |  6^  |  7&  |  8*  |  9(  |  0)  |      |
    * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
    * |      |      |      |      |      |      '----------------,  ,----------------'      |      |      |      |      |      |
-   * |-----------------------------------------/   (   /   )   /    \       \       \-----------------------------------------|
+   * |-----------------------------------------/       /       /    \       \       \-----------------------------------------|
    * |      |      |      |      |    /       /-------/-------/      \-------\-------\       \    |      |      |      |      |
    * |      |      |      |      |   /       /       /       /        \       \       \       \   |      |      |      |      |
    * `---------------------------'  '-------/       /       /          \       \       \-------'  '---------------------------'
@@ -128,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |R M R | Reset|R Tog |R Mod |R Rmod|R M B | R Sai |                    |       | Home | PgDn | PgUp |  End |      |  F12 |
    * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
    * |R HUD |R Hui |R Vai |R Vad |R Spd |R Spi '----------------,  ,----------------'      |      |      |      |      |      |
-   * |-----------------------------------------/   (   /   )   /    \       \       \-----------------------------------------|
+   * |-----------------------------------------/       /       /    \       \       \-----------------------------------------|
    * |      |      |      |      |    /       /-------/-------/      \-------\-------\       \    |      |      |      |      |
    * |R M K |R M SN|R M SW|R M X |   / R M G /       /       /        \       \       \       \   |      |      |      |      |
    * `---------------------------'  '-------/ R M T / R M P /          \       \       \-------'  '---------------------------'
@@ -146,7 +146,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * ,-----------------------------------------.                                    ,-----------------------------------------.
    * |      |      |      |      |      |      |                                    |      |      |      |      |      |      |
    * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
-   * |      |      |      |      |      |      |ScrlUp |                    |Mbtn5  |      |      |  :-P |  :-( |  :-) |      |
+   * |      |      |      |      |      |      |                                    |      |      | :-P  | :-(  | :-)  |      |
    * |------+------+------+------+------+------|-------.                    ,-------|------+------+------+------+------+------|
    * |      |      |      |      |      |      |ScrlDn |                    |Mbtn4  |  6^  |  7&  |  8*  |  9(  |  0)  |      |
    * |------+------+------+------+------+------|       |                    |       |------+------+------+------+------+------|
@@ -164,7 +164,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          KC_BTN1,        KC_BTN2,        KC_BTN3,        _______,        _______,        _______,         _______
   ),
 
-  [_NUMPAD] = LAYOUT(
   /* NUMPAD (Numpad and some extra rarely used keys)
    * ,-----------------------------------------.                                    ,-----------------------------------------.
    * |      |      |      |      |      |      |                                    |      |      |      |      |      |      |
@@ -180,6 +179,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * `---------------------------'  '-------/       /       /          \       \       \-------'  '---------------------------'
    *                                        '--------------'            '--------------'
    */
+
+  [_NUMPAD] = LAYOUT(
      _______,       _______,        _______,        _______,        _______,        _______,                                                          _______,        _______,        _______,        _______,        _______,         _______, 
      _______,       KC_APP,         KC_SLCK,        KC_PAUS,        KC_INS,         KC_NLCK,        _______,                          _______,        _______,        KC_7,           KC_8,           KC_9,           _______,         _______,
      _______,       _______,        _______,        _______,        _______,        _______,        _______,                          _______,        _______,        KC_4,           KC_5,           KC_6,           _______,         _______,
@@ -188,33 +189,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-
-/* Change LED colors depending on the layer.
- * TODO: red led blinking for dynamic macro recording
- *       Sources:
- *       https://docs.qmk.fm/#/custom_quantum_functions?id=example-layer_state_set_-implementation
- *       redox/jeherve/keymap.c */ 
+/* Change LED colors depending on the layer. */ 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
     case _ARROWS:
-//        rgblight_setrgb (0x00,  0x00, 0xFF);
-        rgblight_mode(25); //Christmas
+        rgblight_setrgb (0xFF,  0x00, 0x00); //red
         break;
     case _SYMBOL:
-        rgblight_setrgb (0x00,  0xFF, 0x00); //green
+        rgblight_setrgb (0xFF, 0xFF, 0xFF); /* White */
         break;
     case _FUNC:
-        rgblight_mode(30);
+        rgblight_mode(28);//snake?
         break;
     case _MOUSE:
-        rgblight_setrgb (0x7A,  0x00, 0xFF);
+        rgblight_setrgb (0x7A,  0x00, 0xFF); /* Purple */
         break;
     case _NUMPAD:
-        rgblight_mode(27);//snake?
+        rgblight_mode(25); /* Christmas */
         break;
     default: //  for any other layers, or the default layer
-        rgblight_setrgb (0xFF,  0x00, 0x00); //red
+        rgblight_mode(30);
         break;
     }
   return state;
 };
+/* 
+ * TODO: in addition to the LED color codes, add red led blinking for dynamic macro recording
+ *       Sources:
+ *       https://docs.qmk.fm/#/custom_quantum_functions?id=example-layer_state_set_-implementation
+ *       redox/jeherve/keymap.c 
+ *
+ * Other color codes:
+ * rgblight_setrgb (0xFF,  0x00, 0x00); red
+ * rgblight_mode(23);                   // knightrider yellow, werkt niet blijft knipperen 
+ * rgblight_mode(27);                   //snake?
+ * rgblight_setrgb (0x00, 0x00, 0xFF);  // Blue 
+ * rgblight_setrgb (0x00,  0xFF, 0x00); // Green */

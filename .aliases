@@ -64,7 +64,7 @@ alias dmenubackup='~/.config/dmenubackup.sh'    # Make the current dmenu the sta
 alias dmenuvanilla='~/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROYS CURRENT dmenu!
 alias dmenustable='~/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
 alias dmenupatch='~/.config/dmenupatch.sh'      # Run the dwmpatch command to test the patch
-alias dmenuupdate='~/.config/dmenuUpdate.sh'     # Update the application list for dmenu
+alias dmenuupdate='~/.config/dmenuUpdate.sh'    # Update the application list for dmenu
 # zsh aliases
-alias ze="vim ~/.zshrc"
-alias zs="source ~/.zshrc"
+alias ze="vim ~/.zshrc"                         # edit the .zshrc file
+alias zs="source ~/.zshrc"                      # source the .zshrc 

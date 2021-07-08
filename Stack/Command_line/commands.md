@@ -972,6 +972,14 @@ yay -S spotify
 packages
 yay spotify
 ```
+Pacman upgrade gaf telkens: there is nothing to do. Het bleek dat de mirrorlist
+niet meer goed werkte (wss stond er een foute in de lijst). Het probleem is
+opgelost met Reflector.
+Reflector. Sorteer de beste 20 mirrors en schrijf in mirrorlist. Vergeet niet
+om een backup te maken van /etc/pacman.d/mirrorlist:
+```
+sudo reflector --verbose --latest 20 --sort rate --save /etc/pacman.d/mirrorlist
+```
 
 #### WIFI            
 
