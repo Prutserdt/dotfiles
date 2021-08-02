@@ -359,7 +359,12 @@ Zet de key repeat snelheid hoger, increase key repeat rate,
 modify .xinitrc:
 xset r rate 300 80
 
-#### Converteren van pdf naar een tekstfile en verwijderen van bagger en
+
+#### Converteren van pdf naar een tekstfile, bijv. voor rabo pdf voor import in gnumeric
+
+for file in NL17RABO0304804207-EUR-2021-06.pdf; do pdftotext -layout "$file";done
+
+#### Converteren van pdf naar een tekstfile en verwijderen van bagger en 
 veranderen van komma naar punt. 
 Vier stappen: 
 1: Via command line utililty poppler (pdftotext)
@@ -398,6 +403,13 @@ Volgend is minder effectief:
 `gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default \
     -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages \
     -dCompressFonts=true -r150 -sOutputFile=output.pdf PDA_bacteriophages_for_VF.pdf`
+
+#### Roteren van pdfs
+Probleem: pdf files staan 180 graden gedraaid. Oplossing: roteren van pagina's
+en saven als een nieuwe naam.
+
+'qpdf naam.pdf naam_rotated --rotate=90'
+for file in *.pdf; do qpdf "$file" "$file" --rotate=90; done
 
 
 #### Calender
@@ -479,7 +491,8 @@ Mijn monitor:           AOC CU34G2/BK
 Mijn grafische kaart:   [AMD/ATI] Oland [Radeon HD 8570 / R7 240/340 / Radeon 520 OEM]
 Mijn moederbord:        
 	Manufacturer: LENOVO
-	Product Name: SHARKBAY
+	P#### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### #### ####Name: SHARKBAY
+Converteren van pdf naar een tekstfile en verwijderen van bagger en 
 	Version: 31900058 STD or WIN
 	Serial Number: ES13354825
 	Chassis Handle: 0x0003
@@ -2498,82 +2511,82 @@ Tips: https://www.youtube.com/watch?v=8-S0cWnLBKg
 Nieuwe installatie:
 sudo pacman -S i3status i3gaps dmenu feh
 Start i3 via startx (oftewel .xinitrc in home directory
-Daarvoor eerst de default .xinitrc kopieren
+        Daarvoor eerst de default .xinitrc kopieren
 
-Delete de regels van het bestand maar laat de laatste tekstblok staan 
-en voeg exec i3 toe (plus onderstaande voor logging)
-```
-exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
-twm &
-xclock -geometry 50x50-1+1 &y
-xterm -geometry 80x50+494+51 &
-xterm -geometry 80x20+494-0 &
-exec xterm -geometry 80x66+0+0 -name login
-Start i3 (login als archie)
-startx
-```
+        Delete de regels van het bestand maar laat de laatste tekstblok staan 
+        en voeg exec i3 toe (plus onderstaande voor logging)
+        ```
+        exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
+        twm &
+        xclock -geometry 50x50-1+1 &y
+        xterm -geometry 80x50+494+51 &
+        xterm -geometry 80x20+494-0 &
+        exec xterm -geometry 80x66+0+0 -name login
+        Start i3 (login als archie)
+        startx
+        ```
 
-Je kunt de config file aanmaken met 
-(locatie /home/archie/.config/i3/config)
-`i3-config-wizard`
+        Je kunt de config file aanmaken met 
+        (locatie /home/archie/.config/i3/config)
+        `i3-config-wizard`
 
-Customize de config
-`nano /home/archie/.config/i3/config`
+        Customize de config
+        `nano /home/archie/.config/i3/config`
 
-Verander look and feel met lxappearance. Kies bijv. xfce-dusk
-lxappearance
+        Verander look and feel met lxappearance. Kies bijv. xfce-dusk
+        lxappearance
 
-Mooi lettertype: system-san-francisco-font-git
-`yaourt -S system-san-francisco-font-git`
+        Mooi lettertype: system-san-francisco-font-git
+        `yaourt -S system-san-francisco-font-git`
 
-De font wordt weegegeven in de lijst: 
-fc-list : file
-Open lxappearnce, verander de fontsize, klik op apply.
-Nu is een .gtk file aangemaakt, vind het bestand (.gtkrc-2.0)
-`ls -al`
+        De font wordt weegegeven in de lijst: 
+        fc-list : file
+        Open lxappearnce, verander de fontsize, klik op apply.
+        Nu is een .gtk file aangemaakt, vind het bestand (.gtkrc-2.0)
+        `ls -al`
 
-Pas fontawesome-webfont.ttf de eigenschappen aan in nano, ook in gtk-3. 
-Open de bestanden en verander gtk-font-name="Cantarell 13" naar 
-gtk-font-name="System San Francisco Display "
-```
-nano .gtkrc-2.0
-nano ~/.config/gtk-3.0/settings.ini
-```
+        Pas fontawesome-webfont.ttf de eigenschappen aan in nano, ook in gtk-3. 
+        Open de bestanden en verander gtk-font-name="Cantarell 13" naar 
+        gtk-font-name="System San Francisco Display "
+        ```
+        nano .gtkrc-2.0
+        nano ~/.config/gtk-3.0/settings.ini
+        ```
 
-Het werkt, ook is dit font is toegevoegd aan /home/archie/.config/i3/config 
-(font pango: System San Francisco Display 10)
-Het is ook mogelijk om de font te kiezen in lxappearance, het heet daar 
-SFNS display, maar dit geeft een slechte rendering.
-....yosemity font gecopierd naar ~/.fonts
+        Het werkt, ook is dit font is toegevoegd aan /home/archie/.config/i3/config 
+        (font pango: System San Francisco Display 10)
+        Het is ook mogelijk om de font te kiezen in lxappearance, het heet daar 
+        SFNS display, maar dit geeft een slechte rendering.
+        ....yosemity font gecopierd naar ~/.fonts
 
-Pas het i3status.conf file aan, save het in de user directory voor gebruik voor alleen deze gebruiker
-Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
-```
-mkdir .config/i3status
-cp /etc/i3status.conf .config/i3status/config
-vim .config/i3status/config
-```
+        Pas het i3status.conf file aan, save het in de user directory voor gebruik voor alleen deze gebruiker
+        Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
+        ```
+        mkdir .config/i3status
+        cp /etc/i3status.conf .config/i3status/config
+        vim .config/i3status/config
+        ```
 
-Zet icons op tabs. 
-Download Font-Awesome Release 4.4 op webpagina:
-https://github.com/FortAwesome/Font-Awesome/releases
-Pak de fontawesome-webfont.ttf uit de zipfile en verplaats naar .fonts:
-`mv fontawesome-webfont.ttf ~/.fonts/`
+        Zet icons op tabs. 
+        Download Font-Awesome Release 4.4 op webpagina:
+        https://github.com/FortAwesome/Font-Awesome/releases
+        Pak de fontawesome-webfont.ttf uit de zipfile en verplaats naar .fonts:
+        `mv fontawesome-webfont.ttf ~/.fonts/`
 
-Kopier bijvoorbeeld de firefox afbeelding op de onderstaande webpagina
-https://fontawesome.com/cheatsheet
-Plak het icoon, , in de tekstfile
-`nano /home/archie/.config/i3/config`
+        Kopier bijvoorbeeld de firefox afbeelding op de onderstaande webpagina
+        https://fontawesome.com/cheatsheet
+        Plak het icoon, , in de tekstfile
+        `nano /home/archie/.config/i3/config`
 
-Forceer een applicatie om te openen op een vast tab blad met 
-Vind de class van een applicatie door naast de applicatie een terminal te
-openen en daarin xprop te starten en op de applicatie te klikken:
-(assign [class="Firefox"] $workspace3)
-`xprop`
+        Forceer een applicatie om te openen op een vast tab blad met 
+        Vind de class van een applicatie door naast de applicatie een terminal te
+        openen en daarin xprop te starten en op de applicatie te klikken:
+            (assign [class="Firefox"] $workspace3)
+             `xprop`
 
-Mooi icon theme. Instellen via lxappearance/Icon theme/Moka
+             oooi icon theme. Instellen via lxappearance/Icon theme/Moka
 `yaourt -S moka-icon-theme`
-
+o roduct
 Save layout of workspace, dit zou de layout moeten wegschrijven, waarnaar
 je het na modificatie kunt wegschrijven, niet eenvoudig en lukt me nog 
 niet...  https://i3wm.org/docs/layout-saving.html EditingLayoutFiles: 

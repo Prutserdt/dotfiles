@@ -123,7 +123,8 @@ static Key keys[] =
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("alacritty -e vim ~/.config/i3/config") },                 /* i3 config file */
 	{ MENUFILE,                     XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/urls") },                    /* newsboat urls file */
 	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/config") },                  /* newsboat config file */
-	{ MENUFILE,                     XK_r,      spawn,          SHCMD("alacritty -e vim ~/.config/ranger/rc.conf") },            /* ranger config file */
+//	{ MENUFILE,                     XK_r,      spawn,          SHCMD("alacritty -e vim ~/.config/ranger/rc.conf") },            /* ranger config file */
+	{ MENUFILE,                     XK_r,      spawn,          SHCMD("gnumeric ~/Stack/Documenten/Aandelen/Rekenvoorbeelden.xls") }, /* rekenvoorbeelden xls file */
 	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("alacritty -e vim ~/README.md") },                         /* my github dotfiles README file */
 	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/st/config.h") },      /* st 'config' file */
 	{ MENUFILE,                     XK_v,      spawn,          SHCMD("alacritty -e vim ~/.vimrc") },                            /* vim 'config' file */
