@@ -5,9 +5,7 @@ other stuff. Some of my dotfiles are: alacritty, newsboat, vifm, vim.
 
 My build of dwm, a dynamic window manager, can be found [here](https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm). 
 
-This is how my dwm desktop can look like:
-![full rice](dwm.jpg)
-This is how I use it:
+This typically how my desktop looks like:
 ![productivity](dwm2.jpg)
 
 The qmk configurations of the ortholinear ergonomic split keyboards Redox and Gergo are living [here](https://github.com/Prutserdt/dotfiles/tree/master/Stack/qmk_configurations).
