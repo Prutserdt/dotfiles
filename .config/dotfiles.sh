@@ -7,10 +7,10 @@
 # \__,_|\___/ \__|_| |_|_|\___||___(_)___/_| |_|
 #                           Created by Prutserdt
 #
-# This silly script checks the status of the dotfiles on this 
+# This script checks the status of the dotfiles on this 
 # computer compared to the bare GitHub repo and gives options. 
 # 
-# This shell can be called from the alias "dotfiles" in .bashrc
+# This shell can be called from the alias "dotfiles" .aliases
 
 
 function Push()

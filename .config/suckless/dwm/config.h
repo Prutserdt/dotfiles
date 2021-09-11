@@ -113,7 +113,8 @@ static Key keys[] =
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle & ~/.config/updatebar.sh") }, /* Toggle mute */
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter -r -s ~/Downloads") },                /* Select by mouse what to print from screen */
     /* Right alt key to open textfiles                                                                                             Open textfile in vim: */
-	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/alacritty/alacritty.yml") },   /* alacritty config file */
+//	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/alacritty/alacritty.yml") },   /* alacritty config file */
+	{ MENUFILE,                     XK_a,      spawn,          SHCMD("~/.config/aandelen.sh") },                                /* Open aandelen.md en berekeningen */
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("alacritty -e vim ~/.bashrc") },                           /* .bashrc */
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("alacritty -e vim ~/Stack/Command_line/commands.md") },    /* personal notes and comments about Linux */
 	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/dwm/config.h") },     /* dwm config file */
@@ -122,7 +123,7 @@ static Key keys[] =
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("alacritty -e vim ~/.config/i3/config") },                 /* i3 config file */
 	{ MENUFILE,                     XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/urls") },                    /* newsboat urls file */
 	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/config") },                  /* newsboat config file */
-	{ MENUFILE,                     XK_r,      spawn,          SHCMD("gnumeric ~/Stack/Documenten/Aandelen/Rekenvoorbeelden.xls & alacritty -e vim ~/Stack/Documenten/Aandelen/aandelen_log.md") }, /* rekenvoorbeelden xls file */
+	{ MENUFILE,                     XK_r,      spawn,          SHCMD("gnumeric ~/Stack/Documenten/Aandelen/Rekenvoorbeelden.xls ") }, /* rekenvoorbeelden xls file */
 	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("alacritty -e vim ~/README.md") },                         /* my github dotfiles README file */
 	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/st/config.h") },      /* st 'config' file */
 	{ MENUFILE,                     XK_v,      spawn,          SHCMD("alacritty -e vim ~/.vimrc") },                            /* vim 'config' file */

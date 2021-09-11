@@ -1393,6 +1393,39 @@ awk -F';' '{print "😷" $3 "("$4")" "☠️" $5 "("$6")"    ud script:
 PROBLEEM: nu heb ik een goed script, maar hoe voeg ik dit toe aan i3bar.
 Aan i3status kun je geen script hangen... (vim ~/.config/i3status/config)
 
+### Downloaden DeGiro porfolio data en berekenen percentage.
+
+https://trader.degiro.nl/trader/\#/portfolio openen in Brave, daarna selecteer
+je Export to .csv en save het in ~/Downloads/test.
+hotkey left alt+a runt het script aandelen.sh dat de csv omzet in handig
+formaat van hoog naar laag: BedragAandeel PercentageAandeel NaamAandeel
+
+Voorbeeld:
+23357 38.9 %	VANGUARD S&P500
+23157 38.5 %	VANGUARD FTSE ALL-WORLD UCITS E...
+10895 18.1 %	VANECK VECTORS BITCOIN ETN
+2676 4.5 %	ISHARES PROP GLO
+
+Dit script is geen onderdeel van mijn dotfiles en daarom plak ik het hier:
+
+#!/bin/sh
+#~/.config/aandelen.sh
+#                      _      _                  _
+#  __ _  __ _ _ __   __| | ___| | ___ _ __    ___| |__
+# / _` |/ _` | '_ \ / _` |/ _ \ |/ _ \ '_ \  / __| '_ \
+#| (_| | (_| | | | | (_| |  __/ |  __/ | | |_\__ \ | | |
+# \__,_|\__,_|_| |_|\__,_|\___|_|\___|_| |_(_)___/_| |_|
+#
+# Automating some routines :-)
+#
+#gnumeric ~/Stack/Documenten/Aandelen/Rekenvoorbeelden.xls & # open spreadsheet
+alacritty -e vim ~/Stack/Documenten/Aandelen/aandelen_log.md & # open md file
+cat ~/Downloads/test/Portfolio.csv | sed "1,2 d" | cut -d , -f 1,7 | sed 's/"//'| sort -r -t ',' --key=6 > ~/Downloads/test/TempSorted &&
+cat ~/Downloads/test/TempSorted | cut -d , -f 2 | awk '{a[NR] = $1; sum+= $1 } END {for (i = 1; i <= NR; i++) printf "%s %1.1f %\n", a[i],(100 * a[i])/sum}' > ~/Downloads/test/TempPerc &&
+cat ~/Downloads/test/TempSorted | cut -d , -f 1  > ~/Downloads/test/TempName &&
+paste ~/Downloads/test/TempPerc ~/Downloads/test/TempName > ~/Downloads/test/TempMerged && 
+cat ~/Downloads/test/TempMerged | xclip -sel clip
+
 
 ### Video card information
 lspci -vnn | grep VGA -A 12
@@ -1405,14 +1438,26 @@ Een nieuwe amd card die zou werken kost 50 euro:
 https://www.bol.com/nl/p/asus-r5230-sl-1gd3-l-radeon-r5-230-1gb-gddr3-videokaart/9200000027686779/?bltgh=lAYrxB4tzY134OkTkbpF-w.1_4.5.ProductPage
 
 ### Create Superfast ramdisk
-Tijdelijke ramdisk creeren. Bijvoorbeeld voor snel schrijven
-Check eerst beschikbare ram met free -g!
+Tijdelijke ramdisk creeren. Handig voor snel lezen/schrijven in geheugen/memory
+voor bijvoorbeeld manipuleren van fotos enz.
+Check eerst beschikbare ram met free -g of df -T!
+tmpfs zorgt ervoor dat het systeem niet kan crashen als de buffer vol is. 
 onderaan staat de umount.
 ```
 free -g
-mkdir -p /mnt/ram
-mount -t tmpfs tmpfs /mnt/ram -o size=8192M
-umount tmpfs /mnt/ram
+# check drives (incl virtual drives)
+df -T
+# Dit geeft user id. Of gebruik gewoon de variabele:
+id -u  
+# Of gebruik gewoon de variabele:
+$XDG_RUNTIME_DIR
+# deze directory kun je gebruiken zonder root privileges. Zie ook aandelen.sh
+
+#Het onderstaande kan ook als je een grotere hoeveelheid wilt gebruiken, ik
+#weet niet of er een echte max op /run/user/100 staat...
+sudo mkdir -p /mnt/ram
+sudo mount -t tmpfs tmpfs /mnt/ram -o size=8192M
+sudo umount tmpfs /mnt/ram
 ```
 
 ### RSS stuff
@@ -2203,6 +2248,15 @@ config add ~/.config/stpatch.sh &&
 config add ~/.config/ststable.sh &&
 config add ~/.config/stvanilla.sh 
 ```
+#### Download github files to pc by wget
+Works only for public files:
+
+file location:
+https://github.com/Prutserdt/dotfiles/blob/master/.aliases
+download by entering:
+https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.aliases
+
+
 
 #### Tox
 Android: Antox
@@ -3004,16 +3058,32 @@ Alleen op lokale pc:
 Nu moet je wachtwoord vd server intypen.. 
 (daarom staat passwordauthentificatino aan!)
 PAS DAARNA naar de server sshd_config aanpassen...
-`sudo nano /etc/ssh/sshd_config`
+`sudo nano /etc/ssh/sshd_configav
 Verander: PasswordAuthentication no
 Vul in onderaan AllowUsers archie@81.174.98.248
 Inloggen werkt hierna weer goed! :-)
  
 #### Ubuntu Mate op GPD pocket
 
+23AUG21: problemen met GRUB en booten: stuck in grub 2.04
+Ik ga een nieuwe install doen met de oude mate iso...
+https://releases.ubuntu-mate.org/focal/amd64/ daar staat een 20.04.1 gpd pocket
+iso.
+Ik had de onderstaande oude installatie nog op een memory stick gezet, dus deze
+heb ik gebruikt:
+Switch the GPD Pocket on, immediately hold the Fn key and tapping the F7 key 
+until the Boot Manager screen appears.
+UEFI....(onderaan menu) gekozen en installeer ubuntu
+
+
+
+
+
+
+
 27APR19 opnieuwe linux installatie, want na Parrot upgrade loopte het systeem vast.
 Ubuntu Mate 18.04.2 LTS (Bionic) 
-De iso gedownload op via torrent (https://ubuntu-mate.org/download/)
+De iso gedownload op via torrent (https://ubuntu-mathe.org/download/)
 en op een usb stick gezet.
 `sudo dd if=//home/archie/Downloads/ubuntu-mate-18.04.2-desktop-amd64-gpd-pocket.iso of=/dev/sdd status=progress`
 
@@ -3161,25 +3231,6 @@ De volgende keer maar met usb dongle proberen...
 #### Kali linux op GPD pocket
 
 kali-linux-rolling-pocket+20180207-1_oud.iso
-
-Fn + NumLk Bestuur de muis met de keypad. linker muis knop: ) 
-rechter: Del Scrol: - +
-
-Fn+2 --> activeer profile #2. Indicator lights will flash twice.
-Fn+Ctrl vasthouden 3 secondes om macro op te nemen. Indicator lights will flash slowly.
-Klik op de toe te kennen macro knop. Indicator lights will flash quickly.
-Voer de macro in. Indicator lights will continue to flash quickly.
-Fn+Ctrl indrukken om opname te eindigen. Indicator lights will stop flashing.
-De macro is opgenomen.
-
-Fn+1: 0.02s delay
-Fn+2 --> activeer profile #2. Indicator lights will flash twice.
-Fn+Ctrl vasthouden 3 secondes om macro op te nemen. Indicator lights will flash slowly.
-FN+1
-Klik op de toe te kennen macro knop:a. Indicator lights will flash quickly.
-Voer de macro in. Indicator lights will continue to flash quickly.
-Fn+Ctrl indrukken om opname te eindigen. Indicator lights will stop flashing.
-De macro is opgenomen.
 
 13JAN19 nieuwe installatie op de GPD pocket, want update van Kali 
 resulteerde in een niet werkend systeem.
