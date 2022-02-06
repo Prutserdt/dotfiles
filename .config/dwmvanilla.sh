@@ -15,7 +15,7 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/.config/suckless/dwm &&
     mkdir ~/.config/suckless/dwm &&
-    cp -r ~/Stack/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/.config/suckless/dwm &&
+    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/.config/suckless/dwm &&
     cd ~/.config/suckless/dwm &&
     clear && ls -al
 #    rm -r ~/suckless/dwm &&

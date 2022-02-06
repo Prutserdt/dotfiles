@@ -15,20 +15,22 @@
 # 3: Run the patch
 #
 # This shell script can be called by the .bashrc alias dwmbackup.
-echo -n "Are you sure you want to patch the current dwm system? This will first: RESTORE TO THE STABLE DWM and after that make clean install on the .diff file in the direcotory ~/Stack/suckless/dwm/patches/test. Yes or no? (y/n) "
+echo -n "Are you sure you want to patch the current dwm system? This will
+first: RESTORE TO THE STABLE DWM and after that make clean install on the .diff
+file in the direcotory ~/Stack/Dotfiles/suckless/dwm/patches/test. Yes or no? (y/n) "
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/.config/suckless/dwm &&
     mkdir ~/.config/suckless/dwm &&
     mkdir ~/.config/suckless/dwm/log &&
-    cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm && 
+    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm && 
     cd ~/.config/suckless/dwm &&
     clear && ls -al &&
-    ls ~/Stack/suckless/dwm/patches/test/*.diff >> ~/.config/suckless/dwm/log/diff_log && 
+    ls ~/Stack/Dotfiles/suckless/dwm/patches/test/*.diff >> ~/.config/suckless/dwm/log/diff_log && 
     cp -r ~/.config/suckless/dwm/config.h ~/.config/suckless/dwm/config.def.h && 
     rm ~/.config/suckless/dwm/config.h && 
-    patch -p1 < ~/Stack/suckless/dwm/patches/test/*.diff &&
+    patch -p1 < ~/Stack/Dotfiles/suckless/dwm/patches/test/*.diff &&
     make clean install
 #    rm -r ~/suckless/dwm &&
 #    mkdir ~/suckless/dwm &&

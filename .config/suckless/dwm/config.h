@@ -17,11 +17,11 @@ static const int smartgaps          = 1;                 /* 1 means no outer gap
 static const int showbar            = 1;                 /* 0 means no bar */
 static const int topbar             = 1;                 /* 0 means bottom bar */
 static const char *fonts[]          = { "hack:size=9" }; /* Font of statusbar */
-static const char black[]           = "#000000";         /* Color of background */
-static const char dark_gray[]       = "#111111";         /* Color of not selected borders */
+static const char black[]           = "#111111";         /* Color of background #000000   '#282C34*/
+static const char dark_gray[]       = "#111111";         /* Color of not selected borders  #111111 #333333  */
 static const char gray[]            = "#555555";         /* Color of (not selected) menubar text */
-static const char pink[]            = "#d3869b";         /* Gruvbox pink. Alternative colors: #fb4934 #d3869b */
-static const char green[]           = "#8ec07c";         /* Gruvbox color: slightly desaturaded green */
+static const char pink[]            = "#E06C75";         /* Onedark pink. Alternative colors: #E06C75 #fb4934 #d3869b #C678DD"*/
+static const char green[]           = "#98C379";         /* Onedark color: slightly desaturaded green #98C379 */
 static const char *colors[][3]      =
 {
 /*  name             fg     bg      border */
@@ -113,8 +113,10 @@ static Key keys[] =
 	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle & ~/.config/updatebar.sh") }, /* Toggle mute */
     { 0,            XK_Print,   		       spawn,		   SHCMD("xfce4-screenshooter -r -s ~/Downloads") },                /* Select by mouse what to print from screen */
     /* Right alt key to open textfiles                                                                                             Open textfile in vim: */
-//	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/alacritty/alacritty.yml") },   /* alacritty config file */
-	{ MENUFILE,                     XK_a,      spawn,          SHCMD("~/.config/aandelen.sh") },                                /* Open aandelen.md en berekeningen */
+//	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim ~/.config/alacritty/alacritty.yml") },   /* alacritty config file */i
+//
+	{ MENUFILE,                     XK_a,      spawn,          SHCMD("alacritty -e vim $HOME/Stack/Documenten/Aandelen/aandelen_log.md & python ~/.config/Aandelen.py") },    /* Open aandelen.md en berekeningen */
+//	{ MENUFILE,                     XK_a,      spawn,          SHCMD("~/.config/aandelen.sh") },                                /* Open aandelen.md en berekeningen */
 	{ MENUFILE,                     XK_b,      spawn,          SHCMD("alacritty -e vim ~/.bashrc") },                           /* .bashrc */
 	{ MENUFILE,                     XK_c,      spawn,          SHCMD("alacritty -e vim ~/Stack/Command_line/commands.md") },    /* personal notes and comments about Linux */
 	{ MENUFILE,                     XK_d,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/dwm/config.h") },     /* dwm config file */
@@ -123,6 +125,9 @@ static Key keys[] =
 	{ MENUFILE,                     XK_i,      spawn,          SHCMD("alacritty -e vim ~/.config/i3/config") },                 /* i3 config file */
 	{ MENUFILE,                     XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/urls") },                    /* newsboat urls file */
 	{ MENUFILE|ShiftMask,           XK_n,      spawn,          SHCMD("alacritty -e vim ~/.newsboat/config") },                  /* newsboat config file */
+	{ MENUFILE|ShiftMask,           XK_p,      spawn,          SHCMD("alacritty -e vim ~/Downloads/MSQL_developer_LOI/Programmeren_in_Python_module23917/Python_for_Linux_scripting/test.py") },           /* pythonscript testing config file */
+	{ MENUFILE,                     XK_p,      spawn,          SHCMD("~/Downloads/MSQL_developer_LOI/Programmeren_in_Python_module23917/Python_for_Linux_scripting/test.py") },           /* pythonscript testing config file */
+//	{ MENUFILE,                     XK_p,      spawn,          SHCMD("python ~/Downloads/MSQL_developer_LOI/Programmeren_in_Python_module23917/Python_for_Linux_scripting/test.py") },           /* pythonscript testing config file */
 	{ MENUFILE,                     XK_r,      spawn,          SHCMD("gnumeric ~/Stack/Documenten/Aandelen/Rekenvoorbeelden.xls ") }, /* rekenvoorbeelden xls file */
 	{ MENUFILE|ShiftMask,           XK_r,      spawn,          SHCMD("alacritty -e vim ~/README.md") },                         /* my github dotfiles README file */
 	{ MENUFILE,                     XK_s,      spawn,          SHCMD("alacritty -e vim ~/.config/suckless/st/config.h") },      /* st 'config' file */
@@ -145,7 +150,8 @@ static Key keys[] =
 	{ MENUKEY|ShiftMask,            XK_t,      spawn,          SHCMD("~/.config/dmenuthunar.sh") },                             /* thunar */
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("~/.config/dmenuunicode.sh") },                            /* Insert emojis */
 	{ MENUKEY|ShiftMask,            XK_v,      spawn,          SHCMD("alacritty -e vifm") },                                    /* vifm */
-	{ MENUKEY,                      XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Change wallpaper by dmenu */
+	{ MENUKEY|ShiftMask,            XK_w,      spawn,          SHCMD("~/.config/dmenuwallpaper.sh") },                          /* Change wallpaper by dmenu */
+	{ MENUKEY,                      XK_w,      spawn,          SHCMD("wing-101-8") },                                           /* Wing 101, a simple python IDE */
     /* scratchpads                                                                                                                 Scratchpads */
     { MENUKEY,            			XK_z,  	   togglescratch,  {.ui = 0 } },                                                    /* Open a terminal (st) in scratchpad */
 	{ MENUKEY,            			XK_v,	   togglescratch,  {.ui = 1 } },                                                    /* Open vifm in scratchpad */

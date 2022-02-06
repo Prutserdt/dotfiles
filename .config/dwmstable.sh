@@ -17,7 +17,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/.config/suckless/dwm &&
     mkdir ~/.config/suckless/dwm &&
     mkdir ~/.config/suckless/dwm/log &&
-    cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm &&
+    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm &&
     cd ~/.config/suckless/dwm && # does not change directory, also not after
     #entering 'sleep 5' in front of this. strange
     clear && ls -al

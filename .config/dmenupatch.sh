@@ -22,13 +22,13 @@ read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/.config/suckless/dmenu &&
     mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
     cd ~/.config/suckless/dmenu &&
     clear && ls -al
-    ls ~/Stack/suckless/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
+    ls ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
     cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
     rm ~/.config/suckless/dmenu/config.h &&
-    patch -p1 < ~/Stack/suckless/dmenu/patches/test/*.diff &&
+    patch -p1 < ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff &&
     make clean install
 else
     echo No

@@ -1,4 +1,4 @@
- <! ~/Stack/Command_line/commands.md>
+<! ~/Stack/Command_line/commands.md>
           _     _                    _        _      _        
          | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____ 
          | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
@@ -24,6 +24,7 @@
 * Corona script
 * Video card information
 * Create superfast ramdisk
+* Python programming tricks
 * C programming tricks
 * Allerlei
 #### Applications (Command line and GUIs)
@@ -55,11 +56,23 @@
 * Ducky one mechanical keyboard.
 * Vortex 90M mechanical keyboard
 * Gergo mechanical ortholinear keyboard
+#### qtile
 #### dwm
 #### st
 ---
 ### Command line tricks
 #### Allerlei
+
+** Vind grootte van files/directories in commandline **
+In human form:
+`du -h`
+In megabytes:
+`du -m`
+** Bekijk size van directies hele systeem, geef weer 1 level dir deep**
+`cd ~`
+`du -h -d  1| sort -h`
+* Vaak staat veel rommel in trash, ruim op met:
+`rm -r -f Trash`. This will remove the Trash directory and everything in it.
 
 **Problemen met legen van trash in KDE.**
 Open a terminal and go to ~/.local/share and type:
@@ -117,6 +130,9 @@ via '&'. Zie als voorbeeld:
 Afsluiten systeem, direct:`sudo shutdown -h now`
 Afsluiten systeem over 15 minuten:`sudo shutdown -h 15`
 Stel je wilt toch afsluiten terwijl je de afsluit timer hebt gezet: `sudo shutdown -c`
+
+stack-2.8.2-20210809-x86_64.AppImage
+
 
 #### Zoeken van een textstring in meerder files met grep
 Zoekt naar Layer_state in alle directories recursively onder ../keymaps
@@ -411,6 +427,13 @@ en saven als een nieuwe naam.
 'qpdf naam.pdf naam_rotated --rotate=90'
 for file in *.pdf; do qpdf "$file" "$file" --rotate=90; done
 
+#### pdfs in dark mode weergeven
+verander de zathurarc file in ~/.config/zathura, en voeg toe:
+set recolor true
+set recolor-darkcolor "#dcdccc"
+set recolor-lightcolor "#1f1f1f"
+
+Nu wordt het elk document in zathura in dark mode weergeven.
 
 #### Calender
 Show Calender this month:
@@ -741,7 +764,6 @@ find -name '*.jpeg' -exec rename .jpeg .jpg {} \;
 ```
 Step 3: rename with location info
 rename 20190511 20190511_Schiphol *.jpg
-```
 
 make a list:
 ```
@@ -791,7 +813,6 @@ Create Date                     : 2020:02:16 15:39:55
 Creation Date                   : 2019:06:01 14:09:27+07:00
 ```
 --------------------------------------------------------------
-```
 November 2020, wederom vakantiefotos sorteren.
 Een van de devices lag 66 minuten achter. Daardoor werkte dit niet:
 `exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)`
@@ -968,10 +989,6 @@ format is....:
              time, adding a copy number with leading '-' if the file already
              exists("%-c"), and preserving the original file extension (%e).  Note the extra '%' necessary to escape the filename codes (%c and %e) in the date format string.)'')"")''""""'>'
 
-
-
-
-
 --------------------------------------------------------------
 ### PACMAN/YAOURT/YAY    
 
@@ -1031,7 +1048,9 @@ packages
 `sudo pacman -Rns $(pacman -Qdtq)`
 
 opschonen cache en outdated packages
-`sudo pacman -Scc`
+`paccache -r`
+`sudo pacman -Scc` #oud! gebruik paccache nu!
+
 pacman.conf instellen
 /etc/pacman.conf
 Zet in misc. gedeelte:
@@ -1088,6 +1107,12 @@ Reflector. Sorteer de beste 20 mirrors en schrijf in mirrorlist. Vergeet niet
 om een backup te maken van /etc/pacman.d/mirrorlist:
 ```
 sudo reflector --verbose --latest 20 --sort rate --save /etc/pacman.d/mirrorlist
+```
+Verbetering 20DEC21: Ik wil alleen https sites en zoeken in de lijsten van NL 
+en DE. Ik kies de latest 50 om de meeste NL servers mee te nemen in de test, 
+anders zijn er bijna alleen Duitse servers en de NL servers zijn voor mij het snelste:
+```
+sudo reflector --verbose --protocol https --country NL,DE --latest 50 --sort rate --save /etc/pacman.d/mirrorlist
 ```
 
 #### WIFI            
@@ -1395,7 +1420,7 @@ Aan i3status kun je geen script hangen... (vim ~/.config/i3status/config)
 
 ### Downloaden DeGiro porfolio data en berekenen percentage.
 
-https://trader.degiro.nl/trader/\#/portfolio openen in Brave, daarna selecteer
+https://trader.degiro.nl/trader Portfolio openen in Brave, daarna selecteer
 je Export to .csv en save het in ~/Downloads/test.
 hotkey left alt+a runt het script aandelen.sh dat de csv omzet in handig
 formaat van hoog naar laag: BedragAandeel PercentageAandeel NaamAandeel
@@ -1474,7 +1499,19 @@ Play youtube and other sources automatically by mpv in firefox.
 First set the ff2mpv extension in firefox and then install:
 yay ff2mpv-native-messaging-host-git
 
-### C programming
+### Python programming tricks
+Run script from commandline:
+`python scripname.py`
+
+Using wing 101 ide: was working, after pacman -Syu the version of python is set
+back to 2.7.18, previously version 3.10.1 was set.
+First find location of python3:
+`which python3`
+and add /usr/bin/python3 in wing 101, by selecting edit-configure python-Python
+executable - command line --> /usr/bin/python3 and reset python shell (asking
+to reset probably). Now stuff works :-)
+
+### C programming tricks
 
 De meest simpele manier om snel een C programma te draaien:
 creeer een file in vim, bijv: test.c
@@ -1520,7 +1557,7 @@ Verander tijdelijk de syntax naar conf type:
 `:set syntax:conf`
 
  Vim plugins beheerde ik via Vundle (nu is het plug, want vundle is niet
- onderhouden)
+meer onderhouden)
 `yay vundle-git`
  volg de manual op github: clone de repo en voeg de toe aan ~.vimrc zoals
   beschreven in de manual.
@@ -1542,9 +1579,6 @@ Switching modes:
 ```
 Esc: Exit open mode
 i: Insert mode
-I: Insert mode, en ga naar het begin van de regel
-A: Insert mode, en start aan het einde van de regel
-a: Insert mode, en start 1 cursor stap naar rechts
 v: Visual mode
 V: Visual line
 ```
@@ -1559,18 +1593,25 @@ CTRL+b  : page up
 CTRL+f  : page down
 CTRL+e  : scrolls down (snelheid kun in in ./.vimrc instellen)
 CTRL+y  : scrolls up (snelheid kun in in ./.vimrc instellen)
-CTRL+f  : scrolls down one page
-CTRL+b  : scrolls up  one page
 H: verplaats cursor naar top pagina
-M: verplaats cursor naar top pagina
+M: verplaats cursor naar het midden van de pagina
 L: verplaats cursor bodem van de pagina
 gg: verplaats cursor naar start document
 G: verplaats cursor naar einde document
-z: ?
+
+Woord navigatie
+w: verplaats volgend woord
 e: verplaats naar einde van het woord (einde: volgende woord)
 b: verplaats cursor naar einde van het woord (einde: volgende woord)
-w: verplaats volgend woord
-A: einde van laatste woord
+
+Insert mode opties
+i: insert mode
+I: Insert mode, en ga naar het begin van de regel
+a: ga naar insert een cursor naar rechts
+A: ga naar einde van laatste woord in insert mode
+o: maak een nieuwe regel aan onder cursor en ga naar insert mode
+O: maak een nieuwe regel boven de cursor en ga naar isert mode
+
 ```
 Modifiers
 ```
@@ -1601,7 +1642,7 @@ D: delete until the end of the line
 ```
 Yank (copy) stuff
 ```
-y: yanks whatever specified (modifiers)
+y: yanks whatever specified (modifiers, bijv )
 Y: yanks current line completely
 ```
 ```
@@ -1611,6 +1652,7 @@ Y: yanks current line completely
 Pasting stuff
 ```
 p: pastes from vim buffer after cursor
+P: plakt ervoor (woord: voor regelpositie, regel boven regelpositie
 "ap: paste  from registry entry a (:reg)
 ```
 Working with macros
@@ -1637,7 +1679,9 @@ Zoek en vervang (search and replace), enkele keer: `:s/hot/cold/g`
 Search and replace whole file: `:%s/hot/cold/g`
 Search and replace,  wissen tekst: `:%s/Links naar bestanden op eigen pagina://g`
 Search and replace, wissen tekst, zoeken met wildcard(</small>): `:%s/<.small>//g`
-Saving macros separately, since :reg can be overwritten: `let @a='0fa'`
+Saving macros separately, since :reg can be overwritten: `get @a='0fa`
+Search and replace special characters test: `:s/\~/\$HOME/g`
+Search and replace special characters in whole file: `:%s/\~/\$HOME/g`
 
 Alfabetisch Sorteren: `:sort`.
 
@@ -1679,8 +1723,8 @@ Speel de macro af met: `2@d`
 
 The command line command: :
 ```
-:q!                                 : Quit without saving
-:wq                                 : Quit with saving
+:q!                                 : Quit without saving, (ZQ is beter)
+:wq                                 : Quit with saving (ZZ is beter)
 :w naam                             : Save file as naam
 :new                                : Open een nieuw scherm
 :verbose setlocal syntax? filetype? : Vind de syntax van bestand
@@ -2043,6 +2087,50 @@ ssh -T git@github.com
 Nu heb ik ssh juist ingesteld, maar het werkt niet want ik moet nog eea
 aanpassen, want er wordt geen ssh gebruikt maar .
 
+### Nieuwe poging tot het toevoegen van een key aan github, 06Feb22:
+
+check existing ssh key op linux pc:
+
+ls -al ~/.ssh
+
+-rw-------  1 icefly users 3381 Jan 19  2021 id_rsa
+-rw-r--r--  1 icefly users  744 Jan 19  2021 id_rsa.pub
+-rw-r--r--  1 icefly users  799 Jan 19  2021 known_hosts
+
+aanmaken nieuwe ssh key:
+
+ssh-keygen -t ed25519 -C "walter@elffrink.nl"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
 ```
@@ -2289,6 +2377,8 @@ CTRL-x (voor key handler mode) en CTRL-w. :-).
 
 play animated gif: CTRL+space 
 a
+
+
 #### Neomutt
 Text based email client
 Installation 18JUN20, alleen neomutt geinstalleerd en ~/.mutt/muttrc
@@ -2335,8 +2425,6 @@ chmod +x OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage
 Deze werkt wel: moraal vh verhaal is dat de meest recente versie gebruikt moet
 worden ivm mijn bleeding edge systeem
 
-
-
 #### Stack client
 Stack staat in de AUR maar dit kun je beter niet gebruiken (geen: yay stack-client)
 https://www.transip.nl/knowledgebase/artikel/283-de-desktopapplicatie-van-stack/
@@ -2366,6 +2454,12 @@ ingesteld.
 Zie dmenu onderaan om te zien hoe je appimage koppeld aan dmenu_run
 
 #### Copy pictures of mac to linux
+
+Augustus 2021: verwerken van fotos van Portugal vakantie. De apple fotos heb ik 
+verkregen door de fotos te selecteren in apple photo en deze te plakken in een
+mapje in de desktop van de imac en deze te uploaden naar mijn cloud en ze binnen
+gehaald op die manier.
+
 Connect old imac hard drive connected to a usb connector with powersupply to 
 new imac pc by the usb C hub. Open the photos application of mac and select
 pictures and copy them to the harddrive (somewhere in top bar this can be
@@ -2435,6 +2529,7 @@ En nu geeft het bovenstaande attach commando een goede output.
 arduino-cli compile --fqbn arduino:avr:uno FirstSketchWalter.ino -v
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchWalter.ino
 
+
 #### Arduino
 3 stappen voor Arduino programmeren:
 1: programmeer sketch genaamd FirstSketchWalter.ino
@@ -2443,7 +2538,6 @@ arduino-cli compile --fqbn arduino:avr:uno FirstSketchWalter.ino -v
 3: upload naar de uno, et voila
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchWalter.ino -v
 (remark: de hex files staan in een temp dir, maar dat maakt niet uit verder.)
-
 
 
 #### ESP32 cam, setup esp32 libs, via Arduino-cli
@@ -2456,7 +2550,6 @@ Port         Type              Board Name  FQBN            Core
 `arduino-cli core list`
 ID          Installed Latest Name
 Arduino:avr 1.8.3     1.8.3  Arduino AVR Boards
-
 
 We moeten ESP32 eerst installeren, dat doen we in de bestaande yaml file,
 `vim arduino-cli.yaml. ~/.arduino15/arduino-cli.yaml`
@@ -2515,13 +2608,9 @@ op de usb adapter op 5V te zetten.
 
 De module werkt en geeft beeld!
 
-
 HIER GEBLEVEN
 https://dronebotworkshop.com/esp32-cam-intro/
 Mijn CameraWebServer_06FEB21 heb ik bewaard
-
-
-
 
 
 #### ESP32 CAM, alleen voor  installatie
@@ -2819,7 +2908,6 @@ exec --no-startup-id xmodmap ~/.Xmodmap
 Het werkt. Nu kan de rechter superkey worden gebruikt als applicatie
 launcher :-)
 
-
 PROBLEEM: Als ik mijn keyboard unplug dan werken de xmodmap keybindings niet
 meer. Dat is irritant omdat de Esc/Capslock en "Menu" knop niet meer werken.
 De oplossing is om een dotfile aan te maken `~/.config/kbswitch` en zet daarin:
@@ -2853,7 +2941,6 @@ Het kan ook via: setxkbmap -option ctrl:swapcaps
 https://bbs.archlinux.org/viewtopic.php?id=172421
 In mijn geval wordt het
 https://bbs.archlinux.org/viewtopic.php?id=172421
-
 
 # Swap toegevoegd 12JAN20
 # manually 
@@ -2988,6 +3075,8 @@ Let op: de laatste backup is gemaakt op 30DEC18.
 
 #### Ubuntu 16.10 server en network
 
+na boot bios bekijken met "DEL" knop.
+
 Zaterdag 27Jan17 transip vps opnieuw ingesteld
 
 Hostname: UbuntuSERVER
@@ -3058,11 +3147,12 @@ Alleen op lokale pc:
 Nu moet je wachtwoord vd server intypen.. 
 (daarom staat passwordauthentificatino aan!)
 PAS DAARNA naar de server sshd_config aanpassen...
-`sudo nano /etc/ssh/sshd_configav
+`sudo nano /etc/ssh/sshd_configav`
 Verander: PasswordAuthentication no
 Vul in onderaan AllowUsers archie@81.174.98.248
 Inloggen werkt hierna weer goed! :-)
- 
+
+
 #### Ubuntu Mate op GPD pocket
 
 23AUG21: problemen met GRUB en booten: stuck in grub 2.04
@@ -3074,11 +3164,6 @@ heb ik gebruikt:
 Switch the GPD Pocket on, immediately hold the Fn key and tapping the F7 key 
 until the Boot Manager screen appears.
 UEFI....(onderaan menu) gekozen en installeer ubuntu
-
-
-
-
-
 
 
 27APR19 opnieuwe linux installatie, want na Parrot upgrade loopte het systeem vast.
@@ -3446,6 +3531,13 @@ ik gewoon compileren. Daarna heb ik het systeem van mijn Manjaro VM geupdate
 /usr/bin/avr-ld: /usr/lib/libctf.so.0: version `LIBCTF_1.1' not found (required by /usr/bin/avr-ld)
 
 
+#### qtile
+29jan22 installatie van qtile (python windowmanager)
+
+
+
+
+
 
 
 #### dwm
@@ -3770,8 +3862,18 @@ Daarna de lijst opnieuw te maken:
 En handmatig de appimage toevoegen:
 `sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run`
 Dit allemaal tegelijk, met een tweede appimage:
+`sed -i '1 i /home/icefly/Downloads/stack-2.8.2-20210809-x86_64.AppImage' /home/icefly/.cache/dmenu_run`
 
+oud:
 rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run;sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run;sed -i '2 i /home/icefly/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' /home/icefly/.cache/dmenu_run
 
 Het bovenstaande werkt, maar wel met directory structuur wat lelijk is maar
 verder geen probleem.
+
+nieuw: werkt niet:
+rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run;sed -i '1 i /home/icefly/Downloads/stack-2.8.2-20210809-x86_64.AppImage' /home/icefly/.cache/dmenu_run;sed -i '2 i /home/icefly/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' /home/icefly/.cache/dmenu_run
+Het openen via commandline werkt wel, let op in qtile start het in systray, dus
+het werk misschien wel via bovenstaande, volgende keer ff  opletten in
+systray...
+
+

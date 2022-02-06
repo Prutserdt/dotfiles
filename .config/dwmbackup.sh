@@ -14,8 +14,8 @@ echo -n "Are you sure you want to make a backup of the current dwm system? (y/n)
 read answer
 # if echo "$answer" | grep -iq "^y" ;then
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/Stack/suckless/dwm/dwm-6.2_stable/* &&
-    cp -r ~/.config/suckless/dwm/* ~/Stack/suckless/dwm/dwm-6.2_stable
+    rm -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* &&
+    cp -r ~/.config/suckless/dwm/* ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable
 #    rm -r ~/Stack/suckless/dwm/dwm-6.2_stable/* &&
 #    cp -r ~/suckless/dwm/* ~/Stack/suckless/dwm/dwm-6.2_stable
 else
