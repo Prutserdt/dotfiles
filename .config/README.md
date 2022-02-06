@@ -20,6 +20,9 @@ is running the shell script
     config commit -m "Remove my .example"
     config push -v
 
+~ remember: change the ~/dotfiles/config to ssh:
+	url = ssh://git@github.com/Prutserdt/dotfiles.git
+
 ## :eight_pointed_black_star:References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM

@@ -2026,110 +2026,37 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' (add thi
 bash
 config config --local status.showUntrackedFiles no
 ```
-
-**Ik wil instellen dat de GIT repo direct werkt met een handshake, zonder
-handmatig een password, dat ga ik nog regelen.**
-
-Zorg eerst dat je een public SSH key hebt (had ik al)
-```
-sudo pacman -S xclip
-xclip -sel clip < ~/.ssh/id_rsa.pub
-```
-Plak de key in de webpagina van Github, settings/ssh key en geef het de naam van de computer
-Daarna voer je in de terminal in:
-`ssh -T git@github.com`
-
-Selecteer `yes` 
-
-[archie@archPC ~]$ ssh -T git@github.com
-The authenticity of host 'github.com (140.82.118.3)' can't be established.
-RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added 'github.com,140.82.118.3' (RSA) to the list of known hosts.
-Hi Prutserdt! You've successfully authenticated, but GitHub does not provide shell access.
-
-HET WERKT DUS NOG NIET!!!!
-
-eval "$(ssh-agent -s)"
-ssh-add
-
-### Nieuwe poging tot het toevoegen van een key aan github, 19JAN21:
-
-Ik heb een ~/.ssh directory maar daar staat geen key in.
-Generate a key:
-ssh-keygen -t rsa -b 4096 -C email@email.com
-Daarna heb ik alle vragen leeg gelaten en door 'geentered'(bijv empty
-passphrase)
-Bekijk of de keys zijn aangemaakt door:
-ls -al ~/.ssh
-Ja het staat er!
-Nu ssh-agent laten lopen door:
-eval "$(ssh-agent -s))"
-Yes! De pid is aangemaakt dus het programma loopt.
-Then, add your private key to ssh-agent with:
-ssh-add ~/.ssh/id_rsa
-Print the contents of your public key to the console with
-cat ~/.ssh/id_rsa.pub
-Copy de output en paste het hieronder:
-
-ssh-rsa
-AA....
-email@email.com
-
-Open de webpagina:
-https://github.com/settings/keys
-Kies New ssh key.
-Title: Arch pc
-Plak daarin bovenstaande key (incl ssh-rsa....==)
-Klik op Add SSH key.
-Nu voer in commandline:
-ssh -T git@github.com
-Nu heb ik ssh juist ingesteld, maar het werkt niet want ik moet nog eea
-aanpassen, want er wordt geen ssh gebruikt maar .
-
 ### Nieuwe poging tot het toevoegen van een key aan github, 06Feb22:
 
 check existing ssh key op linux pc:
+ssh-keygen -t ed25519 -C "walter@elffrink.nl"
 
 ls -al ~/.ssh
-
+-rw-r--r--  1 icefly users  100 Feb  6 21:25 id_ed25519.pub
 -rw-------  1 icefly users 3381 Jan 19  2021 id_rsa
 -rw-r--r--  1 icefly users  744 Jan 19  2021 id_rsa.pub
 -rw-r--r--  1 icefly users  799 Jan 19  2021 known_hosts
 
-aanmaken nieuwe ssh key:
+cat ~/.ssh/id_ed25519.pub
+copy/paste in ssh keys gedeelte van github account/settings/ssh keys
+Ik heb de hele output regel gepast, incl email adress.
 
-ssh-keygen -t ed25519 -C "walter@elffrink.nl"
+Check ssh key github:
+ssh -T git@github.com
+Geef passphrase: wordt herkend als Prutsterdt!! Goed.
 
-
-
-
-
-
-
-
-
-
+Kijken of ssh agent draait op het systeem:
+eval "$(ssh-agent -s)"
+Ja het draai, want er is een PID.
 
 
+Then, add your SSH private key to the ssh-agent:
+ssh-add ~/.ssh/id_ed25519
+Type your passphrase and press Enter:
+The command confirms that the private SSH key has been added to the ssh-agent:
+Identity added: /home/icefly/.ssh/id_ed25519 (walter@elffrink.nl))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Belangrijk: aangepast in ~/dotfiles/config: -->	url = ssh://git@github.com/Prutserdt/dotfiles.git
 
 Nu is de bare repo geconfigureerd en kun je via de onderstaande procedure je bestanden toevoegen
 aan deze bare repo:
