@@ -1,11 +1,13 @@
-<!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
-# :sparkles:Dotfiles:sparkles: repo, including my dwm build and my qmk Redox and Gergo keyboard configurations
+<!Dit is de ~/README.md file voor mijn dotfile bare Github repo
+# :sparkles:Dotfiles:sparkles: repo
 Here I store the :sparkles:dotfiles:sparkles: of my GNU/Linux system plus some 
-other stuff. Some of my dotfiles are: alacritty, newsboat, vifm, vim.
+other stuff.
+
+My config of qtile, a hackable tiling window manager written in python, can be found [here](https://github.com/Prutserdt/dotfiles/tree/master/.config/qtile/config.py). 
 
 My build of dwm, a dynamic window manager, can be found [here](https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm). 
 
-This typically how my desktop looks like:
+This typically is how my desktop looks like, minimal and boring:
 ![productivity](dwm2.jpg)
 
 The qmk configurations of the ortholinear ergonomic split keyboards Redox and Gergo are living [here](https://github.com/Prutserdt/dotfiles/tree/master/Stack/qmk_configurations).
