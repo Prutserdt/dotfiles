@@ -8,7 +8,7 @@ import time
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
 
 # Script dat een overzicht van asset allocations maakt en deze saved in clipboard.
-# Een gedeelte wordt handmatig ingevoerd in een input scherm (InputDialog.
+# Een gedeelte wordt handmatig ingevoerd in een input scherm (InputDialog).
 # De rest wordt uit twee csv files van beleggingsportfolios geextraheerd.
 # Dit wordt samengevoegd en de AA% worden berekend. Plus was stylistische toevoegingen.
 # Deze data wordt in het systeem clipboard opgeslagen.
@@ -71,12 +71,14 @@ def CreateSep(teken, herhalingen):
 
    
 # Aanmaken van een aantal variabelen(file locaties, column omsschrijvingen enz
-fileDeGIRO = os.environ["HOME"]+"/Downloads/Portfolio.csv"
+fileDeGIRO = os.path.expanduser("~")+"/Downloads/Portfolio.csv"
+
 # Locatie Rabo portfolio. Zoek meest recente file mbv wildcard:
-searchRabo = os.environ["HOME"]+"/Downloads/Portfolio_3684853*"   # Wildcard zoeken
-fileRabo = max(glob.iglob(searchRabo), key = os.path.getctime)    # Zoek nieuwste 
+searchRabo = os.path.expanduser("~")+"/Downloads/Portfolio_3684853*"# Wildcard zoeken
+fileRabo = max(glob.iglob(searchRabo), key = os.path.getctime)      # Zoek nieuwste 
 # Separator lijn die ik her en der gebruik
 separ = CreateSep("=",80) # separator teken en lengte
+
 # Omschrijving van overwaarde huis en Spaargeld
 OmsHuis = "Overwaarde huis     "
 OmsSpaar = "Spaargeld           "
@@ -94,36 +96,47 @@ df = pd.DataFrame()
 AddCSVtoDataFrame(fileRabo,   ";",       "Titel",         "Waarde €")
 AddCSVtoDataFrame(fileDeGIRO, ",",       "Waarde in EUR", "Product" )
 
-# Huis en Spaargeld toevoegen als regels aan het dataframe
-df = df.append(pd.Series([Huis, OmsHuis], index = [EurCol, OmsCol]), ignore_index = True)
-df = df.append(pd.Series([Spaargeld, OmsSpaar], index = [EurCol, OmsCol]), ignore_index = True)
+# Nieuw dataframe aanmaken met overwaarde huis en spaargeld data
+d={
+    OmsCol:[OmsHuis,OmsSpaar ], # kolom omschrijving invullen
+    EurCol:[Huis,   Spaargeld]} # kolom euros invullen
+dfx = pd.DataFrame(d)
+
+# Samenvoegen van dataframes
+df=pd.concat([df,dfx])
 
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by = EurCol, ascending = False)
-
+print(separ+"\n",df) # Alleen voor debugging gebruik
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 df = pd.DataFrame(df,columns = [OmsCol, EurCol, AaCol, AminHuisCol])
-
 # Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA berekeningen
 Kapitaal = df[EurCol].sum()
 # AA berekeningen en de kolommen AA, en AA-huis omzetten naar integer
 df[AaCol] = (df[EurCol]/Kapitaal*100).astype(int)
 df[AminHuisCol] = (df[EurCol]/(Kapitaal-Huis)*100).astype(int)
 df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*" #Als >100% dan een sterretje geven
+print(separ+"\n",df) # Alleen voor debugging gebruik
 
 # Extra regels toevoegen onder de tabel (separatoren en AA waarden)
 # Separator lijnen aanmaken
-#                (teken, lengte)
-SepKort = CreateSep("-",   6) 
-SepLang = CreateSep("-",   20)
-# Extra rijen toevoegen
-df = df.append(pd.Series([SepKort,SepLang,"+   ",""], index = [EurCol,OmsCol,AaCol,AminHuisCol]), ignore_index = True) # Regel met separatoren en plus tekens om eea duidelijk te maken
-df = df.append(pd.Series([Kapitaal, "Assets totaal       "], index = [EurCol,OmsCol]), ignore_index = True)
-df = df.append(pd.Series([Kapitaal-Huis,"Assets totaal -huis  "], index = [EurCol,OmsCol]), ignore_index = True)
+#                  (teken, lengte)
+SepKort = CreateSep("-",   6     )
+SepLang = CreateSep("-",   20    )
 
-# De kolom omschrijving afslanken (20 tekens)
+# Nieuw dataframe aanmaken met streepjes en totale assets enz
+d={
+    EurCol:     [SepKort, Kapitaal,               Kapitaal-Huis          ],
+    OmsCol:     [SepLang, "Assets totaal       ", "Assets totaal -huis  "],
+    AaCol:      ["+   ",  "",                     ""                     ],   
+    AminHuisCol:["",      "",                     ""                     ]}    
+dfx = pd.DataFrame(d)
+
+# Samenvoegen van dataframes
+df=pd.concat([df,dfx])
+
+# De kolom omschrijving afslanken tot 20 tekens
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
-print(separ+"\n",df) # Alleen voor debugging gebruik
 
 # Maak introductie regels en combineer dit met de dataframe.
 # Datum vinden van het bestand:fileDeGIRO
@@ -133,10 +146,10 @@ t_stamp = str(time.strftime("%d", datum)) + str(time.strftime("%b", datum)) + st
 # Introductie regels (separator/datum+assets/separator)
 deel1 = (separ + "\n" + t_stamp+", assets(zonder huis): " + (Kapitaal-Huis).astype(str)+" Euro." "\n" + separ + "\n")
 # Combineer de introductieregels met de dataframe
-deel2 = df.to_string(index = False)   # Index verwijderen van dataframe en string maken
-deel2 = deel2.replace('NaN', '')    # Verwijder NaN waarden
-data = deel1 + deel2                # Combineren van introductieregels+dataframe
-df = deel1 = deel2 = None                 # Wissen van data (garbage collection)
+deel2 = df.to_string(index = False)     # Index verwijderen van dataframe en string maken
+deel2 = deel2.replace('NaN', '')        # Verwijder NaN waarden
+data = deel1 + deel2                    # Combineren van introductieregels+dataframe
+df = dfx = deel1 = deel2 = None         # Wissen van data (garbage collection)
 print(separ+"\n","data ---> clipboard:",data, sep = "\n") # Alleen voor debugging gebruik
 
 # Schrijf data weg in het clipboard
