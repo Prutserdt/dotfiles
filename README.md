@@ -1,4 +1,4 @@
-<!Dit is de ~/README.md file voor mijn dotfile bare Github repo
+<!Dit is de ~/README.md file voor mijn dotfile bare Github repo/>
 # :sparkles:Dotfiles:sparkles: repo
 Here I store the :sparkles:dotfiles:sparkles: of my GNU/Linux system plus some 
 other stuff.
