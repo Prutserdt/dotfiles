@@ -87,97 +87,97 @@ keys = [
     #Right superkey for opening of applications.
     Key([modR], "b",
         lazy.spawn("brave"),
-        desc="Brave browser"
+        desc="Launch Brave browser"
         ),
     Key([modR], "d",
         lazy.spawn(os.environ["HOME"]+"/.config/dmenuapps.sh"),
-        desc="My dmenu to open applications"
+        desc="Launch My dmenu to open applications"
         ),
     Key([modR], "f",
         lazy.spawn("firefox"),
-        desc="Firefox browser"
+        desc="Launch Firefox browser"
         ),
     Key([modR], "g",
         lazy.spawn("gimp"),
-        desc="Gimp image manipulation"
+        desc="Launch Gimp image manipulation"
         ),
     Key([modR], "k",
         lazy.spawn("keepass"),
-        desc="Keepass password manager"
+        desc="Launch Keepass password manager"
         ),
     Key([modR], "m",
         lazy.spawn("mousepad"),
-        desc="Mousepad notepad"
+        desc="Launch Mousepad"
         ),
     Key([modR], "t",
         lazy.spawn("thunar"),
-        desc="Thunar filemanager"
+        desc="Launch Thunar filemanager"
         ),
     Key([modR], "w",
         lazy.spawn("wing-101-8"),
-        desc="Wing 101 Python IDE"
+        desc="Launch Wing 101 Python IDE"
         ),
     #Right alt for opening of files in vim
     Key([altR], "c",
         lazy.spawn("alacritty -e vim " + os.path.expanduser("~/Stack/Command_line/commands.md")),
-        desc=""
+        desc="Open in vim: "
         ),
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
-        desc="Open aandelen log en script"
+        desc="Open in vim:Open aandelen log en script"
         ),
     Key([altR], "b",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.bashrc")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "c",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/Stack/Command_line/commands.md")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "u",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/urls")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "d",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/suckless/dwm/config.h")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "i",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/i3/config")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "n",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.newsboat/config")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "q",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/qtile/config.py")),
-        desc="Open qtile config"
+        desc="Open in vim:Open qtile config"
         ),
     Key([altR], "r",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/README.md")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "v",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.vimrc")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "w",
         lazy.spawn(os.path.expanduser("~/.config/wololo.sh")),
-        desc=""
+        desc="Launch shellscript"
         ),
     Key([altR], "x",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.xinitrc")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "r",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.Xresources")),
-        desc=""
+        desc="Open in vim:"
         ),
     Key([altR], "z",
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.zshrc")),
-        desc=""
+        desc="Open in vim:"
         ),
     # multiple stack panes
     Key(
@@ -224,20 +224,16 @@ for i in groups:
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
+            # mod1+shift+group letter= move focused window to group(no follow)
             Key(
                 [modL, "shift"],
                 i.name,
-                lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(i.name),
+                lazy.window.togroup(i.name),
+                # add ",switch_group=True" after i.name to follow the window
+                desc="Move the focused window to group {}".format(i.name),
             ),
-            # Or, use below if you prefer not to switch to that group.
-            # # mod1 + shift + letter of group = move focused window to group
-            # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-            #     desc="move focused window to group {}".format(i.name)),
         ]
     )
-
 
 groups.append(
     ScratchPad("scratchpad", [
@@ -249,10 +245,16 @@ keys.extend([
         Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1")),
 ])
 
+layout_theme = {"border_width": 2,
+                "margin": 0,
+                "border_focus": "#98C379",
+                "border_normal": "#282C34"
+                }
+
 layouts = [ 
-    layout.Columns(border_focus=["#98C379"],num_columns=3),
+    layout.Columns(**layout_theme,num_columns=3),
 #   layout.Columns(border_focus=["#d75f5f"],num_columns=3),
-    layout.Columns(),
+    layout.Columns(**layout_theme),
     layout.Max(),
     layout.Bsp(),
     layout.Matrix(),
@@ -265,7 +267,12 @@ layouts = [
     #layout.Zoomy(),
     #layout.Stack(num_stacks=2),
 ### TODO: nieuwe layout komt eraan soort centeredmaster:
-### layout.MonadThreeCol(),
+#check in python3:
+#from libqtile import layout
+#dir(layout))
+# in versie 0.20 staat MonadThreeCol er nog niet in :-(
+# hij wordt getest.. even geduld...
+#    layout.MonadThreeCol(),
 ]
 
 widget_defaults = dict(
@@ -298,14 +305,18 @@ screens = [
         ),
     ),
 ]
-#1c1f24
-
 
 # Drag floating layouts.
 mouse = [
-    Drag([modL], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([modL], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
-    Click([modL], "Button2", lazy.window.bring_to_front()),
+    Drag([modL], "Button1",
+        lazy.window.set_position_floating(), start=lazy.window.get_position()
+        ),
+    Drag([modL], "Button3",
+        lazy.window.set_size_floating(), start=lazy.window.get_size()
+        ),
+    Click([modL], "Button2", 
+        lazy.window.bring_to_front()
+        ),
 ]
 
 dgroups_key_binder = None
@@ -315,7 +326,7 @@ bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(
     float_rules=[
-        # Run the utility of `xprop` to see the wm class and name of an X client.
+        # Run utility of `xprop` to see the wm class and name of an X client
         *layout.Floating.default_float_rules,
         Match(wm_class="gimp"),  # gimp image editor
         Match(wm_class="keepass2"),  # keepass password editor
