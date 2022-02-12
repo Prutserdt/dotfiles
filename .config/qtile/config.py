@@ -1,6 +1,8 @@
+import psutil
+import subprocess
 import os
 from typing import List  # noqa: F401
-from libqtile import bar, layout, widget
+from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, Match, 
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
@@ -13,7 +15,6 @@ altR = "mod5"
 terminal = guess_terminal()
 
 keys = [
-
     # Switch between windows
     Key([modL], "h",
         lazy.layout.left(),
@@ -35,7 +36,6 @@ keys = [
         lazy.layout.next(),
         desc="Move window focus to other window"
         ),
-
     # Move windows around. Moving out range (Columns layout) creates new column.
     Key([modL, "shift"], "h",
         lazy.layout.shuffle_left(),
@@ -53,7 +53,6 @@ keys = [
         lazy.layout.shuffle_up(),
         desc="Move window up"
         ),
-
     # Grow windows. Edge windows could shrink.
     Key([modL, "control"], "h",
         lazy.layout.grow_left(),
@@ -75,7 +74,6 @@ keys = [
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
         ),
-
     # Audio keys
     Key([], "XF86AudioRaiseVolume", 
         lazy.spawn("amixer -q set Master 5%+")
@@ -86,7 +84,6 @@ keys = [
     Key([], "XF86AudioMute", 
         lazy.spawn("amixer -q set Master toggle")
         ),
-
     #Right superkey for opening of applications.
     Key([modR], "b",
         lazy.spawn("brave"),
@@ -120,7 +117,6 @@ keys = [
         lazy.spawn("wing-101-8"),
         desc="Wing 101 Python IDE"
         ),
-
     #Right alt for opening of files in vim
     Key([altR], "c",
         lazy.spawn("alacritty -e vim " + os.path.expanduser("~/Stack/Command_line/commands.md")),
@@ -183,7 +179,6 @@ keys = [
         lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.zshrc")),
         desc=""
         ),
-
     # multiple stack panes
     Key(
         [modL, "shift"],
@@ -194,7 +189,6 @@ keys = [
     Key([modL], "Return",
         lazy.spawn(terminal),
         desc="Launch terminal"),
-
    # Toggle between different layouts as defined below
     Key([modL], "Tab",
         lazy.next_layout(),
@@ -276,7 +270,6 @@ layouts = [
 
 widget_defaults = dict(
     font="hack",
-#    font="sans",
     fontsize=12,
     padding=3,
 )
@@ -305,6 +298,8 @@ screens = [
         ),
     ),
 ]
+#1c1f24
+
 
 # Drag floating layouts.
 mouse = [
@@ -332,5 +327,36 @@ focus_on_window_activation = "smart"
 reconfigure_screens = True
 
 auto_minimize = True # handy for steam games
+
+
+# Startup scripts
+@hook.subscribe.startup_once
+def start_once():
+    home = os.path.expanduser("~")
+    subprocess.call([home + "/.config/qtile/autostart.sh"])
+
+
+# swallow window when starting application from terminal 
+@hook.subscribe.client_new
+def _swallow(window):
+    pid = window.window.get_net_wm_pid()
+    ppid = psutil.Process(pid).ppid()
+    cpids = {
+        c.window.get_net_wm_pid(): wid for wid, c in window.qtile.windows_map.items()
+    }
+    for i in range(5):
+        if not ppid:
+            return
+        if ppid in cpids:
+            parent = window.qtile.windows_map.get(cpids[ppid])
+            parent.minimized = True
+            window.parent = parent
+            return
+        ppid = psutil.Process(ppid).ppid()
+
+@hook.subscribe.client_killed
+def _unswallow(window):
+    if hasattr(window, 'parent'):
+        window.parent.minimized = False
 
 wmname = "LG3D"
