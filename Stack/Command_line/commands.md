@@ -2012,11 +2012,11 @@ Instellen Git
 git config --global user.email "firstname@lastname.nl"
 git config --global user.name "Prutserdt"
 ```
-
-
 Automatisch wegschrijven van dotfiles in Github.
 Dit gaat via de procedure van https://www.atlassian.com/git/tutorials/dotfiles
-en https://www.youtube.com/watch?v=tBoLDpTWVOM. Aanmaken van de bare repository op de locale pc. Zorg dat je in de ~/dotfiles directory staat en voer het volgende in:
+en https://www.youtube.com/watch?v=tBoLDpTWVOM. Aanmaken van de bare repository 
+op de locale pc. Zorg dat je in de ~/dotfiles directory staat en voer het 
+volgende in:
 ```
 git remote add dotfiles https://github.com/Prutserdt/dotfiles.git
 git push dotfiles
@@ -2029,7 +2029,7 @@ config config --local status.showUntrackedFiles no
 ### Nieuwe poging tot het toevoegen van een key aan github, 06Feb22:
 
 check existing ssh key op linux pc:
-ssh-keygen -t ed25519 -C "walter@elffrink.nl"
+ssh-keygen -t ed25519 -C "firstname@lastname.nl"
 
 ls -al ~/.ssh
 -rw-r--r--  1 icefly users  100 Feb  6 21:25 id_ed25519.pub
@@ -2049,12 +2049,11 @@ Kijken of ssh agent draait op het systeem:
 eval "$(ssh-agent -s)"
 Ja het draai, want er is een PID.
 
-
 Then, add your SSH private key to the ssh-agent:
 ssh-add ~/.ssh/id_ed25519
 Type your passphrase and press Enter:
 The command confirms that the private SSH key has been added to the ssh-agent:
-Identity added: /home/icefly/.ssh/id_ed25519 (walter@elffrink.nl))
+Identity added: /home/icefly/.ssh/id_ed25519 (firstname@lastname.nl))
 
 Belangrijk: aangepast in ~/dotfiles/config: -->	url = ssh://git@github.com/Prutserdt/dotfiles.git
 
@@ -3460,10 +3459,12 @@ ik gewoon compileren. Daarna heb ik het systeem van mijn Manjaro VM geupdate
 
 #### qtile
 29jan22 installatie van qtile (python windowmanager)
-
-
-
-
+Installatie via pacman. .config/qtile/config.py.
+.xinitc toevoegen:
+numlockx &              # Switch numlock on
+wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg & # Set wallpaper
+exec qtile start
+En starten in commandline via startx.
 
 
 
@@ -3802,5 +3803,3 @@ rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run;sed -i '1 i /home/icef
 Het openen via commandline werkt wel, let op in qtile start het in systray, dus
 het werk misschien wel via bovenstaande, volgende keer ff  opletten in
 systray...
-
-
