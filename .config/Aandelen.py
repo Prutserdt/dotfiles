@@ -74,7 +74,7 @@ def CreateSep(teken, herhalingen):
 fileDeGIRO = os.path.expanduser("~")+"/Downloads/Portfolio.csv"
 
 # Locatie Rabo portfolio. Zoek meest recente file mbv wildcard:
-searchRabo = os.path.expanduser("~")+"/Downloads/Portfolio_3684853*"# Wildcard zoeken
+searchRabo = os.path.expanduser("~")+"/Downloads/Portfolio_36*"# Wildcard zoeken
 fileRabo = max(glob.iglob(searchRabo), key = os.path.getctime)      # Zoek nieuwste 
 # Separator lijn die ik her en der gebruik
 separ = CreateSep("=",80) # separator teken en lengte
