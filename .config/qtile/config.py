@@ -13,6 +13,7 @@ modR = "mod3"
 altR = "mod5"
 
 terminal = guess_terminal()
+termVim="alacritty -e vim " # Open vim in alacritty (used for AltR hotkeys)
 
 keys = [
     # Switch between windows
@@ -146,50 +147,45 @@ keys = [
         desc="Launch Wing 101 Python IDE"
         ),
     #Right alt for opening of files in vim
-    #TODO: use terminal or assign: termOpen="alacritty -e vim "
-    Key([altR], "c",
-        lazy.spawn("alacritty -e vim " + os.path.expanduser("~/Stack/Command_line/commands.md")),
-        desc="Open in vim: "
-        ),
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        lazy.spawn(termVim +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
         desc="Open in vim:Open aandelen log en script"
         ),
     Key([altR], "b",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.bashrc")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.bashrc")),
+        desc="Open in vim: .bashrc"
         ),
     Key([altR], "c",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/Stack/Command_line/commands.md")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/Stack/Command_line/commands.md")),
+        desc="Open in vim: commands.md"
         ),
     Key([altR], "u",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/urls")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.config/urls")),
+        desc="Open in vim: urls list used for newsboat"
         ),
     Key([altR], "d",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/suckless/dwm/config.h")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.config/suckless/dwm/config.h")),
+        desc="Open in vim: config.h of my dwm build"
         ),
     Key([altR], "i",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/i3/config")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.config/i3/config")),
+        desc="Open in vim: config of my i3 build"
         ),
     Key([altR], "n",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.newsboat/config")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.newsboat/config")),
+        desc="Open in vim: config of newsboat"
         ),
     Key([altR], "q",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.config/qtile/config.py")),
+        lazy.spawn(termVim +os.path.expanduser("~/.config/qtile/config.py")),
         desc="Open in vim:Open qtile config"
         ),
     Key([altR], "r",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/README.md")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/README.md")),
+        desc="Open in vim: README.md of github dotfiles repo"
         ),
     Key([altR], "v",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.vimrc")),
+        lazy.spawn(termVim +os.path.expanduser("~/.vimrc")),
         desc="Open in vim:"
         ),
     Key([altR], "w",
@@ -197,16 +193,16 @@ keys = [
         desc="Launch shellscript"
         ),
     Key([altR], "x",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.xinitrc")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.xinitrc")),
+        desc="Open in vim: .xinitrc"
         ),
     Key([altR], "r",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.Xresources")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.Xresources")),
+        desc="Open in vim: .Xresources"
         ),
     Key([altR], "z",
-        lazy.spawn("alacritty -e vim " +os.path.expanduser("~/.zshrc")),
-        desc="Open in vim:"
+        lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),
+        desc="Open in vim: .zshrc"
         ),
     # multiple stack panes
     Key(
@@ -282,9 +278,8 @@ layout_theme = {"border_width": 2,
 
     # TODO: xmonadthreecol, I want new windows NOT to open as main...
 layouts = [ 
-#    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9, 
-#        new_client_position='before_current'),
-    layout.MonadThreeCol(new_client_position='bottom'),
+    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9, 
+        new_client_position='bottom'),
 #   layout.Columns(**layout_theme,num_columns=3),
 #   layout.Columns(border_focus=["#d75f5f"],num_columns=3),
     layout.Columns(**layout_theme),
