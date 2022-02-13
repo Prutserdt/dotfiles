@@ -32,9 +32,9 @@ keys = [
         lazy.layout.up(),
         desc="Move focus up"
         ),
-    Key([modL], "space",
-        lazy.layout.next(),
-        desc="Move window focus to other window"
+    Key([modL], "m",
+        lazy.layout.maximize(),
+        desc='toggle window between minimum and maximum sizes'
         ),
     # Move windows around. Moving out range (Columns layout) creates new column.
     Key([modL, "shift"], "h",
@@ -53,27 +53,55 @@ keys = [
         lazy.layout.shuffle_up(),
         desc="Move window up"
         ),
-    # Grow windows. Edge windows could shrink.
-    Key([modL, "control"], "h",
-        lazy.layout.grow_left(),
-        desc="Grow window to the left"
-        ),
-    Key([modL, "control"], "l",
-        lazy.layout.grow_right(),
-        desc="Grow window to the right"
+    # xmonadlayout hotkeys
+    Key([modL, "control"], "k",
+        lazy.layout.grow_main(),
+        desc="Grow main window"
         ),
     Key([modL, "control"], "j",
-        lazy.layout.grow_down(),
-        desc="Grow window down"
+        lazy.layout.shrink_main(),
+        desc="Shrink main window"
         ),
-    Key([modL, "control"], "k",
-        lazy.layout.grow_up(),
-        desc="Grow window up"
+    Key([modL, "control"], "i",
+        lazy.layout.grow(),
+        desc="Grow selected window"
         ),
+    Key([modL, "control"], "u",
+        lazy.layout.shrink(),
+        desc="Grow selected window"
+        ),
+    Key([modL], "space",
+        lazy.layout.swap_main(),
+        desc="Make selected window the main windos"
+        ),
+    Key([modL], "n",
+        lazy.layout.flip(),
+        desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
+        ),
+
+    # Hotkeys used for xmonadthreecol
+    # Grow windows. Edge windows could shrink. 
+#    Key([modL, "control"], "h",
+#        lazy.layout.grow_left(),
+#        desc="Grow window to the left"
+#        ),
+#    Key([modL, "control"], "l",
+#        lazy.layout.grow_right(),
+#        desc="Grow window to the right"
+#        ),
+#    Key([modL, "control"], "j",
+#        lazy.layout.grow_down(),
+#        desc="Grow window down"
+#        ),
+#    Key([modL, "control"], "k",
+#        lazy.layout.grow_up(),
+#        desc="Grow window up"
+#        ),
     Key([modL],"b",
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
         ),
+
     # Audio keys
     Key([], "XF86AudioRaiseVolume", 
         lazy.spawn("amixer -q set Master 5%+")
@@ -118,6 +146,7 @@ keys = [
         desc="Launch Wing 101 Python IDE"
         ),
     #Right alt for opening of files in vim
+    #TODO: use terminal or assign: termOpen="alacritty -e vim "
     Key([altR], "c",
         lazy.spawn("alacritty -e vim " + os.path.expanduser("~/Stack/Command_line/commands.md")),
         desc="Open in vim: "
@@ -248,11 +277,15 @@ keys.extend([
 layout_theme = {"border_width": 2,
                 "margin": 0,
                 "border_focus": "#98C379",
-                "border_normal": "#282C34"
+                "border_normal": "#282C34",
                 }
 
+    # TODO: xmonadthreecol, I want new windows NOT to open as main...
 layouts = [ 
-    layout.Columns(**layout_theme,num_columns=3),
+#    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9, 
+#        new_client_position='before_current'),
+    layout.MonadThreeCol(new_client_position='bottom'),
+#   layout.Columns(**layout_theme,num_columns=3),
 #   layout.Columns(border_focus=["#d75f5f"],num_columns=3),
     layout.Columns(**layout_theme),
     layout.Max(),
@@ -266,13 +299,6 @@ layouts = [
     #layout.VerticalTile(),
     #layout.Zoomy(),
     #layout.Stack(num_stacks=2),
-### TODO: nieuwe layout komt eraan soort centeredmaster:
-#check in python3:
-#from libqtile import layout
-#dir(layout))
-# in versie 0.20 staat MonadThreeCol er nog niet in :-(
-# hij wordt getest.. even geduld...
-#    layout.MonadThreeCol(),
 ]
 
 widget_defaults = dict(
