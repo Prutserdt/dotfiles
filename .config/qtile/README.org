@@ -1,11 +1,11 @@
 #+TITLE: Configuration of qtile tiling window manager
 #+PROPERTY: header-args :tangle configFROMorg.py
-#+STARTUP: overview
+#+STARTUP: content
 #+AUTHOR: Prutserdt
 
 
 * Table of contents :toc:
-- [[#about-this-config][About this config]]
+- [[#about-this-org-config-file][About this org config file]]
 - [[#imports][Imports]]
 - [[#variables][Variables]]
 - [[#qtile-specific-keybindings][qtile specific keybindings]]
@@ -16,7 +16,7 @@
 - [[#layouts][Layouts]]
 - [[#startup-applications][Startup applications]]
 
-* About this config
+* About this org config file
 
 In this emacs org document the configuration of the window manager qtile is described.
 This file is used as the source to create [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]].
