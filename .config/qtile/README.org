@@ -8,7 +8,10 @@
 - [[#about-this-config][About this config]]
 - [[#imports][Imports]]
 - [[#variables][Variables]]
-- [[#keybindings][Keybindings]]
+- [[#qtile-specific-keybindings][qtile specific keybindings]]
+- [[#audio-keybindings][Audio keybindings]]
+- [[#application-keybindings][Application keybindings]]
+- [[#text-files-keybindings][Text files keybindings]]
 - [[#groups][Groups]]
 - [[#layouts][Layouts]]
 - [[#startup-applications][Startup applications]]
@@ -20,7 +23,7 @@ This file is used as the source to create the config.py file.
 https://gitlab.com/dwt1/dotfiles/-/raw/master/.config/qtile/README.org
 
 * Imports
-Here the modules are loaded that are needed for the configuration file.
+The python configuration requires some modules to be loaded.
 
 #+BEGIN_SRC python
 import psutil
@@ -33,8 +36,10 @@ from libqtile.config import ( Click, Drag, Group, Key, Match,
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 #+END_SRC
+
 * Variables
-The modL is the left superkey (windows key) and is bound to qtile specific bindings to swithc
+Some variables are set to bind hotkeys
+The modL is the left superkey (windows key) and is bound to qtile specific bindings, for instance move windows around.
 modR is the right superkey (windows key) and is used to open applications.
 altR is the right alt key and is used to open text files.
 
@@ -43,12 +48,12 @@ modL = "mod4"
 modR = "mod3"
 altR = "mod5"
 
-terminal = guess_terminal()
+terminal = "alacritty"
 termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
 
 #+END_SRC
-* Keybindings
 
+* qtile specific keybindings
 
 #+BEGIN_SRC python
 keys = [
@@ -138,6 +143,43 @@ keys = [
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
         ),
+
+    # multiple stack panes
+    Key(
+        [modL, "shift"],
+        "Return",
+        lazy.layout.toggle_split(),
+        desc="Toggle between split and unsplit sides of stack",
+    ),
+    Key([modL], "Return",
+        lazy.spawn(terminal),
+        desc="Launch terminal"),
+   # Toggle between different layouts as defined below
+    Key([modL], "Tab",
+        lazy.next_layout(),
+        desc="Toggle between layouts"
+        ),
+    Key([modL], "q",
+        lazy.window.kill(),
+        desc="Kill focused window"
+        ),
+    Key([modL, "control"], "r",
+        lazy.reload_config(),
+        desc="Reload the config"
+        ),
+    Key([modL, "control"], "q",
+        lazy.shutdown(),
+        desc="Shutdown Qtile"
+        ),
+    Key([modL], "r",
+        lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget"
+        ),
+    #+END_SRC
+
+* Audio keybindings
+
+#+BEGIN_SRC python
     # Audio keys
     Key([], "XF86AudioRaiseVolume",
         lazy.spawn("amixer -q set Master 5%+")
@@ -148,7 +190,13 @@ keys = [
     Key([], "XF86AudioMute",
         lazy.spawn("amixer -q set Master toggle")
         ),
-    #Right superkey for opening of applications.
+#+END_SRC
+
+* Application keybindings
+
+The right superkey is used to open applications.
+
+#+BEGIN_SRC python
     Key([modR], "b",
         lazy.spawn("brave"),
         desc="Launch Brave browser"
@@ -185,7 +233,12 @@ keys = [
         lazy.spawn("wing-101-8"),
         desc="Launch Wing 101 Python IDE"
         ),
-    #Right alt for opening of files in vim
+#+END_SRC
+
+* Text files keybindings
+The right alt key is used to open textfiles in Vim in the terminal.
+
+#+BEGIN_SRC python
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
         lazy.spawn(termVim +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
@@ -243,39 +296,7 @@ keys = [
         lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),
         desc="Open in vim: .zshrc"
         ),
-    # multiple stack panes
-    Key(
-        [modL, "shift"],
-        "Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
-    Key([modL], "Return",
-        lazy.spawn(terminal),
-        desc="Launch terminal"),
-   # Toggle between different layouts as defined below
-    Key([modL], "Tab",
-        lazy.next_layout(),
-        desc="Toggle between layouts"
-        ),
-    Key([modL], "q",
-        lazy.window.kill(),
-        desc="Kill focused window"
-        ),
-    Key([modL, "control"], "r",
-        lazy.reload_config(),
-        desc="Reload the config"
-        ),
-    Key([modL, "control"], "q",
-        lazy.shutdown(),
-        desc="Shutdown Qtile"
-        ),
-    Key([modL], "r",
-        lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"
-        ),
 ]
-
 #+END_SRC
 * Groups
 Here the workspaces are described.
@@ -321,8 +342,9 @@ layout_theme = {"border_width": 2,
                 }
 
 #+END_SRC
+
 * Layouts
-.
+
 
 #+BEGIN_SRC python
     # TODO: MonadThreeCol, I want new windows NOT to open as main...
@@ -404,7 +426,10 @@ reconfigure_screens = True
 auto_minimize = True # handy for steam games
 
 #+END_SRC
+
 * Startup applications
+
+
 #+BEGIN_SRC python
 
 # Startup scripts
