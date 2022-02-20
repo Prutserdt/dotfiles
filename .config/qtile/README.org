@@ -1,8 +1,8 @@
 #+TITLE: My config of qtile
 #+PROPERTY: header-args :tangle configFROMorg.py
 #+STARTUP: overview
-;;showeverything
-#+AUTHOR: Walter Elffrink
+#+AUTHOR: Prutserdt
+
 
 * Table of contents :toc:
 - [[#about-this-config][About this config]]
