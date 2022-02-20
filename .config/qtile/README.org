@@ -1,4 +1,4 @@
-#+TITLE: My config of qtile
+#+TITLE: Configuration of qtile tiling window manager
 #+PROPERTY: header-args :tangle configFROMorg.py
 #+STARTUP: overview
 #+AUTHOR: Prutserdt
@@ -19,8 +19,7 @@
 * About this config
 
 In this emacs org document the configuration of the window manager qtile is described.
-This file is used as the source to create the config.py file.
-https://gitlab.com/dwt1/dotfiles/-/raw/master/.config/qtile/README.org
+This file is used as the source to create [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]].
 
 * Imports
 The python configuration requires some modules to be loaded.
