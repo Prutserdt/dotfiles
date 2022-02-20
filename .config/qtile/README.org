@@ -1,11 +1,17 @@
 #+TITLE: My config of qtile
 #+PROPERTY: header-args :tangle configFROMorg.py
-#+STARTUP: showeverything
+#+STARTUP: overview
+;;showeverything
 #+AUTHOR: Walter Elffrink
 
 * Table of contents :toc:
 - [[#about-this-config][About this config]]
 - [[#imports][Imports]]
+- [[#variables][Variables]]
+- [[#keybindings][Keybindings]]
+- [[#groups][Groups]]
+- [[#layouts][Layouts]]
+- [[#startup-applications][Startup applications]]
 
 * About this config
 
@@ -27,6 +33,10 @@ from libqtile.config import ( Click, Drag, Group, Key, Match,
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 #+END_SRC
+* Variables
+The modL is the left superkey (windows key) and is bound to qtile specific bindings to swithc
+modR is the right superkey (windows key) and is used to open applications.
+altR is the right alt key and is used to open text files.
 
 #+BEGIN_SRC python
 modL = "mod4"
@@ -36,6 +46,11 @@ altR = "mod5"
 terminal = guess_terminal()
 termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
 
+#+END_SRC
+* Keybindings
+
+
+#+BEGIN_SRC python
 keys = [
     # Switch between windows
     Key([modL], "h",
@@ -261,6 +276,11 @@ keys = [
         ),
 ]
 
+#+END_SRC
+* Groups
+Here the workspaces are described.
+
+#+BEGIN_SRC python
 groups = [Group(i) for i in "123456789"]
 
 for i in groups:
@@ -300,6 +320,11 @@ layout_theme = {"border_width": 2,
                 "border_normal": "#282C34",
                 }
 
+#+END_SRC
+* Layouts
+.
+
+#+BEGIN_SRC python
     # TODO: MonadThreeCol, I want new windows NOT to open as main...
 layouts = [
 #    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
@@ -378,6 +403,9 @@ reconfigure_screens = True
 
 auto_minimize = True # handy for steam games
 
+#+END_SRC
+* Startup applications
+#+BEGIN_SRC python
 
 # Startup scripts
 @hook.subscribe.startup_once

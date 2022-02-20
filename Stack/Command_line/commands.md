@@ -42,6 +42,7 @@
 * Virtualbox and Whonix
 * Arduino
 * ESP32 cam
+* Doom Emacs
 #### Distros
 * XFCE tricks
 * i3 window manager
@@ -586,10 +587,10 @@ ls -Art | tail -n 1
 iets als dit, maar dan werkend:
 cat ~/i3_log/{ls -Art ~/i3_log | tail -n 1}|fzf
 
-
+ssh
 #### Wissen van regels in meerdere bestanden die een bepaald woord bevatten.
 
-Je kunt natuurlijk handmatig zoeken met fuzzyfind (bijv "wismij"):
+Je kuht natuurlijk handmatig zoeken met fuzzyfind (bijv "wismij"):
 cat i3log-2020-02-16-22-09-48 |fzf
 Voorbeeld van het verwijderen van een single file:
 grep -v "wismij" i3log-2020-02-16-22-09-48 > i3log_tmp ; mv i3log_tmp i3log-2020-02-16-22-09-48
@@ -2554,6 +2555,36 @@ Setup the tools:
 cd ~/esp/esp-idf
 ./install.sh
 ```
+### Doom Emacs
+install:
+`sudo pacman -S emacs ripgrep fd
+git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+~/.emacs.d/bin/doom install
+yay -S emacs-pdf-tools-git`
+
+Add ~/.emacs.d/bin to your PATH!i
+
+
+`/usr/bin/emacs --daemon &`
+Deze heb ik toegevoegd in startupscript qtile, bij autostart.sh
+
+
+`emacsclient -c -a 'emacs'`
+
+Configurations files: ~/.doom.d
+
+M: meta key: alt
+
+## configureren van emacs
+
+
+
+
+
+
+Je kunt het draaien als grafisch programma of in terminal!
+
+
 
 ### Distros
 

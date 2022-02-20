@@ -37,6 +37,15 @@ alias dotfiles='$HOME/.config/dotfiles.sh'                                  # Do
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github simplification
 alias k='xmodmap $HOME/.config/kbswitch && xset r rate 300 80'              # Change modkeys, Caps/Esc and fast key repeats
 alias r='xmodmap $HOME/.config/rdxswitch && xset r rate 300 80'             # Change to redox kb, alt-r modkeys, and fast key repeats
+
+# emacs
+alias em="/usr/bin/emacs -nw"                   #emacs commandline
+alias emacs="emacsclient -c -a 'emacs'"         #emacs openen grafisch
+alias doomsync="~/.emacs.d/bin/doom sync"
+alias doomdoctor="~/.emacs.d/bin/doom doctor"
+alias doomupgrade="~/.emacs.d/bin/doom upgrade"
+alias doompurge="~/.emacs.d/bin/doom purge"
+
 # Jump to directories
 alias daa="cd $HOME/Stack/Documenten/Aandelen"
 alias daf="cd $HOME/Stack/Afbeeldingen"
@@ -51,6 +60,7 @@ alias de="cd $HOME/Stack/Documenten/Studie/C_programming_training_Dartmouth"
 alias dr="cd $HOME/qmk_firmware/keyboards/redox/keymaps/Prutserdt"
 alias dg="cd $HOME/qmk_firmware/keyboards/gergo/keymaps/Prutserdt"
 alias dp="cd $HOME/Downloads/MSQL_developer_LOI/Programmeren_in_Python_module23917"
+alias dq="cd $HOME/.config/qtile"
 # Jump to suckless app dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
 alias dss="cd $HOME/Stack/suckless"
 alias ddw="cd $HOME/.config/suckless/dwm"

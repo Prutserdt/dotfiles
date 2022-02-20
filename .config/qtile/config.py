@@ -13,7 +13,7 @@ modR = "mod3"
 altR = "mod5"
 
 terminal = guess_terminal()
-termVim="alacritty -e vim " # Open vim in alacritty (used for AltR hotkeys)
+termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
 
 keys = [
     # Switch between windows
@@ -80,29 +80,28 @@ keys = [
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
 
-    # Hotkeys used for xmonadthreecol
+    # The hotkeys marked out are now used for MonadThreeCol
     # Grow windows. Edge windows could shrink. 
-#    Key([modL, "control"], "h",
-#        lazy.layout.grow_left(),
-#        desc="Grow window to the left"
-#        ),
-#    Key([modL, "control"], "l",
-#        lazy.layout.grow_right(),
-#        desc="Grow window to the right"
-#        ),
-#    Key([modL, "control"], "j",
-#        lazy.layout.grow_down(),
-#        desc="Grow window down"
-#        ),
-#    Key([modL, "control"], "k",
-#        lazy.layout.grow_up(),
-#        desc="Grow window up"
-#        ),
+    Key([modL, "control"], "h",
+        lazy.layout.grow_left(),
+        desc="Grow window to the left"
+        ),
+    Key([modL, "control"], "l",
+        lazy.layout.grow_right(),
+        desc="Grow window to the right"
+        ),
+    Key([modL, "control"], "j",
+        lazy.layout.grow_down(),
+        desc="Grow window down"
+        ),
+    Key([modL, "control"], "k",
+        lazy.layout.grow_up(),
+        desc="Grow window up"
+        ),
     Key([modL],"b",
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
         ),
-
     # Audio keys
     Key([], "XF86AudioRaiseVolume", 
         lazy.spawn("amixer -q set Master 5%+")
@@ -117,6 +116,10 @@ keys = [
     Key([modR], "b",
         lazy.spawn("brave"),
         desc="Launch Brave browser"
+        ),
+    Key([modR], "e",
+        lazy.spawn("emacsclient -c -a 'emacs'"),
+        desc="Launch emacs"
         ),
     Key([modR], "d",
         lazy.spawn(os.environ["HOME"]+"/.config/dmenuapps.sh"),
@@ -276,13 +279,11 @@ layout_theme = {"border_width": 2,
                 "border_normal": "#282C34",
                 }
 
-    # TODO: xmonadthreecol, I want new windows NOT to open as main...
+    # TODO: MonadThreeCol, I want new windows NOT to open as main...
 layouts = [ 
-    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9, 
-        new_client_position='bottom'),
-#   layout.Columns(**layout_theme,num_columns=3),
-#   layout.Columns(border_focus=["#d75f5f"],num_columns=3),
-    layout.Columns(**layout_theme),
+#    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9, 
+#        new_client_position='bottom'),
+    layout.Columns(**layout_theme,num_columns=3),
     layout.Max(),
     layout.Bsp(),
     layout.Matrix(),
@@ -290,10 +291,6 @@ layouts = [
     layout.MonadWide(),
     layout.RatioTile(),
     layout.Tile(),
-    #layout.TreeTab(),
-    #layout.VerticalTile(),
-    #layout.Zoomy(),
-    #layout.Stack(num_stacks=2),
 ]
 
 widget_defaults = dict(
