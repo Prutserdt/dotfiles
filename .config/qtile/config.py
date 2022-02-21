@@ -55,19 +55,19 @@ keys = [
         desc="Move window up"
         ),
     # xmonadlayout hotkeys
-    Key([modL, "control"], "k",
-        lazy.layout.grow_main(),
-        desc="Grow main window"
+    Key([modL, "control"], "h",
+        lazy.layout.grow(),
+        desc="Grow selected window"
         ),
     Key([modL, "control"], "j",
         lazy.layout.shrink_main(),
         desc="Shrink main window"
         ),
-    Key([modL, "control"], "i",
-        lazy.layout.grow(),
-        desc="Grow selected window"
+    Key([modL, "control"], "k",
+        lazy.layout.grow_main(),
+        desc="Grow main window"
         ),
-    Key([modL, "control"], "u",
+    Key([modL, "control"], "l",
         lazy.layout.shrink(),
         desc="Grow selected window"
         ),
@@ -79,24 +79,18 @@ keys = [
         lazy.layout.flip(),
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
-    # The hotkeys marked out are now used for MonadThreeCol
-    # Grow windows. Edge windows could shrink.
-    Key([modL, "control"], "h",
-        lazy.layout.grow_left(),
-        desc="Grow window to the left"
+
+
+
+    Key([modL],"f",
+#        layout.Max(),
+#        lazy.hide_show_bar(position="top"),
+        lazy.window.toggle_fullscreen(),
+        desc="Maximize current windos"
         ),
-    Key([modL, "control"], "l",
-        lazy.layout.grow_right(),
-        desc="Grow window to the right"
-        ),
-    Key([modL, "control"], "j",
-        lazy.layout.grow_down(),
-        desc="Grow window down"
-        ),
-    Key([modL, "control"], "k",
-        lazy.layout.grow_up(),
-        desc="Grow window up"
-        ),
+
+
+
     Key([modL],"b",
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
@@ -279,18 +273,13 @@ layout_theme = {"border_width": 2,
                 "border_normal": "#282C34",
                 }
 
-# TODO:     MonadThreeCol, I want new windows NOT to open as main...
 layouts = [
-#   layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
-#   new_client_position='bottom'),
-    layout.Columns(**layout_theme,num_columns=3),
+    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
+    new_client_position='bottom'),
+    # Remark: the bottom position does not work yet, bug is already reported
     layout.Max(),
-    layout.Bsp(),
-    layout.Matrix(),
     layout.MonadTall(),
     layout.MonadWide(),
-    layout.RatioTile(),
-    layout.Tile(),
 ]
 
 widget_defaults = dict(
