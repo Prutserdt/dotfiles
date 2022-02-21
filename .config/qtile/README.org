@@ -1,6 +1,4 @@
 #+TITLE: Configuration of qtile
-#+PROPERTY: header-args :tangle configFROMorg.py
-#+STARTUP: content
 #+AUTHOR: Prutserdt
 
 
@@ -15,19 +13,20 @@
 - [[#groups][Groups]]
 - [[#layouts][Layouts]]
 - [[#some-hooks][Some hooks]]
+- [[#the-autostartsh-script][The autostart.sh script]]
 
 * About qtile and my config
 [[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python.
 In this emacs org document my configuration of qtile is described and it is used as the source to create the qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]].
 
 * Imports
-The Python configuration requires some modules to be loaded.
+This Python configuration requires some modules to be loaded.
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
 import psutil
 import subprocess
 import os
-from typing import List  # noqa: F401
+from typing import List
 from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, Match,
                                 Screen, ScratchPad, DropDown,)
@@ -38,7 +37,7 @@ from libqtile.utils import guess_terminal
 * Variables
 Some variables are declared. Three modification keys whicha are used for keybindings and my terminal program.
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
 modL = "mod4"
 modR = "mod3"
 altR = "mod5"
@@ -51,7 +50,7 @@ termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
 * Keybindings: qtile specific
 These left super key bindings (left window key) are all related to qtile and do thing like moving windows around.
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
 keys = [
     # Switch between windows
     Key([modL], "h",
@@ -174,7 +173,7 @@ keys = [
 * Keybindings: Audio
 Hotkeys to control the volume and mute.
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
     # Audio keys
     Key([], "XF86AudioRaiseVolume",
         lazy.spawn("amixer -q set Master 5%+")
@@ -190,7 +189,7 @@ Hotkeys to control the volume and mute.
 * Keybindings: Applications
 The right super is exclusively used to open applications.
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
     Key([modR], "b",
         lazy.spawn("brave"),
         desc="Launch Brave browser"
@@ -231,8 +230,8 @@ The right super is exclusively used to open applications.
 
 * Keybingings: Text files
 The right super alt key is used to open text files in Vim in the terminal. Might change it to emacs in the future...
-
-#+BEGIN_SRC python
+ :tangle "configFROMorg.py"
+#+BEGIN_SRC python :tangle "configFROMorg.py"
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
         lazy.spawn(termVim +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
@@ -295,7 +294,7 @@ The right super alt key is used to open text files in Vim in the terminal. Might
 * Groups
 Here the workspaces are described, which are called Groups in qtile.
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
 groups = [Group(i) for i in "123456789"]
 
 for i in groups:
@@ -340,7 +339,7 @@ layout_theme = {"border_width": 2,
 * Layouts
 Some of the layouts that I use.
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
     # TODO: MonadThreeCol, I want new windows NOT to open as main...
 layouts = [    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
 #        new_client_position='bottom'),
@@ -423,7 +422,7 @@ auto_minimize = True # handy for steam games
 * Some hooks
 A startup script is ran after startup of qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :tangle "configFROMorg.py"
 
 # Startup scripts
 @hook.subscribe.startup_once
@@ -457,3 +456,14 @@ def _unswallow(window):
 
 wmname = "LG3D"
 #+END_SRC
+
+* The autostart.sh script
+This shellscript is starting some keyboard specific scripts for my redox keyboards and start an Emacs daemon.
+
+#+begin_src sh :tangle "test.sh"
+#!/bin/bash
+# Stuff to be run at startup.
+xmodmap $HOME/.config/kbswitch && xset r rate 300 80 &
+xmodmap $HOME/.config/rdxswitch && xset r rate 300 80 &
+/usr/bin/emacs --daemon &
+#+end_src
