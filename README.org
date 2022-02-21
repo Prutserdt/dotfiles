@@ -31,6 +31,6 @@ The `dotfiles` command is  an [[https://github.com/Prutserdt/dotfiles/blob/maste
 
 Remember to add the ~/dotfiles/config to ssh: url = ssh://git@github.com/Prutserdt/dotfiles.git
 
-References:
+*** References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles
 - :cinema: https://www.youtube.com/watch?v=tBoLDpTWVOM
