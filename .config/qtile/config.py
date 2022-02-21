@@ -1,18 +1,18 @@
 import psutil
 import subprocess
 import os
-from typing import List  # noqa: F401
+from typing import List
 from libqtile import bar, layout, widget,hook
-from libqtile.config import ( Click, Drag, Group, Key, Match, 
+from libqtile.config import ( Click, Drag, Group, Key, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
+#from libqtile.utils import guess_terminal
 
 modL = "mod4"
 modR = "mod3"
 altR = "mod5"
 
-terminal = guess_terminal()
+terminal = "alacritty"
 termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
 
 keys = [
@@ -79,9 +79,8 @@ keys = [
         lazy.layout.flip(),
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
-
     # The hotkeys marked out are now used for MonadThreeCol
-    # Grow windows. Edge windows could shrink. 
+    # Grow windows. Edge windows could shrink.
     Key([modL, "control"], "h",
         lazy.layout.grow_left(),
         desc="Grow window to the left"
@@ -102,17 +101,49 @@ keys = [
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
         ),
+    # multiple stack panes
+    Key(
+        [modL, "shift"],
+        "Return",
+        lazy.layout.toggle_split(),
+        desc="Toggle between split and unsplit sides of stack"
+    ),
+    Key([modL], "Return",
+        lazy.spawn(terminal),
+        desc="Launch terminal"),
+   # Toggle between different layouts as defined below
+    Key([modL], "Tab",
+        lazy.next_layout(),
+        desc="Toggle between layouts"
+        ),
+    Key([modL], "q",
+        lazy.window.kill(),
+        desc="Kill focused window"
+        ),
+    Key([modL, "control"], "r",
+        lazy.reload_config(),
+        desc="Reload the config"
+        ),
+    Key([modL, "control"], "q",
+        lazy.shutdown(),
+        desc="Shutdown Qtile"
+        ),
+    Key([modL], "r",
+        lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget"
+        ),
+
     # Audio keys
-    Key([], "XF86AudioRaiseVolume", 
+    Key([], "XF86AudioRaiseVolume",
         lazy.spawn("amixer -q set Master 5%+")
         ),
-    Key([], "XF86AudioLowerVolume", 
+    Key([], "XF86AudioLowerVolume",
         lazy.spawn("amixer -q set Master 5%-")
         ),
-    Key([], "XF86AudioMute", 
+    Key([], "XF86AudioMute",
         lazy.spawn("amixer -q set Master toggle")
         ),
-    #Right superkey for opening of applications.
+
     Key([modR], "b",
         lazy.spawn("brave"),
         desc="Launch Brave browser"
@@ -149,7 +180,7 @@ keys = [
         lazy.spawn("wing-101-8"),
         desc="Launch Wing 101 Python IDE"
         ),
-    #Right alt for opening of files in vim
+
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
         lazy.spawn(termVim +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
@@ -207,37 +238,6 @@ keys = [
         lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),
         desc="Open in vim: .zshrc"
         ),
-    # multiple stack panes
-    Key(
-        [modL, "shift"],
-        "Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-    ),
-    Key([modL], "Return",
-        lazy.spawn(terminal),
-        desc="Launch terminal"),
-   # Toggle between different layouts as defined below
-    Key([modL], "Tab",
-        lazy.next_layout(),
-        desc="Toggle between layouts"
-        ),
-    Key([modL], "q",
-        lazy.window.kill(),
-        desc="Kill focused window"
-        ),
-    Key([modL, "control"], "r",
-        lazy.reload_config(),
-        desc="Reload the config"
-        ),
-    Key([modL, "control"], "q",
-        lazy.shutdown(),
-        desc="Shutdown Qtile"
-        ),
-    Key([modL], "r",
-        lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"
-        ),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -279,10 +279,10 @@ layout_theme = {"border_width": 2,
                 "border_normal": "#282C34",
                 }
 
-    # TODO: MonadThreeCol, I want new windows NOT to open as main...
-layouts = [ 
-#    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9, 
-#        new_client_position='bottom'),
+# TODO:     MonadThreeCol, I want new windows NOT to open as main...
+layouts = [
+#   layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
+#   new_client_position='bottom'),
     layout.Columns(**layout_theme,num_columns=3),
     layout.Max(),
     layout.Bsp(),
@@ -332,7 +332,7 @@ mouse = [
     Drag([modL], "Button3",
         lazy.window.set_size_floating(), start=lazy.window.get_size()
         ),
-    Click([modL], "Button2", 
+    Click([modL], "Button2",
         lazy.window.bring_to_front()
         ),
 ]
@@ -357,7 +357,6 @@ reconfigure_screens = True
 
 auto_minimize = True # handy for steam games
 
-
 # Startup scripts
 @hook.subscribe.startup_once
 def start_once():
@@ -365,7 +364,7 @@ def start_once():
     subprocess.call([home + "/.config/qtile/autostart.sh"])
 
 
-# swallow window when starting application from terminal 
+# swallow window when starting application from terminal
 @hook.subscribe.client_new
 def _swallow(window):
     pid = window.window.get_net_wm_pid()
