@@ -79,18 +79,10 @@ keys = [
         lazy.layout.flip(),
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
-
-
-
     Key([modL],"f",
-#        layout.Max(),
-#        lazy.hide_show_bar(position="top"),
         lazy.window.toggle_fullscreen(),
-        desc="Maximize current windos"
+        desc="Fullscreen the current window"
         ),
-
-
-
     Key([modL],"b",
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
@@ -169,6 +161,10 @@ keys = [
     Key([modR], "t",
         lazy.spawn("thunar"),
         desc="Launch Thunar filemanager"
+        ),
+    Key([modR], "u",
+        lazy.spawn(os.path.expanduser("~/.config/dmenuunicode.sh")),
+        desc="Insert unicode, emojis :-)"
         ),
     Key([modR], "w",
         lazy.spawn("wing-101-8"),

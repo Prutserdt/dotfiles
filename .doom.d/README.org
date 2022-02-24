@@ -1,0 +1,241 @@
+#+TITLE: My configuration of emacs
+#+STARTUP: showeverything
+#+AUTHOR: Prutserdt
+
+ 
+* Table Of Contents :toc:
+- [[#about-this-config][About this config]]
+- [[#initel][init.el]]
+- [[#packagesel][Packages.el]]
+- [[#configel][config.el]]
+
+* About this config
+This is my personal Emacs config. Nothing much to see here. Just started this journey and learning along the way.
+The init.el and ... files are generated from this README.org file in emacs by running =org-babel-tangle= (Alt-x and typing: =org-babel-tangle=) and run =doom sync= in the terminal to load it.
+
+* init.el
+Small modifications from the default Doom Emacs settings.
+
+This file controls what Doom modules are enabled and what order they load in. Remember to tangle this file and then run 'doom sync' after modifying it!
+
+#+begin_src emacs-lisp :tangle init.el
+;;; init.el -*- lexical-binding: t; -*-
+
+;; NOTE This file is generated from the README.org file. Do not alter this
+;; init.el directly and only modify the REAME.org file then Alt-x and type:
+;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
+;; Happy hacking :-)
+
+
+(doom! :completion
+       company           ; the ultimate code completion backend
+       vertico           ; the search engine of the future
+
+       :ui
+       doom              ; what makes DOOM look the way it does
+       doom-dashboard    ; a nifty splash screen for Emacs
+       doom-quit         ; DOOM quit-message prompts when you quit Emacs
+       (emoji +unicode)  ; ð
+       hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       modeline          ; snazzy, Atom-inspired modeline, plus API
+       ophints           ; highlight the region an operation acts on
+       (popup +defaults)   ; tame sudden yet inevitable temporary windows
+       vc-gutter         ; vcs diff in the fringe
+       vi-tilde-fringe   ; fringe tildes to mark beyond EOB
+       workspaces        ; tab emulation, persistence & separate workspaces
+
+       :editor
+       (evil +everywhere); come to the dark side, we have cookies
+       file-templates    ; auto-snippets for empty files
+       fold              ; (nigh) universal code folding
+       snippets          ; my elves. They type so I don't have to
+
+       :emacs
+       dired             ; making dired pretty [functional]
+       electric          ; smarter, keyword-based electric-indent
+       undo              ; persistent, smarter undo for your inevitable mistakes
+       vc                ; version-control and Emacs, sitting in a tree
+
+       :checkers
+       syntax              ; tasing you for every semicolon you forget
+
+       :tools
+       (eval +overlay)     ; run code, run (also, repls)
+       lookup              ; navigate your code and its documentation
+       lsp               ; M-x vscode
+       magit             ; a git porcelain for Emacs
+
+       :os
+       (:if IS-MAC macos)  ; improve compatibility with macOS
+
+       :lang
+       emacs-lisp        ; drown in parentheses
+       markdown          ; writing docs for people to ignore
+       org               ; organize your plain life in plain text
+       python            ; beautiful is better than ugly
+       sh                ; she sells {ba,z,fi}sh shells on the C xor
+
+       :email
+
+       :app
+
+       :config
+       (default +bindings +smartparens))
+
+;; Other options that can be added to the README.org are listed below.
+;; Remember; do not chage this init.el and only change README.org
+
+       ;; :completion
+       ;;helm              ; the *other* search engine for love and life
+       ;;ido               ; the other *other* search engine...
+       ;;ivy               ; a search engine for love and life
+
+       ;; :lang
+       ;;julia             ; a better, faster MATLAB
+       ;;kotlin            ; a better, slicker Java(Script)
+       ;;latex             ; writing papers in Emacs has never been so fun
+       ;;lean              ; for folks with too much to prove
+       ;;ledger            ; be audit you can be
+       ;;lua               ; one-based indices? one-based indices
+       ;;erlang            ; an elegant language for a more civilized age
+       ;;ess               ; emacs speaks statistics
+       ;;factor
+       ;;faust             ; dsp, but you get to keep your soul
+       ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
+       ;;fsharp            ; ML stands for Microsoft's Language
+       ;;fstar             ; (dependent) types and (monadic) effects and Z3
+       ;;gdscript          ; the language you waited for
+       ;;(go +lsp)         ; the hipster dialect
+       ;;(haskell +lsp)    ; a language that's lazier than I am
+       ;;hy                ; readability of scheme w/ speed of python
+       ;;idris             ; a language you can depend on
+       ;;json              ; At least it ain't XML
+       ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
+       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       ;;nim               ; python + lisp at the speed of c
+       ;;nix               ; I hereby declare "nix geht mehr!"
+       ;;ocaml             ; an objective camel
+       ;;php               ; perl's insecure younger brother
+       ;;plantuml          ; diagrams for confusing people more
+       ;;purescript        ; javascript, but functional
+       ;;qt                ; the 'cutest' gui framework ever
+       ;;racket            ; a DSL for DSLs
+       ;;raku              ; the artist formerly known as perl6
+       ;;rest              ; Emacs as a REST client
+       ;;rst               ; ReST in peace
+       ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
+       ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       ;;scala             ; java, but good
+       ;;(scheme +guile)   ; a fully conniving family of lisps
+       ;;sml
+       ;;solidity          ; do you need a blockchain? No.
+       ;;swift             ; who asked for emoji variables?
+       ;;terra             ; Earth and Moon in alignment for performance.
+       ;;web               ; the tubes
+       ;;yaml              ; JSON, but readable
+       ;;zig               ; C, but simpler
+
+       ;; :email
+       ;;(mu4e +org +gmail)
+       ;;notmuch
+       ;;(wanderlust +gmail)
+
+       ;; :app
+       ;;calendar
+       ;;emms
+       ;;everywhere        ; *leave* Emacs!? You must be joking
+       ;;irc               ; how neckbeards socialize
+       ;;(rss +org)        ; emacs as an RSS reader
+       ;;twitter           ; twitter client https://twitter.com/vnought
+
+       ;; :config
+       ;;literate
+
+#+end_src
+
+* Packages.el
+In Packages.el ....
+
+ To install a package with Doom you must declare them here and run 'doom sync' on the command line, then restart Emacs for the changes to take effect -- or use 'M-x doom/reload'.
+
+#+begin_src emacs-lisp :tangle packages.el
+
+;; -*- no-byte-compile: t; -*-
+
+;; NOTE This file is generated from the README.org file. Do not alter this
+;; packages.el directly and only modify the REAME.org file then Alt-x and type:
+;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking :-)
+
+;;; $DOOMDIR/packages.el
+
+;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;(package! some-package)
+
+;; To install a package directly from a remote git repo, you must specify a
+;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
+;; https://github.com/raxod502/straight.el#the-recipe-format
+;(package! another-package
+;  :recipe (:host github :repo "username/repo"))
+
+;; If the package you are trying to install does not contain a PACKAGENAME.el
+;; file, or is located in a subdirectory of the repo, you'll need to specify
+;; `:files' in the `:recipe':
+;(package! this-package
+;  :recipe (:host github :repo "username/repo"
+;           :files ("some-file.el" "src/lisp/*.el")))
+
+;; If you'd like to disable a package included with Doom, you can do so here
+;; with the `:disable' property:
+;(package! builtin-package :disable t)
+
+;; You can override the recipe of a built in package without having to specify
+;; all the properties for `:recipe'. These will inherit the rest of its recipe
+;; from Doom or MELPA/ELPA/Emacsmirror:
+;(package! builtin-package :recipe (:nonrecursive t))
+;(package! builtin-package-2 :recipe (:repo "myfork/package"))
+
+;; Specify a `:branch' to install a package from a particular branch or tag.
+;; This is required for some packages whose default branch isn't 'master' (which
+;; our package manager can't deal with; see raxod502/straight.el#279)
+;(package! builtin-package :recipe (:branch "develop"))
+
+;; Use `:pin' to specify a particular commit to install.
+;(package! builtin-package :pin "1a2b3c4d5e")
+
+;; Doom's packages are pinned to a specific commit and updated from release to
+;; release. The `unpin!' macro allows you to unpin single packages...
+;(unpin! pinned-package)
+;; ...or multiple packages
+;(unpin! pinned-package another-pinned-package)
+;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
+;(unpin! t)
+
+#+end_src
+
+* config.el
+In config.el .....
+
+
+#+begin_src emacs-lisp :tangle config.el
+
+;; NOTE This file is generated from the README.org file. Do not alter this
+;; config.el directly and only modify the REAME.org file, then Alt-x and type:
+;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
+;; Happy hacking :-)
+
+;; Evil Mode
+(use-package evil
+  :ensure t
+  :config
+
+  (setq evil-want-keybinding nil)
+
+;;  (use-package powerline-evil
+;;   :ensure t
+;;    :config
+;;    (powerline-evil-vim-color-theme)
+;;    )
+  )
+
+#+end_src
+

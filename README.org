@@ -3,7 +3,7 @@
 
 Here I store the dotfiles of my GNU/Linux system plus some other stuff.
 
-My config of qtile, a hackable tiling window manager written in python, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/qtile/README.org][here]]. My build of dwm, a dynamic window manager, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm][here]]. This is my typical setup (qtile/dwm), minimal and boring:
+My config of qtile, a hackable tiling window manager written in python, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/qtile][here]]. My build of dwm, a dynamic window manager, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm][here]]. This is my typical setup (qtile/dwm), minimal and boring:
 
 #+CAPTION: My windowmanager
 #+ATTR_HTML: :alt windowmanager :title windowmanager :align left
@@ -15,18 +15,16 @@ My old i3 gaps config file and surf and st builds are still a part of this repo 
 
 * Managing my dotfiles
 The `dotfiles` command is  an [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] which runs a simple [[https://github.com/Prutserdt/dotfiles/blob/master/.config/dotfiles.sh][bash script]] and push/pulls to this github repo and uses another [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] called config.
-** Add new dotfile to my repo
+** Add a new dotfile to my repo
 #+begin_src sh
     config add .example
-    config commit -m "Add my .example"
-    config push -v
+    dotfiles
 #+end_src
 
 ** Remove a dotfile from my repo
 #+begin_src sh
     config rm .example
-    config commit -m "Remove my .example"
-    config push -v
+    dotfiles
 #+end_src
 
 Remember to add to ~/dotfiles/config
@@ -34,7 +32,6 @@ Remember to add to ~/dotfiles/config
 [remote "origin"]
 	url = ssh://git@github.com/Prutserdt/dotfiles.git
 #+end_src
-
 
 *** References:
 - :book: https://www.atlassian.com/git/tutorials/dotfiles

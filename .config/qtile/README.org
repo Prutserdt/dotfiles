@@ -206,6 +206,11 @@ The right super is exclusively used to open applications.
         lazy.spawn("thunar"),
         desc="Launch Thunar filemanager"
         ),
+    #TODO: modify the script because characters are not imported in emacs org mode
+    Key([modR], "u",
+        lazy.spawn(os.path.expanduser("~/.config/dmenuunicode.sh")),
+        desc="Insert unicode, emojis :-)"
+        ),
     Key([modR], "w",
         lazy.spawn("wing-101-8"),
         desc="Launch Wing 101 Python IDE"

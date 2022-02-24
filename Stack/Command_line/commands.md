@@ -2575,14 +2575,28 @@ Configurations files: ~/.doom.d
 
 M: meta key: alt
 
-## configureren van emacs
+Je kunt emacs draaien als grafisch programma of in de terminal!
+
+## Tips voor werken met Python
+
+Open de interactive python shell:
+M-x run-python
+Selecteer code en run in de interactive python shell:
+M-x python-shell-send-region 
+Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
 
 
 
 
+## doom emacs instellen voor Python
 
-
-Je kunt het draaien als grafisch programma of in terminal!
+init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
+Daarna doomsync uitgevoerd
+i
+## Org mode en python
+Kies results types om code block output te geven:
+#+begin_src python :results output
+#+begin_src python :results values
 
 
 
