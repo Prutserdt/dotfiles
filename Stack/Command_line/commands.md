@@ -2577,26 +2577,26 @@ M: meta key: alt
 
 Je kunt emacs draaien als grafisch programma of in de terminal!
 
-## Tips voor werken met Python
+
+## Org mode en werken met Python
+
+Kies results types om code block output te geven:
+#+begin_src python :results output
+#+begin_src python :results values
+
+Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
 
 Open de interactive python shell:
 M-x run-python
-Selecteer code en run in de interactive python shell:
+Selecteer code en run in de interactive python shell(bovenstaand C-c ' werkt
+eigenlijk beter dan volgende):
 M-x python-shell-send-region 
-Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
-
-
 
 
 ## doom emacs instellen voor Python
 
 init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
 Daarna doomsync uitgevoerd
-i
-## Org mode en python
-Kies results types om code block output te geven:
-#+begin_src python :results output
-#+begin_src python :results values
 
 
 

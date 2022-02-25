@@ -14,7 +14,7 @@
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       (emoji +unicode)  ; ð
+       ;;(emoji +unicode)  ; ð
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        modeline          ; snazzy, Atom-inspired modeline, plus API
        ophints           ; highlight the region an operation acts on
@@ -51,7 +51,8 @@
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
        org               ; organize your plain life in plain text
-       python            ; beautiful is better than ugly
+       (python +lsp +pyright)            ; beautiful is better than ugly
+       ;;python            ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
 
        :email

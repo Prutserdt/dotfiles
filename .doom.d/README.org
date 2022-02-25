@@ -6,7 +6,7 @@
 * Table Of Contents :toc:
 - [[#about-this-config][About this config]]
 - [[#initel][init.el]]
-- [[#packagesel][Packages.el]]
+- [[#packagesel][packages.el]]
 - [[#configel][config.el]]
 
 * About this config
@@ -15,7 +15,6 @@ The init.el and ... files are generated from this README.org file in emacs by ru
 
 * init.el
 Small modifications from the default Doom Emacs settings.
-
 This file controls what Doom modules are enabled and what order they load in. Remember to tangle this file and then run 'doom sync' after modifying it!
 
 #+begin_src emacs-lisp :tangle init.el
@@ -35,7 +34,7 @@ This file controls what Doom modules are enabled and what order they load in. Re
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       (emoji +unicode)  ; ð
+       ;;(emoji +unicode)  ; ð
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        modeline          ; snazzy, Atom-inspired modeline, plus API
        ophints           ; highlight the region an operation acts on
@@ -72,7 +71,8 @@ This file controls what Doom modules are enabled and what order they load in. Re
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
        org               ; organize your plain life in plain text
-       python            ; beautiful is better than ugly
+       (python +lsp +pyright)            ; beautiful is better than ugly
+       ;;python            ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
 
        :email
@@ -153,8 +153,8 @@ This file controls what Doom modules are enabled and what order they load in. Re
 
 #+end_src
 
-* Packages.el
-In Packages.el ....
+* packages.el
+In packages.el ....
 
  To install a package with Doom you must declare them here and run 'doom sync' on the command line, then restart Emacs for the changes to take effect -- or use 'M-x doom/reload'.
 
@@ -210,6 +210,16 @@ In Packages.el ....
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(package-refresh-contents)
+(package-initialize)
+
+;; nose package is not maintained and giving :lang python error, disabled
+(package! nose           :disable t)
+
+
 #+end_src
 
 * config.el
@@ -228,14 +238,18 @@ In config.el .....
   :ensure t
   :config
 
-  (setq evil-want-keybinding nil)
+;;  (setq evil-want-keybinding nil)
 
 ;;  (use-package powerline-evil
-;;   :ensure t
+;;    :ensure t
 ;;    :config
 ;;    (powerline-evil-vim-color-theme)
 ;;    )
   )
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+;;(setq display-line-numbers-type relative)
 
 #+end_src
 
