@@ -12,7 +12,7 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
-- [[#credits-my-config-is-partially-based-on-these][Credits, my config is partially based on these]]
+- [[#credits][Credits]]
 
 * About this config
 This is my personal Emacs config. Nothing much to see here. Just started this journey and learning along the way.
@@ -258,6 +258,7 @@ In config.el .....
 
 #+end_src
 
-* Credits, my config is partially based on these
+* Credits
+My configuration of Doom Emacs is partially based on these ones:
 - :book: https://gitlab.com/zzamboni/dot-doom
 - :book: https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
