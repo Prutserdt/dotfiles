@@ -54,6 +54,5 @@
 (package-refresh-contents)
 (package-initialize)
 
-
 ;; nose package is not maintained and giving :lang python error, disabled
 (package! nose           :disable t)

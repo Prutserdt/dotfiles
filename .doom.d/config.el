@@ -8,7 +8,6 @@
   :ensure t
   :config
 
-
 ;;  (setq evil-want-keybinding nil)
 
 ;;  (use-package powerline-evil
@@ -18,6 +17,5 @@
 ;;    )
   )
 
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-;;(setq display-line-numbers-type relative)
+;; Style of line numbering, set to `relative' for relative number.
+(setq display-line-numbers-mode relative)

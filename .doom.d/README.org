@@ -2,9 +2,8 @@
 #+STARTUP: showeverything
 #+AUTHOR: Prutserdt
 
-
 #+CAPTION: Doom Emacs
-#+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align middle
+#+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align left
 [[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
 
 * Table Of Contents :toc:
@@ -15,12 +14,10 @@
 - [[#credits][Credits]]
 
 * About this config
-This is my personal Emacs config. Nothing much to see here. Just started this journey and learning along the way.
-The emacs files init.el, packages.el and config.el are generated from this README.org file by tangling (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it!
+This is my personal Doom Emacs config. Nothing much to see here. Just started this journey and learning Emacs and literate programming along the way. The emacs files init.el, packages.el and config.el are generated from this README.org file by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it!
 
 * init.el
-Small modifications from the default Doom Emacs settings.
-This file controls what Doom modules are enabled and what order they load in. Remember to tangle this file and then run 'doom sync' after modifying it!
+Small modifications from the default Doom Emacs settings. This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running 'doom sync' after modifying it!
 
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
@@ -87,7 +84,7 @@ This file controls what Doom modules are enabled and what order they load in. Re
        :config
        (default +bindings +smartparens))
 
-;; Other options that can be added to the README.org are listed below.
+;; Other options that that can be chosen are listed below.
 ;; Remember; do not chage this init.el and only change README.org
 
        ;; :completion
@@ -159,9 +156,8 @@ This file controls what Doom modules are enabled and what order they load in. Re
 #+end_src
 
 * packages.el
-In packages.el ....
+Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of init.el.
 
- To install a package with Doom you must declare them here and run 'doom sync' on the command line, then restart Emacs for the changes to take effect -- or use 'M-x doom/reload'.
 
 #+begin_src emacs-lisp :tangle packages.el
 
@@ -228,8 +224,7 @@ In packages.el ....
 #+end_src
 
 * config.el
-In config.el .....
-
+Some custom configuration is set here. For instance the relative numbers are set, which resets the current line to zero
 
 #+begin_src emacs-lisp :tangle config.el
 
@@ -252,9 +247,8 @@ In config.el .....
 ;;    )
   )
 
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-;;(setq display-line-numbers-type relative)
+;; Style of line numbering, set to `relative' for relative number.
+(setq display-line-numbers-mode relative)
 
 #+end_src
 

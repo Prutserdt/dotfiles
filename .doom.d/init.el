@@ -62,7 +62,7 @@
        :config
        (default +bindings +smartparens))
 
-;; Other options that can be added to the README.org are listed below.
+;; Other options that that can be chosen are listed below.
 ;; Remember; do not chage this init.el and only change README.org
 
        ;; :completion
