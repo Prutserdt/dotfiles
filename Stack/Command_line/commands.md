@@ -2577,6 +2577,9 @@ M: meta key: alt
 
 Je kunt emacs draaien als grafisch programma of in de terminal!
 
+figuur laten zien in org:
+org-toggle-inline-images
+
 
 ## Org mode en werken met Python
 

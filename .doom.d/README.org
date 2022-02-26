@@ -2,7 +2,11 @@
 #+STARTUP: showeverything
 #+AUTHOR: Prutserdt
 
- 
+
+#+CAPTION: Doom Emacs
+#+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align middle
+[[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
+
 * Table Of Contents :toc:
 - [[#about-this-config][About this config]]
 - [[#initel][init.el]]
