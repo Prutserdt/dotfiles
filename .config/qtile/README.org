@@ -6,7 +6,7 @@
   - [[#imports][Imports]]
   - [[#variables][Variables]]
   - [[#keybindings-qtile-specific][Keybindings: qtile specific]]
-  - [[#keybindings-audio][Keybindings: Audio]]
+  - [[#keybindings-audio-and-print][Keybindings: Audio and print]]
   - [[#keybindings-applications][Keybindings: Applications]]
   - [[#keybingings-text-files][Keybingings: Text files]]
   - [[#groups][Groups]]
@@ -154,19 +154,26 @@ keys = [
         ),
     #+END_SRC
 
-** Keybindings: Audio
+** Keybindings: Audio and print
 Hotkeys to control the volume and mute.
 
 #+BEGIN_SRC python :tangle "config.py"
     # Audio keys
     Key([], "XF86AudioRaiseVolume",
-        lazy.spawn("amixer -q set Master 5%+")
+        lazy.spawn("amixer -q set Master 5%+"),
+        desc="Raise the volume"
         ),
     Key([], "XF86AudioLowerVolume",
-        lazy.spawn("amixer -q set Master 5%-")
+        lazy.spawn("amixer -q set Master 5%-"),
+        desc="Lowering the volume"
         ),
     Key([], "XF86AudioMute",
-        lazy.spawn("amixer -q set Master toggle")
+        lazy.spawn("amixer -q set Master toggle"),
+        desc="Toggle mute/unmute"
+        ),
+    Key([], "Print",
+        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~//Downloads")),
+        desc="Draw area by mouse to copy from screen and save in Downloads"
         ),
 #+END_SRC
 
@@ -174,6 +181,7 @@ Hotkeys to control the volume and mute.
 The right super is exclusively used to open applications.
 
 #+BEGIN_SRC python :tangle "config.py"
+    # Open applications
     Key([modR], "b",
         lazy.spawn("brave"),
         desc="Launch Brave browser"
@@ -275,7 +283,7 @@ The right super alt key is used to open text files in Vim in the terminal. Might
         desc="Open in vim: .Xresources"
         ),
     Key([altR], "z",
-        lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),
+        lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),:
         desc="Open in vim: .zshrc"
         ),
 ]

@@ -121,15 +121,25 @@ keys = [
 
     # Audio keys
     Key([], "XF86AudioRaiseVolume",
-        lazy.spawn("amixer -q set Master 5%+")
+        lazy.spawn("amixer -q set Master 5%+"),
+        desc="Raise the volume"
         ),
     Key([], "XF86AudioLowerVolume",
-        lazy.spawn("amixer -q set Master 5%-")
+        lazy.spawn("amixer -q set Master 5%-"),
+        desc="Lowering the volume"
         ),
     Key([], "XF86AudioMute",
-        lazy.spawn("amixer -q set Master toggle")
+        lazy.spawn("amixer -q set Master toggle"),
+        desc="Toggle mute/unmute"
+        ),
+#    Key([], "XK_Print",
+    Key([], "Print",
+#        lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
+        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~//Downloads")),
+        desc="Draw area by mouse to copy from screen and save"
         ),
 
+    # Open applications
     Key([modR], "b",
         lazy.spawn("brave"),
         desc="Launch Brave browser"
@@ -162,6 +172,7 @@ keys = [
         lazy.spawn("thunar"),
         desc="Launch Thunar filemanager"
         ),
+    #TODO: modify the script because characters are not imported in emacs org mode
     Key([modR], "u",
         lazy.spawn(os.path.expanduser("~/.config/dmenuunicode.sh")),
         desc="Insert unicode, emojis :-)"
