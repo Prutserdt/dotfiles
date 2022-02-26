@@ -1,4 +1,4 @@
-#+TITLE: My configuration of emacs
+#+TITLE: My configuration of Emacs
 #+STARTUP: showeverything
 #+AUTHOR: Prutserdt
 
@@ -15,7 +15,7 @@
 
 * About this config
 This is my personal Emacs config. Nothing much to see here. Just started this journey and learning along the way.
-The init.el and ... files are generated from this README.org file in emacs by running =org-babel-tangle= (Alt-x and typing: =org-babel-tangle=) and run =doom sync= in the terminal to load it.
+The emacs files init.el, packages.el and config.el are generated from this README.org file by tangling (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it!
 
 * init.el
 Small modifications from the default Doom Emacs settings.
@@ -257,3 +257,7 @@ In config.el .....
 
 #+end_src
 
+
+*** Credits, my config is partially based on these
+- :book: https://gitlab.com/zzamboni/dot-doom
+- :book: https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
