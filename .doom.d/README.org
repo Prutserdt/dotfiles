@@ -14,10 +14,10 @@
 - [[#credits][Credits]]
 
 * About this config
-This is my personal Doom Emacs config. Nothing much to see here. Just started this journey and learning Emacs and literate programming along the way. The emacs files init.el, packages.el and config.el are generated from this README.org file by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it!
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files init.el, packages.el and config.el are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it!
 
 * init.el
-Small modifications from the default Doom Emacs settings. This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running 'doom sync' after modifying it!
+This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running 'doom sync' after modifying it! I made small modifications from the default Doom Emacs settings as adding Python and lsp.
 
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
@@ -58,11 +58,11 @@ Small modifications from the default Doom Emacs settings. This file controls wha
        vc                ; version-control and Emacs, sitting in a tree
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
+       syntax            ; tasing you for every semicolon you forget
 
        :tools
-       (eval +overlay)     ; run code, run (also, repls)
-       lookup              ; navigate your code and its documentation
+       (eval +overlay)   ; run code, run (also, repls)
+       lookup            ; navigate your code and its documentation
        lsp               ; M-x vscode
        magit             ; a git porcelain for Emacs
 
@@ -73,8 +73,9 @@ Small modifications from the default Doom Emacs settings. This file controls wha
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
        org               ; organize your plain life in plain text
-       (python +lsp +pyright)            ; beautiful is better than ugly
-       ;;python            ; beautiful is better than ugly
+       (python +lsp
+        +pyright)        ; beautiful is better than ugly
+       ;;python          ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
 
        :email
@@ -155,9 +156,10 @@ Small modifications from the default Doom Emacs settings. This file controls wha
 
 #+end_src
 
+#+RESULTS:
+
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of init.el.
-
 
 #+begin_src emacs-lisp :tangle packages.el
 
@@ -224,7 +226,7 @@ Here the packages are defined which should be installed. This is an addition to 
 #+end_src
 
 * config.el
-Some custom configuration is set here. For instance the relative numbers are set, which resets the current line to zero
+Some custom configuration is set here. For instance the relative numbers, which resets the current line to zero.
 
 #+begin_src emacs-lisp :tangle config.el
 
@@ -253,6 +255,6 @@ Some custom configuration is set here. For instance the relative numbers are set
 #+end_src
 
 * Credits
-My configuration of Doom Emacs is partially based on these ones:
+My configuration of Doom Emacs is partially based on these ones.
 - :book: https://gitlab.com/zzamboni/dot-doom
 - :book: https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu

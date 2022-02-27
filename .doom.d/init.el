@@ -36,11 +36,11 @@
        vc                ; version-control and Emacs, sitting in a tree
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
+       syntax            ; tasing you for every semicolon you forget
 
        :tools
-       (eval +overlay)     ; run code, run (also, repls)
-       lookup              ; navigate your code and its documentation
+       (eval +overlay)   ; run code, run (also, repls)
+       lookup            ; navigate your code and its documentation
        lsp               ; M-x vscode
        magit             ; a git porcelain for Emacs
 
@@ -51,8 +51,9 @@
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
        org               ; organize your plain life in plain text
-       (python +lsp +pyright)            ; beautiful is better than ugly
-       ;;python            ; beautiful is better than ugly
+       (python +lsp
+        +pyright)        ; beautiful is better than ugly
+       ;;python          ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
 
        :email
