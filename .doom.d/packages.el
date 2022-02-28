@@ -14,5 +14,6 @@
 (package! nose           :disable t)
 
 (package! mu4e)
+(package! powerline)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)

@@ -11,3 +11,6 @@
 ;; Style of line numbering, set to `relative' for relative number.
 (setq display-line-numbers-mode `relative)
   )
+
+(require 'powerline)
+(powerline-default-theme)
