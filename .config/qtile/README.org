@@ -33,11 +33,10 @@ from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
-#from libqtile.utils import guess_terminal
 #+END_SRC
 
 ** Variables
-Some variables are declared. Three modification keys whicha are used for keybindings and my terminal program.
+Some variables are declared. Three modification keys whicha are used for keybindings and terminal program.
 
 #+BEGIN_SRC python :tangle "config.py"
 modL = "mod4"
@@ -45,9 +44,8 @@ modR = "mod3"
 altR = "mod5"
 
 terminal = "alacritty"
-termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
-Emacs="emacsclient -c -a 'emacs' "         #emacs openen grafisch
-
+termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
+Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 #+END_SRC
 
 ** Keybindings: qtile specific
@@ -232,8 +230,8 @@ The right super is exclusively used to open applications.
 
 
 ** Keybingings: Text files
-The right super alt key is used to open text files in Vim in the terminal. #TODO I'm in the middel of changing from vim to emacs....
- :tangle "config.py"
+The right super alt key is used to open text files in Vim in the terminal. #TODO I'm in the middle of changing from vim to emacs....
+
 #+BEGIN_SRC python :tangle "config.py"
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
@@ -294,7 +292,6 @@ The right super alt key is used to open text files in Vim in the terminal. #TODO
         ),
 ]
 #+END_SRC
-
 
 ** Groups
 Here the workspaces are described, which are called Groups in qtile.
@@ -429,7 +426,6 @@ A startup script is ran after startup of qtile and the window swallowing is set 
 def start_once():
     home = os.path.expanduser("~")
     subprocess.call([home + "/.config/qtile/autostart.sh"])
-
 
 # swallow window when starting application from terminal
 @hook.subscribe.client_new
