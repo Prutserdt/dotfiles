@@ -13,5 +13,6 @@
 ;; Disable the nose package, because is not maintained and giving :lang python error
 (package! nose           :disable t)
 
+(package! mu4e)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)

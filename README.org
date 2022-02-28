@@ -3,7 +3,7 @@
 
 Here I store the dotfiles of my GNU/Linux system plus some other stuff.
 
-My config of qtile, a hackable tiling window manager written in python, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/qtile][here]]. My build of dwm, a dynamic window manager, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm][here]]. This is my typical setup (qtile/dwm), minimal and boring:
+My config of qtile, a hackable tiling window manager written in Python, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/qtile][here]]. My build of dwm, a dynamic window manager, can be found [[https://github.com/Prutserdt/dotfiles/tree/master/.config/suckless/dwm][here]]. This is my typical setup (qtile/dwm), minimal and boring:
 
 #+CAPTION: My windowmanager
 #+ATTR_HTML: :alt windowmanager :title windowmanager :align left

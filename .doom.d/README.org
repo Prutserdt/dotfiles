@@ -66,8 +66,6 @@ This file controls what Doom modules are enabled and what order they load in. Re
        lsp               ; M-x vscode
        magit             ; a git porcelain for Emacs
 
-;;       :os
-;;       (:if IS-MAC macos)  ; improve compatibility with macOS
 
        :lang
        emacs-lisp        ; drown in parentheses
@@ -85,8 +83,13 @@ This file controls what Doom modules are enabled and what order they load in. Re
        :config
        (default +bindings +smartparens))
 
-;; Other options that that can be chosen are listed below.
-;; Remember; do not chage this init.el and only change README.org
+#+end_src
+
+The folowwing could be added to the packages.el
+ Other options that that can be chosen are listed below.
+ Remember; do not chage this init.el and only change README.org
+
+#+begin_src emacs-lisp
 
        ;; :completion
        ;;helm              ; the *other* search engine for love and life
@@ -151,10 +154,14 @@ This file controls what Doom modules are enabled and what order they load in. Re
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
+       ;; :os
+       ;;(:if IS-MAC macos)  ; improve compatibility with macOS
+
        ;; :config
        ;;literate
 
 #+end_src
+
 
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of init.el.
@@ -176,6 +183,7 @@ Here the packages are defined which should be installed. This is an addition to 
 ;; Disable the nose package, because is not maintained and giving :lang python error
 (package! nose           :disable t)
 
+(package! mu4e)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 
