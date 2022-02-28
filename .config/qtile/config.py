@@ -14,6 +14,7 @@ altR = "mod5"
 
 terminal = "alacritty"
 termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
+Emacs="emacsclient -c -a 'emacs' "         #emacs openen grafisch
 
 keys = [
     # Switch between windows
@@ -132,11 +133,9 @@ keys = [
         lazy.spawn("amixer -q set Master toggle"),
         desc="Toggle mute/unmute"
         ),
-#    Key([], "XK_Print",
     Key([], "Print",
-#        lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
         lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~//Downloads")),
-        desc="Draw area by mouse to copy from screen and save"
+        desc="Draw area by mouse to copy from screen and save in Downloads"
         ),
 
     # Open applications
@@ -192,8 +191,8 @@ keys = [
         desc="Open in vim: .bashrc"
         ),
     Key([altR], "c",
-        lazy.spawn(termVim +os.path.expanduser("~/Stack/Command_line/commands.md")),
-        desc="Open in vim: commands.md"
+        lazy.spawn(Emacs +os.path.expanduser("~/Stack/Command_line/commands.org")),
+        desc="Open in Emacs: commands.org"
         ),
     Key([altR], "u",
         lazy.spawn(termVim +os.path.expanduser("~/.config/urls")),

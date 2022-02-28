@@ -1,6 +1,10 @@
 #+TITLE: Configuration of qtile
 #+AUTHOR: Prutserdt
 
+#+CAPTION: Qtile
+#+ATTR_HTML: :alt Qtile :title Qtile :align left
+https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/QtileLogo.png
+
 * Table of contents :toc:
 - [[#qtile-and-my-config][Qtile and my config]]
   - [[#imports][Imports]]
@@ -42,6 +46,7 @@ altR = "mod5"
 
 terminal = "alacritty"
 termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
+Emacs="emacsclient -c -a 'emacs' "         #emacs openen grafisch
 
 #+END_SRC
 
@@ -225,8 +230,9 @@ The right super is exclusively used to open applications.
         ),
 #+END_SRC
 
+
 ** Keybingings: Text files
-The right super alt key is used to open text files in Vim in the terminal. Might change it to emacs in the future...
+The right super alt key is used to open text files in Vim in the terminal. #TODO I'm in the middel of changing from vim to emacs....
  :tangle "config.py"
 #+BEGIN_SRC python :tangle "config.py"
     Key([altR], "a",
@@ -239,8 +245,8 @@ The right super alt key is used to open text files in Vim in the terminal. Might
         desc="Open in vim: .bashrc"
         ),
     Key([altR], "c",
-        lazy.spawn(termVim +os.path.expanduser("~/Stack/Command_line/commands.md")),
-        desc="Open in vim: commands.md"
+        lazy.spawn(Emacs +os.path.expanduser("~/Stack/Command_line/commands.org")),
+        desc="Open in Emacs: commands.org"
         ),
     Key([altR], "u",
         lazy.spawn(termVim +os.path.expanduser("~/.config/urls")),
@@ -283,11 +289,12 @@ The right super alt key is used to open text files in Vim in the terminal. Might
         desc="Open in vim: .Xresources"
         ),
     Key([altR], "z",
-        lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),:
+        lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),
         desc="Open in vim: .zshrc"
         ),
 ]
 #+END_SRC
+
 
 ** Groups
 Here the workspaces are described, which are called Groups in qtile.
