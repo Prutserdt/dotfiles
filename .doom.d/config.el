@@ -8,14 +8,6 @@
   :ensure t
   :config
 
-;;  (setq evil-want-keybinding nil)
-
-;;  (use-package powerline-evil
-;;    :ensure t
-;;    :config
-;;    (powerline-evil-vim-color-theme)
-;;    )
-  )
-
 ;; Style of line numbering, set to `relative' for relative number.
-(setq display-line-numbers-mode relative)
+(setq display-line-numbers-mode `relative)
+  )

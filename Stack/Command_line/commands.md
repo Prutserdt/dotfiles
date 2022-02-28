@@ -2577,6 +2577,9 @@ M: meta key: alt
 
 Je kunt emacs draaien als grafisch programma of in de terminal!
 
+Toevoegen link/hyperlink: 
+C-c C-l
+
 figuur laten zien in org:
 org-toggle-inline-images
 

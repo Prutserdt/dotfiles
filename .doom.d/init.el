@@ -44,8 +44,8 @@
        lsp               ; M-x vscode
        magit             ; a git porcelain for Emacs
 
-       :os
-       (:if IS-MAC macos)  ; improve compatibility with macOS
+;;       :os
+;;       (:if IS-MAC macos)  ; improve compatibility with macOS
 
        :lang
        emacs-lisp        ; drown in parentheses
@@ -53,10 +53,10 @@
        org               ; organize your plain life in plain text
        (python +lsp
         +pyright)        ; beautiful is better than ugly
-       ;;python          ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
 
        :email
+       (mu4e +org +gmail)
 
        :app
 

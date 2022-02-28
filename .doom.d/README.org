@@ -17,7 +17,7 @@
 This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it!
 
 * init.el
-This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running 'doom sync' after modifying it! I made small modifications from the default Doom Emacs settings as adding Python and lsp.
+This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =doom sync= after modifying it! I made small modifications from the default Doom Emacs settings as adding Python and lsp.
 
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
@@ -66,8 +66,8 @@ This file controls what Doom modules are enabled and what order they load in. Re
        lsp               ; M-x vscode
        magit             ; a git porcelain for Emacs
 
-       :os
-       (:if IS-MAC macos)  ; improve compatibility with macOS
+;;       :os
+;;       (:if IS-MAC macos)  ; improve compatibility with macOS
 
        :lang
        emacs-lisp        ; drown in parentheses
@@ -75,10 +75,10 @@ This file controls what Doom modules are enabled and what order they load in. Re
        org               ; organize your plain life in plain text
        (python +lsp
         +pyright)        ; beautiful is better than ugly
-       ;;python          ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
 
        :email
+       (mu4e +org +gmail)
 
        :app
 
@@ -156,8 +156,6 @@ This file controls what Doom modules are enabled and what order they load in. Re
 
 #+end_src
 
-#+RESULTS:
-
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of init.el.
 
@@ -169,59 +167,17 @@ Here the packages are defined which should be installed. This is an addition to 
 ;; packages.el directly and only modify the REAME.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking :-)
 
-;;; $DOOMDIR/packages.el
-
-;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
-;(package! some-package)
-
-;; To install a package directly from a remote git repo, you must specify a
-;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
-;; https://github.com/raxod502/straight.el#the-recipe-format
-;(package! another-package
-;  :recipe (:host github :repo "username/repo"))
-
-;; If the package you are trying to install does not contain a PACKAGENAME.el
-;; file, or is located in a subdirectory of the repo, you'll need to specify
-;; `:files' in the `:recipe':
-;(package! this-package
-;  :recipe (:host github :repo "username/repo"
-;           :files ("some-file.el" "src/lisp/*.el")))
-
-;; If you'd like to disable a package included with Doom, you can do so here
-;; with the `:disable' property:
-;(package! builtin-package :disable t)
-
-;; You can override the recipe of a built in package without having to specify
-;; all the properties for `:recipe'. These will inherit the rest of its recipe
-;; from Doom or MELPA/ELPA/Emacsmirror:
-;(package! builtin-package :recipe (:nonrecursive t))
-;(package! builtin-package-2 :recipe (:repo "myfork/package"))
-
-;; Specify a `:branch' to install a package from a particular branch or tag.
-;; This is required for some packages whose default branch isn't 'master' (which
-;; our package manager can't deal with; see raxod502/straight.el#279)
-;(package! builtin-package :recipe (:branch "develop"))
-
-;; Use `:pin' to specify a particular commit to install.
-;(package! builtin-package :pin "1a2b3c4d5e")
-
-;; Doom's packages are pinned to a specific commit and updated from release to
-;; release. The `unpin!' macro allows you to unpin single packages...
-;(unpin! pinned-package)
-;; ...or multiple packages
-;(unpin! pinned-package another-pinned-package)
-;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
-;(unpin! t)
-
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
 (package-refresh-contents)
 (package-initialize)
 
-;; nose package is not maintained and giving :lang python error, disabled
+;; Disable the nose package, because is not maintained and giving :lang python error
 (package! nose           :disable t)
 
+;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;(package! some-package)
 
 #+end_src
 
@@ -240,17 +196,9 @@ Some custom configuration is set here. For instance the relative numbers, which 
   :ensure t
   :config
 
-;;  (setq evil-want-keybinding nil)
-
-;;  (use-package powerline-evil
-;;    :ensure t
-;;    :config
-;;    (powerline-evil-vim-color-theme)
-;;    )
-  )
-
 ;; Style of line numbering, set to `relative' for relative number.
-(setq display-line-numbers-mode relative)
+(setq display-line-numbers-mode `relative)
+  )
 
 #+end_src
 
