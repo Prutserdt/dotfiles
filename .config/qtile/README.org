@@ -3,7 +3,7 @@
 
 #+CAPTION: Qtile
 #+ATTR_HTML: :alt Qtile :title Qtile :align left
-https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/QtileLogo.png
+[[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/QtileLogo.png]]
 
 * Table of contents :toc:
 - [[#qtile-and-my-config][Qtile and my config]]
