@@ -2,12 +2,15 @@
 #+STARTUP: showeverything
 #+AUTHOR: Prutserdt
 
+#+begin_export ascii
           _     _                    _        _      _
          | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____ 
          | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
          | |___| | | | | |_| |>  <  | |_| |  | | (__|   <\__ \
          |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
                                           Created by Prutserdt
+#+end_export
+
 * Table of content :toc:
 - [[#command-line-tricks][Command line tricks]]
   - [[#zoeken-van-een-textstring-in-meerder-files-met-grep][Zoeken van een textstring in meerder files met grep]]
@@ -2631,11 +2634,11 @@ figuur laten zien in org:
 org-toggle-inline-images
 
 
-## Org mode en werken met Python
+*** Org mode en werken met Python
 
 Kies results types om code block output te geven:
-#+begin_src python :results output
-#+begin_src python :results values
+;;#+begin_src python :results output
+;;#+begin_src python :results values
 
 Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
 
@@ -2650,7 +2653,6 @@ M-x python-shell-send-region
 
 init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
 Daarna doomsync uitgevoerd
-
 
 
 * Distros

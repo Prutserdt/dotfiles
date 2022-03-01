@@ -48,4 +48,8 @@
        (mu4e +org +gmail)
        :app
        :config
-       (default +bindings +smartparens))
+       (default +bindings +smartparens)
+
+       )
+;; TODO: I want to add python to the default sourceblock (insert, <p TAB)
+;;       Doesn't work properly. It is part of the list but <p tab doesn't work in org mode...

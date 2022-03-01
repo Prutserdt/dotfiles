@@ -1,12 +1,13 @@
 #+TITLE: My configuration of Emacs
 #+STARTUP: showeverything
+#+STARTUP: inlineimages
 #+AUTHOR: Prutserdt
 
 #+CAPTION: Doom Emacs
 #+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align left
 [[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
 
-* Table Of Contents :toc:
+* /home/icefly/.doom.d/Table Of Contents :toc:
 - [[#about-this-config][About this config]]
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
@@ -36,7 +37,7 @@ This file controls what Doom modules are enabled and what order they load in. Re
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
        ;;(emoji +unicode)  ; ð
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       ;;modeline          ; snazzy, Atom-inspired modeline, plus API
+       modeline          ; snazzy, Atom-inspired modeline, plus API
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        vc-gutter         ; vcs diff in the fringe
@@ -70,9 +71,13 @@ This file controls what Doom modules are enabled and what order they load in. Re
        (mu4e +org +gmail)
        :app
        :config
-       (default +bindings +smartparens))
+       (default +bindings +smartparens)
 
+       )
+;; TODO: I want to add python to the default sourceblock (insert, <p TAB)
+;;       Doesn't work properly. It is part of the list but <p tab doesn't work in org mode...
 #+end_src
+
 
 The folowing could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it.
 
@@ -149,7 +154,6 @@ The folowing could be added to the init.el part that is listed above. Just copy/
 
 #+end_src
 
-
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of init.el.
 
@@ -196,8 +200,12 @@ Some custom configuration is set here. For instance the relative numbers, which 
 (setq display-line-numbers-mode `relative)
   )
 
-(require 'powerline)
-(powerline-default-theme)
+;;(with-eval-after-load 'org
+;;  (add-to-list 'org-structure-template-alist '("p" . "python")))
+
+;; TODO: powerline, doesn't work...?
+;;(require 'powerline)
+;;(powerline-default-theme)
 #+end_src
 
 * Credits

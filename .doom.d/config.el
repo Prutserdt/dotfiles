@@ -12,5 +12,9 @@
 (setq display-line-numbers-mode `relative)
   )
 
-(require 'powerline)
-(powerline-default-theme)
+(with-eval-after-load 'org
+  (add-to-list 'org-structure-template-alist '("p" . "python")))
+
+;; TODO: powerline, doesn't work...?
+;;(require 'powerline)
+;;(powerline-default-theme)
