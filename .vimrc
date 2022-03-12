@@ -21,6 +21,8 @@ Plug 'neoclide/coc.nvim', {'branch': ',()release'} " Conquer of Completion plugi
 " pyright static type checker for python :CocInstall coc-python  :CocInstall py-right
 Plug 'joshdick/onedark.vim'           " Color scheme
 Plug 'machakann/vim-highlightedyank/' " Highlight yanked text
+Plug 'miyakogi/seiya.vim'             " Make transparency work in VIM
+
 call plug#end()                       " End of the plugged section
 """"""""""""""""""""""""""""""  Configuration of the statusbar plugin lightline
 let g:lightline = {'colorscheme' : 'onedark'}
@@ -63,6 +65,9 @@ set formatoptions=c,q,r,t " formatting sequence:
                           " t Auto-wrap text using textwidth (does not apply to comments)
 set ruler                 " Show the line and column number of the cursor position
 set background=dark       " dark/white: use colors that look good on a dark/white
+
+"Plugin seiya to enable transparency
+let g:seiya_auto_enable=1
 
 colorscheme onedark
 

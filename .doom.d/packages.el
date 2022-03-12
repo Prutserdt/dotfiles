@@ -11,9 +11,14 @@
 (package-initialize)
 
 ;; Disable the nose package, because is not maintained and giving :lang python error
-(package! nose           :disable t)
+(package! nose :disable t)
 
-(package! mu4e)
-(package! powerline)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
-;(package! some-package)
+(package! mu4e)
+;; FIXME: ik wil dat bij column 80 een grijze lijn komt te staan
+;;       hetzelfde als ik in Vim heb staan (colorcolumn 80)
+;;(package! column-marker)
+;;(require 'column-marker)
+
+;; Help finding the cursor
+(package! beacon)

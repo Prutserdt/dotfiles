@@ -12,9 +12,9 @@
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;(emoji +unicode)  ; ð
+       (emoji +unicode)  ; ð
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       ;;modeline          ; snazzy, Atom-inspired modeline, plus API
+       modeline          ; snazzy, Atom-inspired modeline, plus API
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        vc-gutter         ; vcs diff in the fringe
@@ -40,12 +40,12 @@
        :lang
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
-       org               ; organize your plain life in plain text
+       (org +pretty)     ; organize your plain life in plain text
        (python +lsp
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        :email
-       (mu4e +org +gmail)
+       (mu4e +org +gmail); TODO: this is not set up yet....
        :app
        :config
        (default +bindings +smartparens)

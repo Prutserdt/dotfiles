@@ -1,3 +1,8 @@
+# NOTE This file is generated from a README.org file. Do not alter this
+# config.py file directly and only modify the REAME.org file, then Alt-x and type:
+# 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
+# Happy hacking :-)
+
 import psutil
 import subprocess
 import os
@@ -6,15 +11,14 @@ from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
-#from libqtile.utils import guess_terminal
 
 modL = "mod4"
 modR = "mod3"
 altR = "mod5"
 
 terminal = "alacritty"
-termVim="alacritty -e vim " # Open vim in alacritty (used for altR hotkeys)
-Emacs="emacsclient -c -a 'emacs' "         #emacs openen grafisch
+termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
+Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
 keys = [
     # Switch between windows
@@ -171,15 +175,19 @@ keys = [
         lazy.spawn("thunar"),
         desc="Launch Thunar filemanager"
         ),
-    #TODO: modify the script because characters are not imported in emacs org mode
+    #FIXME: modify the script because characters are not imported in emacs org mode
     Key([modR], "u",
         lazy.spawn(os.path.expanduser("~/.config/dmenuunicode.sh")),
         desc="Insert unicode, emojis :-)"
         ),
     Key([modR], "w",
-        lazy.spawn("wing-101-8"),
-        desc="Launch Wing 101 Python IDE"
+        lazy.spawn(os.environ["HOME"]+"/.config/dmenuwallpaper.sh"),
+        desc="Change wallpapers and select in dmenu"
         ),
+#    Key([modR], "w",
+#        lazy.spawn("wing-101-8"),
+#        desc="Launch Wing 101 Python IDE"
+#        ),
 
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
@@ -357,7 +365,6 @@ auto_minimize = True # handy for steam games
 def start_once():
     home = os.path.expanduser("~")
     subprocess.call([home + "/.config/qtile/autostart.sh"])
-
 
 # swallow window when starting application from terminal
 @hook.subscribe.client_new

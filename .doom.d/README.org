@@ -15,7 +15,7 @@
 - [[#credits][Credits]]
 
 * About this config
-This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it!
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it! (or M-x doom-reload, or SPC h r r within emacs)
 
 * init.el
 This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =doom sync= after modifying it! I made small modifications from the default Doom Emacs settings as adding Python and lsp.
@@ -35,7 +35,7 @@ This file controls what Doom modules are enabled and what order they load in. Re
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;(emoji +unicode)  ; ð
+       (emoji +unicode)  ; ð
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        modeline          ; snazzy, Atom-inspired modeline, plus API
        ophints           ; highlight the region an operation acts on
@@ -63,12 +63,12 @@ This file controls what Doom modules are enabled and what order they load in. Re
        :lang
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
-       org               ; organize your plain life in plain text
+       (org +pretty)     ; organize your plain life in plain text
        (python +lsp
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        :email
-       (mu4e +org +gmail)
+       (mu4e +org +gmail); TODO: this is not set up yet....
        :app
        :config
        (default +bindings +smartparens)
@@ -77,7 +77,6 @@ This file controls what Doom modules are enabled and what order they load in. Re
 ;; TODO: I want to add python to the default sourceblock (insert, <p TAB)
 ;;       Doesn't work properly. It is part of the list but <p tab doesn't work in org mode...
 #+end_src
-
 
 The folowing could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it.
 
@@ -172,17 +171,23 @@ Here the packages are defined which should be installed. This is an addition to 
 (package-initialize)
 
 ;; Disable the nose package, because is not maintained and giving :lang python error
-(package! nose           :disable t)
+(package! nose :disable t)
 
-(package! mu4e)
-(package! powerline)
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
-;(package! some-package)
+(package! mu4e)
+;; FIXME: ik wil dat bij column 80 een grijze lijn komt te staan
+;;       hetzelfde als ik in Vim heb staan (colorcolumn 80)
+;;(package! column-marker)
+;;(require 'column-marker)
+
+;; Help finding the cursor
+(package! beacon)
 
 #+end_src
 
 * config.el
-Some custom configuration is set here. For instance the relative numbers, which resets the current line to zero.
+Thee custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
+, which resets the current selected line to zero and adding an image to the splash screen.
 
 #+begin_src emacs-lisp :tangle config.el
 
@@ -195,17 +200,85 @@ Some custom configuration is set here. For instance the relative numbers, which 
 (use-package evil
   :ensure t
   :config
+)
 
 ;; Style of line numbering, set to `relative' for relative number.
-(setq display-line-numbers-mode `relative)
-  )
+;; Or keycord: SPC t l, or SPC u SPC t l
+;; FIXME: dit werkt niet na een reboot. vreemd...
+;;(setq display-line-numbers-mode `relative)
+;;(setq display-line-numbers-mode relative)
+;;(setq doom-line-numbers-style 'relative)
+;;(setq doom-line-numbers-style 'relative)
+;;(setq display-line-numbers-mode)
+(global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
 
-;;(with-eval-after-load 'org
-;;  (add-to-list 'org-structure-template-alist '("p" . "python")))
+;; Restoring old Y behavior of VIM (yank the whole line)
+(setq! evil-want-Y-yank-to-eol nil)
 
-;; TODO: powerline, doesn't work...?
-;;(require 'powerline)
-;;(powerline-default-theme)
+;; Make the normal/insert/visual states more apparent by changing cursor:
+(setq evil-normal-state-cursor '(box "tomato")
+      evil-insert-state-cursor '(bar "white")
+      evil-visual-state-cursor '(hollow "orange"))
+
+;; Nice bullets instead of boring *. Requires (org +pretty)
+(setq     org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+
+;; FIXME: ik wil een ander font instellen. Hack font geeft problemen
+;; LIJKT het. Na een reboot is de tekst onleesbaar klein wat DENK
+;; ik komt door onderstaande fontinstelling. Even kijken hoe ik dit
+;; ga oplossen...
+;;(set-frame-font "Hack 12" nil t)
+
+;; Add closing parenthesis of [{"'
+(show-paren-mode 1)
+
+;; Add this image to my splash screen
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+
+;; Change the theme (other pleasing ones: moonlight,)
+;;(setq doom-theme 'doom-moonlight)
+;;(setq doom-theme 'doom-vibrant)
+;;(setq doom-theme 'doom-material-dark)
+;;(setq doom-theme 'doom-acario-dark) ;; donker, hoog contrast
+(setq doom-theme 'doom-xcode)
+
+;; Transparency... werkt niet..!!
+(set-frame-parameter (selected-frame) 'alpha '(95 90))
+(add-to-list 'default-frame-alist '(alpha 95 90))
+
+;; FIXME: ik wil dat flash highligting langer duurd, bijv 1 sec
+;;(setq hl-line-mode  5)
+
+;; Help to find the cursor by beacon blink
+(setq beacon-mode 1)
+(setq beacon-blink-duration 3)
+
+;; use mu4e for e-mail in emacs
+(setq mail-user-agent 'mu4e-user-agent)
+(set-email-account!
+ "transip"
+ '((mu4e-sent-folder       . "/transip/Sent Mail")
+   (mu4e-trash-folder      . "/transip/Bin")
+   (smtpmail-smtp-user     . "walter@elffrink.nl"))
+ t)
+(setq mu4e-get-mail-command "mbsync transip"
+      ;; get emails and index every 5 minutes
+      mu4e-update-interval 300
+	  ;; send emails with format=flowed
+	  mu4e-compose-format-flowed t
+	  ;; no need to run cleanup after indexing for gmail
+	  mu4e-index-cleanup nil
+	  mu4e-index-lazy-check t
+      ;; more sensible date format
+      mu4e-headers-date-format "%d.%m.%y")
+;; FIXME: smtpmail werkt nog niet, onderstaande verbeteren....
+;; tell message-mode how to send mail
+(setq message-send-mail-function 'smtpmail-send-it)
+;; if our mail server lives at smtp.example.org; if you have a local
+;; mail-server, simply use 'localhost' here.
+(setq smtpmail-smtp-server "smtp.transip.email")
+
 #+end_src
 
 * Credits
