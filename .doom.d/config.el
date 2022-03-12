@@ -31,12 +31,6 @@
 ;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq     org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
-;; FIXME: ik wil een ander font instellen. Hack font geeft problemen
-;; LIJKT het. Na een reboot is de tekst onleesbaar klein wat DENK
-;; ik komt door onderstaande fontinstelling. Even kijken hoe ik dit
-;; ga oplossen...
-;;(set-frame-font "Hack 12" nil t)
-
 ;; Add closing parenthesis of [{"'
 (show-paren-mode 1)
 
@@ -53,9 +47,6 @@
 ;; Transparency... werkt niet..!!
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
-
-;; FIXME: ik wil dat flash highligting langer duurd, bijv 1 sec
-;;(setq hl-line-mode  5)
 
 ;; Help to find the cursor by beacon blink
 (setq beacon-mode 1)

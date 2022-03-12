@@ -15,10 +15,6 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 (package! mu4e)
-;; FIXME: ik wil dat bij column 80 een grijze lijn komt te staan
-;;       hetzelfde als ik in Vim heb staan (colorcolumn 80)
-;;(package! column-marker)
-;;(require 'column-marker)
 
 ;; Help finding the cursor
 (package! beacon)

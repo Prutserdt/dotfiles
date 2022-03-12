@@ -7,11 +7,17 @@
 #+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align left
 [[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
 
-* /home/icefly/.doom.d/Table Of Contents :toc:
+* Table Of Contents :toc:
 - [[#about-this-config][About this config]]
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
+- [[#todos][TODOs]]
+  - [[#python-sourceblock][Python sourceblock]]
+  - [[#add-grey-line-at-the-80-column][Add grey line at the 80 column]]
+  - [[#change-font][Change font]]
+  - [[#mu4e][MU4e]]
+  - [[#flash-highlighting-yanked-text][Flash highlighting yanked text]]
 - [[#credits][Credits]]
 
 * About this config
@@ -74,11 +80,9 @@ This file controls what Doom modules are enabled and what order they load in. Re
        (default +bindings +smartparens)
 
        )
-;; TODO: I want to add python to the default sourceblock (insert, <p TAB)
-;;       Doesn't work properly. It is part of the list but <p tab doesn't work in org mode...
 #+end_src
 
-The folowing could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it.
+The folowing options could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it.
 
 #+begin_src emacs-lisp
 
@@ -175,10 +179,6 @@ Here the packages are defined which should be installed. This is an addition to 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 (package! mu4e)
-;; FIXME: ik wil dat bij column 80 een grijze lijn komt te staan
-;;       hetzelfde als ik in Vim heb staan (colorcolumn 80)
-;;(package! column-marker)
-;;(require 'column-marker)
 
 ;; Help finding the cursor
 (package! beacon)
@@ -224,12 +224,6 @@ Thee custom configurations are set here. For instance theme settings, image to t
 ;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq     org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
-;; FIXME: ik wil een ander font instellen. Hack font geeft problemen
-;; LIJKT het. Na een reboot is de tekst onleesbaar klein wat DENK
-;; ik komt door onderstaande fontinstelling. Even kijken hoe ik dit
-;; ga oplossen...
-;;(set-frame-font "Hack 12" nil t)
-
 ;; Add closing parenthesis of [{"'
 (show-paren-mode 1)
 
@@ -246,9 +240,6 @@ Thee custom configurations are set here. For instance theme settings, image to t
 ;; Transparency... werkt niet..!!
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
-
-;; FIXME: ik wil dat flash highligting langer duurd, bijv 1 sec
-;;(setq hl-line-mode  5)
 
 ;; Help to find the cursor by beacon blink
 (setq beacon-mode 1)
@@ -280,6 +271,30 @@ Thee custom configurations are set here. For instance theme settings, image to t
 (setq smtpmail-smtp-server "smtp.transip.email")
 
 #+end_src
+
+* TODOs
+Here is a list of things I want to improve in my Doom Emacs configuration.
+
+** Python sourceblock
+I want to add a Python sourceblock by (insert, <p TAB) and also add =:tangle *.py=.
+
+** Add grey line at the 80 column
+Ik wil dat bij column 80 een grijze lijn komt te staan vergelijkbaar als ik in Vim heb staan (colorcolumn 80)
+Het volgende heb ik toegevoegd aan config.el en werkt niet:
+=(package! column-marker)=
+=(require 'column-marker)=
+
+** Change font
+Ik wil een ander font instellen. Hack font geeft problemen LIJKT het. Na een reboot is de tekst onleesbaar klein wat DENKik komt door onderstaande fontinstelling. Even kijken hoe ik dit
+ga oplossen. Onderstaande in config.el wert niet:
+=(set-frame-font "Hack 12" nil t)=
+
+** MU4e
+Is not yet properly configured.
+
+** Flash highlighting yanked text
+This is already out of the box in doom emacs. I want the flashing to last longer, about 1 second. The following line adition to config.el does NOT work:
+=(setq hl-line-mode  5)=
 
 * Credits
 My configuration of Doom Emacs is partially based on these ones.
