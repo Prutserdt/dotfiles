@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 
 ;; NOTE This file is generated from the README.org file. Do not alter this
-;; packages.el directly and only modify the REAME.org file then Alt-x and type:
+;; packages.el fle directly and only modify the REAME.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking :-)
 
 (require 'package)
@@ -10,10 +10,10 @@
 (package-refresh-contents)
 (package-initialize)
 
-;; Disable the nose package, because is not maintained and giving :lang python error
+;; Disable the nose package. Not maintained and leading to :lang python error
 (package! nose :disable t)
 
-;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;; The email package MU for emacs
 (package! mu4e)
 
 ;; Help finding the cursor

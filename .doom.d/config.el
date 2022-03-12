@@ -37,11 +37,10 @@
 ;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 
-;; Change the theme (other pleasing ones: moonlight,)
+;; Change the theme
 ;;(setq doom-theme 'doom-moonlight)
 ;;(setq doom-theme 'doom-vibrant)
 ;;(setq doom-theme 'doom-material-dark)
-;;(setq doom-theme 'doom-acario-dark) ;; donker, hoog contrast
 (setq doom-theme 'doom-xcode)
 
 ;; Transparency... werkt niet..!!

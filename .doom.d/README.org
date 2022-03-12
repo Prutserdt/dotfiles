@@ -24,7 +24,7 @@
 This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it! (or M-x doom-reload, or SPC h r r within emacs)
 
 * init.el
-This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =doom sync= after modifying it! I made small modifications from the default Doom Emacs settings as adding Python and lsp.
+This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =doom sync= after modifying it!
 
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
@@ -78,7 +78,6 @@ This file controls what Doom modules are enabled and what order they load in. Re
        :app
        :config
        (default +bindings +smartparens)
-
        )
 #+end_src
 
@@ -90,7 +89,6 @@ The folowing options could be added to the init.el part that is listed above. Ju
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
-
        ;; :lang
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -135,12 +133,10 @@ The folowing options could be added to the init.el part that is listed above. Ju
        ;;web               ; the tubes
        ;;yaml              ; JSON, but readable
        ;;zig               ; C, but simpler
-
        ;; :email
        ;;(mu4e +org +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
-
        ;; :app
        ;;calendar
        ;;emms
@@ -148,10 +144,8 @@ The folowing options could be added to the init.el part that is listed above. Ju
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
-
        ;; :os
        ;;(:if IS-MAC macos)  ; improve compatibility with macOS
-
        ;; :config
        ;;literate
 
@@ -165,7 +159,7 @@ Here the packages are defined which should be installed. This is an addition to 
 ;; -*- no-byte-compile: t; -*-
 
 ;; NOTE This file is generated from the README.org file. Do not alter this
-;; packages.el directly and only modify the REAME.org file then Alt-x and type:
+;; packages.el fle directly and only modify the REAME.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking :-)
 
 (require 'package)
@@ -174,10 +168,10 @@ Here the packages are defined which should be installed. This is an addition to 
 (package-refresh-contents)
 (package-initialize)
 
-;; Disable the nose package, because is not maintained and giving :lang python error
+;; Disable the nose package. Not maintained and leading to :lang python error
 (package! nose :disable t)
 
-;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;; The email package MU for emacs
 (package! mu4e)
 
 ;; Help finding the cursor
@@ -186,8 +180,7 @@ Here the packages are defined which should be installed. This is an addition to 
 #+end_src
 
 * config.el
-Thee custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
-, which resets the current selected line to zero and adding an image to the splash screen.
+The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
 
 #+begin_src emacs-lisp :tangle config.el
 
@@ -230,11 +223,10 @@ Thee custom configurations are set here. For instance theme settings, image to t
 ;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 
-;; Change the theme (other pleasing ones: moonlight,)
+;; Change the theme
 ;;(setq doom-theme 'doom-moonlight)
 ;;(setq doom-theme 'doom-vibrant)
 ;;(setq doom-theme 'doom-material-dark)
-;;(setq doom-theme 'doom-acario-dark) ;; donker, hoog contrast
 (setq doom-theme 'doom-xcode)
 
 ;; Transparency... werkt niet..!!

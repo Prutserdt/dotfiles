@@ -49,5 +49,4 @@
        :app
        :config
        (default +bindings +smartparens)
-
        )
