@@ -1,7 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter this
-;; packages.el fle directly and only modify the REAME.org file then Alt-x and type:
+;; NOTE This file is generated from the README.org file. Do not alter the
+;; packages.el file directly and only modify the README.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking :-)
 
 (require 'package)

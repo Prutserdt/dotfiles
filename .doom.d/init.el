@@ -1,7 +1,7 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter this
-;; init.el directly and only modify the REAME.org file then Alt-x and type:
+;; NOTE This file is generated from the README.org file. Do not alter the
+;; init.el directly and only modify the README.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
 ;; Happy hacking :-)
 

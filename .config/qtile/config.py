@@ -184,10 +184,6 @@ keys = [
         lazy.spawn(os.environ["HOME"]+"/.config/dmenuwallpaper.sh"),
         desc="Change wallpapers and select in dmenu"
         ),
-#    Key([modR], "w",
-#        lazy.spawn("wing-101-8"),
-#        desc="Launch Wing 101 Python IDE"
-#        ),
 
     Key([altR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
@@ -307,6 +303,7 @@ screens = [
     Screen(
         top=bar.Bar(
             [
+#                widget.GroupBox (background="#00000000"),
                 widget.GroupBox(foreground="#555555"),
                 widget.CurrentLayout(foreground="#555555"),
                 widget.Prompt(foreground="#555555"),

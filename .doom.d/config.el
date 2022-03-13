@@ -1,5 +1,5 @@
-;; NOTE This file is generated from the README.org file. Do not alter this
-;; config.el directly and only modify the REAME.org file, then Alt-x and type:
+;; NOTE This file is generated from the README.org file. Do not alter the
+;; config.el directly and only modify the README.org file, then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
 ;; Happy hacking :-)
 
@@ -9,19 +9,32 @@
   :config
 )
 
+;; Add this image to my splash screen
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+
 ;; Style of line numbering, set to `relative' for relative number.
 ;; Or keycord: SPC t l, or SPC u SPC t l
-;; FIXME: dit werkt niet na een reboot. vreemd...
-;;(setq display-line-numbers-mode `relative)
-;;(setq display-line-numbers-mode relative)
-;;(setq doom-line-numbers-style 'relative)
-;;(setq doom-line-numbers-style 'relative)
-;;(setq display-line-numbers-mode)
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
 ;; Restoring old Y behavior of VIM (yank the whole line)
 (setq! evil-want-Y-yank-to-eol nil)
+
+;; Add closing parenthesis of [{"'
+(show-paren-mode 1)
+
+;; Show the 80 column (Fill Column Indicator)
+(global-display-fill-column-indicator-mode)
+
+;; Change the theme
+;;(setq doom-theme 'doom-moonlight)
+;;(setq doom-theme 'doom-vibrant)
+(setq doom-theme 'doom-material-dark)
+;;(setq doom-theme 'doom-xcode)
+
+;; Help to find the cursor by beacon blink
+(beacon-mode 1)
+(setq beacon-blink-duration 3)
 
 ;; Make the normal/insert/visual states more apparent by changing cursor:
 (setq evil-normal-state-cursor '(box "tomato")
@@ -31,25 +44,9 @@
 ;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq     org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
-;; Add closing parenthesis of [{"'
-(show-paren-mode 1)
-
-;; Add this image to my splash screen
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-
-;; Change the theme
-;;(setq doom-theme 'doom-moonlight)
-;;(setq doom-theme 'doom-vibrant)
-;;(setq doom-theme 'doom-material-dark)
-(setq doom-theme 'doom-xcode)
-
-;; Transparency... werkt niet..!!
+;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
-
-;; Help to find the cursor by beacon blink
-(setq beacon-mode 1)
-(setq beacon-blink-duration 3)
 
 ;; use mu4e for e-mail in emacs
 (setq mail-user-agent 'mu4e-user-agent)

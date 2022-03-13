@@ -7,14 +7,13 @@
 #+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align left
 [[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
 
-* Table Of Contents :toc:
+* /home/icefly/.doom.d/Table Of Contents :toc:
 - [[#about-this-config][About this config]]
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
 - [[#todos][TODOs]]
   - [[#python-sourceblock][Python sourceblock]]
-  - [[#add-grey-line-at-the-80-column][Add grey line at the 80 column]]
   - [[#change-font][Change font]]
   - [[#mu4e][MU4e]]
   - [[#flash-highlighting-yanked-text][Flash highlighting yanked text]]
@@ -29,8 +28,8 @@ This file controls what Doom modules are enabled and what order they load in. Re
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter this
-;; init.el directly and only modify the REAME.org file then Alt-x and type:
+;; NOTE This file is generated from the README.org file. Do not alter the
+;; init.el directly and only modify the README.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
 ;; Happy hacking :-)
 
@@ -158,8 +157,8 @@ Here the packages are defined which should be installed. This is an addition to 
 
 ;; -*- no-byte-compile: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter this
-;; packages.el fle directly and only modify the REAME.org file then Alt-x and type:
+;; NOTE This file is generated from the README.org file. Do not alter the
+;; packages.el file directly and only modify the README.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking :-)
 
 (require 'package)
@@ -184,8 +183,8 @@ The custom configurations are set here. For instance theme settings, image to th
 
 #+begin_src emacs-lisp :tangle config.el
 
-;; NOTE This file is generated from the README.org file. Do not alter this
-;; config.el directly and only modify the REAME.org file, then Alt-x and type:
+;; NOTE This file is generated from the README.org file. Do not alter the
+;; config.el directly and only modify the README.org file, then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
 ;; Happy hacking :-)
 
@@ -195,19 +194,32 @@ The custom configurations are set here. For instance theme settings, image to th
   :config
 )
 
+;; Add this image to my splash screen
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+
 ;; Style of line numbering, set to `relative' for relative number.
 ;; Or keycord: SPC t l, or SPC u SPC t l
-;; FIXME: dit werkt niet na een reboot. vreemd...
-;;(setq display-line-numbers-mode `relative)
-;;(setq display-line-numbers-mode relative)
-;;(setq doom-line-numbers-style 'relative)
-;;(setq doom-line-numbers-style 'relative)
-;;(setq display-line-numbers-mode)
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
 ;; Restoring old Y behavior of VIM (yank the whole line)
 (setq! evil-want-Y-yank-to-eol nil)
+
+;; Add closing parenthesis of [{"'
+(show-paren-mode 1)
+
+;; Show the 80 column (Fill Column Indicator)
+(global-display-fill-column-indicator-mode)
+
+;; Change the theme
+;;(setq doom-theme 'doom-moonlight)
+;;(setq doom-theme 'doom-vibrant)
+(setq doom-theme 'doom-material-dark)
+;;(setq doom-theme 'doom-xcode)
+
+;; Help to find the cursor by beacon blink
+(beacon-mode 1)
+(setq beacon-blink-duration 3)
 
 ;; Make the normal/insert/visual states more apparent by changing cursor:
 (setq evil-normal-state-cursor '(box "tomato")
@@ -217,25 +229,9 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq     org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
-;; Add closing parenthesis of [{"'
-(show-paren-mode 1)
-
-;; Add this image to my splash screen
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-
-;; Change the theme
-;;(setq doom-theme 'doom-moonlight)
-;;(setq doom-theme 'doom-vibrant)
-;;(setq doom-theme 'doom-material-dark)
-(setq doom-theme 'doom-xcode)
-
-;; Transparency... werkt niet..!!
+;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
-
-;; Help to find the cursor by beacon blink
-(setq beacon-mode 1)
-(setq beacon-blink-duration 3)
 
 ;; use mu4e for e-mail in emacs
 (setq mail-user-agent 'mu4e-user-agent)
@@ -269,12 +265,30 @@ Here is a list of things I want to improve in my Doom Emacs configuration.
 
 ** Python sourceblock
 I want to add a Python sourceblock by (insert, <p TAB) and also add =:tangle *.py=.
-
-** Add grey line at the 80 column
-Ik wil dat bij column 80 een grijze lijn komt te staan vergelijkbaar als ik in Vim heb staan (colorcolumn 80)
-Het volgende heb ik toegevoegd aan config.el en werkt niet:
-=(package! column-marker)=
-=(require 'column-marker)=
+https://orgmode.org/manual/Structure-Templates.html#Structure-Templates
+https://www.reddit.com/r/emacs/comments/abygwc/if_you_pull_orgmode_from_0day_be_sure_to_check/
+https://www.lucacambiaghi.com/vanilla-emacs/readme.html#h:934C85A9-D8DB-455F-A19C-570300047FD5
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+(setq new-structure-template-alist
+        '(("py" . "src python :results output")
+werkt nu niet....
+;;(require 'org-tempo)
+;;(add-to-list 'org-structure-template-alist '("py" . "src python"))
+(setq new-structure-template-alist
+        '(("py" . "src python :results output")
+          ("ipy" . "src ipython :results output")
+          ("el" . "src emacs-lisp")
+          ("hs" . "src haskell")
+          ("laeq" . "latex \n\\begin{equation} \\label{eq-sinh}\ny=\\sinh x\n\\end{equation}")
+          ("sh" . "src sh")
+          ("r" . "src R")
+          ("js" . "src js")
+          ("http" . "src http")
+          ("ditaa" . "src ditaa :file")
+          ("dot" . "src dot :file")
+          ("rp" . "src R :results output graphics :file ")
+          ("plantuml" . "src plantuml :file")
+          ))
 
 ** Change font
 Ik wil een ander font instellen. Hack font geeft problemen LIJKT het. Na een reboot is de tekst onleesbaar klein wat DENKik komt door onderstaande fontinstelling. Even kijken hoe ik dit

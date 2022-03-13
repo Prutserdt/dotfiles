@@ -2340,6 +2340,35 @@ M-x python-shell-send-region
 init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
 Daarna doomsync uitgevoerd
 
+**** Tabellen in Org mode
+
+Aanmaken van een tabel gaat door invoegen in insert mode van =|=, en een separator met =|-enter=.
+|--------|
+| testen |
+|--------|
+
+Toevoegen van een extra rij door in testen te staan en =TAB=
+|--------|
+| testen |
+|        |
+|--------|
+
+Toevoegen van een extra kolom door te typen achter testen en tab...
+|--------+--------|
+| testen | regels |
+|        |        |
+|--------+--------|
+
+Ik heb de tabel uitgebreid met bovenstaande stappen. Scheidingspaneel is gewoon toevoegen door |- en tab.
+|--------+----------------------+----------------------------------|
+| Editor | Voordelen            | Nadelen                          |
+|--------+----------------------+----------------------------------|
+| nano   | Eenvoudig in gebruik | Weinig functionaliteit           |
+| VIM    | Meerdere modes       | Minder functionaliteit dan emacs |
+| Emacs  | Dit is geen editor   |                                  |
+|--------+----------------------+----------------------------------|
+
+
 **** mu4e
 
 ***** mu4e installation and settings

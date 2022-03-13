@@ -28,7 +28,7 @@ This Python configuration requires some modules to be loaded.
 #+BEGIN_SRC python :tangle "config.py"
 
 # NOTE This file is generated from a README.org file. Do not alter this
-# config.py file directly and only modify the REAME.org file, then Alt-x and type:
+# config.py file directly and only modify the README.org file, then Alt-x and type:
 # 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
 # Happy hacking :-)
 
@@ -43,7 +43,7 @@ from libqtile.lazy import lazy
 #+END_SRC
 
 ** Variables
-Some variables are declared. Three modification keys whicha are used for keybindings and terminal program.
+Some variables are declared. Three modification keys which are used for keybindings, my terminal program and opening of VIM and Emacs.
 
 #+BEGIN_SRC python :tangle "config.py"
 modL = "mod4"
@@ -466,7 +466,7 @@ This shellscript is called in the config.py script and is starting some keyboard
 #!/bin/bash
 
 # NOTE This file is generated from a README.org file. Do not alter this
-# autostart.sh file directly and only modify the REAME.org file, then
+# autostart.sh file directly and only modify the README.org file, then
 # Alt-x and type: 'org-babel-tangle' in emacs and run 'doom sync' in
 # the terminal. Happy hacking :-)
 
