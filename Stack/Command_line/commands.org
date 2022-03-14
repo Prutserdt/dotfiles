@@ -21,7 +21,6 @@
 
 * About this document
 This document consists of notes that I took during my Linux journey. A lot of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference.
-
 * Command line tricks
 
 *** Vind grootte van files/directories in commandline
@@ -1387,7 +1386,6 @@ Make sure gnupg is installed.
 maar eerst gnupg instellen, hier even de tijd voor nemen....
 
 * Applications (Command line and GUIs)
-
 *** Vim
 Installeer gvim, niet om te gebruiken maar om clipboard functionaliteit
 tekunnen gebruiken :)
@@ -2368,6 +2366,31 @@ Ik heb de tabel uitgebreid met bovenstaande stappen. Scheidingspaneel is gewoon 
 | Emacs  | Dit is geen editor   |                                  |
 |--------+----------------------+----------------------------------|
 
+**** Snippets (yasnippets)
+Snippets are already part of Doom Emacs (config :editor snippets)
+
+Find available snippets by M-x =yas-visit-snippet-file=.
+
+Simple way to add a new snippet to the mode you are in at that moment:
+M-x =yas-new-snippet=
+Saving by: C-c C-c
+
+https://www.youtube.com/watch?v=xmBovJvQ3KU
+
+My first snippet (in ~/.doom.d/snippets/org-mode)
+
+# -*- mode: snippet -*-
+# name: PythonBlock
+# key: <p
+# --
+#+begin_src python :tangle ${1:wismij}.py
+# NOTE, this file is generated from the org file:
+# `(file-name-nondirectory (buffer-file-name))`.org by org-babel-tangle
+# Only modify the org file and not this Python file.
+# Happy hacking :-)
+
+$2
+#+end_src
 
 **** mu4e
 
@@ -2428,7 +2451,6 @@ Sending email via: smtpmail
 This has a steep learning curve... How to use this bloody program...
 
 * Distros
-
 *** XFCE tricks
 XFCE4 in desktop achtergrond terminal services laten draaien.
 Filename: wallterm.sh
@@ -2941,8 +2963,6 @@ het shell script te starten. Dit lijkt op de oude Arch installer:
 =sh archfi=
 
 * Tiling windowmanagers
-
-
 *** i3 window manager
 
 Tips: https://www.youtube.com/watch?v=8-S0cWnLBKg
@@ -3392,7 +3412,6 @@ het werk misschien wel via bovenstaande, volgende keer ff  opletten in
 systray...
 
 * Keebs
-
 *** Ducky one mechanical keyboard
 
 Fn + NumLk: keypad bestuurd de muis aan/uit Fn + NumLk.

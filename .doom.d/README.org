@@ -7,7 +7,7 @@
 #+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align left
 [[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
 
-* /home/icefly/.doom.d/Table Of Contents :toc:
+* Table Of Contents :toc:
 - [[#about-this-config][About this config]]
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
