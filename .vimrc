@@ -19,7 +19,8 @@ Plug 'itchyny/lightline.vim'          " Lightline statusbar
 Plug 'ap/vim-css-color'               " Shows color of css color coding in vim: yellow, 503fa9
 Plug 'neoclide/coc.nvim', {'branch': ',()release'} " Conquer of Completion plugin, autocomplete!
 " pyright static type checker for python :CocInstall coc-python  :CocInstall py-right
-Plug 'joshdick/onedark.vim'           " Color scheme
+"Plug 'joshdick/onedark.vim'          " Color scheme
+Plug 'ghifarit53/tokyonight-vim'
 Plug 'machakann/vim-highlightedyank/' " Highlight yanked text
 Plug 'miyakogi/seiya.vim'             " Make transparency work in VIM
 
@@ -69,7 +70,8 @@ set background=dark       " dark/white: use colors that look good on a dark/whit
 "Plugin seiya to enable transparency
 let g:seiya_auto_enable=1
 
-colorscheme onedark
+"colorscheme onedark
+colorscheme tokyonight
 
 let g:highlightedyank_highlight_duration =1000 " highlighting yanked text:
 

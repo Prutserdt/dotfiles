@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # NOTE This file is generated from a README.org file. Do not alter this
-# autostart.sh file directly and only modify the REAME.org file, then
+# autostart.sh file directly and only modify the README.org file, then
 # Alt-x and type: 'org-babel-tangle' in emacs and run 'doom sync' in
 # the terminal. Happy hacking :-)
 

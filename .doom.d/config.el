@@ -29,7 +29,8 @@
 ;; Change the theme
 ;;(setq doom-theme 'doom-moonlight)
 ;;(setq doom-theme 'doom-vibrant)
-(setq doom-theme 'doom-material-dark)
+(setq doom-theme 'doom-tokyo-night)
+;;(setq doom-theme 'doom-material-dark)
 ;;(setq doom-theme 'doom-xcode)
 
 ;; Help to find the cursor by beacon blink

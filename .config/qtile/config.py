@@ -1,5 +1,5 @@
 # NOTE This file is generated from a README.org file. Do not alter this
-# config.py file directly and only modify the REAME.org file, then Alt-x and type:
+# config.py file directly and only modify the README.org file, then Alt-x and type:
 # 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
 # Happy hacking :-)
 
@@ -19,6 +19,35 @@ altR = "mod5"
 terminal = "alacritty"
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
+
+def threecol(qtile):
+    qtile.cmd_to_layout_index(0) #0:monadthreecolumn with margins
+
+def threecol2(qtile):
+    qtile.cmd_to_layout_index(1) #1:monadthreecolumn without margins
+
+def montall(qtile):
+    qtile.cmd_to_layout_index(2) #2: monadtall with margins
+
+def monwide(qtile):
+    qtile.cmd_to_layout_index(3) #3: monadwide with margins
+
+#FIXME: dit is een test voor spelen met margins...
+#def cmd_increase_margin(self):
+#    self.margin += 10
+#    self.group.layout_all()
+#
+#
+#def cmd_decrease_margin(self):
+#    new_margin = self.margin - 10
+#    if new_margin < 0:
+#        new_margin = 0
+#
+#
+#self.margin = new_margin
+#
+#self.group.layout_all()
+#FIXME: einde test
 
 keys = [
     # Switch between windows
@@ -84,6 +113,23 @@ keys = [
         lazy.layout.flip(),
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
+    # Layout hotkeys
+    Key([modL],"u",
+        lazy.function(threecol),
+        desc="Threecolumn selection, with margins"
+        ),
+    Key([modL],"i",
+        lazy.function(threecol2),
+        desc="Threecolumn selection without margins"
+        ),
+    Key([modL],"o",
+        lazy.function(montall),
+        desc="MonadTall selection"
+        ),
+    Key([modL],"p",
+        lazy.function(monwide),
+        desc="MonadWide selection"
+        ),
     Key([modL],"f",
         lazy.window.toggle_fullscreen(),
         desc="Fullscreen the current window"
@@ -123,6 +169,14 @@ keys = [
         lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"
         ),
+#    Key([modL], "z", #FIXME: would be nice to dynamically control..
+#        lazy.layout.increase_margin(),
+#        desc="Increase margin, tests...."
+#        ),
+#    Key([modL], "x", #FIXME: idem
+#        lazy.layout.decrease_margin(),
+#        desc="Increase margin, tests...."
+#        ),
 
     # Audio keys
     Key([], "XF86AudioRaiseVolume",
@@ -215,8 +269,8 @@ keys = [
         desc="Open in vim: config of newsboat"
         ),
     Key([altR], "q",
-        lazy.spawn(termVim +os.path.expanduser("~/.config/qtile/config.py")),
-        desc="Open in vim:Open qtile config"
+        lazy.spawn(Emacs +os.path.expanduser("~/.config/qtile/README.org")),
+        desc="Open in emacs:Open qtile config"
         ),
     Key([altR], "r",
         lazy.spawn(termVim +os.path.expanduser("~/README.md")),
@@ -244,7 +298,8 @@ keys = [
         ),
 ]
 
-groups = [Group(i) for i in "123456789"]
+#groups = [Group(i) for i in "123456789"]
+groups = [Group(i) for i in "1234"]
 
 for i in groups:
     keys.extend(
@@ -269,7 +324,8 @@ for i in groups:
 
 groups.append(
     ScratchPad("scratchpad", [
-        DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,on_focus_lost_hide=False),
+        DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,
+                 on_focus_lost_hide=False),
     ])
 )
 
@@ -278,18 +334,19 @@ keys.extend([
 ])
 
 layout_theme = {"border_width": 2,
-                "margin": 0,
+#                "margin": 20,
                 "border_focus": "#98C379",
                 "border_normal": "#282C34",
                 }
 
 layouts = [
-    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
-    new_client_position='bottom'),
+    layout.MonadThreeCol(**layout_theme, margin=20, min_ratio=0.05,
+                         max_ratio=0.9, new_client_position='bottom'),
     # Remark: the bottom position does not work yet, bug is already reported
-    layout.Max(),
-    layout.MonadTall(),
-    layout.MonadWide(),
+    layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
+                         new_client_position='bottom'),
+    layout.MonadTall(**layout_theme, margin=20),
+    layout.MonadWide(**layout_theme, margin=20),
 ]
 
 widget_defaults = dict(
@@ -303,7 +360,6 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-#                widget.GroupBox (background="#00000000"),
                 widget.GroupBox(foreground="#555555"),
                 widget.CurrentLayout(foreground="#555555"),
                 widget.Prompt(foreground="#555555"),
@@ -320,6 +376,7 @@ screens = [
                 widget.Clock(format="%d%b%y %H:%M",foreground="#555555"),
             ],
             24,
+            opacity=0.85,
         ),
     ),
 ]

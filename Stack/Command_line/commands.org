@@ -15,6 +15,7 @@
 - [[#about-this-document][About this document]]
 - [[#command-line-tricks][Command line tricks]]
 - [[#applications-command-line-and-guis][Applications (Command line and GUIs)]]
+  - [[#irc-inspircd][IRC, inspircd]]
 - [[#distros][Distros]]
 - [[#tiling-windowmanagers][Tiling windowmanagers]]
 - [[#keebs][Keebs]]
@@ -2449,6 +2450,11 @@ Sending email via: smtpmail
 
 ***** mu4e
 This has a steep learning curve... How to use this bloody program...
+
+** IRC, inspircd
+
+Install by =yay inspircd=
+
 
 * Distros
 *** XFCE tricks

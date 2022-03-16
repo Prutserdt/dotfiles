@@ -13,7 +13,6 @@
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
 - [[#todos][TODOs]]
-  - [[#python-sourceblock][Python sourceblock]]
   - [[#change-font][Change font]]
   - [[#mu4e][MU4e]]
   - [[#flash-highlighting-yanked-text][Flash highlighting yanked text]]
@@ -214,7 +213,8 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; Change the theme
 ;;(setq doom-theme 'doom-moonlight)
 ;;(setq doom-theme 'doom-vibrant)
-(setq doom-theme 'doom-material-dark)
+(setq doom-theme 'doom-tokyo-night)
+;;(setq doom-theme 'doom-material-dark)
 ;;(setq doom-theme 'doom-xcode)
 
 ;; Help to find the cursor by beacon blink
@@ -262,33 +262,6 @@ The custom configurations are set here. For instance theme settings, image to th
 
 * TODOs
 Here is a list of things I want to improve in my Doom Emacs configuration.
-
-** Python sourceblock
-I want to add a Python sourceblock by (insert, <p TAB) and also add =:tangle *.py=.
-https://orgmode.org/manual/Structure-Templates.html#Structure-Templates
-https://www.reddit.com/r/emacs/comments/abygwc/if_you_pull_orgmode_from_0day_be_sure_to_check/
-https://www.lucacambiaghi.com/vanilla-emacs/readme.html#h:934C85A9-D8DB-455F-A19C-570300047FD5
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(setq new-structure-template-alist
-        '(("py" . "src python :results output")
-werkt nu niet....
-;;(require 'org-tempo)
-;;(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(setq new-structure-template-alist
-        '(("py" . "src python :results output")
-          ("ipy" . "src ipython :results output")
-          ("el" . "src emacs-lisp")
-          ("hs" . "src haskell")
-          ("laeq" . "latex \n\\begin{equation} \\label{eq-sinh}\ny=\\sinh x\n\\end{equation}")
-          ("sh" . "src sh")
-          ("r" . "src R")
-          ("js" . "src js")
-          ("http" . "src http")
-          ("ditaa" . "src ditaa :file")
-          ("dot" . "src dot :file")
-          ("rp" . "src R :results output graphics :file ")
-          ("plantuml" . "src plantuml :file")
-          ))
 
 ** Change font
 Ik wil een ander font instellen. Hack font geeft problemen LIJKT het. Na een reboot is de tekst onleesbaar klein wat DENKik komt door onderstaande fontinstelling. Even kijken hoe ik dit
