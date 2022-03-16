@@ -26,7 +26,7 @@
 To get insight of qtile the sourcecode can be checked (usr/lib/python3.10/site-packages/libqtile, or alternatively find location of libqtile from python shell and import os and run print(help(libqtile))
 
 ** Imports
-This Python configuration requires some modules to be loaded.
+My configuration requires some modules to be loaded, all are default settings.
 
 #+BEGIN_SRC python :tangle "config.py"
 
@@ -46,7 +46,7 @@ from libqtile.lazy import lazy
 #+END_SRC
 
 ** Variables
-Some variables are declared. Three modification keys which are used for keybindings, my terminal program and opening of VIM and Emacs.
+Some variables are declared. The left super key, right super key and right alt key, which I use for keybindings. Also the terminal and opening of VIM and Emacs are declared.
 
 #+BEGIN_SRC python :tangle "config.py"
 modL = "mod4"
@@ -60,7 +60,7 @@ Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 #+END_SRC
 
 ** Custom functions
-Here I created some functions. These are used for keybinding, see are utilized in the next keybinding section.
+Here I created some functions. These are used for keybinding and are utilized in the next keybinding section.
 
 #+BEGIN_SRC python :tangle "config.py"
 
@@ -96,7 +96,7 @@ def monwide(qtile):
 #+END_SRC
 
 ** Keybindings: qtile specific
-These left super key bindings (left window key) are all related to qtile and do thing like moving windows around.
+My left super key bindings are all related to qtile and do thing like moving windows around.
 
 #+BEGIN_SRC python :tangle "config.py"
 
@@ -258,7 +258,7 @@ Hotkeys to control the volume and mute.
 #+END_SRC
 
 ** Keybindings: Applications
-The right super is exclusively used to open applications.
+Right super key to open applications.
 
 #+BEGIN_SRC python :tangle "config.py"
     # Open applications
@@ -306,7 +306,7 @@ The right super is exclusively used to open applications.
 #+END_SRC
 
 ** Keybingings: Text files
-The right super alt key is used to open text files in Vim in the terminal. #TODO I'm in the middle of changing from vim to emacs....
+The right alt key is used to open text files in Vim or in Emacs.
 
 #+BEGIN_SRC python :tangle "config.py"
     Key([altR], "a",
@@ -370,7 +370,7 @@ The right super alt key is used to open text files in Vim in the terminal. #TODO
 #+END_SRC
 
 ** Groups
-Here the workspaces are described, which are called Groups in qtile.
+the workspaces are described, which are called Groups in qtile.
 
 #+BEGIN_SRC python :tangle "config.py"
 #groups = [Group(i) for i in "123456789"]
@@ -545,8 +545,10 @@ This shellscript is called in the config.py script and is starting some keyboard
 # Alt-x and type: 'org-babel-tangle' in emacs and run 'doom sync' in
 # the terminal. Happy hacking :-)
 
-xmodmap $HOME/.config/kbswitch && xset r rate 300 80 &
-xmodmap $HOME/.config/rdxswitch && xset r rate 300 80 &
+#xmodmap $HOME/.config/kbswitch && xset r rate 300 80 &
+xmodmap $HOME/.config/kbswitch &
+xmodmap $HOME/.config/rdxswitch &
+xset r rate 300 80 &
 picom -b &
 /usr/bin/emacs --daemon &
 #+end_src
