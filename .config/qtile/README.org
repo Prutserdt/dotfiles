@@ -26,7 +26,7 @@
 To get insight of qtile the sourcecode can be checked (usr/lib/python3.10/site-packages/libqtile, or alternatively find location of libqtile from python shell and import os and run print(help(libqtile))
 
 ** Imports
-My configuration requires some modules to be loaded, all are default settings.
+My configuration requires some modules to be loaded, these are all default settings.
 
 #+BEGIN_SRC python :tangle "config.py"
 
@@ -49,7 +49,7 @@ from libqtile.lazy import lazy
 : None
 
 ** Variables
-Some variables are declared. The left super key, right super key and right alt key, which I use for keybindings. Also the terminal and opening of VIM and Emacs are declared.
+Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Also the terminal and opening of VIM and Emacs are declared.
 
 #+BEGIN_SRC python :tangle "config.py"
 modL = "mod4"
@@ -63,7 +63,7 @@ Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 #+END_SRC
 
 ** Custom functions
-These functions are used for keybinding and are utilized in the next keybinding section.
+These functions are used for keybindings and are utilized in the next keybinding section.
 
 #+BEGIN_SRC python :tangle "config.py"
 
@@ -99,7 +99,7 @@ def monwide(qtile):
 #+END_SRC
 
 ** Keybindings: qtile specific
-My left super key bindings are all related to qtile and do thing like moving windows around.
+My left super key bindings are all related to qtile, for instance moving windows around.
 
 #+BEGIN_SRC python :tangle "config.py"
 
@@ -233,9 +233,8 @@ keys = [
 
     #+END_SRC
 
-
 ** Keybindings: Audio and print
-Hotkeys to control the volume and mute.
+Hotkeys to control the volume, muting and printscreen.
 
 #+BEGIN_SRC python :tangle "config.py"
     # Audio keys
@@ -252,8 +251,8 @@ Hotkeys to control the volume and mute.
         desc="Toggle mute/unmute"
         ),
     Key([], "Print",
-        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~//Downloads")),
-        desc="Draw area by mouse to copy from screen and save in Downloads"
+        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~/Downloads")),
+        desc="Draw area by mouse to copy the selection and save in Downloads"
         ),
 #+END_SRC
 
@@ -289,6 +288,10 @@ Right super key to open applications.
     Key([modR], "m",
         lazy.spawn("mousepad"),
         desc="Launch Mousepad"
+        ),
+    Key([modR], "s",
+        lazy.spawn("xfce4-screenshooter -s " + os.path.expanduser("~/Downloads")),
+        desc="Choose what to screenshot and save in Downloads"
         ),
     Key([modR], "t",
         lazy.spawn("thunar"),

@@ -191,8 +191,8 @@ keys = [
         desc="Toggle mute/unmute"
         ),
     Key([], "Print",
-        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~//Downloads")),
-        desc="Draw area by mouse to copy from screen and save in Downloads"
+        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~/Downloads")),
+        desc="Draw area by mouse to copy the selection and save in Downloads"
         ),
 
     # Open applications
@@ -223,6 +223,10 @@ keys = [
     Key([modR], "m",
         lazy.spawn("mousepad"),
         desc="Launch Mousepad"
+        ),
+    Key([modR], "s",
+        lazy.spawn("xfce4-screenshooter -s " + os.path.expanduser("~/Downloads")),
+        desc="Choose what to screenshot and save in Downloads"
         ),
     Key([modR], "t",
         lazy.spawn("thunar"),
