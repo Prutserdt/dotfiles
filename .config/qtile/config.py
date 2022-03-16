@@ -1,6 +1,6 @@
 # NOTE This file is generated from a README.org file. Do not alter this
-# config.py file directly and only modify the README.org file, then Alt-x and type:
-# 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
+# config.py file directly and only modify the README.org file, then M-x and
+# type: 'org-babel-tangle' in emacs and press CTR MOD R to reload qtile live.
 # Happy hacking :-)
 
 import psutil
@@ -139,9 +139,8 @@ keys = [
         desc="hide/show bar"
         ),
     # multiple stack panes
-    Key(
-        [modL, "shift"],
-        "Return",
+    # FIXME: doesn't seem to work, probably for other layouts?
+    Key([modL, "shift"],"Return",
         lazy.layout.toggle_split(),
         desc="Toggle between split and unsplit sides of stack"
     ),

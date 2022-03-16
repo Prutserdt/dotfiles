@@ -2,10 +2,9 @@
 
 # NOTE This file is generated from a README.org file. Do not alter this
 # autostart.sh file directly and only modify the README.org file, then
-# Alt-x and type: 'org-babel-tangle' in emacs and run 'doom sync' in
-# the terminal. Happy hacking :-)
+# M-x and type 'org-babel-tangle' in emacs and press CTR MOD R to reload qtile.
+# Happy hacking :-)
 
-#xmodmap $HOME/.config/kbswitch && xset r rate 300 80 &
 xmodmap $HOME/.config/kbswitch &
 xmodmap $HOME/.config/rdxswitch &
 xset r rate 300 80 &
