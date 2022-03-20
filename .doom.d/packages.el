@@ -18,3 +18,6 @@
 
 ;; Help finding the cursor
 (package! beacon)
+
+;; The email package MU for emacs
+(package! visual-fill-column)

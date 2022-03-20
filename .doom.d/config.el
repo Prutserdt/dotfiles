@@ -23,8 +23,11 @@
 ;; Add closing parenthesis of [{"'
 (show-paren-mode 1)
 
-;; Show the 80 column (Fill Column Indicator)
-(global-display-fill-column-indicator-mode)
+;; Rainbow delimiters, to find the matching parenthesis
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode)
+  :hook (org-mode . rainbow-delimiters-mode)
+  )
 
 ;; Change the theme
 ;;(setq doom-theme 'doom-moonlight)
@@ -45,6 +48,17 @@
 ;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq     org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
+;; Visual fill column, to break the lines that otherwise will keep on going
+;; to the end of the window, to improve readability. Related:
+;; visual-fill-column-mode, global-visual-line-mode.
+;; Can be set manually per buffer by: set-fill-column 80
+(setq-default fill-column 110)
+(add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+
+;; Show the 80 column (Fill Column Indicator)
+;; FIXME: does not work in combination with visual-fill-column-mode....
+(global-display-fill-column-indicator-mode)
+
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
@@ -55,7 +69,7 @@
  "transip"
  '((mu4e-sent-folder       . "/transip/Sent Mail")
    (mu4e-trash-folder      . "/transip/Bin")
-   (smtpmail-smtp-user     . "walter@elffrink.nl"))
+   (smtpmail-smtp-user     . "email@adress.com"))
  t)
 (setq mu4e-get-mail-command "mbsync transip"
       ;; get emails and index every 5 minutes
