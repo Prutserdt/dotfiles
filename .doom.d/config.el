@@ -20,8 +20,8 @@
 ;; Restoring old Y behavior of VIM (yank the whole line)
 (setq! evil-want-Y-yank-to-eol nil)
 
-;; Add closing parenthesis of [{"'
-(show-paren-mode 1)
+;; Highlight the parenthesis pair ([{
+(setq show-paren-mode 1)
 
 ;; Rainbow delimiters, to find the matching parenthesis
 (use-package rainbow-delimiters
@@ -46,7 +46,11 @@
       evil-visual-state-cursor '(hollow "orange"))
 
 ;; Nice bullets instead of boring *. Requires (org +pretty)
-(setq     org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+
+;; Show the 80 column (Fill Column Indicator)
+;; FIXME: does not work in combination with visual-fill-column-mode....
+(global-display-fill-column-indicator-mode)
 
 ;; Visual fill column, to break the lines that otherwise will keep on going
 ;; to the end of the window, to improve readability. Related:
@@ -54,10 +58,8 @@
 ;; Can be set manually per buffer by: set-fill-column 80
 (setq-default fill-column 110)
 (add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
-
-;; Show the 80 column (Fill Column Indicator)
-;; FIXME: does not work in combination with visual-fill-column-mode....
-(global-display-fill-column-indicator-mode)
+;; Center to the middle of the screen
+(setq-default visual-fill-column-center-text t)
 
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
@@ -74,11 +76,11 @@
 (setq mu4e-get-mail-command "mbsync transip"
       ;; get emails and index every 5 minutes
       mu4e-update-interval 300
-	  ;; send emails with format=flowed
-	  mu4e-compose-format-flowed t
-	  ;; no need to run cleanup after indexing for gmail
-	  mu4e-index-cleanup nil
-	  mu4e-index-lazy-check t
+      ;; send emails with format=flowed
+      mu4e-compose-format-flowed t
+      ;; no need to run cleanup after indexing for gmail
+      mu4e-index-cleanup nil
+      mu4e-index-lazy-check t
       ;; more sensible date format
       mu4e-headers-date-format "%d.%m.%y")
 ;; FIXME: smtpmail werkt nog niet, onderstaande verbeteren....
