@@ -3,7 +3,6 @@
 ;; NOTE This file is generated from the README.org file. Do not alter the
 ;; init.el directly and only modify the README.org file then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
-;; Happy hacking :-)
 
 (doom! :completion
        company           ; the ultimate code completion backend

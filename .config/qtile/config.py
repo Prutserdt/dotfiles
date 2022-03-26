@@ -29,8 +29,14 @@ def threecol2(qtile):
 def montall(qtile):
     qtile.cmd_to_layout_index(2) #2: monadtall with margins
 
+def montall2(qtile):
+    qtile.cmd_to_layout_index(3) #2: monadtall with margins
+
 def monwide(qtile):
-    qtile.cmd_to_layout_index(3) #3: monadwide with margins
+    qtile.cmd_to_layout_index(4) #3: monadwide with margins
+
+def monwide2(qtile):
+    qtile.cmd_to_layout_index(5) #3: monadwide with margins
 
 #FIXME: dit is een test voor spelen met margins...
 #def cmd_increase_margin(self):
@@ -114,22 +120,30 @@ keys = [
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
     # Layout hotkeys
-    Key([modL],"u",
+    Key([modL],"y",
         lazy.function(threecol),
         desc="Threecolumn selection, with margins"
         ),
-    Key([modL],"i",
+    Key([modL],"u",
         lazy.function(threecol2),
         desc="Threecolumn selection without margins"
         ),
-    Key([modL],"o",
+    Key([modL],"i",
         lazy.function(montall),
         desc="MonadTall selection"
+        ),
+    Key([modL],"o",
+        lazy.function(montall2),
+        desc="MonadTall selection without margins"
         ),
     Key([modL],"p",
         lazy.function(monwide),
         desc="MonadWide selection"
         ),
+#    Key([modL],"=",
+#        lazy.function(monwide2),
+#        desc="MonadWide selection without margins"
+#        ),
     Key([modL],"f",
         lazy.window.toggle_fullscreen(),
         desc="Fullscreen the current window"
@@ -196,6 +210,11 @@ keys = [
         ),
 
     # Open applications
+    Key([modR], "a",
+        lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
+        lazy.spawn(termVim +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        desc="Open in vim:Open aandelen log en script"
+        ),
     Key([modR], "b",
         lazy.spawn("brave"),
         desc="Launch Brave browser"
@@ -243,9 +262,8 @@ keys = [
         ),
 
     Key([altR], "a",
-        lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
-        lazy.spawn(termVim +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
-        desc="Open in vim:Open aandelen log en script"
+        lazy.spawn(Emacs +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        desc="Open in emacs:aandelen log"
         ),
     Key([altR], "b",
         lazy.spawn(termVim +os.path.expanduser("~/.bashrc")),
@@ -343,13 +361,18 @@ layout_theme = {"border_width": 2,
                 }
 
 layouts = [
-    layout.MonadThreeCol(**layout_theme, margin=20, min_ratio=0.05,
-                         max_ratio=0.9, new_client_position='bottom'),
-    # Remark: the bottom position does not work yet, bug is already reported
     layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
                          new_client_position='bottom'),
-    layout.MonadTall(**layout_theme, margin=20),
-    layout.MonadWide(**layout_theme, margin=20),
+    layout.MonadThreeCol(**layout_theme, margin=20, min_ratio=0.05,
+                         max_ratio=0.9, new_client_position='bottom'),
+    layout.MonadTall(**layout_theme, min_ratio=0.05, max_ratio=0.9,
+                     new_client_position='bottom'),
+    layout.MonadTall(**layout_theme, margin=20, min_ratio=0.05,
+                     max_ratio=0.9, new_client_position='bottom'),
+    layout.MonadWide(**layout_theme, min_ratio=0.05, max_ratio=0.9,
+                     new_client_position='bottom'),
+    layout.MonadWide(**layout_theme, margin=20, min_ratio=0.05,
+                     max_ratio=0.9, new_client_position='bottom'),
 ]
 
 widget_defaults = dict(

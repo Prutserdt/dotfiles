@@ -1,7 +1,6 @@
 ;; NOTE This file is generated from the README.org file. Do not alter the
 ;; config.el directly and only modify the README.org file, then Alt-x and type:
 ;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
-;; Happy hacking :-)
 
 ;; Evil Mode
 (use-package evil
@@ -20,7 +19,7 @@
 ;; Restoring old Y behavior of VIM (yank the whole line)
 (setq! evil-want-Y-yank-to-eol nil)
 
-;; Highlight the parenthesis pair ([{
+;; Highlight the matching parenthesis pair
 (setq show-paren-mode 1)
 
 ;; Rainbow delimiters, to find the matching parenthesis
@@ -29,12 +28,14 @@
   :hook (org-mode . rainbow-delimiters-mode)
   )
 
-;; Change the theme
+;; Change the theme (manually set to darktooth at the moment)
 ;;(setq doom-theme 'doom-moonlight)
 ;;(setq doom-theme 'doom-vibrant)
-(setq doom-theme 'doom-tokyo-night)
+;;(setq doom-theme 'doom-tokyo-night)
+;;(setq doom-theme 'doom-dracula)
 ;;(setq doom-theme 'doom-material-dark)
 ;;(setq doom-theme 'doom-xcode)
+;;(setq doom-theme 'doom-zenburn)
 
 ;; Help to find the cursor by beacon blink
 (beacon-mode 1)
@@ -61,6 +62,8 @@
 ;; Center to the middle of the screen
 (setq-default visual-fill-column-center-text t)
 
+(set-frame-font "Hack 11" nil t)
+
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
@@ -73,7 +76,7 @@
    (mu4e-trash-folder      . "/transip/Bin")
    (smtpmail-smtp-user     . "email@adress.com"))
  t)
-(setq mu4e-get-mail-command "mbsync transip"
+(setq mu4e-get-mail-command "mbsync transip "
       ;; get emails and index every 5 minutes
       mu4e-update-interval 300
       ;; send emails with format=flowed

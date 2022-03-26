@@ -22,5 +22,8 @@ remove mod4 = Super_R
 add mod3 = Super_R
 
 ! Remove Alt_R and make it another mod key (for opening txt files)
+! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift
+!remove mod1 = ISO_Level3_Shift
+!add mod5 = ISO_Level3_Shift
 remove mod1 = Alt_R
 add mod5 = Alt_R

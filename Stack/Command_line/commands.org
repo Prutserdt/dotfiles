@@ -6,7 +6,7 @@
           _     _                    _        _      _
          | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____ 
          | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
-         | |___| | | | | |_| |>  <  | |_| |  | | (__|   <\__ \
+         | |___| | | | | |_| ||  |  | |_| |  | | (__|   <\__ \
          |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
                                           Created by Prutserdt
 #+end_example
@@ -1213,6 +1213,14 @@ Maak deze directory: =mkdir -p ~/.local/share/fonts=
 Kopieer de ttf file: =cp ~/Downloads/*.ttf ~/.local/share/fonts=
 Verfris fc-cache: =fc-cache -f -v =
 Kijken of de font erbij staat: =fc-list | grep Double=
+
+*** Problemen met fonts (Manjaro XFCE 2022, na gebruikname mijn dotfiles)
+Alacritty: verander het Hack font naar monospace in ~/.config/alacritty/alacritty.yml
+
+
+*** Problemen met keyboard in Manjaro XFCE 2022, na in gebruikname van mijn dotfiles)
+In commandline: =setxkbmap us=. Daarmee zet je het keyboard naar us, en nu zijn mijn problemen voorbij!
+
 
 *** SQlite3 database
 https://www.tutorialspoint.com/sqlite/sqlite_select_query.htm

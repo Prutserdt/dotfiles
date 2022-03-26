@@ -20,8 +20,6 @@ keysym Escape = Escape
 keysym Caps_Lock = Caps_Lock
 !add Lock = Caps_Lock
 
-
-
 ! With my custom redox build there is a Super-R
 ! Remove right super key and make it another mod key (for opening apps)
 remove mod4 = Super_R
