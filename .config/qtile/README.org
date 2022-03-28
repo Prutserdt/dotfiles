@@ -45,9 +45,6 @@ from libqtile.config import ( Click, Drag, Group, Key, Match,
 from libqtile.lazy import lazy
 #+END_SRC
 
-#+RESULTS:
-: None
-
 ** Variables
 Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Also the terminal and opening of VIM and Emacs are declared.
 
@@ -84,23 +81,6 @@ def monwide(qtile):
 
 def monwide2(qtile):
     qtile.cmd_to_layout_index(5) #3: monadwide with margins
-
-#FIXME: dit is een test voor spelen met margins...
-#def cmd_increase_margin(self):
-#    self.margin += 10
-#    self.group.layout_all()
-#
-#
-#def cmd_decrease_margin(self):
-#    new_margin = self.margin - 10
-#    if new_margin < 0:
-#        new_margin = 0
-#
-#
-#self.margin = new_margin
-#
-#self.group.layout_all()
-#FIXME: einde test
 
 #+END_SRC
 
@@ -194,10 +174,10 @@ keys = [
         lazy.function(monwide),
         desc="MonadWide selection"
         ),
-    Key([modL],"=",
-        lazy.function(monwide2),
-        desc="MonadWide selection without margins"
-        ),
+#    Key([modL],"=",
+#        lazy.function(monwide2),
+#        desc="MonadWide selection without margins"
+#        ),
     Key([modL],"f",
         lazy.window.toggle_fullscreen(),
         desc="Fullscreen the current window"
@@ -247,6 +227,7 @@ keys = [
 
     #+END_SRC
 
+    #+RESULTS:
 
 ** Keybindings: Audio and print
 Hotkeys to control the volume, muting and printscreen.
@@ -391,7 +372,6 @@ The right alt key is used to open text files in Vim or in Emacs.
 ]
 #+END_SRC
 
-
 ** Groups
 the workspaces are described, which are called Groups in qtile.
 
@@ -433,7 +413,7 @@ keys.extend([
 
 layout_theme = {"border_width": 2,
 #                "margin": 20,
-                "border_focus": "#98C379",
+                "border_focus": "#00ffd2",  #98C379= groen
                 "border_normal": "#282C34",
                 }
 #+END_SRC
@@ -524,7 +504,6 @@ reconfigure_screens = True
 auto_minimize = True # handy for steam games
 
 #+END_SRC
-
 
 ** Some hooks
 A startup script is ran after startup of qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).

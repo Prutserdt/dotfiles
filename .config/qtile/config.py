@@ -38,23 +38,6 @@ def monwide(qtile):
 def monwide2(qtile):
     qtile.cmd_to_layout_index(5) #3: monadwide with margins
 
-#FIXME: dit is een test voor spelen met margins...
-#def cmd_increase_margin(self):
-#    self.margin += 10
-#    self.group.layout_all()
-#
-#
-#def cmd_decrease_margin(self):
-#    new_margin = self.margin - 10
-#    if new_margin < 0:
-#        new_margin = 0
-#
-#
-#self.margin = new_margin
-#
-#self.group.layout_all()
-#FIXME: einde test
-
 keys = [
     # Switch between windows
     Key([modL], "h",
@@ -356,7 +339,7 @@ keys.extend([
 
 layout_theme = {"border_width": 2,
 #                "margin": 20,
-                "border_focus": "#98C379",
+                "border_focus": "#00ffd2",  #98C379= groen
                 "border_normal": "#282C34",
                 }
 
