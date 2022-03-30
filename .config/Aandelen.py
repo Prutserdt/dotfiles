@@ -121,7 +121,7 @@ Kapitaal = df[EurCol].sum()
 df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int)
 df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int)
 df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje geven
-print(separ + "\n", df)  # Alleen voor debugging gebruik
+print(separ + "\n", dfx)  # Alleen voor debugging gebruik
 
 # Extra regels toevoegen onder de tabel (separatoren en AA waarden)
 # Separator lijnen aanmaken
@@ -136,12 +136,16 @@ d = {
     AaCol: ["+   ", "", ""],
     AminHuisCol: ["", "", ""]}
 dfx = pd.DataFrame(d)
-
+print("hieronder staat dfx!!!!!!!!!!!!!!!!!!!!!!!!!!")
+print(separ + "\n", dfx)  # Alleen voor debugging gebruik
 # Samenvoegen van dataframes
 df = pd.concat([df, dfx])
 
 # De kolom omschrijving afslanken tot 20 tekens
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
+
+print("hieronder staat df!!!!!!!!!!!!!!!!!!!!!!!!!!")
+print(separ + "\n", df)  # Alleen voor debugging gebruik
 
 # Maak introductie regels en combineer dit met de dataframe.
 # Datum vinden van het bestand:fileDeGIRO
@@ -151,9 +155,11 @@ t_stamp = str(time.strftime("%d", datum)) + str(time.strftime("%b", datum)) + st
 # Introductie regels (separator/datum+assets/separator)
 deel1 = (separ + "\n" + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(
     str) + " Euro." "\n" + separ + "\n")
+
 # Combineer de introductieregels met het dataframe
 deel2 = df.to_string(index=False)  # Index verwijderen van dataframe en string maken
 deel2 = deel2.replace('NaN', '')  # Verwijder NaN waarden
+
 data = deel1 + deel2  # Combineren van introductieregels+dataframe
 df = dfx = deel1 = deel2 = None  # Wissen van data (garbage collection)
 print(separ + "\n", "data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik

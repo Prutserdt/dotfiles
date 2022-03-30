@@ -17,6 +17,7 @@ alias l='ls -alh'               # Lazy man's ls
 alias la='ls -lAFh'             # Long list
 alias diff="diff --color=auto"
 alias q="exit"                  # Exiting quickly
+alias ZZ="exit"                 # Exiting quickly, the Vim way
 alias c='printf "\e[H\e[2J"'    # Clear screen, CTL-L for scrollback
 alias cls="c;ls"                # Clear screen, scrollback and 'ls --color=auto'
 alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
