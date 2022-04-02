@@ -60,7 +60,7 @@ alias dw="cd $HOME/Stack/Afbeeldingen/Wallpapers"
 alias de="cd $HOME/Stack/Documenten/Studie/C_programming_training_Dartmouth"
 alias dr="cd $HOME/qmk_firmware/keyboards/redox/keymaps/Prutserdt"
 alias dg="cd $HOME/qmk_firmware/keyboards/gergo/keymaps/Prutserdt"
-alias dp="cd $HOME/Downloads/MSQL_developer_LOI/Programmeren_in_Python_module23917"
+alias dp="cd $HOME/Stack/Documenten/Studie/MSQL_developer_LOI/Programmeren_in_Python_module23917"
 alias dq="cd $HOME/.config/qtile"
 # Jump to suckless app dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
 alias dss="cd $HOME/Stack/suckless"

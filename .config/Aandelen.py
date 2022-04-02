@@ -80,7 +80,7 @@ fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 
 # Locatie Rabo portfolio. Zoek meest recente file mbv wildcard:
 searchRabo = os.path.expanduser("~") + "/Downloads/Portfolio_36*"  # Wildcard zoeken
-fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)  # Zoek nieuwste
+fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)       # Zoek nieuwste
 # Separator lijn die ik her en der gebruik
 separ = CreateSep("=", 80)  # separator teken en lengte
 
@@ -112,7 +112,12 @@ df = pd.concat([df, dfx])
 
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
+
+# Rekening courant corrigeren voor 500 euro
+# Regel drie is mijn Rabobank rekening courant saldo
+df.at[3, "Euro"]= df.at[3, "Euro"] - 500
 print(separ + "\n", df)  # Alleen voor debugging gebruik
+
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 # Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA-berekening
@@ -136,16 +141,12 @@ d = {
     AaCol: ["+   ", "", ""],
     AminHuisCol: ["", "", ""]}
 dfx = pd.DataFrame(d)
-print("hieronder staat dfx!!!!!!!!!!!!!!!!!!!!!!!!!!")
-print(separ + "\n", dfx)  # Alleen voor debugging gebruik
+
 # Samenvoegen van dataframes
 df = pd.concat([df, dfx])
 
 # De kolom omschrijving afslanken tot 20 tekens
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
-
-print("hieronder staat df!!!!!!!!!!!!!!!!!!!!!!!!!!")
-print(separ + "\n", df)  # Alleen voor debugging gebruik
 
 # Maak introductie regels en combineer dit met de dataframe.
 # Datum vinden van het bestand:fileDeGIRO
@@ -161,8 +162,8 @@ deel2 = df.to_string(index=False)  # Index verwijderen van dataframe en string m
 deel2 = deel2.replace('NaN', '')  # Verwijder NaN waarden
 
 data = deel1 + deel2  # Combineren van introductieregels+dataframe
-df = dfx = deel1 = deel2 = None  # Wissen van data (garbage collection)
 print(separ + "\n", "data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
 
 # Schrijf data weg in het clipboard
 pyperclip.copy(data)
+df = dfx = deel1 = deel2 = d = Saldo = data = SepKort = SepLang = Sep = datum = t_stamp = None  # Wissen van data (garbage collection)
