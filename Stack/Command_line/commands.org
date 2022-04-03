@@ -11,7 +11,7 @@
                                           Created by Prutserdt
 #+end_example
 
-* Table of content :toc:
+* /home/icefly/Stack/Command_line/Table of content :toc:
 - [[#about-this-document][About this document]]
 - [[#command-line-tricks][Command line tricks]]
 - [[#applications-command-line-and-guis][Applications (Command line and GUIs)]]
@@ -518,64 +518,78 @@ naar de directory en hernoem deze files met cw.
 
 *** Linux keyboard shortcuts
 Lijstje met allerlei keyboard shortcuts.
-===
+
+
 Grafische omgeving shortcuts:
-F10				Shows menubar/Switch to menubar
-Ctrl Fx (F1-F9)			Switch naar desktop x
-Ctrl Alt left/right cursor	Switch workspaces
-Ctrl Alt Backspace		Log uit X en terug naar login scherm
-Ctrl Alt Delete			Reboot
-Ctrl Alt D			Toggles "show desktop"
-Ctrl Alt Fx (F1-F9)		Switch naar virtual terminal. Goed voor debugging als je X niet wilt afsluiten (Ctrl Alt Delete). Default terminal is 6.
-Alt				Opent het menu bovenin de applicatie
-Alt F1				Opent het application menu (niet als Win is ingesteld)
-Alt F2				Zoek een applicatie
-Alt F3				Zoek een applicatie (uitgebreid)
-Alt F4				Closes window
-Alt F5				Returns window to "normal" or previous size
-Alt F7				Move the window
-Alt F8				Resize the window
-Alt F9				Minimizes current window
-Alt F10				Maximizes current window
-Alt Tab				Cycle through open windows
-Alt Space			Brings up window menu with with 'Always on Top' and 'Minimise' and 'Maximise' etc. 
-Ctrl c				Copy
-Ctrl v				Paste
-Ctrl f				Search
-Ctrl x				Cut the selected 
-Ctrl a				Select all text
-Ctrl b				Make the selected text bold
-Ctrl i				Make the selected text italic
-Ctrl u				Underline the selected text
-Ctrl n				Open a new document or window
-Ctrl s				Save the current document
-Ctrl o				Open another document
-Ctrl p				Print the current document
-Ctrl z				Undo the last change you made
-Ctrl Shift Z        Redo a change that you just undid 
+|----------------------------+----------------------------------------------------------|
+| Hotkeys                    | Omschrijving                                             |
+|----------------------------+----------------------------------------------------------|
+| F10                        | Shows menubar/Switch to menubar                          |
+| Ctrl Fx (F1-F9)            | Switch naar desktop x                                    |
+| Ctrl Alt left/right cursor | Switch workspaces                                        |
+| Ctrl Alt Backspace         | Log uit X en terug naar login scherm                     |
+| Ctrl Alt Delete            | Reboot                                                   |
+| Ctrl Alt D                 | Toggles "show desktop"                                   |
+| Ctrl Alt Fx (F1-F9)        | irtual terminal. Goed voor debugging                     |
+| Alt                        | Opent het menu bovenin de applicatie                     |
+| Alt F1                     | Opent het application menu (niet als Win is ingesteld)   |
+| Alt F2                     | Zoek een applicatie                                      |
+| Alt F3                     | Zoek een applicatie (uitgebreid)                         |
+| Alt F4                     | Closes window                                            |
+| Alt F5                     | Returns window to "normal" or previous size              |
+| Alt F7                     | Move the window                                          |
+| Alt F8                     | Resize the window                                        |
+| Alt F9                     | Minimizes current window                                 |
+| Alt F10                    | Maximizes current window                                 |
+| Alt Tab                    | Cycle through open windows                               |
+| Alt Space                  | Open window menu with 'Always on Top' and 'Minimise' and |
+| Ctrl c                     | Copy                                                     |
+| Ctrl v                     | Paste                                                    |
+| Ctrl f                     | Search                                                   |
+| Ctrl x                     | Cut the selected                                         |
+| Ctrl a                     | Select all text                                          |
+| Ctrl b                     | Make the selected text bold                              |
+| Ctrl i                     | Make the selected text italic                            |
+| Ctrl u                     | Underline the selected text                              |
+| Ctrl n                     | Open a new document or window                            |
+| Ctrl s                     | Save the current document                                |
+| Ctrl o                     | Open another document                                    |
+| Ctrl p                     | Print the current document                               |
+| Ctrl z                     | Undo the last change you made                            |
+| Ctrl Shift Z               | Redo a change that you just undid                        |
+|----------------------------+----------------------------------------------------------|
 
 Terminal shortcuts:
-Ctrl a				Ga na begin van de line (in bijv. Nano)
-Ctrl e				Ga na het einde van de line (in bijv. Nano)
-Ctrl c				Kill process in terminal
-Ctrl z				Zombie an application in a terminal, dit geeft de terminal terug en de applicatie is niet afgesloten. Het proces komt terug door het typen van "fg".
-Ctrl r				Zoek in de command line. Type een woord dat je zoekt.
+|---------+-------------------------------------------------------|
+| Hotkeys | Omschrijving                                          |
+|---------+-------------------------------------------------------|
+| F10     | Shows menubar/Switch to menubar                       |
+| Ctrl a  | Ga na begin van de line (in bijv. Nano)               |
+| Ctrl e  | Ga na het einde van de line (in bijv. Nano)           |
+| Ctrl c  | Kill process in terminal                              |
+| Ctrl z  | Zombie an application in a terminal. 'fg' to return.  |
+| Ctrl r  | Zoek in de command line. Type een woord dat je zoekt. |
+|---------+-------------------------------------------------------|
 
 Firefox shortcuts
-Ctrl                uOpen a new tab
-Ctrl Tab            Rotate through each tab
-Ctrl Shift          TabRotate backwards through each tab
-Alt Left            Page Back
-Alt right           Page Forward
-Ctrl b				Show a list of your bookis
-Ctrl h				Show your browsing history
-Ctrl k				Enter a new web search in the search bar
-Ctrl y				Show a list of downloaded files
-Ctrl r				Reload the current page 
-Ctrl p				Open a private window
-F11				Display the current page full-screen
-Esc				Stop loading the current page
-===
+|------------+------------------------------------------|
+| Hotkeys    | Omschrijving                             |
+|------------+------------------------------------------|
+| Ctrl       | Open a new tab                           |
+| Ctrl Tab   | Rotate through each tab                  |
+| Ctrl Shift | TabRotate backwards through each tab     |
+| Alt Left   | Page Back                                |
+| Alt right  | Page Forward                             |
+| Ctrl b     | Show a list of your bookis               |
+| Ctrl h     | Show your browsing history               |
+| Ctrl k     | Enter a new web search in the search bar |
+| Ctrl y     | Show a list of downloaded files          |
+| Ctrl r     | Reload the current page                  |
+| Ctrl p     | Open a private window                    |
+| F11        | Display the current page full-screen     |
+| Esc        | Stop loading the current page            |
+|------------+------------------------------------------|
+
 
 *** Batch rename image files
 
@@ -1248,8 +1262,11 @@ Procedure gepikt van Luke Smith
 Script aangemaakt in ~/.local genaamd corona, executable gemaakt door:
 =chmod +x ~/.local/corona=
 Inhoud script:
+
+#+begin_src shell
+
 #!/bin/sh
-# 
+#
 # This script imports a corona dataset
 # on a daily basis and gives output in
 # the i3 bar
@@ -1262,6 +1279,9 @@ curl -s https://corona-stats.online/netherlands > ~/.cache/corona
 =grep "Netherlands" ~/.cache/corona |=
 =sed "s/\s*//g ; s/║//g ; s/│/;/g" |=
 =awk -F';' '{print "😷" $3 "("$4")" "☠️" $5 "("$6")"    ud script:=
+
+#+end_src
+
 PROBLEEM: nu heb ik een goed script, maar hoe voeg ik dit toe aan i3bar.
 Aan i3status kun je geen script hangen... (vim ~/.config/i3status/config)
 
@@ -1280,6 +1300,9 @@ Voorbeeld:
 
 Dit script is geen onderdeel van mijn dotfiles en daarom plak ik het hier:
 
+
+#+begin_src shell
+
 #!/bin/sh
 #~/.config/aandelen.sh
 #                      _      _                  _
@@ -1295,8 +1318,10 @@ alacritty -e vim ~/Stack/Documenten/Aandelen/aandelen_log.md & # open md file
 cat ~/Downloads/test/Portfolio.csv | sed "1,2 d" | cut -d , -f 1,7 | sed 's/"//'| sort -r -t ',' --key=6 > ~/Downloads/test/TempSorted &&
 cat ~/Downloads/test/TempSorted | cut -d , -f 2 | awk '{a[NR] = $1; sum+= $1 } END {for (i = 1; i <= NR; i++) printf "%s %1.1f %\n", a[i],(100 * a[i])/sum}' > ~/Downloads/test/TempPerc &&
 cat ~/Downloads/test/TempSorted | cut -d , -f 1  > ~/Downloads/test/TempName &&
-paste ~/Downloads/test/TempPerc ~/Downloads/test/TempName > ~/Downloads/test/TempMerged && 
+paste ~/Downloads/test/TempPerc ~/Downloads/test/TempName > ~/Downloads/test/TempMerged &&
 cat ~/Downloads/test/TempMerged | xclip -sel clip
+
+#+end_src
 
 *** Video card information
 lspci -vnn | grep VGA -A 12
@@ -1317,9 +1342,9 @@ onderaan staat de umount.
 =free -g=
 # check drives (incl virtual drives)
 =df -T=
-# Dit geeft user id. Of gebruik gewoon de variabele:
+# /home/icefly/Stack/Command_line/Dit geeft user id. Of gebruik gewoon de variabele:
 =id -u=
-# Of gebruik gewoon de variabele:
+# /home/icefly/Stack/Command_line/Of gebruik gewoon de variabele:
 =$XDG_RUNTIME_DIR=
 # deze directory kun je gebruiken zonder root privileges. Zie ook aandelen.sh
 
@@ -1631,7 +1656,8 @@ Maak asci word art van een woord in command line: =sudo pacman -S figlet=
 Een terminal file manager die gebruikt maakt van VI bindings :-)
 Ik heb van Distro Tube de volgende twee files toegevoegd aan 
 vi ~/.config/vifm/scripts/vifmimg
-===
+#+begin_src shell
+
 #!/usr/bin/env bash
 	readonly ID_PREVIEW="preview"
 	if [ -e "$FIFO_UEBERZUG" ]; then
@@ -1645,8 +1671,11 @@ vi ~/.config/vifm/scripts/vifmimg
 	            > "$FIFO_UEBERZUG"
 	    fi
 	fi
+#+end_src
+
 =vi ~/.config/vifm/scripts/vifmrun=
-===
+#+begin_src shell
+
 #!/usr/bin/env bash
 	export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
 	function cleanup {
@@ -1659,7 +1688,9 @@ vi ~/.config/vifm/scripts/vifmimg
 	tail --follow "$FIFO_UEBERZUG" | ueberzug layer --silent --parser bash &
 	vifm
 	cleanup
-===
+
+#+end_src
+
 Wat je ook nodig hebt is het python script Ueberzug en pillow:
 =yay python-ueberzug=
 =yay pillow=
@@ -1720,7 +1751,8 @@ URxvt.resize-font.smaller:  C-j
 URxvt.resize-font.bigger:   C-k 
  Keyboard select. Je gaat erin met Mod+ESC en eruit met Esc:
 URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
-===
+
+#+begin_src shell
 
 # .Xdefaults
 #  __  __   _       __             _ _       
@@ -1752,6 +1784,9 @@ URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
 =URxvt.keysym.M-Escape:      perl:keyboard-select:activate=
 =URxvt.keysym.M-s:           perl:keyboard-select:search=
 =URxvt.keysym.M-c:           perl:clipboard:copy=
+
+#+end_src
+
 
 *** cmus. Terminal music player
 Begin door het toevoegen van een direcotory, waar het prog. muziek in gaat
@@ -2029,7 +2064,8 @@ desktop: qtox
 Assign keyboard shortcuts (https://wiki.archlinux.org/index.php/Sxiv)
 Kopieer het voorbeeld in de de wiki in de file
 =~/.config/sxiv/exec/key-handler en maak deze executable.=
-===
+#+begin_src shell
+
 #!/bin/sh
 while read file
 do
@@ -2044,7 +2080,8 @@ do
                 wal -i "$file" ;;
         esac
 done
-===
+#+end_src
+
 Als je nu in SXIV een image als achtergrond wilt instellen klik je op
 CTRL-x (voor key handler mode) en CTRL-w. :-).
 
@@ -2199,7 +2236,7 @@ arduino-cli compile --fqbn arduino:avr:uno FirstSketchVoornaam.ino -v
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchVoornaam.ino
 
 *** Arduino
-3 stappen voor Arduino programmeren:
+3 /home/icefly/Stack/Command_line/stappen voor Arduino programmeren:
 1: programmeer sketch genaamd FirstSketchVoornaam.ino
 2: compileer in directory sketch:
 arduino-cli compile --fqbn arduino:avr:uno FirstSketchVoornaam.ino -v
@@ -2387,18 +2424,23 @@ Saving by: C-c C-c
 https://www.youtube.com/watch?v=xmBovJvQ3KU
 
 My first snippet (in ~/.doom.d/snippets/org-mode)
+#+begin_src snippet
+
 
 # -*- mode: snippet -*-
 # name: PythonBlock
 # key: <p
 # --
-#+begin_src python :tangle ${1:wismij}.py
-# NOTE, this file is generated from the org file:
+,#+begin_src python :tangle ${1:wismij}.py
+# /home/icefly/Stack/Command_line/NOTE, this file is generated from the org file:
 # `(file-name-nondirectory (buffer-file-name))`.org by org-babel-tangle
 # Only modify the org file and not this Python file.
 # Happy hacking :-)
 
 $2
+#+end_src
+
+
 #+end_src
 
 **** mu4e
@@ -2427,7 +2469,8 @@ Other useable commands:
 If there's a lock then delete the flintlock file in ~/.cache/mu/xapian/flintlock
 
 my first working .mbsyncrc:
-#+begin_example
+
+#+begin_src shell
 
 IMAPAccount transip
 Host imap.transip.email
@@ -2452,7 +2495,7 @@ Create Both
 Expunge Both
 SyncState *
 
-#+end_example
+#+end_src
 
 Sending email via: smtpmail
 
@@ -2618,9 +2661,13 @@ if you add the following line to the script that he showed:
 it will automatically insert the emoji into the focused program (like browser or terminal), making this
 dmenu setup act like an emoji keyboard for quick insertion
 
+#+begin_src shell
 
     /*{ MENUKEY,                    XK_u,      spawn,          SHCMD("cat ~/.config/unicode | dmenu -i -l 20 -fn unifont-08| awk '{print $1}'| xclip -selection clipboard") },*/
     /*cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard && xdotool type "$(xclip -o -selection clipboard)" */
+
+#+end_src
+
 
 *** Install on persistent USB feb2017
 
@@ -3062,7 +3109,9 @@ launcher :-)
 PROBLEEM: Als ik mijn keyboard unplug dan werken de xmodmap keybindings niet
 meer. Dat is irritant omdat de Esc/Capslock en "Menu" knop niet meer werken.
 De oplossing is om een dotfile aan te maken =~/.config/kbswitch= en zet daarin:
-===
+
+#+begin_src shell
+
 !.kbswitch
 ! _    _                  _ _       _
 !| | _| |__  _____      _(_) |_ ___| |__
@@ -3083,7 +3132,9 @@ remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
-===
+
+#+end_src
+
 In .bashrc is een alias aangemaakt die deze xmodmap laat lopen:
 alias kbswitch='xmodmap ~/.config/kbswitch'
 
@@ -3100,7 +3151,7 @@ https://bbs.archlinux.org/viewtopic.php?id=172421
 =mkswap /mnt/sdc1/swapfile=
 =swapon /mnt/sdc1/swapfile=
 =/etc/fstab=
-# 12sep20 toegevoegd /etc/fstab:
+# /home/icefly/Stack/Command_line/12sep20 toegevoegd /etc/fstab:
 =/swapfile none swap default 0 0=
 Hierna werkt het nog niet, want error bij opstarten
 
@@ -3135,37 +3186,44 @@ Voeg toe aan bashrc:
 =PATH="$HOME/bin:$PATH"=
 Pas .xinitrc aan (exec dwm). Reboot en startx!
 
+#+begin_src shell
+
 #!/bin/sh
 #
 # ~/.xinitrc
-#        _       _ _            
-#  __  _(_)_ __ (_) |_ _ __ ___ 
+#        _       _ _
+#  __  _(_)_ __ (_) |_ _ __ ___
 #  \ \/ / | '_ \| | __| '__/ __|
-# _ >  <| | | | | | |_| | | (__ 
+# _ >  <| | | | | | |_| | | (__
 #(_)_/\_\_|_| |_|_|\__|_|  \___|
-#                               
-# Modified by Prutserdt
-# Executed by startx. 
+#          Modified by Prutserdt
+# Executed by startx.
 #
-=xmodmap ~/.Xmodmap & # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3=
-#
-# Uncomment the next line to start i3wm and writes in the log:
-#exec i3 -V >> ~/i3_log/i3log-$(date +'%F-%k-%M-%S') 2>&1
+xmodmap ~/.Xmodmap &    # Use .Xmodmap for escape/Caps_lock change and Super_R to mod3
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
+xset r rate 300 80      # Move around quicker (increase keyboard rate)
 
-# give menu bar and start dwm
-while true
-do
-#  xsetroot -name "=date +"%d%h%y %H:%M"= =amixer -c 1 get Master | sed '5!d'="
-# xsetroot -name "=amixer -c 1 get Master | sed '5!d'= =date +"%d%h%y %H:%M"="
-xsetroot -name "=awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master)= =date +"%d%h%y %H:%M"="
+# DWM starten als window manager: uncommenting
+~/.config/dwmbar.sh &   # Menu bar
+numlockx &              # Switch numlock on
+wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg & # Set wallpaper
+#picom -b               # Start picom, for transparancy
+exec dwm                # Run dwm, a sym link in  ~/bin, and the path was set in .bashrc
+while type dwm >/dev/null ; do dwm && continue || break ; done # to restart in place
 
-=sleep 1=
-=done &=
-=numlockx &=
-=wal -i /home/icefly/Downloads/gekibbel.jpg=
-=exec dwm=
-# if dwm exits 0, restart -- this allows hot reloading of config.h
-=while type dwm >/dev/null ; do dwm && continue || break ; done=
+# qtile starten als window manager: uncommenting
+#numlockx &              # Switch numlock on
+#wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg & # Set wallpaper
+#exec qtile start
+
+# Gedeelte om te testen
+#twm &
+#xclock -geometry 50x50-1+1 &
+#xterm -geometry 80x50+494+51 &
+#xterm -geometry 80x20+494-0 &
+#exec xterm -geometry 80x66+0+0 -name login
+
+#+end_src
 
 ## Vervang de huidige dwm installatie voor vanilla dwm: dwmrestore (staat in .bashrc)
 Het commando "dwmrestore" geeft een vanilla install terug! Het kopieerd data.
@@ -3186,13 +3244,13 @@ Let op: LET OP DIT VERWIJDERD DE HUIDIGE VERSIE!!
 
 
 ===
-# Automatische patching via de volgende .bashrc alias procedure:
+# /home/icefly/Stack/Command_line/Automatische patching via de volgende .bashrc alias procedure:
 # alias dwmpatch = "dwmstable && cp ~/dwm/config.h ~/dwm/config.def.h && rm ~/dwm/config.h &&
 #                  patch -p1 < ~/Stack/dwm/patches/test/*.diff && make clean install"
-# Stap 1: verwijdern files in test direcotory:
+# /home/icefly/Stack/Command_line/Stap 1: verwijdern files in test direcotory:
 rm ~/Stack/dwm/patches/test/*
 # Stap 2: Zet je diff file op de volgend locatie: ~/Stack/dwm/patches/test en run 
-# Stap 3: run .bashrc alias:
+# /home/icefly/Stack/Command_line/Stap 3: run .bashrc alias:
 dmwpatch
 ===
 
@@ -3293,7 +3351,7 @@ Transparancy werkt als je picom insteld in xinitrc:
 =picom -b=
 
 #fonts instellen
-# font ingesteld voor config.def.h:
+# /home/icefly/Stack/Command_line/font ingesteld voor config.def.h:
 Aangepast in config.def.h:
 orgineel:
 ===
@@ -3360,11 +3418,6 @@ select, dus default dmenu font wat nu hack is)
 
 
 *** st
-     _   
- ___| |_ 
-/ __| __|
-\__ \ |_ 
-|___/\__|
 #st mijn eigen build!
 # ik ga st in mijn dwm folder zetten en deze mee ontwikkelen met mijn huidige
 # laten we kijken of dit goed werkt.
@@ -3397,33 +3450,55 @@ Helaas, werkt nog niet, maar..... een andere dezelfde foutmelding:
 =/home/icefly/bin/dmenu_run: line 2: /home/icefly/bin/dmenu_path: Permission denied=
 Opgelost door met het script ~/.config/dmenuapps.sh:
 
+#+begin_src shell
+
 #!/bin/sh
+#~/.config/dmenuapps.sh
+#     _                                                        _
+#  __| |_ __ ___   ___ _ __  _   _  __ _ _ __  _ __  ___   ___| |__
+# / _` | '_ ` _ \ / _ \ '_ \| | | |/ _` | '_ \| '_ \/ __| / __| '_ \
+#| (_| | | | | | |  __/ | | | |_| | (_| | |_) | |_) \__ \_\__ \ | | |
+# \__,_|_| |_| |_|\___|_| |_|\__,_|\__,_| .__/| .__/|___(_)___/_| |_|
+#                                       |_|   |_|
+#                                                Created by Prutserdt
+#
+# Script to open applications (listed in: ~/.cache/dmenu_run) by dmenu.
+# This requires the dmenu patch: center, which gives the dmenu -c option.
+#
+# If applications are missing, then it is time to update dmenu_run by:
+# rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run
+cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
 
-# Script to open applications (~/.cache/dmenu_run) by dmenu.
-# It opens: ~/.cache/dmenu_run
-# This required the dmenu patch: center, which gives the dmenu -c option.
-=cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}=
-Probleem is dat nieuwe apps nu niet bij dmenu_run worden toegevoegd.
-Doe dat door eerst de file te deleten:
-=rm ~/.cache/dmenu_run=
-Daarna de lijst opnieuw te maken:
-=ls /usr/bin/* > ~/.cache/dmenu_run=
-En handmatig de appimage toevoegen:
-=sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run=
-Dit allemaal tegelijk, met een tweede appimage:
-=sed -i '1 i /home/icefly/Downloads/stack-2.8.2-20210809-x86_64.AppImage' /home/icefly/.cache/dmenu_run=
+#+end_src
 
-oud:
-rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run;sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run;sed -i '2 i /home/icefly/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' /home/icefly/.cache/dmenu_run
 
-Het bovenstaande werkt, maar wel met directory structuur wat lelijk is maar
-verder geen probleem.
+To update the package list the following shell script can be used:
 
-nieuw: werkt niet:
-rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run;sed -i '1 i /home/icefly/Downloads/stack-2.8.2-20210809-x86_64.AppImage' /home/icefly/.cache/dmenu_run;sed -i '2 i /home/icefly/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' /home/icefly/.cache/dmenu_run
-Het openen via commandline werkt wel, let op in qtile start het in systray, dus
-het werk misschien wel via bovenstaande, volgende keer ff  opletten in
-systray...
+#+begin_src shell
+
+#!/bin/bash
+# ~/.config/dmenustable.sh
+#     _                            _   _           _       _             _
+#  __| |_ __ ___   ___ _ __  _   _| | | |_ __   __| | __ _| |_ ___   ___| |__
+# / _` | '_ ` _ \ / _ \ '_ \| | | | | | | '_ \ / _` |/ _` | __/ _ \ / __| '_ \
+#| (_| | | | | | |  __/ | | | |_| | |_| | |_) | (_| | (_| | ||  __/_\__ \ | | |
+# \__,_|_| |_| |_|\___|_| |_|\__,_|\___/| .__/ \__,_|\__,_|\__\___(_)___/_| |_|
+#                                       |_|                Created by Prutserdt
+#
+# Script to create a list of applications that is used for dmenu.
+#
+# Delete the dmenu_run file
+rm $HOME/'.cache/dmenu_run' &
+# Create a new list of apps
+ls /usr/bin/* > $HOME/.cache/dmenu_run #&&
+# Add the appimages to the list of apps
+sed -i '1 i ~/Downloads/stack-2.8.2-20210809-x86_64.AppImage' ~/.cache/dmenu_run &&
+sed -i '2 i ~/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' ~/.cache/dmenu_run
+
+#+end_src
+
+Of paste in shell het volgende:
+=rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run;sed -i '1 i /home/icefly/Downloads/stack-2.8.2-20210809-x86_64.AppImage' /home/icefly/.cache/dmenu_run;sed -i '2 i /home/icefly/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' /home/icefly/.cache/dmenu_run=
 
 * Keebs
 *** Ducky one mechanical keyboard

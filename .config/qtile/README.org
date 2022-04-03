@@ -313,6 +313,8 @@ Right super key to open applications.
         ),
 #+END_SRC
 
+#+RESULTS:
+
 ** Keybingings: Text files
 The right alt key is used to open text files in Vim or in Emacs.
 
