@@ -26,15 +26,15 @@ class InputDialog(QDialog):
         global Spaargeld  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
         Spaargeld = QLineEdit(self)
         Huis = QLineEdit(self)
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+        buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
         layout = QFormLayout(self)
         layout.addRow("Voer spaarsaldo in:", Spaargeld)
         layout.addRow("Voer overwaarde huis in:", Huis)
-        layout.addWidget(buttonBox)
-        buttonBox.accepted.connect(self.accept)
-        buttonBox.rejected.connect(self.reject)
+        layout.addWidget(buttonbox)
+        buttonbox.accepted.connect(self.accept)
+        buttonbox.rejected.connect(self.reject)
 
-    def getInputs(self):
+    def getinputs(self):
         return Spaargeld.text(), Huis.text()
 
 
@@ -44,8 +44,8 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     dialog = InputDialog()
     if dialog.exec():
-        Spaargeld, Huis = dialog.getInputs()
-        Huis = int(Huis)  # Moet integer zijn voor latere berekening
+        Spaargeld, Huis = dialog.getinputs()
+        Huis = int(Huis)            # Moet integer zijn voor latere berekening
         Spaargeld = int(Spaargeld)  # Moet integer zijn voor latere berekening
 
 
@@ -88,36 +88,33 @@ separ = CreateSep("=", 80)  # separator teken en lengte
 OmsHuis = "Overwaarde huis     "
 OmsSpaar = "Spaargeld           "
 # Namen van kolommen die ik ga gebruiken:
-EurCol = "Euro"  # Euro column naam
-OmsCol = "Omschrijving        "  # Omschrijving column naam
-AaCol = "AA%"  # Asset Allocation column naam
-AminHuisCol = "AA*%"  # Asset Allocation zonder huis berekend column naam
+EurCol = "Euro"                     # Euro column naam
+OmsCol = "Omschrijving        "     # Omschrijving column naam
+AaCol = "AA%"                       # Asset Allocation column naam
+AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
 
+# Aanmaken van dataframes van de twee portefeuilles en samenvoegen dataframes.
 # Aanmaken van een leeg dataframe
 df = pd.DataFrame()
-
 # Toevoegen van data uit csv files aan het lege dataframe.
 #                (filename,   delimiter, kolom1,          kolom2    )
 AddCSVtoDataFrame(fileRabo, ";", "Titel", "Waarde €")
 AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product")
-
 # Nieuw dataframe aanmaken met overwaarde huis en spaargeld data
 d = {
-    OmsCol: [OmsHuis, OmsSpaar],  # kolom omschrijving invullen
-    EurCol: [Huis, Spaargeld]}  # kolom euros invullen
+    OmsCol: [OmsHuis, OmsSpaar],    # kolom omschrijving invullen
+    EurCol: [Huis, Spaargeld]}      # kolom euros invullen
 dfx = pd.DataFrame(d)
-
 # Samenvoegen van dataframes
 df = pd.concat([df, dfx])
-
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
-
-# Rekening courant corrigeren voor 500 euro
+# Rekening courant -500 euro corrigeren
 # Regel drie is mijn Rabobank rekening courant saldo
-df.at[3, "Euro"]= df.at[3, "Euro"] - 500
+df.at[3, "Euro"] = df.at[3, "Euro"] - 500
 print(separ + "\n", df)  # Alleen voor debugging gebruik
 
+# Asset allocations berekenen en toevoegen aan dataframe
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 # Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA-berekening
@@ -127,7 +124,6 @@ df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int)
 df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int)
 df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje geven
 print(separ + "\n", dfx)  # Alleen voor debugging gebruik
-
 # Extra regels toevoegen onder de tabel (separatoren en AA waarden)
 # Separator lijnen aanmaken
 #                  (teken, lengte)
@@ -141,10 +137,8 @@ d = {
     AaCol: ["+   ", "", ""],
     AminHuisCol: ["", "", ""]}
 dfx = pd.DataFrame(d)
-
 # Samenvoegen van dataframes
 df = pd.concat([df, dfx])
-
 # De kolom omschrijving afslanken tot 20 tekens
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
 
@@ -156,14 +150,14 @@ t_stamp = str(time.strftime("%d", datum)) + str(time.strftime("%b", datum)) + st
 # Introductie regels (separator/datum+assets/separator)
 deel1 = (separ + "\n" + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(
     str) + " Euro." "\n" + separ + "\n")
-
 # Combineer de introductieregels met het dataframe
-deel2 = df.to_string(index=False)  # Index verwijderen van dataframe en string maken
-deel2 = deel2.replace('NaN', '')  # Verwijder NaN waarden
-
-data = deel1 + deel2  # Combineren van introductieregels+dataframe
+deel2 = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
+deel2 = deel2.replace('NaN', '')    # Verwijder NaN waarden
+data = deel1 + deel2                # Combineren van introductieregels+dataframe
 print(separ + "\n", "data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
 
 # Schrijf data weg in het clipboard
 pyperclip.copy(data)
-df = dfx = deel1 = deel2 = d = Saldo = data = SepKort = SepLang = Sep = datum = t_stamp = None  # Wissen van data (garbage collection)
+
+# Wissen van data (garbage collection)
+df = dfx = deel1 = deel2 = d = Saldo = data = SepKort = SepLang = Sep = datum = t_stamp = None
