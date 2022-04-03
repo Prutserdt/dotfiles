@@ -11,7 +11,7 @@
                                           Created by Prutserdt
 #+end_example
 
-* /home/icefly/Stack/Command_line/Table of content :toc:
+* Table of content :toc:
 - [[#about-this-document][About this document]]
 - [[#command-line-tricks][Command line tricks]]
 - [[#applications-command-line-and-guis][Applications (Command line and GUIs)]]
