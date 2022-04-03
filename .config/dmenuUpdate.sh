@@ -7,11 +7,12 @@
 # \__,_|_| |_| |_|\___|_| |_|\__,_|\___/| .__/ \__,_|\__,_|\__\___(_)___/_| |_|
 #                                       |_|                Created by Prutserdt
 #
-# Script to recreate the list of applications used for dmenu.
+# Script to create a list of applications that is used for dmenu.
 #
 # Delete the dmenu_run file
-rm '/home/icefly/.cache/dmenu_run' &&
+rm $HOME/'.cache/dmenu_run' &
 # Create a new list of apps
-ls /usr/bin/* > /home/icefly/.cache/dmenu_run &&
-# Add the appimage to the list of apps
-sed -i '1 i /home/icefly/Downloads/stack-2.6.5-20200909-x86_64.AppImage' /home/icefly/.cache/dmenu_run
+ls /usr/bin/* > $HOME/.cache/dmenu_run #&&
+# Add the appimages to the list of apps
+sed -i '1 i ~/Downloads/stack-2.8.2-20210809-x86_64.AppImage' ~/.cache/dmenu_run &&
+sed -i '2 i ~/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' ~/.cache/dmenu_run

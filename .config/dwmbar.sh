@@ -11,6 +11,6 @@
 # updatebar.sh
 while true
 do
-/home/icefly/.config/updatebar.sh
+$HOME/.config/updatebar.sh
   sleep 60
 done

@@ -274,6 +274,10 @@ Right super key to open applications.
         lazy.spawn(os.environ["HOME"]+"/.config/dmenuapps.sh"),
         desc="Launch My dmenu to open applications"
         ),
+    Key([modR, "shift"], "d",
+        lazy.spawn(os.environ["HOME"]+"/.config/dmenuUpdate.sh"),
+        desc="Recreate list of applications (list used for dmenuapps.sh)"
+        ),
     Key([modR], "f",
         lazy.spawn("firefox"),
         desc="Launch Firefox browser"
