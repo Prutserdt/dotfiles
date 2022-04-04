@@ -15,7 +15,6 @@
 - [[#about-this-document][About this document]]
 - [[#command-line-tricks][Command line tricks]]
 - [[#applications-command-line-and-guis][Applications (Command line and GUIs)]]
-  - [[#irc-inspircd][IRC, inspircd]]
 - [[#distros][Distros]]
 - [[#tiling-windowmanagers][Tiling windowmanagers]]
 - [[#keebs][Keebs]]
@@ -117,8 +116,10 @@ sort .bash_history | uniq > .bash_history_shortened
 
 Voeg het volgende toe aan .bashrc om een grotere en meer cleane history file te
 krijgen:
-===
-# Change the size of the bash history to 5000 in memory (500 is default) 
+
+#+begin_src shell
+
+# Change the size of the bash history to 5000 in memory (500 is default)
 # and the total amount of maximally saved lines
 HISTSIZE=5000
 HISTFILESIZE=10000
@@ -126,7 +127,8 @@ HISTFILESIZE=10000
 HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
-===
+
+#+end_src
 
 *** Weergave hard drive, formatting, dd, etc
 =sudo fdisk -l=
@@ -157,7 +159,7 @@ Alternatief voor lsusb:
 =sudo fdisk -l=
 =usb-devices=
 Output voorbeeld van =usb-devices=:
-
+#+begin_example
 T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#= 17 Spd=480 MxCh= 0
 D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
 P:  Vendor=058f ProdID=6387 Rev=01.01
@@ -166,6 +168,7 @@ S:  Product=Mass Storage
 S:  SerialNumber=4D55D1EC
 C:  #Ifs= 1 Cfg#= 1 Atr=80 MxPwr=100mA
 I:  If#=0x0 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
+#+end_example
 
 Ander alternatief voor meer info:
 =sudo blkid=
@@ -267,14 +270,14 @@ please update microcode to version: 0x22 (or later). Opgelost door een
 intel-ucode installatie en aanpassing aan syslinux:
 =yaourt -S intel-ucode=
 onderstaande INITRD aangepast in /boot/syslinux/syslinux.cfg:
-===
+#+begin_example
 LABEL arch
 MENU LABEL Arch Linux
 LINUX ../vmlinuz-linux
 INITRD ../intel-ucode.img,../initramfs-linux.img
 APPEND root=/dev/sda1 rw
 INITRD ../initramfs-linux.img
-===
+#+end_example
 
 Firefox customization: verander skins per website met Stylish.
 
@@ -340,20 +343,24 @@ Verwijder wachtwoord uit een pdf en save de pdf onder een andere naam:
 =pdftops -upw Ikwil1glas PDA\ Standaar\ 04-2021.pdf PDA_bacteriophages_for_VF.pdf=
 
 *** Removing size of pdf. Shrinking size by ghostscript package:
-=gs -sDEVICE=pdfwrite \
-     -dCompatibilityLevel=1.4 \
-     -dDownsampleColorImages=true \
-     -dColorImageResolution=150 \
-     -dNOPAUSE \
-     -dBATCH \
-     -sOutputFile=output3.pdf
-     PDA_bacteriophages_for_VF.pdf=
 
-Volgend is minder effectief:
+#+begin_src example
+gs -sDEVICE=pdfwrite \
+   -dCompatibilityLevel=1.4 \
+   -dDownsampleColorImages=true \
+   -dColorImageResolution=150 \
+   -dNOPAUSE \
+   -dBATCH \
+   -sOutputFile=output3.pdf
+   PDA_bacteriophages_for_VF.pdf
+#+end_src
 
-=gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default \
-    -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages \
-    -dCompressFonts=true -r150 -sOutputFile=output.pdf PDA_bacteriophages_for_VF.pdf=
+Het volgende is minder effectief:
+#+begin_src example
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default \
+   -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages \
+   -dCompressFonts=true -r150 -sOutputFile=output.pdf PDA_bacteriophages_for_VF.pdf
+#+end_src
 
 *** Roteren van pdfs
 Probleem: pdf files staan 180 graden gedraaid. Oplossing: roteren van pagina's
@@ -595,19 +602,18 @@ Firefox shortcuts
 
 Imagemagick, simpel verkleinen, comprimeren en renamen van files in directory.
 resize: pixel size, quality: compression, en daarachter naamverandering
-===
+#+begin_src shell
 for f in *.JPG
   do
   echo "Converting $f."
   convert "$f" -resize 3000x2000 -quality 60% "${f/.JPG/-resized.JPG}"
 done
-===
--------
-Batch rename. Verander de naam van bestanden. Zet eerst de foto's in 
+#+end_src
+Batch rename. Verander de naam van bestanden. Zet eerst de foto's in
 directories met nummer van dag v.d. vakantie en locatie. Ga in de main 
 directory. Dit scriptje VERPLAATST alleen bestanden uit de directory naar
 de main directory met als begin de naam van de directory waar het in stond
-===
+#+begin_src shell
 start=$PWD
 for directory in *; do
   cd "$directory"
@@ -616,7 +622,7 @@ mv "$filename" ../"$directory$filename"
   done
   cd "$start"
 done
-===
+#+end_src
 In command line:
 =start=$PWD; for directory in *; do cd "$directory"; for filename in *; do mv "$filename" ../"$directory $filename"; done; cd "$start"; done=
 
@@ -625,7 +631,8 @@ dag v.d. vakantie en locatie. Ga in de main directory. Dit scriptje KOPIEERT all
 bestanden uit de directory naar de main directory met als begin de naam van de 
 directory waar het in stond.
 PWD = print working directory
-===
+
+#+begin_src shell
 start=$PWD
 for directory in *; do
   cd "$directory"
@@ -634,13 +641,13 @@ for directory in *; do
   done
   cd "$start"
 done
-===
+#+end_src
 
 In command line:
 =start=$PWD; for directory in *; do cd "$directory"; for filename in *; do cp "$filename" ../"$directory $filename"; done; cd "$start"; done=
 
 rename all files in all directories....
-===
+#+begin_src shell
 start=$PWD
 for directory in *; do
   cd "$directory"
@@ -649,15 +656,17 @@ for directory in *; do
   done
   cd "$start"
 done
-===
+#+end_src
 
 In command line:
+#+begin_src shell
 =start=$PWD; for directory in *; do cd "$directory"; for filename in *; do exiv2 -r'%Y%m%d_%H%M_:basename:' rename $(ls); done; cd "$start"; done=
 =start=$PWD; for directory in *; do cd "$directory"; for filename in *; do exiv2 -r'%Y%m%d_:basename:' rename $(ls); done; cd "$start"; done=
+#+end_src
 
-===
+#+begin_src shell
 start=$PWD; for directory in *; do cd "$directory"; for filename in *; do for i in $(ls *.*); do for i in $(ls *.*); do exiv2 -r '%Y%m%d-%H%M-:basename:' rename $i; done; done; cd "$start"; done
-===
+#+end_src
 
 werkt redelijk, maar niet super want de tijd wordt 3 keer herhaald (original+digitized+modified) Haakjes in naam werkt niet. .mov --> no exif data found in the file. 
 =for i in $(ls *.*); do exiv2 -r '%Y%m%d-%H%M-:basename:' rename $i; done=
@@ -684,7 +693,7 @@ Step 3: rename with location info
 =rename 20190511 20190511_Schiphol *.jpg=
 
 make a list:
-===
+#+begin_example
 rename 20190511 20190511_Schiphol *.jpg
 rename 20190512 20190512_Bangkok *.jpg
 rename 20190513 20190513_Bangkok *.jpg
@@ -709,27 +718,28 @@ rename 20190531 20190531_Koh_Samui *.jpg
 rename 20190601 20190601_Bangkok *.jpg
 rename 20190602 20190602_Schiphol *.jpg
 rename 20190603 20190603_Schiphol *.jpg
-===
+#+end_example
 
 Combine to one line:
-===
+#+begin_src shell
 rename 20190511 20190511_Schiphol *.jpg; rename 20190512 20190512_Bangkok*.jpg; rename 20190513 20190513_Bangkok *.jpg; rename 20190514 20190514_Bangkok *.jpg; rename 20190515 20190515_Chiang_Mai *.jpg; rename 20190516 20190516_Chiang_Mai *.jpg; rename 20190517 20190517_Chiang_Mai *.jpg; rename 20190518 20190518_Chiang_Mai *.jpg; rename 20190519 20190519_Chiang_Mai *.jpg; rename 20190520 20190520_Koh_Yao_Noi *.jpg; rename 20190521 20190521_Koh_Yao_Noi *.jpg; rename 20190522 20190522_Koh_Yao_Noi *.jpg; rename 20190523 20190523_Kao_Sok *.jpg; rename 20190524 20190524_Kao_Sok *.jpg; rename 20190525 20190525_Kao_Sok *.jpg; rename 20190526 20190526_Koh_Tao *.jpg; rename 20190527 20190527_Koh_Tao *.jpg; rename 20190528 20190528_Koh_Tao *.jpg; rename 20190529 20190529_Koh_Samui *.jpg; rename 20190530 20190530_Ang_Thong *.jpg; rename 20190531 20190531_Koh_Samui *.jpg; rename 20190601 20190601_Bangkok *.jpg
-===
+#+end_src
 
 Helaas lukte het niet om .mov .gif en .mp4 te hernoemen met de exiv2 data.
-Daarom heb ik exiftool gedownload
-===
-exiftool -time:all VID_20190513_113545.mp4
+Daarom heb ik exiftool gedownload.
+=exiftool -time:all VID_20190513_113545.mp4=
+#+begin_example
 Creation Date                   : 2019:06:01 14:09:27+07:00
 gif: geen creation date 
 mov: Creation Date
 mp4: Creation Data
-===
-===
+#+end_example
+
+#+begin_example
 exiftool -time:all IMG_4074.mov
 Create Date                     : 2020:02:16 15:39:55
 Creation Date                   : 2019:06:01 14:09:27+07:00
-===
+#+end_example
 --------------------------------------------------------------
 November 2020, wederom vakantiefotos sorteren.
 Een van de devices lag 66 minuten achter. Daardoor werkte dit niet:
@@ -743,12 +753,11 @@ en daarna alle foto's bij elkaar te zetten en in te voeren:
 =exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls) === Nu wil ik nog de .jpeg en .JPG files omzetten naar .jpg.  Doe dit met:
 =find -name '*.JPG' -exec rename .JPG .jpg {} \;=
 =find -name '*.jpeg' -exec rename .jpeg .jpg {} \;=
-===
-Nu wil ik nog de locatie toevoegen voor elke foto. 
+Nu wil ik nog de locatie toevoegen voor elke foto.
 Dat doen we per dag en daar zetten we een locatie bij.
 Dat gaat handig via vim.
 creer eerst een lijst met de dagen:
-===
+#+begin_example
 20201008
 20201009
 20201010
@@ -758,9 +767,10 @@ creer eerst een lijst met de dagen:
 20201014
 20201015
 20201016
-===
+#+end_example
+
 En verander dit in vim in de volgende lijst:
-===
+#+begin_src shell
 rename 20201007 20201007_Roma *.jpg;
 rename 20201008 20201008_Roma *.jpg;
 rename 20201009 20201009_Roma *.jpg;
@@ -771,17 +781,18 @@ rename 20201013 20201013_Napoli *.jpg;
 rename 20201014 20201014_Napoli *.jpg;
 rename 20201015 20201015_Positano *.jpg;
 rename 20201016 20201016_Schiphol *.jpg;
+#+end_src
 
-
+#+begin_src shell
 rename 20201007 20201007_Roma *.jpg; rename 20201008 20201008_Roma *.jpg; rename 20201009 20201009_Roma *.jpg; rename 20201010 20201010_Roma *.jpg; rename 20201011 20201011_Napoli *.jpg; rename 20201012 20201012_Napoli *.jpg; rename 20201013 20201013_Napoli *.jpg; rename 20201014 20201014_Napoli *.jpg; rename 20201015 20201015_Positano *.jpg; rename 20201016 20201016_Schiphol *.jpg;
-===
+#+end_src
 En samenvoegen in vim tot de volgend commandline die je laat lopen
 Opmerking: het gaf foutmeldingen, omdat het te snel gaat ofzo, onduidelijk, het
 is wss beter om de bovenstaande commandos afzonderlijk te laten lopen, of er
 een microbreak tussen zetten ofzo:
-===
+#+begin_src shell
 rename 20201007 20201007_Roma *.jpg; rename 20201008 20201008_Roma *.jpg; rename 20201009 20201009_Roma *.jpg; rename 20201010 20201010_Roma *.jpg; rename 20201011 20201011_Napoli *.jpg; rename 20201012 20201012_Napoli *.jpg; rename 20201013 20201013_Napoli *.jpg; rename 20201014 20201014_Napoli *.jpg; rename 20201015 20201015_Positano *.jpg; rename 20201016 20201016_Schiphol *.jpg;
-
+#+end_src
 ===
 Mac image format heic conversion
 Conversion of .heic to jpg:
@@ -821,6 +832,8 @@ Eerst de volgende command line commandos uitgevoerd:
 =find -name '*.JPG' -exec rename .JPG .jpg {} \;=
 =find -name '*.jpeg' -exec rename .jpeg .jpg {} \;=
 Hier in vim de dagen van vakantie uitgetypt:
+
+#+begin_example
 20210615
 20210616
 20210617
@@ -840,8 +853,10 @@ Hier in vim de dagen van vakantie uitgetypt:
 20210701
 20210702
 20210703
+#+end_example
 
 En vervolgens het adres er achter schrijven(via keyboard macros)
+#+begin_example
 20210615_Porto
 20210616_Porto
 20210617_Porto
@@ -860,8 +875,10 @@ En vervolgens het adres er achter schrijven(via keyboard macros)
 20210701_Pinhao
 20210702_Pinhao
 20210703_Amsterdam
+#+end_example
 
 Daarna het volgende ervoor/erachter zetten met macros keyboard en vim :
+#+begin_src shell
 rename 20210615 20210615_Porto *.jpg;
 rename 20210616 20210616_Porto *.jpg;
 rename 20210617 20210617_Porto *.jpg;
@@ -880,11 +897,13 @@ rename 20210630 20210630_Pinhao *.jpg;
 rename 20210701 20210701_Pinhao *.jpg;
 rename 20210702 20210702_Pinhao *.jpg;
 rename 20210703 20210703_Amsterdam *.jpg;
+#+end_src
+
 
 Daarna het bovenstaande samengevoegd tot een enkel commando:
-=
+#+begin_src shell
 rename 20210616 20210616_Porto *.jpg; rename 20210617 20210617_Porto *.jpg; rename 20210619 20210619_Lagos *.jpg; rename 20210620 20210620_Lagos *.jpg; rename 20210621 20210621_Lagos *.jpg; rename 20210622 20210622_Lagos *.jpg; rename 20210623 20210623_Lagos *.jpg; rename 20210624 20210624_Lagos *.jpg; rename 20210625 20210625_Lagos *.jpg; rename 20210626 20210626_Evora *.jpg; rename 20210627 20210627_Evora *.jpg; rename 20210628 20210628_Evora *.jpg; rename 20210629 20210629_Pinhao *.jpg; rename 20210630 20210630_Pinhao *.jpg; rename 20210701 20210701_Pinhao *.jpg; rename 20210702 20210702_Pinhao *.jpg; rename 20210703 20210703_Amsterdam *.jpg;
-=
+#+end_src
 De *.mov files van apple moet ik nog hernoemen... Hoe kan ik in metadata...
 
 onderstaande optie nog testen, volgens stackoverflow:
@@ -1019,54 +1038,44 @@ mac adress vast internet desktop pc
 eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT qlen 1000
 link/ether 00:1a:4d:5d:fe:4c brd ff:ff:ff:ff:ff:ff
 Mijn ip address 82.174.98.248
-===
-sudo ip link set dev eth0 down
-sudo ip link set dev eth0 address 00:23:4E:00:00:00
-sudo ip link set dev eth0 up
-===
+=sudo ip link set dev eth0 down=
+=sudo ip link set dev eth0 address 00:23:4E:00:00:00=
+=sudo ip link set dev eth0 up=
 Verander mac address wlan0 en wlan1 via onderstaande shell script
 ===
-#!/bin/sh\
 machack.sh: deze shell veranderd mac address van wlan0 en wlan1
             naar 00:23:4E:00:00:00 en 00:23:4E:11:11:11
-----------------------------------------------------------------
-Dit stuk tekst zijn simpele tools voor gebruik van Bash
-
-testen of de file exec is: sudo ls -l bestandsnaam.sh
-script executable maken:   sudo chmod +x bestandsnaam.sh
-scrip runnen:              ./bestandsnaam.sh
-
-----------------------------------------------------------------
+#+begin_src shell
+#!/bin/sh\
 sudo ip link set dev wlan0 down
 sudo ip link set dev wlan0 address 00:23:4E:00:00:00
 sudo ip link set dev wlan0 up
 sudo ip link set dev wlan1 down
 sudo ip link set dev wlan1 address 00:23:4E:11:11:11
 sudo ip link set dev wlan1 up
-===
+#+end_src
+
+Dit stuk tekst zijn simpele tools voor gebruik van Bash
+
+testen of de file exec is:                  =sudo ls -l bestandsnaam.sh=
+script executable maken:                    =sudo chmod +x bestandsnaam.sh=
+script read/writeable maken voor iedereen:  =sudo chmod a+rw bestandsnaam=
+scrip runnen:                               =./bestandsnaam.sh=
+
 Verander mac address wlan0 en wlan1 via onderstaande shell script terug
-===
-#!/bin/sh
 macback.sh: deze shell veranderd mac address van wlan0 en wlan1
             naar android device en alfa USB wifi
             dan worden beide wlans geaccepteerd door mijn
             routers...
-----------------------------------------------------------------
-Dit stuk tekst zijn simpele tools voor gebruik van Bash
-
-testen of de file exec is: sudo ls -l bestandsnaam.sh
-script executable maken:   sudo chmod +x bestandsnaam.sh
-script read/writeable maken voor iedereen:   sudo chmod a+rw bestandsnaam
-scrip runnen:              ./bestandsnaam.sh
-
-----------------------------------------------------------------
+#+begin_src shell
+#!/bin/sh\
 sudo ip link set dev wlan0 down
 sudo ip link set dev wlan0 address 18:E2:C2:15:EC:48
 sudo ip link set dev wlan0 up
 sudo ip link set dev wlan1 down
 sudo ip link set dev wlan1 address 00:C0:CA:58:16:A5
 sudo ip link set dev wlan1 up
-------------------------------------------------------------------
+#+end_src
 *** VNC (controle van desktop van buitenaf,oa android phone)
 
 vncserver
@@ -1145,48 +1154,49 @@ tuxi wie is de mol
 Geprobeerd aan de gang te krijgen: 07MAY18.
 Install
 =yaourt -S bluez bluez-utils=
-=modinfo btusb=
 
+=modinfo btusb=
 Output:
-===
+#+begin_example
 modinfo
 ERROR: Module aliaa btusb not found
-===
+#+end_example
 
 Dus de module maar geladen:
 =modprobe btusb=
-
+=modprobe=
 Output: 
-===
-modprobe
+#+begin_example
 FATAL: Module btusb not found in directory
 /lib/modules/4.16.6-1-ARCH.  To load a module by filename (i.e. one that
 is not installed in /usr/lib/modules/$(uname -r)/): insmod filename [args]
 insmod filename [args]
+#+end_example
 
-modprobe -c | grep btusb
+=modprobe -c | grep btusb=
+#+begin_example
 output: options btusb reset=1
+#+end_example
 Then start the bluetooth.service systemd unit.
 You can enable it to start automatically at boot time. 
 
-sudo systemctl start bluetooth.service
+=sudo systemctl start bluetooth.service=
+=modinfo btusb=
 
-modinfo btusb
-===
 Deze keer wel output
 dmenu Bluetooth manager: Bluez daemon is no running, blueman-manager cannot
 continue.
-sudo modprobe btusb
+=sudo modprobe btusb=
 dmenu Bluetooth manager geen foutmelding maar er gebeurt niets.
 Daaro blueberry, met gui, geïnstalleerd
 
-sudo pacman -S blueberry
+=sudo pacman -S blueberry=
 In Blueberry, gestart in commandline, staat er een x bij devices no 
 plugin adapter found
 met dmenu a, alle blueman apps geprobeerd, zonder succes.
 blueman aangezet adapter
 Blijkbaar heb ik geen bluetooth op mijn pc want geen output bij:
-sudo lsusb |grep Bluetooth
+=sudo lsusb |grep Bluetooth=
 
 *** VPN
 19JAN19: ProtonVPN getest in mijn transip console.
@@ -1339,8 +1349,8 @@ voor bijvoorbeeld manipuleren van fotos enz.
 Check eerst beschikbare ram met free -g of df -T!
 tmpfs zorgt ervoor dat het systeem niet kan crashen als de buffer vol is. 
 onderaan staat de umount.
-=free -g=
-# check drives (incl virtual drives)
+  =free -g=
+  # check drives (incl virtual drives)
 =df -T=
 # /home/icefly/Stack/Command_line/Dit geeft user id. Of gebruik gewoon de variabele:
 =id -u=
@@ -1448,82 +1458,103 @@ De manual, ook te openen in vim met :help
 Personifieer vimrc
 =vim ~/.vimrc=
 
-My personal manual :)
 Switching modes:
-
-===
-Esc: Exit open mode
-i: Insert mode
-v: Visual mode
-V: Visual line
-===
+|-----+----------------|
+| Esc | Exit open mode |
+| i   | Insert mode    |
+| v   | Visual mode    |
+| V   | Visual line    |
+|-----+----------------|
 
 Navigation(direct commands):
-===
-h: left
-j: down
-k: up
-l: right
-CTRL+b  : page up
-CTRL+f  : page down
-CTRL+e  : scrolls down (snelheid kun in in ./.vimrc instellen)
-CTRL+y  : scrolls up (snelheid kun in in ./.vimrc instellen)
-H: verplaats cursor naar top pagina
-M: verplaats cursor naar het midden van de pagina
-L: verplaats cursor bodem van de pagina
-gg: verplaats cursor naar start document
-G: verplaats cursor naar einde document
+|---+-------|
+| h | left  |
+| j | down  |
+| k | up    |
+| l | right |
+|---+-------|
+
+|--------+------------------------------------------------------|
+| CTRL+b | page up                                              |
+| CTRL+f | page down                                            |
+| CTRL+e | scrolls down (snelheid kun in in ./.vimrc instellen) |
+| CTRL+y | scrolls up (snelheid kun in in ./.vimrc instellen)   |
+| H      | verplaats cursor naar top pagina                     |
+| M      | verplaats cursor naar het midden van de pagina       |
+| L      | verplaats cursor bodem van de pagina                 |
+| gg     | verplaats cursor naar start document                 |
+| G      | verplaats cursor naar einde document                 |
+|--------+------------------------------------------------------|
 
 Woord navigatie
-w: verplaats volgend woord
-e: verplaats naar einde van het woord (einde: volgende woord)
-b: verplaats cursor naar einde van het woord (einde: volgende woord)
+|---+-------------------------------------------------------------------|
+| w | verplaats volgend woord                                           |
+| e | verplaats naar einde van het woord (einde: volgende woord)        |
+| b | verplaats cursor naar einde van het woord (einde: volgende woord) |
+|---+-------------------------------------------------------------------|
 
 Insert mode opties
-i: insert mode
-I: Insert mode, en ga naar het begin van de regel
-a: ga naar insert een cursor naar rechts
-A: ga naar einde van laatste woord in insert mode
-o: maak een nieuwe regel aan onder cursor en ga naar insert mode
-O: maak een nieuwe regel boven de cursor en ga naar isert mode
+|---+---------------------------------------------------------------|
+| i | insert mode                                                   |
+| I | Insert mode, en ga naar het begin van de regel                |
+| a | ga naar insert een cursor naar rechts                         |
+| A | ga naar einde van laatste woord in insert mode                |
+| o | maak een nieuwe regel aan onder cursor en ga naar insert mode |
+| O | maak een nieuwe regel boven de cursor en ga naar isert mode   |
+|---+---------------------------------------------------------------|
 
 Modifiers
-i: inner
-s: surround
-p: paragraph
-.: perform the last
+|---+------------------|
+| i | inner            |
+| s | surround         |
+| p | paragraph        |
+| . | perform the last |
+|---+------------------|
+
 Search stuff
-/string : search string.
-n: next word
-N: previous word
+|---------+---------------|
+| /string | search string |
+| n       | next word     |
+| N       | Previous word |
+|---------+---------------|
 
 Replace stuff
-r: Replace a single character
-R: Replace until we tell it to stop
-c: Changes whatever specified (modifier)
-C: Changes until the end of a line
+|---+---------------------------------------|
+| r | Replace a single characte             |
+| R | Replace until we tell it to stop      |
+| c | Changes whatever specified (modifier) |
+| C | Changes until the end of a line       |
+|---+---------------------------------------|
 
 Delete stuff
-x: Delete single character after the cursor
-X: Delete single character before the cursor
-d: delete whatever specified (modifiers)
-D: delete until the end of the line
+|---+-------------------------------------------|
+| x | Delete single character after the cursor  |
+| X | Delete single character before the cursor |
+| d | delete whatever specified (modifiers)     |
+| D | delete until the end of the line          |
+|---+-------------------------------------------|
 
 Yank (copy) stuff
-y: yanks whatever specified (modifiers, bijv )
-Y: yanks current line completely
-:reg: Show the register
-"aY: Yank line to register B
+|-------+---------------------------------------------|
+| y     | yanks whatever specified (modifiers, bijv ) |
+| Y     | yanks current line completely               |
+| :reg: | Show the register                           |
+| "aY"  | Yank line to register B                     |
+|-------+---------------------------------------------|
 
 Pasting stuff
-p: pastes from vim buffer after cursor
-P: plakt ervoor (woord: voor regelpositie, regel boven regelpositie
-"ap: paste  from registry entry a (:reg)
+|-----+------------------------------------------------------------------|
+| p   | pastes from vim buffer after cursor                              |
+| P   | plakt ervoor (woord: voor regelpositie, regel boven regelpositie |
+| "ap | paste  from registry entry a (:reg)                              |
+|-----+------------------------------------------------------------------|
 
 Working with macros
-qa: Record a macro and save it to register a
-q: Stop recording macro
-@a: Play 1 time macro a (:reg)
+|----+------------------------------------------|
+| qa | Record a macro and save it to register a |
+| q  | Stop recording macro                     |
+| @a | Play 1 time macro a (:reg)               |
+|----+------------------------------------------|
 
 Editing an existing macro(in dit geval a)
 =:new=
@@ -1603,6 +1634,10 @@ alfabetsch sorteren vim document:
 :sort /\s\+/
 
 *** Veranderen van tabbing naar spaces
+y: yanks whatever specified (modifiers, bijv )
+Y: yanks current line completely
+:reg: Show the register
+"aY: Yank line to register B
 :retab
 
 *** Batch renaming in vim/vifm
@@ -1940,7 +1975,7 @@ Re-run the check out if you had problems:
 =config checkout=
 
 Probably not everything is in the correct subdirectory, therefore add the following dirs:
-===
+#+begin_src shell
 mkdir .config-backup/.config
 mkdir .config-backup/.config/i3
 mkdir .config-backup/.config/i3status
@@ -1949,7 +1984,8 @@ mkdir .config-backup/.config/vifm
 mkdir .config-backup/.config/i3status
 mkdir .config-backup/Stack
 mkdir .config-backup/Stack/Command_line
-===
+#+end_src
+
 And then perform the same previously performed commands:
 =config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | \=
 =xargs -I{} mv {} .config-backup/{}=
@@ -1974,7 +2010,7 @@ remove stuff by
 open output in vim, ctrl v block selection, copy, and removing white space at
 the end by :%s/\s\+$//e
 
-===
+#+begin_src shell
 config add ~/suckless/dwm/config.h &&
 config add ~/suckless/dwm/config.mk &&
 config add ~/suckless/dwm/drw.c &&
@@ -2046,8 +2082,9 @@ config add ~/.config/surfvanilla.sh &&
 config add ~/.config/stbackup.sh &&
 config add ~/.config/stpatch.sh &&
 config add ~/.config/ststable.sh &&
-config add ~/.config/stvanilla.sh 
-===
+config add ~/.config/stvanilla.sh
+#+end_src
+
 *** Download github files to pc by wget
 Works only for public files:
 
@@ -2502,8 +2539,7 @@ Sending email via: smtpmail
 ***** mu4e
 This has a steep learning curve... How to use this bloody program...
 
-** IRC, inspircd
-
+*** IRC, inspircd
 Install by =yay inspircd=
 
 
@@ -3165,13 +3201,8 @@ Installatie via pacman. .config/qtile/config.py.
 En starten in commandline via startx.
 
 *** dwm
- ______        ____  __
-|  _ \ \      / /  \/  |
-| | | \ \ /\ / /| |\/| |
-| |_| |\ V  V / | |  | |
-|____/  \_/\_/  |_|  |_|
 
-## Installatie
+**** Installatie
 Procedure: https://www.youtube.com/watch?v=KaSuYdkV6Bg
 Download de tarbal en run in deze directory in  terminal:
 =tar -xvf ./dwm-6.2.tar.gz=
