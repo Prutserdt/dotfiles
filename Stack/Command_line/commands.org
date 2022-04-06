@@ -22,7 +22,6 @@
 * About this document
 This document consists of notes that I took during my Linux journey. A lot of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference.
 * Command line tricks
-
 *** Vind grootte van files/directories in commandline
 In human form:
 =du -h=
@@ -41,7 +40,7 @@ Open Dolphin go to *Settings>Configure Dolphin>Trash*.
 De-select and Re-select the "Limit to maximum size" check box and press 
 Apply.  This will re-create a new trash can. 
 
-**Checksum.** Voor het vinden, checken en vergelijken van sha256 van een iso
+*Checksum* Voor het vinden, checken en vergelijken van sha256 van een iso
 file. Bijvoorbeeld: md5, sha-1 of sh256. Dit doe je met: =md5sum=, =sha1sum= en
 =sha256sum=.
 
@@ -52,9 +51,9 @@ which firefox
 Om te kijken waar het van uigevoerd word kun je dit proberen:
 find / -name firefox 2> /dev/null
 
-**cat** command. Laat txt files zien: =cat /etc/fstab=
+*cat* command. Laat txt files zien: =cat /etc/fstab=
 
-**less** command. Laat groot bestand zien in emulator, met pijltjes kun je 
+*less* command. Laat groot bestand zien in emulator, met pijltjes kun je
 erdoor lopen.
 less longfile.txt
 cat /etc/fstab |less
@@ -62,26 +61,26 @@ cat /etc/fstab |less
 Vind router adres, bijv 1923324.2.245, router adres, internet:
 ip link show
 
-**more** command. Een ander manier om grote files te laten zin
+*more* command. Een ander manier om grote files te laten zin
 
 more longfile.txt
 cat longfile.txt | more
 
-Op systemen waar **root user disabled** is, bijv. Ubuntu. Dan kun je 
+Op systemen waar *root user disabled* is, bijv. Ubuntu. Dan kun je
 toch inloggen door gebruik te maken van: =sudo -s=.
 
-**Start gnome** programma (wireshark, gparted, unetbootin); =gksu gparted WIFI=
+*Start gnome* programma (wireshark, gparted, unetbootin); =gksu gparted WIFI=
 
-**Switch user**. Ga naar juiste home directory: =su username=.
+*Switch user*. Ga naar juiste home directory: =su username=.
 
-Vindt alle **system users**: =compgen -u=.
+Vindt alle *system users*: =compgen -u=.
 
 Herstart het systeem: =sudo reboot=.
 
 Midnight Commander als super user gebruiken, bijvoorbeeld voor het 
 wegschrijven op de 1 Terabyte drive: =su= en daarna =mc=.
 
-Vind de **beeldscherm resolution**: =xdpyinfo | grep dimensions=
+Vind de *beeldscherm resolution*: =xdpyinfo | grep dimensions=
 
 Open applicatie in command line en ga daarna door met command line, dat gaat
 via '&'. Zie als voorbeeld:
@@ -94,10 +93,12 @@ Stel je wilt toch afsluiten terwijl je de afsluit timer hebt gezet: =sudo shutdo
 stack-2.8.2-20210809-x86_64.AppImage
 
 *** Zoeken van een textstring in meerder files met grep
-Zo** aar Layer_state in alle directories recursively onder ../keymaps
-grep -rnw '/home/icefly/qmk_firmware/keyboards/planck/keymaps/' -e "layer_state"
+Zoek naar Layer_state in alle directories recursively onder ../keymaps
+=grep -rnw '/home/icefly/qmk_firmware/keyboards/planck/keymaps/' -e "layer_state"=
+Zoeken in huidige directory en alle onderstaande naar woord "stack"
+=grep -rnw -e "stack"=
 
-**bleachbit**. Schoonmaken van het systeem. Je kunt kiezen welke files van
+*bleachbit*. Schoonmaken van het systeem. Je kunt kiezen welke files van
 welke apps je  wilt wissen: =bleachbit=
 
 Probleem: te weinig capaciteit tmp dir, en virtueel geheugen. Check verdeling van geheugen:=df -H=
@@ -240,7 +241,6 @@ minimalistich. Deze heb ik ingesteld in mijn .bashrc.
 
 Welkom tekst voor login venster instellen in: =sudo nano etc/issue=
 Voeg toe:
-===
 |--------------------------|
 |  Welcome Back Commander  |
 |--------------------------|
@@ -252,7 +252,6 @@ Voeg toe:
 |     startx               |
 |--------------------------|
 Arch Linux \r (\l)
-===
 
 Roteren van het scherm (0,1,2,3 zijn de richtingen, of left/right/normal)
 =xrandr -o 1=
@@ -423,7 +422,7 @@ Veranderen van rechten, van root root naar icefly users.
 (username groupname)
 =chown icefly:users *.*=
 
-**Grafische problemen**
+*Grafische problemen*
 
 Check grafische kaart, video card
 =lspci=
@@ -508,7 +507,6 @@ maar dan dynamisch door te zoeken met
 iets als dit, maar dan werkend:
 =cat ~/i3_log/{ls -Art ~/i3_log | tail -n 1}|fzf=
 
-ssh
 *** Wissen van regels in meerdere bestanden die een bepaald woord bevatten.
 
 Je kuht natuurlijk handmatig zoeken met fuzzyfind (bijv "wismij"):
@@ -596,7 +594,6 @@ Firefox shortcuts
 | F11        | Display the current page full-screen     |
 | Esc        | Stop loading the current page            |
 |------------+------------------------------------------|
-
 
 *** Batch rename image files
 
@@ -793,7 +790,6 @@ een microbreak tussen zetten ofzo:
 #+begin_src shell
 rename 20201007 20201007_Roma *.jpg; rename 20201008 20201008_Roma *.jpg; rename 20201009 20201009_Roma *.jpg; rename 20201010 20201010_Roma *.jpg; rename 20201011 20201011_Napoli *.jpg; rename 20201012 20201012_Napoli *.jpg; rename 20201013 20201013_Napoli *.jpg; rename 20201014 20201014_Napoli *.jpg; rename 20201015 20201015_Positano *.jpg; rename 20201016 20201016_Schiphol *.jpg;
 #+end_src
-===
 Mac image format heic conversion
 Conversion of .heic to jpg:
 =for file in *.heic; do heif-convert $file ${file/%.heic/.jpg}; done=
@@ -1043,9 +1039,8 @@ Mijn ip address 82.174.98.248
 =sudo ip link set dev eth0 address 00:23:4E:00:00:00=
 =sudo ip link set dev eth0 up=
 Verander mac address wlan0 en wlan1 via onderstaande shell script
-===
-machack.sh: deze shell veranderd mac address van wlan0 en wlan1
-            naar 00:23:4E:00:00:00 en 00:23:4E:11:11:11
+=machack.sh=: deze shell veranderd mac address van wlan0 en wlan1
+              naar 00:23:4E:00:00:00 en 00:23:4E:11:11:11
 #+begin_src shell
 #!/bin/sh\
 sudo ip link set dev wlan0 down
@@ -1242,10 +1237,8 @@ Kijken of de font erbij staat: =fc-list | grep Double=
 *** Problemen met fonts (Manjaro XFCE 2022, na gebruikname mijn dotfiles)
 Alacritty: verander het Hack font naar monospace in ~/.config/alacritty/alacritty.yml
 
-
 *** Problemen met keyboard in Manjaro XFCE 2022, na in gebruikname van mijn dotfiles)
 In commandline: =setxkbmap us=. Daarmee zet je het keyboard naar us, en nu zijn mijn problemen voorbij!
-
 
 *** SQlite3 database
 https://www.tutorialspoint.com/sqlite/sqlite_select_query.htm
@@ -1334,6 +1327,8 @@ cat ~/Downloads/test/TempMerged | xclip -sel clip
 
 #+end_src
 
+Bovenstaande shell script is deprecated en vervangen door Python code.
+
 *** Video card information
 lspci -vnn | grep VGA -A 12
 [AMD/ATI] Oland [Radeon HD 8570 / R7 240/340 / Radeon 520 OEM]
@@ -1392,7 +1387,6 @@ executable - command line --> /usr/bin/python3 and reset python shell (asking
 to reset probably). Now stuff works :-)
 
 *** C programming tricks
-
 De meest simpele manier om snel een C programma te draaien:
 creeer een file in vim, bijv: test.c
 Compile deze file met:
@@ -1575,18 +1569,22 @@ Search and replace special characters in whole file: =:%s/\~/\$HOME/g=
 Alfabetisch Sorteren: =:sort=.
 
 Voorbeelden
-4w: 4 woorden verder
-6k: 6 regels omhoog
-d2w: delete the next two words
-ciw: change inner word
-ysiw"   : Onduidelijk wat ik hiermee kan doen ... ?
+|-------+-------------------------------------------|
+| 4w    | 4 woorden verder                          |
+| 6k    | 6 regels omhoog                           |
+| d2w   | delete the next two words                 |
+| ciw   | change inner word                         |
+| ysiw" | Onduidelijk wat ik hiermee kan doen ... ? |
+|-------+-------------------------------------------|
 
 Navigation(command combination examples):
-:42: verplaats cursor naar lijn nummer 42
-10k: verplaats cursor 10 lijnen omhoog
-10-: verplaats cursor 10 lijnen omhoog
-10j: verplaats cursor 10 lijnen omlaag
-10+: verplaats cursor 10 lijnen omlaag
+|------+--------------------------------------|
+| :42: | verplaats cursor naar lijn nummer 42 |
+| 10k: | verplaats cursor 10 lijnen omhoog    |
+| 10-: | verplaats cursor 10 lijnen omhoog    |
+| 10j: | verplaats cursor 10 lijnen omlaag    |
+| 10+: | verplaats cursor 10 lijnen omlaag    |
+|------+--------------------------------------|
 
 Verander dit:
 Commandl line
@@ -1599,16 +1597,18 @@ Commandl line
 <A href="#2  Rechten bestanden">naam
 <A href="#3  Grafische problemen">naam
 <>
-Door het volgende te typen:=qdI'Esc'A'Esc'0jq=
+Door het volgende te typen =qdI'Esc'A'Esc'0jq=
 Speel de macro af met: =2@d=
 
 The command line command: :
-:q!                                 : Quit without saving, (ZQ is beter)
-:wq                                 : Quit with saving (ZZ is beter)
-:w naam                             : Save file as naam
-:new                                : Open een nieuw scherm
-:verbose setlocal syntax? filetype? : Vind de syntax van bestand
-:set syntax:conf                    : Tijdelijke Verandering syntax 
+|-------------------------------------+-------------------------------------|
+| :q!                                 | Quit without saving, (ZQ is beter)Q |
+| :wq                                 | Quit with saving (ZZ is beter)      |
+| :w naam                             | Save file as naam                   |
+| :new                                | Open een nieuw scherm               |
+| :verbose setlocal syntax? filetype? | Vind de syntax van bestand          |
+| :set syntax:conf                    | Tijdelijke Verandering syntax       |
+|-------------------------------------+-------------------------------------|
 
 VIM; editen van markdown en live preview in browser met de
 =iamcco/makrdown-preview.nvim= plugin.
@@ -1744,12 +1744,10 @@ Nu start je het script door in te voeren.  ~/.config/vifm/scripts/vifmrun
 Dit is toegevoegd als hotkey in i3: =mod+v=
 
 Hernoemen van filenames in vifm in huidige directory(%: files in directory).
-Ik wil de whitespaces vervangen door underscored:
-===
-:%rename
-:%s/ /_/g
-:wq
-===
+Ik wil de whitespaces vervangen door underscores:
+=:%rename=
+=:%s/ /_/g=
+=:wq=
 Het kan nog eenvoudiger!!! In vifm voer in:
 =:%s/ /_/g=
 
@@ -1762,23 +1760,26 @@ Open nano
 Plak daarin de onderstaande regels om de transparantie en font in te 
 stellen, plus extra's die in de comments worden beschreven.
 Created to rice the urxvt terminal.
-===
-Set transparency
 
+Set transparency
+#+begin_src
 URxvt.transparent:	        true
 URxvt.shading:		        30
+#+end_src
 
 Choose a decent font.
-
+#+begin_src
 URxvt.font:                 xft:bitstream Vera Sans Mono:size=9:antialias=true
 URxvt.boldFont:             xft:bitstream Vera Sans Mono:bold:size=9:antialias=true
+#+end_src
 
 Set a rediculous cursor colour
-
+#+begin_src
 URxvt.cursoColor:           magenta
+#+end_src
 
 Extentions (install urxvt-perls resize-font-git)
-
+#+begin_src
 URxvt.perl-ext-common:      default, matcher, resize-font, url-select,keyboard-select
 URxvt.keysym.M-u:           perl:url-select:select_next
 URxvt.url-select.underline: True
@@ -1787,6 +1788,7 @@ URxvt.resize-font.smaller:  C-j
 URxvt.resize-font.bigger:   C-k 
  Keyboard select. Je gaat erin met Mod+ESC en eruit met Esc:
 URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
+#+end_src
 
 #+begin_src shell
 
@@ -1822,7 +1824,6 @@ URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
 =URxvt.keysym.M-c:           perl:clipboard:copy=
 
 #+end_src
-
 
 *** cmus. Terminal music player
 Begin door het toevoegen van een direcotory, waar het prog. muziek in gaat
@@ -2206,6 +2207,7 @@ verkregen door de fotos te selecteren in apple photo en deze te plakken in een
 mapje in de desktop van de imac en deze te uploaden naar mijn cloud en ze binnen
 gehaald op die manier.
 
+The following is too complicated teh above method is prefered.
 Connect old imac hard drive connected to a usb connector with powersupply to 
 new imac pc by the usb C hub. Open the photos application of mac and select
 pictures and copy them to the harddrive (somewhere in top bar this can be
@@ -2469,18 +2471,17 @@ My first snippet (in ~/.doom.d/snippets/org-mode)
 # name: PythonBlock
 # key: <p
 # --
-,#+begin_src python :tangle ${1:wismij}.py
+#+begin_src python :tangle ${1:wismij}.py :results output
 # /home/icefly/Stack/Command_line/NOTE, this file is generated from the org file:
 # `(file-name-nondirectory (buffer-file-name))`.org by org-babel-tangle
 # Only modify the org file and not this Python file.
 # Happy hacking :-)
 
-$2
+$0
 #+end_src
 
 Opmerking: als ik de tekstfile verander dan wordt deze niet gebruikt in org-mode, en als ik de snippet bekijk met =yas-visit-snippet-file= dan zie ik de juiste aanpassing. Vreemd...
 ZQ
-
 
 **** mu4e
 
@@ -2544,7 +2545,6 @@ This has a steep learning curve... How to use this bloody program...
 *** IRC, inspircd
 Install by =yay inspircd=
 
-
 * Distros
 *** XFCE tricks
 XFCE4 in desktop achtergrond terminal services laten draaien.
@@ -2554,7 +2554,7 @@ maak executable:
 =chmod a+x /path/to/wallterm.sh=
 
 Voeg dit toe aan de file walltem.sh:
-===
+#+begin_src shell
 !/bin/bash
 Dit script zorgt ervoor dat er terminals in de desktop komen...
 
@@ -2563,24 +2563,22 @@ xfce4-terminal -e htop --hide-borders --hide-toolbar --hide-menubar --title=dt2 
 sleep 5
 wmctrl -r dt2 -b add,skip_pager,skip_taskbar 
 wmctrl -r dt1 -b add,skip_pager,skip_taskbar
-===
-Autostart de wallterm.sh in XFCE4 door dit te doen: 
+#+end_src
+Autostart de wallterm.sh in XFCE4 door dit te doen:
 XFCE4-Settings-Session and Startup-Application Autostart
 --> add wallterm --> command: /home/icefly/wallterm.sh
 Andere opties die interessant kunnen zijn voor monitoring:
-===
-vmstat
-sudo tcpdump -i enp3s0
-sudo tcpdump -c 5 -i enp3s0
-sudo tcpdump -XX -i enp3s0
-sudo iftop
-sudo xfce4-terminal -e iftop --hide-borders --hide-toolbar --hide-menubar --title=dt5 --geometry=70x30+720+10 & 
-sleep 5 wmctrl -r dt5 -b add,skip_pager,skip_taskbar 
-monitorix 
-yaourt -S monitorix ( vorige keer niet geinstalleerd)
-nmon
-sudo iptraf-ng
-===
+=vmstat=
+=sudo tcpdump -i enp3s0=
+=sudo tcpdump -c 5 -i enp3s0=
+=sudo tcpdump -XX -i enp3s0=
+=sudo iftop=
+=sudo xfce4-terminal -e iftop --hide-borders --hide-toolbar --hide-menubar --title=dt5   --geometry=70x30+720+10 &=
+=sleep 5 wmctrl -r dt5 -b add,skip_pager,skip_taskbar=
+=monitorix=
+=yaourt -S monitorix ( vorige keer niet geinstalleerd)=
+=nmon=
+=sudo iptraf-ng=
 
 Maak de windows meer snappy, meer tiling window manager achtig...
 XFCE4-Settings-Window manager --> advanced
@@ -2592,7 +2590,7 @@ maximaliseren F11)
 XFCE4-Settings-Window manager --> Keyboard
 Het staat in een text file maar dat is minder goed leesbaar:
 =~/.config/xfce4/xfconf/xfce-perchannel-xml\xfce4-keyboard-shortcuts.xml=
-===
+#+begin_src
 Maximize window					Alt+5
 Tile window to the top				Alt+8
 Tile window to the bottom			Alt+2
@@ -2602,7 +2600,7 @@ Tile window to the top-left			Alt+7
 Tile window to the top-right        Alt+9
 Tile window to the bottom-left      Alt+1
 Tile window to the bottom-right	   	Alt+3
-===
+#+end_src
 
 Aanmaken van keyboard shortcuts
 XFCE4-Settings-Keyboard --> Application shortcuts
@@ -2706,7 +2704,6 @@ dmenu setup act like an emoji keyboard for quick insertion
 
 #+end_src
 
-
 *** Install on persistent USB feb2017
 
 Twee partities aangemaakt in GPARTED: 12.6 GB ext4 en 2.1 GB FAT32
@@ -2743,53 +2740,53 @@ Install XFCE4
 Exit chroot en reboot.
 Hmmmm, na inloggen starte linux mint op en liep daarna vast...
 aangepast:
-===
-gparted --> bootable flag voor sda1 aangezet.
-sudo dd bs=440 count=1 if=/usr/lib/syslinux/bios/mbr.bin of=/dev/sdd
+=gparted= --> bootable flag voor sda1 aangezet.
+=sudo dd bs=440 count=1 if=/usr/lib/syslinux/bios/mbr.bin of=/dev/sdd=
 reboot.... hopelijk nu ok.....?
 ... nee, geen linuxmint meer tijdens opstarten dus de mbr is veranderd, maar
 nog steeds niet OK.
-sudo mount /dev/sdd1 /mnt
-sudo arch-chroot /mnt
+=sudo mount /dev/sdd1 /mnt=
+=sudo arch-chroot /mnt=
 Install syslinux en daarna sda1 aangepast.
-pacman -S syslinux mc
+=pacman -S syslinux mc=
 reboot.... hopelijk nu ok.....?
 ... nee. waarschijnlijk is de mbr niet correct...
-sudo mount /dev/sdd1 /mnt
-sudo arch-chroot /mnt
-printf '\x5' | cat /usr/lib/syslinux/bios/altmbr.bin - | dd bs=440 count=1 iflag=fullblock of=/dev/sdd
+=sudo mount /dev/sdd1 /mnt=
+=sudo arch-chroot /mnt=
+=printf '\x5' | cat /usr/lib/syslinux/bios/altmbr.bin - | dd bs=440 count=1 iflag=fullblock of=/dev/sdd=
 reboot.... hopelijk nu ok.....?
 ... nee. waarschijnlijk is syslinux niet correct geconfigureerd...
-sudo mount /dev/sdd1 /mnt
-sudo arch-chroot /mnt
-syslinux-install_update -i -a -m
+=sudo mount /dev/sdd1 /mnt
+=sudo arch-chroot /mnt=
+=syslinux-install_update -i -a -m=
 reboot.... hopelijk nu ok.....?
 ... nee. syslinux niet correct geconfigureerd...
-sudo mount /dev/sdd1 /mnt
-sudo arch-chroot /mnt
-pacman -S linux
-mkinitcpio -p linux
+=sudo mount /dev/sdd1 /mnt=
+=sudo arch-chroot /mnt=
+=pacman -S linux=
+=mkinitcpio -p linux=
 maak gebruiker aan
-useradd -m -G wheel -s /bin/bash icefly
+=useradd -m -G wheel -s /bin/bash icefly=
 maak wachtwoord voor gebruiker aan:
-passwd icefly
+=passwd icefly=
 volgende geinstalleerd:
-pacman -S xf86-video-vesa  xf86-video-fbdev xorg-server  xf86-video-amdgpu
+=pacman -S xf86-video-vesa  xf86-video-fbdev xorg-server  xf86-video-amdgpu=
 dhcpcd gestart als root:
-dhcpcd enp3s0
+=dhcpcd enp3s0=
 Aan /etc/pacman.conf toegevoegd:
+#+begin_src
 [archlinuxfr]
 SigLevel = Never
 Server = http://repo.archlinux.fr/$arch
+#+end_src
 sudoers aanpassen
-pacman -S yaourt sudo
-open visudo met nano en haal de hashtag weg voor %wheel ALL=all+all
-EDITOR=nano visudo
+=pacman -S yaourt sudo=
+open visudo met nano en haal de hashtag weg voor =%wheel ALL=all+all=
+=EDITOR=nano visudo=
 list available timezones
-timedatectl set-timezone Zone/SubZone
+=timedatectl set-timezone Zone/SubZone=
 instellen timezone:
-timedatectl set-timezone Europe/Amsterdam
-===
+=timedatectl set-timezone Europe/Amsterdam=
 
 Let op: de laatste backup is gemaakt op 30DEC18.
 (er is sinds 20JUL17 een tweede useraccounts en setup voor op het werk).
@@ -2899,19 +2896,16 @@ sudo dd if=//home/archie/Downloads/archlinux-gpd-pocket-2018.01.05-x86_64.iso of
 
 arch vanuit usb gestart (01MAY18 22:18)
 start met delete knop ingedruk, en boot from USB
-===
-ip link set wlp1s0 up
+=ip link set wlp1s0 up=
 ip linkoutput: wlp1s0 ... UP
 wifi-menu
 Voer alvast het wachtwoord in
-modprobe -r brcmfmac
-modprobe brcmfmac
-pacman -Syu
+=modprobe -r brcmfmac=
+=modprobe brcmfmac=
+=pacman -Syu=
 Yess, het werkt, ik zit online!
-===
-
-===
-lsblk
+=lsblk=
+#+begin_src
 NAME		MAJ:MIN	RM	SIZE	RO	TYPE	MOUNTPOINT
 loop0		7:0	0	487.8M	0	loop	/run/archiso/sfs/airootfs
 sda		7:0	0	1.9G	0	disk
@@ -2924,9 +2918,9 @@ mmcblk0p3	179:3	0	65.8G	0	part
 mmcblk0p4	179:4	0	800M	0	part	
 mmcblk0p5	179:5	0	49.8G	0	part	
 mmcblk0boot0	179:8	0	4M	1	disk	
-mmcblk0boot1	179:16	0	4M	1	disk	
+mmcblk0boot1	179:16	0	4M	1	disk
+#+end_src
 
-===
 =cfdisk /dev/mmcblk0=
 =mkfs.ext4 /dev/mmcblk0p3=
 =mount /dev/mmcblk0p3 /mnt=
@@ -3073,7 +3067,7 @@ Daarvoor eerst de default .xinitrc kopieren
 
 Delete de regels van het bestand maar laat de laatste tekstblok staan
 en voeg exec i3 toe (plus onderstaande voor logging)
-===
+#+begin_src
 exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
 twm &
 xclock -geometry 50x50-1+1 &y
@@ -3082,7 +3076,7 @@ xterm -geometry 80x20+494-0 &
 exec xterm -geometry 80x66+0+0 -name login
 Start i3 (login als archie)
 startx
-===
+#+end_src
  Je kunt de config file aanmaken met
 (locatie /home/archie/.config/i3/config)
 =i3-config-wizard=
@@ -3109,10 +3103,9 @@ SFNS display, maar dit geeft een slechte rendering.
 ....yosemity font gecopierd naar ~/.fonts
  Pas het i3status.conf file aan, save het in de user directory voor gebruik voor alleen deze gebruiker
 Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
-===
-mkdir .config/i3status
-cp /etc/i3status.conf .config/i3status/config
-vim .config/i3status/config
+=mkdir .config/i3status=
+=cp /etc/i3status.conf .config/i3status/config=
+=vim .config/i3status/config=
 
 Instellen van Super_R als applications launcher en Capslock als escape
 voor VIM. Wat is de default setting van mijn Ducky keyboard:
@@ -3127,20 +3120,22 @@ mod3
 mod4        Super_L (0x85),  Super_L (0xce),   Super_R (0x86), Hyper_L (0xcf)
 mod5        ISO_Level3_Shift (0x5c),  Mode_switch (0xcb)
 mod3 is leeg, daar gaan we Super_R neerzetten.
-nano .Xmodmap
+=nano .Xmodmap=
 Plak daarin:
+#+begin_src
 remove mod4 = Super_R
 add mod3 = Super_R
 remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
+#+end_src
 laad xmodmap :-)
-xmodmap ~/.Xmodmap
+=xmodmap ~/.Xmodmap=
 
 Voeg toe aan ~/.config/i3/config
-bindsym mod3+f exec firefox
-exec --no-startup-id xmodmap ~/.Xmodmap
+=bindsym mod3+f exec firefox=
+=exec --no-startup-id xmodmap ~/.Xmodmap=
 Het werkt. Nu kan de rechter superkey worden gebruikt als applicatie
 launcher :-)
 
@@ -3258,11 +3253,11 @@ while type dwm >/dev/null ; do dwm && continue || break ; done # to restart in p
 
 #+end_src
 
-## Vervang de huidige dwm installatie voor vanilla dwm: dwmrestore (staat in .bashrc)
+Vervang de huidige dwm installatie voor vanilla dwm: dwmrestore (staat in .bashrc)
 Het commando "dwmrestore" geeft een vanilla install terug! Het kopieerd data.
 alias dwmrestore="cp -i ~/Stack/dwm/dwm-6.2_200512_vanilla/* ~/dwm-6.2 && cd ~/dwm-6.2 && c && l"
 
-## Maak symbolic link om eenvoudig te starten via startx (.xinitrc)
+Maak symbolic link om eenvoudig te starten via startx (.xinitrc)
 Let op: maak symlink aan in ~/bin. Vergeet niet dat het pad aan bashrc moet staan.
 =ln -s -v /home/icefly/dwm/dwm /home/icefly/bin/dwm=
 Of overschrijf een symlink:
@@ -3270,29 +3265,27 @@ Of overschrijf een symlink:
 =ln -f -s /home/icefly/.config//dwm/dwm /home/icefly/bin/dwm=
 Nu kun je via het executable kiezen in .xinitrc: exec dwm_vanilla voor startx.
 
-## De laatste stabiele backup installeren:
-## Vervang de huidige dwm installatie door: dwmstable (.bashrc alias)
+De laatste stabiele backup installeren:
+Vervang de huidige dwm installatie door: dwmstable (.bashrc alias)
 Het commando "dwmstable" geeft een install van de laatste stabiele dwm versie terug!
 Let op: LET OP DIT VERWIJDERD DE HUIDIGE VERSIE!!
 
-
-===
 # /home/icefly/Stack/Command_line/Automatische patching via de volgende .bashrc alias procedure:
 # alias dwmpatch = "dwmstable && cp ~/dwm/config.h ~/dwm/config.def.h && rm ~/dwm/config.h &&
 #                  patch -p1 < ~/Stack/dwm/patches/test/*.diff && make clean install"
 # /home/icefly/Stack/Command_line/Stap 1: verwijdern files in test direcotory:
-rm ~/Stack/dwm/patches/test/*
+=rm ~/Stack/dwm/patches/test/*=
 # Stap 2: Zet je diff file op de volgend locatie: ~/Stack/dwm/patches/test en run 
 # /home/icefly/Stack/Command_line/Stap 3: run .bashrc alias:
-dmwpatch
-===
+=dmwpatch=
 
-# Een complete walkthrough van een nieuwe installatie, vanuit vanilla (dwmvanilla)
-#1: gridmode, via dwmpatch, werkt eenvoudig. :-)
-#2: fakefullscreen, via dwmpatch :-)
-#3: centered master. niet via dwmpatch. :-(. Onderstaande procedure werkt wel. :-)
+ Een complete walkthrough van een nieuwe installatie, vanuit vanilla (dwmvanilla)
+1: gridmode, via dwmpatch, werkt eenvoudig. :-)
+2: fakefullscreen, via dwmpatch :-)
+3: centered master. niet via dwmpatch. :-(. Onderstaande procedure werkt wel. :-)
 dwmstable
 Toevoeging aan config.def.h:
+#+begin_src
 	{ "[M]",      monocle },
 	{ "|M|",      centeredmaster },
 	{ ">M>",      centeredfloatingmaster },
@@ -3300,25 +3293,26 @@ Toevoeging aan config.def.h:
 	{ MODKEY,                       XK_g,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[5]} },
+#+end_src
 Daarna:
 =rm config.h=
 =patch -p1 < ~/Stack/dwm/patches/test/*.diff=
 Foutmeldingen, maar gewoon doorgaan, rej en orig file verwijderen en:
 =make clean install=
 reboot: werkt!
-#4: restartsig, via dmwpatch :-)
+4: restartsig, via dmwpatch :-)
 Let op pas aan de .xinitrc:
 # if dwm exits 0, restart -- this allows hot reloading of config.h
 =while type dwm >/dev/null ; do dwm && continue || break ; done=
-#5: Verander modkey in ~/dwm/config.h:
+5: Verander modkey in ~/dwm/config.h:
 Veranderen van modkey. 
 =define MODKEY Mod4Mask=
 =cp config.h config.def.h=
 =make clean install=
 Restart in place (super+ctrl+shift+q), dwmbackup
-#6: defaulttransparency, werkt niet via  dwmpatch :-(
+6: defaulttransparency, werkt niet via  dwmpatch :-(
 Toegevoegd aan config.def.h:
-===
+#+begin_src
 static const Bool topbar            = True;     /* False means bottom bar */
 +static const double defaultopacity  = 0.75;
 ...
@@ -3326,7 +3320,7 @@ static const Bool topbar            = True;     /* False means bottom bar */
 +	{ MODKEY|ShiftMask,		XK_s,	   spawn,	   SHCMD("transset-df -a --dec .1") },
 +	{ MODKEY|ShiftMask,		XK_d,	   spawn,	   SHCMD("transset-df -a --inc .1") },
 +	{ MODKEY|ShiftMask,		XK_f,	   spawn,	   SHCMD("transset-df -a .75") },
-===
+#+end_src
 Daarna:
 =rm config.h=
 =patch -p1 < ~/Stack/dwm/patches/test/*.diff=
@@ -3334,27 +3328,21 @@ Daarna:
 Restart in place (super+ctrl+shift+q), dwmbackup
 hmmm hoe zit het eigenlijk, ik zie geen transparancy...
 Helaas heb ik een dwmbackup gemaakt en zit deze nu in mijn stable built...
-#7: attachbottom, werkt via dwmpatch :-)
-===
+7: attachbottom, werkt via dwmpatch :-)
 dwmbackup
-===
-#8: (bottomstack.. dit is geen bruikbare patch en gebruik ik niet.)
-#8: (Cyclelayouts. Cycle door de layouts met MOD-CTRL, handig, ga ik later
-#8: installeren, gaat niet met dwmpatch.)
-#8: Inplacerotate, gaat goed via dwmpatch.
+8: (bottomstack.. dit is geen bruikbare patch en gebruik ik niet.)
+8: (Cyclelayouts. Cycle door de layouts met MOD-CTRL, handig, ga ik later
+8: installeren, gaat niet met dwmpatch.)
+8: Inplacerotate, gaat goed via dwmpatch.
 Super handig voor cycling zonder dat de ordering veranders.
-===
-dwmbackup
-===
-#9: Sticky. werkt via dwmpatch :-). Handig, mod s om te togglen.
-===
-dwmbacup
-===
+=dwmbackup=
+9: Sticky. werkt via dwmpatch :-). Handig, mod s om te togglen.
+=dwmbackup=
 #10: Swallow, werkt niet via dwmpatch. dwm.c moet je aanpassen:
-===
-+	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow;
-+	pid_t pid;
-+	Client *swallowing;
+#+begin_src
++ int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow;
++ pid_t pid;
++ Client *swallowing;
 +static pid_t getparentprocess(pid_t p);
 
 +static int isdescprocess(pid_t p, pid_t c);
@@ -3376,33 +3364,27 @@ dwmbacup
 +        focus(NULL);
 +		return;
 +	}
-===
-# Gelukt en saved dmv dmwbackup, plus een extra backup gemaakt dwm-6.2_stable_200517.
+#+end_src
+Gelukt en saved dmv dmwbackup, plus een extra backup gemaakt dwm-6.2_stable_200517.
 
 Transparancy werkt als je picom insteld in xinitrc:
-# Start picom, for transparancy
+Start picom, for transparancy
 =picom -b=
 
 #fonts instellen
 # /home/icefly/Stack/Command_line/font ingesteld voor config.def.h:
 Aangepast in config.def.h:
 orgineel:
-===
-static const char *fonts[]          = { "monospace:size=10" };
-===
+=static const char *fonts[]          = { "monospace:size=10" };=
 veranderd in:
-===
-static const char *fonts[]          = { "unifont:size=9" };
-make clean install
-===
+=static const char *fonts[]          = { "unifont:size=9" };=
+=make clean install=
 Andere geinstalleerde en geprobeerde fonts:
-===
-inconsolata Dina profont ttf-monaco ttf-hack
-===
+=inconsolata Dina profont ttf-monaco ttf-hack=
 
 # XF86XK buttons aanpassen
-===
 https://github.com/kusk/dwm/blob/master/config.h
+#+begin_src
 /* commands */
 	{ 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+") },
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%-") },
@@ -3412,7 +3394,7 @@ https://github.com/kusk/dwm/blob/master/config.h
 
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("cat ~/.config/unicode | dmenu -i -l 25 -fn unifont-10| awk '{print $1}'| xclip -selection clipboard") },
     /*{ MENUKEY,                    XK_w,      spawn,          SHCMD("ls ~/Stack/Afbeeldingen/Wallpapers/ | dmenu -i -l 20 -fn unifont-08| awk '{print $1}'| xclip -selection clipboard && wal -i "$(xclip -o -selection clipboard)"") },*/
-===
+#+end_src
 
 # color emojis
 Installeer: yay libxft-bgra
@@ -3455,7 +3437,7 @@ select, dus default dmenu font wat nu hack is)
 # ik ga st in mijn dwm folder zetten en deze mee ontwikkelen met mijn huidige
 # laten we kijken of dit goed werkt.
 
-## Installatie en gebruik .bashrc aliases
+Installatie en gebruik .bashrc aliases
 Download de suckless.org tarbal en run in deze directory in  terminal:
 =tar -xvf st-0.8.3.tar.gz=
 =make=
