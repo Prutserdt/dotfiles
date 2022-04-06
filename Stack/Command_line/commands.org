@@ -184,7 +184,7 @@ Hiermee kun je meerdere USB  distros op een enkele pendrive zetten. :-)
 Het lukt me niet in i3 om multibootusb te gebruiken (ook niet met gksu, niet
 als super user).
 
-Overschrijf hard disk door random data:=dd if=/dev/urandom of=/dev/sdb status=progress=
+Overschrijf hard disk door random data: =dd if=/dev/urandom of=/dev/sdb status=progress=
 
 Vind de naam van harddrives UUID door: =sudo blkid=
 
@@ -192,7 +192,7 @@ dvd: =/dev/sr0=
 
 Formatteren sdb vanuit commandline met cfdisk: =sudo cfdisk /dev/sdb=
 
-Mount partitie:= sudo mount /dev/sda5 /media/data=
+Mount partitie: =sudo mount /dev/sda5 /media/data=
 
 Maak een directory: =sudo mkdir /media/data=
 
@@ -278,7 +278,7 @@ APPEND root=/dev/sda1 rw
 INITRD ../initramfs-linux.img
 #+end_example
 
-Firefox customization: verander skins per website met Stylish.
+Firefox customization: verander skins per website met *Stylish*.
 
 Change system time: =timedatectl set-time "2017-01-06 22:27:49"=.
 
@@ -297,7 +297,7 @@ Find PID of program:
 =pidof firefox=
 =ps aux | grep  firefox=
 
-*(tweede kolom is PID, je kunt trouwens zoeken met wildcards)*
+De tweede kolom is PID, je kunt trouwens zoeken met wildcards
 =sudo kill -9 <ur process id> =
 =sudo killall firefox=
 
@@ -318,7 +318,7 @@ modify .xinitrc:
 
 *** Converteren van pdf naar een tekstfile, bijv. voor rabo pdf voor import in gnumeric
 
-for file in NL17RABO0304804207-EUR-2021-06.pdf; do pdftotext -layout "$file";done
+=for file in NL17RABO0304804207-EUR-2021-06.pdf; do pdftotext -layout "$file";done=
 
 *** Converteren van pdf naar een tekstfile en verwijderen van bagger en
 veranderen van komma naar punt. 
@@ -366,23 +366,24 @@ Probleem: pdf files staan 180 graden gedraaid. Oplossing: roteren van pagina's
 en saven als een nieuwe naam.
 
 =qpdf naam.pdf naam_rotated --rotate=90=
-for file in *.pdf; do qpdf "$file" "$file" --rotate=90; done
+=for file in *.pdf; do qpdf "$file" "$file" --rotate=90; done=
 
 *** pdfs in dark mode weergeven
 verander de zathurarc file in ~/.config/zathura, en voeg toe:
+#+begin_src
 set recolor true
 set recolor-darkcolor "#dcdccc"
 set recolor-lightcolor "#1f1f1f"
-
+#+end_src
 Nu wordt het elk document in zathura in dark mode weergeven.
 
 *** Calender
 Show Calender this month:
-cal 
+=cal =
 Show Calender whole year:
-cal -y
+=cal -y=
 Show Calender year:
-cal 1999
+=cal 1999=
 
 *** Rechten bestanden
 
@@ -393,12 +394,16 @@ Uitleg output:
 r: read, w: file can be modified, x: file can be executed, s:setUID bit, t: sticky
 voorbeeld:
 -rw-r--r-- 1 root   root    426 Feb 13 14:21 info
-- : een file, want directory geeft de letter: d
-rw: owners permission: read and write
-r: groups permission: read
-r: all the other users
-root: gebruiker
-root: groep
+|-----------+---------------------------------------------|
+| Character | Betekenis                                   |
+|-----------+---------------------------------------------|
+| -         | een file, want directory geeft de letter: d |
+| rw        | owners permission: read and write           |
+| r         | groups permission: read                     |
+| r         | all the other users                         |
+| root      | gebruiker                                   |
+| root      | groep                                       |
+|-----------+---------------------------------------------|
 
 Verander rechten directory naar:
 =chmod u=rwx filename=
@@ -468,7 +473,6 @@ Zoeken op process, users, groupID
 =journalctl _PID=8088=
 =journalctl _UID=33 --since today=
 
-
 Kernel messages
 =journalctl -k #from the current boot=
 =journalctl -k -b -5 #messages from 5 boots ago=
@@ -510,11 +514,11 @@ iets als dit, maar dan werkend:
 *** Wissen van regels in meerdere bestanden die een bepaald woord bevatten.
 
 Je kuht natuurlijk handmatig zoeken met fuzzyfind (bijv "wismij"):
-cat i3log-2020-02-16-22-09-48 |fzf
+=cat i3log-2020-02-16-22-09-48 |fzf=
 Voorbeeld van het verwijderen van een single file:
 grep -v "wismij" i3log-2020-02-16-22-09-48 > i3log_tmp ; mv i3log_tmp i3log-2020-02-16-22-09-48
 Voorbeeld van verwijderen van regels van alle bestanden i3log* in directory
-for thefile in i3log* ; do grep -v "wismij" $thefile > $thefile.$$.tmp; mv $thefile.$$.tmp $thefile; done
+=for thefile in i3log* ; do grep -v "wismij" $thefile > $thefile.$$.tmp; mv $thefile.$$.tmp $thefile; done=
 
 Bovenstaande commando werkt niet voor de eerste negen uren van de dag dat het
 logfile is aangemaaakt, want dan komt er een spatie in de naam en  volgt er een
@@ -523,7 +527,6 @@ naar de directory en hernoem deze files met cw.
 
 *** Linux keyboard shortcuts
 Lijstje met allerlei keyboard shortcuts.
-
 
 Grafische omgeving shortcuts:
 |----------------------------+----------------------------------------------------------|
@@ -753,7 +756,8 @@ en daarna alle foto's bij elkaar te zetten en in te voeren:
 Nu wil ik nog de locatie toevoegen voor elke foto.
 Dat doen we per dag en daar zetten we een locatie bij.
 Dat gaat handig via vim.
-creer eerst een lijst met de dagen:
+creer eerst een lijst met de dagen (kan ook via een script, zie shell script een eindje verder in dit document met daarin: =for number in {0..18}=)
+
 #+begin_example
 20201008
 20201009
@@ -827,7 +831,7 @@ Eerst de volgende command line commandos uitgevoerd:
 =exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)=
 =find -name '*.JPG' -exec rename .JPG .jpg {} \;=
 =find -name '*.jpeg' -exec rename .jpeg .jpg {} \;=
-Hier in vim de dagen van vakantie uitgetypt:
+Hier in vim de dagen van vakantie uitgetypt(volgend keer met het shell script dat onder het volgende example staat):
 
 #+begin_example
 20210615
@@ -850,6 +854,41 @@ Hier in vim de dagen van vakantie uitgetypt:
 20210702
 20210703
 #+end_example
+
+Laat ik eens kijken of ik bovenstaande met org mode kan genereren via een shell script, dit werkt goed met :results output
+
+#+begin_src shell :results output
+# Code block to calculate list of dates by this shell script in org mode.
+# ONLY change two parts: number of days 18} and first day of holiday 15 Jun 2021, and press enter.
+for number in {0..18}
+do
+date -d "15 Jun 2021 "${number}" days" +"%Y%m%d"
+done
+#+end_src
+
+#+RESULTS:
+#+begin_example
+20210615
+20210616
+20210617
+20210618
+20210619
+20210620
+20210621
+20210622
+20210623
+20210624
+20210625
+20210626
+20210627
+20210628
+20210629
+20210630
+20210701
+20210702
+20210703
+#+end_example
+
 
 En vervolgens het adres er achter schrijven(via keyboard macros)
 #+begin_example
@@ -900,8 +939,8 @@ Daarna het bovenstaande samengevoegd tot een enkel commando:
 #+begin_src shell
 rename 20210616 20210616_Porto *.jpg; rename 20210617 20210617_Porto *.jpg; rename 20210619 20210619_Lagos *.jpg; rename 20210620 20210620_Lagos *.jpg; rename 20210621 20210621_Lagos *.jpg; rename 20210622 20210622_Lagos *.jpg; rename 20210623 20210623_Lagos *.jpg; rename 20210624 20210624_Lagos *.jpg; rename 20210625 20210625_Lagos *.jpg; rename 20210626 20210626_Evora *.jpg; rename 20210627 20210627_Evora *.jpg; rename 20210628 20210628_Evora *.jpg; rename 20210629 20210629_Pinhao *.jpg; rename 20210630 20210630_Pinhao *.jpg; rename 20210701 20210701_Pinhao *.jpg; rename 20210702 20210702_Pinhao *.jpg; rename 20210703 20210703_Amsterdam *.jpg;
 #+end_src
-De *.mov files van apple moet ik nog hernoemen... Hoe kan ik in metadata...
 
+De *.mov files van apple moet ik nog hernoemen... Hoe kan ik in metadata...
 onderstaande optie nog testen, volgens stackoverflow:
 =exiftool -time:all vid.mov=
 
