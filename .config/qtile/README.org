@@ -227,7 +227,6 @@ keys = [
 
     #+END_SRC
 
-    #+RESULTS:
 
 ** Keybindings: Audio and print
 Hotkeys to control the volume, muting and printscreen.
@@ -313,7 +312,6 @@ Right super key to open applications.
         ),
 #+END_SRC
 
-#+RESULTS:
 
 ** Keybingings: Text files
 The right alt key is used to open text files in Vim or in Emacs.

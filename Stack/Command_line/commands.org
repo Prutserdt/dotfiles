@@ -693,7 +693,7 @@ Step 3: rename with location info
 =rename 20190511 20190511_Schiphol *.jpg=
 
 make a list:
-#+begin_example
+#+begin_src shell
 rename 20190511 20190511_Schiphol *.jpg
 rename 20190512 20190512_Bangkok *.jpg
 rename 20190513 20190513_Bangkok *.jpg
@@ -718,7 +718,7 @@ rename 20190531 20190531_Koh_Samui *.jpg
 rename 20190601 20190601_Bangkok *.jpg
 rename 20190602 20190602_Schiphol *.jpg
 rename 20190603 20190603_Schiphol *.jpg
-#+end_example
+#+end_src
 
 Combine to one line:
 #+begin_src shell
@@ -962,6 +962,8 @@ List number of applications by size
 =sudo pacman -Qi | egrep '^(Name|Installed)' | cut -f2 -d':' | paste - - | column -t | sort -nrk 2 | grep MiB | less=
 all apps:
 =sudo pacman -Qe=
+Export all installed apps to a textfile:
+=sudo pacman -Qe > ~/Stack/Command_line/pacman_Qe_01JAN24=
 check orphan packages
 =sudo pacman -Qdt=
 Remove the application + orphan packages
@@ -969,7 +971,6 @@ Remove the application + orphan packages
 combineren van bovenstaande 2 commands, verwijderd automatisch de orphan 
 packages
 =sudo pacman -Rns $(pacman -Qdtq)=
-
 opschonen cache en outdated packages
 =paccache -r=
 =sudo pacman -Scc= #oud! gebruik paccache nu!
@@ -2477,8 +2478,9 @@ My first snippet (in ~/.doom.d/snippets/org-mode)
 $2
 #+end_src
 
+Opmerking: als ik de tekstfile verander dan wordt deze niet gebruikt in org-mode, en als ik de snippet bekijk met =yas-visit-snippet-file= dan zie ik de juiste aanpassing. Vreemd...
+ZQ
 
-#+end_src
 
 **** mu4e
 
