@@ -102,31 +102,31 @@ keys = [
         lazy.layout.flip(),
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
-    # Layout hotkeys
-    Key([modL],"y",
-        lazy.function(threecol),
-        desc="Threecolumn selection, with margins"
+   # Layout hotkeys
+     Key([modL],"y",
+        lazy.function(montall),
+        desc="MonadTall selection without margins"
         ),
     Key([modL],"u",
-        lazy.function(threecol2),
+        lazy.function(threecol),
         desc="Threecolumn selection without margins"
         ),
     Key([modL],"i",
-        lazy.function(montall),
-        desc="MonadTall selection"
-        ),
-    Key([modL],"o",
-        lazy.function(montall2),
-        desc="MonadTall selection without margins"
-        ),
-    Key([modL],"p",
         lazy.function(monwide),
-        desc="MonadWide selection"
+        desc="MonadWide selection without margins"
         ),
-#    Key([modL],"=",
-#        lazy.function(monwide2),
-#        desc="MonadWide selection without margins"
-#        ),
+    Key([modL],"6",
+        lazy.function(montall2),
+        desc="MonadTall selection with margins"
+        ),
+    Key([modL],"7",
+        lazy.function(threecol2),
+        desc="Threecolumn selection with margins"
+        ),
+    Key([modL],"8",
+        lazy.function(monwide2),
+        desc="MonadWide selection without margins"
+        ),
     Key([modL],"f",
         lazy.window.toggle_fullscreen(),
         desc="Fullscreen the current window"
@@ -137,10 +137,10 @@ keys = [
         ),
     # multiple stack panes
     # FIXME: doesn't seem to work, probably for other layouts?
-    Key([modL, "shift"],"Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack"
-    ),
+    #Key([modL, "shift"],"Return",
+    #    lazy.layout.toggle_split(),
+    #    desc="Toggle between split and unsplit sides of stack"
+    #),
     Key([modL], "Return",
         lazy.spawn(terminal),
         desc="Launch terminal"),
@@ -306,7 +306,6 @@ keys = [
         ),
 ]
 
-#groups = [Group(i) for i in "123456789"]
 groups = [Group(i) for i in "1234"]
 
 for i in groups:

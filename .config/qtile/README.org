@@ -153,31 +153,31 @@ keys = [
         lazy.layout.flip(),
         desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
         ),
-    # Layout hotkeys
-    Key([modL],"y",
-        lazy.function(threecol),
-        desc="Threecolumn selection, with margins"
+   # Layout hotkeys
+     Key([modL],"y",
+        lazy.function(montall),
+        desc="MonadTall selection without margins"
         ),
     Key([modL],"u",
-        lazy.function(threecol2),
+        lazy.function(threecol),
         desc="Threecolumn selection without margins"
         ),
     Key([modL],"i",
-        lazy.function(montall),
-        desc="MonadTall selection"
-        ),
-    Key([modL],"o",
-        lazy.function(montall2),
-        desc="MonadTall selection without margins"
-        ),
-    Key([modL],"p",
         lazy.function(monwide),
-        desc="MonadWide selection"
+        desc="MonadWide selection without margins"
         ),
-#    Key([modL],"=",
-#        lazy.function(monwide2),
-#        desc="MonadWide selection without margins"
-#        ),
+    Key([modL],"6",
+        lazy.function(montall2),
+        desc="MonadTall selection with margins"
+        ),
+    Key([modL],"7",
+        lazy.function(threecol2),
+        desc="Threecolumn selection with margins"
+        ),
+    Key([modL],"8",
+        lazy.function(monwide2),
+        desc="MonadWide selection without margins"
+        ),
     Key([modL],"f",
         lazy.window.toggle_fullscreen(),
         desc="Fullscreen the current window"
@@ -188,10 +188,10 @@ keys = [
         ),
     # multiple stack panes
     # FIXME: doesn't seem to work, probably for other layouts?
-    Key([modL, "shift"],"Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack"
-    ),
+    #Key([modL, "shift"],"Return",
+    #    lazy.layout.toggle_split(),
+    #    desc="Toggle between split and unsplit sides of stack"
+    #),
     Key([modL], "Return",
         lazy.spawn(terminal),
         desc="Launch terminal"),
@@ -301,7 +301,6 @@ Right super key to open applications.
         lazy.spawn("thunar"),
         desc="Launch Thunar filemanager"
         ),
-    #FIXME: modify the script because characters are not imported in emacs org mode
     Key([modR], "u",
         lazy.spawn(os.path.expanduser("~/.config/dmenuunicode.sh")),
         desc="Insert unicode, emojis :-)"
@@ -377,10 +376,9 @@ The right alt key is used to open text files in Vim or in Emacs.
 #+END_SRC
 
 ** Groups
-the workspaces are described, which are called Groups in qtile.
+The workspaces are described here, which are called Groups in qtile. I don't need more then four groups so I limited it.
 
 #+BEGIN_SRC python :tangle "config.py"
-#groups = [Group(i) for i in "123456789"]
 groups = [Group(i) for i in "1234"]
 
 for i in groups:
@@ -423,7 +421,7 @@ layout_theme = {"border_width": 2,
 #+END_SRC
 
 ** Layouts
-Some of the layouts that I use.
+I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
 
 #+BEGIN_SRC python :tangle "config.py"
 

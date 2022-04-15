@@ -855,7 +855,7 @@ Hier in vim de dagen van vakantie uitgetypt(volgend keer met het shell script da
 20210703
 #+end_example
 
-Laat ik eens kijken of ik bovenstaande met org mode kan genereren via een shell script, dit werkt goed met :results output
+Laat ik eens kijken of ik bovenstaande met org mode kan genereren via een shell script, dit werkt goed met :results output.
 
 #+begin_src shell :results output
 # Code block to calculate list of dates by this shell script in org mode.
@@ -2581,6 +2581,18 @@ Sending email via: smtpmail
 ***** mu4e
 This has a steep learning curve... How to use this bloody program...
 
+**** dired
+Handige shortcuts in doom emacs:
+|-----+------------------------------------------------|
+| o   | Toggle sorting order by date                   |
+| -   | Up directory                                   |
+| +   | create directory                               |
+| (   | toggle details                                 |
+| W   | Open file with default web browser, new window |
+| g O | visit selected file in another dired window    |
+| T   | Touch: change timestamp                        |
+|-----+------------------------------------------------|
+
 *** IRC, inspircd
 Install by =yay inspircd=
 
@@ -3624,6 +3636,10 @@ Ik heb een nieuwe keyboard layout die er goed uitziet en die geflashed kan
 worden maar helaas kan ik het bord niet resetten via right shift ingedrukt
 gehouden en daarna inpluggen. Het zou kunnen dat dit door de software niet lukt
 ofzo.
+
+Nieuwe poging 14APR22:
+Het lukt me niet om het bord te resetten. Met rechtershift ingedrukt terwijl het =qmk flash -kb gergo -km Prutserdt= loopt wert niet, er is geen reset. Er is ook geen reset button op het bord dus ik kan dit keyboard niet veranderen.
+
 
 *** Redox keyboard, falba teck (NOV2020)
 Binnen gekomen 19NOV20.

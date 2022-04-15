@@ -43,8 +43,6 @@
        (python +lsp
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
-       :email
-       (mu4e +org +gmail); TODO: this is not set up yet....
        :app
        :config
        (default +bindings +smartparens)

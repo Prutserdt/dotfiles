@@ -12,9 +12,9 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
+- [[#some-tinkering][Some tinkering]]
 - [[#todos][TODOs]]
   - [[#mu4e][MU4e]]
-  - [[#flash-highlighting-yanked-text][Flash highlighting yanked text]]
 - [[#credits][Credits]]
 
 * About this config
@@ -69,8 +69,6 @@ This file controls what Doom modules are enabled and what order they load in. Re
        (python +lsp
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
-       :email
-       (mu4e +org +gmail); TODO: this is not set up yet....
        :app
        :config
        (default +bindings +smartparens)
@@ -166,9 +164,6 @@ Here the packages are defined which should be installed. This is an addition to 
 ;; Disable the nose package. Not maintained and leading to :lang python error
 (package! nose :disable t)
 
-;; The email package MU for emacs
-(package! mu4e)
-
 ;; Help finding the cursor
 (package! beacon)
 
@@ -194,12 +189,11 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 
-;; Style of line numbering, set to `relative' for relative number.
-;; Or keycord: SPC t l, or SPC u SPC t l
+;; Set relative numbering. 'SPC' 't'  'l'
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-;; Restoring old Y behavior of VIM (yank the whole line)
+;; Restoring to behavior of VIM (Y:yank the whole line, independent on position)
 (setq! evil-want-Y-yank-to-eol nil)
 
 ;; Highlight the matching parenthesis pair
@@ -210,15 +204,6 @@ The custom configurations are set here. For instance theme settings, image to th
   :hook (prog-mode . rainbow-delimiters-mode)
   :hook (org-mode . rainbow-delimiters-mode)
   )
-
-;; Change the theme (manually set to darktooth at the moment)
-;;(setq doom-theme 'doom-moonlight)
-;;(setq doom-theme 'doom-vibrant)
-;;(setq doom-theme 'doom-tokyo-night)
-;;(setq doom-theme 'doom-dracula)
-;;(setq doom-theme 'doom-material-dark)
-;;(setq doom-theme 'doom-xcode)
-;;(setq doom-theme 'doom-zenburn)
 
 ;; Help to find the cursor by beacon blink
 (beacon-mode 1)
@@ -236,22 +221,51 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; FIXME: does not work in combination with visual-fill-column-mode....
 (global-display-fill-column-indicator-mode)
 
+;; Set flashing yanked text longer, default is 0.2
+(setq evil-goggles-duration 0.6)
+
 ;; Visual fill column, to break the lines that otherwise will keep on going
-;; to the end of the window, to improve readability. Related:
-;; visual-fill-column-mode, global-visual-line-mode.
+;; Related: visual-fill-column-mode, global-visual-line-mode.
 ;; Can be set manually per buffer by: set-fill-column 80
 (setq-default fill-column 110)
-(add-hook 'visual-line-mode-hook #'visual-fill-column-mode)
+(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 ;; Center to the middle of the screen
 (setq-default visual-fill-column-center-text t)
 
-(set-frame-font "Hack 11" nil t)
+(set-frame-font "Hack 10" nil t)
 
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
 
-;; use mu4e for e-mail in emacs
+#+end_src
+
+* Some tinkering
+
+Not all tinkering should be part of the three configuration files that are described above.
+
+Choose a theme by 'M-x' RET 'load-theme' and choose for instance: doom-darktooth, doom-moonlight, doom-vibrant, doom-tokyo-night, doom-dracula, doom-material-dark, doom-xcode or doom-zenburn,
+
+Highlight the current selected line: 'M-x' RET 'hl-line-mode' RET
+
+I changed the default flashing yanked text of 0.2 sec to 0.6 sec by changing the evil-goggle.el file by 'Mx' 'doom-help-package' RET evil-goggles RET. I THINK adding =(setq evil-goggles-duration 0.6)= to config.el did not work.
+
+* TODOs
+Here is a list of things I want to improve in my Doom Emacs configuration.
+** MU4e
+Needs to be configured properly...
+
+The following code shoudl be added to package.el
+#+begin_src emacs-lisp
+
+;; The email package MU for emacs
+(package! mu4e)
+
+#+end_src
+
+The following code block should be part of config.el
+#+begin_src emacs-lisp
+
 (setq mail-user-agent 'mu4e-user-agent)
 (set-email-account!
  "transip"
@@ -260,7 +274,7 @@ The custom configurations are set here. For instance theme settings, image to th
    (smtpmail-smtp-user     . "email@adress.com"))
  t)
 (setq mu4e-get-mail-command "mbsync transip "
-      ;; get emails and index every 5 minutes
+    ;; get emails and index every 5 minutes
       mu4e-update-interval 300
       ;; send emails with format=flowed
       mu4e-compose-format-flowed t
@@ -275,17 +289,8 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; if our mail server lives at smtp.example.org; if you have a local
 ;; mail-server, simply use 'localhost' here.
 (setq smtpmail-smtp-server "smtp.transip.email")
+
 #+end_src
-
-* TODOs
-Here is a list of things I want to improve in my Doom Emacs configuration.
-
-** MU4e
-Is not yet properly configured.
-
-** Flash highlighting yanked text
-This is already out of the box in doom emacs. I want the flashing to last longer, about 1 second. The following line adition to config.el does NOT work:
-=(setq hl-line-mode  5)=
 
 * Credits
 My configuration of Doom Emacs is partially based on these ones.

@@ -13,9 +13,6 @@
 ;; Disable the nose package. Not maintained and leading to :lang python error
 (package! nose :disable t)
 
-;; The email package MU for emacs
-(package! mu4e)
-
 ;; Help finding the cursor
 (package! beacon)
 
