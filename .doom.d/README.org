@@ -15,24 +15,26 @@
 - [[#some-tinkering][Some tinkering]]
 - [[#todos][TODOs]]
   - [[#mu4e][MU4e]]
+  - [[#recently-open-files][Recently open files]]
 - [[#credits][Credits]]
 
 * About this config
-This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs (Alt-x and typing: =org-babel-tangle=). Remember to run =doom sync= in the terminal after modifying it! (or M-x doom-reload, or SPC h r r within emacs)
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs ='M-x' 'org-babel-tangle' RET=. Remember to run =~/.emacs.d/bin/doom sync= in the terminal after modifications!
 
 * init.el
-This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =doom sync= after modifying it!
+This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =~/.emacs.d/bin/doom sync= after modifying it!
 
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter the
-;; init.el directly and only modify the README.org file then Alt-x and type:
-;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
+;; NOTE This file is generated from the README.org file. Do not alter
+;; init.el directly and only modify the README.org file in emacs by
+;; 'M-x' 'org-babel-tangle' RET and run $ '~/.emacs.d/bin/doom sync'
 
 (doom! :completion
        company           ; the ultimate code completion backend
        vertico           ; the search engine of the future
+
        :ui
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
@@ -45,23 +47,31 @@ This file controls what Doom modules are enabled and what order they load in. Re
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        workspaces        ; tab emulation, persistence & separate workspaces
+
        :editor
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
        snippets          ; my elves. They type so I don't have to
+
        :emacs
-       dired             ; making dired pretty [functional]
+       (dired +icons)    ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        undo              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and :Emacs, sitting in a tree
+
+       :term
+       vterm             ; the best terminal emulation in Emacs
+
        :checkers
        syntax            ; tasing you for every semicolon you forget
+
        :tools
        (eval +overlay)   ; run code, run (also, repls)
        lookup            ; navigate your code and its documentation
        lsp               ; M-x vscode
        magit             ; a git porcelain for Emacs
+
        :lang
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
@@ -69,13 +79,16 @@ This file controls what Doom modules are enabled and what order they load in. Re
        (python +lsp
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
+
        :app
+
        :config
        (default +bindings +smartparens)
        )
 #+end_src
 
-The folowing options could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it.
+
+The folowing options could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it. Tip: the list of modules can be checked in emacs by 'C-h' d m
 
 #+begin_src emacs-lisp
 
@@ -83,6 +96,7 @@ The folowing options could be added to the init.el part that is listed above. Ju
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
+
        ;; :lang
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -127,10 +141,15 @@ The folowing options could be added to the init.el part that is listed above. Ju
        ;;web               ; the tubes
        ;;yaml              ; JSON, but readable
        ;;zig               ; C, but simpler
+
+       ;; :term
+       ;;term              ; terminals in emacs
+
        ;; :email
        ;;(mu4e +org +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
+
        ;; :app
        ;;calendar
        ;;emms
@@ -138,6 +157,7 @@ The folowing options could be added to the init.el part that is listed above. Ju
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
+
        ;; :os
        ;;(:if IS-MAC macos)  ; improve compatibility with macOS
        ;; :config
@@ -151,9 +171,9 @@ Here the packages are defined which should be installed. This is an addition to 
 
 ;; -*- no-byte-compile: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter the
-;; packages.el file directly and only modify the README.org file then Alt-x and type:
-;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking
+;; NOTE This file is generated from the README.org file. Do not alter
+;; packages.el directly and only modify the README.org file in emacs by
+;; 'M-x' 'org-babel-tangle' RET and run $ '~/.emacs.d/bin/doom sync'
 
 (require 'package)
 (add-to-list 'package-archives
@@ -167,8 +187,9 @@ Here the packages are defined which should be installed. This is an addition to 
 ;; Help finding the cursor
 (package! beacon)
 
-;; The email package MU for emacs
+;; Wrapping lines at fill-column and centering text
 (package! visual-fill-column)
+
 #+end_src
 
 * config.el
@@ -176,15 +197,9 @@ The custom configurations are set here. For instance theme settings, image to th
 
 #+begin_src emacs-lisp :tangle config.el
 
-;; NOTE This file is generated from the README.org file. Do not alter the
-;; config.el directly and only modify the README.org file, then Alt-x and type:
-;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal.
-
-;; Evil Mode
-(use-package evil
-  :ensure t
-  :config
-)
+;; NOTE This file is generated from the README.org file. Do not alter
+;; config.el directly and only modify the README.org file in emacs by
+;; 'M-x' 'org-babel-tangle' RET and reload by 'M-x' 'doom/reload' RET
 
 ;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
@@ -218,21 +233,20 @@ The custom configurations are set here. For instance theme settings, image to th
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
 ;; Show the 80 column (Fill Column Indicator)
-;; FIXME: does not work in combination with visual-fill-column-mode....
+;; NOTE: does not work in combination with visual-fill-column-mode
 (global-display-fill-column-indicator-mode)
 
 ;; Set flashing yanked text longer, default is 0.2
 (setq evil-goggles-duration 0.6)
 
 ;; Visual fill column, to break the lines that otherwise will keep on going
-;; Related: visual-fill-column-mode, global-visual-line-mode.
-;; Can be set manually per buffer by: set-fill-column 80
+;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
 (setq-default fill-column 110)
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 ;; Center to the middle of the screen
 (setq-default visual-fill-column-center-text t)
 
-(set-frame-font "Hack 10" nil t)
+(set-frame-font "Hack 12" nil t)
 
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
@@ -251,11 +265,11 @@ Highlight the current selected line: 'M-x' RET 'hl-line-mode' RET
 I changed the default flashing yanked text of 0.2 sec to 0.6 sec by changing the evil-goggle.el file by 'Mx' 'doom-help-package' RET evil-goggles RET. I THINK adding =(setq evil-goggles-duration 0.6)= to config.el did not work.
 
 * TODOs
-Here is a list of things I want to improve in my Doom Emacs configuration.
+Here is a list of things I want to add/improve in my Doom Emacs configuration.
 ** MU4e
 Needs to be configured properly...
 
-The following code shoudl be added to package.el
+mu42 should be uncommented in init.el and the mu4e package should be added to package.el:
 #+begin_src emacs-lisp
 
 ;; The email package MU for emacs
@@ -263,7 +277,7 @@ The following code shoudl be added to package.el
 
 #+end_src
 
-The following code block should be part of config.el
+The following code block should be part of config.el:
 #+begin_src emacs-lisp
 
 (setq mail-user-agent 'mu4e-user-agent)
@@ -283,7 +297,6 @@ The following code block should be part of config.el
       mu4e-index-lazy-check t
       ;; more sensible date format
       mu4e-headers-date-format "%d.%m.%y")
-;; FIXME: smtpmail werkt nog niet, onderstaande verbeteren....
 ;; tell message-mode how to send mail
 (setq message-send-mail-function 'smtpmail-send-it)
 ;; if our mail server lives at smtp.example.org; if you have a local
@@ -291,6 +304,9 @@ The following code block should be part of config.el
 (setq smtpmail-smtp-server "smtp.transip.email")
 
 #+end_src
+
+** Recently open files
+HACK: SPC f r opens the recently opened file buffer. When running M-x recentf-open-files the same list is given with numeric options to switch to files. I prefer this was instead of using typing or the up/down buttons. I want to change SPC f r to be this way...
 
 * Credits
 My configuration of Doom Emacs is partially based on these ones.

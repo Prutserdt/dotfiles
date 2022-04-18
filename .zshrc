@@ -1,4 +1,4 @@
-# ~/.zshrc #           _
+# ~/.zshrc  _
 #   _______| |__  _ __ ___
 #  |_  / __| '_ \| '__/ __|
 # _ / /\__ \ | | | | | (__
@@ -24,8 +24,10 @@ setopt HIST_REDUCE_BLANKS  ## Delete empty lines from history file
 # Based on the xiong-chiamiov-plus.szh-theme, from oh-mh-zsh.
 # user, host, full path, and time/date on two lines for easier grepping
 PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;32m%}%n%{\e[1;30m%}@%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%} - %b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%} - %{\e[0;34m%}%B[%b%{\e[0;33m%}'%D{"%a %b %d, %H:%M"}%b$'%{\e[0;34m%}%B]%b%{\e[0m%}
-%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B] <$(git_prompt_info)>%{\e[0m%}%b '
-PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
+%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B %{\e[0m%}%b'
+# 17APR22: line above added and lines below removed:
+# #%{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B] <$(git_prompt_info)>%{\e[0m%}%b '
+#PS2=$' \e[0;34m%}%B>%{\e[0m%}%b '
 
 pfetch              # Display arch logo (asci art) and additional sys info
 cowthink $(fortune) # Let the cow quote! (requires conwsay and fortune-mod)

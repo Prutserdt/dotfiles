@@ -2,9 +2,12 @@
 #+STARTUP: inlineimages
 #+AUTHOR: Prutserdt
 
+;; #+ATTR_HTML: :alt Qtile :title Qtile :align left
+
 #+CAPTION: Qtile
-#+ATTR_HTML: :alt Qtile :title Qtile :align left
-[[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/QtileLogo.png]]
+#+ATTR_ORG: :width 400
+[[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.config/qtile/QtileLogo.png]]
+
 
 * Table of contents :toc:
 - [[#qtile-and-my-config][Qtile and my config]]
@@ -335,6 +338,10 @@ The right alt key is used to open text files in Vim or in Emacs.
     Key([altR], "d",
         lazy.spawn(termVim +os.path.expanduser("~/.config/suckless/dwm/config.h")),
         desc="Open in vim: config.h of my dwm build"
+        ),
+    Key([altR], "e",
+        lazy.spawn(Emacs +os.path.expanduser("~/.doom.d/README.org")),
+        desc="Open in Emacs my Doom emacs config: README.org"
         ),
     Key([altR], "i",
         lazy.spawn(termVim +os.path.expanduser("~/.config/i3/config")),

@@ -1,8 +1,8 @@
 ;; -*- no-byte-compile: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter the
-;; packages.el file directly and only modify the README.org file then Alt-x and type:
-;; 'org-babel-tangle' in emacs and run 'doom sync' in the terminal. Happy hacking
+;; NOTE This file is generated from the README.org file. Do not alter
+;; packages.el directly and only modify the README.org file in emacs by
+;; 'M-x' 'org-babel-tangle' RET and run $ '~/.emacs.d/bin/doom sync'
 
 (require 'package)
 (add-to-list 'package-archives
@@ -16,5 +16,5 @@
 ;; Help finding the cursor
 (package! beacon)
 
-;; The email package MU for emacs
+;; Wrapping lines at fill-column and centering text
 (package! visual-fill-column)

@@ -2139,6 +2139,8 @@ Android: Antox
 desktop: qtox
 
 *** SXIV
+Image mode and thumbnail mode are the main modes and can be toggled by RET.
+
 Assign keyboard shortcuts (https://wiki.archlinux.org/index.php/Sxiv)
 Kopieer het voorbeeld in de de wiki in de file
 =~/.config/sxiv/exec/key-handler en maak deze executable.=
@@ -2429,6 +2431,25 @@ C-c C-l
 figuur laten zien in org:
 org-toggle-inline-images
 
+
+**** Help in emacs/doom-emacs
+
+Emacs is self documenting. All information is part of the software.
+
+|---------+-----------+-------------------------------------------|
+| Emacs   | Doom      | Function                                  |
+|---------+-----------+-------------------------------------------|
+| C-h ?   | SPC h ?   | Help with the help function               |
+| C-h k   | SPC h k   | Give keystroke, then you get help on that |
+| C-h i   | SPC h i   | info mode.                                |
+|         |           |                                           |
+|         |           |                                           |
+|         |           |                                           |
+|         |           |                                           |
+| C-h d h | SPC h d   | Doom emacs documentation                  |
+| C-h d m | SPC h d m | Show all modules, loaded/not loaded       |
+|---------+-----------+-------------------------------------------|
+
 **** Working with windows in emacs
 
 Algemeen: SPC w om opties te tonen.
@@ -2592,6 +2613,15 @@ Handige shortcuts in doom emacs:
 | g O | visit selected file in another dired window    |
 | T   | Touch: change timestamp                        |
 |-----+------------------------------------------------|
+Walter is mijn naam. YOU WILL RESPECT MY AUTHORITY!!
+
+
+**** Spell checking in emacs
+Dat kan met ispell en flyspell.
+aspell wordt nu aanbevolen...
+Even uitzoeken wat ik ga gebruiken
+
+
 
 *** IRC, inspircd
 Install by =yay inspircd=

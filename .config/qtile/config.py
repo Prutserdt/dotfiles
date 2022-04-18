@@ -238,7 +238,6 @@ keys = [
         lazy.spawn("thunar"),
         desc="Launch Thunar filemanager"
         ),
-    #FIXME: modify the script because characters are not imported in emacs org mode
     Key([modR], "u",
         lazy.spawn(os.path.expanduser("~/.config/dmenuunicode.sh")),
         desc="Insert unicode, emojis :-)"
@@ -267,6 +266,10 @@ keys = [
     Key([altR], "d",
         lazy.spawn(termVim +os.path.expanduser("~/.config/suckless/dwm/config.h")),
         desc="Open in vim: config.h of my dwm build"
+        ),
+    Key([altR], "e",
+        lazy.spawn(Emacs +os.path.expanduser("~/.doom.d/README.org")),
+        desc="Open in Emacs my Doom emacs config: README.org"
         ),
     Key([altR], "i",
         lazy.spawn(termVim +os.path.expanduser("~/.config/i3/config")),
