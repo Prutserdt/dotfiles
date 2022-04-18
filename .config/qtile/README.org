@@ -2,7 +2,6 @@
 #+STARTUP: inlineimages
 #+AUTHOR: Prutserdt
 
-;; #+ATTR_HTML: :alt Qtile :title Qtile :align left
 
 #+CAPTION: Qtile
 #+ATTR_ORG: :width 400
