@@ -73,7 +73,7 @@ toch inloggen door gebruik te maken van: ~sudo -s~.
 
 *Switch user*. Ga naar juiste home directory: ~su username~.
 
-Vindt alle *system users*: ~compgen -u~.
+Vind alle *system users*: ~compgen -u~.
 
 Herstart het systeem: ~sudo reboot~.
 

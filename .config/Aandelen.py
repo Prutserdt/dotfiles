@@ -15,27 +15,27 @@ from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, 
 # Deze data wordt in het systeem clipboard opgeslagen.
 
 
-# Open een simpel inputscherm voor handmatige invoer van spaargeld en overwaarde huis.
+# Open een simpel inputscherm voor handmatige invoer van cash geld en overwaarde huis.
 # gebaseerd op: https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog
 class InputDialog(QDialog):
-    """Invoerscherm voor hoeveelheid spaargeld en overwaarde huis"""
+    """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
         global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
-        global Spaargeld  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
-        Spaargeld = QLineEdit(self)
+        global RaboCash  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
+        RaboCash = QLineEdit(self)
         Huis = QLineEdit(self)
         buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
         layout = QFormLayout(self)
-        layout.addRow("Voer spaarsaldo in:", Spaargeld)
+        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
         layout.addRow("Voer overwaarde huis in:", Huis)
         layout.addWidget(buttonbox)
         buttonbox.accepted.connect(self.accept)
         buttonbox.rejected.connect(self.reject)
 
     def getinputs(self):
-        return Spaargeld.text(), Huis.text()
+        return RaboCash.text(), Huis.text()
 
 
 if __name__ == '__main__':
@@ -44,9 +44,9 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     dialog = InputDialog()
     if dialog.exec():
-        Spaargeld, Huis = dialog.getinputs()
+        RaboCash, Huis = dialog.getinputs()
         Huis = int(Huis)            # Moet integer zijn voor latere berekening
-        Spaargeld = int(Spaargeld)  # Moet integer zijn voor latere berekening
+        RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
 
 
 # CSV data aan dataframe toevoegen
@@ -75,18 +75,19 @@ def CreateSep(teken, herhalingen):
     return x
 
 
-# Aanmaken van een aantal variabelen(file locaties, column omschrijvingen enz
+# Aanmaken van een aantal variabelen.
+# Locatie van DeGIRO porfolio:
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
-
-# Locatie Rabo portfolio. Zoek meest recente file mbv wildcard:
-searchRabo = os.path.expanduser("~") + "/Downloads/Portfolio_36*"  # Wildcard zoeken
+# Locatie Rabo portfolio. Zoek eerst de meest recente file mbv wildcard:
+searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-36*"  # Wildcard zoeken
+# Daarna de nieuwste file zoeken in directory
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)       # Zoek nieuwste
 # Separator lijn die ik her en der gebruik
 separ = CreateSep("=", 80)  # separator teken en lengte
 
-# Omschrijving van overwaarde huis en Spaargeld
+# Omschrijving van overwaarde huis en cash geld
 OmsHuis = "Overwaarde huis     "
-OmsSpaar = "Spaargeld           "
+OmsCash = "RaboCash            "
 # Namen van kolommen die ik ga gebruiken:
 EurCol = "Euro"                     # Euro column naam
 OmsCol = "Omschrijving        "     # Omschrijving column naam
@@ -97,21 +98,21 @@ AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend colu
 # Aanmaken van een leeg dataframe
 df = pd.DataFrame()
 # Toevoegen van data uit csv files aan het lege dataframe.
-#                (filename,   delimiter, kolom1,          kolom2    )
-AddCSVtoDataFrame(fileRabo, ";", "Titel", "Waarde €")
+AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €")
+#De onderste regel van de rabobank csv is een lege regel dus verwijderen:
+df.drop(3,0,inplace=True)
+
+# Nu de DeGIRO data toevoegen:
 AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product")
 # Nieuw dataframe aanmaken met overwaarde huis en spaargeld data
 d = {
-    OmsCol: [OmsHuis, OmsSpaar],    # kolom omschrijving invullen
-    EurCol: [Huis, Spaargeld]}      # kolom euros invullen
+    OmsCol: [OmsHuis, OmsCash],    # kolom omschrijving invullen
+    EurCol: [Huis, RaboCash]}      # kolom euros invullen
 dfx = pd.DataFrame(d)
 # Samenvoegen van dataframes
 df = pd.concat([df, dfx])
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
-# Rekening courant -500 euro corrigeren
-# Regel drie is mijn Rabobank rekening courant saldo
-df.at[3, "Euro"] = df.at[3, "Euro"] - 500
 print(separ + "\n", df)  # Alleen voor debugging gebruik
 
 # Asset allocations berekenen en toevoegen aan dataframe
@@ -139,6 +140,8 @@ d = {
 dfx = pd.DataFrame(d)
 # Samenvoegen van dataframes
 df = pd.concat([df, dfx])
+print(separ + "\n", df)  # Alleen voor debugging gebruik
+
 # De kolom omschrijving afslanken tot 20 tekens
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
 
