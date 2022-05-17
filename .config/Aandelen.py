@@ -68,6 +68,7 @@ def AddCSVtoDataFrame(filename, delimiter, kolom1, kolom2):
 
 
 # Aanmaken van separatoren (gebruikt voor opmaak).
+# TODO: dit kan makkelijker! dash = '-' * 40
 def CreateSep(teken, herhalingen):
     x = str("")  # Maak x aan als een lege string
     for a in range(0, herhalingen):

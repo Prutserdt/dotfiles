@@ -36,6 +36,7 @@ cowthink $(fortune) # Let the cow quote! (requires conwsay and fortune-mod)
 #     oh-my-zsh stuff     #
 ###########################
 ZSH=/usr/share/oh-my-zsh/ # Path to the oh-my-zsh installation.
+#ZSH=$HOME/.oh-my-zsh/ # Alternative path to the oh-my-zsh installation.
 
 DISABLE_AUTO_UPDATE="true" # Uncomment to disable bi-weekly auto-update checks
 
@@ -74,7 +75,6 @@ fi
 #   Sourcing of sources   #
 ###########################
 source $ZSH/oh-my-zsh.sh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $HOME/.aliases
-# zsh-autosuggestions. Leads to cursor vanishing in alacrity. Strange....
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

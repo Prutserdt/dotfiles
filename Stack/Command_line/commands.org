@@ -33,6 +33,14 @@ du -h -d  1| sort -h~
 *** Vaak staat veel rommel in trash, ruim op met:
 ~rm -r -f Trash~. This will remove the Trash directory and everything in it.
 
+*** Verwijderen files/directories
+~rm text.txt~
+Verwijder directory and all files/subdirs in it: ~rm -r directoryname~
+Verwijderen alle files in dir: ~rm ~/Stack/dwm/patches/test/*~
+
+*** Kopieren van files
+
+
 *** Problemen met legen van trash in KDE.
 Open a terminal and go to ~/.local/share and type:
 ~rm -r -f Trash~. This will remove the Trash directory and everything in it.
@@ -1460,6 +1468,19 @@ Make sure gnupg is installed.
 ... nog te doen: initialize password store: ~pass init~
 maar eerst gnupg instellen, hier even de tijd voor nemen....
 
+*** Tesseract, ocr recognition from command line
+Install: ~yay tesseract~
+Ik heb nld en eng data geinstalleerd.
+Ik wil een script schrijven dat een screenshot maakt en dan ocr er direct op uitvoerd, dat moet mogelijk zijn.
+
+~​tesseract Screenshot_2022-05-17_10-16-18.jpg testt~
+
+
+​
+​
+
+
+
 * Applications (Command line and GUIs)
 *** Vim
 Installeer gvim, niet om te gebruiken maar om clipboard functionaliteit
@@ -2314,13 +2335,15 @@ arduino-cli compile --fqbn arduino:avr:uno FirstSketchVoornaam.ino -v
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchVoornaam.ino
 
 *** Arduino
-3 /home/icefly/Stack/Command_line/stappen voor Arduino programmeren:
+3 stappen voor Arduino programmeren:
 1: programmeer sketch genaamd FirstSketchVoornaam.ino
 2: compileer in directory sketch:
 arduino-cli compile --fqbn arduino:avr:uno FirstSketchVoornaam.ino -v
 3: upload naar de uno, et voila
 arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:uno FirstSketchVoornaam.ino -v
 (remark: de hex files staan in een temp dir, maar dat maakt niet uit verder.)
+
+Mijn data staat hier: /home/icefly/Arduino/
 
 *** ESP32 cam, setup esp32 libs, via Arduino-cli
 https://www.survivingwithandroid.com/arduino-cli-compile-upload-manage-libraries-cores-boards/
@@ -2389,7 +2412,7 @@ HIER GEBLEVEN
 https://dronebotworkshop.com/esp32-cam-intro/
 Mijn CameraWebServer_06FEB21 heb ik bewaard
 
-*** ESP32 CAM, alleen voor  installatie
+*** ESP32 CAM, alleen voor installatie
 Hieronder staan de stappen die ik heb genomen om ESP32 aan de gang te krijgen.
 De volgende packages geinstalleerd:
 ~sudo pacman -S --needed gcc git make flex bison gperf python-pip cmake ninja ccache dfu-util~
@@ -3351,7 +3374,7 @@ Let op: LET OP DIT VERWIJDERD DE HUIDIGE VERSIE!!
 # /home/icefly/Stack/Command_line/Automatische patching via de volgende .bashrc alias procedure:
 # alias dwmpatch = "dwmstable && cp ~/dwm/config.h ~/dwm/config.def.h && rm ~/dwm/config.h &&
 #                  patch -p1 < ~/Stack/dwm/patches/test/*.diff && make clean install"
-# /home/icefly/Stack/Command_line/Stap 1: verwijdern files in test direcotory:
+# /home/icefly/Stack/Command_line/Stap 1: verwijderen files in test direcotory:
 ~rm ~/Stack/dwm/patches/test/*~
 # Stap 2: Zet je diff file op de volgend locatie: ~/Stack/dwm/patches/test en run 
 # /home/icefly/Stack/Command_line/Stap 3: run .bashrc alias:

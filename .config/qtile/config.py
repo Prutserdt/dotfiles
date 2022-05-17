@@ -6,6 +6,7 @@
 import psutil
 import subprocess
 import os
+import pyperclip
 from typing import List
 from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, Match,
@@ -191,12 +192,16 @@ keys = [
         lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~/Downloads")),
         desc="Draw area by mouse to copy the selection and save in Downloads"
         ),
+    Key(["shift"], "Print",
+        lazy.spawn(os.environ["HOME"]+"/.config/ScreenshotToText.sh"),
+        desc="Make screenshot and text is magically in clipboard"
+        ),
 
     # Open applications
     Key([modR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
-        lazy.spawn(termVim +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
-        desc="Open in vim:Open aandelen log en script"
+        lazy.spawn(termVim + os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        desc="Open in vim: run het python aandelen script en open het aandelen log"
         ),
     Key([modR], "b",
         lazy.spawn("brave"),
