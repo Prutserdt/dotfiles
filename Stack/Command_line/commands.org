@@ -1469,15 +1469,27 @@ Make sure gnupg is installed.
 maar eerst gnupg instellen, hier even de tijd voor nemen....
 
 *** Tesseract, ocr recognition from command line
-Install: ~yay tesseract~
-Ik heb nld en eng data geinstalleerd.
-Ik wil een script schrijven dat een screenshot maakt en dan ocr er direct op uitvoerd, dat moet mogelijk zijn.
+Install: ~yay tesseract~. Verder heb ik nld en eng data geinstalleerd (tesseract-data-nld, tesseract-data-eng). Ik heb een script gemaakt dat een screenshot omzet naar text in het clipboard:
 
-~​tesseract Screenshot_2022-05-17_10-16-18.jpg testt~
+#+begin_src shell
 
+#!/bin/sh
+#~/.config/ScreenshotToText.sh
+#                       _      _                  _
+# Magically fetch text from screen to clipboard
+#
+# make directory in ram memory of user
+mkdir $XDG_RUNTIME_DIR/temp &
+# Open screenshot tool and write to temp memory
+xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
+# Run tesseract on the screenshot, the filename will be wismij.txt
+tesseract $XDG_RUNTIME_DIR/temp/wismij.jpg $XDG_RUNTIME_DIR/temp/wismij &&
+# Write the ocr extracted text to the systems clipboard
+cat  $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 
-​
-​
+#+end_src
+
+#+RESULTS:
 
 
 

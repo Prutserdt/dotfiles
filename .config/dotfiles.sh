@@ -22,6 +22,7 @@ function Push()
 
 function Pull()
 {
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME reset -hard;
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull
 }
 
@@ -38,7 +39,7 @@ Please read the status of the dotfiles carefully above.
 Options:
 
 1 commit/push 
-2 pull 
+2 pull (and first reset -hard)
 3 pull and a commit/push
 4 exit
 
