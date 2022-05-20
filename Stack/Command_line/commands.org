@@ -2651,6 +2651,13 @@ Dat kan met ispell en flyspell.
 aspell wordt nu aanbevolen...
 Even uitzoeken wat ik ga gebruiken
 
+**** Problemen na upgrade: vorige versie files waren nog aanwezig
+~rm -r ~/.emacs.d/.local/straight/build-27.2~
+~rm  ~/.emacs.d/.local/straight/build-27.2-cache.electrum~
+~doomsync~
+~doomdoctor~
+Nu is de vorige versie verwijderd en zijn er geen meldingen meer.
+
 
 *** IRC, inspircd
 Install by ~yay inspircd~
