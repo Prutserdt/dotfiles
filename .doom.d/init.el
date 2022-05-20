@@ -34,7 +34,6 @@
        vc                ; version-control and :Emacs, sitting in a tree
 
        :term
-       ;;term              ; terminals in emacs
        vterm             ; the best terminal emulation in Emacs
 
        :checkers

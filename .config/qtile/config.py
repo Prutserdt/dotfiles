@@ -381,8 +381,8 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(foreground="#555555"),
-                widget.CurrentLayout(foreground="#555555"),
-                widget.Prompt(foreground="#555555"),
+                widget.CurrentLayout(foreground="#777777"),
+                widget.Prompt(foreground="#777777"),
                 widget.WindowName(),
                 widget.Chord(
                     chords_colors={
@@ -390,10 +390,10 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.QuickExit(foreground="#282C34"),
+                widget.QuickExit(foreground="#888888"),
                 widget.Volume(foreground="#d75f5f"),
                 widget.Systray(),
-                widget.Clock(format="%d%b%y %H:%M",foreground="#555555"),
+                widget.Clock(format="%d%b%y %H:%M",foreground="#888888"),
             ],
             24,
             opacity=0.85,

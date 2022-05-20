@@ -47,7 +47,8 @@
 ;; Center to the middle of the screen
 (setq-default visual-fill-column-center-text t)
 
-(set-frame-font "Hack 12" nil t)
+;;(set-frame-font "Hack 12" nil t)
+(set-frame-font "Inconsolata-Light 12" nil t)
 
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
