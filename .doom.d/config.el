@@ -5,6 +5,9 @@
 ;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 
+(set-frame-font "Hack 12" t t)
+(setq default-frame-alist '((font . "Hack 13")))
+
 ;; Set relative numbering. 'SPC' 't'  'l'
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
@@ -46,9 +49,6 @@
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 ;; Center to the middle of the screen
 (setq-default visual-fill-column-center-text t)
-
-;;(set-frame-font "Hack 12" nil t)
-(set-frame-font "Inconsolata-Light 12" nil t)
 
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
