@@ -6,8 +6,7 @@
 # Happy hacking :-)
 
 setxkbmap us &&
-#xmodmap $HOME/.config/rdxswitch &&
 xmodmap $HOME/.config/kbswitch &&
 xset r rate 300 80 &
 picom -b &
-/usr/bin/emacs --daemon &
+/usr/bin/emacs --daeon &

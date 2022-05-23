@@ -13,11 +13,10 @@ from libqtile.config import ( Click, Drag, Group, Key, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
-modL = "mod4"
-modR = "mod3"
-altR = "mod5"
+modL = "mod4"                       # Left super key
+modR = "mod3"                       # Right super key
+altR = "mod5"                       # Right alt key
 
-terminal = "alacritty"
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
@@ -136,14 +135,8 @@ keys = [
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
         ),
-    # multiple stack panes
-    # FIXME: doesn't seem to work, probably for other layouts?
-    #Key([modL, "shift"],"Return",
-    #    lazy.layout.toggle_split(),
-    #    desc="Toggle between split and unsplit sides of stack"
-    #),
     Key([modL], "Return",
-        lazy.spawn(terminal),
+        lazy.spawn("alacritty"),
         desc="Launch terminal"),
    # Toggle between different layouts as defined below
     Key([modL], "Tab",
@@ -175,28 +168,6 @@ keys = [
 #        desc="Increase margin, tests...."
 #        ),
 
-    # Audio keys
-    Key([], "XF86AudioRaiseVolume",
-        lazy.spawn("amixer -q set Master 5%+"),
-        desc="Raise the volume"
-        ),
-    Key([], "XF86AudioLowerVolume",
-        lazy.spawn("amixer -q set Master 5%-"),
-        desc="Lowering the volume"
-        ),
-    Key([], "XF86AudioMute",
-        lazy.spawn("amixer -q set Master toggle"),
-        desc="Toggle mute/unmute"
-        ),
-    Key([], "Print",
-        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~/Downloads")),
-        desc="Draw area by mouse to copy the selection and save in Downloads"
-        ),
-    Key(["shift"], "Print",
-        lazy.spawn(os.environ["HOME"]+"/.config/ScreenshotToText.sh"),
-        desc="Make screenshot and text is magically in clipboard"
-        ),
-
     # Open applications
     Key([modR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
@@ -212,11 +183,11 @@ keys = [
         desc="Launch emacs"
         ),
     Key([modR], "d",
-        lazy.spawn(os.environ["HOME"]+"/.config/dmenuapps.sh"),
+        lazy.spawn(home + "/.config/dmenuapps.sh"),
         desc="Launch My dmenu to open applications"
         ),
     Key([modR, "shift"], "d",
-        lazy.spawn(os.environ["HOME"]+"/.config/dmenuUpdate.sh"),
+        lazy.spawn(home + "/.config/dmenuUpdate.sh"),
         desc="Recreate list of applications (list used for dmenuapps.sh)"
         ),
     Key([modR], "f",
@@ -248,49 +219,51 @@ keys = [
         desc="Insert unicode, emojis :-)"
         ),
     Key([modR], "w",
-        lazy.spawn(os.environ["HOME"]+"/.config/dmenuwallpaper.sh"),
+        lazy.spawn(home + "/dmenuwallpaper.sh"),
         desc="Change wallpapers and select in dmenu"
         ),
 
     Key([altR], "a",
-        lazy.spawn(Emacs +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.md")),
         desc="Open in emacs:aandelen log"
         ),
+
     Key([altR], "b",
-        lazy.spawn(termVim +os.path.expanduser("~/.bashrc")),
-        desc="Open in vim: .bashrc"
+#        lazy.spawn(Emacs +os.path.expanduser("~/.bashrc")),
+        lazy.spawn(Emacs + home + "/.bashrc"),
+        desc="Open in Emacs: .bashrc"
         ),
     Key([altR], "c",
-        lazy.spawn(Emacs +os.path.expanduser("~/Stack/Command_line/commands.org")),
+        lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org"),
         desc="Open in Emacs: commands.org"
         ),
     Key([altR], "u",
-        lazy.spawn(termVim +os.path.expanduser("~/.config/urls")),
-        desc="Open in vim: urls list used for newsboat"
+        lazy.spawn(Emacs + home + "/.config/urls"),
+        desc="Open in Emacs: urls list used for newsboat"
         ),
     Key([altR], "d",
-        lazy.spawn(termVim +os.path.expanduser("~/.config/suckless/dwm/config.h")),
-        desc="Open in vim: config.h of my dwm build"
+        lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h"),
+        desc="Open in Emacs: config.h of my dwm build"
         ),
     Key([altR], "e",
-        lazy.spawn(Emacs +os.path.expanduser("~/.doom.d/README.org")),
+        lazy.spawn(Emacs + home + "/.doom.d/README.org"),
         desc="Open in Emacs my Doom emacs config: README.org"
         ),
     Key([altR], "i",
-        lazy.spawn(termVim +os.path.expanduser("~/.config/i3/config")),
-        desc="Open in vim: config of my i3 build"
+        lazy.spawn(Emacs + home + "/.config/i3/config"),
+        desc="Open in Emacs: config of my i3 build"
         ),
     Key([altR], "n",
-        lazy.spawn(termVim +os.path.expanduser("~/.newsboat/config")),
-        desc="Open in vim: config of newsboat"
+        lazy.spawn(Emacs + home + "/.newsboat/config"),
+        desc="Open in Emacs: config of newsboat"
         ),
     Key([altR], "q",
-        lazy.spawn(Emacs +os.path.expanduser("~/.config/qtile/README.org")),
+        lazy.spawn(Emacs + home + "/.config/qtile/README.org"),
         desc="Open in emacs:Open qtile config"
         ),
     Key([altR], "r",
-        lazy.spawn(termVim +os.path.expanduser("~/README.md")),
-        desc="Open in vim: README.md of github dotfiles repo"
+        lazy.spawn(Emacs + home + "/README.md"),
+        desc="Open in Emacs: README.md of github dotfiles repo"
         ),
     Key([altR], "v",
         lazy.spawn(termVim +os.path.expanduser("~/.vimrc")),
@@ -298,19 +271,19 @@ keys = [
         ),
     Key([altR], "w",
         lazy.spawn(os.path.expanduser("~/.config/wololo.sh")),
-        desc="Launch shellscript"
+        desc="Launch shellscript for generating keystroke wololo"
         ),
     Key([altR], "x",
-        lazy.spawn(termVim +os.path.expanduser("~/.xinitrc")),
-        desc="Open in vim: .xinitrc"
+        lazy.spawn(Emacs + home + "/.xinitrc"),
+        desc="Open in Emacs: .xinitrc"
         ),
     Key([altR], "r",
-        lazy.spawn(termVim +os.path.expanduser("~/.Xresources")),
-        desc="Open in vim: .Xresources"
+        lazy.spawn(Emacs + home + "/.Xresources"),
+        desc="Open in Emacs: .Xresources"
         ),
     Key([altR], "z",
-        lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),
-        desc="Open in vim: .zshrc"
+        lazy.spawn(Emacs + home + "/.zshrc"),
+        desc="Open in Emacs: .zshrc"
         ),
 ]
 

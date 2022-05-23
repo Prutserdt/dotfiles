@@ -53,3 +53,8 @@
 ;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
+
+;; There are error in the bootscreen after the first loading: no splashscreen
+;; and no icons. This can be corrected by running doom/reload, this is not
+;; recommended and gives a void-variable doom/reload error but it seems to work for now...
+doom/reload

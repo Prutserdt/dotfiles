@@ -52,14 +52,12 @@ from libqtile.lazy import lazy
 Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Also the terminal and opening of VIM and Emacs are declared.
 
 #+BEGIN_SRC python :tangle "config.py"
-modL = "mod4"
-modR = "mod3"
-altR = "mod5"
+modL = "mod4"                       # Left super key
+modR = "mod3"                       # Right super key
+altR = "mod5"                       # Right alt key
 
-terminal = "alacritty"
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
-
 #+END_SRC
 
 ** Custom functions
@@ -189,14 +187,8 @@ keys = [
         lazy.hide_show_bar(position="top"),
         desc="hide/show bar"
         ),
-    # multiple stack panes
-    # FIXME: doesn't seem to work, probably for other layouts?
-    #Key([modL, "shift"],"Return",
-    #    lazy.layout.toggle_split(),
-    #    desc="Toggle between split and unsplit sides of stack"
-    #),
     Key([modL], "Return",
-        lazy.spawn(terminal),
+        lazy.spawn("alacritty"),
         desc="Launch terminal"),
    # Toggle between different layouts as defined below
     Key([modL], "Tab",
@@ -253,11 +245,11 @@ Hotkeys to control the volume, muting and printscreen.
         desc="Draw area by mouse to copy the selection and save in Downloads"
         ),
     Key(["shift"], "Print",
-        lazy.spawn(os.environ["HOME"]+"/.config/ScreenshotToText.sh"),
+        lazy.spawn(home + "/.config/ScreenshotToText.sh"),
         desc="Make screenshot and text is magically in clipboard"
         ),
 
-#+END_SRC
+#+END_SRC4-
 
 
 ** Keybindings: Applications
@@ -279,11 +271,11 @@ Right super key to open applications.
         desc="Launch emacs"
         ),
     Key([modR], "d",
-        lazy.spawn(os.environ["HOME"]+"/.config/dmenuapps.sh"),
+        lazy.spawn(home + "/.config/dmenuapps.sh"),
         desc="Launch My dmenu to open applications"
         ),
     Key([modR, "shift"], "d",
-        lazy.spawn(os.environ["HOME"]+"/.config/dmenuUpdate.sh"),
+        lazy.spawn(home + "/.config/dmenuUpdate.sh"),
         desc="Recreate list of applications (list used for dmenuapps.sh)"
         ),
     Key([modR], "f",
@@ -315,7 +307,7 @@ Right super key to open applications.
         desc="Insert unicode, emojis :-)"
         ),
     Key([modR], "w",
-        lazy.spawn(os.environ["HOME"]+"/.config/dmenuwallpaper.sh"),
+        lazy.spawn(home + "/dmenuwallpaper.sh"),
         desc="Change wallpapers and select in dmenu"
         ),
 #+END_SRC
@@ -326,44 +318,46 @@ The right alt key is used to open text files in Vim or in Emacs.
 
 #+BEGIN_SRC python :tangle "config.py"
     Key([altR], "a",
-        lazy.spawn(Emacs +os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.md")),
         desc="Open in emacs:aandelen log"
         ),
+
     Key([altR], "b",
-        lazy.spawn(termVim +os.path.expanduser("~/.bashrc")),
-        desc="Open in vim: .bashrc"
+#        lazy.spawn(Emacs +os.path.expanduser("~/.bashrc")),
+        lazy.spawn(Emacs + home + "/.bashrc"),
+        desc="Open in Emacs: .bashrc"
         ),
     Key([altR], "c",
-        lazy.spawn(Emacs +os.path.expanduser("~/Stack/Command_line/commands.org")),
+        lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org"),
         desc="Open in Emacs: commands.org"
         ),
     Key([altR], "u",
-        lazy.spawn(termVim +os.path.expanduser("~/.config/urls")),
-        desc="Open in vim: urls list used for newsboat"
+        lazy.spawn(Emacs + home + "/.config/urls"),
+        desc="Open in Emacs: urls list used for newsboat"
         ),
     Key([altR], "d",
-        lazy.spawn(termVim +os.path.expanduser("~/.config/suckless/dwm/config.h")),
-        desc="Open in vim: config.h of my dwm build"
+        lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h"),
+        desc="Open in Emacs: config.h of my dwm build"
         ),
     Key([altR], "e",
-        lazy.spawn(Emacs +os.path.expanduser("~/.doom.d/README.org")),
+        lazy.spawn(Emacs + home + "/.doom.d/README.org"),
         desc="Open in Emacs my Doom emacs config: README.org"
         ),
     Key([altR], "i",
-        lazy.spawn(termVim +os.path.expanduser("~/.config/i3/config")),
-        desc="Open in vim: config of my i3 build"
+        lazy.spawn(Emacs + home + "/.config/i3/config"),
+        desc="Open in Emacs: config of my i3 build"
         ),
     Key([altR], "n",
-        lazy.spawn(termVim +os.path.expanduser("~/.newsboat/config")),
-        desc="Open in vim: config of newsboat"
+        lazy.spawn(Emacs + home + "/.newsboat/config"),
+        desc="Open in Emacs: config of newsboat"
         ),
     Key([altR], "q",
-        lazy.spawn(Emacs +os.path.expanduser("~/.config/qtile/README.org")),
+        lazy.spawn(Emacs + home + "/.config/qtile/README.org"),
         desc="Open in emacs:Open qtile config"
         ),
     Key([altR], "r",
-        lazy.spawn(termVim +os.path.expanduser("~/README.md")),
-        desc="Open in vim: README.md of github dotfiles repo"
+        lazy.spawn(Emacs + home + "/README.md"),
+        desc="Open in Emacs: README.md of github dotfiles repo"
         ),
     Key([altR], "v",
         lazy.spawn(termVim +os.path.expanduser("~/.vimrc")),
@@ -371,19 +365,19 @@ The right alt key is used to open text files in Vim or in Emacs.
         ),
     Key([altR], "w",
         lazy.spawn(os.path.expanduser("~/.config/wololo.sh")),
-        desc="Launch shellscript"
+        desc="Launch shellscript for generating keystroke wololo"
         ),
     Key([altR], "x",
-        lazy.spawn(termVim +os.path.expanduser("~/.xinitrc")),
-        desc="Open in vim: .xinitrc"
+        lazy.spawn(Emacs + home + "/.xinitrc"),
+        desc="Open in Emacs: .xinitrc"
         ),
     Key([altR], "r",
-        lazy.spawn(termVim +os.path.expanduser("~/.Xresources")),
-        desc="Open in vim: .Xresources"
+        lazy.spawn(Emacs + home + "/.Xresources"),
+        desc="Open in Emacs: .Xresources"
         ),
     Key([altR], "z",
-        lazy.spawn(termVim +os.path.expanduser("~/.zshrc")),
-        desc="Open in vim: .zshrc"
+        lazy.spawn(Emacs + home + "/.zshrc"),
+        desc="Open in Emacs: .zshrc"
         ),
 ]
 #+END_SRC
@@ -560,7 +554,7 @@ wmname = "LG3D"
 #+END_SRC
 
 * The autostart.sh script
-This shellscript is called in the config.py script and is starting some keyboard specific scripts for my redox keyboard and starts the Emacs daemon.
+This shellscript is called in the config.py script and is starting some keyboard specific stuff (us keyboard map, redox keyboard alt/super/escape settings, fast keyrepeats), starts picom for transparancy and starts the Emacs daemon.
 
 #+begin_src sh :tangle-mode rwxr-xr-x :tangle autostart.sh
 #!/bin/bash
@@ -571,9 +565,8 @@ This shellscript is called in the config.py script and is starting some keyboard
 # Happy hacking :-)
 
 setxkbmap us &&
-#xmodmap $HOME/.config/rdxswitch &&
 xmodmap $HOME/.config/kbswitch &&
 xset r rate 300 80 &
 picom -b &
-/usr/bin/emacs --daemon &
+/usr/bin/emacs --daeon &
 #+end_src

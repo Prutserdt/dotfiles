@@ -2644,7 +2644,6 @@ Handige shortcuts in doom emacs:
 | g O | visit selected file in another dired window    |
 | T   | Touch: change timestamp                        |
 |-----+------------------------------------------------|
-Walter is mijn naam. YOU WILL RESPECT MY AUTHORITY!!
 
 **** Spell checking in emacs
 Dat kan met ispell en flyspell.
@@ -2656,7 +2655,7 @@ Even uitzoeken wat ik ga gebruiken
 ~rm  ~/.emacs.d/.local/straight/build-27.2-cache.electrum~
 ~doomsync~
 ~doomdoctor~
-Nu is de vorige versie verwijderd en zijn er geen meldingen meer.
+Nu is de vorige versie verwijderd en zijn er geen meldingen meer, dus opgelost.
 
 
 *** IRC, inspircd
