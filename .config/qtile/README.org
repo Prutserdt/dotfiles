@@ -34,8 +34,7 @@ My configuration requires some modules to be loaded, these are all default setti
 
 # NOTE This file is generated from a README.org file. Do not alter this
 # config.py file directly and only modify the README.org file, then M-x and
-# type: 'org-babel-tangle' in emacs and press CTR MOD R to reload qtile live.
-# Happy hacking :-)
+# run: 'org-babel-tangle' in emacs and press CTR modL r to reload qtile live.
 
 import psutil
 import subprocess
@@ -49,12 +48,12 @@ from libqtile.lazy import lazy
 #+END_SRC
 
 ** Variables
-Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Also the terminal and opening of VIM and Emacs are declared.
+Some variables are declared. The left super key, right super key and right alt key are used for keybindings. VIM and Emacs variables for opening files in these editors.
 
 #+BEGIN_SRC python :tangle "config.py"
-modL = "mod4"                       # Left super key
-modR = "mod3"                       # Right super key
-altR = "mod5"                       # Right alt key
+modL = "mod4"                       # Left super key, for the windowmanager 
+modR = "mod3"                       # Right super key, for opening of applications
+altR = "mod5"                       # Right alt key, for opening of files
 
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
@@ -224,7 +223,7 @@ keys = [
 
 
 ** Keybindings: Audio and print
-Hotkeys to control the volume, muting and printscreen.
+Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
 
 #+BEGIN_SRC python :tangle "config.py"
     # Audio keys
@@ -323,7 +322,6 @@ The right alt key is used to open text files in Vim or in Emacs.
         ),
 
     Key([altR], "b",
-#        lazy.spawn(Emacs +os.path.expanduser("~/.bashrc")),
         lazy.spawn(Emacs + home + "/.bashrc"),
         desc="Open in Emacs: .bashrc"
         ),
@@ -391,14 +389,14 @@ groups = [Group(i) for i in "1234"]
 for i in groups:
     keys.extend(
         [
-            # mod1 + letter of group = switch to group
+            # modL + letter of group = switch to group
             Key(
                 [modL],
                 i.name,
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mod1+shift+group letter= move focused window to group(no follow)
+            # modL+shift+group letter= move focused window to group(no follow)
             Key(
                 [modL, "shift"],
                 i.name,
@@ -560,9 +558,8 @@ This shellscript is called in the config.py script and is starting some keyboard
 #!/bin/bash
 
 # NOTE This file is generated from a README.org file. Do not alter this
-# autostart.sh file directly and only modify the README.org file, then
-# M-x and type 'org-babel-tangle' in emacs and press CTR MOD R to reload qtile.
-# Happy hacking :-)
+# config.py file directly and only modify the README.org file, then M-x and
+# run: 'org-babel-tangle' in emacs and press CTR modL r to reload qtile live.
 
 setxkbmap us &&
 xmodmap $HOME/.config/kbswitch &&

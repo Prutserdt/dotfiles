@@ -1,7 +1,6 @@
 # NOTE This file is generated from a README.org file. Do not alter this
 # config.py file directly and only modify the README.org file, then M-x and
-# type: 'org-babel-tangle' in emacs and press CTR MOD R to reload qtile live.
-# Happy hacking :-)
+# run: 'org-babel-tangle' in emacs and press CTR modL r to reload qtile live.
 
 import psutil
 import subprocess
@@ -13,9 +12,9 @@ from libqtile.config import ( Click, Drag, Group, Key, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
-modL = "mod4"                       # Left super key
-modR = "mod3"                       # Right super key
-altR = "mod5"                       # Right alt key
+modL = "mod4"                       # Left super key, for the windowmanager 
+modR = "mod3"                       # Right super key, for opening of applications
+altR = "mod5"                       # Right alt key, for opening of files
 
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
@@ -229,7 +228,6 @@ keys = [
         ),
 
     Key([altR], "b",
-#        lazy.spawn(Emacs +os.path.expanduser("~/.bashrc")),
         lazy.spawn(Emacs + home + "/.bashrc"),
         desc="Open in Emacs: .bashrc"
         ),
@@ -292,14 +290,14 @@ groups = [Group(i) for i in "1234"]
 for i in groups:
     keys.extend(
         [
-            # mod1 + letter of group = switch to group
+            # modL + letter of group = switch to group
             Key(
                 [modL],
                 i.name,
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mod1+shift+group letter= move focused window to group(no follow)
+            # modL+shift+group letter= move focused window to group(no follow)
             Key(
                 [modL, "shift"],
                 i.name,
