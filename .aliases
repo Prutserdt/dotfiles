@@ -8,6 +8,7 @@
 # (_)__,_|_|_|\__,_|___/\___||___/
 #             created by Prutserdt
 
+# General
 alias .1='cd ..'
 alias .2='cd ../.. && pwd'
 alias .3='cd ../../.. && pwd'
@@ -21,27 +22,34 @@ alias ZZ="exit"                 # Exiting quickly, the Vim way
 alias c='printf "\e[H\e[2J"'    # Clear screen, CTL-L for scrollback
 alias cls="c;ls"                # Clear screen, scrollback and 'ls --color=auto'
 alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
-#alias rm='rm -i'                # Ask for permission, for safety
+alias rm='rm -i'                # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
 alias mv='mv -i'                # Ask for permission, for safety
 
-# TODO uitzoeken hoe history te gebruiken met , misschien bash en zsh sourcen?
-##alias h="history | fzf"         # Fuzzy find history
-alias h="/home/icefly/.histfile | fzf"         # Fuzzy find history, Werkt niet!!!
-alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # History executable
-alias fzlog='fzf < $HOME/i3_log/"$(ls -Art $HOME/i3_log | tail -n1)"' # Fuzzy find in the most recent i3_log file 
-# sxiv: thumbnail mode current directory. Sort by name and give output if files are selected (m)
+# Search
+#alias h="$HOME/.histfile | fzf"    # Fuzzy find history
+#alias h="$HOME/.zsh_history | fzf" # Fuzzy find history
+alias h="history | fzf"             # Fuzzy find history
+alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # Search and execute
+alias fzlog='fzf < $HOME/i3_log/"$(ls -Art $HOME/i3_log | tail -n1)"' # Fuzzy find in the most recent i3_log file
+
+# sxiv
+# Thumbnail mode current directory. Sort by name and give output if files are selected (m)
 alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | sxiv -ftio"
-# sxiv: including underlaying subdirectories
+# Including underlaying subdirectories
 alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv -ftio"
+
+# Dotfiles
 alias dotfiles='$HOME/.config/dotfiles.sh'                                  # Dotfiles repository Github
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github simplification
-alias k='xmodmap $HOME/.config/kbswitch && xset r rate 300 80'              # Change modkeys, Caps/Esc and fast key repeats
-alias r='xmodmap $HOME/.config/rdxswitch && xset r rate 300 80'             # Change to redox kb, alt-r modkeys, and fast key repeats
+
+# Keyboard related
+alias k='xmodmap $HOME/.config/kbswitch && xset r rate 300 80'      # Change modkeys, Caps/Esc and fast key repeats
+alias r='xmodmap $HOME/.config/rdxswitch && xset r rate 300 80'     # Change to redox kb, alt-r modkeys, and fast key repeats
 
 # emacs
 alias em="/usr/bin/emacs -nw"                   #emacs commandline
-alias emacs="emacsclient -c -a 'emacs'"         #emacs openen grafisch
+alias emacs="emacsclient -c -a 'emacs'"         #emacs graphically
 alias doomsync="~/.emacs.d/bin/doom sync"
 alias doomdoctor="~/.emacs.d/bin/doom doctor"
 alias doomupgrade="~/.emacs.d/bin/doom upgrade"
@@ -62,23 +70,27 @@ alias dr="cd $HOME/qmk_firmware/keyboards/redox/keymaps/Prutserdt"
 alias dg="cd $HOME/qmk_firmware/keyboards/gergo/keymaps/Prutserdt"
 alias dp="cd $HOME/Stack/Documenten/Studie/MSQL_developer_LOI/Programmeren_in_Python_module23917"
 alias dq="cd $HOME/.config/qtile"
-# Jump to suckless app dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
+
+# Suckless dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
 alias dss="cd $HOME/Stack/suckless"
 alias ddw="cd $HOME/.config/suckless/dwm"
 alias dsdw="cd $HOME/Stack/suckless/dwm"
 alias ddm="cd $HOME/.config/suckless/dmenu"
 alias dsdm="cd $HOME/Stack/suckless/dmenu"
-# dwm aliases. dwm requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
+
+# dwm. dwm requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
 alias dwmbackup='$HOME/.config/dwmbackup.sh'        # Make the current dwm the stable version
 alias dwmvanilla='$HOME/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTROYS CURRENT dwm!
 alias dwmstable='$HOME/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
 alias dwmpatch='$HOME/.config/dwmpatch.sh'          # Restore dwmstable and run the patch on it
-# dmenu aliases. dmenu requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
+
+# dmenu. dmenu requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
 alias dmenubackup='$HOME/.config/dmenubackup.sh'    # Make the current dmenu the stable version
 alias dmenuvanilla='$HOME/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROYS CURRENT dmenu!
 alias dmenustable='$HOME/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
 alias dmenupatch='$HOME/.config/dmenupatch.sh'      # Run the dwmpatch command to test the patch
 alias dmenuupdate='$HOME/.config/dmenuUpdate.sh'    # Update the application list for dmenu
-# zsh aliases
+
+# zsh
 alias ze="vim $HOME/.zshrc"                         # edit the .zshrc file
 alias zs="source $HOME/.zshrc"                      # source the .zshrc 
