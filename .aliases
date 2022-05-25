@@ -70,8 +70,7 @@ alias dr="cd $HOME/qmk_firmware/keyboards/redox/keymaps/Prutserdt"
 alias dg="cd $HOME/qmk_firmware/keyboards/gergo/keymaps/Prutserdt"
 alias dp="cd $HOME/Stack/Documenten/Studie/MSQL_developer_LOI/Programmeren_in_Python_module23917"
 alias dq="cd $HOME/.config/qtile"
-
-# Suckless dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
+# Jump to suckless dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
 alias dss="cd $HOME/Stack/suckless"
 alias ddw="cd $HOME/.config/suckless/dwm"
 alias dsdw="cd $HOME/Stack/suckless/dwm"
