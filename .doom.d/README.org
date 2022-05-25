@@ -14,8 +14,8 @@
 - [[#configel][config.el]]
 - [[#some-tinkering][Some tinkering]]
 - [[#todos][TODOs]]
+  - [[#create-custom-welcome-screen-splash-screen][Create custom welcome screen (splash screen)]]
   - [[#mu4e][MU4e]]
-  - [[#recently-open-files][Recently open files]]
 - [[#credits][Credits]]
 
 * About this config
@@ -38,7 +38,6 @@ This file controls what Doom modules are enabled and what order they load in. Re
        :ui
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
-       doom-quit         ; DOOM quit-message prompts when you quit Emacs
        (emoji +unicode)  ; ð
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        modeline          ; snazzy, Atom-inspired modeline, plus API
@@ -91,11 +90,13 @@ This file controls what Doom modules are enabled and what order they load in. Re
 The folowing options could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it. Tip: the list of modules can be checked in emacs by 'C-h' d m
 
 #+begin_src emacs-lisp
-
        ;; :completion
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
+
+       ;; :UI
+       ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
 
        ;; :lang
        ;;julia             ; a better, faster MATLAB
@@ -201,30 +202,27 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; config.el directly and only modify the README.org file in emacs by
 ;; 'M-x' 'org-babel-tangle' RET and reload by 'M-x' 'doom/reload' RET
 
-;; Add this image to my splash screen
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                  Revert Doom Emacs opinionated stuff              ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; Hide the toolbar
 (tool-bar-mode -1)
 
-(set-frame-font "Hack 12" t t)
-(setq default-frame-alist '((font . "Hack 13")))
-
-;; Set relative numbering. 'SPC' 't'  'l'
-(global-display-line-numbers-mode)
-(setq display-line-numbers-type 'relative)
-
 ;; Restoring to behavior of VIM (Y:yank the whole line, independent on position)
 (setq! evil-want-Y-yank-to-eol nil)
 
-;; Highlight the matching parenthesis pair
-(setq show-paren-mode 1)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                           Visual stuff                            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Rainbow delimiters, to find the matching parenthesis
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)
-  :hook (org-mode . rainbow-delimiters-mode)
-  )
+;; Add this image to my splash screen
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+
+;; Set the font
+(set-frame-font "Hack 12" t t)
+(setq default-frame-alist '((font . "Hack 13")))
 
 ;; Help to find the cursor by beacon blink
 (beacon-mode 1)
@@ -238,16 +236,42 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
-;; Show the 80 column (Fill Column Indicator)
-;; NOTE: does not work in combination with visual-fill-column-mode
-(global-display-fill-column-indicator-mode)
+;; Set flashing of yanked text to a longer interval, default is 0.2
+(setq evil-goggles-duration 1.0)
 
-;; Set flashing yanked text longer, default is 0.2
-(setq evil-goggles-duration 0.6)
+;; Rainbow delimiters, help to find the matching parenthesis
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode)
+  :hook (org-mode . rainbow-delimiters-mode)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                       Custom keybindings                          :
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-set-key "\C-h" 'recentf-open-more-files)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                               Other                               :
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Set relative numbering. 'SPC' 't'  'l'
+(global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
 
 ;; Visual fill column, to break the lines that otherwise will keep on going
 ;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
-(setq-default fill-column 110)
+;;(setq-default Fill-column 110)
+;;(setq set-fill-column 110)
+;;(setq set-fill-column 110)
+;;(setq fill-column 110)
+;;(auto-fill-mode 1)
+;;(setq fill-column 110)
+;;(setq-default display-fill-column-indicator-column 100)
+;;(setq-default fill-column 110)
+;; FIXME: the 110 column width is not set...? Weird,
+;;        the other tries, pasted above, also did not work...
+(setq-default visual-fill-column-width 110)
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 ;; Center to the middle of the screen
 (setq-default visual-fill-column-center-text t)
@@ -256,12 +280,32 @@ The custom configurations are set here. For instance theme settings, image to th
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                              Old stuff                            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; The lines below are removed and are kept here for a while and can be deleted later.
+
+;; Show the 80 column (Fill Column Indicator)
+;; NOTE: does not work in combination with visual-fill-column-mode
+;;       and can be removed...
+(global-display-fill-column-indicator-mode)
+
+;; Highlight the matching parenthesis pair
+;; Removed, since smartparens is already in init.el and the next line is not needed.
+;; Remove this line later when it is tested and proven to be not needed.
+;;(setq show-paren-mode 1)
+
 ;; There are error in the bootscreen after the first loading: no splashscreen
 ;; and no icons. This can be corrected by running doom/reload, this is not
 ;; recommended and gives a void-variable doom/reload error but it seems to work for now...
 ;;(doom/reload)
 
+;; Quit immediately, without a confirmation
+;;(setq confirm-kill-emacs nil)
+
 #+end_src
+
 
 * Some tinkering
 
@@ -271,14 +315,17 @@ Choose a theme by 'M-x' RET 'load-theme' and choose for instance: doom-darktooth
 
 Highlight the current selected line: 'M-x' RET 'hl-line-mode' RET
 
-I changed the default flashing yanked text of 0.2 sec to 0.6 sec by changing the evil-goggle.el file by 'Mx' 'doom-help-package' RET evil-goggles RET. I THINK adding =(setq evil-goggles-duration 0.6)= to config.el did not work.
 
 * TODOs
 Here is a list of things I want to add/improve in my Doom Emacs configuration.
+
+** Create custom welcome screen (splash screen)
+Would be nice to change it, modifying the default requires too much effort. Just create a simple page with an image and a few options shoudl be relatively simple....
+
 ** MU4e
 Needs to be configured properly...
 
-mu42 should be uncommented in init.el and the mu4e package should be added to package.el:
+mu4e should be uncommented in init.el and the mu4e package should be added to package.el:
 #+begin_src emacs-lisp
 
 ;; The email package MU for emacs
@@ -313,9 +360,6 @@ The following code block should be part of config.el:
 (setq smtpmail-smtp-server "smtp.transip.email")
 
 #+end_src
-
-** Recently open files
-HACK: SPC f r opens the recently opened file buffer. When running M-x recentf-open-files the same list is given with numeric options to switch to files. I prefer this was instead of using typing or the up/down buttons. I want to change SPC f r to be this way...
 
 * Credits
 My configuration of Doom Emacs is partially based on these ones.
