@@ -25,7 +25,7 @@
 * Qtile and my config
 [[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org emacs document my configuration of qtile is described and it is used as the source to create the qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
 
-To get insight of qtile the sourcecode can be checked (usr/lib/python3.10/site-packages/libqtile, or alternatively run from python shell: ~import libqtile~ and ~print(help(libqtile))~.
+Check the sourcecode of qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
 
 ** Imports
 My configuration requires some modules to be loaded, these are all default settings.
@@ -55,6 +55,7 @@ modL = "mod4"                       # Left super key, for the windowmanager
 modR = "mod3"                       # Right super key, for opening of applications
 altR = "mod5"                       # Right alt key, for opening of files
 
+home = os.path.expanduser("~")
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 #+END_SRC
@@ -190,10 +191,6 @@ keys = [
         lazy.spawn("alacritty"),
         desc="Launch terminal"),
    # Toggle between different layouts as defined below
-    Key([modL], "Tab",
-        lazy.next_layout(),
-        desc="Toggle between layouts"
-        ),
     Key([modL], "q",
         lazy.window.kill(),
         desc="Kill focused window"
@@ -202,8 +199,11 @@ keys = [
         lazy.reload_config(),
         desc="Reload the config"
         ),
-    Key([modL, "control"], "q",
-        lazy.shutdown(),
+    # NOTE: exit via script en popup window, net als dwm...
+    # nog even testen of ik dit zo ga houden, denk het wel
+    Key([modL, "shift"], "q",
+        lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"),
+        #lazy.shutdown(),
         desc="Shutdown Qtile"
         ),
     Key([modL], "r",
@@ -220,6 +220,8 @@ keys = [
 #        ),
 
     #+END_SRC
+
+    #+RESULTS:
 
 
 ** Keybindings: Audio and print
@@ -407,6 +409,7 @@ for i in groups:
         ]
     )
 
+    #       DropDown( 'ranger', myTerm + ' ranger', width=0.7, height=0.7, x=0.15, y=0.15, opacity=1.0, on_focus_lost_hide=False ), and in my case: myTerm = "kitty"
 groups.append(
     ScratchPad("scratchpad", [
         DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,
@@ -424,6 +427,8 @@ layout_theme = {"border_width": 2,
                 "border_normal": "#282C34",
                 }
 #+END_SRC
+
+#+RESULTS:
 
 ** Layouts
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
@@ -565,5 +570,5 @@ setxkbmap us &&
 xmodmap $HOME/.config/kbswitch &&
 xset r rate 300 80 &
 picom -b &
-/usr/bin/emacs --daeon &
+/usr/bin/emacs --daemon &
 #+end_src

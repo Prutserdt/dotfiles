@@ -5,6 +5,9 @@
 ;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 
+;; Hide the toolbar
+(tool-bar-mode -1)
+
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
 
@@ -57,4 +60,4 @@
 ;; There are error in the bootscreen after the first loading: no splashscreen
 ;; and no icons. This can be corrected by running doom/reload, this is not
 ;; recommended and gives a void-variable doom/reload error but it seems to work for now...
-doom/reload
+;;(doom/reload)

@@ -21,6 +21,7 @@
 
 * About this document
 This document consists of notes that I took during my Linux journey. A lot of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference.
+
 * Command line tricks
 *** Vind grootte van files/directories in commandline
 In human form:
@@ -44,7 +45,7 @@ Verwijderen alle files in dir: ~rm ~/Stack/dwm/patches/test/*~
 *** Problemen met legen van trash in KDE.
 Open a terminal and go to ~/.local/share and type:
 ~rm -r -f Trash~. This will remove the Trash directory and everything in it.
-Open Dolphin go to *Settings>Configure Dolphin>Trash*.
+Open Dolphin go to *Settings-Configure Dolphin-Trash*.
 De-select and Re-select the "Limit to maximum size" check box and press 
 Apply.  This will re-create a new trash can. 
 
@@ -57,7 +58,7 @@ kali-linux-rolling-pocket+20180207-1_oud.iso
 Which command. Vind locatie van applicatie. Find application location directory.
 which firefox
 Om te kijken waar het van uigevoerd word kun je dit proberen:
-find / -name firefox 2> /dev/null
+~find / -name firefox 2> /dev/null~
 
 *cat* command. Laat txt files zien: ~cat /etc/fstab~
 
@@ -116,12 +117,12 @@ Vergroten tmp directory: ~sudo mount -t tmpfs tmpfs /tmp -o size=2000M,mode=1777
 Bekijk routers naar adres met: mtr: ~mtr --report-wide --curses www.google.com~
 
 geeft usb devices weer
-lsusb
+~lsusb~
 
 History bashrc. Dit staat in ~/.bash_history. Verwijder duplicates met het
 volgende commando:
 
-sort .bash_history | uniq > .bash_history_shortened
+~sort .bash_history | uniq > .bash_history_shortened~
 
 Voeg het volgende toe aan .bashrc om een grotere en meer cleane history file te
 krijgen:
@@ -3633,6 +3634,13 @@ sed -i '2 i ~/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64
 
 Of paste in shell het volgende:
 ~rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run;sed -i '1 i /home/icefly/Downloads/stack-2.8.2-20210809-x86_64.AppImage' /home/icefly/.cache/dmenu_run;sed -i '2 i /home/icefly/Downloads/OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage' /home/icefly/.cache/dmenu_run~
+
+24MAY22: ik heb de appimages verplaatst naar $HOME/Applications
+~cp OpenShot-v2.5.1-dev3-daily-7905-fbe02428-c31fac5e-x86_64.AppImage ~/Applications~
+~cp stack-2.8.2-20210809-x86_64.AppImage ~/Applications~
+
+24MAY22: ik heb het dmenuUpdate.sh script veranderd zodat het alle appimages in $HOME/Applications toevoegd, dat is eenvoudiger.
+
 
 * Keebs
 *** Ducky one mechanical keyboard

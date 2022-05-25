@@ -16,6 +16,7 @@ modL = "mod4"                       # Left super key, for the windowmanager
 modR = "mod3"                       # Right super key, for opening of applications
 altR = "mod5"                       # Right alt key, for opening of files
 
+home = os.path.expanduser("~")
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
@@ -138,10 +139,6 @@ keys = [
         lazy.spawn("alacritty"),
         desc="Launch terminal"),
    # Toggle between different layouts as defined below
-    Key([modL], "Tab",
-        lazy.next_layout(),
-        desc="Toggle between layouts"
-        ),
     Key([modL], "q",
         lazy.window.kill(),
         desc="Kill focused window"
@@ -150,8 +147,11 @@ keys = [
         lazy.reload_config(),
         desc="Reload the config"
         ),
-    Key([modL, "control"], "q",
-        lazy.shutdown(),
+    # NOTE: exit via script en popup window, net als dwm...
+    # nog even testen of ik dit zo ga houden, denk het wel
+    Key([modL, "shift"], "q",
+        lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"),
+        #lazy.shutdown(),
         desc="Shutdown Qtile"
         ),
     Key([modL], "r",
@@ -308,6 +308,7 @@ for i in groups:
         ]
     )
 
+    #       DropDown( 'ranger', myTerm + ' ranger', width=0.7, height=0.7, x=0.15, y=0.15, opacity=1.0, on_focus_lost_hide=False ), and in my case: myTerm = "kitty"
 groups.append(
     ScratchPad("scratchpad", [
         DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,
