@@ -19,7 +19,7 @@
 This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs ='M-x' 'org-babel-tangle' RET=. Remember to run =~/.emacs.d/bin/doom sync= in the terminal after modifications!
 
 * init.el
-This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =~/.emacs.d/bin/doom sync= after modifying it!
+This file controls what Doom modules are enabled and what order they load in.
 
 The list of modules can be checked in emacs by 'M-x' Doom/help-modules and added if needed.
 
@@ -124,7 +124,7 @@ Wrapping lines at fill-column and centering text.. uitleg hier........
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
 
-The default setting of Doom Emacs and the Y key is to yank the whole line from the cursor position. This is obviously the incorrect way and I revert it here.
+Add a NOTE to the config.el to highlight that this file should not be edited directly.
 
 #+begin_src emacs-lisp :tangle config.el
 
@@ -134,31 +134,38 @@ The default setting of Doom Emacs and the Y key is to yank the whole line from t
 
 ;; Hide the toolbar
 ;; (tool-bar-mode -1)
+#+end_src
 
-;; Restoring to behavior of VIM (Y:yank the whole line, independent on position)
+The default setting of Doom Emacs and the Y key is to yank the whole line from the cursor position. This is obviously the incorrect way and I revert it here.
+
+#+begin_src emacs-lisp :tangle config.el
+
 (setq! evil-want-Y-yank-to-eol nil)
-
 #+end_src
 
 The doom-emacs image of the welcome screen is added here
 #+begin_src emacs-lisp :tangle config.el
+
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 #+end_src
 
 The transparency is set ..... bla bla bla
 #+begin_src emacs-lisp :tangle config.el
+
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
 #+end_src
 
 Help to find the cursor by beacon blink
 #+begin_src emacs-lisp :tangle config.el
+
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 #+end_src
 
 Make the normal/insert/visual states more apparent by changing cursor:
 #+begin_src emacs-lisp :tangle config.el
+
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
@@ -166,16 +173,19 @@ Make the normal/insert/visual states more apparent by changing cursor:
 
 Nice bullets instead of boring *. Requires (org +pretty)
 #+begin_src emacs-lisp :tangle config.el
+
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 #+end_src
 
 Set flashing of yanked text to a longer interval, default is 0.2
 #+begin_src emacs-lisp :tangle config.el
+
 (setq evil-goggles-duration 1.0)
 #+end_src
 
 Rainbow delimiters, help to find the matching parenthesis
 #+begin_src emacs-lisp :tangle config.el
+
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
   :hook (org-mode . rainbow-delimiters-mode)
@@ -184,6 +194,7 @@ Rainbow delimiters, help to find the matching parenthesis
 
  Set the font
 #+begin_src emacs-lisp :tangle config.el
+
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
 #+end_src
@@ -191,6 +202,7 @@ Rainbow delimiters, help to find the matching parenthesis
 Center to the middle of the screen + set fill column to break the lines
 Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
 #+begin_src emacs-lisp :tangle config.el
+
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
@@ -204,17 +216,12 @@ Set relative numbering. 'SPC' 't'  'l'
 (setq display-line-numbers-type 'relative)
 #+end_src
 
-
 *Keybindings*
 
 Some keybindings are added to the config.el.
 It's easy to check if a key binding is available by........
 
 #+begin_src emacs-lisp :tangle config.el
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                       Custom keybindings                          :
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; List of recently opened files:
 (global-set-key "\C-h" 'recentf-open-more-files)
@@ -223,8 +230,6 @@ It's easy to check if a key binding is available by........
 ;;(global-set-key "\C-h" 'recentf-open-more-files)
 
 #+end_src
-
-
 
 * TODOs
 Here is a list of things I want to add/improve in my Doom Emacs configuration.
