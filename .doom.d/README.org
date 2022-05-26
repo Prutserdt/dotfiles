@@ -199,7 +199,7 @@ The Hack font is set here
 (setq default-frame-alist '((font . "Hack 13")))
 #+end_src
 
-For ultrawide monitors I prefer to set my working window in the middle of screen. In my case I use qtile window manager with monadthreecolumn and emacs as centered master. With visual-fill emacs is set to be in the middle of the window. This is nice for three column layout and especially nice on ultrawides in a maximized window. Then it is now perfectly in the middle and distraction free.
+For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This is nice for three column layout and especially nice for maximized windows on ultrawides. Now it's perfectly in the middle and distraction free.
 #+begin_src emacs-lisp :tangle config.el
 
 (setq-default fill-column 110)
@@ -208,7 +208,7 @@ For ultrawide monitors I prefer to set my working window in the middle of screen
 (setq-default visual-fill-column-center-text t)
 #+end_src
 
-Set relative numbering. 'SPC' 't'  'l'
+Set relative numbering. In Doom Emacs it can be toggled by ~SPC~ ~t~ ~l~.
 #+begin_src emacs-lisp :tangle config.el
 
 (global-display-line-numbers-mode)
@@ -217,7 +217,6 @@ Set relative numbering. 'SPC' 't'  'l'
 
 Some *keybindings* are added to the ~config.el~.
 It's easy to check if a key binding is available by........
-
 #+begin_src emacs-lisp :tangle config.el
 
 ;; List of recently opened files:
