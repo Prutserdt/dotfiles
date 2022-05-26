@@ -110,7 +110,7 @@ Disable the nose package because it is not maintained and leading to an ~:lang p
 (package! nose :disable t)
 #+end_src
 
-Load the beacon package. This is not part of the Doom Emacs modules. /*Never lose your cursor again*/ by highlighting the cursor after scrolling.
+Load the beacon package. This is not part of the Doom Emacs modules. /Never lose your cursor again/ by highlighting the cursor after scrolling.
 #+begin_src emacs-lisp :tangle packages.el
 ;; Help finding the cursor
 (package! beacon)
@@ -123,8 +123,6 @@ Wrapping lines at fill-column and centering text.. uitleg hier........
 
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
-
-*Change Y to yank the whole line*
 
 The default setting of Doom Emacs and the Y key is to yank the whole line from the cursor position. This is obviously the incorrect way and I revert it here.
 
@@ -141,8 +139,6 @@ The default setting of Doom Emacs and the Y key is to yank the whole line from t
 (setq! evil-want-Y-yank-to-eol nil)
 
 #+end_src
-
-*Eye candy*
 
 The doom-emacs image of the welcome screen is added here
 #+begin_src emacs-lisp :tangle config.el
