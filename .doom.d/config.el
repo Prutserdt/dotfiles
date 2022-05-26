@@ -2,26 +2,16 @@
 ;; config.el directly and only modify the README.org file in emacs by
 ;; 'M-x' 'org-babel-tangle' RET and reload by 'M-x' 'doom/reload' RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                Revert opiniate Doom Emacs settings                ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; Hide the toolbar
 ;; (tool-bar-mode -1)
 
 ;; Restoring to behavior of VIM (Y:yank the whole line, independent on position)
 (setq! evil-want-Y-yank-to-eol nil)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                           Visual stuff                            ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 
-;; Set the font
-(set-frame-font "Hack 12" t t)
-(setq default-frame-alist '((font . "Hack 13")))
+(set-frame-parameter (selected-frame) 'alpha '(95 90))
+(add-to-list 'default-frame-alist '(alpha 95 90))
 
 ;; Help to find the cursor by beacon blink
 (beacon-mode 1)
@@ -44,9 +34,9 @@
   :hook (org-mode . rainbow-delimiters-mode)
   )
 
-;; Transparency
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
+;; Set the font
+(set-frame-font "Hack 12" t t)
+(setq default-frame-alist '((font . "Hack 13")))
 
 ;; Center to the middle of the screen + set fill column to break the lines
 ;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=

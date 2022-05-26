@@ -142,44 +142,59 @@ The doom-emacs image of the welcome screen is added here
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 #+end_src
 
-Transparency is set ..... bla bla bla
+The transparency is set ..... bla bla bla
 #+begin_src emacs-lisp :tangle config.el
-;; Transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;; Help to find the cursor by beacon blink
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;; Make the normal/insert/visual states more apparent by changing cursor:
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;; Set flashing of yanked text to a longer interval, default is 0.2
 (setq evil-goggles-duration 1.0)
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;; Rainbow delimiters, help to find the matching parenthesis
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
   :hook (org-mode . rainbow-delimiters-mode)
   )
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;; Set the font
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;; Center to the middle of the screen + set fill column to break the lines
 ;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-center-text t)
+#+end_src
 
+#+begin_src emacs-lisp :tangle config.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               Other                               :
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
