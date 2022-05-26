@@ -2,7 +2,7 @@
 
 ;; NOTE This file is generated from the README.org file. Do not alter
 ;; init.el directly and only modify the README.org file in emacs by
-;; 'M-x' 'org-babel-tangle' RET and run $ '~/.emacs.d/bin/doom sync'
+;; 'M-x' 'org-babel-tangle' and run $ '~/.emacs.d/bin/doom sync'
 
 (doom! :completion
        company           ; the ultimate code completion backend

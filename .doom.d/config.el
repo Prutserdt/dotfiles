@@ -1,6 +1,6 @@
 ;; NOTE This file is generated from the README.org file. Do not alter
 ;; config.el directly and only modify the README.org file in emacs by
-;; 'M-x' 'org-babel-tangle' RET and reload by 'M-x' 'doom/reload' RET
+;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload' RET
 
 ;; Hide the toolbar
 ;; (tool-bar-mode -1)
