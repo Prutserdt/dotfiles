@@ -87,7 +87,7 @@ The list of modules can be checked in emacs by 'M-x' Doom/help-modules and added
 #+end_src
 
 * packages.el
-Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of init.el.
+Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of ~init.el~.
 
 Uitleg hier over onderstaande package gedeelte ........
 #+begin_src emacs-lisp :tangle packages.el
@@ -124,7 +124,7 @@ Wrapping lines at fill-column and centering text.. uitleg hier........
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
 
-Add a NOTE to the config.el to highlight that this file should not be edited directly.
+Add a NOTE to ~config.el~ to highlight that this file should not be edited directly.
 
 #+begin_src emacs-lisp :tangle config.el
 
@@ -216,9 +216,7 @@ Set relative numbering. 'SPC' 't'  'l'
 (setq display-line-numbers-type 'relative)
 #+end_src
 
-*Keybindings*
-
-Some keybindings are added to the config.el.
+Some *keybindings* are added to the ~config.el~.
 It's easy to check if a key binding is available by........
 
 #+begin_src emacs-lisp :tangle config.el
@@ -241,7 +239,7 @@ Would be nice to change it, modifying the default requires too much effort. Just
 *MU4e*
 
 Needs to be configured properly...
-mu4e should be added to the init.el (mu4e +org +gmail) and/or the mu4e package should be added to package.el:
+mu4e should be added to ~init.el~ (mu4e +org +gmail) and/or the mu4e package should be added to ~package.el~:
 
 #+begin_src emacs-lisp
 
