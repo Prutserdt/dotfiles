@@ -139,8 +139,6 @@ The default setting of Doom Emacs and the Y key is to yank the whole line from t
 
 The doom-emacs image of the welcome screen is added here
 #+begin_src emacs-lisp :tangle config.el
-
-;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 #+end_src
 
