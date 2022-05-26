@@ -12,9 +12,6 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
-  - [[#change-y-to-yank-the-whole-line][Change Y to yank the whole line]]
-  - [[#eye-candy][Eye candy]]
-  - [[#keybindings][Keybindings]]
 - [[#todos][TODOs]]
 - [[#credits][Credits]]
 
@@ -120,7 +117,7 @@ Here the packages are defined which should be installed. This is an addition to 
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
 
-** Change Y to yank the whole line
+*Change Y to yank the whole line*
 
 The default setting of Doom Emacs and the Y key is to yank the whole line from the cursor position. This is obviously the incorrect way and I revert it here.
 
@@ -142,7 +139,7 @@ The default setting of Doom Emacs and the Y key is to yank the whole line from t
 
 #+end_src
 
-** Eye candy
+*Eye candy*
 
 omschrijving hier zetten...
 
@@ -201,7 +198,7 @@ omschrijving hier zetten...
 #+end_src
 
 
-** Keybindings
+*Keybindings*
 
 Some keybindings are added o the config.el.
 It's easy to check if a key binding is available by........
@@ -225,10 +222,10 @@ It's easy to check if a key binding is available by........
 * TODOs
 Here is a list of things I want to add/improve in my Doom Emacs configuration.
 
-**** Create custom welcome screen (splash screen)
+*Create custom welcome screen (splash screen)*
 Would be nice to change it, modifying the default requires too much effort. Just create a simple page with an image and a few options shoudl be relatively simple....
 
-**** MU4e
+*MU4e*
 Needs to be configured properly...
 
 mu4e should be added to the init.el (mu4e +org +gmail) and/or the mu4e package should be added to package.el:
