@@ -2445,7 +2445,9 @@ Setup the tools:
 ~~/.emacs.d/bin/doom install~
 ~yay -S emacs-pdf-tools-git~
 
-Add ~/.emacs.d/bin to your PATH!i
+Add ~/.emacs.d/bin to your PATH!
+In terminal entered:
+~export PATH="$PATH":"$HOME/.emacs.d/bin"~
 
 ~/usr/bin/emacs --daemon &~
 Deze heb ik toegevoegd in startupscript qtile, bij autostart.sh
@@ -2509,8 +2511,7 @@ Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
 
 Open de interactive python shell:
 M-x run-python
-Selecteer code en run in de interactive python shell(bovenstaand C-c ' werkt
-eigenlijk beter dan volgende):
+Selecteer code en run in de interactive python shell(bovenstaand C-c ' werkt eigenlijk beter dan volgende):
 M-x python-shell-send-region 
 
 init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
@@ -2676,7 +2677,7 @@ maak executable:
 Voeg dit toe aan de file walltem.sh:
 #+begin_src shell
 !/bin/bash
-Dit script zorgt ervoor dat er terminals in de desktop komen...
+#Dit script zorgt ervoor dat er terminals in de desktop komen...
 
 xfce4-terminal -e nload --hide-borders --hide-toolbar --hide-menubar --title=dt1 --geometry=70x25+1420+190 &
 xfce4-terminal -e htop --hide-borders --hide-toolbar --hide-menubar --title=dt2 --geometry=70x30+1420+610 &
@@ -2686,7 +2687,7 @@ wmctrl -r dt1 -b add,skip_pager,skip_taskbar
 #+end_src
 Autostart de wallterm.sh in XFCE4 door dit te doen:
 XFCE4-Settings-Session and Startup-Application Autostart
---> add wallterm --> command: /home/icefly/wallterm.sh
+-add wallterm -command: /home/icefly/wallterm.sh
 Andere opties die interessant kunnen zijn voor monitoring:
 ~vmstat~
 ~sudo tcpdump -i enp3s0~
@@ -2701,13 +2702,13 @@ Andere opties die interessant kunnen zijn voor monitoring:
 ~sudo iptraf-ng~
 
 Maak de windows meer snappy, meer tiling window manager achtig...
-XFCE4-Settings-Window manager --> advanced
+XFCE4-Settings-Window manager -advanced
 Windows snapping: to screen border en To other windows, distance:
 halverwege small-Wide
 
 Quickbuttons voor verplaatsen van tiles (met alt knop) (quickbutton 
 maximaliseren F11)
-XFCE4-Settings-Window manager --> Keyboard
+XFCE4-Settings-Window manager -Keyboard
 Het staat in een text file maar dat is minder goed leesbaar:
 ~~/.config/xfce4/xfconf/xfce-perchannel-xml\xfce4-keyboard-shortcuts.xml~
 #+begin_src
@@ -2723,9 +2724,9 @@ Tile window to the bottom-right	   	Alt+3
 #+end_src
 
 Aanmaken van keyboard shortcuts
-XFCE4-Settings-Keyboard --> Application shortcuts
+XFCE4-Settings-Keyboard -Application shortcuts
 (Ook dit staat in de text file die hierboven staat, maar dat is minder goed leesbaar)
-~sh -c "mousepad && thunar "~ Twee commands :-)=
+~sh -c "mousepad && thunar "~ Twee commands
 mousepad /mousepad /home/archie/Stack/Command_line/commands_2018_12_31.txt	Ctrl+Alt+M
 firefox	https://facebook.com							Ctrl+Alt+F
 firefox https://webmaileu.werk.com/OWA/	    			Ctrl+Alt+S
@@ -2741,14 +2742,14 @@ Gebruik autokey voor assignen van macros aan keys (zoiets als autohotkey)
 ~yaourt -S autokey~
 
 Gebruik windows key voor XFCE menu:
- XFCE4-Settings-Window manager --> keyboard --> Applications Shortcuts --> 
+ XFCE4-Settings-Window manager -keyboard -Applications Shortcuts -
  xfce4-popup-applicationsmenu
- Edit --> click OK, daarna kun je de windows key selecteren
+ Edit and click OK, daarna kun je de windows key selecteren
 
 Windows snapping: to screen border en To other windows, distance: halverwege small-Wide
 
 Appearance aanpassen
-aanpassen bottom bar, rechtermuis op de bar, dan Panel --> panel preferences,
+aanpassen bottom bar, rechtermuis op de bar, dan Panel -panel preferences,
 row size: 20
 start button: Settings: setting manager: Appearance:     Style: Xfce-dusk. 
                                                          Icons: Faba. 
@@ -2777,7 +2778,7 @@ $ Oplossing: verwijder als super user, via mc de xfce4 cache files!
 ~/.cache/sessions
 
 *** Thunar
-Settings Manager (XFCE, vanuit superbutton)--> Settings Editor --> thunar
+Settings Manager (XFCE, vanuit superbutton) -Settings Editor -thunar
 Hier kun je last-separator-position aan/uitzetten.
 Of, veel simpeler, klik op CTR-M om het menu aan/uit te zetten in de Thunar 
 balk.
@@ -3573,6 +3574,9 @@ Voeg toe aan bashrc (hoeft niet als hij er al is):
 
 *** dmenu
 error na starten van dmenu_run
+~PATH="$HOME/bin:$PATH"~
+~PATH="$HOME/bin:$PATH"~
+~PATH="$HOME/bin:$PATH"~
 ~/home/icefly/bin/dmenu_run: line 2: dmenu_path: command not found~
 Ik heb daarna dmenu_path als symlink toegevoegd
 ~ln -s -v /home/icefly/dmenu/dmenu_path /home/icefly/bin/dmenu_path~

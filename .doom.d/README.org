@@ -24,6 +24,8 @@ This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] confi
 * init.el
 This file controls what Doom modules are enabled and what order they load in. Remember to tangle this README.org file and running =~/.emacs.d/bin/doom sync= after modifying it!
 
+The list of modules can be checked in emacs by 'M-x' Doom/help-modules and added if needed.
+
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
 
@@ -85,85 +87,6 @@ This file controls what Doom modules are enabled and what order they load in. Re
        :config
        (default +bindings +smartparens)
        )
-#+end_src
-
-
-The folowing options could be added to the init.el part that is listed above. Just copy/paste the section and uncomment it. Tip: the list of modules can be checked in emacs by 'C-h' d m
-
-#+begin_src emacs-lisp
-       ;; :completion
-       ;;helm              ; the *other* search engine for love and life
-       ;;ido               ; the other *other* search engine...
-       ;;ivy               ; a search engine for love and life
-
-       ;; :UI
-       ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
-
-       ;; :lang
-       ;;julia             ; a better, faster MATLAB
-       ;;kotlin            ; a better, slicker Java(Script)
-       ;;latex             ; writing papers in Emacs has never been so fun
-       ;;lean              ; for folks with too much to prove
-       ;;ledger            ; be audit you can be
-       ;;lua               ; one-based indices? one-based indices
-       ;;erlang            ; an elegant language for a more civilized age
-       ;;ess               ; emacs speaks statistics
-       ;;factor
-       ;;faust             ; dsp, but you get to keep your soul
-       ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
-       ;;fsharp            ; ML stands for Microsoft's Language
-       ;;fstar             ; (dependent) types and (monadic) effects and Z3
-       ;;gdscript          ; the language you waited for
-       ;;(go +lsp)         ; the hipster dialect
-       ;;(haskell +lsp)    ; a language that's lazier than I am
-       ;;hy                ; readability of scheme w/ speed of python
-       ;;idris             ; a language you can depend on
-       ;;json              ; At least it ain't XML
-       ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
-       ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
-       ;;ocaml             ; an objective camel
-       ;;php               ; perl's insecure younger brother
-       ;;plantuml          ; diagrams for confusing people more
-       ;;purescript        ; javascript, but functional
-       ;;qt                ; the 'cutest' gui framework ever
-       ;;racket            ; a DSL for DSLs
-       ;;raku              ; the artist formerly known as perl6
-       ;;rest              ; Emacs as a REST client
-       ;;rst               ; ReST in peace
-       ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-       ;;scala             ; java, but good
-       ;;(scheme +guile)   ; a fully conniving family of lisps
-       ;;sml
-       ;;solidity          ; do you need a blockchain? No.
-       ;;swift             ; who asked for emoji variables?
-       ;;terra             ; Earth and Moon in alignment for performance.
-       ;;web               ; the tubes
-       ;;yaml              ; JSON, but readable
-       ;;zig               ; C, but simpler
-
-       ;; :term
-       ;;term              ; terminals in emacs
-
-       ;; :email
-       ;;(mu4e +org +gmail)
-       ;;notmuch
-       ;;(wanderlust +gmail)
-
-       ;; :app
-       ;;calendar
-       ;;emms
-       ;;everywhere        ; *leave* Emacs!? You must be joking
-       ;;irc               ; how neckbeards socialize
-       ;;(rss +org)        ; emacs as an RSS reader
-       ;;twitter           ; twitter client https://twitter.com/vnought
-
-       ;; :os
-       ;;(:if IS-MAC macos)  ; improve compatibility with macOS
-       ;; :config
-       ;;literate
 #+end_src
 
 * packages.el
@@ -291,7 +214,8 @@ Would be nice to change it, modifying the default requires too much effort. Just
 ** MU4e
 Needs to be configured properly...
 
-mu4e should be uncommented in init.el and the mu4e package should be added to package.el:
+mu4e should be added to the init.el and/or the mu4e package should be added to package.el (mu4e +org +gmail).
+
 #+begin_src emacs-lisp
 
 ;; The email package MU for emacs
