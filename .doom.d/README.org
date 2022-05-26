@@ -12,7 +12,6 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
-- [[#some-tinkering][Some tinkering]]
 - [[#todos][TODOs]]
   - [[#create-custom-welcome-screen-splash-screen][Create custom welcome screen (splash screen)]]
   - [[#mu4e][MU4e]]
@@ -127,7 +126,7 @@ The custom configurations are set here. For instance theme settings, image to th
 ;; 'M-x' 'org-babel-tangle' RET and reload by 'M-x' 'doom/reload' RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                  Revert Doom Emacs opinionated stuff              ;
+;                Revert opiniate Doom Emacs settings                ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hide the toolbar
@@ -168,6 +167,17 @@ The custom configurations are set here. For instance theme settings, image to th
   :hook (org-mode . rainbow-delimiters-mode)
   )
 
+;; Transparency
+(set-frame-parameter (selected-frame) 'alpha '(95 90))
+(add-to-list 'default-frame-alist '(alpha 95 90))
+
+;; Center to the middle of the screen + set fill column to break the lines
+;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
+(setq-default fill-column 110)
+(global-display-fill-column-indicator-mode)
+(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
+(setq-default visual-fill-column-center-text t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                       Custom keybindings                          :
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -182,28 +192,7 @@ The custom configurations are set here. For instance theme settings, image to th
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-;; Center to the middle of the screen + set fill column to break the lines
-;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
-(setq-default fill-column 110)
-(global-display-fill-column-indicator-mode)
-(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
-(setq-default visual-fill-column-center-text t)
-
-;; Transparency
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
-
 #+end_src
-
-
-* Some tinkering
-
-Not all tinkering should be part of the three configuration files that are described above.
-
-Choose a theme by 'M-x' RET 'load-theme' and choose for instance: doom-darktooth, doom-moonlight, doom-vibrant, doom-tokyo-night, doom-dracula, doom-material-dark, doom-xcode or doom-zenburn,
-
-Highlight the current selected line: 'M-x' RET 'hl-line-mode' RET
-
 
 * TODOs
 Here is a list of things I want to add/improve in my Doom Emacs configuration.
@@ -214,7 +203,7 @@ Would be nice to change it, modifying the default requires too much effort. Just
 ** MU4e
 Needs to be configured properly...
 
-mu4e should be added to the init.el and/or the mu4e package should be added to package.el (mu4e +org +gmail).
+mu4e should be added to the init.el (mu4e +org +gmail) and/or the mu4e package should be added to package.el:
 
 #+begin_src emacs-lisp
 

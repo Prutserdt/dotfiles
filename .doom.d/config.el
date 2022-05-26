@@ -3,7 +3,7 @@
 ;; 'M-x' 'org-babel-tangle' RET and reload by 'M-x' 'doom/reload' RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                  Revert Doom Emacs opinionated stuff              ;
+;                Revert opiniate Doom Emacs settings                ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hide the toolbar
@@ -44,6 +44,17 @@
   :hook (org-mode . rainbow-delimiters-mode)
   )
 
+;; Transparency
+(set-frame-parameter (selected-frame) 'alpha '(95 90))
+(add-to-list 'default-frame-alist '(alpha 95 90))
+
+;; Center to the middle of the screen + set fill column to break the lines
+;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
+(setq-default fill-column 110)
+(global-display-fill-column-indicator-mode)
+(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
+(setq-default visual-fill-column-center-text t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                       Custom keybindings                          :
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,14 +68,3 @@
 ;; Set relative numbering. 'SPC' 't'  'l'
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
-
-;; Center to the middle of the screen + set fill column to break the lines
-;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
-(setq-default fill-column 110)
-(global-display-fill-column-indicator-mode)
-(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
-(setq-default visual-fill-column-center-text t)
-
-;; Transparency
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
