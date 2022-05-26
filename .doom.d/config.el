@@ -1,9 +1,6 @@
-;; NOTE This file is generated from the README.org file. Do not alter
+;; NOTE: This file is generated from the README.org file. Do not alter
 ;; config.el directly and only modify the README.org file in emacs and
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
-
-;; Hide the toolbar
-;; (tool-bar-mode -1)
 
 (setq! evil-want-Y-yank-to-eol nil)
 

@@ -1,6 +1,6 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; NOTE This file is generated from the README.org file. Do not alter
+;; NOTE: This file is generated from the README.org file. Do not alter
 ;; init.el directly and only modify the README.org file in emacs and
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 

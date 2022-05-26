@@ -19,16 +19,14 @@
 This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~org-babel-tangle~ in Doom Emacs, after modifying this README.org!
 
 * init.el
-This file controls what Doom modules are enabled and what order they load in.
-
-Lexical binding to make the file run faster
+This file controls what Doom modules are enabled and what order they load in and the first line of the file is lexical binding. This makes the file run (sligthly) faster.
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
 #+end_src
 
-Add a NOTE to ~init.el~ to highlight that this file should not be edited directly.
+Add a note to ~init.el~ to highlight that this file should not be edited directly.
 #+begin_src emacs-lisp :tangle init.el
-;; NOTE This file is generated from the README.org file. Do not alter
+;; NOTE: This file is generated from the README.org file. Do not alter
 ;; init.el directly and only modify the README.org file in emacs and
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 
@@ -99,9 +97,9 @@ Here the packages are defined which should be installed. This is an addition to 
 ;; -*- no-byte-compile: t; -*-
 #+end_src
 
-Add a NOTE to ~packages.el~ to highlight that this file should not be edited directly.
+Again a NOTE is added to ~packages.el~ to *not* edit this file.
 #+begin_src emacs-lisp :tangle packages.el
-;; NOTE This file is generated from the README.org file. Do not alter
+;; NOTE: This file is generated from the README.org file. Do not alter
 ;; packages.el directly and only modify the README.org file in emacs by
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
@@ -133,20 +131,14 @@ Wrapping lines at fill-column and centering text.. uitleg hier........
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
 
-For this files first
-Add a NOTE to ~config.el~ to highlight that this file should not be edited directly.
-
+Let's remind the reader of ~config.el~ to not edit this file directly.
 #+begin_src emacs-lisp :tangle config.el
-;; NOTE This file is generated from the README.org file. Do not alter
+;; NOTE: This file is generated from the README.org file. Do not alter
 ;; config.el directly and only modify the README.org file in emacs and
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
-
-;; Hide the toolbar
-;; (tool-bar-mode -1)
 #+end_src
 
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here.
-
 #+begin_src emacs-lisp :tangle config.el
 (setq! evil-want-Y-yank-to-eol nil)
 #+end_src
@@ -162,26 +154,25 @@ Get a glimpse of the desktop background by setting a low transparency for Emacs.
 (add-to-list 'default-frame-alist '(alpha 95 90))
 #+end_src
 
-Finding the cursor is sometimes tricky while scrolling. The beacon module helps by highlighing the cursor area after scrolling! /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
+Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area! /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
 #+begin_src emacs-lisp :tangle config.el
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 #+end_src
 
-Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. A white bar is set for insert mode and a hollow orange cursor for visual mode.
+Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. It pops right out. A white bar is set for insert mode and a hollow orange cursor for visual mode. This helps to differentiate between normal/insert/visual mode.
 #+begin_src emacs-lisp :tangle config.el
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
 #+end_src
 
-More eye candy by setting superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
+More eye candy by superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
 #+begin_src emacs-lisp :tangle config.el
-
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 #+end_src
 
-Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda slow and like the flashing to take longer. The default is 0.2 second and set it here to one second.
+Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda slow and like the flashing to take longer. The default is 0.2 second and set it here to a whole second.
 #+begin_src emacs-lisp :tangle config.el
 (setq evil-goggles-duration 1.0)
 #+end_src
@@ -194,7 +185,7 @@ Elisp is parentheses galore! The package rainbow-delimiters is matching the colo
   )
 #+end_src
 
-The Hack font is set here.
+The superior font is chosen here.
 #+begin_src emacs-lisp :tangle config.el
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
@@ -208,17 +199,14 @@ For ultrawide monitors I prefer to set my working window in the middle of the sc
 (setq-default visual-fill-column-center-text t)
 #+end_src
 
-Set relative numbering. In Doom Emacs it can be toggled by ~SPC~ ~t~ ~l~.
+Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
 #+begin_src emacs-lisp :tangle config.el
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 #+end_src
 
-Some *keybindings* are added to ~config.el~.
-This area is very much under construction. At the moment I use ~SPC~ ~d~ as my personal hotkeys, not to interfere with the build in hotkeys. I would like to use a secondary leader key, not sure if that is possible. For now I will experiment with ~SPC~ ~d~.
+Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use ~SPC~ ~d~. This area is under construction.
 #+begin_src emacs-lisp :tangle config.el
-
-
 (map! :leader
       (:prefix ("d" . "Walter")
        :desc "Tangling: org-babel-tangle"
@@ -228,7 +216,6 @@ This area is very much under construction. At the moment I use ~SPC~ ~d~ as my p
        :desc "Open recent files"
        "o" #'recentf-open-more-files)
                 )
-
 #+end_src
 
 
