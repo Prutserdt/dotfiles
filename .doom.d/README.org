@@ -25,8 +25,8 @@ This file controls what Doom modules are enabled and what order they load in. Th
 ;;; init.el -*- lexical-binding: t; -*-
 
 ;; NOTE This file is generated from the README.org file. Do not alter
-;; init.el directly and only modify the README.org file in emacs by
-;; 'M-x' 'org-babel-tangle' and run $ '~/.emacs.d/bin/doom sync'
+;; init.el directly and only modify the README.org file in emacs and
+;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 
 (doom! :completion
        company           ; the ultimate code completion backend
@@ -93,7 +93,7 @@ Add a NOTE to ~init.el~ to highlight that this file should not be edited directl
 
 ;; NOTE This file is generated from the README.org file. Do not alter
 ;; packages.el directly and only modify the README.org file in emacs by
-;; 'M-x' 'org-babel-tangle' and run $ '~/.emacs.d/bin/doom sync'
+;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
 Uitleg hier over onderstaande package gedeelte ........
@@ -127,8 +127,8 @@ Add a NOTE to ~config.el~ to highlight that this file should not be edited direc
 
 #+begin_src emacs-lisp :tangle config.el
 ;; NOTE This file is generated from the README.org file. Do not alter
-;; config.el directly and only modify the README.org file in emacs by
-;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload' RET
+;; config.el directly and only modify the README.org file in emacs and
+;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 
 ;; Hide the toolbar
 ;; (tool-bar-mode -1)
@@ -140,7 +140,7 @@ The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yan
 (setq! evil-want-Y-yank-to-eol nil)
 #+end_src
 
-The doom-emacs image of the welcome screen is added here
+The doom-emacs image of the welcome screen is added here.
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 #+end_src
@@ -151,7 +151,7 @@ Get a glimpse of the desktop background by setting a low transparency for Emacs.
 (add-to-list 'default-frame-alist '(alpha 95 90))
 #+end_src
 
-Finding the cursor is sometimes tricky while scrolling. The beacon module helps by highlighing the cursor area after scrolling! /Never lose your cursor again/.
+Finding the cursor is sometimes tricky while scrolling. The beacon module helps by highlighing the cursor area after scrolling! /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
 #+begin_src emacs-lisp :tangle config.el
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
