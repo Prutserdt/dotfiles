@@ -39,8 +39,12 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-;; List of recently opened files:
-(global-set-key "\C-h" 'recentf-open-more-files)
-
-;; org babel tangle
-;;(global-set-key "\C-h" 'recentf-open-more-files)
+(map! :leader
+      (:prefix ("d" . "Walter")
+       :desc "Tangling: org-babel-tangle"
+       "t" #'org-babel-tangle
+       :desc "Reload Doom: doom/reload"
+       "r" #'doom/reload
+       :desc "Open recent files"
+       "o" #'recentf-open-more-files)
+                )
