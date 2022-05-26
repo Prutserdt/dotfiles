@@ -156,14 +156,14 @@ The transparency is set to a low level not too distract too much with the deskto
 (add-to-list 'default-frame-alist '(alpha 95 90))
 #+end_src
 
-Finding the cursor is sometimes tricky while scrolling. The beacon module helps by highlighing the cursor area after scrolling! /Never lose your cursor again/
+Finding the cursor is sometimes tricky while scrolling. The beacon module helps by highlighing the cursor area after scrolling! /Never lose your cursor again/.
 #+begin_src emacs-lisp :tangle config.el
 
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 #+end_src
 
-Make the normal/insert/visual states more apparent by changing cursor:
+Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. A white bar is set for insert mode and a hollow orange cursor for visual mode.
 #+begin_src emacs-lisp :tangle config.el
 
 (setq evil-normal-state-cursor '(box "tomato")
@@ -171,19 +171,19 @@ Make the normal/insert/visual states more apparent by changing cursor:
       evil-visual-state-cursor '(hollow "orange"))
 #+end_src
 
-Let's use some nice bullets in org mode, and not the default boring *. This reequires (org +pretty) in ~init.el~.
+More eye candy by setting superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
 #+begin_src emacs-lisp :tangle config.el
 
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 #+end_src
 
-The flashing of yanked text can be set to a longer interval. The default is 0.2 and I prefer to use 1 second.
+Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda slow and like the flashing to take longer. The default is 0.2 second and set it here to one second.
 #+begin_src emacs-lisp :tangle config.el
 
 (setq evil-goggles-duration 1.0)
 #+end_src
 
-Rainbow delimiters, help to find the matching parenthesis. This is very handy for the parenthis galore Elisp language.
+Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
 #+begin_src emacs-lisp :tangle config.el
 
 (use-package rainbow-delimiters
@@ -216,7 +216,7 @@ Set relative numbering. In Doom Emacs it can be toggled by ~SPC~ ~t~ ~l~.
 #+end_src
 
 Some *keybindings* are added to the ~config.el~.
-It's easy to check if a key binding is available by........
+More keybindings will be added.....
 #+begin_src emacs-lisp :tangle config.el
 
 ;; List of recently opened files:
@@ -232,7 +232,7 @@ Here is a list of things I want to add/improve in my Doom Emacs configuration.
 
 *Create custom welcome screen (splash screen)*
 
-Would be nice to change it, modifying the default requires too much effort. Just create a simple page with an image and a few options shoudl be relatively simple....
+It would be nice to change it, modifying the default requires too much effort. Just create a simple page with an image and a few options shoudl be relatively simple....
 
 *MU4e*
 
