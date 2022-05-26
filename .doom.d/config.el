@@ -13,43 +13,30 @@
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
 
-;; Help to find the cursor by beacon blink
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 
-;; Make the normal/insert/visual states more apparent by changing cursor:
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
 
-;; Nice bullets instead of boring *. Requires (org +pretty)
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
-;; Set flashing of yanked text to a longer interval, default is 0.2
 (setq evil-goggles-duration 1.0)
 
-;; Rainbow delimiters, help to find the matching parenthesis
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode)
   :hook (org-mode . rainbow-delimiters-mode)
   )
 
-;; Set the font
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
 
-;; Center to the middle of the screen + set fill column to break the lines
-;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-center-text t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                               Other                               :
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Set relative numbering. 'SPC' 't'  'l'
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
