@@ -21,7 +21,7 @@ This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] confi
 * init.el
 This file controls what Doom modules are enabled and what order they load in.
 
-The list of modules can be checked in emacs by 'M-x' Doom/help-modules and added if needed.
+The list of modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and added to this list if needed.
 
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
@@ -136,7 +136,7 @@ Add a NOTE to ~config.el~ to highlight that this file should not be edited direc
 ;; (tool-bar-mode -1)
 #+end_src
 
-The default setting of Doom Emacs and the Y key is to yank the whole line from the cursor position. This is obviously the incorrect way and I revert it here.
+The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here.
 
 #+begin_src emacs-lisp :tangle config.el
 
@@ -149,14 +149,14 @@ The doom-emacs image of the welcome screen is added here
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 #+end_src
 
-The transparency is set ..... bla bla bla
+The transparency is set to a low level not too distract too much with the desktop background.
 #+begin_src emacs-lisp :tangle config.el
 
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
 #+end_src
 
-Help to find the cursor by beacon blink
+Finding the cursor is sometimes tricky while scrolling. The beacon module helps by highlighing the cursor area after scrolling! /Never lose your cursor again/
 #+begin_src emacs-lisp :tangle config.el
 
 (beacon-mode 1)
@@ -171,19 +171,19 @@ Make the normal/insert/visual states more apparent by changing cursor:
       evil-visual-state-cursor '(hollow "orange"))
 #+end_src
 
-Nice bullets instead of boring *. Requires (org +pretty)
+Let's use some nice bullets in org mode, and not the default boring *. This reequires (org +pretty) in ~init.el~.
 #+begin_src emacs-lisp :tangle config.el
 
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 #+end_src
 
-Set flashing of yanked text to a longer interval, default is 0.2
+The flashing of yanked text can be set to a longer interval. The default is 0.2 and I prefer to use 1 second.
 #+begin_src emacs-lisp :tangle config.el
 
 (setq evil-goggles-duration 1.0)
 #+end_src
 
-Rainbow delimiters, help to find the matching parenthesis
+Rainbow delimiters, help to find the matching parenthesis. This is very handy for the parenthis galore Elisp language.
 #+begin_src emacs-lisp :tangle config.el
 
 (use-package rainbow-delimiters
@@ -192,15 +192,14 @@ Rainbow delimiters, help to find the matching parenthesis
   )
 #+end_src
 
- Set the font
+The Hack font is set here
 #+begin_src emacs-lisp :tangle config.el
 
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
 #+end_src
 
-Center to the middle of the screen + set fill column to break the lines
-Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
+For ultrawide monitors I prefer to set my working window in the middle of screen. In my case I use qtile window manager with monadthreecolumn and emacs as centered master. With visual-fill emacs is set to be in the middle of the window. This is nice for three column layout and especially nice on ultrawides in a maximized window. Then it is now perfectly in the middle and distraction free.
 #+begin_src emacs-lisp :tangle config.el
 
 (setq-default fill-column 110)
