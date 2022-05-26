@@ -127,10 +127,6 @@ The default setting of Doom Emacs and the Y key is to yank the whole line from t
 ;; config.el directly and only modify the README.org file in emacs by
 ;; 'M-x' 'org-babel-tangle' RET and reload by 'M-x' 'doom/reload' RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                Revert opiniate Doom Emacs settings                ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; Hide the toolbar
 ;; (tool-bar-mode -1)
 
@@ -141,19 +137,18 @@ The default setting of Doom Emacs and the Y key is to yank the whole line from t
 
 *Eye candy*
 
-omschrijving hier zetten...
-
+The doom-emacs image of the welcome screen is added here
 #+begin_src emacs-lisp :tangle config.el
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                           Visual stuff                            ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Add this image to my splash screen
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+#+end_src
 
-;; Set the font
-(set-frame-font "Hack 12" t t)
-(setq default-frame-alist '((font . "Hack 13")))
+Transparency is set ..... bla bla bla
+#+begin_src emacs-lisp :tangle config.el
+;; Transparency
+(set-frame-parameter (selected-frame) 'alpha '(95 90))
+(add-to-list 'default-frame-alist '(alpha 95 90))
 
 ;; Help to find the cursor by beacon blink
 (beacon-mode 1)
@@ -176,9 +171,9 @@ omschrijving hier zetten...
   :hook (org-mode . rainbow-delimiters-mode)
   )
 
-;; Transparency
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
+;; Set the font
+(set-frame-font "Hack 12" t t)
+(setq default-frame-alist '((font . "Hack 13")))
 
 ;; Center to the middle of the screen + set fill column to break the lines
 ;; Related: visual-fill-column-mode, global-visual-line =set-fill-column 80=
