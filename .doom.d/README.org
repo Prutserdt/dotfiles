@@ -89,6 +89,7 @@ The list of modules can be checked in emacs by 'M-x' Doom/help-modules and added
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of init.el.
 
+Uitleg hier over onderstaande package gedeelte ........
 #+begin_src emacs-lisp :tangle packages.el
 
 ;; -*- no-byte-compile: t; -*-
@@ -102,16 +103,22 @@ Here the packages are defined which should be installed. This is an addition to 
              '("melpa" . "https://melpa.org/packages/"))
 (package-refresh-contents)
 (package-initialize)
+#+end_src
 
-;; Disable the nose package. Not maintained and leading to :lang python error
+Disable the nose package because it is not maintained and leading to an ~:lang python error~
+#+begin_src emacs-lisp :tangle packages.el
 (package! nose :disable t)
+#+end_src
 
+Load the beacon package. This is not part of the Doom Emacs modules. /*Never lose your cursor again*/ by highlighting the cursor after scrolling.
+#+begin_src emacs-lisp :tangle packages.el
 ;; Help finding the cursor
 (package! beacon)
+#+end_src
 
-;; Wrapping lines at fill-column and centering text
+Wrapping lines at fill-column and centering text.. uitleg hier........
+#+begin_src emacs-lisp :tangle packages.el
 (package! visual-fill-column)
-
 #+end_src
 
 * config.el

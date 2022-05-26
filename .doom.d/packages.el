@@ -10,11 +10,9 @@
 (package-refresh-contents)
 (package-initialize)
 
-;; Disable the nose package. Not maintained and leading to :lang python error
 (package! nose :disable t)
 
 ;; Help finding the cursor
 (package! beacon)
 
-;; Wrapping lines at fill-column and centering text
 (package! visual-fill-column)
