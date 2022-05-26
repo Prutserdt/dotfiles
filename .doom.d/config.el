@@ -7,7 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hide the toolbar
-(tool-bar-mode -1)
+;; (tool-bar-mode -1)
 
 ;; Restoring to behavior of VIM (Y:yank the whole line, independent on position)
 (setq! evil-want-Y-yank-to-eol nil)
@@ -56,15 +56,19 @@
 (setq-default visual-fill-column-center-text t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                       Custom keybindings                          :
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(global-set-key "\C-h" 'recentf-open-more-files)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;                               Other                               :
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Set relative numbering. 'SPC' 't'  'l'
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;                       Custom keybindings                          :
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; List of recently opened files:
+(global-set-key "\C-h" 'recentf-open-more-files)
+
+;; org babel tangle
+;;(global-set-key "\C-h" 'recentf-open-more-files)
