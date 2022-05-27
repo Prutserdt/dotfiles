@@ -4,7 +4,7 @@
 #+AUTHOR: Prutserdt
 
 #+CAPTION: Doom Emacs
-#+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align left
+#+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align center
 [[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
 
 * Table Of Contents :toc:
@@ -38,8 +38,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
 (doom! :completion
        company           ; the ultimate code completion backend
        vertico           ; the search engine of the future
-
-       :ui
+ :ui
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        (emoji +unicode)  ; ð
@@ -173,8 +172,7 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 
 Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
 #+begin_src emacs-lisp :tangle config.el
-(use-package rainbow-delimiters
-  )
+(use-package rainbow-delimiters)
 #+end_src
 
 The superior font is chosen here.
@@ -183,7 +181,7 @@ The superior font is chosen here.
 (setq default-frame-alist '((font . "Hack 13")))
 #+end_src
 
-For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This is nice for three column layout and especially nice for maximized windows on ultrawides. Now it's perfectly in the middle and distraction free.
+For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This works with the three column layout and is especially nice for maximized windows on an ultrawide. Now it's perfectly in the middle and distraction free.
 #+begin_src emacs-lisp :tangle config.el
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
@@ -201,20 +199,29 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
       (:prefix ("d" . "Personal Bindings")
-       :desc "Tangling: org-babel-tangle"
-       "t" #'org-babel-tangle
+       :desc "Switch to buffer"
+       "b" #'switch-to-buffer
+       :desc "Kill current buffer"
+       "k" #'kill-buffer
+       :desc "Open recent files"
+       "o" #'recentf-open-more-files
        :desc "Reload Doom: doom/reload"
        "r" #'doom/reload
-       :desc "Open recent files"
-       "o" #'recentf-open-more-files)
+       :desc "Tangling: org-babel-tangle"
+       "t" #'org-babel-tangle)
                 )
 #+end_src
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
-NOTE: if this part is placed at the start of ~config.el~ then transparency does not work. That's kinda weird.
+NOTE: if this part is placed at the start of ~config.el~ then transparency does not work.
 #+begin_src emacs-lisp :tangle config.el
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
+#+end_src
+
+Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
+#+begin_src emacs-lisp :tangle config.el
+(scroll-bar-mode -1)
 #+end_src
 
 * TODOs

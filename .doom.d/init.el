@@ -7,8 +7,7 @@
 (doom! :completion
        company           ; the ultimate code completion backend
        vertico           ; the search engine of the future
-
-       :ui
+ :ui
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        (emoji +unicode)  ; ð

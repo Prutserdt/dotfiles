@@ -17,8 +17,7 @@
 
 (setq evil-goggles-duration 1.0)
 
-(use-package rainbow-delimiters
-  )
+(use-package rainbow-delimiters)
 
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
@@ -33,13 +32,19 @@
 
 (map! :leader
       (:prefix ("d" . "Personal Bindings")
-       :desc "Tangling: org-babel-tangle"
-       "t" #'org-babel-tangle
+       :desc "Switch to buffer"
+       "b" #'switch-to-buffer
+       :desc "Kill current buffer"
+       "k" #'kill-buffer
+       :desc "Open recent files"
+       "o" #'recentf-open-more-files
        :desc "Reload Doom: doom/reload"
        "r" #'doom/reload
-       :desc "Open recent files"
-       "o" #'recentf-open-more-files)
+       :desc "Tangling: org-babel-tangle"
+       "t" #'org-babel-tangle)
                 )
 
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))
+
+(scroll-bar-mode -1)

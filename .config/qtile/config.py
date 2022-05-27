@@ -207,6 +207,7 @@ keys = [
         ),
     Key([modR], "s",
         lazy.spawn("xfce4-screenshooter -s " + os.path.expanduser("~/Downloads")),
+    #   lazy.spawn("xfce4-screenshooter -s " + (home + ("~/Downloads"))),
         desc="Choose what to screenshot and save in Downloads"
         ),
     Key([modR], "t",
@@ -214,11 +215,12 @@ keys = [
         desc="Launch Thunar filemanager"
         ),
     Key([modR], "u",
-        lazy.spawn(os.path.expanduser("~/.config/dmenuunicode.sh")),
+        lazy.spawn(home + ("/.config/dmenuunicode.sh")),
         desc="Insert unicode, emojis :-)"
         ),
     Key([modR], "w",
-        lazy.spawn(home + "/dmenuwallpaper.sh"),
+        #lazy.spawn(os.path.expanduser("~/.config/dmenuwallpaper.sh")),
+        lazy.spawn(home + ("/.config/dmenuwallpaper.sh")),
         desc="Change wallpapers and select in dmenu"
         ),
 
