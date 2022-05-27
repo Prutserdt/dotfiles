@@ -104,28 +104,28 @@ Again a NOTE is added to ~packages.el~ to *not* edit this file.
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
-Uitleg hier over onderstaande package gedeelte ........
+This part will refresh the packages after every reload, which is not needed actuall and this part can be removed. I leave it here for a while and will remove if not needed.
 #+begin_src emacs-lisp :tangle packages.el
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(package-refresh-contents)
-(package-initialize)
+;;(require 'package)
+;;(add-to-list 'package-archives
+;;             '("melpa" . "https://melpa.org/packages/"))
+;;(package-refresh-contents)
+;;(package-initialize)
 #+end_src
 
-Disable the nose package because it is not maintained and leading to an ~:lang python error~
-#+begin_src emacs-lisp :tangle packages.el
-(package! nose :disable t)
-#+end_src
-
-Load the beacon package. This is not part of the Doom Emacs modules. /Never lose your cursor again/ by highlighting the cursor after scrolling.
+A package can be installed from MELPA, ELPA or emacsmirror by (package! package_name). The beacon package is not part of the Doom Emacs modules and is added here. /Never lose your cursor again/ by highlighting the cursor after scrolling.
 #+begin_src emacs-lisp :tangle packages.el
 (package! beacon)
 #+end_src
 
-Wrapping lines at fill-column and centering text.. uitleg hier........
+Centering text to the middle of the window can be done by the visual-fill-column package
 #+begin_src emacs-lisp :tangle packages.el
 (package! visual-fill-column)
+#+end_src
+
+The nose package is already installed in Doom Emacs but it is not maintained and leading to an ~:lang python error~. Therefore this package is disabled. Note: disabling of core packages might lead to terrible side effects!
+#+begin_src emacs-lisp :tangle packages.el
+;;(package! nose :disable t)
 #+end_src
 
 * config.el
@@ -208,7 +208,7 @@ Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
 Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use ~SPC~ ~d~. This area is under construction.
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
-      (:prefix ("d" . "Walter")
+      (:prefix ("d" . "Personal Bindings")
        :desc "Tangling: org-babel-tangle"
        "t" #'org-babel-tangle
        :desc "Reload Doom: doom/reload"
@@ -217,7 +217,6 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        "o" #'recentf-open-more-files)
                 )
 #+end_src
-
 
 * TODOs
 Here is a list of things I want to add/improve in my Doom Emacs configuration. This part is /under construction/.

@@ -8,9 +8,9 @@
 ###########################
 #     Basic config        #
 ###########################
-export PATH="$HOME/bin:$PATH" # ~/bin added, for local dwm install by .xinitrc.
+export PATH="$HOME/bin:$PATH"           # ~/bin added, for local dwm install by .xinitrc.
+export PATH=”$HOME/.emacs.d/bin:$PATH”  # Run Doom Emacs from the shell
 
-# TODO: do not add duplicates to history
 HISTFILE=~/.histfile
 HISTSIZE=20000
 SAVEHIST=10000

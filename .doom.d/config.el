@@ -37,7 +37,7 @@
 (setq display-line-numbers-type 'relative)
 
 (map! :leader
-      (:prefix ("d" . "Walter")
+      (:prefix ("d" . "Personal Bindings")
        :desc "Tangling: org-babel-tangle"
        "t" #'org-babel-tangle
        :desc "Reload Doom: doom/reload"
