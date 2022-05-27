@@ -104,7 +104,7 @@ Again a NOTE is added to ~packages.el~ to *not* edit this file.
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
-This part will refresh the packages after every reload, which is not needed actuall and this part can be removed. I leave it here for a while and will remove if not needed.
+This part will refresh the packages after every reload, which is not needed actually and this part can be removed. I leave it here for a while and will remove if not needed.
 #+begin_src emacs-lisp :tangle packages.el
 ;;(require 'package)
 ;;(add-to-list 'package-archives
@@ -118,7 +118,7 @@ A package can be installed from MELPA, ELPA or emacsmirror by (package! package_
 (package! beacon)
 #+end_src
 
-Centering text to the middle of the window can be done by the visual-fill-column package
+Centering text to the middle of the window can be done by the visual-fill-column package.
 #+begin_src emacs-lisp :tangle packages.el
 (package! visual-fill-column)
 #+end_src
@@ -138,7 +138,7 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
-The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here.
+The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
 #+begin_src emacs-lisp :tangle config.el
 (setq! evil-want-Y-yank-to-eol nil)
 #+end_src
@@ -146,12 +146,6 @@ The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yan
 The doom-emacs image of the welcome screen is added here.
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-#+end_src
-
-Get a glimpse of the desktop background by setting a low transparency for Emacs.
-#+begin_src emacs-lisp :tangle config.el
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
 #+end_src
 
 Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area! /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
@@ -180,8 +174,6 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
 #+begin_src emacs-lisp :tangle config.el
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)
-  :hook (org-mode . rainbow-delimiters-mode)
   )
 #+end_src
 
@@ -216,6 +208,13 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Open recent files"
        "o" #'recentf-open-more-files)
                 )
+#+end_src
+
+Get a glimpse of the desktop background by setting a low transparency for Emacs.
+NOTE: if this part is placed at the start of ~config.el~ then transparency does not work. That's kinda weird.
+#+begin_src emacs-lisp :tangle config.el
+(set-frame-parameter (selected-frame) 'alpha '(95 90))
+(add-to-list 'default-frame-alist '(alpha 95 90))
 #+end_src
 
 * TODOs

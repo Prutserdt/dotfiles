@@ -6,9 +6,6 @@
 
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
-
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 
@@ -21,8 +18,6 @@
 (setq evil-goggles-duration 1.0)
 
 (use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)
-  :hook (org-mode . rainbow-delimiters-mode)
   )
 
 (set-frame-font "Hack 12" t t)
@@ -45,3 +40,6 @@
        :desc "Open recent files"
        "o" #'recentf-open-more-files)
                 )
+
+(set-frame-parameter (selected-frame) 'alpha '(95 90))
+(add-to-list 'default-frame-alist '(alpha 95 90))
