@@ -167,6 +167,28 @@ keys = [
 #        desc="Increase margin, tests...."
 #        ),
 
+    # Audio keys
+    Key([], "XF86AudioRaiseVolume",
+        lazy.spawn("amixer -q set Master 5%+"),
+        desc="Raise the volume"
+        ),
+    Key([], "XF86AudioLowerVolume",
+        lazy.spawn("amixer -q set Master 5%-"),
+        desc="Lowering the volume"
+        ),
+    Key([], "XF86AudioMute",
+        lazy.spawn("amixer -q set Master toggle"),
+        desc="Toggle mute/unmute"
+        ),
+    Key([], "Print",
+        lazy.spawn("xfce4-screenshooter -r -s " + os.path.expanduser("~/Downloads")),
+        desc="Draw area by mouse to copy the selection and save in Downloads"
+        ),
+    Key(["shift"], "Print",
+        lazy.spawn(home + "/.config/ScreenshotToText.sh"),
+        desc="Make screenshot and text is magically in clipboard"
+        ),
+
     # Open applications
     Key([modR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
@@ -206,8 +228,8 @@ keys = [
         desc="Launch Mousepad"
         ),
     Key([modR], "s",
-        lazy.spawn("xfce4-screenshooter -s " + os.path.expanduser("~/Downloads")),
-    #   lazy.spawn("xfce4-screenshooter -s " + (home + ("~/Downloads"))),
+        #lazy.spawn("xfce4-screenshooter -s " + os.path.expanduser("~/Downloads")),
+        lazy.spawn("xfce4-screenshooter -s " + (home + ("~/Downloads"))),
         desc="Choose what to screenshot and save in Downloads"
         ),
     Key([modR], "t",
@@ -219,7 +241,6 @@ keys = [
         desc="Insert unicode, emojis :-)"
         ),
     Key([modR], "w",
-        #lazy.spawn(os.path.expanduser("~/.config/dmenuwallpaper.sh")),
         lazy.spawn(home + ("/.config/dmenuwallpaper.sh")),
         desc="Change wallpapers and select in dmenu"
         ),

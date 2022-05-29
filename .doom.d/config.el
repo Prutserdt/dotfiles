@@ -35,7 +35,9 @@
        :desc "Switch to buffer"
        "b" #'switch-to-buffer
        :desc "Kill current buffer"
-       "k" #'kill-buffer
+       "k" #'kill-this-buffer
+       :desc "Kill current buffer"
+       "K" #'kill-some-buffers
        :desc "Open recent files"
        "o" #'recentf-open-more-files
        :desc "Reload Doom: doom/reload"
