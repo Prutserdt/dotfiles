@@ -21,6 +21,7 @@
   - [[#layouts][Layouts]]
   - [[#some-hooks][Some hooks]]
 - [[#the-autostartsh-script][The autostart.sh script]]
+- [[#list][list]]
 
 * Qtile and my config
 [[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org emacs document my configuration of qtile is described and it is used as the source to create the qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
@@ -30,16 +31,17 @@ Check the sourcecode of qtile by running from python shell: ~import libqtile~, ~
 ** Imports
 My configuration requires some modules to be loaded, these are all default settings.
 
+A NOTE is added to ~config.el~ remember to *not* edit this file directly.
+#+begin_src python :tangle config.py
+# NOTE: This file is generated from the README.org file. Do not alter
+# config.el directly and only modify the README.org file in emacs by
+# 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
+#+end_src
+
 #+BEGIN_SRC python :tangle "config.py"
-
-# NOTE This file is generated from a README.org file. Do not alter this
-# config.py file directly and only modify the README.org file, then M-x and
-# run: 'org-babel-tangle' in emacs and press CTR modL r to reload qtile live.
-
 import psutil
 import subprocess
 import os
-import pyperclip
 from typing import List
 from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, Match,
@@ -210,10 +212,12 @@ keys = [
         lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"
         ),
-#    Key([modL], "z", #FIXME: would be nice to dynamically control..
+    #FIXME: would be nice to dynamically control..
+#    Key([modL], "z",
 #        lazy.layout.increase_margin(),
 #        desc="Increase margin, tests...."
 #        ),
+#def cmd_increase_margin(self):
 #    Key([modL], "x", #FIXME: idem
 #        lazy.layout.decrease_margin(),
 #        desc="Increase margin, tests...."
@@ -429,6 +433,13 @@ layout_theme = {"border_width": 2,
 ** Layouts
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
 
+def monwide2(qtile):
+    qtile.cmd_to_layout_index(5) #3: monadwide with margins
+
+def testt(qtile):
+    qtile.cmd_to_layout_index(6) #3: monadwide with margins
+
+
 #+BEGIN_SRC python :tangle "config.py"
 
 layouts = [
@@ -513,8 +524,6 @@ auto_minimize = True # handy for steam games
 
 #+END_SRC
 
-#+RESULTS:
-
 ** Some hooks
 A startup script is ran after startup of qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
 
@@ -553,18 +562,25 @@ wmname = "LG3D"
 #+END_SRC
 
 * The autostart.sh script
-This shellscript is called in the config.py script and is starting some keyboard specific stuff (us keyboard map, redox keyboard alt/super/escape settings, fast keyrepeats), starts picom for transparancy and starts the Emacs daemon.
+This shellscript is called in the config.py script and is starting some keyboard specific stuff.
 
+A NOTE is added to ~autosart.sh~ to remember *not* to edit this file directly.
 #+begin_src sh :tangle-mode rwxr-xr-x :tangle autostart.sh
 #!/bin/bash
+# NOTE: This file is generated from the README.org file. Do not alter
+# autostart.sh directly and only modify the README.org file in emacs by
+# 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
+#+end_src
 
-# NOTE This file is generated from a README.org file. Do not alter this
-# config.py file directly and only modify the README.org file, then M-x and
-# run: 'org-babel-tangle' in emacs and press CTR modL r to reload qtile live.
-
+The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increase. Picom is handling the transparancy and the Emacs daemon is started.
+#+begin_src sh :tangle-mode rwxr-xr-x :tangle autostart.sh
 setxkbmap us &&
 xmodmap $HOME/.config/kbswitch &&
 xset r rate 300 80 &
 picom -b &
 /usr/bin/emacs --daemon &
 #+end_src
+
+* TODO list
+It would be nice to dynamically control the space between the windows (not critical).
+I did not get it to work yet with https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input.

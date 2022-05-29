@@ -1,11 +1,10 @@
-# NOTE This file is generated from a README.org file. Do not alter this
-# config.py file directly and only modify the README.org file, then M-x and
-# run: 'org-babel-tangle' in emacs and press CTR modL r to reload qtile live.
+# NOTE: This file is generated from the README.org file. Do not alter
+# config.el directly and only modify the README.org file in emacs by
+# 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 
 import psutil
 import subprocess
 import os
-import pyperclip
 from typing import List
 from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, Match,
@@ -158,10 +157,12 @@ keys = [
         lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"
         ),
-#    Key([modL], "z", #FIXME: would be nice to dynamically control..
+    #FIXME: would be nice to dynamically control..
+#    Key([modL], "z",
 #        lazy.layout.increase_margin(),
 #        desc="Increase margin, tests...."
 #        ),
+#def cmd_increase_margin(self):
 #    Key([modL], "x", #FIXME: idem
 #        lazy.layout.decrease_margin(),
 #        desc="Increase margin, tests...."
