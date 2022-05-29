@@ -29,16 +29,15 @@
 Check the sourcecode of qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
 
 ** Imports
-My configuration requires some modules to be loaded, these are all default settings.
-
-A NOTE is added to ~config.el~ remember to *not* edit this file directly.
+A note NOTE is added to ~config.py~ which reminds *not* to edit this file directly.
 #+begin_src python :tangle config.py
 # NOTE: This file is generated from the README.org file. Do not alter
 # config.el directly and only modify the README.org file in emacs by
 # 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
-#+BEGIN_SRC python :tangle "config.py"
+My configuration requires some modules to be loaded. These are all default settings.
+#+BEGIN_SRC python :tangle config.py
 import psutil
 import subprocess
 import os
@@ -51,11 +50,10 @@ from libqtile.lazy import lazy
 
 ** Variables
 Some variables are declared. The left super key, right super key and right alt key are used for keybindings. VIM and Emacs variables for opening files in these editors.
-
-#+BEGIN_SRC python :tangle "config.py"
-modL = "mod4"                       # Left super key, for the windowmanager 
-modR = "mod3"                       # Right super key, for opening of applications
-altR = "mod5"                       # Right alt key, for opening of files
+#+BEGIN_SRC python :tangle config.py
+modL = "mod4"                       # Left super key, dedicated to the windowmanager
+modR = "mod3"                       # Right super key, dedicated to open applications
+altR = "mod5"                       # Right alt key, dedicated to opening of files
 
 home = os.path.expanduser("~")
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
@@ -64,8 +62,7 @@ Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
 ** Custom functions
 These functions are used for keybindings and are utilized in the next keybinding section.
-
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py
 
 def threecol(qtile):
     qtile.cmd_to_layout_index(0) #0:monadthreecolumn with margins
@@ -89,8 +86,7 @@ def monwide2(qtile):
 
 ** Keybindings: qtile specific
 My left super key bindings are all related to qtile, for instance moving windows around.
-
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py
 
 keys = [
     # Switch between windows
@@ -227,7 +223,6 @@ keys = [
 
 ** Keybindings: Audio and print
 Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
-
 #+BEGIN_SRC python :tangle "config.py"
     # Audio keys
     Key([], "XF86AudioRaiseVolume",
@@ -248,14 +243,13 @@ Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
         ),
     Key(["shift"], "Print",
         lazy.spawn(home + "/.config/ScreenshotToText.sh"),
-        desc="Make screenshot and text is magically in clipboard"
+        desc="Make screenshot and text is magically in the system clipboard"
         ),
 
 #+END_SRC
 
 ** Keybindings: Applications
 Right super key to open applications.
-
 #+BEGIN_SRC python :tangle "config.py"
     # Open applications
     Key([modR], "a",
@@ -316,8 +310,7 @@ Right super key to open applications.
 
 ** Keybingings: Text files
 The right alt key is used to open text files in Vim or in Emacs.
-
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py
     Key([altR], "a",
         lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.md")),
         desc="Open in emacs:aandelen log"
@@ -384,8 +377,7 @@ The right alt key is used to open text files in Vim or in Emacs.
 
 ** Groups
 The workspaces are described here, which are called Groups in qtile. I don't need more then four groups so I limited it.
-
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py
 groups = [Group(i) for i in "1234"]
 
 for i in groups:
@@ -428,19 +420,10 @@ layout_theme = {"border_width": 2,
                 }
 #+END_SRC
 
-#+RESULTS:
-
 ** Layouts
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
 
-def monwide2(qtile):
-    qtile.cmd_to_layout_index(5) #3: monadwide with margins
-
-def testt(qtile):
-    qtile.cmd_to_layout_index(6) #3: monadwide with margins
-
-
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py
 
 layouts = [
     layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
@@ -527,7 +510,7 @@ auto_minimize = True # handy for steam games
 ** Some hooks
 A startup script is ran after startup of qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
 
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py
 
 # Startup scripts
 @hook.subscribe.startup_once
@@ -564,7 +547,7 @@ wmname = "LG3D"
 * The autostart.sh script
 This shellscript is called in the config.py script and is starting some keyboard specific stuff.
 
-A NOTE is added to ~autosart.sh~ to remember *not* to edit this file directly.
+Again a note is added and this time to ~autostart.sh~ to *not* edit this file directly.
 #+begin_src sh :tangle-mode rwxr-xr-x :tangle autostart.sh
 #!/bin/bash
 # NOTE: This file is generated from the README.org file. Do not alter

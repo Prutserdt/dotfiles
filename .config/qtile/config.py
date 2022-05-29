@@ -11,9 +11,9 @@ from libqtile.config import ( Click, Drag, Group, Key, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
-modL = "mod4"                       # Left super key, for the windowmanager 
-modR = "mod3"                       # Right super key, for opening of applications
-altR = "mod5"                       # Right alt key, for opening of files
+modL = "mod4"                       # Left super key, dedicated to the windowmanager
+modR = "mod3"                       # Right super key, dedicated to open applications
+altR = "mod5"                       # Right alt key, dedicated to opening of files
 
 home = os.path.expanduser("~")
 termVim="alacritty -e vim "         # Open vim in alacritty (used for altR hotkeys)
@@ -187,7 +187,7 @@ keys = [
         ),
     Key(["shift"], "Print",
         lazy.spawn(home + "/.config/ScreenshotToText.sh"),
-        desc="Make screenshot and text is magically in clipboard"
+        desc="Make screenshot and text is magically in the system clipboard"
         ),
 
     # Open applications
