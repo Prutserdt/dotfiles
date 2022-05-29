@@ -157,16 +157,6 @@ keys = [
         lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"
         ),
-    #FIXME: would be nice to dynamically control..
-#    Key([modL], "z",
-#        lazy.layout.increase_margin(),
-#        desc="Increase margin, tests...."
-#        ),
-#def cmd_increase_margin(self):
-#    Key([modL], "x", #FIXME: idem
-#        lazy.layout.decrease_margin(),
-#        desc="Increase margin, tests...."
-#        ),
 
     # Audio keys
     Key([], "XF86AudioRaiseVolume",

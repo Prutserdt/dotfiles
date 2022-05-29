@@ -208,17 +208,6 @@ keys = [
         lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"
         ),
-    #FIXME: would be nice to dynamically control..
-#    Key([modL], "z",
-#        lazy.layout.increase_margin(),
-#        desc="Increase margin, tests...."
-#        ),
-#def cmd_increase_margin(self):
-#    Key([modL], "x", #FIXME: idem
-#        lazy.layout.decrease_margin(),
-#        desc="Increase margin, tests...."
-#        ),
-
     #+END_SRC
 
 ** Keybindings: Audio and print
@@ -245,7 +234,6 @@ Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
         lazy.spawn(home + "/.config/ScreenshotToText.sh"),
         desc="Make screenshot and text is magically in the system clipboard"
         ),
-
 #+END_SRC
 
 ** Keybindings: Applications
