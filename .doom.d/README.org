@@ -201,6 +201,8 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
       (:prefix ("d" . "Personal Bindings")
        :desc "Switch to buffer"
        "b" #'switch-to-buffer
+       :desc "Increase font size"
+       "i" #'doom/increase-font-size
        :desc "Kill current buffer"
        "k" #'kill-this-buffer
        :desc "Kill some buffers"
@@ -213,6 +215,9 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        "t" #'org-babel-tangle)
                 )
 #+end_src
+
+#+RESULTS:
+: org-babel-tangle
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
 NOTE: if this part is placed at the start of ~config.el~ then transparency does not work.

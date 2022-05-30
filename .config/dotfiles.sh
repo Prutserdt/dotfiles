@@ -22,7 +22,7 @@ function Push()
 
 function Pull()
 {
-/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME reset -hard;
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME reset --hard;
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull
 }
 

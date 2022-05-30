@@ -34,9 +34,11 @@
       (:prefix ("d" . "Personal Bindings")
        :desc "Switch to buffer"
        "b" #'switch-to-buffer
+       :desc "Increase font size"
+       "i" #'doom/increase-font-size
        :desc "Kill current buffer"
        "k" #'kill-this-buffer
-       :desc "Kill current buffer"
+       :desc "Kill some buffers"
        "K" #'kill-some-buffers
        :desc "Open recent files"
        "o" #'recentf-open-more-files
