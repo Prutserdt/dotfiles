@@ -5,6 +5,10 @@
 (setq! evil-want-Y-yank-to-eol nil)
 
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(add-hook! '+doom-dashboard-functions :append
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config."))
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright 2022 Free Software Foundation, Inc.")))
 
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
@@ -32,20 +36,18 @@
 
 (map! :leader
       (:prefix ("d" . "Personal Bindings")
-       :desc "Switch to buffer"
-       "b" #'switch-to-buffer
-       :desc "Increase font size"
-       "i" #'doom/increase-font-size
-       :desc "Kill current buffer"
-       "k" #'kill-this-buffer
-       :desc "Kill some buffers"
-       "K" #'kill-some-buffers
-       :desc "Open recent files"
-       "o" #'recentf-open-more-files
-       :desc "Reload Doom: doom/reload"
-       "r" #'doom/reload
-       :desc "Tangling: org-babel-tangle"
-       "t" #'org-babel-tangle)
+          (:prefix ("b" . "Buffer options")
+                :desc "Kill current buffer"     "k" #'kill-this-buffer
+                :desc "Kill some buffers"       "K" #'kill-some-buffers
+                :desc "Open a buffer"           "o" #'buffer-menu)
+       :desc "Search hotkey key briefly"        "d" #'describe-key-briefly
+       :desc "Describe function"                "h" #'describe-function
+       :desc "Increase font size"               "i" #'doom/increase-font-size
+       :desc "Find a file"                      "f" #'find-file
+       :desc "Open recent files"                "o" #'recentf-open-more-files
+       :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+       :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+       :desc "Write this buffer to file"        "w" #'write-file)
                 )
 
 (set-frame-parameter (selected-frame) 'alpha '(95 90))

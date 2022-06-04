@@ -142,9 +142,13 @@ The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yan
 (setq! evil-want-Y-yank-to-eol nil)
 #+end_src
 
-The doom-emacs image of the welcome screen is added here.
+The Doom Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added.
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(add-hook! '+doom-dashboard-functions :append
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config."))
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
 #+end_src
 
 Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area! /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
@@ -195,32 +199,28 @@ Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
 (setq display-line-numbers-type 'relative)
 #+end_src
 
-Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use ~SPC~ ~d~. This area is under construction.
+Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use ~SPC~ ~d~. This area is under construction. Probably it is better to just use the already present doom keybindings and use them. This part is just an excercize to map a set of keybindings.
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
       (:prefix ("d" . "Personal Bindings")
-       :desc "Switch to buffer"
-       "b" #'switch-to-buffer
-       :desc "Increase font size"
-       "i" #'doom/increase-font-size
-       :desc "Kill current buffer"
-       "k" #'kill-this-buffer
-       :desc "Kill some buffers"
-       "K" #'kill-some-buffers
-       :desc "Open recent files"
-       "o" #'recentf-open-more-files
-       :desc "Reload Doom: doom/reload"
-       "r" #'doom/reload
-       :desc "Tangling: org-babel-tangle"
-       "t" #'org-babel-tangle)
+          (:prefix ("b" . "Buffer options")
+                :desc "Kill current buffer"     "k" #'kill-this-buffer
+                :desc "Kill some buffers"       "K" #'kill-some-buffers
+                :desc "Open a buffer"           "o" #'buffer-menu)
+       :desc "Search hotkey key briefly"        "d" #'describe-key-briefly
+       :desc "Describe function"                "h" #'describe-function
+       :desc "Increase font size"               "i" #'doom/increase-font-size
+       :desc "Find a file"                      "f" #'find-file
+       :desc "Open recent files"                "o" #'recentf-open-more-files
+       :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+       :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+       :desc "Write this buffer to file"        "w" #'write-file)
                 )
 #+end_src
 
-#+RESULTS:
-: org-babel-tangle
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
-NOTE: if this part is placed at the start of ~config.el~ then transparency does not work.
+NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
 #+begin_src emacs-lisp :tangle config.el
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))

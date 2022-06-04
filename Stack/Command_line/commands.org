@@ -40,7 +40,7 @@ Verwijder directory and all files/subdirs in it: ~rm -r directoryname~
 Verwijderen alle files in dir: ~rm ~/Stack/dwm/patches/test/*~
 
 *** Kopieren van files
-
+~cp existing_file new_file~
 
 *** Problemen met legen van trash in KDE.
 Open a terminal and go to ~/.local/share and type:
@@ -1453,6 +1453,10 @@ Downgrade applicatie binutils: ~sudo downgrade --ala-only binutils~
 Daarna heb je de keuze over beschikbare downgrades, en daarna wordt gevraagd of
 je de package wil ignoren, waarbij je beter nee kunt kiezen. Let wel dat de
 volgende update de downgrade gaat overschrijven.
+
+31MAY22: downgrade virtualbox 6.1.34-4 want deze gaf issues..
+~sudo downgrade --ala-only virtualbox~, daarna versie 6.1.32-1 gekozen, en niet gegevoegd aan ignorepackage (dus volgende update overschreven). Dus de komende tijd upgraden met yay en virtualbox overslaan.
+
 
 *** Vergelijken van twee textfiles. Comparing two text files.
 diff file1.txt file2.txt
