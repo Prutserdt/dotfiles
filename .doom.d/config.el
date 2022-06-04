@@ -8,7 +8,7 @@
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config."))
-  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright 2022 Free Software Foundation, Inc.")))
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
 
 (beacon-mode 1)
 (setq beacon-blink-duration 3)

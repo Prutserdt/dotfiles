@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: PythonBlock
+# key: <p
+# --
+#+begin_src python :tangle ${1:wismij}.py :results output
+# NOTE, this file is generated from the org file:
+# `(file-name-nondirectory (buffer-file-name))`
+# Only modify the org file and not this Python file.
+
+$0
+#+end_src
