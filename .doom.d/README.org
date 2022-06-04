@@ -234,10 +234,6 @@ Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 * TODOs
 Here is a list of things I want to add/improve in my Doom Emacs configuration. This part is /under construction/.
 
-*Create custom welcome screen (splash screen)*
-
-It would be nice to change it, modifying the default requires too much effort. Just create a simple page with an image and a few options shoudl be relatively simple....
-
 *MU4e*
 
 Needs to be configured properly...
