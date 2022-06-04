@@ -235,9 +235,7 @@ Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 
 Code snippets can automate lot's of stuff. Here below is and example. In org-mode <p tab will insert the following snippet:
 
-+begin_src emacs-lisp :tangle snippets/org-mode/PythonBlock
-
-#+begin_src :tangle snippets/org-mode/PythonBlock
+#+begin_src snippet :tangle snippets/org-mode/PythonBlock
 # -*- mode: snippet -*-
 # name: PythonBlock
 # key: <p
@@ -251,7 +249,8 @@ $0
 #+end_sr${1:c}
 #+end_src
 
-Remark: I end the codeblock this way to include this line, in org-mode #+end_src would end this codeblock and it would not have been added.
+Remark: github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is not showning on the github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the raw file for that.
+
 
 
 
