@@ -246,12 +246,11 @@ Code snippets can automate lot's of stuff. Here below is and example. In org-mod
 # Only modify the org file and not this Python file.
 
 $0
-#+end_sr${1:c}
+#+end_sr${1:p}
 #+end_src
 
 Remark: I end the codeblock this way to include this line, in org-mode #+end_src would end this codeblock and it would not have been added.
 
-Remark: I end the codeblock this way to include this line, in org-mode #+end_src would end this codeblock and it would not have been added.
 
 
 * TODOs
