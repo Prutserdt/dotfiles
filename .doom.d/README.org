@@ -249,9 +249,7 @@ $0
 #+end_sr${1:c}
 #+end_src
 
-Remark: github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is not showning on the github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the raw file for that.
-
-
+Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showning on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
 
 
 * TODOs
