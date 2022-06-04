@@ -235,7 +235,9 @@ Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 
 Code snippets can automate lot's of stuff. Here below is and example. In org-mode <p tab will insert the following snippet:
 
-#+begin_src emacs-lisp :tangle snippets/org-mode/PythonBlock
++begin_src emacs-lisp :tangle snippets/org-mode/PythonBlock
+
+#+begin_src :tangle snippets/org-mode/PythonBlock
 # -*- mode: snippet -*-
 # name: PythonBlock
 # key: <p
@@ -246,7 +248,7 @@ Code snippets can automate lot's of stuff. Here below is and example. In org-mod
 # Only modify the org file and not this Python file.
 
 $0
-#+end_sr${1:p}
+#+end_sr${1:c}
 #+end_src
 
 Remark: I end the codeblock this way to include this line, in org-mode #+end_src would end this codeblock and it would not have been added.
