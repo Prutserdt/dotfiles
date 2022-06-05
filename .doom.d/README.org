@@ -233,7 +233,7 @@ Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 
 * Code snippets
 
-Code snippets can automate lot's of stuff. Here below is and example. In org-mode <p tab will insert the following snippet:
+Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:
 
 #+begin_src snippet :tangle snippets/org-mode/PythonBlock
 # -*- mode: snippet -*-
@@ -249,15 +249,12 @@ $0
 #+end_sr${1:c}
 #+end_src
 
-Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showning on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
-
+Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
 
 * TODOs
-Here is a list of things I want to add/improve in my Doom Emacs configuration. This part is /under construction/.
 
 *MU4e*
-
-Needs to be configured properly...
+This email program needs to be configured properly.
 mu4e should be added to ~init.el~ (mu4e +org +gmail) and/or the mu4e package should be added to ~package.el~:
 
 #+begin_src emacs-lisp
