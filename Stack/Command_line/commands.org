@@ -1050,7 +1050,7 @@ Installeren van bekende package
 ~packages~
 ~yay spotify~
 Pacman upgrade gaf telkens: there is nothing to do. Het bleek dat de mirrorlist
-niet meer goed werkte (wss stond er een foute in de lijst). Het probleem is
+niet meer goed werkte (wss stond er een fout in de lijst). Het probleem is
 opgelost met Reflector.
 Reflector. Sorteer de beste 20 mirrors en schrijf in mirrorlist. Vergeet niet
 om een backup te maken van /etc/pacman.d/mirrorlist:
@@ -2505,53 +2505,9 @@ Dat komt doordat deze packages niet geinstalleerd zijn op mijn Linux systeem.
 Simpel op te lossen met: ~sudo pacman -S shellcheck pipenv~
 Alleen nosetests en isort geeft nog een warning.
 
-**** Org mode en werken met Python
-
-Kies results types om code block output te geven:
-;;#+begin_src python :results output
-;;#+begin_src python :results values
-
-Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
-
-Open de interactive python shell:
-M-x run-python
-Selecteer code en run in de interactive python shell(bovenstaand C-c ' werkt eigenlijk beter dan volgende):
-M-x python-shell-send-region 
-
-init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
-Daarna doomsync uitgevoerd
-
-**** Tabellen in Org mode
-
-Aanmaken van een tabel gaat door invoegen in insert mode van ~|~, en een separator met ~|-enter~.
-|--------|
-| testen |
-|--------|
-
-Toevoegen van een extra rij door in testen te staan en ~TAB~
-|--------|
-| testen |
-|        |
-|--------|
-
-Toevoegen van een extra kolom door te typen achter testen en tab...
-|--------+--------|
-| testen | regels |
-|        |        |
-|--------+--------|
-
-Ik heb de tabel uitgebreid met bovenstaande stappen. Scheidingspaneel is gewoon toevoegen door |- en tab.
-|--------+----------------------+----------------------------------|
-| Editor | Voordelen            | Nadelen                          |
-|--------+----------------------+----------------------------------|
-| nano   | Eenvoudig in gebruik | Weinig functionaliteit           |
-| VIM    | Meerdere modes       | Minder functionaliteit dan emacs |
-| Emacs  | Dit is geen editor   |                                  |
-|--------+----------------------+----------------------------------|
 
 **** Snippets (yasnippets)
 Snippets are already part of Doom Emacs (config :editor snippets)
-
 Find available snippets by M-x ~yas-visit-snippet-file~.
 
 Simple way to add a new snippet to the mode you are in at that moment:
@@ -2578,7 +2534,6 @@ $0
 #+end_src
 
 Opmerking: als ik de tekstfile verander dan wordt deze niet gebruikt in org-mode, en als ik de snippet bekijk met ~yas-visit-snippet-file~ dan zie ik de juiste aanpassing. Vreemd...
-ZQ
 
 **** mu4e
 
@@ -2662,6 +2617,100 @@ Even uitzoeken wat ik ga gebruiken
 ~doomsync~
 ~doomdoctor~
 Nu is de vorige versie verwijderd en zijn er geen meldingen meer, dus opgelost.
+
+*** Org mode (in emacs)
+
+**** Lijsten in Org-mode
+Dit kan eenvoudig met streepjes: -
+
+- Eenvoudige lijst.
+  Dit is een eenvoudige lijst.
+  - Met een sub lijst gedeelte hier.
+  - Dat uit te breiden is.
+- En weer hier weer doorgaat.
+
+Numbered lists maak je aan met: 1.
+
+1. De eerste regel van deze lijst.
+   Hierna kun je extra regels toevoegen.
+   Deze kun je verbergen door op 1. te staan en ~tab~ te klikken.
+2. En een extra regel.
+   a. Je kunt ook doornummeren met a.
+   b. En verder door.
+
+
+**** Tabellen in Org-mode
+
+Aanmaken van een tabel gaat door invoegen in insert mode van ~|~, en een separator met ~|-enter~.
+|--------|
+| testen |
+|--------|
+
+Toevoegen van een extra rij door in testen te staan en ~TAB~
+|--------|
+| testen |
+|        |
+|--------|
+
+Toevoegen van een extra kolom door te typen achter testen en tab...
+|--------+--------|
+| testen | regels |
+|        |        |
+|--------+--------|
+
+Ik heb de tabel uitgebreid met bovenstaande stappen. Scheidingspaneel is gewoon toevoegen door |- en tab.
+|--------+----------------------+----------------------------------|
+| Editor | Voordelen            | Nadelen                          |
+|--------+----------------------+----------------------------------|
+| nano   | Eenvoudig in gebruik | Weinig functionaliteit           |
+| VIM    | Meerdere modes       | Minder functionaliteit dan emacs |
+| Emacs  | Dit is geen editor   |                                  |
+|--------+----------------------+----------------------------------|
+
+**** Checkboxes in Org-mode
+In een lijst kunnen checkboxes worden gebruikt. Let op, het moet wel een lijst zijn.
+Dus eerst een lijst aanmaken, bijvoorbeeld:
+
+***** TODO: Organize party
+- Call people
+  - Peter
+  - Sarah
+  - Same
+- order food
+- think about what music to play
+- Talk to the neighbors
+
+  Daarna kun je checkboxes toevoegen. Dat doe je door: spatie []. Je vult het in met: spatie/X/-.
+  Je kunt het beste de checkbox togglen met: ~M-x~ ~org-toggle-checkbox~. Dan zie je dat de bovenliggende hierachie ook geupdate wordt (dat gebeurd niet als je het handmatig invult).
+
+  Je kunt het aantal afgevinkte items weergeven met [/].
+
+***** TODO: Organize party
+- [-] Call people [2/3]
+  - [-] Peter
+  - [X] Sarah
+  - [X] Same
+- [ ] order food
+- [X] think about what music to play
+- [ ] Talk to the neighbors
+
+**** Org mode en werken met Python
+
+Kies results types om code block output te geven:
+;;#+begin_src python :results output
+;;#+begin_src python :results values
+
+Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
+
+Open de interactive python shell:
+M-x run-python
+Selecteer code en run in de interactive python shell(bovenstaand C-c ' werkt eigenlijk beter dan volgende):
+M-x python-shell-send-region
+
+init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
+Daarna doomsync uitgevoerd
+
+
 
 
 *** IRC, inspircd
@@ -3678,11 +3727,11 @@ De macro is opgenomen.
 
 !Programming/MacroGuideStep
 1. Choose a layer (Pn+M, <,>key) where you want to edit the keycodes.
-tep 2. HitPn + Left Ctrlto enter the programming mode (Capslock LED steadily litin green)
-Step 3. Select a desire key you want to program (Capslock LED flashingin green)
-Step 4. Key-in the contents and then press Pn(CapslockLED steadily lit in green again)
-Step 5. Repeat step 2 and step 3 to program other keys.
-Step 6. Press Pn + Left Ctrlto exit programming mode (CapslockLED off)
+2. HitPn + Left Ctrlto enter the programming mode (Capslock LED steadily in green)
+3. Select a desire key you want to program (Capslock LED flashingin green)
+4. Key-in the contents and then press Pn(CapslockLED steadily lit in green again)
+5. Repeat step 2 and step 3 to program other keys.
+6. Press Pn + Left Ctrlto exit programming mode (CapslockLED off)
 More: Support Fn layer programming, you can select the Fn combination key
 (e.g., Fn + A) to program it Support time delay, press 15ms key (Fn + T)
 each time to delay 15ms, press 0.1s key (Fn + G) each time to delay 0.1s,
