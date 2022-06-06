@@ -2711,14 +2711,11 @@ init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
 Daarna doomsync uitgevoerd
 
 
-
-
 *** IRC, inspircd
 Install by ~yay inspircd~
 
 
 * Distros and related stuff
-
 
 *** XFCE tricks
 XFCE4 in desktop achtergrond terminal services laten draaien.
@@ -3038,17 +3035,6 @@ Inloggen werkt hierna weer goed! :-)
 
 *** Ubuntu Mate op GPD pocket
 
-23AUG21: problemen met GRUB en booten: stuck in grub 2.04
-Ik ga een nieuwe install doen met de oude mate iso...
-https://releases.ubuntu-mate.org/focal/amd64/ daar staat een 20.04.1 gpd pocket
-iso.
-Ik had de onderstaande oude installatie nog op een memory stick gezet, dus deze
-heb ik gebruikt:
-Switch the GPD Pocket on, immediately hold the Fn key and tapping the F7 key 
-until the Boot Manager screen appears.
-UEFI....(onderaan menu) gekozen en installeer ubuntu
-
-
 27APR19 opnieuwe linux installatie, want na Parrot upgrade loopte het systeem vast.
 Ubuntu Mate 18.04.2 LTS (Bionic) 
 De iso gedownload op via torrent (https://ubuntu-mathe.org/download/)
@@ -3174,6 +3160,16 @@ Weer in de root shell. Er is nog steeds geen wifi device....
 reboot
 
 De volgende keer maar met usb dongle proberen...
+
+23AUG21: problemen met GRUB en booten: stuck in grub 2.04
+Ik ga een nieuwe install doen met de oude mate iso...
+https://releases.ubuntu-mate.org/focal/amd64/ daar staat een 20.04.1 gpd pocket
+iso.
+Ik had de onderstaande oude installatie nog op een memory stick gezet, dus deze
+heb ik gebruikt:
+Switch the GPD Pocket on, immediately hold the Fn key and tapping the F7 key
+until the Boot Manager screen appears.
+UEFI....(onderaan menu) gekozen en installeer ubuntu
 
 *** Kali linux op GPD pocket
 
