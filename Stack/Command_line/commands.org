@@ -1646,7 +1646,7 @@ Voorbeelden
 |-------+-------------------------------------------|
 | 4w    | 4 woorden verder                          |
 | 6k    | 6 regels omhoog                           |
-| d2w   | delete the next two words                 |
+| d2w   | delete t next two words                 |
 | ciw   | change inner word                         |
 | ysiw" | Onduidelijk wat ik hiermee kan doen ... ? |
 |-------+-------------------------------------------|
