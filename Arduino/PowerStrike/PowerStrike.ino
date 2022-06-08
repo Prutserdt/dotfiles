@@ -1,4 +1,4 @@
-/* PowerStrike v0.04. Twee FSR druk sensoren met live output op een LCD scherm.*/
+/* PowerStrike v0.04. Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor.*/
 
 #include <LiquidCrystal.h>             //Import de LCD library
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2); // Initialiseren vd LCD en gebruikte pins

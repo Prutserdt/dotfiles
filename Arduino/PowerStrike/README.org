@@ -1,25 +1,24 @@
-#+TITLE: PowerStrike
+#+TITLE: README.org
 #+startup: inlineimages
 
-* Table of contents :toc:
+* Inhoudsopgave:toc:
 - [[#powerstrike][PowerStrike]]
 - [[#onderdelen-lijst][Onderdelen lijst]]
 - [[#opbouw-van-het-prototype][Opbouw van het prototype]]
-- [[#powerstrike-software][PowerStrike software]]
+- [[#powerstrikeino-software][PowerStrike.ino software]]
 
 * PowerStrike
 We zijn bezig met het ontwikkelen van een prototype mma glove met ingebouwede druksensoren.
 
-Onze TODO lijst [3/6]
+Onze TODO lijst [2/8]
  - [X] Live meten van een klap dmv een druksensor.
  - [X] Meten van meerdere druksensoren naast elkaar.
  - [ ] Inbouwen van een druksensor in een mma handschoen.
  - [ ] Testsen van de handschoen in de dojo.
- - [ ] Uitvoerige robuustheid test in de dojo
+ - [ ] Uitvoerig de robuustheid testen in de dojo
  - [ ] Meerdere sensoren in een mma handschoen inbouwen en testen.
  - [ ] Uitfigulieren hoe we communicatie gaan doen vanuit de handschoen?
  - [ ] Miniaturiseren van hardware.
- - [ ] ...
 
 
 * Onderdelen lijst
@@ -37,20 +36,19 @@ Het systeem is op deze manier opgebouwd.
 #+ATTR_HTML: :width 300px
 [[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/picture.jpg]]
 
-Schematische ziet dat er zo uit:
+Schematische ziet dat er zo uit (excuses voor de slechte uitlijning):
 #+CAPTION: scheme
 #+ATTR_HTML: :width 300px
 [[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/scheme.jpg]]
 
 Opmerking: waarschijnlijk moeten er capacitors gebruikt worden want er is nu een probleem. Als een FSR wordt ingedrukt dan is er ook een signaal in de andere FSR, dit moet nog opgelost worden.
 
-* PowerStrike software
+* PowerStrike.ino software
 
 Versie 0.04 is uit!
 
-
 #+begin_src C :tangle ~/Arduino/PowerStrike/PowerStrike.ino
-/* PowerStrike v0.04. Twee FSR druk sensoren met live output op een LCD scherm.*/
+/* PowerStrike v0.04. Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor.*/
 
 #include <LiquidCrystal.h>             //Import de LCD library
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2); // Initialiseren vd LCD en gebruikte pins
