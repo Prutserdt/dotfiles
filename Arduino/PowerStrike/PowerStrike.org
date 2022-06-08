@@ -7,6 +7,7 @@
 - [[#experimental-06jun22][Experimental, 06JUN22]]
 - [[#07jun22-een-tweede-drukmeter-aansluiten][07JUN22: een tweede drukmeter aansluiten...]]
 - [[#powerstrike-huidige-versie][PowerStrike, huidige versie]]
+- [[#tekenen-van-arduino-afbeelding-met-fitzing-software][Tekenen van Arduino afbeelding met Fitzing software]]
 
 * PowerStrike
 We gaan een prototype mma glove bouwen met ingebouwede druksensoren.
@@ -562,3 +563,6 @@ void loop() {
 
 
 #+end_src
+
+* Tekenen van Arduino afbeelding met Fitzing software
+Geinstalleerd via ~yay fritzing~.
