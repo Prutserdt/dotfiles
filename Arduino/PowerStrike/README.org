@@ -4,6 +4,7 @@
 * Table of contents :toc:
 - [[#powerstrike][PowerStrike]]
 - [[#onderdelen-lijst][Onderdelen lijst]]
+- [[#opbouw-van-het-prototype][Opbouw van het prototype]]
 - [[#powerstrike-software][PowerStrike software]]
 
 * PowerStrike
@@ -29,9 +30,19 @@ Onze TODO lijst [3/6]
 4. LCD scherm (16*2)
 5. 2* 1 Mega-ohm weerstand
 
-#+CAPTION: schemeQtilewindowmanager
+* Opbouw van het prototype
+
+Het systeem is op deze manier opgebouwd.
+#+CAPTION: picture
 #+ATTR_HTML: :width 300px
 [[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/picture.jpg]]
+
+Schematische ziet dat er zo uit:
+#+CAPTION: scheme
+#+ATTR_HTML: :width 300px
+[[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/scheme.jpg]]
+
+Opmerking: waarschijnlijk moeten er capacitors gebruikt worden want er is nu een probleem. Als een FSR wordt ingedrukt dan is er ook een signaal in de andere FSR, dit moet nog opgelost worden.
 
 * PowerStrike software
 
