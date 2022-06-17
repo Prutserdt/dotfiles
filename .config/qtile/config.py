@@ -38,28 +38,59 @@ def monwide2(qtile):
     qtile.cmd_to_layout_index(5) #3: monadwide with margins
 
 keys = [
-    # Switch between windows
+    Key([modL], "Return",
+        lazy.spawn("alacritty"),
+        desc="Launch a terminal in a new window"
+        ),
+    Key([modL], "space",
+        lazy.layout.swap_main(),
+        desc="Make the selected window the main window"
+        ),
+    Key([modL],"b",
+        lazy.hide_show_bar(position="top"),
+        desc="Toggle the bar"
+        ),
+    Key([modL],"f",
+        lazy.window.toggle_fullscreen(),
+        desc="Fullscreen the current window"
+        ),
+    Key([modL], "r",
+        lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget in the taskbar"
+        ),
+    Key([modL], "t",
+        lazy.window.toggle_floating(),
+        desc="Toggle the floating state of the window."
+        ),
+    Key([modL], "q",
+        lazy.window.kill(),
+        desc="Kill focused window"
+        ),
+    Key([modL, "control"], "r",
+        lazy.reload_config(),
+        desc="Reload the Qtile configuration"
+        ),
+    Key([modL, "shift"], "q",
+        lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"),
+        desc="Shutdown Qtile by a shellscript"
+        ),
+    #Hotkeys to move windows around, resize windows and choose layouts
     Key([modL], "h",
         lazy.layout.left(),
-        desc="Move focus to left"
+        desc="Move window focus to the left"
         ),
     Key([modL], "l",
         lazy.layout.right(),
-        desc="Move focus to right"
+        desc="Move window focus to the right"
         ),
     Key([modL], "j",
         lazy.layout.down(),
-        desc="Move focus down"
+        desc="Move window focus down"
         ),
     Key([modL], "k",
         lazy.layout.up(),
-        desc="Move focus up"
+        desc="Move window focus up"
         ),
-    Key([modL], "m",
-        lazy.layout.maximize(),
-        desc='toggle window between minimum and maximum sizes'
-        ),
-    # Move windows around. Moving out range (Columns layout) creates new column.
     Key([modL, "shift"], "h",
         lazy.layout.shuffle_left(),
         desc="Move window to the left"
@@ -76,89 +107,48 @@ keys = [
         lazy.layout.shuffle_up(),
         desc="Move window up"
         ),
-    # xmonadlayout hotkeys
     Key([modL, "control"], "h",
         lazy.layout.grow(),
-        desc="Grow selected window"
+        desc="Grow the selected window"
         ),
     Key([modL, "control"], "j",
         lazy.layout.shrink_main(),
-        desc="Shrink main window"
+        desc="Shrink the main window"
         ),
     Key([modL, "control"], "k",
         lazy.layout.grow_main(),
-        desc="Grow main window"
+        desc="Grow the main window"
         ),
     Key([modL, "control"], "l",
         lazy.layout.shrink(),
-        desc="Grow selected window"
+        desc="Shrink the selected window"
         ),
-    Key([modL], "space",
-        lazy.layout.swap_main(),
-        desc="Make selected window the main windos"
-        ),
-    Key([modL], "n",
-        lazy.layout.flip(),
-        desc="Draai main en secondary panes (niet bij xmonadthreecol!)"
-        ),
-   # Layout hotkeys
      Key([modL],"y",
         lazy.function(montall),
-        desc="MonadTall selection without margins"
+        desc="Layout: MonadTall selection without margins"
         ),
     Key([modL],"u",
         lazy.function(threecol),
-        desc="Threecolumn selection without margins"
+        desc="Layout: Threecolumn selection without margins"
         ),
     Key([modL],"i",
         lazy.function(monwide),
-        desc="MonadWide selection without margins"
+        desc="Layout: MonadWide selection without margins"
         ),
     Key([modL],"6",
         lazy.function(montall2),
-        desc="MonadTall selection with margins"
+        desc="Layout: MonadTall selection with margins"
         ),
     Key([modL],"7",
         lazy.function(threecol2),
-        desc="Threecolumn selection with margins"
+        desc="Layout: Threecolumn selection with margins"
         ),
     Key([modL],"8",
         lazy.function(monwide2),
-        desc="MonadWide selection without margins"
-        ),
-    Key([modL],"f",
-        lazy.window.toggle_fullscreen(),
-        desc="Fullscreen the current window"
-        ),
-    Key([modL],"b",
-        lazy.hide_show_bar(position="top"),
-        desc="hide/show bar"
-        ),
-    Key([modL], "Return",
-        lazy.spawn("alacritty"),
-        desc="Launch terminal"),
-   # Toggle between different layouts as defined below
-    Key([modL], "q",
-        lazy.window.kill(),
-        desc="Kill focused window"
-        ),
-    Key([modL, "control"], "r",
-        lazy.reload_config(),
-        desc="Reload the config"
-        ),
-    # NOTE: exit via script en popup window, net als dwm...
-    # nog even testen of ik dit zo ga houden, denk het wel
-    Key([modL, "shift"], "q",
-        lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"),
-        #lazy.shutdown(),
-        desc="Shutdown Qtile"
-        ),
-    Key([modL], "r",
-        lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"
+        desc="Layout: MonadWide selection without margins"
         ),
 
-    # Audio keys
+    # Hotkeys for audio and printscreen
     Key([], "XF86AudioRaiseVolume",
         lazy.spawn("amixer -q set Master 5%+"),
         desc="Raise the volume"
@@ -238,7 +228,7 @@ keys = [
 
     Key([altR], "a",
         lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.md")),
-        desc="Open in emacs:aandelen log"
+        desc="Open in Emacs: aandelen log"
         ),
 
     Key([altR], "b",
@@ -271,7 +261,7 @@ keys = [
         ),
     Key([altR], "q",
         lazy.spawn(Emacs + home + "/.config/qtile/README.org"),
-        desc="Open in emacs:Open qtile config"
+        desc="Open in Emacs:Open qtile config"
         ),
     Key([altR], "r",
         lazy.spawn(Emacs + home + "/README.md"),
@@ -279,7 +269,7 @@ keys = [
         ),
     Key([altR], "v",
         lazy.spawn(termVim +os.path.expanduser("~/.vimrc")),
-        desc="Open in vim:"
+        desc="Open in Vim:"
         ),
     Key([altR], "w",
         lazy.spawn(os.path.expanduser("~/.config/wololo.sh")),
