@@ -29,7 +29,7 @@
 Check the sourcecode of qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
 
 ** Imports
-A note NOTE is added to ~config.py~ which reminds *not* to edit this file directly.
+A note is added to ~config.py~ which reminds *not* to edit this file directly.
 #+begin_src python :tangle config.py
 # NOTE: This file is generated from the README.org file. Do not alter
 # config.el directly and only modify the README.org file in emacs by
@@ -49,7 +49,7 @@ from libqtile.lazy import lazy
 #+END_SRC
 
 ** Variables
-Some variables are declared. The left super key, right super key and right alt key are used for keybindings. VIM and Emacs variables for opening files in these editors.
+Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Vim and Emacs variables for opening files in these editors.
 #+BEGIN_SRC python :tangle config.py
 modL = "mod4"                       # Left super key, dedicated to the windowmanager
 modR = "mod3"                       # Right super key, dedicated to open applications
@@ -303,10 +303,6 @@ The right alt key is used to open text files in Vim or in Emacs.
         lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org"),
         desc="Open in Emacs: commands.org"
         ),
-    Key([altR], "u",
-        lazy.spawn(Emacs + home + "/.config/urls"),
-        desc="Open in Emacs: urls list used for newsboat"
-        ),
     Key([altR], "d",
         lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h"),
         desc="Open in Emacs: config.h of my dwm build"
@@ -327,9 +323,17 @@ The right alt key is used to open text files in Vim or in Emacs.
         lazy.spawn(Emacs + home + "/.config/qtile/README.org"),
         desc="Open in Emacs:Open qtile config"
         ),
-    Key([altR], "r",
-        lazy.spawn(Emacs + home + "/README.md"),
+    Key([altR, "shift"], "r",
+        lazy.spawn(Emacs + home + "/README.org"),
         desc="Open in Emacs: README.md of github dotfiles repo"
+        ),
+    Key([altR], "r",
+        lazy.spawn(Emacs + home + "/.Xresources"),
+        desc="Open in Emacs: .Xresources"
+        ),
+    Key([altR], "u",
+        lazy.spawn(Emacs + home + "/.config/urls"),
+        desc="Open in Emacs: urls list used for newsboat"
         ),
     Key([altR], "v",
         lazy.spawn(termVim +os.path.expanduser("~/.vimrc")),
@@ -342,10 +346,6 @@ The right alt key is used to open text files in Vim or in Emacs.
     Key([altR], "x",
         lazy.spawn(Emacs + home + "/.xinitrc"),
         desc="Open in Emacs: .xinitrc"
-        ),
-    Key([altR], "r",
-        lazy.spawn(Emacs + home + "/.Xresources"),
-        desc="Open in Emacs: .Xresources"
         ),
     Key([altR], "z",
         lazy.spawn(Emacs + home + "/.zshrc"),
@@ -380,7 +380,6 @@ for i in groups:
         ]
     )
 
-    #       DropDown( 'ranger', myTerm + ' ranger', width=0.7, height=0.7, x=0.15, y=0.15, opacity=1.0, on_focus_lost_hide=False ), and in my case: myTerm = "kitty"
 groups.append(
     ScratchPad("scratchpad", [
         DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,
@@ -392,12 +391,19 @@ keys.extend([
         Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1")),
 ])
 
+# My default theme
 layout_theme = {"border_width": 2,
-#                "margin": 20,
                 "border_focus": "#00ffd2",  #98C379= groen
                 "border_normal": "#282C34",
                 }
+# A separate theme for floating mode, to make it clear that the window floats
+floating_theme = {"border_width": 3,
+                "border_focus":  "#d75f5f",
+                "border_normal": "#966363",
+                }
 #+END_SRC
+
+#+RESULTS:
 
 ** Layouts
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
@@ -469,13 +475,13 @@ dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
-floating_layout = layout.Floating(
+floating_layout = layout.Floating(**floating_theme,
     float_rules=[
         # Run utility of `xprop` to see the wm class and name of an X client
         ,*layout.Floating.default_float_rules,
-        Match(wm_class="gimp"),  # gimp image editor
+        Match(wm_class="gimp"),      # gimp image editor
         Match(wm_class="keepass2"),  # keepass password editor
-    ]
+    ],
 )
 
 auto_fullscreen = False
@@ -485,6 +491,8 @@ reconfigure_screens = True
 auto_minimize = True # handy for steam games
 
 #+END_SRC
+
+#+RESULTS:
 
 ** Some hooks
 A startup script is ran after startup of qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
@@ -534,7 +542,7 @@ Again a note is added and this time to ~autostart.sh~ to *not* edit this file di
 # 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
-The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increase. Picom is handling the transparancy and the Emacs daemon is started.
+The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started.
 #+begin_src sh :tangle-mode rwxr-xr-x :tangle autostart.sh
 setxkbmap us &&
 xmodmap $HOME/.config/kbswitch &&

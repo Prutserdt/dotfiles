@@ -10,9 +10,10 @@
 * PowerStrike
 We zijn bezig met het ontwikkelen van een prototype mma glove met ingebouwede druksensoren.
 
-Onze TODO lijst [2/8]
+Onze TODO lijst [3/9]
  - [X] Live meten van een klap dmv een druksensor.
  - [X] Meten van meerdere druksensoren naast elkaar.
+ - [X] Speel een tune als het maximum geslagen is via een piezo buzzer.
  - [ ] Inbouwen van een druksensor in een mma handschoen.
  - [ ] Testsen van de handschoen in de dojo.
  - [ ] Uitvoerig de robuustheid testen in de dojo
@@ -45,10 +46,24 @@ Opmerking: waarschijnlijk moeten er capacitors gebruikt worden want er is nu een
 
 * PowerStrike.ino software
 
-Versie 0.04 is uit!
+Versie 0.05 is uit!
 
 #+begin_src C :tangle ~/Arduino/PowerStrike/PowerStrike.ino
-/* PowerStrike v0.04. Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor.*/
+/* PowerStrike v0.05. Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
+ ,* plus was beeps en jingle all the way via de piezo buzzer.*/
+#include "pitches.h"
+  const int BUZZER_PIN        = 8; // Arduino pin connected to Buzzer's pin
+
+// De tune voor een nieuw maximum: jingle all the way:
+int melody[] = {
+  NOTE_E5, NOTE_G5, NOTE_C5, NOTE_D5,
+  NOTE_E5,
+};
+// toonduurs: 4 = kwart noot, 8 = achtste noot, enzc, oftewel het tempo:
+int noteDurations[] = {
+  16, 16, 16, 16,
+  4,
+};
 
 #include <LiquidCrystal.h>             //Import de LCD library
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2); // Initialiseren vd LCD en gebruikte pins
@@ -64,6 +79,14 @@ int maximumA;              // Variabelel die de maximale kracht bijhoud
 int maximumB;              // Variabelel die de maximale kracht bijhoud
 int PowerStrikereadingB;   // Variabele voor opslag PowerStrike waarde
 
+// De piep functie, met piep(10) kanl je 10xbeep(50), scheelt weer SLOCs!
+void piep(int count){
+    while ( count-- )
+    {
+      beep(50);
+    }
+  }
+
 void setup() {
   Serial.begin(9600);      // Zet serial communicatie op 9600 baud:
   maximumA=0;              // Zet het maximum op 0, dit kan alleen maar oplopen :-)
@@ -76,29 +99,36 @@ void setup() {
   digitalWrite(contra, LOW);// Geeft geen power aan contrast pin. Nu zie je woorden. Best handig.
   analogWrite(bri, 255);    // Geeft volledige power aan screen brightness LED (255)
 
-  // Stukje amusement op de LCD
+  // Stukje amusement op de LCD met beeping, alsof deze retesnelle code een
+  // significante boot tijd heeft
+  // Note: de onderstaande code kan efficienter via een functie, nog uitwerken.
+  beep(50);
   lcd.setCursor(0, 0);            // Bovenste regel
   lcd.print("**PowerStrike**");
   lcd.setCursor(0, 1);            // Onderste regel
   lcd.print("Booting in ");
   delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
+  beep(50);
   lcd.setCursor(0, 1);            // Onderste regel
   lcd.print("Booting in 3");
   delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
+  beep(50);
   lcd.setCursor(0, 1);            // Onderste regel
   lcd.print("Booting in 2");
   delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
+  beep(50);
   lcd.setCursor(0, 1);            // Onderste regel
   lcd.print("Booting in 1");
   delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
+  beep(50);
   lcd.clear(); // Clear LCD anders krijg je trailing rommel
   lcd.setCursor(0, 0);            // Bovenste regel
   lcd.print("  Tijd om te");
   lcd.setCursor(0, 1);            // Onderste regel
   lcd.print("!!!!!RAMMEN!!!!!");
-  delay(2000); // De delay van de loop wordt ingesteld, in milliseconden.
+  piep(20); // pieperdepiep, 20 keer beep
+  delay(1000); // De delay van de loop wordt ingesteld, in milliseconden.
   lcd.clear(); // Clear LCD anders krijg je trailing rommel
-
 }
 
 void loop() {
@@ -110,9 +140,12 @@ void loop() {
   //set maxima als deze gevonden worden
   if (PowerStrikereadingA > maximumA) {
     maximumA=PowerStrikereadingA;     // Maximum gevonden dus overschrijven
+    beep(200);
+    buzzer();
   }
   if (PowerStrikereadingB > maximumB) {
     maximumB=PowerStrikereadingB;     // Maximum gevonden dus overschrijven
+    beep(200);
   }
 
   // Print naar LCD
@@ -142,5 +175,131 @@ void loop() {
 
   delay(500); // De delay van deze loop wordt ingesteld, in milliseconden.
 }
+
+void buzzer() {
+  // itereerd over de noten van de melody:
+  int size = sizeof(noteDurations) / sizeof(int);
+
+  for (int thisNote = 0; thisNote < size; thisNote++) {
+    // bereken de toonduur, neem een seconde gedeelt door noot type.
+    // toonduurs: kwart noot= 1000 / 4, achtste note = 1000/8, enz
+    int noteDuration = 1000 / noteDurations[thisNote];
+    tone(BUZZER_PIN, melody[thisNote], noteDuration);
+
+    // om de onafhankelijke noten goed te horen moet er een korte pauze tussen zitten.
+    // Hier heb ik de tijd van de noot  + 30% genomen, dat werkt:
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+    // stop de tune:
+    noTone(BUZZER_PIN);
+  }
+}
+
+void beep(unsigned char delayms){
+  analogWrite(8, 250);     // schrijf naar pin 8, volume: gebruik waarden tussen 0-255,
+  delay(delayms);          // wacht voor een delay in ms
+  analogWrite(8, 0);       // 0 zet het uit
+  delay(delayms);          // wacht voor een delay in ms
+}
+
+
+#+end_src
+
+
+  
+#+begin_src C :tangle ~/Arduino/PowerStrike/pitches.h
+/*************************************************
+   Public Constants
+ *************************************************/
+
+#define NOTE_B0  31
+#define NOTE_C1  33
+#define NOTE_CS1 35
+#define NOTE_D1  37
+#define NOTE_DS1 39
+#define NOTE_E1  41
+#define NOTE_F1  44
+#define NOTE_FS1 46
+#define NOTE_G1  49
+#define NOTE_GS1 52
+#define NOTE_A1  55
+#define NOTE_AS1 58
+#define NOTE_B1  62
+#define NOTE_C2  65
+#define NOTE_CS2 69
+#define NOTE_D2  73
+#define NOTE_DS2 78
+#define NOTE_E2  82
+#define NOTE_F2  87
+#define NOTE_FS2 93
+#define NOTE_G2  98
+#define NOTE_GS2 104
+#define NOTE_A2  110
+#define NOTE_AS2 117
+#define NOTE_B2  123
+#define NOTE_C3  131
+#define NOTE_CS3 139
+#define NOTE_D3  147
+#define NOTE_DS3 156
+#define NOTE_E3  165
+#define NOTE_F3  175
+#define NOTE_FS3 185
+#define NOTE_G3  196
+#define NOTE_GS3 208
+#define NOTE_A3  220
+#define NOTE_AS3 233
+#define NOTE_B3  247
+#define NOTE_C4  262
+#define NOTE_CS4 277
+#define NOTE_D4  294
+#define NOTE_DS4 311
+#define NOTE_E4  330
+#define NOTE_F4  349
+#define NOTE_FS4 370
+#define NOTE_G4  392
+#define NOTE_GS4 415
+#define NOTE_A4  440
+#define NOTE_AS4 466
+#define NOTE_B4  494
+#define NOTE_C5  523
+#define NOTE_CS5 554
+#define NOTE_D5  587
+#define NOTE_DS5 622
+#define NOTE_E5  659
+#define NOTE_F5  698
+#define NOTE_FS5 740
+#define NOTE_G5  784
+#define NOTE_GS5 831
+#define NOTE_A5  880
+#define NOTE_AS5 932
+#define NOTE_B5  988
+#define NOTE_C6  1047
+#define NOTE_CS6 1109
+#define NOTE_D6  1175
+#define NOTE_DS6 1245
+#define NOTE_E6  1319
+#define NOTE_F6  1397
+#define NOTE_FS6 1480
+#define NOTE_G6  1568
+#define NOTE_GS6 1661
+#define NOTE_A6  1760
+#define NOTE_AS6 1865
+#define NOTE_B6  1976
+#define NOTE_C7  2093
+#define NOTE_CS7 2217
+#define NOTE_D7  2349
+#define NOTE_DS7 2489
+#define NOTE_E7  2637
+#define NOTE_F7  2794
+#define NOTE_FS7 2960
+#define NOTE_G7  3136
+#define NOTE_GS7 3322
+#define NOTE_A7  3520
+#define NOTE_AS7 3729
+#define NOTE_B7  3951
+#define NOTE_C8  4186
+#define NOTE_CS8 4435
+#define NOTE_D8  4699
+#define NOTE_DS8 4978
 
 #+end_src

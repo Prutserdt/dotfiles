@@ -1,6 +1,6 @@
 #!/bin/sh
 #~/.config/ScreenshotToText.sh
-#                       _      _                  _
+#
 # Magically fetch text from screen to clipboard
 #
 # make directory in ram memory of user

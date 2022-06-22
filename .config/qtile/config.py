@@ -239,10 +239,6 @@ keys = [
         lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org"),
         desc="Open in Emacs: commands.org"
         ),
-    Key([altR], "u",
-        lazy.spawn(Emacs + home + "/.config/urls"),
-        desc="Open in Emacs: urls list used for newsboat"
-        ),
     Key([altR], "d",
         lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h"),
         desc="Open in Emacs: config.h of my dwm build"
@@ -263,9 +259,17 @@ keys = [
         lazy.spawn(Emacs + home + "/.config/qtile/README.org"),
         desc="Open in Emacs:Open qtile config"
         ),
-    Key([altR], "r",
-        lazy.spawn(Emacs + home + "/README.md"),
+    Key([altR, "shift"], "r",
+        lazy.spawn(Emacs + home + "/README.org"),
         desc="Open in Emacs: README.md of github dotfiles repo"
+        ),
+    Key([altR], "r",
+        lazy.spawn(Emacs + home + "/.Xresources"),
+        desc="Open in Emacs: .Xresources"
+        ),
+    Key([altR], "u",
+        lazy.spawn(Emacs + home + "/.config/urls"),
+        desc="Open in Emacs: urls list used for newsboat"
         ),
     Key([altR], "v",
         lazy.spawn(termVim +os.path.expanduser("~/.vimrc")),
@@ -278,10 +282,6 @@ keys = [
     Key([altR], "x",
         lazy.spawn(Emacs + home + "/.xinitrc"),
         desc="Open in Emacs: .xinitrc"
-        ),
-    Key([altR], "r",
-        lazy.spawn(Emacs + home + "/.Xresources"),
-        desc="Open in Emacs: .Xresources"
         ),
     Key([altR], "z",
         lazy.spawn(Emacs + home + "/.zshrc"),
@@ -312,7 +312,6 @@ for i in groups:
         ]
     )
 
-    #       DropDown( 'ranger', myTerm + ' ranger', width=0.7, height=0.7, x=0.15, y=0.15, opacity=1.0, on_focus_lost_hide=False ), and in my case: myTerm = "kitty"
 groups.append(
     ScratchPad("scratchpad", [
         DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,
@@ -324,10 +323,15 @@ keys.extend([
         Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1")),
 ])
 
+# My default theme
 layout_theme = {"border_width": 2,
-#                "margin": 20,
                 "border_focus": "#00ffd2",  #98C379= groen
                 "border_normal": "#282C34",
+                }
+# A separate theme for floating mode, to make it clear that the window floats
+floating_theme = {"border_width": 3,
+                "border_focus":  "#d75f5f",
+                "border_normal": "#966363",
                 }
 
 layouts = [
@@ -395,13 +399,13 @@ dgroups_app_rules = []  # type: List
 follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
-floating_layout = layout.Floating(
+floating_layout = layout.Floating(**floating_theme,
     float_rules=[
         # Run utility of `xprop` to see the wm class and name of an X client
         *layout.Floating.default_float_rules,
-        Match(wm_class="gimp"),  # gimp image editor
+        Match(wm_class="gimp"),      # gimp image editor
         Match(wm_class="keepass2"),  # keepass password editor
-    ]
+    ],
 )
 
 auto_fullscreen = False
