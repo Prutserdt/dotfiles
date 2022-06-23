@@ -29,6 +29,7 @@ Onze TODO lijst [3/9]
 3. 2* FSR 50 kg
 4. LCD scherm (16*2)
 5. 2* 1 Mega-ohm weerstand
+6. Piezo buzzer
 
 * Opbouw van het prototype
 

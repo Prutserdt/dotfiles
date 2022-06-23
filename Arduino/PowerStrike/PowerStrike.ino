@@ -1,5 +1,3 @@
-int main() {
-
 /* PowerStrike v0.06.
  * Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
  * plus was beeps en Rocky tune via de piezo buzzer.*/
@@ -175,7 +173,4 @@ void loop() {
   Serial.print(", ");                  // spacer
   Serial.println(maximum1);            // Maximum van B
   delay(500); // De delay van deze loop, in ms.
-}
-    
-return 0;
 }
