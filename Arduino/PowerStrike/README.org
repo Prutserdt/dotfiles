@@ -42,55 +42,128 @@ Schematische ziet dat er zo uit (excuses voor de slechte uitlijning):
 #+ATTR_HTML: :width 300px
 [[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/scheme.jpg]]
 
-Opmerking: waarschijnlijk moeten er capacitors gebruikt worden want er is nu een probleem. Als een FSR wordt ingedrukt dan is er ook een signaal in de andere FSR, dit moet nog opgelost worden.
+Opmerking: waarschijnlijk moeten er capacitors gebruikt worden want er is nu een probleem. Als een FSR wordt ingedrukt dan is er ook een signaal in de andere FSR, dit moet nog opgelost worden. Ook valt de LCD even uit als de piezo buzzer gebruikt wordt (bij maximum druk), dit is hetzelfde probleem, waarschijnlijk op te lossen met een capacitor.
 
 * PowerStrike.ino software
 
-Versie 0.05 is uit!
+Versie 0.06 is uit!
 
 #+begin_src C :tangle ~/Arduino/PowerStrike/PowerStrike.ino
-/* PowerStrike v0.05. Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
- ,* plus was beeps en jingle all the way via de piezo buzzer.*/
-#include "pitches.h"
-  const int BUZZER_PIN        = 8; // Arduino pin connected to Buzzer's pin
 
-// De tune voor een nieuw maximum: jingle all the way:
-int melody[] = {
+/* PowerStrike v0.06.
+ * Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
+ * plus was beeps en Rocky tune via de piezo buzzer.*/
+
+#include <LiquidCrystal.h> //Importeer de LCD library
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2); // Initialiseren vd LCD en gebruikte pins
+
+
+// Definieer de constanten
+#define NOTE_E5  659       // Toonhoogte en bijbehorende frequentie voor piezo buzzer
+#define NOTE_G5  784
+#define NOTE_C5  523
+#define NOTE_D5  587
+#define NOTE_A5  880
+#define NOTE_B5  988
+#define PowerStrikepin0 A0 // Arduino pin voor druksensor 0
+#define PowerStrikepin1 A1 // Arduino pin voor druksensor 1
+#define bzzr 8             // Arduino pin voor de Piezo buzzer
+#define contra 9           // Arduino pin voor het contrast van de LCD
+#define bri 10             // Arduino pin voor de brightness van het LCD
+
+
+// Definieer de variabelen
+int PowerStrikereading0;   // Variabele voor uitlezen druksensor op pin 0
+int PowerStrikereading1;   // Variabele voor uitlezen druksensor op pin 1
+int maximum0;              // Variabele die de maximale kracht bijhoud
+int maximum1;              // Variabele die de maximale kracht bijhoud
+
+// jingle all the way:
+int jingleNoten[] = {
   NOTE_E5, NOTE_G5, NOTE_C5, NOTE_D5,
   NOTE_E5,
 };
-// toonduurs: 4 = kwart noot, 8 = achtste noot, enzc, oftewel het tempo:
-int noteDurations[] = {
+// toonduur: 4 = kwart noot, 8 = achtste noot, enzc, oftewel het tempo:
+int jingleTijdPerNoot[] = {
   16, 16, 16, 16,
   4,
 };
 
-#include <LiquidCrystal.h>             //Import de LCD library
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2); // Initialiseren vd LCD en gebruikte pins
+// Rocky Tune
+int rockyNoten[] = {
+  NOTE_E5, NOTE_G5, 0, NOTE_A5,
+  NOTE_A5, NOTE_B5, 0, NOTE_G5,
+  NOTE_E5, NOTE_G5, 0, NOTE_A5,
+  NOTE_A5, NOTE_B5, 0, NOTE_G5,
+};
+int rockyTijdPerNoot[] = {
+  16, 8, 8, 1,              // toonduur: 4 = kwart noot, 8 = achtste noot, enzc, oftewel het tempo:
+  16, 8, 8, 1,
+  16, 8, 8, 1,
+  16, 8, 8, 1,
+};
 
-#define PowerStrikepinA A0 // Definieer welke Arduino pin wordt gebruikt voor uitlezen
-#define PowerStrikepinB A1 // Definieer welke Arduino pin wordt gebruikt voor uitlezen
-#define contra 9           // Definieer de pin die het contrast van de LCD regelt
-#define bri 10             // Definieer de pin die de brightness van het LCD scherm regelt
 
-// Definieer de variabelen
-int PowerStrikereadingA;   // Variabele voor opslag PowerStrike waarde
-int maximumA;              // Variabelel die de maximale kracht bijhoud
-int maximumB;              // Variabelel die de maximale kracht bijhoud
-int PowerStrikereadingB;   // Variabele voor opslag PowerStrike waarde
+// Functies
 
-// De piep functie, met piep(10) kanl je 10xbeep(50), scheelt weer SLOCs!
-void piep(int count){
+void muziek(int noten[], int tijden[]) {
+  // Invoer van twee arrays: de noten en de tijden per noot
+  // Voorbeeld: muziek(rockyNoten,rockyTijdPerNoot)
+  int size = sizeof(tijden) / sizeof(int);
+
+  for (int dezeNoot = 0; dezeNoot < size; dezeNoot++) {
+    // bereken de toonduur, neem een seconde gedeelt door noot type.
+    // toonduurs: kwart noot= 1000 / 4, achtste note = 1000/8, enz
+    int nootDuur = 1000 /tijden[dezeNoot];     // hier wordt de tijd van de noot berekend, in ms
+    tone(bzzr, noten[dezeNoot], nootDuur);
+
+    // om de onafhankelijke noten goed te horen moet er een korte pauze tussen zitten.
+    int pauzeTussenNoten = nootDuur * 1.30;   // Hier heb ik de tijd van de noot  + 30% genomen, dat werkt:
+    delay(pauzeTussenNoten);
+    noTone(bzzr);                             // stop de tune:
+  }
+}
+
+void tik(unsigned char delayms){
+  // Tik geven via de piezo buzzer, deze is in te stellen; tik(10) geeft 10 ms delay
+  analogWrite(8, 250);     // schrijf naar pin 8, volume: gebruik waarden tussen 0-255,
+  delay(delayms);          // wacht voor een delay in ms
+  analogWrite(8, 0);       // 0 zet het uit
+  delay(delayms);          // wacht voor een delay in ms
+}
+void tikken(int count){
+  // Herhalen van tik, tikkerdetik
     while ( count-- )
     {
-      beep(50);
+      tik(20);             // 20 ms is nu de duur van de tik die gegeven wordt, zie functie tik
     }
-  }
+}
+
+
+void elcede(int regel, int spatie, String a, int b){
+  // funtie voor de invoer van output naar LCD
+  lcd.setCursor(regel, spatie);
+  lcd.print(a);
+  lcd.print(b);
+}
+
+
+void elcedeboot(String a, String b){
+  // De elcede functie, input is bovenste en onderste regel.
+  lcd.setCursor(0, 0);     // Bovenste regel
+  lcd.print(a);
+  lcd.setCursor(0, 1);     // Onderste regel
+  lcd.print(b);
+  delay(500);              // De delay van de loop in milliseconden.
+  tik(10);                 // Een enkele korte tik (10 is in ms)
+}
+
 
 void setup() {
   Serial.begin(9600);      // Zet serial communicatie op 9600 baud:
-  maximumA=0;              // Zet het maximum op 0, dit kan alleen maar oplopen :-)
-  maximumB=0;              // Zet het maximum op 0, dit kan alleen maar oplopen :-)
+  maximum0=0;              // Zet het maximum op 0
+  maximum1=0;              // Zet het maximum op 0
 
   // LCD instellingen
   lcd.begin(16, 2);         // Stelt in dat de LCD een 16x2 type is
@@ -99,114 +172,65 @@ void setup() {
   digitalWrite(contra, LOW);// Geeft geen power aan contrast pin. Nu zie je woorden. Best handig.
   analogWrite(bri, 255);    // Geeft volledige power aan screen brightness LED (255)
 
-  // Stukje amusement op de LCD met beeping, alsof deze retesnelle code een
-  // significante boot tijd heeft
-  // Note: de onderstaande code kan efficienter via een functie, nog uitwerken.
-  beep(50);
-  lcd.setCursor(0, 0);            // Bovenste regel
-  lcd.print("**PowerStrike**");
-  lcd.setCursor(0, 1);            // Onderste regel
-  lcd.print("Booting in ");
-  delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
-  beep(50);
-  lcd.setCursor(0, 1);            // Onderste regel
-  lcd.print("Booting in 3");
-  delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
-  beep(50);
-  lcd.setCursor(0, 1);            // Onderste regel
-  lcd.print("Booting in 2");
-  delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
-  beep(50);
-  lcd.setCursor(0, 1);            // Onderste regel
-  lcd.print("Booting in 1");
-  delay(500); // De delay van de loop wordt ingesteld, in milliseconden.
-  beep(50);
-  lcd.clear(); // Clear LCD anders krijg je trailing rommel
-  lcd.setCursor(0, 0);            // Bovenste regel
-  lcd.print("  Tijd om te");
-  lcd.setCursor(0, 1);            // Onderste regel
-  lcd.print("!!!!!RAMMEN!!!!!");
-  piep(20); // pieperdepiep, 20 keer beep
-  delay(1000); // De delay van de loop wordt ingesteld, in milliseconden.
-  lcd.clear(); // Clear LCD anders krijg je trailing rommel
+//FIXME: de tunes draaien niet meer!!!!
+//       wat is er aan de hand met de code?
+//       vreemd
+  muziek(jingleNoten,jingleTijdPerNoot);
+//muziek(rockyNoten,rockyTijdPerNoot);
+
+  // Stukje amusement op de LCD met beeping
+  // Alsof deze retesnelle code een significante boot tijd heeft
+  elcedeboot("**PowerStrike**", "Booting in ");   // Run de elcedeboot functie met deze text
+  elcedeboot("**PowerStrike**", "Booting in 3");  // Run de elcedeboot functie met deze text
+  elcedeboot("**PowerStrike**", "Booting in 2");  // Run de elcedeboot functie met deze text
+  elcedeboot("**PowerStrike**", "Booting in 1");  // Run de elcedeboot functie met deze text
+  lcd.clear();                                    // Clear LCD anders krijg je trailing rommel
+  elcedeboot("  Tijd om te", "!!!!!RAMMEN!!!!!"); // Run de elcedeboot functie met deze text
+  tikken(10);                                     // Tikken met de Piezo buzzer
+  lcd.clear();                                    // Clear LCD anders krijg je trailing rommel
 }
 
-void loop() {
-  lcd.clear(); // Clear LCD anders krijg je trailing nummers (alternatief: padding programmeren)
 
-  PowerStrikereadingA = analogRead(PowerStrikepinA); // Lees PowerStrike pin en save als variabele
-  PowerStrikereadingB = analogRead(PowerStrikepinB); // Lees PowerStrike pin en save als variabele
+void loop() {
+  lcd.clear(); // Clear LCD anders krijg je trailing rommel
+               // TODO: padding programmeren, dat is beter dan dit lcd geflits...
+
+  PowerStrikereading0 = analogRead(PowerStrikepin0); // Lees PowerStrike pin en save als variabele
+  PowerStrikereading1 = analogRead(PowerStrikepin1); // Lees PowerStrike pin en save als variabele
 
   //set maxima als deze gevonden worden
-  if (PowerStrikereadingA > maximumA) {
-    maximumA=PowerStrikereadingA;     // Maximum gevonden dus overschrijven
-    beep(200);
-    buzzer();
+  if (PowerStrikereading0 > maximum0) {
+    maximum0=PowerStrikereading0;     // Maximum gevonden dus overschrijven
+    muziek(rockyNoten,rockyTijdPerNoot);
   }
-  if (PowerStrikereadingB > maximumB) {
-    maximumB=PowerStrikereadingB;     // Maximum gevonden dus overschrijven
-    beep(200);
+  if (PowerStrikereading1 > maximum1) {
+    maximum1=PowerStrikereading1;     // Maximum gevonden dus overschrijven
+    tik(200);
   }
 
   // Print naar LCD
   // Live waarde in de bovenste regel, onderste regel geeft de maxima
-    lcd.setCursor(0, 0);            // Bovenste regel
-    lcd.print("L1:");
-    lcd.print(PowerStrikereadingA); // 'Live' output
-    lcd.setCursor(9, 0);            // Bovenste regel, rechts
-    lcd.print("L2:");
-    lcd.print(PowerStrikereadingB); // 'Live' output
-    lcd.setCursor(0, 1);            // Onderste regel
-    lcd.print("M1:");
-    lcd.print(maximumA);            // Maximum output
-    lcd.setCursor(9, 1);            // Bovenste regel, rechts
-    lcd.print("M2:");
-    lcd.print(maximumB);            // Maximum output
+    elcede(0,0,"L0:",PowerStrikereading0);
+    elcede(9,0,"L2:",PowerStrikereading1);
+    elcede(0,1,"M0:",maximum0);
+    elcede(9,1,"M1:",maximum1);
 
-   // Print output ook naar de serial monitor.
+  // Print output ook naar de serial monitor.
   Serial.print("LIVE = ");             // Aangeven dat dit de 'Live' waarden zijn
-  Serial.print(PowerStrikereadingA);   // 'Live' A waarde
+  Serial.print(PowerStrikereading0);   // 'Live' A waarde
   Serial.print(", ");                  // spacer
-  Serial.print(PowerStrikereadingB);   // 'Live' B waarde
+  Serial.print(PowerStrikereading1);   // 'Live' B waarde
   Serial.print("   MAX = ");           // Aangeven dat dit de Max waarden zijn
-  Serial.print(maximumA);              // Maximum van A
+  Serial.print(maximum0);              // Maximum van A
   Serial.print(", ");                  // spacer
-  Serial.println(maximumB);            // Maximum van B
-
-  delay(500); // De delay van deze loop wordt ingesteld, in milliseconden.
+  Serial.println(maximum1);            // Maximum van B
+  delay(500); // De delay van deze loop, in ms.
 }
-
-void buzzer() {
-  // itereerd over de noten van de melody:
-  int size = sizeof(noteDurations) / sizeof(int);
-
-  for (int thisNote = 0; thisNote < size; thisNote++) {
-    // bereken de toonduur, neem een seconde gedeelt door noot type.
-    // toonduurs: kwart noot= 1000 / 4, achtste note = 1000/8, enz
-    int noteDuration = 1000 / noteDurations[thisNote];
-    tone(BUZZER_PIN, melody[thisNote], noteDuration);
-
-    // om de onafhankelijke noten goed te horen moet er een korte pauze tussen zitten.
-    // Hier heb ik de tijd van de noot  + 30% genomen, dat werkt:
-    int pauseBetweenNotes = noteDuration * 1.30;
-    delay(pauseBetweenNotes);
-    // stop de tune:
-    noTone(BUZZER_PIN);
-  }
-}
-
-void beep(unsigned char delayms){
-  analogWrite(8, 250);     // schrijf naar pin 8, volume: gebruik waarden tussen 0-255,
-  delay(delayms);          // wacht voor een delay in ms
-  analogWrite(8, 0);       // 0 zet het uit
-  delay(delayms);          // wacht voor een delay in ms
-}
-
-
+    
 #+end_src
 
 
-  
+De onderstaande code is ter referentie. Als we de tune willen aanpassen met andere noten dan weten we de frequenties te vinden voor de piezo buzzer.
 #+begin_src C :tangle ~/Arduino/PowerStrike/pitches.h
 /*************************************************
    Public Constants
@@ -214,7 +238,7 @@ void beep(unsigned char delayms){
 
 #define NOTE_B0  31
 #define NOTE_C1  33
-#define NOTE_CS1 35
+#define NOTE_S1 35
 #define NOTE_D1  37
 #define NOTE_DS1 39
 #define NOTE_E1  41
@@ -272,7 +296,7 @@ void beep(unsigned char delayms){
 #define NOTE_GS5 831
 #define NOTE_A5  880
 #define NOTE_AS5 932
-#define NOTE_B5  988
+#define NOTE_  988
 #define NOTE_C6  1047
 #define NOTE_CS6 1109
 #define NOTE_D6  1175
