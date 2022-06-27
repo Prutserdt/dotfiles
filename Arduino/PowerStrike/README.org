@@ -32,6 +32,7 @@ Onze TODO lijst [4/10]
 4. LCD scherm (16*2)
 5. 2* 1 Mega-ohm weerstand
 6. Piezo buzzer
+7. Micro switch
 
 * Opbouw van het prototype
 
@@ -40,7 +41,7 @@ Het systeem is op deze manier opgebouwd.
 #+ATTR_HTML: :width 300px
 [[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/picture.jpg]]
 
-Schematische ziet dat er zo uit (excuses voor de slechte uitlijning):
+Schematische ziet dat er zo uit (crappy plaatje):
 #+CAPTION: scheme
 #+ATTR_HTML: :width 300px
 [[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/scheme.jpg]]
@@ -52,9 +53,6 @@ Opmerking: waarschijnlijk moeten er capacitors gebruikt worden want er is nu een
 Versie 0.07 is uit!
 
 #+begin_src C :tangle ~/Arduino/PowerStrike/PowerStrike.ino
-
-
-
 
 /* PowerStrike v0.07.
  * Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
@@ -228,7 +226,7 @@ void loop() {
   PowerStrikereading1 = analogRead(PowerStrikepin1); // Lees PowerStrike pin en save als variabele
 
 
-//FIXME: onderstaande IF blocks is spaghetti code, dit kan beter en in minder SLOCs.
+//FIXME: onderstaande IF blocks zijn spaghetti code, dit kan beter en in minder SLOCs.
 if (PowerStrikereading0+PowerStrikereading1  < 301){ // Deze lage waarden zijn geen maximum waardig
     elcede(0,0,"L0:",PowerStrikereading0);
     elcede(9,0,"L2:",PowerStrikereading1);

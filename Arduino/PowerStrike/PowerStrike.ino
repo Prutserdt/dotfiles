@@ -1,8 +1,5 @@
 int main() {
 
-
-
-
 /* PowerStrike v0.07.
  * Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
  * plus was beeps en Rocky tune via de piezo buzzer.*/
@@ -175,7 +172,7 @@ void loop() {
   PowerStrikereading1 = analogRead(PowerStrikepin1); // Lees PowerStrike pin en save als variabele
 
 
-//FIXME: onderstaande IF blocks is spaghetti code, dit kan beter en in minder SLOCs.
+//FIXME: onderstaande IF blocks zijn spaghetti code, dit kan beter en in minder SLOCs.
 if (PowerStrikereading0+PowerStrikereading1  < 301){ // Deze lage waarden zijn geen maximum waardig
     elcede(0,0,"L0:",PowerStrikereading0);
     elcede(9,0,"L2:",PowerStrikereading1);
