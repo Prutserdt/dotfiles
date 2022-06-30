@@ -11,7 +11,7 @@
 * PowerStrike
 We zijn bezig met het ontwikkelen van een prototype mma glove met ingebouwede druksensoren.
 
-Onze TODO lijst [4/16]
+Onze TODO lijst [4/15]
  - [X] Live meten van een klap dmv een druksensor.
  - [X] Meten van meerdere druksensoren naast elkaar.
  - [X] Maak een retro boot screen op de LCD.
