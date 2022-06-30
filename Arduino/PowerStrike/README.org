@@ -14,14 +14,16 @@ We zijn bezig met het ontwikkelen van een prototype mma glove met ingebouwede dr
 Onze TODO lijst [4/12]
  - [X] Live meten van een klap dmv een druksensor.
  - [X] Meten van meerdere druksensoren naast elkaar.
- - [X] Speel een tune en geef retro boot screen.
- - [X] Maximum geslagen: geef een piep (hoe harder hoe hoger de toon).
+ - [X] Maak een retro boot screen op de LCD.
+ - [X] Voeg geluid en tunes toe. Piep als er een maximum is geslagen (hoe harder hoe hoger de toon).
  - [ ] Inbouwen van wifi module, voor het draadloos uitlezen mobieltje/desktop.
  - [ ] Start van het miniaturiseren van hardware: Arduino nano. Nog steeds volumineus.
- - [ ] Inbouwen van een druksensor in een mma handschoen.
- - [ ] Uitfigulieren hoe we bedrading gaan doen?
- - [ ] Testsen van de handschoen in de dojo.
- - [ ] Uitvoerig de robuustheid testen in de dojo
+ - [ ] Uitfigulieren hoe we de bedrading gaan doen. Via geleidende draden?
+ - [ ] Inbouwen van een enkele druksensor in een enkele mma handschoen.
+ - [ ] Testen van de handschoen in de dojo met deze enkele sensor.
+ - [ ] Design verbeteren en een enkele sensor in beide handschoenen inbouwen.
+ - [ ] Programmeer een tabata workout voor link/rechts storen met een bepaalde minimum kracht en geef feedback via de piezo buzzer.
+ - [ ] Uitvoerig de robuustheid testen in de dojo.
  - [ ] Meerdere sensoren in een mma handschoen inbouwen en testen. Feedback inbouwen?
  - [ ] Uitfigulieren hoe we communicatie gaan doen vanuit de handschoen?
  - [ ] Miniaturiseren van hardware. Processor verkleinen en pcb bouwen?
