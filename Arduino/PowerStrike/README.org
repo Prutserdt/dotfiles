@@ -11,17 +11,22 @@
 * PowerStrike
 We zijn bezig met het ontwikkelen van een prototype mma glove met ingebouwede druksensoren.
 
-Onze TODO lijst [4/10]
+Onze TODO lijst [4/12]
  - [X] Live meten van een klap dmv een druksensor.
  - [X] Meten van meerdere druksensoren naast elkaar.
  - [X] Speel een tune en geef retro boot screen.
  - [X] Maximum geslagen: geef een piep (hoe harder hoe hoger de toon).
+ - [ ] Inbouwen van wifi module, voor het draadloos uitlezen mobieltje/desktop.
+ - [ ] Start van het miniaturiseren van hardware: Arduino nano. Nog steeds volumineus.
  - [ ] Inbouwen van een druksensor in een mma handschoen.
+ - [ ] Uitfigulieren hoe we bedrading gaan doen?
  - [ ] Testsen van de handschoen in de dojo.
  - [ ] Uitvoerig de robuustheid testen in de dojo
- - [ ] Meerdere sensoren in een mma handschoen inbouwen en testen.
+ - [ ] Meerdere sensoren in een mma handschoen inbouwen en testen. Feedback inbouwen?
  - [ ] Uitfigulieren hoe we communicatie gaan doen vanuit de handschoen?
- - [ ] Miniaturiseren van hardware.
+ - [ ] Miniaturiseren van hardware. Processor verkleinen en pcb bouwen?
+ - [ ] Software optimaliseren (libraries slopen enz.)
+
 
 
 * Onderdelen lijst
@@ -30,7 +35,7 @@ Onze TODO lijst [4/10]
 2. Breadboard
 3. 2* FSR 50 kg
 4. LCD scherm (16*2)
-5. 2* 1 Mega-ohm weerstand
+5. 2* 1 Mega-ohm weerstand en een 10 K-ohm weerstand.
 6. Piezo buzzer
 7. Micro switch
 
