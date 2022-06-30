@@ -326,20 +326,28 @@ modify .xinitrc:
 
 ~for file in NL17RABO0304804207-EUR-2021-06.pdf; do pdftotext -layout "$file";done~
 
-*** Converteren van pdf naar een tekstfile en verwijderen van bagger en
-veranderen van komma naar punt. 
-Vier stappen: 
+*** Converteren van pdf naar een tekstfile en verwijderen van bagger en veranderen van komma naar punt. (viral clearance data pdf conversion to usefull text)
+Vijf stappen:
 1: Via command line utililty poppler (pdftotext)
 2: maak subdir, verplaats txt files en ga naar subdir
 3: Alleen de regels 'br' (afkorting voor bar) wegschrijven.
 4: Verwijder overtollige spaties (meer dan 1)
 5: Verander komma's naar punten
+In a single commandline:
+#+begin_src bash
+for file in *.pdf; do pdftotext -layout "$file"; done;
+mkdir test && mv *.txt test && cd test;
+for file in *; do grep br "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done;
+for file in *; do cat "$file"| tr -s ' ' > "$file"_tmp && mv "$file"_tmp "$file"; done;
+for file in *; do sed 's/,/./g' "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done;
+#+end_src
+Als iets misgaat kun je line by line proberen:
 ~for file in *.pdf; do pdftotext -layout "$file"; done~
 ~mkdir test && mv *.txt test && cd test~
 ~for file in *; do grep br "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done~
 ~for file in *; do cat "$file"| tr -s ' ' > "$file"_tmp && mv "$file"_tmp "$file"; done~
 ~for file in *; do sed 's/,/./g' "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done~
-~sed 's/,/./g' '~
+
 
 *** Removing of password of pdf. Met package xpdf.
 Verwijder wachtwoord uit een pdf en save de pdf onder een andere naam:
