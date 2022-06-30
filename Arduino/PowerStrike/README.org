@@ -11,7 +11,7 @@
 * PowerStrike
 We zijn bezig met het ontwikkelen van een prototype mma glove met ingebouwede druksensoren.
 
-Onze TODO lijst [4/12]
+Onze TODO lijst [4/16]
  - [X] Live meten van een klap dmv een druksensor.
  - [X] Meten van meerdere druksensoren naast elkaar.
  - [X] Maak een retro boot screen op de LCD.
@@ -24,8 +24,7 @@ Onze TODO lijst [4/12]
  - [ ] Design verbeteren en een enkele sensor in beide handschoenen inbouwen.
  - [ ] Programmeer een tabata workout voor link/rechts storen met een bepaalde minimum kracht en geef feedback via de piezo buzzer.
  - [ ] Uitvoerig de robuustheid testen in de dojo.
- - [ ] Meerdere sensoren in een mma handschoen inbouwen en testen. Feedback inbouwen?
- - [ ] Uitfigulieren hoe we communicatie gaan doen vanuit de handschoen?
+ - [ ] Meerdere sensoren in een mma handschoen inbouwen en testen. Vibratie feedback inbouwen?
  - [ ] Miniaturiseren van hardware. Processor verkleinen en pcb bouwen?
  - [ ] Software optimaliseren (libraries slopen enz.)
 
