@@ -3,12 +3,12 @@
 #+AUTHOR: Prutserdt
 
 #+begin_example
-          _     _                    _        _      _
-         | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____ 
-         | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
-         | |___| | | | | |_| ||  |  | |_| |  | | (__|   <\__ \
-         |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
-                                          Created by Prutserdt
+  _     _                    _        _      _
+ | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____
+ | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
+ | |___| | | | | |_| ||  |  | |_| |  | | (__|   <\__ \
+ |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
+                                  Created by Prutserdt
 #+end_example
 
 * Table of content :toc:
@@ -1654,7 +1654,7 @@ Voorbeelden
 |-------+-------------------------------------------|
 | 4w    | 4 woorden verder                          |
 | 6k    | 6 regels omhoog                           |
-| d2w   | delete t next two words                 |
+| d2w   | delete t next two words                   |
 | ciw   | change inner word                         |
 | ysiw" | Onduidelijk wat ik hiermee kan doen ... ? |
 |-------+-------------------------------------------|
@@ -2437,6 +2437,10 @@ HIER GEBLEVEN
 https://dronebotworkshop.com/esp32-cam-intro/
 Mijn CameraWebServer_06FEB21 heb ik bewaard
 
+Verder gegaan 01JUL22 om te kijken of ik de druksensoren hier op kan aansluiten.
+libraries
+
+
 *** ESP32 CAM, alleen voor installatie
 Hieronder staan de stappen die ik heb genomen om ESP32 aan de gang te krijgen.
 De volgende packages geinstalleerd:
@@ -2675,6 +2679,51 @@ Ik heb de tabel uitgebreid met bovenstaande stappen. Scheidingspaneel is gewoon 
 | Emacs  | Dit is geen editor   |                                  |
 |--------+----------------------+----------------------------------|
 
+***** Optellen van waarden in kolommen in org-mode tabel
+
+Optellen van waarden in een kolom met vsum. Zet dit onderaan de tabel met #+TBLFM. Ga in de onderstaande rij van de tabel staan en run org-table-field-info via ~C-c~ ~?~ ~RET~.
+
+#+NAME: dagtabel
+|---------+----+----+----+----+----+----+----+----+----+----|
+| Persoon | 04 | 05 | 06 | 07 | 08 | 11 | 12 | 13 | 14 | 15 |
+|         | di | wo | do | vr | za | di | wo | do | vr | za |
+|---------+----+----+----+----+----+----+----+----+----+----|
+| Frank   |  1 |  1 |  1 | -1 | -1 |  1 |  1 |  1 | -1 | -1 |
+| Rene    |  1 |  1 | -1 |  1 |  1 |  1 |  1 | -1 |  1 |  1 |
+| Rolf    |  1 |  1 |  1 |  1 | -1 |  1 |  1 |  1 |  1 | -1 |
+| Raymond |  1 |  1 |  1 |  1 |  1 |  1 | -1 |  1 |  1 |  1 |
+| Arjanne |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |
+| Walter  | -1 |  0 | -1 |  0 | -1 | -1 |  0 | -1 |  0 | -1 |
+| Zjak    |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  1 |  0 |  0 |
+| Gert-J  |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Bertus  |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Rens    |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Jan     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Henar   |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Pascal  |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Jordy   |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+|---------+----+----+----+----+----+----+----+----+----+----|
+|         |  4 |  5 |  3 |  3 |  0 |  4 |  3 |  3 |  3 |  0 |
+|---------+----+----+----+----+----+----+----+----+----+----|
+#+TBLFM: @>$2..@>$11=vsum(@3$0..@-1$0)
+
+***** Berekeningen in code block met een org table als input
+
+#+begin_src python :var tbl=dagtabel :results output :colnames no
+# Vinden van de meest populaire dag in de tabel 'dagtabel'
+ondersteRegelList=(tbl[16])        # De onderste regel van de list kiezen
+ondersteRegelList.pop(0)           # Verwijder eerste waarde via pop
+max_value = max(ondersteRegelList) # Maximum zoeken
+maxpos = ondersteRegelList.index(max(ondersteRegelList)) # Maximum positie zoeken
+#print('Maximum value of list:', ondersteRegelList, "is", max_value, 'at position: ', maxpos)
+dagnummer=(tbl[0])                 #Bovenste regel van tabel, met dag nummer
+dagtext=(tbl[1])                   # Tweede regel van tabel, met dag afkorting
+print('De meest populaire datum is', dagtext[maxpos+1], dagnummer[maxpos+1],"oktober met", max_value,"punten.")
+#+end_src
+
+#+RESULTS:
+: De meest populaire datum is wo 5 oktober met 5 punten.
+
 **** Checkboxes in Org-mode
 In een lijst kunnen checkboxes worden gebruikt. Let op, het moet wel een lijst zijn.
 Dus eerst een lijst aanmaken, bijvoorbeeld:
@@ -2717,7 +2766,6 @@ M-x python-shell-send-region
 
 init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
 Daarna doomsync uitgevoerd
-
 
 *** IRC, inspircd
 Install by ~yay inspircd~

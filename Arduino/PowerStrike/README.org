@@ -2,13 +2,22 @@
 #+startup: inlineimages
 
 * Inhoudsopgave:toc:
-- [[#powerstrike][PowerStrike]]
-- [[#onderdelen-lijst][Onderdelen lijst]]
-- [[#opbouw-van-het-prototype][Opbouw van het prototype]]
-- [[#powerstrikeino-software][PowerStrike.ino software]]
+- [[#het-powerstrike-project][Het PowerStrike project]]
+- [[#powerstrike-op-de-arduino-uno][PowerStrike op de Arduino Uno]]
+  - [[#onderdelen-lijst][Onderdelen lijst]]
+  - [[#opbouw-van-het-prototype][Opbouw van het prototype]]
+  - [[#software][Software]]
+- [[#powerstrike-op-het-esp32-development-board][PowerStrike op het ESP32 development board]]
+  - [[#onderdelen-lijst-1][Onderdelen lijst]]
+  - [[#opbouw-van-het-prototype-1][Opbouw van het prototype]]
+  - [[#software-1][Software]]
+- [[#powerstrike-op-de-arduino-nano][PowerStrike op de Arduino Nano]]
+  - [[#onderdelen-lijst-2][Onderdelen lijst]]
+  - [[#opbouw-van-het-prototype-2][Opbouw van het prototype]]
+  - [[#software-2][Software]]
 - [[#vorige-software-versies][Vorige software versies]]
 
-* PowerStrike
+* Het PowerStrike project
 We zijn bezig met het ontwikkelen van een prototype mma glove met ingebouwede druksensoren.
 
 Onze TODO lijst [4/15]
@@ -30,7 +39,10 @@ Onze TODO lijst [4/15]
 
 
 
-* Onderdelen lijst
+
+* PowerStrike op de Arduino Uno
+
+** Onderdelen lijst
 
 1. Arduino Uno R3
 2. Breadboard
@@ -40,7 +52,7 @@ Onze TODO lijst [4/15]
 6. Piezo buzzer
 7. Micro switch
 
-* Opbouw van het prototype
+** Opbouw van het prototype
 
 Het systeem is op deze manier opgebouwd.
 #+CAPTION: picture
@@ -54,15 +66,15 @@ Schematische ziet dat er zo uit (crappy plaatje):
 
 Opmerking: waarschijnlijk moeten er capacitors gebruikt worden want er is nu een probleem. Als een FSR wordt ingedrukt dan is er ook een signaal in de andere FSR, dit moet nog opgelost worden. Ook valt de LCD even uit als de piezo buzzer gebruikt wordt (bij maximum druk), dit is hetzelfde probleem, waarschijnlijk op te lossen met een capacitor.
 
-* PowerStrike.ino software
-
-Versie 0.08 is uit!
+** Software
+Twee FSR druk sensoren worden gebruikt en het maximum wordt bewaard. De output gaat naar een LCD scherm en ook naar de seriele poort. Verder is een Piezo buzzer aangesloten voor geluid en is er een schakelaar die het maximum op nul zet.
 
 #+begin_src C :tangle ~/Arduino/PowerStrike/PowerStrike.ino
 
-/* PowerStrike v0.08.
+/* PowerStrike v0.09
  * Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
  * plus was beeps en tunes via de piezo buzzer.*/
+
 
 #include <LiquidCrystal.h> //Importeer de LCD library
 
@@ -155,6 +167,15 @@ void muziek(int noten[], int tijden[], int grootte) {
   }
 }
 
+void jingle(){
+  // Jingle all the way plus tikken
+  tikken(2);                                     // Tikken met de Piezo buzzer
+  tikken(2);
+  muziek(jingleNoten, jingleTijdPerNoot, sizeOfJingle);// Jingle all the way
+  tikken(2);
+  tikken(2);
+}
+
 
 void tikken(int count){
   // Enkele of meerdere tikken, tikkerdetik
@@ -207,6 +228,7 @@ void setup() {
   digitalWrite(contra, LOW);// Geeft geen power aan contrast pin. Nu zie je woorden. Best handig
   analogWrite(bri, 255);    // Geeft volledige power aan screen brightness LED (255)
 
+
   // Stukje amusement
   muziek(rockyNoten,rockyTijdPerNoot, sizeOfRocky);// Rocky tune :-)
   // Boot screen: alsof deze retesnelle code een significante boot tijd heeft
@@ -216,7 +238,7 @@ void setup() {
   elcedeBoot("**PowerStrike**", "Booting in 1");
   lcd.clear();                                    // Clear LCD anders krijg je trailing rommel
   elcedeBoot("  Tijd om te", "!!!!!RAMMEN!!!!!"); // Run de elcedeBoot functie met deze text
-  tikken(10);                                     // Tikken met de Piezo buzzer
+  jingle();
   lcd.clear();                                    // Clear LCD anders krijg je trailing rommel
 }
 
@@ -253,7 +275,8 @@ if (PowerStrikereading0+PowerStrikereading1  < 301){ // Deze lage waarden zijn g
   if (PowerStrikereading1 > maximum1) {
     maximum1 = PowerStrikereading1;                // Maximum gevonden dus overschrijven
     delay(200);                                    // Pauze, zodat je de piep van  bovenstaande functie eerst hoort
-    tone(bzzr, 50 + 150 * log(maximum1), 1000 / 8);// Hoe hoger het maximum hoe hoger de toon, log functie
+    //tone(bzzr, 50 + 150 * log(maximum1), 1000 / 8); // Hoe hoger het maximum hoe hoger de toon, log functie
+    tone(bzzr, 50 + 150 * log(maximum0), 1000 / 8);// Hoe hoger het maximum hoe hoger de toon, log functie
     int huldeNummer = (rand() % huldeAantal);      // maakt random nummer die we gaan gebruiken voor text
     String huldeStr = (hulde[huldeNummer]);        // kies de random hulde
     lcd.clear();                                   // Clear LCD anders krijg je trailing rommel
@@ -273,24 +296,19 @@ if (PowerStrikereading0+PowerStrikereading1  < 301){ // Deze lage waarden zijn g
   Serial.println(maximum1);            // Maximum van sensor1
   delay(500); // De delay van deze loop, in ms
 
-  // Schakelaare om de maxima op nul te zetten, handig voor testen
-  // FIXME: onderstaande spaghetti code nog opschonen
+  // Schakelaar om de maxima op nul te zetten, handig voor testen
   if(digitalRead(schklr) == HIGH){
     maximum0 = maximum1 = 0;
     lcd.clear();                                         // Clear LCD anders krijg je trailing rommel
     elcedeBoot("  Resetten van", "  alle maxima!");      // Geef deze tekst weer in LCD
-    tikken(2);
-    tikken(2);
-    muziek(jingleNoten, jingleTijdPerNoot, sizeOfJingle);// Jingle all the way
- //   delay(20);
-    tikken(2);
-    tikken(2);
+    jingle();
     lcd.clear();
   }
 
+}}
+  if (Power
 }
 #+end_src
-
 
 
 De onderstaande code is ter referentie. Als we de tune willen aanpassen met andere noten dan weten we de frequenties te vinden voor de piezo buzzer.
@@ -391,7 +409,138 @@ De onderstaande code is ter referentie. Als we de tune willen aanpassen met ande
 
 #+end_src
 
+
+* PowerStrike op het ESP32 development board
+
+** Onderdelen lijst
+
+1. ESP32-cam
+2. Breadboard
+3. 2* FSR 50 kg
+
+** Opbouw van het prototype
+
+in ontwikkeling....
+
+** Software
+
+Helaas heb ik het ESP board opgeblazen door 3V en 5V jumper verkeerd aan te sluiten. Een nieuw ESP development board is besteld en de onderstaande code wordt nog aangepast
+
+#+begin_src C
+
+/* PowerStrike v0.09
+/*
+  ESP32 WiFi Signal Test
+  esp32-wifi-signal-test.ino
+  Tests WiFi signal strength
+  *Requires WiFi SSID and Password
+
+  DroneBot Workshop 2020
+  https://dronebotworkshop.com
+  board: AI-thinker ESP32 cam
+
+
+*/
+
+// Include WiFi library
+#include "WiFi.h"
+
+// SSID and Password - modify for your WiFi network
+const char* ssid     = "******";
+const char* passw:ord = "******";
+
+void setup(){
+  // Setup serial monitor
+  Serial.begin(115200);
+  // Start WiFi and conect to network
+  WiFi.begin(ssid, password);
+  // Wait while connection established
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print("-");
+  }
+  // WiFi is connected
+  Serial.println("");
+  Serial.print("Connected to network ");
+  Serial.println(ssid);
+  delay(100);
+}
+
+void loop(){
+  Serial.print(ssid);
+  Serial.print(" Signal Level: ");
+  Serial.println(WiFi.RSSI());
+  delay(2000);
+}
+
+
+#+end_src
+
+* PowerStrike op de Arduino Nano
+
+** Onderdelen lijst
+
+1. Arduino Nano v3
+2. Breadboard
+3. FSR 50 kg
+
+** Opbouw van het prototype
+
+Het systeem is op deze manier opgebouwd.
+#+CAPTION: picture
+#+ATTR_HTML: :width 300px
+[[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/picture_nano.jpg]]
+
+
+** Software
+
+De Nano gebruiken we met de eenvoudigste setup met minimale code en een enkele druksensor.
+TODO: toevoegen van wifi.
+
+#+begin_src C
+/* PowerStrike voor Arduino Nano v0.01.
+ * Enkele FSR druk sensoren met live output. Keep it simple.*/
+
+// Definieer de constanten
+#define schklr 5           // Arduino pin voor de schakelaar
+#define PowerStrikepin0 A0 // Arduino pin voor druksensor 0
+
+// Definieer de variabelen
+int PowerStrikereading0;   // Variabele voor uitlezen druksensor op pin 0
+int maximum0;              // Variabele die de maximale kracht bijhoud
+
+void setup() {
+  Serial.begin(9600);       // Zet serial communicatie op 9600 baud
+  maximum0 = 0;  // Zet het maximum op 0
+  pinMode(schklr, INPUT);   // Schakelaartje
+}
+
+void loop() {
+  PowerStrikereading0 = analogRead(PowerStrikepin0); // Lees PowerStrike pin en save als variabele
+
+  if (PowerStrikereading0 > maximum0) {
+    maximum0 = PowerStrikereading0;
+  }
+  // Print output naar de serial monitor.
+  Serial.print(PowerStrikereading0);   // 'Live' sensor0 waarde
+  Serial.print(" ");                  // spacer
+  Serial.print(" max ");           // Aangeven dat dit de Max waarden zijn
+  Serial.println(maximum0);              // Maximum van sensor0
+  delay(500); // De delay van deze loop, in ms
+
+  // Schakelaar om de maxima op nul te zetten, handig voor testen
+  if(digitalRead(schklr) == HIGH){
+    maximum0 = 0;
+  }
+
+}
+#+end_src
+
+
+
 * Vorige software versies
+
+Onderstaande is een extra backup van code omdat de Arduino de code automatisch overschrijft.
 
 #+begin_src C
 
@@ -488,8 +637,6 @@ void buzzer() {
     noTone(bzzr);
   }
 }
-
-
 
 
 void tik(unsigned char delayms){
@@ -1162,7 +1309,7 @@ void muziek(int noten[], int tijden[], int grootte) {
     // bereken de toonduur, neem een seconde gedeelt door noot type.
     // toonduurs: kwart noot= 1000 / 4, achtste note = 1000/8, enz
     int nootDuur = 1000 /tijden[dezeNoot];     // hier wordt de tijd van de noot berekend, in ms
-    tone(bzzr, noten[dezeNoot], nootDuur);
+    tone(bzzr, noten[dezeoot], nootDuur);
 
     // om de onafhankelijke noten goed te horen moet er een korte pauze tussen zitten.
     int pauzeTussenNoten = nootDuur * 1.30;   // Hier heb ik de tijd van de noot  + 30% genomen, dat werkt:

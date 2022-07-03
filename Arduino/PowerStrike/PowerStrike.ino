@@ -1,6 +1,4 @@
-int main() {
-
-/* PowerStrike v0.08.
+/* PowerStrike v0.09.
  * Twee FSR druk sensoren met live output op een LCD scherm en naar de serial monitor
  * plus was beeps en tunes via de piezo buzzer.*/
 
@@ -95,6 +93,15 @@ void muziek(int noten[], int tijden[], int grootte) {
   }
 }
 
+void jingle(){
+  // Jingle all the way plus tikken
+  tikken(2);                                     // Tikken met de Piezo buzzer
+  tikken(2);
+  muziek(jingleNoten, jingleTijdPerNoot, sizeOfJingle);// Jingle all the way
+  tikken(2);
+  tikken(2);
+}
+
 
 void tikken(int count){
   // Enkele of meerdere tikken, tikkerdetik
@@ -147,6 +154,7 @@ void setup() {
   digitalWrite(contra, LOW);// Geeft geen power aan contrast pin. Nu zie je woorden. Best handig
   analogWrite(bri, 255);    // Geeft volledige power aan screen brightness LED (255)
 
+
   // Stukje amusement
   muziek(rockyNoten,rockyTijdPerNoot, sizeOfRocky);// Rocky tune :-)
   // Boot screen: alsof deze retesnelle code een significante boot tijd heeft
@@ -156,7 +164,7 @@ void setup() {
   elcedeBoot("**PowerStrike**", "Booting in 1");
   lcd.clear();                                    // Clear LCD anders krijg je trailing rommel
   elcedeBoot("  Tijd om te", "!!!!!RAMMEN!!!!!"); // Run de elcedeBoot functie met deze text
-  tikken(10);                                     // Tikken met de Piezo buzzer
+  jingle();
   lcd.clear();                                    // Clear LCD anders krijg je trailing rommel
 }
 
@@ -193,7 +201,8 @@ if (PowerStrikereading0+PowerStrikereading1  < 301){ // Deze lage waarden zijn g
   if (PowerStrikereading1 > maximum1) {
     maximum1 = PowerStrikereading1;                // Maximum gevonden dus overschrijven
     delay(200);                                    // Pauze, zodat je de piep van  bovenstaande functie eerst hoort
-    tone(bzzr, 50 + 150 * log(maximum1), 1000 / 8);// Hoe hoger het maximum hoe hoger de toon, log functie
+    //tone(bzzr, 50 + 150 * log(maximum1), 1000 / 8); // Hoe hoger het maximum hoe hoger de toon, log functie
+    tone(bzzr, 50 + 150 * log(maximum0), 1000 / 8);// Hoe hoger het maximum hoe hoger de toon, log functie
     int huldeNummer = (rand() % huldeAantal);      // maakt random nummer die we gaan gebruiken voor text
     String huldeStr = (hulde[huldeNummer]);        // kies de random hulde
     lcd.clear();                                   // Clear LCD anders krijg je trailing rommel
@@ -213,21 +222,13 @@ if (PowerStrikereading0+PowerStrikereading1  < 301){ // Deze lage waarden zijn g
   Serial.println(maximum1);            // Maximum van sensor1
   delay(500); // De delay van deze loop, in ms
 
-  // Schakelaare om de maxima op nul te zetten, handig voor testen
-  // FIXME: onderstaande spaghetti code nog opschonen
+  // Schakelaar om de maxima op nul te zetten, handig voor testen
   if(digitalRead(schklr) == HIGH){
     maximum0 = maximum1 = 0;
     lcd.clear();                                         // Clear LCD anders krijg je trailing rommel
     elcedeBoot("  Resetten van", "  alle maxima!");      // Geef deze tekst weer in LCD
-    tikken(2);
-    tikken(2);
-    muziek(jingleNoten, jingleTijdPerNoot, sizeOfJingle);// Jingle all the way
- //   delay(20);
-    tikken(2);
-    tikken(2);
+    jingle();
     lcd.clear();
   }
 
-}
-return 0;
 }

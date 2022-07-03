@@ -255,6 +255,10 @@ keys = [
         lazy.spawn(Emacs + home + "/.newsboat/config"),
         desc="Open in Emacs: config of newsboat"
         ),
+    Key([altR], "p",
+        lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org"),
+        desc="Open in Emacs: the readme of the PowerStrike project"
+        ),
     Key([altR], "q",
         lazy.spawn(Emacs + home + "/.config/qtile/README.org"),
         desc="Open in Emacs:Open qtile config"
