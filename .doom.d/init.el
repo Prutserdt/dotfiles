@@ -51,6 +51,7 @@
        (python +lsp
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
+       php               ; perl's insecure younger brother
 
        :app
 

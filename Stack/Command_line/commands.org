@@ -349,11 +349,10 @@ Als iets misgaat kun je line by line proberen:
 ~for file in *; do sed 's/,/./g' "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done~
 
 
-*** Removing of password of pdf. Met package xpdf.
-Verwijder wachtwoord uit een pdf en save de pdf onder een andere naam:
-~pdftops -upw password WachtwoordBeveiligd.pdf ZonderWachtwoord.pdf~
-
-~pdftops -upw Ikwil1glas PDA\ Standaar\ 04-2021.pdf PDA_bacteriophages_for_VF.pdf~
+*** Removing of password of pdf. Met package xpdf en ps2pdf(ghostscript).
+Verwijder wachtwoord uit een pdf en save de als een postscript en daarna als een pdf:
+~pdftops -upw password WachtwoordBeveiligd.pdf ZonderWachtwoord.ps~
+~ps2pdf ZonderWachtwoord.ps ZonderWachtwoord.pdf~
 
 *** Removing size of pdf. Shrinking size by ghostscript package:
 
@@ -2688,24 +2687,26 @@ Optellen van waarden in een kolom met vsum. Zet dit onderaan de tabel met #+TBLF
 | Persoon | 04 | 05 | 06 | 07 | 08 | 11 | 12 | 13 | 14 | 15 |
 |         | di | wo | do | vr | za | di | wo | do | vr | za |
 |---------+----+----+----+----+----+----+----+----+----+----|
-| Frank   |  1 |  1 |  1 | -1 | -1 |  1 |  1 |  1 | -1 | -1 |
+| Fra     |  1 |  1 |  1 | -1 | -1 |  1 |  1 |  1 | -1 | -1 |
 | Rene    |  1 |  1 | -1 |  1 |  1 |  1 |  1 | -1 |  1 |  1 |
-| Rolf    |  1 |  1 |  1 |  1 | -1 |  1 |  1 |  1 |  1 | -1 |
-| Raymond |  1 |  1 |  1 |  1 |  1 |  1 | -1 |  1 |  1 |  1 |
-| Arjanne |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |
-| Walter  | -1 |  0 | -1 |  0 | -1 | -1 |  0 | -1 |  0 | -1 |
-| Zjak    |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  1 |  0 |  0 |
-| Gert-J  |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
-| Bertus  |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
-| Rens    |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Ro      |  1 |  1 |  1 |  1 | -1 |  1 |  1 |  1 |  1 | -1 |
+| Ray     |  1 |  1 |  1 |  1 |  1 |  1 | -1 |  1 |  1 |  1 |
+| Arj     |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |  1 |
+| Wal     | -1 |  0 | -1 |  0 | -1 | -1 |  0 | -1 |  0 | -1 |
+| Zja     |  0 |  0 |  1 |  0 |  0 |  0 |  0 |  1 |  0 |  0 |
+| Ger     |  0 |  0 | -1 |  1 |  0 |  0 |  0 |  0 |  1 |  0 |
+| Ber     |  1 |  1 |  1 |  1 |  1 |  0 |  0 |  0 |  0 |  0 |
+| Ren     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
 | Jan     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
-| Henar   |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
-| Pascal  |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
-| Jordy   |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
+| Hen     |  1 |  1 |  1 |  1 |  1 | -1 | -1 | -1 | -1 | -1 |
+| Pas     |  1 |  0 |  1 |  0 |  0 |  1 |  0 |  1 |  1 |  0 |
+| Jor     |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |  0 |
 |---------+----+----+----+----+----+----+----+----+----+----|
-|         |  4 |  5 |  3 |  3 |  0 |  4 |  3 |  3 |  3 |  0 |
+|         |  7 |  7 |  5 |  6 |  2 |  4 |  2 |  3 |  4 | -1 |
 |---------+----+----+----+----+----+----+----+----+----+----|
 #+TBLFM: @>$2..@>$11=vsum(@3$0..@-1$0)
+
+
 
 ***** Berekeningen in code block met een org table als input
 
@@ -2722,7 +2723,7 @@ print('De meest populaire datum is', dagtext[maxpos+1], dagnummer[maxpos+1],"okt
 #+end_src
 
 #+RESULTS:
-: De meest populaire datum is wo 5 oktober met 5 punten.
+: De meest populaire datum is di 4 oktober met 7 punten.
 
 **** Checkboxes in Org-mode
 In een lijst kunnen checkboxes worden gebruikt. Let op, het moet wel een lijst zijn.

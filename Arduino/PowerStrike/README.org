@@ -15,6 +15,13 @@
   - [[#onderdelen-lijst-2][Onderdelen lijst]]
   - [[#opbouw-van-het-prototype-2][Opbouw van het prototype]]
   - [[#software-2][Software]]
+- [[#bewegingssensor-op-de-arduino-nano][Bewegingssensor op de Arduino Nano]]
+- [[#bewegingssensor-op-de-esp32-dev-board][Bewegingssensor op de ESP32 dev board]]
+- [[#bewegingssensor-en-lcd-op-de-esp32-dev-board][Bewegingssensor en LCD op de ESP32 dev board]]
+- [[#rfid-rc522-op-de-arduino-nano][RFID-RC522 op de Arduino Nano]]
+  - [[#onderdelen-lijst-3][Onderdelen lijst]]
+  - [[#opbouw-van-het-prototype-3][Opbouw van het prototype]]
+  - [[#software-3][Software]]
 - [[#vorige-software-versies][Vorige software versies]]
 
 * Het PowerStrike project
@@ -414,67 +421,118 @@ De onderstaande code is ter referentie. Als we de tune willen aanpassen met ande
 
 ** Onderdelen lijst
 
-1. ESP32-cam
+1. ESP32 wrover dev kit 1
 2. Breadboard
 3. 2* FSR 50 kg
 
 ** Opbouw van het prototype
 
-in ontwikkeling....
+Board: DOIT ESP32 DEVKIT V1
+Baud:  115200
+
+In ontwikkeling, onderstaande code werkt gewoon netjes. Connectie met wifi thuis en om de 5 seconde wordt de tijd via de serial port weergegeven.
+Ik wil wat anders: wegschrijven naar mobieltje ipv uitlezen via wifi.
+
 
 ** Software
 
-Helaas heb ik het ESP board opgeblazen door 3V en 5V jumper verkeerd aan te sluiten. Een nieuw ESP development board is besteld en de onderstaande code wordt nog aangepast
+Deze code werkt gewoon:
 
 #+begin_src C
 
-/* PowerStrike v0.09
-/*
-  ESP32 WiFi Signal Test
-  esp32-wifi-signal-test.ino
-  Tests WiFi signal strength
-  *Requires WiFi SSID and Password
+//
+//
+// Wiring scheme: ESP32 dev kit v1--- FSR (pressure sensor)
+//
+// ESP32 pin VIN    --     FSR
+// ESP32 pin GND    --     breadboard  --  resistor    ---  D13     --      wire to FSR
+// Remarks: VIN is 5V when the board is USB powered. D13 is used as an analog input.
+//
+//
 
-  DroneBot Workshop 2020
-  https://dronebotworkshop.com
-  board: AI-thinker ESP32 cam
 
+include <WiFi.h>
+#include "time.h"
+#include "sntp.h"
 
-*/
+const char* ssid     = "**";
+const char* password = "**";
 
-// Include WiFi library
-#include "WiFi.h"
+const char* ntpServer1 = "pool.ntp.org";
+const char* ntpServer2 = "time.nist.gov";
+const long  gmtOffset_sec = 3600;
+const int   daylightOffset_sec = 3600;
 
-// SSID and Password - modify for your WiFi network
-const char* ssid     = "******";
-const char* passw:ord = "******";
+const char* time_zone = "CET-1CEST,M3.5.0,M10.5.0/3";  // TimeZone rule for Europe/Rome including daylight adjustment rules (optional)
 
-void setup(){
-  // Setup serial monitor
-  Serial.begin(115200);
-  // Start WiFi and conect to network
-  WiFi.begin(ssid, password);
-  // Wait while connection established
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print("-");
+void printLocalTime()
+{
+  struct tm timeinfo;
+  if(!getLocalTime(&timeinfo)){
+    Serial.println("No time available (yet)");
+    return;
   }
-  // WiFi is connected
-  Serial.println("");
-  Serial.print("Connected to network ");
-  Serial.println(ssid);
-  delay(100);
+  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 }
 
-void loop(){
-  Serial.print(ssid);
-  Serial.print(" Signal Level: ");
-  Serial.println(WiFi.RSSI());
-  delay(2000);
+// Callback function (get's called when time adjusts via NTP)
+void timeavailable(struct timeval *t)
+{
+  Serial.println("Got time adjustment from NTP!");
+  printLocalTime();
 }
 
+void setup()
+{
+  Serial.begin(115200);
+
+  // set notification call-back function
+  sntp_set_time_sync_notification_cb( timeavailable );
+
+  /**
+   ,* NTP server address could be aquired via DHCP,
+   ,*
+   ,* NOTE: This call should be made BEFORE esp32 aquires IP address via DHCP,
+   ,* otherwise SNTP option 42 would be rejected by default.
+   ,* NOTE: configTime() function call if made AFTER DHCP-client run
+   ,* will OVERRIDE aquired NTP server address
+   ,*/
+  sntp_servermode_dhcp(1);    // (optional)
+
+  /**
+   ,* This will set configured ntp servers and constant TimeZone/daylightOffset
+   ,* should be OK if your time zone does not need to adjust daylightOffset twice a year,
+   ,* in such a case time adjustment won't be handled automagicaly.
+   ,*/
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer1, ntpServer2);
+
+  /**
+   ,* A more convenient approach to handle TimeZones with daylightOffset
+   ,* would be to specify a environmnet variable with TimeZone definition including daylight adjustmnet rules.
+   ,* A list of rules for your zone could be obtained from https://github.com/esp8266/Arduino/blob/master/cores/esp8266/TZ.h
+   ,*/
+  //configTzTime(time_zone, ntpServer1, ntpServer2);
+
+  //connect to WiFi
+  Serial.printf("Connecting to %s ", ssid);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
+  }
+  Serial.println(" CONNECTED");
+
+}
+
+void loop()
+{
+  delay(5000);
+  printLocalTime();     // it will take some time to sync time :)
+}
 
 #+end_src
+
+
 
 * PowerStrike op de Arduino Nano
 
@@ -536,6 +594,180 @@ void loop() {
 }
 #+end_src
 
+
+
+* Bewegingssensor op de Arduino Nano
+werkt :-)
+#+begin_src C
+/* Test met eeen enkele bewegingssensor (PIR)
+ * Deze werkts :-) */
+#define PIN_PIRSENSOR 4
+#define PIN_LED 13
+
+void setup() {
+  Serial.begin(9600); // start serial connection to print out messages to the serial monitor
+  pinMode(PIN_PIRSENSOR, INPUT);
+  pinMode(PIN_LED, OUTPUT);
+  digitalWrite(PIN_LED, LOW); // switch off the Arduino's in-built LED
+}
+
+void loop() {
+  int movement_detected = digitalRead(PIN_PIRSENSOR);
+  if (movement_detected) {
+    // movement has been detected by the HC-SR501 PIR sensor
+    digitalWrite(PIN_LED, HIGH); // switch on the Arduino's in-built LED
+    Serial.println("Movement detected.");
+
+  } else {
+    digitalWrite(PIN_LED, LOW); // switch off the Arduino's in-built LED
+    Serial.println("-");
+
+  }
+  delay(1000); // wait for one second until the next check
+}
+
+#+end_src
+
+
+
+
+* Bewegingssensor op de ESP32 dev board
+
+Onderstaande eenvoudige programma werkt
+#+begin_src C
+/* Test met eeen enkele bewegingssensor (PIR)
+ * Deze werkts :-) */
+#define PIN_PIRSENSOR 19
+#define PIN_LED 13
+
+void setup() {
+  Serial.begin(9600); // start serial connection to print out messages to the serial monitor
+  pinMode(PIN_PIRSENSOR, INPUT);
+  pinMode(PIN_LED, OUTPUT);
+  digitalWrite(PIN_LED, LOW); // switch off the Arduino's in-built LED
+}
+
+void loop() {
+  int movement_detected = digitalRead(PIN_PIRSENSOR);
+  if (movement_detected) {
+    // movement has been detected by the HC-SR501 PIR sensor
+    digitalWrite(PIN_LED, HIGH); // switch on the Arduino's in-built LED
+    Serial.println("Movement detected.");
+
+  } else {
+    digitalWrite(PIN_LED, LOW); // switch off the Arduino's in-built LED
+    Serial.println("-");
+
+  }
+  delay(1000); // wait for one second until the next check
+}
+
+#+end_src
+
+
+* Bewegingssensor en LCD op de ESP32 dev board
+
+Onderstaande eenvoudige programma werkt
+#+begin_src C
+/* Test met eeen enkele bewegingssensor (PIR)
+ * Deze werkts :-) */
+#define PIN_PIRSENSOR 19
+#define PIN_LED 13
+
+void setup() {
+  Serial.begin(9600); // start serial connection to print out messages to the serial monitor
+  pinMode(PIN_PIRSENSOR, INPUT);
+  pinMode(PIN_LED, OUTPUT);
+  digitalWrite(PIN_LED, LOW); // switch off the Arduino's in-built LED
+}
+
+void loop() {
+  int movement_detected = digitalRead(PIN_PIRSENSOR);
+  if (movement_detected) {
+    // movement has been detected by the HC-SR501 PIR sensor
+    digitalWrite(PIN_LED, HIGH); // switch on the Arduino's in-built LED
+    Serial.println("Movement detected.");
+
+  } else {
+    digitalWrite(PIN_LED, LOW); // switch off the Arduino's in-built LED
+    Serial.println("-");
+
+  }
+  delay(1000); // wait for one second until the next check
+}
+
+#+end_src
+
+
+* RFID-RC522 op de Arduino Nano
+
+niet aan de gang gekregen: of niet goed gesoldeerd, of fried!
+
+** Onderdelen lijst
+
+1. Arduino Nano v3
+2. Breadboard
+3. RFID-RC22
+
+** Opbouw van het prototype
+
+Het systeem is op deze manier opgebouwd.
+#+CAPTION: picture
+#+ATTR_HTML: :width 300px
+[[https://github.com/Prutserdt/dotfiles/blob/master/Arduino/PowerStrike/picture_nano.jpg]]
+
+
+** Software
+
+De Nano gebruiken we met de eenvoudigste setup met alleen de rfid module
+foutmelding opgelost door aanpassen de volgende cpp file: /Arduino/libraries/MFRC522/src/MFRC522Extended.cpp op twee plaasen, zie:
+https://github.com/FallenAngel666/rfid/commit/cd53f8a36fbdf9f4e2e1c3644b7c15c8883f9c7a
+
+#+begin_src C
+ * Created by ArduinoGetStarted.com
+ *
+ * This example code is in the public domain
+ *
+ * Tutorial page: https://arduinogetstarted.com/tutorials/arduino-rfid-nfc
+ */
+
+#include <SPI.h>
+#include <MFRC522.h>
+
+#define SS_PIN 10
+#define RST_PIN 5
+
+MFRC522 rfid(SS_PIN, RST_PIN);
+
+void setup() {
+  Serial.begin(9600);
+  SPI.begin(); // init SPI bus
+  rfid.PCD_Init(); // init MFRC522
+
+  Serial.println("Tap RFID/NFC Tag on reader");
+}
+
+void loop() {
+  if (rfid.PICC_IsNewCardPresent()) { // new tag is available
+    if (rfid.PICC_ReadCardSerial()) { // NUID has been readed
+      MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
+      //Serial.print("RFID/NFC Tag Type: ");
+      //Serial.println(rfid.PICC_GetTypeName(piccType));
+
+      // print NUID in Serial Monitor in the hex format
+      Serial.print("UID:");
+      for (int i = 0; i < rfid.uid.size; i++) {
+        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
+        Serial.print(rfid.uid.uidByte[i], HEX);
+      }
+      Serial.println();
+
+      rfid.PICC_HaltA(); // halt PICC
+      rfid.PCD_StopCrypto1(); // stop encryption on PCD
+    }
+  }
+}
+#+end_src
 
 
 * Vorige software versies

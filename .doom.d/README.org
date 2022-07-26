@@ -83,6 +83,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        (python +lsp
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
+       php               ; perl's insecure younger brother
 
        :app
 

@@ -25,6 +25,7 @@ alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
 alias rm='rm -i'                # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
 alias mv='mv -i'                # Ask for permission, for safety
+alias u="sudo pacman -Syu"      # pacman update
 
 # Search
 #alias h="$HOME/.histfile | fzf"    # Fuzzy find history
