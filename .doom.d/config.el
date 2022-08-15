@@ -47,8 +47,14 @@
        :desc "Open recent files"                "o" #'recentf-open-more-files
        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+       :desc "Hide org blocks"                  "L" #'org-hide-block-all
+       :desc "Laat zien org blocks"             "l" #'org-show-block-all
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
+
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
+
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
 (set-frame-parameter (selected-frame) 'alpha '(95 90))
 (add-to-list 'default-frame-alist '(alpha 95 90))

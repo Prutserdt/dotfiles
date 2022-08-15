@@ -216,9 +216,23 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Open recent files"                "o" #'recentf-open-more-files
        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+       :desc "Hide org blocks"                  "L" #'org-hide-block-all
+       :desc "Laat zien org blocks"             "l" #'org-show-block-all
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
 #+end_src
+
+Ik wil dat de default instelling is dat de code blocks verborgen zijn.
+#+begin_src emacs-lisp :tangle config.el
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
+#+end_src
+
+
+Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
+#+begin_src emacs-lisp :tangle config.el
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
+#+end_src
+
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
 NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.

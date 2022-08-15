@@ -1501,8 +1501,6 @@ cat  $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 
 #+end_src
 
-#+RESULTS:
-
 
 
 * Applications (Command line and GUIs)
@@ -2452,6 +2450,15 @@ Setup the tools:
 ~cd ~/esp/esp-idf~
 ~./install.sh~
 
+*** ESP-IDF via VScodium
+28JUL22 heb ik in VSCodium Espressif IDF extension geinstalleerd en daarna de install information gevolgd. Met handige arch linux install dependencies. Daarna via ESP-IDF setup de express optie gekozen en de ~/esp/test/ gekozen met daarin /esp-idf. Ik had denk ik ~/esp/esp-idf al geinstalleerd eerder maar heb het voor vscodium nog maar een keer onder test gegooid.
+
+sod
+
+
+
+
+
 *** Doom Emacs
 
 **** Install
@@ -2752,7 +2759,10 @@ Dus eerst een lijst aanmaken, bijvoorbeeld:
 - [X] think about what music to play
 - [ ] Talk to the neighbors
 
-**** Org mode en werken met Python
+**** Org mode en code blocks
+***** Python in code blocks
+
+Zie 'dagtabel' in dit document voor een voorbeeld 😉.
 
 Kies results types om code block output te geven:
 ;;#+begin_src python :results output
@@ -2768,8 +2778,258 @@ M-x python-shell-send-region
 init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
 Daarna doomsync uitgevoerd
 
+***** C code in code blocks
+
+#+begin_src C
+#include <stdio.h>;
+
+int main(void) {
+   int Teller =0;
+   char buffer[12];
+   snprintf(buffer, 12, "druksensor%d", Teller); // creates the buffer string
+   printf("%s\n", buffer);                       // outputs the string, so you can see it
+}
+#+end_src
+
+#+RESULTS:
+: druksensor0
+
+
+Tangle voorbeeld: begin_src C :tangle PowerStrike_ESP32.ino
+#+begin_src C
+// Arduino example
+
+#include <SPI.h>              // voor OLED
+#include <Wire.h>             // voor OLED
+#include <Adafruit_GFX.h>     // voor OLED
+#include <Adafruit_SSD1306.h> // voor OLED
+
+void resetMax(){
+  //Touch sensor voor resetten van maxima
+  touch_sensor_value = touchRead(T3);// T3 is de touchsensor op mijn ESP32 positie D13
+                                     // niet aanraken geeft output: 80, aanraken meestal <15
+    if (touch_sensor_value <30) {    // 30 is een veilige marge als button
+      maximum0 =  0;               // Zet maxima op nul
+        for (int Teller = 0; Teller < AantalFSRsensors; Teller++ ){
+        //Zet maxima op nul, gebaseerd op aantal aangesloten sensors
+          maxi[Teller]=0;          // Zet maximum op nulaak een lege array aan voor maxima.
+        }
+    }
+}
+#+end_src
+
+
+***** Shell in code blocks
+
+#+begin_src shell
+cd ~/.doom.d
+ls
+#+end_src
+
+Maak een lijst aan (//Example 6.1.. 6.10)
+#+begin_src shell :results output
+# Code block to calculate list with text and suffix numbering
+for number in {1..15}
+do
+echo //Example 6.${number}
+echo
+done
+#+end_src
+
+Genereer tekst om de examples in te plakken:
+#+begin_src shell :results output
+# The goal is to create a list style: echo "<br><br>Example 6.13:<br>";
+# not completely perfect... " " not included
+for number in {1..17}
+do
+echo "echo '<br><br>Example 7.${number}:<br>;'"
+echo
+echo
+done
+#+end_src
+
+Voer command lines uit met sudo rechten, dus maar een maal wachtwoord invoeren!
+#+BEGIN_SRC shell :dir /sudo::
+alacritty -e systemctl restart httpd.service &&
+alacritty -e rm /srv/http/*.* &&
+echo -e Yolo, bro! >> /srv/http/testfile.txt
+#+end_src
+
+Maak een lijst van source code blocks. De output
+#+name: php-files
+#+BEGIN_SRC bash :results output
+    cd /home/icefly/Downloads/lpmj6-master/05;
+for f in *; do
+  echo "#+begin_src html :tangle \"/sudo::/srv/http/$f\"" # \ escape voor " character
+  paste /dev/null - < "$f" #Geeft de inhoud van de php file
+  echo "#+end_src"
+  echo ""
+done
+#+end_src
+
+***** Javascript in code blocks
+
+Tangle voorbeeld: begin_src java :tangle data/script.js
+#+begin_src java
+
+// Get current sensor readings when the page loads
+window.addEventListener('load', getReadings);
+
+#+end_src
+
+
+***** html in code blocks
+
+#+begin_src html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Powerstrike dashboard</title>
+  </head>
+  <body>
+    <div class="content">
+    </div>
+  </body>
+</html>
+#+end_src
+
+
+***** html in code blocks
+
+#+begin_src css
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  display: inline-block;
+  text-align: center;
+  background-color: black;
+}
+h1 {
+  font-size: 1.8rem;
+  color: #E06C75;
+}
+#+end_src
+
+
+***** php in code blocks, met sudo voorbeeld
+
+Voorbeeld van tangling met sudo privileges: ~begin_src php :tangle "/sudo::/srv/http/ide.php"~
+
+//#+begin_src php :tangle "/sudo::/srv/http/ide.php"
+#+begin_src php
+<?php
+// Link naar homepage toegevoegd.
+?>
+<a href="index.html">Homepage</a>
+<?php
+echo "<h1>Example 4-1. True False tests</h1>";
+echo "a: [" . TRUE . "]<br>";
+echo "b: [" . FALSE . "]<br>";
+?>
+#+end_src
+
+
 *** IRC, inspircd
 Install by ~yay inspircd~
+
+
+*** Installeren en instellen van LAMP
+Ik heb de volgende packages geinstalleerd: sudo pacman -S apache mariadb php php-apache
+
+**** Apache
+Check of apache loopt met: ~systemctl status httpd.service~
+Zo niet, start handmatige met: ~systemctl start httpd.service~
+
+Check in ~sudo vim /etc/httpd/conf/httpd.conf~ dat deze regel is commented: ~#LoadModule unique_id_module modules/mod_unique_id.so~. Dat was het in mijn geval.
+
+
+**** MariaDB
+Voordat we mariadb runnen moeten we het instellen met:
+~sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql~
+Nu nog instellen hoe te starten, autostart en test de server met:
+~cd /usr ; /usr/bin/mysqld_safe — datadir=/var/lib/mysql~
+Ik krijg nu een permission denied error:
+└─[$ cd /usr ; /usr/bin/mysqld_safe — datadir=/var/lib/mysql
+220714 14:23:08 mysqld_safe Logging to '/var/lib/mysql/archlinux.err'.
+220714 14:23:08 mysqld_safe Starting mariadbd daemon with databases from /var/lib/mysql
+/usr/bin/mariadbd-safe-helper: Can't create/write to file '/var/lib/mysql/archlinux.err' (Errcode: 13 "Permission denied")
+eerst de maraidb.service gestart met: ~systemctl start mariadb.service~
+dit commando ~cd /usr ; /usr/bin/mysqld_safe — datadir=/var/lib/mysql~ geeft weer dezelfde error.
+
+with default / unhardened blank root password like this:
+sudo mysql -u root -p
+After hitting Enter to pass a blank password you should see something like this, indicating that the database service is up and running and you are logged into it:
+Welcome to the MariaDB monitor. Commands end with ; or \g.
+Your MariaDB connection id is 3
+Server version: 10.5.6-MariaDB Arch Linux
+Copyright © 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.
+MariaDB [(none)]>
+You can exit MariaDB for now by issuing the command: \q
+
+Bovenstaande werkte.
+
+**** PHP
+Edit the PHP configuration by editing your php.ini file:
+vim /etc/php/php.ini
+Change display_errors = Off to display_errors = On and display_startup_errors = Off to display_startup_errors = On
+You’ll also want to uncomment some of the extensions by removing the ; at the beginning of each line:
+extension=pdo_mysql
+extension=mysqli
+extension=pdo_pgsql
+extension=pgsql
+After making these changes, you should restart Apache:
+systemctl restart httpd.service && systemctl status httpd.service
+
+Bovenstaande werkte. Na instellen PHP heb ik apache opnieuw gestart.
+
+
+**** Samengeval als ik alles wil laten runnen:
+
+systemctl start httpd.service
+systemctl start mariadb.service
+
+Check status:
+systemctl status httpd.service
+systemctl status mariadb.service
+
+**** problemen 02aug22
+php werkt niet ...
+de volgende foutmelding krijg ik als ik de apache server start via systemctl:
+
+~Archlinux httpd[508182]: AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using fe80::5ef5:794a:e0c4:fad5%enp7s0. Set the 'ServerName' directive globally to suppress this message~
+
+in de arch wiki staat dat php-apache nodig is voor php 8, en ik gebruik deze versie. Ik heb /extra/php-apache 8.1 geinstalleerd in uit de aur dus dit is het niet.
+
+Het volgende uit de arch wiki uitgevoerd:
+
+In /etc/httpd/conf/httpd.conf, comment the line:
+
+#LoadModule mpm_event_module modules/mod_mpm_event.so
+and uncomment the line:
+
+LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+Note: The above is required, because libphp.so included with the package does not work with mod_mpm_event, but will only work mod_mpm_prefork instead. (FS#39218)
+Otherwise you will get the following error:
+
+Apache is running a threaded MPM, but your PHP Module is not compiled to be threadsafe.  You need to recompile PHP.
+AH00013: Pre-configuration failed
+httpd.service: control process exited, code=exited status=1
+As an alternative, you can use mod_proxy_fcgi (see #Using php-fpm and mod_proxy_fcgi below).
+To enable PHP, add these lines to /etc/httpd/conf/httpd.conf:
+
+Place this at the end of the LoadModule list:
+LoadModule php_module modules/libphp.so
+AddHandler php-script .php
+Place this at the end of the Include list:
+Include conf/extra/php_module.conf
+
+restart httpd.service
+
+Nu is de foutmelding over het serveradres er niet meer maar krijg ik een ernstiger error:
+~httpd: Configuration error: MOre than one MPM loaded.~
+
+Dit was mijn fout ik heb nu commented: ~#LoadModule mpm_event_module mdules/mod_mpm_event.so~.
+Nu werkt loopt apache zonder foutmeldingen. :-)
 
 
 * Distros and related stuff
