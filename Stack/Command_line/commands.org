@@ -1464,6 +1464,9 @@ volgende update de downgrade gaat overschrijven.
 31MAY22: downgrade virtualbox 6.1.34-4 want deze gaf issues..
 ~sudo downgrade --ala-only virtualbox~, daarna versie 6.1.32-1 gekozen, en niet gegevoegd aan ignorepackage (dus volgende update overschreven). Dus de komende tijd upgraden met yay en virtualbox overslaan.
 
+23AUG22:
+sudo downgrade 0ad
+select versiont: a25b
 
 *** Vergelijken van twee textfiles. Comparing two text files.
 diff file1.txt file2.txt
@@ -1992,7 +1995,7 @@ Then, add your SSH private key to the ssh-agent:
 ssh-add ~/.ssh/id_ed25519
 Type your passphrase and press Enter:
 The command confirms that the private SSH key has been added to the ssh-agent:
-Identity added: /home/icefly/.ssh/id_ed25519 (firstname@lastname.nl))
+Identity added: /home/yolo/.ssh/id_ed25519 (firstname@lastname.nl))
 
 Belangrijk: aangepast in ~/dotfiles/config: -->	url = ssh://git@github.com/Prutserdt/dotfiles.git
 
@@ -2009,6 +2012,13 @@ Deze bestaat uit de volgende commando's
 Git command line examples
 ~config status~
 ~config push --force (deze wil je eigenlijk niet gebruiken)~
+
+*** 15AUG22 nieuwe token aangemaakt
+
+via website nieuwe token aangemaakt
+
+ik gebruik nu ssh dus dit lijkt eigenlijk overbodig...
+
 
 *** Add an additional dotfile to this repo
 ~config add .example~
@@ -2821,10 +2831,12 @@ void resetMax(){
 
 ***** Shell in code blocks
 
-#+begin_src shell
+Voorbeeld waarbij de output gebokkeerd wordt dmv ~:eval no~.
+#+begin_src shell :eval no
 cd ~/.doom.d
 ls
 #+end_src
+
 
 Maak een lijst aan (//Example 6.1.. 6.10)
 #+begin_src shell :results output
@@ -2855,9 +2867,9 @@ alacritty -e rm /srv/http/*.* &&
 echo -e Yolo, bro! >> /srv/http/testfile.txt
 #+end_src
 
-Maak een lijst van source code blocks. De output
+Maak een lijst van source code blocks. Met raw output is het mogelijk om meerder code blocks weg te schrijven!
 #+name: php-files
-#+BEGIN_SRC bash :results output
+#+BEGIN_SRC bash :results raw output
     cd /home/icefly/Downloads/lpmj6-master/05;
 for f in *; do
   echo "#+begin_src html :tangle \"/sudo::/srv/http/$f\"" # \ escape voor " character
@@ -2912,9 +2924,9 @@ h1 {
 
 ***** php in code blocks, met sudo voorbeeld
 
-Voorbeeld van tangling met sudo privileges: ~begin_src php :tangle "/sudo::/srv/http/ide.php"~
+Voorbeeld van tangling met sudo privileges: ~begin_src php :tangle "/sudo::/srv/http/index.php"~
 
-//#+begin_src php :tangle "/sudo::/srv/http/ide.php"
+//#+begin_src php :tangle "/sudo::/srv/http/index.php"
 #+begin_src php
 <?php
 // Link naar homepage toegevoegd.
@@ -2926,6 +2938,42 @@ echo "a: [" . TRUE . "]<br>";
 echo "b: [" . FALSE . "]<br>";
 ?>
 #+end_src
+
+
+***** Elisp in code blocks
+
+
+#+begin_src elisp
+(concat "Yolo" " Mongol!")
+#+end_src
+
+#+RESULTS:
+: yolo Mongol!
+
+
+#+begin_src elisp
+(apply #'concat '("Yolo" " Mongol! " "Code, " "Biatch."))
+#+end_src
+
+#+RESULTS:
+: Yolo Mongol! Code, Biatch.
+
+#+begin_src elisp
+(join ", " '("1.232" "300"  "500"))
+#+end_src
+
+#+RESULTS:
+: 1.232, 300, 500
+
+#+begin_src elisp
+(+ 1 + 2)
+#+end_src
+
+#+RESULTS:
+
+
+
+
 
 
 *** IRC, inspircd

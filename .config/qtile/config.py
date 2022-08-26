@@ -7,7 +7,7 @@ import subprocess
 import os
 from typing import List
 from libqtile import bar, layout, widget,hook
-from libqtile.config import ( Click, Drag, Group, Key, Match,
+from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
@@ -37,7 +37,36 @@ def monwide(qtile):
 def monwide2(qtile):
     qtile.cmd_to_layout_index(5) #3: monadwide with margins
 
+def cmd_increase_margin(self):
+    self.margin += 10
+    self.group.layout_all()
+
+def cmd_decrease_margin(self):
+    new_margin = self.margin - 10
+    if new_margin < 0:
+        new_margin = 0
+    self.margin = new_margin
+    self.group.layout_all()
+
 keys = [
+    KeyChord([modL], "m", [      # testje, keychording werkt!! :-)
+        Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
+        Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
+        Key([], "k", lazy.layout.increase_margin()),
+        Key([], "j", lazy.layout.decrease_margin())
+        ],
+        mode="Margins" # als je mode kiest dan moet je eruit met escape....
+    ),
+    KeyChord([modL], "z", [  # test, weet niet ik dit erin hou...
+        Key([], "k", lazy.layout.grow_main()),
+        Key([], "j", lazy.layout.shrink_main()),
+        Key([], "i", lazy.layout.grow()),
+        Key([], "u", lazy.layout.shrink()),
+        Key([], "n", lazy.layout.normalize()),
+        Key([], "m", lazy.layout.maximize())],
+        mode="Windows"
+    ),
+
     Key([modL], "Return",
         lazy.spawn("alacritty"),
         desc="Launch a terminal in a new window"
@@ -329,27 +358,34 @@ keys.extend([
 
 # My default theme
 layout_theme = {"border_width": 2,
-                "border_focus": "#00ffd2",  #98C379= groen
-                "border_normal": "#282C34",
+                "border_focus":  "#d75f5f",
+                "border_normal": "#282C35", # #966363
                 }
 # A separate theme for floating mode, to make it clear that the window floats
 floating_theme = {"border_width": 3,
-                "border_focus":  "#d75f5f",
-                "border_normal": "#966363",
+                "border_focus": "#00ffd2",  #98C379= groen
+                "border_normal": "#006553",
                 }
+
+#self.margin = new_margin
+
+#self.group.layout_all()
+
+
+
 
 layouts = [
     layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
                          new_client_position='bottom'),
-    layout.MonadThreeCol(**layout_theme, margin=20, min_ratio=0.05,
+    layout.MonadThreeCol(**layout_theme, margin=60, min_ratio=0.05,
                          max_ratio=0.9, new_client_position='bottom'),
     layout.MonadTall(**layout_theme, min_ratio=0.05, max_ratio=0.9,
                      new_client_position='bottom'),
-    layout.MonadTall(**layout_theme, margin=20, min_ratio=0.05,
+    layout.MonadTall(**layout_theme, margin=60, min_ratio=0.05,
                      max_ratio=0.9, new_client_position='bottom'),
     layout.MonadWide(**layout_theme, min_ratio=0.05, max_ratio=0.9,
                      new_client_position='bottom'),
-    layout.MonadWide(**layout_theme, margin=20, min_ratio=0.05,
+    layout.MonadWide(**layout_theme, margin=60, min_ratio=0.05,
                      max_ratio=0.9, new_client_position='bottom'),
 ]
 

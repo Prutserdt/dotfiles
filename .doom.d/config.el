@@ -47,8 +47,9 @@
        :desc "Open recent files"                "o" #'recentf-open-more-files
        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-       :desc "Hide org blocks"                  "L" #'org-hide-block-all
-       :desc "Laat zien org blocks"             "l" #'org-show-block-all
+       :desc "Hide org blocks"                  "L" #'org-fold-hide-block-all
+       :desc "Laat zien org blocks"             "l" #'org-fold-show-all
+       :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
 

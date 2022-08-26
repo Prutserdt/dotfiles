@@ -14,4 +14,6 @@
 
 (package! visual-fill-column)
 
+(package! web-mode)
+
 ;;(package! nose :disable t)

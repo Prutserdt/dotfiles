@@ -124,6 +124,11 @@ Centering text to the middle of the window can be done by the visual-fill-column
 (package! visual-fill-column)
 #+end_src
 
+Web-mode for editing of html/php/css
+#+begin_src emacs-lisp :tangle packages.el
+(package! web-mode)
+#+end_src
+
 The nose package is already installed in Doom Emacs but it is not maintained and leading to an ~:lang python error~. Therefore this package is disabled. Note: disabling of core packages might lead to terrible side effects!
 #+begin_src emacs-lisp :tangle packages.el
 ;;(package! nose :disable t)
@@ -216,8 +221,9 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Open recent files"                "o" #'recentf-open-more-files
        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-       :desc "Hide org blocks"                  "L" #'org-hide-block-all
-       :desc "Laat zien org blocks"             "l" #'org-show-block-all
+       :desc "Hide org blocks"                  "L" #'org-fold-hide-block-all
+       :desc "Laat zien org blocks"             "l" #'org-fold-show-all
+       :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
 #+end_src
