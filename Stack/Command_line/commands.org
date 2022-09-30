@@ -41,6 +41,8 @@ Verwijderen alle files in dir: ~rm ~/Stack/dwm/patches/test/*~
 
 *** Kopieren van files
 ~cp existing_file new_file~
+Recursief, oftewel incl subdirectories
+~cp -r The*thing* ~/Downloads~
 
 *** Problemen met legen van trash in KDE.
 Open a terminal and go to ~/.local/share and type:
@@ -2723,6 +2725,24 @@ Optellen van waarden in een kolom met vsum. Zet dit onderaan de tabel met #+TBLF
 |---------+----+----+----+----+----+----+----+----+----+----|
 #+TBLFM: @>$2..@>$11=vsum(@3$0..@-1$0)
 
+lijst met mensen die meegaan:
+
+renegieling@kpnplanet.nl
+judithfiret@hotmail.com
+frank.benneker@synthon.com
+arjanne.overeem@synthon.com
+henar.tejedor@synthon.com
+bertus.thijs@byondis.com
+jordy.luten@byondis.com
+pascal.renartverkerk@byondis.com
+raymond.westheim@synthon.com
+gertjan.ettema@synthon.com
+rolf.keltjens@synthon.com
+zjak.vaneupen@byondis.com
+dat zijn er 12, met mij en rens: 14 personen.
+Rens nog bellen.
+Misschien komt Herald ook nog mee.
+dus 14 of 15 personen.
 
 
 ***** Berekeningen in code block met een org table als input
@@ -3006,15 +3026,17 @@ dit commando ~cd /usr ; /usr/bin/mysqld_safe — datadir=/var/lib/mysql~ geeft w
 with default / unhardened blank root password like this:
 sudo mysql -u root -p
 After hitting Enter to pass a blank password you should see something like this, indicating that the database service is up and running and you are logged into it:
-Welcome to the MariaDB monitor. Commands end with ; or \g.
-Your MariaDB connection id is 3
-Server version: 10.5.6-MariaDB Arch Linux
-Copyright © 2000, 2018, Oracle, MariaDB Corporation Ab and others.
-Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.
-MariaDB [(none)]>
-You can exit MariaDB for now by issuing the command: \q
+Welcome to the MariaDB monitor...
 
-Bovenstaande werkte.
+Opnieuw beginnen met MySQL commandline aan de gang te krijgen:
+~systemctl start mariadb.service~
+~sudo mysql -u root -p~ #with default / unhardened blank root password like this
+Aanmaken database: ~CREATE DATABASE publications;~
+Als root new user aangemaakt,ww 1234: ~CREATE USER 'name'@'localhost' IDENTIFIED BY '1234';~
+Toegang gegeven tot database: ~GRANT ALL ON publications.* TO 'name'@'localhost';~
+Nu kun je uitloggen en inloggen met: ~mysql -u name -p~ (ww: 1234)
+Create a table: ~USE publication~ en daarna toevoegen:
+
 
 **** PHP
 Edit the PHP configuration by editing your php.ini file:

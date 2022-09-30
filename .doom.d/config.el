@@ -10,6 +10,10 @@
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config."))
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)))
+
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 

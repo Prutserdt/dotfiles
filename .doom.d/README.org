@@ -158,6 +158,14 @@ The Doom Emacs welcome screen is modified here. A different image is used, the d
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
 #+end_src
 
+Test: kan ik sql gebruiken in org code blocks....
+#+begin_src emacs-lisp :tangle config.el
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)))
+#+end_src
+
+
 Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area. /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
 #+begin_src emacs-lisp :tangle config.el
 (beacon-mode 1)
