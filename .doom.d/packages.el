@@ -4,12 +4,6 @@
 ;; packages.el directly and only modify the README.org file in emacs by
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 
-;;(require 'package)
-;;(add-to-list 'package-archives
-;;             '("melpa" . "https://melpa.org/packages/"))
-;;(package-refresh-contents)
-;;(package-initialize)
-
 (package! beacon)
 
 (package! visual-fill-column)

@@ -53,6 +53,7 @@
        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
        :desc "Hide org blocks"                  "L" #'org-fold-hide-block-all
        :desc "Laat zien org blocks"             "l" #'org-fold-show-all
+       :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
        :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
@@ -65,3 +66,10 @@
 (add-to-list 'default-frame-alist '(alpha 95 90))
 
 (scroll-bar-mode -1)
+
+(global-set-key (kbd "<mouse-2>") 'clipboard-yank)
+;; misschien is deze ook nodig:...
+(delete-selection-mode)
+;; https://www.emacswiki.org/emacs/CopyAndPaste
+
+(setq confirm-kill-emacs nil)

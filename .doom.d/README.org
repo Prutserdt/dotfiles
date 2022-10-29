@@ -105,15 +105,6 @@ Again a NOTE is added to ~packages.el~ to *not* edit this file.
 ;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
-This part will refresh the packages after every reload, which is not needed actually and this part can be removed. I leave it here for a while and will remove it if I'm sure it's not needed.
-#+begin_src emacs-lisp :tangle packages.el
-;;(require 'package)
-;;(add-to-list 'package-archives
-;;             '("melpa" . "https://melpa.org/packages/"))
-;;(package-refresh-contents)
-;;(package-initialize)
-#+end_src
-
 A package can be installed from MELPA, ELPA or emacsmirror by (package! package_name). The beacon package is not part of the Doom Emacs modules and is added here. /Never lose your cursor again/ by highlighting the cursor after scrolling.
 #+begin_src emacs-lisp :tangle packages.el
 (package! beacon)
@@ -231,6 +222,7 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
        :desc "Hide org blocks"                  "L" #'org-fold-hide-block-all
        :desc "Laat zien org blocks"             "l" #'org-fold-show-all
+       :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
        :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
@@ -258,6 +250,20 @@ NOTE: when this part is placed at the start of ~config.el~ then transparency doe
 Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 #+begin_src emacs-lisp :tangle config.el
 (scroll-bar-mode -1)
+#+end_src
+
+Kijken of ik middle mouse button kan gebruiken om te pasten....
+Op zich werkt het want via mijn keyboard kan ik met derde muisbutton dit laten werken, alleen werkt het niet vanuit de muis. Dat is vreemd... TODO: dit moet ik nog oplossen
+#+begin_src emacs-lisp :tangle config.el
+(global-set-key (kbd "<mouse-2>") 'clipboard-yank)
+;; misschien is deze ook nodig:...
+(delete-selection-mode)
+;; https://www.emacswiki.org/emacs/CopyAndPaste
+#+end_src
+
+No more conformation message after closing emacs.
+#+begin_src emacs-lisp :tangle config.el
+(setq confirm-kill-emacs nil)
 #+end_src
 
 * Code snippets

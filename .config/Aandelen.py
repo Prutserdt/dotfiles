@@ -45,7 +45,7 @@ if __name__ == '__main__':
     dialog = InputDialog()
     if dialog.exec():
         RaboCash, Huis = dialog.getinputs()
-        Huis = int(Huis)            # Moet integer zijn voor latere berekening
+        Huis = int(Huis)          # Moet integer zijn voor latere berekening
         RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
 
 
@@ -64,17 +64,7 @@ def AddCSVtoDataFrame(filename, delimiter, kolom1, kolom2):
     dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)
     # Toevoegen van tijdelijke dataframe aan bestaande dataframe
     df = pd.concat([df, dfx])
-    print(separ + "\n", dfx)  # Alleen voor debugging gebruik
-
-
-# Aanmaken van separatoren (gebruikt voor opmaak).
-# TODO: dit kan makkelijker! dash = '-' * 40
-def CreateSep(teken, herhalingen):
-    x = str("")  # Maak x aan als een lege string
-    for a in range(0, herhalingen):
-        x = x + teken
-    return x
-
+    print('=' * 40 + "\n", dfx)  # Alleen voor debugging gebruik
 
 # Aanmaken van een aantal variabelen.
 # Locatie van DeGIRO porfolio:
@@ -84,7 +74,7 @@ searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-36*"  # Wildcard
 # Daarna de nieuwste file zoeken in directory
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)       # Zoek nieuwste
 # Separator lijn die ik her en der gebruik
-separ = CreateSep("=", 80)  # separator teken en lengte
+# separ = '=' * 40 # separator teken en lengte
 
 # Omschrijving van overwaarde huis en cash geld
 OmsHuis = "Overwaarde huis     "
@@ -114,7 +104,7 @@ dfx = pd.DataFrame(d)
 df = pd.concat([df, dfx])
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
-print(separ + "\n", df)  # Alleen voor debugging gebruik
+print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
 
 # Asset allocations berekenen en toevoegen aan dataframe
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
@@ -125,23 +115,18 @@ Kapitaal = df[EurCol].sum()
 df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int)
 df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int)
 df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje geven
-print(separ + "\n", dfx)  # Alleen voor debugging gebruik
-# Extra regels toevoegen onder de tabel (separatoren en AA waarden)
-# Separator lijnen aanmaken
-#                  (teken, lengte)
-SepKort = CreateSep("-", 6)
-SepLang = CreateSep("-", 20)
+print('=' * 40  + "\n", dfx)  # Alleen voor debugging gebruik
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
-    EurCol: [SepKort, Kapitaal, Kapitaal - Huis],
-    OmsCol: [SepLang, "Assets totaal       ", "Assets totaal -huis  "],
+    EurCol: ["-" * 6, Kapitaal, Kapitaal - Huis],
+    OmsCol: ["-" * 20, "Assets totaal       ", "Assets totaal -huis  "],
     AaCol: ["+   ", "", ""],
     AminHuisCol: ["", "", ""]}
 dfx = pd.DataFrame(d)
 # Samenvoegen van dataframes
 df = pd.concat([df, dfx])
-print(separ + "\n", df)  # Alleen voor debugging gebruik
+print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
 
 # De kolom omschrijving afslanken tot 20 tekens
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
@@ -149,19 +134,20 @@ df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
 # Maak introductie regels en combineer dit met de dataframe.
 # Datum vinden van het bestand:fileDeGIRO
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO)))
-# Maak een timestamp string aan als deze: 01JAN22
-t_stamp = str(time.strftime("%d", datum)) + str(time.strftime("%b", datum)) + str(time.strftime("%y", datum))
+# Maak een timestamp als 20230131
+t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum)))
 # Introductie regels (separator/datum+assets/separator)
-deel1 = (separ + "\n" + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(
-    str) + " Euro." "\n" + separ + "\n")
+deel1 = ('=' * 40 + "\n" + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + '=' * 40 + "\n")
 # Combineer de introductieregels met het dataframe
 deel2 = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
 deel2 = deel2.replace('NaN', '')    # Verwijder NaN waarden
 data = deel1 + deel2                # Combineren van introductieregels+dataframe
-print(separ + "\n", "data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
+print('=' * 40 + "\n", "data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
 
 # Schrijf data weg in het clipboard
 pyperclip.copy(data)
 
 # Wissen van data (garbage collection)
-df = dfx = deel1 = deel2 = d = Saldo = data = SepKort = SepLang = Sep = datum = t_stamp = None
+del(AaCol , df , dfx , deel1 , deel2 , d , data ,   datum , t_stamp)
+del(AminHuisCol , EurCol , Huis , Kapitaal ,OmsCash , OmsCol , OmsHuis)
+del(RaboCash , fileDeGIRO , fileRabo , searchRabo)

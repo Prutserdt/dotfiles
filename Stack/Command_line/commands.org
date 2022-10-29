@@ -440,7 +440,7 @@ Aanmaken directory voor meerdere users (in dit geval, DATA in /home):
 
 Veranderen van rechten, van root root naar icefly users.
 (username groupname)
-~chown icefly:users *.*~
+~sudo chown icefly:users *.*~
 
 *Grafische problemen*
 
@@ -578,7 +578,7 @@ Grafische omgeving shortcuts:
 | Ctrl s                     | Save the current document                                |
 | Ctrl o                     | Open another document                                    |
 | Ctrl p                     | Print the current document                               |
-| Ctrl z                     | Undo the last change you made                            |
+| Ctrl z                     | undo the last change you made                            |
 | Ctrl Shift Z               | Redo a change that you just undid                        |
 |----------------------------+----------------------------------------------------------|
 
@@ -756,7 +756,7 @@ Create Date                     : 2020:02:16 15:39:55
 Creation Date                   : 2019:06:01 14:09:27+07:00
 #+end_example
 --------------------------------------------------------------
-November 2020, wederom vakantiefotos sorteren.
+**** November 2020, wederom vakantiefotos sorteren.
 Een van de devices lag 66 minuten achter. Daardoor werkte dit niet:
 ~exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)~
 De fotos stonden daarna namelijk niet goed chronologisch. Dit is opgelost door 
@@ -833,12 +833,8 @@ Daarna deze output gecopieerd naar vim en de verschillende orientaties in
 apparte dirs gezet (dmv commandline cp files.jpg file2.jpg dirnaam).
 Daarna in deze dirs de bestanden gedraaid met de volgende commandos:
 
---------------------------------------------------------------
-Augustus 2021: verwerken van fotos van Portugal vakantie. De apple fotos heb ik 
-verkregen door de fotos te selecteren in apple photo en deze te plakken in een
-mapje en deze te uploaden naar mijn cloud en ze binnen halen.
-Ik heb dus de *.JPG en *.raw van mijn camera, de raw files zet ik appart en ga
-ik niet aan zitten. Verder zijn er *.jpg van Cindy.
+**** Augustus 2021: verwerken van fotos van Portugal vakantie.
+De apple fotos heb ik verkregen door de fotos te selecteren in apple photo en deze te plakken in een mapje en deze te uploaden naar mijn cloud en ze binnen halen. Ik heb dus de *.JPG en *.raw van mijn camera, de raw files zet ik appart en ga ik niet aan zitten. Verder zijn er *.jpg van Cindy.
 Eerst de volgende command line commandos uitgevoerd:
 ~mkdir test~
 ~cp *.* test~
@@ -966,6 +962,150 @@ format is....:
              Rename all images in "dir" according to the "CreateDate" date and
              time, adding a copy number with leading '-' if the file already
              exists("%-c"), and preserving the original file extension (%e).  Note the extra '%' necessary to escape the filename codes (%c and %e) in the date format string.)'')"")''""""'>'
+
+
+--------------------------------------------------------------
+**** October 2022: verwerken van fotos van Indonesie/Qatar Portugal vakantie.
+De apple fotos heb ik verkregen van Cindy als twee downloadable albums. Veel handiger dan voorgaande jaren.
+
+Helaas had ik de tijd van mijn camera niet juist gezet. Deze had ik niet veranderd van Nederlandse tijd en heb ik dus allemaal aangepast.
+
+bromo eruption tijd, sony: 20220908-2316, iphone: 20220909-0526. Mijn camera ligt dus 370 minuten achter. Het mapje met Sony indonesie foto's aangepast met:
+~exiftool -DateTimeOriginal+='0:00:0 6:10:0' *.*~
+Dit heb ik eerst met een enkele foto getest natuurlijk. Met commando ~exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)~ heb ik de eruption van Bromo (duidelijke time mark) vergeleken en het klopt, dus ik kan de 6:10 correctie gebruiken voor alle foto's.
+Daarna heb ik de fotos van Sony-Indonesie bij elkaar gezet en ze veranderd met:
+~exiftool -DateTimeOriginal+='0:00:0 6:10:0' *.*~
+Het is wel omslachtig dat er nu allemaal originals gemaakt zijn. Deze verwijderd met:
+~rm *original~
+Daarna juiste naam gegeven met:
+~exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)~
+
+Hetzelfde gedaan als hierboven beschreven maar dan voor Qatar, wat weer een andere tijdszone is.
+~exiftool -DateTimeOriginal+='0:00:0 2:10:0' *.*~
+
+Daarna heb ik alle foto's bij elkaar gezet en de .JPEG en .JPG files omgezet naar .jpg met:
+~find -name '*.JPG' -exec rename .JPG .jpg {} \;~
+~find -name '*.JPEG' -exec rename .JPEG .jpg {} \;~
+
+Nu wil ik nog de locatie toevoegen voor elke foto. Dat doen we per dag en daar zetten we een locatie bij. Eerst even een lijst gegenereerd in emacs met de volgende code:
+#+begin_src shell :results output
+# Code block to calculate list of dates by this shell script in org mode.
+# ONLY change two parts: number of days 18} and first day of holiday 15 Jun 2021, and press enter.
+for number in {0..20}
+do
+dag=`date -d "03 Sep 2022 "${number}" days" +"%Y%m%d"`
+b="rename "
+c=$b$dag" "$dag"_ *.jpg"
+echo $c
+done
++end_src
+
+#+RESULTS:
+#+begin_example
+rename 20220903 20220903_ *.jpg
+rename 20220904 20220904_ *.jpg
+rename 20220905 20220905_ *.jpg
+rename 20220906 20220906_ *.jpg
+rename 20220907 20220907_ *.jpg
+rename 20220908 20220908_ *.jpg
+rename 20220909 20220909_ *.jpg
+rename 20220910 20220910_ *.jpg
+rename 20220911 20220911_ *.jpg
+rename 20220912 20220912_ *.jpg
+rename 20220913 20220913_ *.jpg
+rename 20220914 20220914_ *.jpg
+rename 20220915 20220915_ *.jpg
+rename 20220916 20220916_ *.jpg
+rename 20220917 20220917_ *.jpg
+rename 20220918 20220918_ *.jpg
+rename 20220919 20220919_ *.jpg
+rename 20220920 20220920_ *.jpg
+rename 20220921 20220921_ *.jpg
+rename 20220922 20220922_ *.jpg
+rename 20220923 20220923_ *.jpg
+#+end_example
+
+En vervolgens het adres er achter geschreven mbv keyboard macros:
+#+begin_src shell
+rename 20220903 20220903_Amsterdam *.jpg
+rename 20220904 20220904_Malang *.jpg
+rename 20220905 20220905_Malang *.jpg
+rename 20220906 20220906_Malang *.jpg
+rename 20220907 20220907_Malang *.jpg
+rename 20220908 20220908_Bromo *.jpg
+rename 20220909 20220909_Bromo *.jpg
+rename 20220910 20220910_Yogyakarta *.jpg
+rename 20220911 20220911_Yogyakarta *.jpg
+rename 20220912 20220912_Yogyakarta *.jpg
+rename 20220913 20220913_Yogyakarta *.jpg
+rename 20220914 20220914_Yogyakarta *.jpg
+rename 20220915 20220915_Yogyakarta *.jpg
+rename 20220916 20220916_Bandung *.jpg
+rename 20220917 20220917_Bandung *.jpg
+rename 20220918 20220918_Bandung *.jpg
+rename 20220919 20220919_??geen fotos?? *.jpg
+rename 20220920 20220920_Qatar *.jpg
+rename 20220921 20220921_Qatar *.jpg
+rename 20220922 20220922_Qatar *.jpg
+rename 20220923 20220923_Amsterdam *.jpg
+#+end_src
+
+Daarna het bovenstaande samengevoegd tot een enkel commando:
+#+begin_src shell
+rename 20220903 20220903_Amsterdam *.jpg; rename 20220904 20220904_Malang *.jpg; rename 20220905 20220905_Malang *.jpg; rename 20220906 20220906_Malang *.jpg; rename 20220907 20220907_Malang *.jpg; rename 20220908 20220908_Bromo *.jpg; rename 20220909 20220909_Bromo *.jpg; rename 20220910 20220910_Yogyakarta *.jpg; rename 20220911 20220911_Yogyakarta *.jpg; rename 20220912 20220912_Yogyakarta *.jpg; rename 20220913 20220913_Yogyakarta *.jpg; rename 20220914 20220914_Yogyakarta *.jpg; rename 20220915 20220915_Yogyakarta *.jpg; rename 20220916 20220916_Bandung *.jpg; rename 20220917 20220917_Bandung *.jpg; rename 20220918 20220918_Bandung *.jpg; rename 20220920 20220920_Qatar *.jpg; rename 20220921 20220921_Qatar *.jpg; rename 20220922 20220922_Qatar *.jpg; rename 20220923 20220923_Amsterdam *.jpg
+#+end_src
+
+
+De *.mov files van apple heb ik hernoemd met:
+Onderstaande commando renamed alle files in huidige directory als: 20220921_1305.xxx. Ik wil eigen lijk de filename als onderdeel houden, maar dat lukt me nog niet.
+~exiftool '-FileName<CreateDate' -d %Y%m%d_%H%M%%-c.%%e *~
+
+Zelf heb ik met onderstaande gespeeld, maar het lukt me niet om de filename toe te voegen... Dat lijkt eigenlijk triviaal, maar onderstaande is niet compleet gelukt:
+~exiftool -T -createdate IMG_1756.MOV~ geeft:
+2022:09:21 13:05:15
+dit wil ik omzetten naar het formaat: 20220921_1305_IMG_1856.MOV
+~exiftool -T -createdate IMG_1756.MOV|tr -d '[:punct:]'~ geeft:
+20220921 130515
+Laatste twee digite verwijderen:
+~exiftool -T -createdate IMG_1756.MOV|tr -d '[:punct:]'| sed 's/..$//'~ geeft:
+20220921 1305
+Spatie veranderen in een underscore:
+~exiftool -T -createdate IMG_1756.MOV|tr -d '[:punct:]'| sed 's/..$//'| tr ' ' '_'~ geeft:
+20220921_1305  Nu nog de naam erachter plakken en overschrijven... Dit werkt nog niet,bovenstaande wel.
+
+
+En vervolgens het adres er achter geschreven mbv keyboard macros:
+#+begin_src shell
+rename 20220903 20220903_Amsterdam *
+rename 20220904 20220904_Malang *
+rename 20220905 20220905_Malang *
+rename 20220906 20220906_Malang *
+rename 20220907 20220907_Malang *
+rename 20220908 20220908_Bromo *
+rename 20220909 20220909_Bromo *
+rename 20220910 20220910_Yogyakarta *
+rename 20220911 20220911_Yogyakarta *
+rename 20220912 20220912_Yogyakarta *
+rename 20220913 20220913_Yogyakarta *
+rename 20220914 20220914_Yogyakarta *
+rename 20220915 20220915_Yogyakarta *
+rename 20220916 20220916_Bandung *
+rename 20220917 20220917_Bandung *
+rename 20220918 20220918_Bandung *
+rename 20220919 20220919_Bandung *
+rename 20220920 20220920_Qatar *
+rename 20220921 20220921_Qatar *
+rename 20220922 20220922_Qatar *
+rename 20220923 20220923_Amsterdam *
+#+end_src
+
+#+begin_src shell
+rename 20220903 20220903_Amsterdam *; rename 20220904 20220904_Malang *; rename 20220905 20220905_Malang *; rename 20220906 20220906_Malang *; rename 20220907 20220907_Malang *; rename 20220908 20220908_Bromo *; rename 20220909 20220909_Bromo *; rename 20220910 20220910_Yogyakarta *; rename 20220911 20220911_Yogyakarta *; rename 20220912 20220912_Yogyakarta *; rename 20220913 20220913_Yogyakarta *; rename 20220914 20220914_Yogyakarta *; rename 20220915 20220915_Yogyakarta *; rename 20220916 20220916_Bandung *; rename 20220917 20220917_Bandung *; rename 20220918 20220918_Bandung *; rename 20220919 20220919_Bandung *; rename 20220920 20220920_Qatar *; rename 20220921 20220921_Qatar *; rename 20220922 20220922_Qatar *; rename 20220923 20220923_Amsterdam *
+#+end_src
+
+
+
+
 
 *** PACMAN/YAOURT/YAY
 
@@ -1395,7 +1535,7 @@ https://www.bol.com/nl/p/asus-r5230-sl-1gd3-l-radeon-r5-230-1gb-gddr3-videokaart
 
 *** Create Superfast ramdisk
 Tijdelijke ramdisk creeren. Handig voor snel lezen/schrijven in geheugen/memory
-voor bijvoorbeeld manipuleren van fotos enz.
+rbeeld manipuleren van fotos enz.
 Check eerst beschikbare ram met free -g of df -T!
 tmpfs zorgt ervoor dat het systeem niet kan crashen als de buffer vol is. 
 onderaan staat de umount.
@@ -1422,6 +1562,197 @@ I based it on Luke Smith: https://github.com/LukeSmithxyz/voidrice/blob/master/.
 The macro menu can be called by pressing "."
 To download youtube.dll the tsp program is needed which can be installed by the
 package called ts
+
+
+*** Download movies from BJJ website, met youtube-dl
+
+Login into BJJ website. Select Blue belt requirements, select the video, rechtmuis knop 'view source'. Zoek 'vimeo' en kopieer de url in onderstaande python script:
+
+#+begin_src python :results output
+import os
+
+videolijst = [
+                #Solo
+                "https://player.vimeo.com/video/180798770?h=e17d8d0033&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/180798700?h=1690e31583&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/180802439?h=0aa39b9eb5&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/230822722?h=b8f35c779e&dnt=1&app_id=122963",
+                #Stand up
+                "https://player.vimeo.com/video/137071761?h=151c210b2a&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137011158?h=cd42ae07c4&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/172808050?h=fd478a3b5e&dnt=1&app_id=122963",
+                #Self Defense
+                "https://player.vimeo.com/video/137072714?h=1beaaa5e27&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/179861100?h=1ed78e7394&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/154900066?h=96a8faff08&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/154900067?h=3b5fbefcb4&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137072712?h=e89a2e3aef&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/180798770?h=e17d8d0033&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/180798700?h=1690e31583&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/180802439?h=0aa39b9eb5&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/230822722?h=b8f35c779e&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137071755?h=313b691308&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137072713?h=fc3a9cd7fb&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/280042288?h=70f0cde646&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/291044164?h=e11248599b&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/291048592?h=54dd04fdbc&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/291043458?h=16965e11e5&dnt=1&app_id=122963",
+                #Guard Top
+                ##earning safe posture under construction
+                "https://player.vimeo.com/video/137037265?h=57ca651c3c&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137037266?h=e7c69cf39f&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137039959?h=84ca25b4d0&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/291047574?h=1512b6a1b7&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137073756?h=6b5294beda&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137039958?h=1d8d40380c&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/154918793?h=c08eea21ff&dnt=1&app_id=122963",
+                #Guard Bottom
+                "https://player.vimeo.com/video/137011160?h=5d663e77c9&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137011162?h=ae3675fb58&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137010170?h=36f4f40e50&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137010168?h=3c13de1133&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137010167?h=ddf17fad83&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137010169?h=79f62eca0d&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/179861103?h=3b076b5130&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/162264123?h=1ec22796f6&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/154917291?h=5a773a1bbf&dnt=1&app_id=122963",
+                #Side Control Top
+                "https://player.vimeo.com/video/154901503?h=8fe6770336&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/179818286?h=b65993e87a&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/291049766?h=a0ac9407ac&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/154901499?h=cc3106f906&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/280042014?h=53c6c61ee7&dnt=1&app_id=122963",
+                #Side Control Bottom
+                "https://player.vimeo.com/video/137061452?h=71c9d45b3f&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137070658?h=f83a23138b&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137070659?h=c4f9336feb&dnt=1&app_id=122963",
+                #Mount Top
+                "https://player.vimeo.com/video/137042579?h=f005dd034f&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137040500?h=185511a279&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/178245121?h=4495d336da&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137042580?h=b33be8d187&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137042641?h=fea889d187&dnt=1&app_id=122963",
+                #Mount Bottom
+                "https://player.vimeo.com/video/137042644?h=53cbd86d0b&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/314265981?h=d75dfb5dab&dnt=1&app_id=122963",
+                #Knee on Belly Top
+                ##??stabilize under construction
+                "https://player.vimeo.com/video/179861106?h=d150237152&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/179861104?h=40a4edbe4b&dnt=1&app_id=122963",
+                #Knee on Belly Bottom
+                "https://player.vimeo.com/video/140965925?h=838f145556&dnt=1&app_id=122963",
+                #Back Control & Attack
+                "https://player.vimeo.com/video/136989993?h=f50eb9223c&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/137040494?h=a48f17a429&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/280041316?h=6d73c7685c&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/136989994?h=a8d9366a1e&dnt=1&app_id=122963",
+                #Back Defence
+                "https://player.vimeo.com/video/154899303?h=9b94ab88a7&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/154899304?h=a0434ad2fc&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/136989992?h=8fba61d546&dnt=1&app_id=122963"
+        ]
+
+print("Data wordt hier weggeschreven: {0}".format(os.getcwd()))
+
+for element in videolijst:
+    commando=("alacritty -e youtube-dl '" + element + "'")
+    print(commando)
+    os.system(commando)
+#+end_src
+
+Ik heb de spaties via een bash script veranderd in underscores met:
+#+begin_src shell
+for file in *;
+do
+  echo Converting "$file" to "${file// /_}"
+  mv "$file" "${file// /_}"
+done
+#+end_src
+
+Daarna files in directories gezet als '01_Solo' en daarna het onderstaande script laten lopen:
+
+Batch rename. Verander de naam van bestanden. Zet eerst de foto's in directories met nummer van techniek en omschrijving. Ga in de main directory. Dit scriptje VERPLAATST alleen bestanden uit de directory naar de main directory met als begin de naam van de directory waar het in stond.
+Het onderstaande heb ik als een enkele commandline regel gebruikt.
+#+begin_src shell
+start=$PWD
+for directory in *; do
+  cd "$directory"
+  for filename in *; do
+mv "$filename" ../"$directory$filename"
+  done
+  cd "$start"
+done
+#+end_src
+
+Later had ik per ongeluk spaties tussen de filenames gezet en die ik heb gedelete met het volgende:
+#+begin_src shell
+for file in *;
+do
+  mv "$file" "${file// /}"
+done
+#+end_src
+
+Om het af te maken heb ik alles omgezet naar lower case
+#+begin_src shell
+for file in *; do
+  mv -n -- "$file" "$(tr '[A-Z]' '[a-z]' <<< "$file")"
+done
+#+end_src
+
+
+
+
+Script dat filenames veranderd.
+- vervangen spatie door underscore, staat hierboven
+
+
+Het volgende script veranderd '&' naar 'and'.
+#+begin_src shell
+#for f in *;
+for f in ~/Stack/Muziek/MP3/**/* ;
+do
+  mv -- "$f" "${f//&/and}";
+done
+#+end_src
+
+#+RESULTS:
+
+
+Het volgende script veranderd alle karakters in underscores, dus ook &!
+#+begin_src shell
+#for f in *;
+for f in ~/Stack/Muziek/MP3/**/* ;
+do
+  mv -- "$f" "${f//[!0-9a-zA-Z.-]/_}";
+done
+#+end_src
+
+Het volgende script veranderd de extra punten in underscores, behalve de .extention.
+#+begin_src shell
+for f in *.*;
+do
+  pre="${f%.*}"; suf="${f##*.}"; \
+  mv -i -- "$f" "${pre//./_}.${suf}";
+done
+#+end_src
+
+Uitvoeren van commando naar alle onderliggende subdirectories. Met deze kun je testen, want geeft alleen filenames:
+#+begin_src shell
+for f in /Stack/Muziek/MP3/**/* ;
+do
+    echo $f;
+done;
+#+end_src
+
+
+
+
+Verander directory namen en file namen recursively van spatie naar underscore:
+#+begin_src shell
+find -name "* *" -print0 | sort -rz | \
+  while read -d $'\0' f; do mv -v "$f" "$(dirname "$f")/$(basename "${f// /_}")"; done
+#+end_src
+
 
 *** ff2mpv
 Play youtube and other sources automatically by mpv in firefox.
