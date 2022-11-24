@@ -37,11 +37,11 @@ def monwide(qtile):
 def monwide2(qtile):
     qtile.cmd_to_layout_index(5) #3: monadwide with margins
 
-def cmd_increase_margin(self):
+def cmd_increase_margin(self): ### FIXME werkt NIET!
     self.margin += 10
     self.group.layout_all()
 
-def cmd_decrease_margin(self):
+def cmd_decrease_margin(self): ### FIXME werkt NIET!
     new_margin = self.margin - 10
     if new_margin < 0:
         new_margin = 0
@@ -52,21 +52,29 @@ keys = [
     KeyChord([modL], "m", [      # testje, keychording werkt!! :-)
         Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
         Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
-        Key([], "k", lazy.layout.increase_margin()),
-        Key([], "j", lazy.layout.decrease_margin())
+        Key([], "k", lazy.function(cmd_increase_margin)),  ### FIXME werkt NIET:!
+        Key([], "j", lazy.funtion(cmd_decrease_margin))    ### FIXME werkt NIET:!
         ],
         mode="Margins" # als je mode kiest dan moet je eruit met escape....
-    ),
+        ),
     KeyChord([modL], "z", [  # test, weet niet ik dit erin hou...
         Key([], "k", lazy.layout.grow_main()),
         Key([], "j", lazy.layout.shrink_main()),
         Key([], "i", lazy.layout.grow()),
         Key([], "u", lazy.layout.shrink()),
         Key([], "n", lazy.layout.normalize()),
-        Key([], "m", lazy.layout.maximize())],
+        Key([], "m", lazy.layout.maximize())
+        ],
         mode="Windows"
-    ),
-
+        ),
+    Key([modL], "a",
+        lazy.function(cmd_increase_margin), ### FIXME werkt NIET:
+        desc="increase margin..."
+        ),
+    Key([modL, "shift"], "a",
+        lazy.function(cmd_decrease_margin), ### FIXME werkt NIET:
+        desc="decrease margin..."
+        ),
     Key([modL], "Return",
         lazy.spawn("alacritty"),
         desc="Launch a terminal in a new window"
@@ -152,7 +160,7 @@ keys = [
         lazy.layout.shrink(),
         desc="Shrink the selected window"
         ),
-     Key([modL],"y",
+    Key([modL],"y",
         lazy.function(montall),
         desc="Layout: MonadTall selection without margins"
         ),
@@ -367,13 +375,6 @@ floating_theme = {"border_width": 3,
                 "border_focus": "#00ffd2",  #98C379= groen
                 "border_normal": "#006553",
                 }
-
-#self.margin = new_margin
-
-#self.group.layout_all()
-
-
-
 
 layouts = [
     layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,

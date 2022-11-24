@@ -30,14 +30,14 @@ Check the sourcecode of qtile by running from python shell: ~import libqtile~, ~
 
 ** Imports
 A note is added to ~config.py~ which reminds *not* to edit this file directly.
-#+begin_src python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :results none
 # NOTE: This file is generated from the README.org file. Do not alter
 # config.el directly and only modify the README.org file in emacs by
 # 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
 #+end_src
 
 My configuration requires some modules to be loaded. These are all default settings.
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :results none
 import psutil
 import subprocess
 import os
@@ -50,7 +50,7 @@ from libqtile.lazy import lazy
 
 ** Variables
 Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Vim and Emacs variables for opening files in these editors.
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :results none
 modL = "mod4"                       # Left super key, dedicated to the windowmanager
 modR = "mod3"                       # Right super key, dedicated to open applications
 altR = "mod5"                       # Right alt key, dedicated to opening of files
@@ -84,57 +84,53 @@ def monwide2(qtile):
 
 #+END_SRC
 
-FIXME: Het volgende heb ik toegevoegd 16AUG22. orgineel als eerste test met keychording voor het aanpassen voor de marges, maar dat werk nog niet.
-
+### FIXME : Het volgende heb ik toegevoegd 16AUG22. orgineel als eerste test met keychording voor het aanpassen voor de marges, maar dat werk nog niet.
 # https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input
-#    Key([], "Up", lazy.layout.increase_margin()),
-#    Key([], "Down", lazy.layout.decrease_margin())
-#    ],
-#    mode="Margins"
-#    ),
-#
 
-
-#+BEGIN_SRC python :tangle config.py
-def cmd_increase_margin(self):
+#+BEGIN_SRC python :tangle config.py :results none
+def cmd_increase_margin(self): ### FIXME werkt NIET!
     self.margin += 10
     self.group.layout_all()
 
-def cmd_decrease_margin(self):
+def cmd_decrease_margin(self): ### FIXME werkt NIET!
     new_margin = self.margin - 10
     if new_margin < 0:
         new_margin = 0
     self.margin = new_margin
     self.group.layout_all()
-
-
 #+END_SRC
-
-
 
 ** Keybindings: qtile specific
 My left super key bindings are all related to qtile, for instance moving windows around.
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :results none
 
 keys = [
     KeyChord([modL], "m", [      # testje, keychording werkt!! :-)
         Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
         Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
-        Key([], "k", lazy.layout.increase_margin()),
-        Key([], "j", lazy.layout.decrease_margin())
+        Key([], "k", lazy.function(cmd_increase_margin)),  ### FIXME werkt NIET:!
+        Key([], "j", lazy.funtion(cmd_decrease_margin))    ### FIXME werkt NIET:!
         ],
         mode="Margins" # als je mode kiest dan moet je eruit met escape....
-    ),
+        ),
     KeyChord([modL], "z", [  # test, weet niet ik dit erin hou...
         Key([], "k", lazy.layout.grow_main()),
         Key([], "j", lazy.layout.shrink_main()),
         Key([], "i", lazy.layout.grow()),
         Key([], "u", lazy.layout.shrink()),
         Key([], "n", lazy.layout.normalize()),
-        Key([], "m", lazy.layout.maximize())],
+        Key([], "m", lazy.layout.maximize())
+        ],
         mode="Windows"
-    ),
-
+        ),
+    Key([modL], "a",
+        lazy.function(cmd_increase_margin), ### FIXME werkt NIET:
+        desc="increase margin..."
+        ),
+    Key([modL, "shift"], "a",
+        lazy.function(cmd_decrease_margin), ### FIXME werkt NIET:
+        desc="decrease margin..."
+        ),
     Key([modL], "Return",
         lazy.spawn("alacritty"),
         desc="Launch a terminal in a new window"
@@ -220,7 +216,7 @@ keys = [
         lazy.layout.shrink(),
         desc="Shrink the selected window"
         ),
-     Key([modL],"y",
+    Key([modL],"y",
         lazy.function(montall),
         desc="Layout: MonadTall selection without margins"
         ),
@@ -246,12 +242,9 @@ keys = [
         ),
     #+END_SRC
 
-    #+RESULTS:
-
-
 ** Keybindings: Audio and print
 Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py :results none
     # Hotkeys for audio and printscreen
     Key([], "XF86AudioRaiseVolume",
         lazy.spawn("amixer -q set Master 5%+"),
@@ -277,7 +270,7 @@ Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
 
 ** Keybindings: Applications
 Right super key to open applications.
-#+BEGIN_SRC python :tangle "config.py"
+#+BEGIN_SRC python :tangle config.py :results none
     # Open applications
     Key([modR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
@@ -338,7 +331,7 @@ Right super key to open applications.
 
 ** Keybingings: Text files
 The right alt key is used to open text files in Vim or in Emacs.
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :results none
     Key([altR], "a",
         lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org")),
         desc="Open in Emacs: aandelen log"
@@ -409,7 +402,7 @@ The right alt key is used to open text files in Vim or in Emacs.
 
 ** Groups
 The workspaces are described here, which are called Groups in qtile. I don't need more then four groups so I limited it to that.
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :results none
 groups = [Group(i) for i in "1234"]
 
 for i in groups:
@@ -456,66 +449,11 @@ floating_theme = {"border_width": 3,
                 }
 #+END_SRC
 
-#+RESULTS:
 
 ** Layouts
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
 
-aangepast 16AUG22: ik wil proberen om gaps dynamisch te maken.
-ik begin met het aanpassen van mod Y: oftewel monadtall die nu margin 20 heeft, entry 4. Orgineel:
-
-    layout.MonadTall(**layout_theme, margin=20, min_ratio=0.05,
-                     max_ratio=0.9, new_client_position='bottom'),
-
-
-    def cmd_increase_margin(self):
-        self.margin += 10
-        self.group.layout_all()
-
-    def cmd_decrease_margin(self):
-        new_margin = self.margin - 10
-        if new_margin < 0:
-            new_margin = 0
-
-        self.margin = new_margin
-
-        self.group.layout_all()
-
-  KeyChord([mod], "m", [
-            Key([], "Up", lazy.layout.increase_margin()),
-            Key([], "Down", lazy.layout.decrease_margin())
-        ],
-        mode="Margins"
-    ),
-
-
-
-def cmd_increase_margin(self):
-    self.margin += 10
-    self.group.layout_all()
-
-def cmd_decrease_margin(self):
-    new_margin = self.margin - 10
-    if new_margin < 0:
-        new_margin = 0
-    self.margin = new_margin
-    self.group.layout_all()
-
-It looks like I can affect the current layout's margins with qtile.current_layout.margin += 18 followed by the refresh. However, I'd like to effect all layout's margins. Is this possible?
-
-I think you'd have to iterate through qtile.config.layouts (Or I guess, layouts, as it's probably directly accessible from the config) and change them all manually.
-
-
-#+BEGIN_SRC python :tangle config.py
-
-
-
-#self.margin = new_margin
-
-#self.group.layout_all()
-
-
-
+#+BEGIN_SRC python :tangle config.py :results none
 
 layouts = [
     layout.MonadThreeCol(**layout_theme, min_ratio=0.05, max_ratio=0.9,
@@ -599,7 +537,6 @@ auto_minimize = True # handy for steam games
 
 #+END_SRC
 
-#+RESULTS:
 
 ** Some hooks
 A startup script is ran after startup of qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
@@ -637,9 +574,6 @@ def _unswallow(window):
 
 wmname = "LG3D"
 #+END_SRC
-
-
-
 
 
 * The autostart.sh script
