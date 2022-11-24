@@ -49,6 +49,7 @@ if __name__ == '__main__':
         RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
 
 
+
 # CSV data aan dataframe toevoegen
 def AddCSVtoDataFrame(filename, delimiter, kolom1, kolom2):
     """Opbouwen van het dataframe uit meerdere csv-bestanden"""
@@ -119,9 +120,9 @@ print('=' * 40  + "\n", dfx)  # Alleen voor debugging gebruik
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
-    EurCol: ["-" * 6, Kapitaal, Kapitaal - Huis],
-    OmsCol: ["-" * 20, "Assets totaal       ", "Assets totaal -huis  "],
-    AaCol: ["+   ", "", ""],
+    EurCol: ["" , Kapitaal, Kapitaal - Huis],
+    OmsCol: ["" , "Assets totaal       ", "Assets totaal - huis  "],
+    AaCol: ["", "", ""],
     AminHuisCol: ["", "", ""]}
 dfx = pd.DataFrame(d)
 # Samenvoegen van dataframes
@@ -136,18 +137,38 @@ df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO)))
 # Maak een timestamp als 20230131
 t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum)))
-# Introductie regels (separator/datum+assets/separator)
-deel1 = ('=' * 40 + "\n" + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + '=' * 40 + "\n")
+
+# De titel voor in org mode (met drie sterren)
+titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
+print('\n\n')
+orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
+orgTabelNaam=''.join(orgTabelNaam)
+
+# Transformeer dataframe tot een text string met Emacs org mode table separatoren (|)
+gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
+gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')    # Verwijder NaN waarden
+gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Voeg separatoren in
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Verwijder dubbele waarden
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
+gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
+
+scheider= ('|-|-|-|-|') # separator voor in Emacs org mode (table)
+
 # Combineer de introductieregels met het dataframe
-deel2 = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
-deel2 = deel2.replace('NaN', '')    # Verwijder NaN waarden
-data = deel1 + deel2                # Combineren van introductieregels+dataframe
-print('=' * 40 + "\n", "data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
+data = titel + orgTabelNaam + scheider +'\n' + gesorteerdeLijst + '\n'+scheider               # Combineren van introductieregels+dataframe
+data = data.replace('Omschrijving', '|Omschrijving')    # Verwijder NaN waarden
+data = data.replace('AA% AA*%', 'AA% |AA*%')    # Verwijder NaN waarden
+data = data.replace('Euro AA%', 'Euro |AA%')    # Verwijder NaN waarden
+data = data.replace('||||', str(scheider)+'\n\n'+str(scheider))    # Verwijder NaN waarden
+data = data.replace('|Overwaarde', str(scheider)+'\n| Overwaarde ')    # Verwijder NaN waarden
+
+print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
 
 # Schrijf data weg in het clipboard
 pyperclip.copy(data)
 
 # Wissen van data (garbage collection)
-del(AaCol , df , dfx , deel1 , deel2 , d , data ,   datum , t_stamp)
-del(AminHuisCol , EurCol , Huis , Kapitaal ,OmsCash , OmsCol , OmsHuis)
-del(RaboCash , fileDeGIRO , fileRabo , searchRabo)
+del(AaCol, df, dfx, scheider, gesorteerdeLijst, d, data, datum, t_stamp,
+    orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol, 
+    OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)

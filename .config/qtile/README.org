@@ -281,7 +281,8 @@ Right super key to open applications.
     # Open applications
     Key([modR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
-        lazy.spawn(termVim + os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org")),
+        #lazy.spawn(termVim + os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.org")),
         desc="Open in vim: run het python aandelen script en open het aandelen log"
         ),
     Key([modR], "b",
@@ -339,7 +340,7 @@ Right super key to open applications.
 The right alt key is used to open text files in Vim or in Emacs.
 #+BEGIN_SRC python :tangle config.py
     Key([altR], "a",
-        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.md")),
+        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org")),
         desc="Open in Emacs: aandelen log"
         ),
 
@@ -636,6 +637,10 @@ def _unswallow(window):
 
 wmname = "LG3D"
 #+END_SRC
+
+
+
+
 
 * The autostart.sh script
 This shellscript is called in the config.py script and is starting some keyboard specific stuff.

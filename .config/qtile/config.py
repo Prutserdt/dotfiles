@@ -202,7 +202,8 @@ keys = [
     # Open applications
     Key([modR], "a",
         lazy.spawn("python " + os.path.expanduser("~/.config/Aandelen.py")),
-        lazy.spawn(termVim + os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.md")),
+        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org")),
+        #lazy.spawn(termVim + os.path.expanduser("~/Stack/Documenten/Aandelen/aandelen_log.org")),
         desc="Open in vim: run het python aandelen script en open het aandelen log"
         ),
     Key([modR], "b",
@@ -256,7 +257,7 @@ keys = [
         ),
 
     Key([altR], "a",
-        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.md")),
+        lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org")),
         desc="Open in Emacs: aandelen log"
         ),
 

@@ -2736,6 +2736,8 @@ Yes, de libraries staan erbij! Ik ben verder gegaan met de Arduino IDE.
 
 *** ESP32 CAM, via arduino IDE
 
+Let op: je moet in arduino IDE wel de USB poort selecteren. Dat doe je onder Tools/Ports/dev/ttyUSB0.
+
 Open CameraWebServer sketch, via de IDE: File-Examples-ESP32-Camera-CameraWebServer
 Nu staat de CameraWebServer in de sketch IDE, deze moet aangepast worden, en
 uncomment het volgende en geef ssid en password voor wifi in sketch:
@@ -2795,11 +2797,6 @@ Setup the tools:
 
 *** ESP-IDF via VScodium
 28JUL22 heb ik in VSCodium Espressif IDF extension geinstalleerd en daarna de install information gevolgd. Met handige arch linux install dependencies. Daarna via ESP-IDF setup de express optie gekozen en de ~/esp/test/ gekozen met daarin /esp-idf. Ik had denk ik ~/esp/esp-idf al geinstalleerd eerder maar heb het voor vscodium nog maar een keer onder test gegooid.
-
-sod
-
-
-
 
 
 *** Doom Emacs
@@ -3092,6 +3089,96 @@ print('De meest populaire datum is', dagtext[maxpos+1], dagnummer[maxpos+1],"okt
 
 #+RESULTS:
 : De meest populaire datum is di 4 oktober met 7 punten.
+
+
+Mijn huidige verdeling van fondsen heb ik in de volgende tabel geplakt:
+#+NAME: 3funds
+|-------+---------|
+| fund  |  bedrag |
+|-------+---------|
+| NT W  | 9999999 |
+| NT SC | 1111111 |
+| NT EM | 1111111 |
+|-------+---------|
+
+Berekeningen in code block met een org table als input
+#+begin_src python :var tbl=3funds :results output :colnames no
+
+# Optellen van de bedragen in de rechter kolom
+bedragKolom = [i.pop(1) for i in tbl] # 1: kolom die je gebruikt
+totaal = 0
+
+for i in range(len(bedragKolom)-1):
+  totaal=totaal + bedragKolom[i+1]
+print ('Het totaal van de tabel is', totaal, 'euro.')
+
+print('\n\n',tbl[0],',', bedragKolom[0],', %')
+# Berekenen van percentages
+for i in range(len(bedragKolom)-1):
+  percentage= bedragKolom[i+1]/totaal*100
+  print(tbl[i+1],',', bedragKolom[i+1],',', round(percentage,1))
+#+end_src
+
+#+RESULTS:
+: Het totaal van de tabel is 12222221 euro.
+:
+:
+:  ['fund'] , bedrag , %
+: ['NT W'] , 9999999 , 81.8
+: ['NT SC'] , 1111111 , 9.1
+: ['NT EM'] , 1111111 , 9.1
+
+
+Berekeningen in code block met een org table als input
+#+begin_src python :var tbl=3funds :results output :colnames no
+import pandas as pd
+
+df = pd.DataFrame(tbl)
+print(df)
+
+
+bedragKolom = [i.pop(1) for i in tbl] # 1: kolom die je gebruikt
+totaal = 0
+
+for i in range(len(bedragKolom)-1):
+  totaal=totaal + bedragKolom[i+1]
+print ('Het totaal van de tabel is', totaal, 'euro.')
+
+print('\n\n',tbl[0],',', bedragKolom[0],', %')
+# Berekenen van percentages
+for i in range(len(bedragKolom)-1):
+  percentage= bedragKolom[i+1]/totaal*100
+  print(tbl[i+1],',', bedragKolom[i+1],',', round(percentage,1))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+       0        1
+0   fund   bedrag
+1   NT W  9999999
+2  NT SC  1111111
+3  NT EM  1111111
+Het totaal van de tabel is 12222221 euro.
+
+
+ ['fund'] , bedrag , %
+['NT W'] , 9999999 , 81.8
+['NT SC'] , 1111111 , 9.1
+['NT EM'] , 1111111 , 9.1
+#+end_example
+
+
+****** awk in code blocks
+Eigenlijk kun je dit soort opdrachten beter via shell/regex laten verlopen. Dit geeft snellere executie en een gecondenseerdere code, alhoewel het minder leesbaar is.
+
+#+BEGIN_SRC awk :stdin 3funds
+/NT*[a-zA-Z]/{sum+= $3} #Search for NT+zero or more spaces+one or more letters
+END { print "Sum of the NT shares is: ", sum}
+#+END_SRC
+
+#+RESULTS:
+: Sum of the NT shares is:  12222221
+
 
 **** Checkboxes in Org-mode
 In een lijst kunnen checkboxes worden gebruikt. Let op, het moet wel een lijst zijn.
