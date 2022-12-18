@@ -3519,6 +3519,19 @@ Nu is de foutmelding over het serveradres er niet meer maar krijg ik een ernstig
 Dit was mijn fout ik heb nu commented: ~#LoadModule mpm_event_module mdules/mod_mpm_event.so~.
 Nu werkt loopt apache zonder foutmeldingen. :-)
 
+*** Installeren graphenOS op Pixel (dec2022)
+Geinstalleerd volgens: https://www.youtube.com/watch?v=qruzL9IdUr8, en https://grapheneos.org/install/web.
+Device opgeladen tot 81%, daarna aangezet zonder sim/memory cards. Pin aangemaakt die tijdelijk is. OEM unlocking ingesteld (na wifi connectie voor contact unlocking optie Google database) Arch linux: install android-udev. Reboot pc. Alles doorgelopen t/m flashing.
+In Brave browser kwam de volgende error: error failed to execute claiminterface on usbDevice: unable to claim interface.
+Op de telefoon staat: fastbootd, reboot system now
+lsusb herkend het niet meer, voor flash: Google Inc Nexu/Pixel device (fastboot).
+In usb geplugd reboot hij nu om de 10 seconden.
+
+sbootloader is unlocked and software integrity cannot be guaranteed.
+visit link: g.co/ABH
+
+Tijdens reboot heb ik het pijltje naar beneden gekozen, nu kun je opnieuw flashen, hij is nog unlocked. lsusb geeft aan dat Pixel gekoppeld is.
+Precies hetzelfde gedaan via brave browser en de webinstall procedure, en daarna werkt het!
 
 * Distros and related stuff
 

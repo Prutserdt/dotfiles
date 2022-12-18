@@ -13,7 +13,6 @@
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
 - [[#code-snippets][Code snippets]]
-- [[#todos][TODOs]]
 - [[#credits][Credits]]
 
 * About this config
@@ -49,7 +48,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        (popup +defaults) ; tame sudden yet inevitable temporary windows
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       fill-column       ; a `fill-column' indicator
+  ;;     fill-column       ; a `fill-column' indicator
        workspaces        ; tab emulation, persistence & separate workspaces
 
        :editor
@@ -156,7 +155,6 @@ Test: kan ik sql gebruiken in org code blocks....
  '((sql . t)))
 #+end_src
 
-
 Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area. /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
 #+begin_src emacs-lisp :tangle config.el
 (beacon-mode 1)
@@ -189,6 +187,44 @@ The superior font is set here.
 #+begin_src emacs-lisp :tangle config.el
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
+#+end_src
+
+Nieuw(DEC2022):
+Hide emphasis markup (e.g. /italic/, *bold*, ~code~, etc)
+#+begin_src emacs-lisp :tangle config.el
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+#+begin_src emacs-lisp :tangle config.el
+  (custom-theme-set-faces
+   'user
+   '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
+   '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle config.el
+# (use-package org-bullets
+#    :config
+#    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle config.el
+let* ((variable-tuple
+          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (base-font-color     (face-foreground 'default nil 'default))
+         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+(custom-theme-set-faces
+ 'user
+ '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
+ '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
+
+(add-hook 'org-mode-hook 'variable-pitch-mode)
 #+end_src
 
 For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This works with the three column layout and is especially nice for maximized windows on an ultrawide. Now it's perfectly in the middle and distraction free.
@@ -233,12 +269,10 @@ Ik wil dat de default instelling is dat de code blocks verborgen zijn.
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
 
-
 Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
 #+begin_src emacs-lisp :tangle config.el
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
-
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
 NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
@@ -285,8 +319,6 @@ $0
 #+end_src
 
 Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
-
-* TODOs
 
 *MU4e*
 This email program needs to be configured properly.

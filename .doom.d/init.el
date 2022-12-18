@@ -17,7 +17,7 @@
        (popup +defaults) ; tame sudden yet inevitable temporary windows
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       fill-column       ; a `fill-column' indicator
+  ;;     fill-column       ; a `fill-column' indicator
        workspaces        ; tab emulation, persistence & separate workspaces
 
        :editor
