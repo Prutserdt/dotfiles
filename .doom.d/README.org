@@ -144,8 +144,8 @@ The Doom Emacs welcome screen is modified here. A different image is used, the d
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
-  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config."))
-  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
+;;  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
 #+end_src
 
 Test: kan ik sql gebruiken in org code blocks....
@@ -189,42 +189,28 @@ The superior font is set here.
 (setq default-frame-alist '((font . "Hack 13")))
 #+end_src
 
-Nieuw(DEC2022):
 Hide emphasis markup (e.g. /italic/, *bold*, ~code~, etc)
 #+begin_src emacs-lisp :tangle config.el
 (setq org-hide-emphasis-markers t)
 #+end_src
 
 #+begin_src emacs-lisp :tangle config.el
-  (custom-theme-set-faces
-   'user
-   '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
-   '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
-#+end_src
+;;let* ((variable-tuple
+;;          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+;;                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+;;                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+;;                ((x-list-fonts "Verdana")         '(:font "Verdana"))
+;;                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+;;                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+;;         (base-font-color     (face-foreground 'default nil 'default))
+;;         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
 
-#+begin_src emacs-lisp :tangle config.el
-# (use-package org-bullets
-#    :config
-#    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-#+end_src
-
-#+begin_src emacs-lisp :tangle config.el
-let* ((variable-tuple
-          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-         (base-font-color     (face-foreground 'default nil 'default))
-         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-(custom-theme-set-faces
- 'user
- '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
- '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
-
-(add-hook 'org-mode-hook 'variable-pitch-mode)
+;;(custom-theme-set-faces
+;; 'user
+;; '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
+;; '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
+;;
+;;(add-hook 'org-mode-hook 'variable-pitch-mode)
 #+end_src
 
 For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This works with the three column layout and is especially nice for maximized windows on an ultrawide. Now it's perfectly in the middle and distraction free.
@@ -262,11 +248,6 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
-#+end_src
-
-Ik wil dat de default instelling is dat de code blocks verborgen zijn.
-#+begin_src emacs-lisp :tangle config.el
-(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
 
 Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.

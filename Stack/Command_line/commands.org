@@ -3527,8 +3527,7 @@ Op de telefoon staat: fastbootd, reboot system now
 lsusb herkend het niet meer, voor flash: Google Inc Nexu/Pixel device (fastboot).
 In usb geplugd reboot hij nu om de 10 seconden.
 
-sbootloader is unlocked and software integrity cannot be guaranteed.
-visit link: g.co/ABH
+The bootloader is unlocked and software integrity cannot be guaranteed. visit link: g.co/ABH
 
 Tijdens reboot heb ik het pijltje naar beneden gekozen, nu kun je opnieuw flashen, hij is nog unlocked. lsusb geeft aan dat Pixel gekoppeld is.
 Precies hetzelfde gedaan via brave browser en de webinstall procedure, en daarna werkt het!
