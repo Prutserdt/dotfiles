@@ -45,7 +45,7 @@
   - [[#fetch-all-scrips-of-config-by-this-code-block][Fetch all scrips of ~/.config by this code block]]
 
 * About this document
-This org document is a literate programming document about the scripts that I use on my GNU/Linux computer. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
+This org document is a literate programming document about the scripts that I use on my GNU/Linux system. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
 
 
 * My scripts
@@ -241,12 +241,12 @@ del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
 A script to manage my dotfiles git repo. It checks the status of my dotfiles and gives options how to continue (push/pull/pullpush/exit).
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a shell script is used.
-#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no
 #!/bin/bash
 #+end_src
 
 Two functions are declared; one to push to git and one to pull. The push function contains a commit message that, just because I'm lazy and commit messages for dotfiles are not that necessary.
-#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no
 # ~/.config/dotfiles.sh
 
 function Push()
@@ -264,27 +264,24 @@ function Pull()
 #+end_src
 
 The screen of the terminal is cleared and the status of dotfiles is checked. Then a menu is given in the terminal for the 4 options.
-#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no
 clear &&
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status &&
 
 echo -n "--------------------------------------------------
-
 Please read the status of the dotfiles carefully above.
 
-
 Options:
-
-1 commit/push
-2 pull (and first reset -hard)
-3 pull and a commit/push
-4 exit
+ 1 commit/push
+ 2 pull (and first reset -hard)
+ 3 pull and a commit/push
+ 4 exit
 
 [$USER@github.com/Prutserdt/dotfiles ~]:> "
 #+end_src
 
 The read command will take the imput that the user gives from within the terminal and the case statement will perform the push/pull/exit commands. That's all.
-#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no
 read PullPush
 case $PullPush in
             [1])
@@ -318,26 +315,22 @@ esac
 
 
 ** exitqtile.sh
-#+begin_src bash
-	#!/bin/bash
-	# ~/.config/exitqtile.sh
-	#           _ _        _   _ _            _
-	#  _____  _(_) |_ __ _| |_(_) | ___   ___| |__
-	# / _ \ \/ / | __/ _` | __| | |/ _ \ / __| '_ \
-	#|  __/>  <| | || (_| | |_| | |  __/_\__ \ | | |
-	# \___/_/\_\_|\__\__, |\__|_|_|\___(_)___/_| |_|
-	#                   |_|     Created by Prutserdt
-	#
-	#
-	# This script gives yes/no option before exiting dwm.
-	# It is set in config.h of dwm.
-	echo -n "Do you wish to exit qtile right now? (y/n) "
-	read answer
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	   killall qtile
-	else
-	    echo No
-	fi
+Used to exit the Qtile windowmanager with yes/no option.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle exitqtile.sh :padline no :eval no
+#!/bin/bash
+#+end_src
+
+Echo out the options and run the ~killall qtile~ command, or not.
+#+begin_src sh :tangle exitqtile.sh :padline no :eval no
+echo -n "Do you wish to exit qtile right now? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+   killall qtile
+else
+    echo No
+fi
 #+end_src
 
 ** rdxswitch
@@ -959,7 +952,7 @@ Simple cheat code for 0ad. Does not properly work.
 
 ** Fetch all scrips of ~/.config by this code block
 
-The next code block will give the output of all of the scripts of the ~/.config as separate code blocks. Very handy to import all of the scripts.
+The next code block will give the output of all of the ~*.sh~ scripts of the ~~/.config~ as separate code blocks. Very handy to import all of 'em.
 
 #+name: fetch-shell-scripts
 #+BEGIN_SRC bash :results raw output
