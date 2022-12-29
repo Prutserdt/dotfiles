@@ -38,7 +38,9 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
 (doom! :completion
        company           ; the ultimate code completion backend
        vertico           ; the search engine of the future
- :ui
+       (ivy +childframe) ; a search engine for love and life
+
+       :ui
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        (emoji +unicode)  ; ð
@@ -48,8 +50,8 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        (popup +defaults) ; tame sudden yet inevitable temporary windows
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-  ;;     fill-column       ; a `fill-column' indicator
        workspaces        ; tab emulation, persistence & separate workspaces
+       treemacs          ; a project drawer, like neotree but cooler
 
        :editor
        (evil +everywhere); come to the dark side, we have cookies
@@ -70,6 +72,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        syntax            ; tasing you for every semicolon you forget
 
        :tools
+       debugger          ; stepping through code, to help you add bugs
        (eval +overlay)   ; run code, run (also, repls)
        lookup            ; navigate your code and its documentation
        lsp               ; M-x vscode
@@ -90,6 +93,8 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        (default +bindings +smartparens)
        )
 #+end_src
+
+#+RESULTS:
 
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of ~init.el~. This file shouln't be byte compiled.
@@ -119,10 +124,21 @@ Web-mode for editing of html/php/css
 (package! web-mode)
 #+end_src
 
-The nose package is already installed in Doom Emacs but it is not maintained and leading to an ~:lang python error~. Therefore this package is disabled. Note: disabling of core packages might lead to terrible side effects!
+Adding arduino-mode, testing, not working properly yet FIXME
 #+begin_src emacs-lisp :tangle packages.el
-;;(package! nose :disable t)
+(package! arduino-cli-mode)
+(package! arduino-mode)
 #+end_src
+
+Settings for python hacking, not sure I will use this setup, FIXME
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-babel-eval-in-repl)
+(package! eval-in-repl)
+(package! jupyter)
+(package! phpactor)
+#+end_src
+
+
 
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
@@ -145,7 +161,6 @@ The Doom Emacs welcome screen is modified here. A different image is used, the d
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
-;;  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
 #+end_src
 
 Test: kan ik sql gebruiken in org code blocks....
@@ -194,25 +209,6 @@ Hide emphasis markup (e.g. /italic/, *bold*, ~code~, etc)
 (setq org-hide-emphasis-markers t)
 #+end_src
 
-#+begin_src emacs-lisp :tangle config.el
-;;let* ((variable-tuple
-;;          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-;;                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-;;                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-;;                ((x-list-fonts "Verdana")         '(:font "Verdana"))
-;;                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-;;                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-;;         (base-font-color     (face-foreground 'default nil 'default))
-;;         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-;;(custom-theme-set-faces
-;; 'user
-;; '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
-;; '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
-;;
-;;(add-hook 'org-mode-hook 'variable-pitch-mode)
-#+end_src
-
 For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This works with the three column layout and is especially nice for maximized windows on an ultrawide. Now it's perfectly in the middle and distraction free.
 #+begin_src emacs-lisp :tangle config.el
 (setq-default fill-column 110)
@@ -246,6 +242,7 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Laat zien org blocks"             "l" #'org-fold-show-all
        :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
        :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
+       :desc "Treemacs file navigation"         "." #'treemacs
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
 #+end_src
@@ -300,45 +297,6 @@ $0
 #+end_src
 
 Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
-
-*MU4e*
-This email program needs to be configured properly.
-mu4e should be added to ~init.el~ (mu4e +org +gmail) and/or the mu4e package should be added to ~package.el~:
-
-#+begin_src emacs-lisp
-
-;; The email package MU for emacs
-(package! mu4e)
-
-#+end_src
-
-The following code block should be part of config.el:
-#+begin_src emacs-lisp
-
-(setq mail-user-agent 'mu4e-user-agent)
-(set-email-account!
- "transip"
- '((mu4e-sent-folder       . "/transip/Sent Mail")
-   (mu4e-trash-folder      . "/transip/Bin")
-   (smtpmail-smtp-user     . "email@adress.com"))
- t)
-(setq mu4e-get-mail-command "mbsync transip "
-    ;; get emails and index every 5 minutes
-      mu4e-update-interval 300
-      ;; send emails with format=flowed
-      mu4e-compose-format-flowed t
-      ;; no need to run cleanup after indexing for gmail
-      mu4e-index-cleanup nil
-      mu4e-index-lazy-check t
-      ;; more sensible date format
-      mu4e-headers-date-format "%d.%m.%y")
-;; tell message-mode how to send mail
-(setq message-send-mail-function 'smtpmail-send-it)
-;; if our mail server lives at smtp.example.org; if you have a local
-;; mail-server, simply use 'localhost' here.
-(setq smtpmail-smtp-server "smtp.transip.email")
-
-#+end_src
 
 * Credits
 My configuration of Doom Emacs is partially based on these ones.

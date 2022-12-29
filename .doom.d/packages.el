@@ -10,4 +10,10 @@
 
 (package! web-mode)
 
-;;(package! nose :disable t)
+(package! arduino-cli-mode)
+(package! arduino-mode)
+
+(package! org-babel-eval-in-repl)
+(package! eval-in-repl)
+(package! jupyter)
+(package! phpactor)

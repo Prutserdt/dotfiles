@@ -1,5 +1,6 @@
 #+TITLE: Linux tips and tricks
 #+STARTUP: showeverything
+#+OPTIONS: toc:4
 #+AUTHOR: Prutserdt
 
 #+begin_example
@@ -11,7 +12,7 @@
                                   Created by Prutserdt
 #+end_example
 
-* Table of content :toc:
+* Table of contents :toc:
 - [[#about-this-document][About this document]]
 - [[#command-line-tricks][Command line tricks]]
 - [[#applications-command-line-and-guis][Applications (Command line and GUIs)]]
@@ -1208,6 +1209,17 @@ Verbetering 20DEC21: Ik wil alleen https sites en zoeken in de lijsten van NL
 en DE. Ik kies de latest 50 om de meeste NL servers mee te nemen in de test, 
 anders zijn er bijna alleen Duitse servers en de NL servers zijn voor mij het snelste:
 ~sudo reflector --verbose --protocol https --country NL,DE --latest 50 --sort rate --save /etc/pacman.d/mirrorlist~
+
+***** Pacman keys probleem
+
+14DEC22: probleem met keys in pacman. De oplossing is de onderstaande code:
+#+BEGIN_SRC shell :dir /sudo::
+#!/bin/sh\
+sudo rm -rf /etc/pacman.d/gnupg;
+sudo pacman-key --init;
+sudo pacman-key --populate
+#+end_src
+
 
 *** WIFI
 
@@ -2976,6 +2988,15 @@ Even uitzoeken wat ik ga gebruiken
 ~doomdoctor~
 Nu is de vorige versie verwijderd en zijn er geen meldingen meer, dus opgelost.
 
+**** Python code check/run in emacs
+
+Zorg dat je in een python code block staat en dan C-c ' om de code aan te passen.
+
+Open de interactive python shell:
+M-x run-python
+Selecteer code en run in de interactive python shell(bovenstaand C-c ' werkt eigenlijk beter dan volgende):
+M-x python-shell-send-region
+
 *** Org mode (in emacs)
 
 **** Lijsten in Org-mode
@@ -3053,27 +3074,9 @@ Optellen van waarden in een kolom met vsum. Zet dit onderaan de tabel met #+TBLF
 |---------+----+----+----+----+----+----+----+----+----+----|
 #+TBLFM: @>$2..@>$11=vsum(@3$0..@-1$0)
 
-lijst met mensen die meegaan:
-
-renegieling@kpnplanet.nl
-judithfiret@hotmail.com
-frank.benneker@synthon.com
-arjanne.overeem@synthon.com
-henar.tejedor@synthon.com
-bertus.thijs@byondis.com
-jordy.luten@byondis.com
-pascal.renartverkerk@byondis.com
-raymond.westheim@synthon.com
-gertjan.ettema@synthon.com
-rolf.keltjens@synthon.com
-zjak.vaneupen@byondis.com
-dat zijn er 12, met mij en rens: 14 personen.
-Rens nog bellen.
-Misschien komt Herald ook nog mee.
-dus 14 of 15 personen.
-
-
-***** Berekeningen in code block met een org table als input
+**** Org mode en code blocks
+***** Python in code blocks
+In dit voorbeeld wordt een org table als input gebruikt, [[dagtabel]]:
 
 #+begin_src python :var tbl=dagtabel :results output :colnames no
 # Vinden van de meest populaire dag in de tabel 'dagtabel'
@@ -3101,7 +3104,8 @@ Mijn huidige verdeling van fondsen heb ik in de volgende tabel geplakt:
 | NT EM | 1111111 |
 |-------+---------|
 
-Berekeningen in code block met een org table als input
+Berekeningen in code block met een org table als input, en specifiek deze: [[3funds]].
+#+NAME: dagtabel_python
 #+begin_src python :var tbl=3funds :results output :colnames no
 
 # Optellen van de bedragen in de rechter kolom
@@ -3112,16 +3116,15 @@ for i in range(len(bedragKolom)-1):
   totaal=totaal + bedragKolom[i+1]
 print ('Het totaal van de tabel is', totaal, 'euro.')
 
-print('\n\n',tbl[0],',', bedragKolom[0],', %')
+print('\n',tbl[0],',', bedragKolom[0],', %')
 # Berekenen van percentages
 for i in range(len(bedragKolom)-1):
   percentage= bedragKolom[i+1]/totaal*100
   print(tbl[i+1],',', bedragKolom[i+1],',', round(percentage,1))
 #+end_src
 
-#+RESULTS:
+#+RESULTS: dagtabel_python
 : Het totaal van de tabel is 12222221 euro.
-:
 :
 :  ['fund'] , bedrag , %
 : ['NT W'] , 9999999 , 81.8
@@ -3129,13 +3132,13 @@ for i in range(len(bedragKolom)-1):
 : ['NT EM'] , 1111111 , 9.1
 
 
-Berekeningen in code block met een org table als input
+Berekeningen in code block met een org table als input, en specifiek deze: [[3funds]].
+#+NAME: dagtabel_python_pandas
 #+begin_src python :var tbl=3funds :results output :colnames no
 import pandas as pd
 
 df = pd.DataFrame(tbl)
 print(df)
-
 
 bedragKolom = [i.pop(1) for i in tbl] # 1: kolom die je gebruikt
 totaal = 0
@@ -3151,7 +3154,7 @@ for i in range(len(bedragKolom)-1):
   print(tbl[i+1],',', bedragKolom[i+1],',', round(percentage,1))
 #+end_src
 
-#+RESULTS:
+#+RESULTS: dagtabel_python_pandas
 #+begin_example
        0        1
 0   fund   bedrag
@@ -3167,9 +3170,14 @@ Het totaal van de tabel is 12222221 euro.
 ['NT EM'] , 1111111 , 9.1
 #+end_example
 
+Kies results types om code block output te geven:
+;;#+begin_src python :results output
+;;#+begin_src python :results values
 
-****** awk in code blocks
-Eigenlijk kun je dit soort opdrachten beter via shell/regex laten verlopen. Dit geeft snellere executie en een gecondenseerdere code, alhoewel het minder leesbaar is.
+
+***** awk in code blocks
+Eigenlijk kun je een python document als [[dagtabel_python_pandas]] beter shell/regex laten verlopen. Dit geeft snellere executie en een gecondenseerdere code, alhoewel het totaal onleesbaar wordt.
+#+NAME: dagtabel_python_pandas
 
 #+BEGIN_SRC awk :stdin 3funds
 /NT*[a-zA-Z]/{sum+= $3} #Search for NT+zero or more spaces+one or more letters
@@ -3179,52 +3187,6 @@ END { print "Sum of the NT shares is: ", sum}
 #+RESULTS:
 : Sum of the NT shares is:  12222221
 
-
-**** Checkboxes in Org-mode
-In een lijst kunnen checkboxes worden gebruikt. Let op, het moet wel een lijst zijn.
-Dus eerst een lijst aanmaken, bijvoorbeeld:
-
-***** TODO: Organize party
-- Call people
-  - Peter
-  - Sarah
-  - Same
-- order food
-- think about what music to play
-- Talk to the neighbors
-
-  Daarna kun je checkboxes toevoegen. Dat doe je door: spatie []. Je vult het in met: spatie/X/-.
-  Je kunt het beste de checkbox togglen met: ~M-x~ ~org-toggle-checkbox~. Dan zie je dat de bovenliggende hierachie ook geupdate wordt (dat gebeurd niet als je het handmatig invult).
-
-  Je kunt het aantal afgevinkte items weergeven met [/].
-
-***** TODO: Organize party
-- [-] Call people [2/3]
-  - [-] Peter
-  - [X] Sarah
-  - [X] Same
-- [ ] order food
-- [X] think about what music to play
-- [ ] Talk to the neighbors
-
-**** Org mode en code blocks
-***** Python in code blocks
-
-Zie 'dagtabel' in dit document voor een voorbeeld 😉.
-
-Kies results types om code block output te geven:
-;;#+begin_src python :results output
-;;#+begin_src python :results values
-
-Zorg dat je in de code staat en dan C-c ' om de code aan te passen.
-
-Open de interactive python shell:
-M-x run-python
-Selecteer code en run in de interactive python shell(bovenstaand C-c ' werkt eigenlijk beter dan volgende):
-M-x python-shell-send-region
-
-init.el aangepast: ;;python veranderd in python en ;;lsp naar lsp
-Daarna doomsync uitgevoerd
 
 ***** C code in code blocks
 
@@ -3241,7 +3203,6 @@ int main(void) {
 
 #+RESULTS:
 : druksensor0
-
 
 Tangle voorbeeld: begin_src C :tangle PowerStrike_ESP32.ino
 #+begin_src C
@@ -3275,7 +3236,6 @@ cd ~/.doom.d
 ls
 #+end_src
 
-
 Maak een lijst aan (//Example 6.1.. 6.10)
 #+begin_src shell :results output
 # Code block to calculate list with text and suffix numbering
@@ -3308,23 +3268,13 @@ echo -e Yolo, bro! >> /srv/http/testfile.txt
 Maak een lijst van source code blocks. Met raw output is het mogelijk om meerder code blocks weg te schrijven!
 #+name: php-files
 #+BEGIN_SRC bash :results raw output
-    cd /home/icefly/Downloads/lpmj6-master/05;
+cd /home/icefly/Downloads/lpmj6-master/05;
 for f in *; do
   echo "#+begin_src html :tangle \"/sudo::/srv/http/$f\"" # \ escape voor " character
   paste /dev/null - < "$f" #Geeft de inhoud van de php file
   echo "#+end_src"
   echo ""
 done
-#+end_src
-
-***** Javascript in code blocks
-
-Tangle voorbeeld: begin_src java :tangle data/script.js
-#+begin_src java
-
-// Get current sensor readings when the page loads
-window.addEventListener('load', getReadings);
-
 #+end_src
 
 
@@ -3344,7 +3294,7 @@ window.addEventListener('load', getReadings);
 #+end_src
 
 
-***** html in code blocks
+***** CSS in code blocks
 
 #+begin_src css
 html {
@@ -3362,10 +3312,9 @@ h1 {
 
 ***** php in code blocks, met sudo voorbeeld
 
-Voorbeeld van tangling met sudo privileges: ~begin_src php :tangle "/sudo::/srv/http/index.php"~
+Voorbeeld van tangling met sudo privileges: ~~#+begin_src php :tangle "/sudo::/srv/http/index.php"~
 
-//#+begin_src php :tangle "/sudo::/srv/http/index.php"
-#+begin_src php
+#+begin_src
 <?php
 // Link naar homepage toegevoegd.
 ?>
@@ -3380,13 +3329,12 @@ echo "b: [" . FALSE . "]<br>";
 
 ***** Elisp in code blocks
 
-
 #+begin_src elisp
 (concat "Yolo" " Mongol!")
 #+end_src
 
 #+RESULTS:
-: yolo Mongol!
+: Yolo Mongol!
 
 
 #+begin_src elisp
@@ -3403,13 +3351,68 @@ echo "b: [" . FALSE . "]<br>";
 #+RESULTS:
 : 1.232, 300, 500
 
+#+NAME: tellen
 #+begin_src elisp
-(+ 1 + 2)
+(+ 1 2)
 #+end_src
 
+#+RESULTS: tellen
+: 3
+
+
+***** Runnen van een codeblock, vanuit een andere plaats
+Dat gaat met het keyword ~CALL~, niet vergeten om de haakjes na het code block naam te zetten!
+Je kunt ook code blocks uit andere documenten aanroepen!
+
+#+CALL: tellen()
+
 #+RESULTS:
+: 3
 
 
+#+CALL: dagtabel_python()
+
+#+RESULTS:
+: Het totaal van de tabel is 12222221 euro.
+:
+:  ['fund'] , bedrag , %
+: ['NT W'] , 9999999 , 81.8
+: ['NT SC'] , 1111111 , 9.1
+: ['NT EM'] , 1111111 , 9.1
+
+
+***** Verwijzen naar een codeblock in het document (of tabel)
+
+Dat kun je doen als het een naam heeft, en het dan tussen dubbele [ haakjes zetten:
+[[dagtabel_python]].
+
+
+**** Checkboxes in Org-mode
+In een lijst kunnen checkboxes worden gebruikt. Let op, het moet wel een lijst zijn.
+Dus eerst een lijst aanmaken, bijvoorbeeld:
+
+***** TODO: Organize party
+- Call people
+  - Peter
+  - Sarah
+  - Same
+- order food
+- think about what music to play
+- Talk to the neighbors
+
+  Daarna kun je checkboxes toevoegen. Dat doe je door: spatie []. Je vult het in met: spatie/X/-.
+  Je kunt het beste de checkbox togglen met: ~M-x~ ~org-toggle-checkbox~. Dan zie je dat de bovenliggende hierachie ook geupdate wordt (dat gebeurd niet als je het handmatig invult).
+
+  Je kunt het aantal afgevinkte items weergeven met [/].
+
+***** TODO: Organize party
+- [-] Call people [2/3]
+  - [-] Peter
+  - [X] Sarah
+  - [X] Same
+- [ ] order food
+- [X] think about what music to play
+- [ ] Talk to the neighbors
 
 
 
@@ -3531,6 +3534,12 @@ The bootloader is unlocked and software integrity cannot be guaranteed. visit li
 
 Tijdens reboot heb ik het pijltje naar beneden gekozen, nu kun je opnieuw flashen, hij is nog unlocked. lsusb geeft aan dat Pixel gekoppeld is.
 Precies hetzelfde gedaan via brave browser en de webinstall procedure, en daarna werkt het!
+
+*** Mastodon install
+~yay mastodon~
+Welke client te kiezen....
+prutserdt
+
 
 * Distros and related stuff
 

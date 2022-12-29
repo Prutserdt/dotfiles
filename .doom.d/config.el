@@ -8,7 +8,6 @@
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
-;;  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "GNU Emacs comes with ABSOLUTELY NO WARRANTY. Copyright (C) 2022 Free Software Foundation, Inc.")))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -31,23 +30,6 @@
 (setq default-frame-alist '((font . "Hack 13")))
 
 (setq org-hide-emphasis-markers t)
-
-;;let* ((variable-tuple
-;;          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-;;                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-;;                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-;;                ((x-list-fonts "Verdana")         '(:font "Verdana"))
-;;                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-;;                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-;;         (base-font-color     (face-foreground 'default nil 'default))
-;;         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-;;(custom-theme-set-faces
-;; 'user
-;; '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
-;; '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
-;;
-;;(add-hook 'org-mode-hook 'variable-pitch-mode)
 
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
@@ -74,6 +56,7 @@
        :desc "Laat zien org blocks"             "l" #'org-fold-show-all
        :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
        :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
+       :desc "Treemacs file navigation"         "." #'treemacs
        :desc "Write this buffer to file"        "w" #'write-file)
                 )
 
@@ -84,7 +67,6 @@
 
 (scroll-bar-mode -1)
 
-;;(select-enable-primary - default nil)
 (global-set-key (kbd "<mouse-2>") 'clipboard-yank)
 ;; misschien is deze ook nodig:...
 (delete-selection-mode)

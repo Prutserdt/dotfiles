@@ -7,7 +7,9 @@
 (doom! :completion
        company           ; the ultimate code completion backend
        vertico           ; the search engine of the future
- :ui
+       (ivy +childframe) ; a search engine for love and life
+
+       :ui
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        (emoji +unicode)  ; ð
@@ -17,8 +19,8 @@
        (popup +defaults) ; tame sudden yet inevitable temporary windows
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-  ;;     fill-column       ; a `fill-column' indicator
        workspaces        ; tab emulation, persistence & separate workspaces
+       treemacs          ; a project drawer, like neotree but cooler
 
        :editor
        (evil +everywhere); come to the dark side, we have cookies
@@ -39,6 +41,7 @@
        syntax            ; tasing you for every semicolon you forget
 
        :tools
+       debugger          ; stepping through code, to help you add bugs
        (eval +overlay)   ; run code, run (also, repls)
        lookup            ; navigate your code and its documentation
        lsp               ; M-x vscode
