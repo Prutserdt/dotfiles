@@ -1,28 +1,10 @@
-! kbswitch
-!   _    _                  _ _       _     
-!  | | _| |__  _____      _(_) |_ ___| |__  
-!  | |/ / '_ \/ __\ \ /\ / / | __/ __| '_ \ 
-!  |   <| |_) \__ \\ V  V /| | || (__| | | |
-!  |_|\_\_.__/|___/ \_/\_/ |_|\__\___|_| |_|
-!                       Created by Prutserdt
-! Restores the keysetting that are typically lost 
-! after hotswapping keyboards.
-!
-! Use it by running the .bashrc alias k in terminal
-! or run as: xmodmap ~/.config/kbswitch
-
-! Swap Caps/Esc. A little hack for VIM.
 remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
-
-! Remove right super key and make it another mod key (for opening apps)
 remove mod4 = Super_R
 add mod3 = Super_R
-
-! Remove Alt_R and make it another mod key (for opening txt files)
-! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift
+! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift, uncomment next lines if needed.
 !remove mod1 = ISO_Level3_Shift
 !add mod5 = ISO_Level3_Shift
 remove mod1 = Alt_R

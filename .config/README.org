@@ -1,0 +1,975 @@
+#+TITLE: README
+#+STARTUP: showeverything
+#+OPTIONS: toc:4
+#+AUTHOR: Prutserdt
+
+#+begin_example
+ __  __                       _       _
+|  \/  |_   _   ___  ___ _ __(_)_ __ | |_ ___
+| |\/| | | | | / __|/ __| '__| | '_ \| __/ __|
+| |  | | |_| | \__ \ (__| |  | | |_) | |_\__ \
+|_|  |_|\__, | |___/\___|_|  |_| .__/ \__|___/
+        |___/                  |_| Created by Prutserdt
+#+end_example
+
+* Table of contents :toc:
+- [[#about-this-document][About this document]]
+- [[#my-scripts][My scripts]]
+  - [[#aandelenpy][aandelen.py]]
+  - [[#dotfilessh][dotfiles.sh]]
+  - [[#exitqtilesh][exitqtile.sh]]
+  - [[#rdxswitch][rdxswitch]]
+  - [[#kbswitch][kbswitch]]
+  - [[#screenshot2textsh][screenshot2text.sh]]
+- [[#unused-scripts][Unused scripts]]
+  - [[#aandelensh][aandelen.sh]]
+  - [[#dmenuupdatesh][dmenuUpdate.sh]]
+  - [[#dmenuappssh][dmenuapps.sh]]
+  - [[#dmenubackupsh][dmenubackup.sh]]
+  - [[#dmenuinternetsh][dmenuinternet.sh]]
+  - [[#dmenupatchsh][dmenupatch.sh]]
+  - [[#dmenustablesh][dmenustable.sh]]
+  - [[#dmenuthunarsh][dmenuthunar.sh]]
+  - [[#dmenuunicodesh][dmenuunicode.sh]]
+  - [[#dmenuvanillash][dmenuvanilla.sh]]
+  - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
+  - [[#dwmbackupsh][dwmbackup.sh]]
+  - [[#dwmbarsh][dwmbar.sh]]
+  - [[#dwmpatchsh][dwmpatch.sh]]
+  - [[#dwmstablesh][dwmstable.sh]]
+  - [[#dwmvanillash][dwmvanilla.sh]]
+  - [[#exitdwmsh][exitdwm.sh]]
+  - [[#updatebarsh][updatebar.sh]]
+  - [[#wololosh][wololo.sh]]
+- [[#tips-and-tricks][Tips and tricks]]
+  - [[#fetch-all-scrips-of-config-by-this-code-block][Fetch all scrips of ~/.config by this code block]]
+
+* About this document
+This org document is a literate programming document about the scripts that I use on my GNU/Linux computer. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
+
+
+* My scripts
+
+** aandelen.py
+
+A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. And after that  screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen. The format in the clipboard is optimized for emacs org mode tables.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
+#+begin_src python :tangle aandelen.py :padline no :eval no
+#!/usr/bin/env python3
+#+end_src
+
+The libraries that are used for this script are imported in the next section.
+#+begin_src python :tangle aandelen.py :padline no :eval no
+import glob, os, pyperclip, time
+import pandas as pd
+from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
+#+end_src
+
+The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog
+The aim is to add the amount of cash and surplus value of the house here by hand. After this the script will continue.
+
+#+begin_src python :tangle aandelen.py :padline yes :eval no
+
+class InputDialog(QDialog):
+    """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
+        global RaboCash  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
+        RaboCash = QLineEdit(self)
+        Huis = QLineEdit(self)
+        buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+        layout = QFormLayout(self)
+        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
+        layout.addRow("Voer overwaarde huis in:", Huis)
+        layout.addWidget(buttonbox)
+        buttonbox.accepted.connect(self.accept)
+        buttonbox.rejected.connect(self.reject)
+
+    def getinputs(self):
+        return RaboCash.text(), Huis.text()
+
+
+if __name__ == '__main__':
+    import sys
+
+    app = QApplication(sys.argv)
+    dialog = InputDialog()
+    if dialog.exec():
+        RaboCash, Huis = dialog.getinputs()
+        Huis = int(Huis)          # Moet integer zijn voor latere berekening
+        RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
+#+end_src
+
+A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
+#+begin_src python :tangle aandelen.py :padline yes :eval no
+def AddCSVtoDataFrame(filename, delimiter, column1, column2):
+    """Building a dataframe from several CSV files"""
+    global df  # This dataframe will be used outside of this def, so make it global
+    dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
+    dfx.columns = [OmsCol, EurCol] # Harmonizing column names
+    # Harmoniseer notatie. Verwijder punt als duizend separator, en wissel komma om met punt
+    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]
+    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]]
+    # Verander kolom Euro naar integer
+    dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)
+    # Toevoegen van tijdelijke dataframe aan bestaande dataframe
+    df = pd.concat([df, dfx])
+    print('=' * 40 + "\n", dfx)  # For debugging
+#+end_src
+
+The filenames of the csv files are generated here.
+#+begin_src python :tangle aandelen.py :padline yes :eval no
+fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
+searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-*"  # Wildcard searching
+fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
+#+end_src
+
+Creating some variables
+# Omschrijving van overwaarde huis en cash geld
+
+#+begin_src python :tangle aandelen.py :padline yes :eval no
+OmsHuis = "Overwaarde huis     "
+OmsCash = "RaboCash            "
+# Namen van kolommen die ik ga gebruiken:
+EurCol = "Euro"                     # Euro column naam
+OmsCol = "Omschrijving        "     # Omschrijving column naam
+AaCol = "AA%"                       # Asset Allocation column naam
+AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
+#+end_src
+
+#+begin_src python :tangle aandelen.py :padline yes :eval no
+# Aanmaken van dataframes van de twee portefeuilles en samenvoegen dataframes.
+# Aanmaken van een leeg dataframe
+df = pd.DataFrame()
+# Toevoegen van data uit csv files aan het lege dataframe.
+AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €")
+#De onderste regel van de rabobank csv is een lege regel dus verwijderen:
+df.drop(3,0,inplace=True)
+
+# Nu de DeGIRO data toevoegen:
+AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product")
+# Nieuw dataframe aanmaken met overwaarde huis en spaargeld data
+d = {
+    OmsCol: [OmsHuis, OmsCash],    # kolom omschrijving invullen
+    EurCol: [Huis, RaboCash]}      # kolom euros invullen
+dfx = pd.DataFrame(d)
+# Samenvoegen van dataframes
+df = pd.concat([df, dfx])
+# Sorteer op euros, aflopend (ascending=False)
+df = df.sort_values(by=EurCol, ascending=False)
+print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
+
+# Asset allocations berekenen en toevoegen aan dataframe
+# Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
+df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
+# Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA-berekening
+Kapitaal = df[EurCol].sum()
+# AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
+df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int)
+df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int)
+df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje geven
+print('=' * 40  + "\n", dfx)  # Alleen voor debugging gebruik
+#+end_src
+
+#+begin_src python :tangle aandelen.py :padline yes :eval no
+# Nieuw dataframe aanmaken met streepjes en totale assets enz
+d = {
+    EurCol: ["" , Kapitaal, Kapitaal - Huis],
+    OmsCol: ["" , "Assets totaal       ", "Assets totaal - huis  "],
+    AaCol: ["", "", ""],
+    AminHuisCol: ["", "", ""]}
+dfx = pd.DataFrame(d)
+# Samenvoegen van dataframes
+df = pd.concat([df, dfx])
+print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
+
+# De kolom omschrijving afslanken tot 20 tekens
+df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
+
+# Maak introductie regels en combineer dit met de dataframe.
+# Datum vinden van het bestand:fileDeGIRO
+datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO)))
+# Maak een timestamp als 20230131
+t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum)))
+#+end_src
+
+The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
+
+#+begin_src python :tangle aandelen.py :padline yes :eval no
+# De titel voor in org mode (met drie sterren)
+titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
+print('\n\n')
+orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
+orgTabelNaam=''.join(orgTabelNaam)
+
+# Transformeer dataframe tot een text string met Emacs org mode table separatoren (|)
+gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
+gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
+gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
+gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
+
+separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
+
+# Combineer de introductieregels met het dataframe
+data = titel + orgTabelNaam + separator +'\n' + gesorteerdeLijst + '\n'+separator               # Combineren van introductieregels+dataframe
+data = data.replace('Omschrijving', '|Omschrijving')    # Verwijder NaN waarden
+data = data.replace('AA% AA*%', 'AA% |AA*%')    # Verwijder NaN waarden
+data = data.replace('Euro AA%', 'Euro |AA%')    # Verwijder NaN waarden
+data = data.replace('||||', str(separator)+'\n\n'+str(separator))    # Verwijder NaN waarden
+data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')    # Verwijder NaN waarden
+
+print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
+
+#+end_src
+
+Writing the data to the clipboard and garbage collection.
+#+begin_src python :tangle aandelen.py :padline no :eval no
+pyperclip.copy(data)
+
+del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
+    orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
+    OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
+#+end_src
+
+** dotfiles.sh
+A script to manage my dotfiles git repo. It checks the status of my dotfiles and gives options how to continue (push/pull/pullpush/exit).
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a shell script is used.
+#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+#!/bin/bash
+#+end_src
+
+Two functions are declared; one to push to git and one to pull. The push function contains a commit message that, just because I'm lazy and commit messages for dotfiles are not that necessary.
+#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+# ~/.config/dotfiles.sh
+
+function Push()
+{
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v;
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME commit -m "Updated";
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME push -v
+}
+
+function Pull()
+{
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME reset --hard;
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull
+}
+#+end_src
+
+The screen of the terminal is cleared and the status of dotfiles is checked. Then a menu is given in the terminal for the 4 options.
+#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+clear &&
+/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status &&
+
+echo -n "--------------------------------------------------
+
+Please read the status of the dotfiles carefully above.
+
+
+Options:
+
+1 commit/push
+2 pull (and first reset -hard)
+3 pull and a commit/push
+4 exit
+
+[$USER@github.com/Prutserdt/dotfiles ~]:> "
+#+end_src
+
+The read command will take the imput that the user gives from within the terminal and the case statement will perform the push/pull/exit commands. That's all.
+#+begin_src sh :tangle dotfiles_.sh :padline no :eval no
+read PullPush
+case $PullPush in
+            [1])
+                echo --------------------------------------------------
+                echo
+                Push
+                ;;
+            [2])
+                echo --------------------------------------------------
+                echo
+                Pull
+                ;;
+            [3])
+                echo --------------------------------------------------
+                echo
+                Pull
+                Push
+                ;;
+            [4])
+                echo --------------------------------------------------
+                echo
+                echo As you whish: exiting
+                ;;
+
+            *)  echo --------------------------------------------------
+                echo
+                echo "Invalid input, exiting"
+            ;;
+esac
+#+end_src
+
+
+** exitqtile.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/exitqtile.sh
+	#           _ _        _   _ _            _
+	#  _____  _(_) |_ __ _| |_(_) | ___   ___| |__
+	# / _ \ \/ / | __/ _` | __| | |/ _ \ / __| '_ \
+	#|  __/>  <| | || (_| | |_| | |  __/_\__ \ | | |
+	# \___/_/\_\_|\__\__, |\__|_|_|\___(_)___/_| |_|
+	#                   |_|     Created by Prutserdt
+	#
+	#
+	# This script gives yes/no option before exiting dwm.
+	# It is set in config.h of dwm.
+	echo -n "Do you wish to exit qtile right now? (y/n) "
+	read answer
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	   killall qtile
+	else
+	    echo No
+	fi
+#+end_src
+
+** rdxswitch
+
+These settings are used in combination with an xmodmap command and are restoring the keysetting that I use for my Redox keyboard. I run it by the alias ~r~ in my terminal which will execute ~xmodmap ~/.config/rdxswitch~. This is needed when keyboards are swapped.
+
+My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
+#+begin_src sh :tangle rdxswitch :padline no :eval no
+remove Lock = Caps_Lock
+keysym Escape = Escape
+keysym Caps_Lock = Caps_Lock
+add Lock = Caps_Lock
+#+end_src
+
+! With my custom redox build there is a Super-R
+! Remove right super key and make it another mod key (for opening apps)
+#+begin_src sh :tangle rdxswitch :padline no :eval no
+remove mod4 = Super_R
+add mod3 = Super_R
+#+end_src
+
+** kbswitch
+
+These settings are used in combination with an xmodmap command and can be used when a normy keyboard is used. It will swap Escape/CapsLock, change the super key to super left and super right and the same for the alt key (switch to alt-left and alt-right)
+I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config/kbswitch~.
+
+Swap the Escape with the Capslock.
+#+begin_src sh :tangle kbswitch :padline no :eval no
+remove Lock = Caps_Lock
+keysym Escape = Caps_Lock
+keysym Caps_Lock = Escape
+add Lock = Caps_Lock
+#+end_src
+
+Change the setting so that the left and right super keys are both functional. More modifiers is better...
+#+begin_src sh :tangle kbswitch :padline no :eval no
+remove mod4 = Super_R
+add mod3 = Super_R
+#+end_src
+
+The same thing for the alt key. Let's use the Alt-left and Alt-right.
+#+begin_src sh :tangle kbswitch :padline no :eval no
+! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift, uncomment next lines if needed.
+!remove mod1 = ISO_Level3_Shift
+!add mod5 = ISO_Level3_Shift
+remove mod1 = Alt_R
+add mod5 = Alt_R
+#+end_src
+
+
+
+** screenshot2text.sh
+A script that makes a screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle screenshot2text.sh :padline no
+#!/bin/sh
+#+end_src
+
+First a temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
+#+begin_src bash :tangle screenshot2text.sh :padline no
+mkdir $XDG_RUNTIME_DIR/temp &
+#+end_src
+
+The screenshot program xfce4-screenshooter -r flag will select a region to be captured by mouse and the -s flag will save to the path. Here the $XDG_RUNTIME_DIR/temp is selected and the screenshot is saved as 'wismij.jpg' (wismij is Dutch for EraseMe). Note: the next screenshot will overwrite the jpg and txt file.
+#+begin_src bash :tangle screenshot2text.sh :padline no
+xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
+#+end_src
+
+The tesseract program is converting the picture to text and is saved in the RAM directory as 'wismij', which is actually 'wismij.txt'.
+#+begin_src bash :tangle screenshot2text.sh :padline no
+tesseract $XDG_RUNTIME_DIR/temp/wismij.jpg $XDG_RUNTIME_DIR/temp/wismij &&
+#+end_src
+
+Finally the textfile is catted to the system clipboard with xclip. The -sel flag selects the X selection to use and ~clip~ stands for clipboard, where the text will be stored. Ready to be pasted when needed.
+#+begin_src bash :tangle screenshot2text.sh :padline no
+cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
+#+end_src
+
+
+
+* Unused scripts
+
+** aandelen.sh
+My shell script which extracts information from a portfolio and calculates percentages and pastes the information to the system clipboards.
+
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/aandelen.sh
+	#                       _      _                  _
+	#  __ _  __ _ _ __   __| | ___| | ___ _ __    ___| |__
+	# / _` |/ _` | '_ \ / _` |/ _ \ |/ _ \ '_ \  / __| '_ \
+	#| (_| | (_| | | | | (_| |  __/ |  __/ | | |_\__ \ | | |
+	# \__,_|\__,_|_| |_|\__,_|\___|_|\___|_| |_(_)___/_| |_|
+	#
+	# Automating some routines :-)
+	# Opens up a mark down file and places data to clipboard.
+	# This clipboard data consists of my current stock portfolio, which is taken
+	# from ~/Downloads/Portfolio.csv, which is sorted by stock size, then the
+	# percentage is calculated and some other stuff.
+	#
+	# Open markdown file in the terminal
+	alacritty -e vim $HOME/Stack/Documenten/Aandelen/aandelen_log.md &
+	# make directory in ram memory of user
+	# df -T # to see the ram memory usage
+	mkdir $XDG_RUNTIME_DIR/temp &
+	# Fetch data from the .csv: two columns, stock name and size and sorth them by
+	# size and write to TempSorted
+	cat $HOME/Downloads/Portfolio.csv | sed "1,2 d" | cut -d , -f 1,7 | sed 's/"//'| sort -r -t ',' --key=6 > $XDG_RUNTIME_DIR/temp/TempSorted &&
+	# Take only the size of stocks and calculate percentage and add this in brackets to a temp file
+	cat $XDG_RUNTIME_DIR/temp/TempSorted | cut -d , -f 2 | awk '{a[NR] = $1; sum+= $1 } END {for (i = 1; i <= NR; i++) printf "%s %1.1f %\n", a[i],(100 * a[i])/sum}' > $XDG_RUNTIME_DIR/temp/TempPerc &&
+	# Write only the stockname to temp file
+	cat $XDG_RUNTIME_DIR/temp/TempSorted | cut -d , -f 1  > $XDG_RUNTIME_DIR/temp/TempName &&
+	# Combine TempPerc and TempName
+	paste $XDG_RUNTIME_DIR/temp/TempPerc $XDG_RUNTIME_DIR/temp/TempName > $XDG_RUNTIME_DIR/temp/TempMerged &&
+	# Add a line for markdown formatting
+	echo '================================================================================' > $XDG_RUNTIME_DIR/temp/TempLine1 &&
+	# Fetch the date of the portfolio.csv file and write to TempDate
+	date +%d%h%y -r $HOME/Downloads/Portfolio.csv >> $XDG_RUNTIME_DIR/temp/TempDate && # find date of .csv file and write to temp file
+	# Write text to TempLine2a
+	echo ', portfolio:' > $XDG_RUNTIME_DIR/temp/TempLine2a &&
+	# Calculate the sum of all stocks and write in TempTotal
+	cat $XDG_RUNTIME_DIR/temp/TempPerc | cut -d , -f 1 | awk '{n += $1}; END{print n}' > $XDG_RUNTIME_DIR/temp/TempTotal &&
+	# Again some text is written, this time to TempLine2b
+	echo 'euro, winst:  euro.' > $XDG_RUNTIME_DIR/temp/TempLine2b &&
+	# Text of three temp files are combined in one single line: TempLine2New
+	paste $XDG_RUNTIME_DIR/temp/TempDate $XDG_RUNTIME_DIR/temp/TempLine2a $XDG_RUNTIME_DIR/temp/TempTotal $XDG_RUNTIME_DIR/temp/TempLine2b > $XDG_RUNTIME_DIR/temp/TempLine2New &&
+	# Text of four temp files are combined to the final temp file: TempNieuw
+	cat $XDG_RUNTIME_DIR/temp/TempLine1 $XDG_RUNTIME_DIR/temp/TempLine2New $XDG_RUNTIME_DIR/temp/TempLine1 $XDG_RUNTIME_DIR/temp/TempMerged > $XDG_RUNTIME_DIR/temp/TempNieuw &&
+	# Placing the TempNieuw data in the clipboard memory
+	cat $XDG_RUNTIME_DIR/temp/TempNieuw | xclip -sel clip &&
+	# Remove the created temp files
+	rm $XDG_RUNTIME_DIR/temp/Temp*
+#+end_src
+
+
+** dmenuUpdate.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dmenuUpdate.sh
+	#     _                            _   _           _       _             _
+	#  __| |_ __ ___   ___ _ __  _   _| | | |_ __   __| | __ _| |_ ___   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | | | | '_ \ / _` |/ _` | __/ _ \ / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_| | |_) | (_| | (_| | ||  __/_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|\___/| .__/ \__,_|\__,_|\__\___(_)___/_| |_|
+	#                                       |_|                Created by Prutserdt
+	#
+	# Script to create a list of applications that is used for dmenu.
+	#
+	# Delete the dmenu_run file
+	rm $HOME/'.cache/dmenu_run' &
+
+	# Create a new list of apps from my binaries
+	ls /usr/bin/* > $HOME/.cache/dmenu_run &&
+
+	# Add all of the appimages from $HOME/Applications to the dmenu_run file
+	shopt -s nullglob # When AppImages aren't present then the loop will not be run
+	FILES=$HOME/Applications/*.AppImage
+	for f in $FILES
+	do
+	    #write to first line of the file (AppImages on top of list)
+	    sed -i '1 i '$f  $HOME/.cache/dmenu_run
+	done
+#+end_src
+
+** dmenuapps.sh
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/dmenuapps.sh
+	#     _                                                        _
+	#  __| |_ __ ___   ___ _ __  _   _  __ _ _ __  _ __  ___   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | |/ _` | '_ \| '_ \/ __| / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | (_| | |_) | |_) \__ \_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__,_| .__/| .__/|___(_)___/_| |_|
+	#                                       |_|   |_|
+	#                                                Created by Prutserdt
+	#
+	# Script to open applications (listed in: ~/.cache/dmenu_run) by dmenu.
+	# This requires the dmenu patch: center, which gives the dmenu -c option.
+	#
+	# If applications are missing, then it is time to update dmenu_run by
+	# running dmenuUpdadate.sh or perform it manually:
+	# rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run
+	cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
+#+end_src
+
+** dmenubackup.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dmenubackup.sh
+	#     _                            _                _                           _
+	#  __| |_ __ ___   ___ _ __  _   _| |__   __ _  ___| | ___   _ _ __  ___   ___ | |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | '_ \ / _` |/ __| |/ / | | | '_ \/ __| / __|| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_) | (_| | (__|   <| |_| | |_) \__ \_\__ \| | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|_.__/ \__,_|\___|_|\_\\__,_| .__/|___(_)___/|_| |_|
+	#                                                             |_| Created by Prutserdt
+	#
+	# This script gives yes/no option to mak a local backup of dmenu.
+	# This shell script can be called by the .bashrc alias dmenubackup.
+	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable &&
+	    mkdir ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable &&
+	    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable
+	else
+	    echo No
+	fi
+#+end_src
+
+** dmenuinternet.sh
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/dmenuinternet.sh
+	#     _                            _       _                       _         _
+	#  __| |_ __ ___   ___ _ __  _   _(_)_ __ | |_ ___ _ __ _ __   ___| |_   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | | '_ \| __/ _ \ '__| '_ \ / _ \ __| / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | | | | | ||  __/ |  | | | |  __/ |_ _\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|_|_| |_|\__\___|_|  |_| |_|\___|\__(_)___/_| |_|
+	#                                                              Created by Prutserdt
+	#
+	# Script to select webpages (~/.config/urls) in Firefox by dmenu.
+	# It opens: ~/.config/urls
+	# This requires the dmenu patch: center, which gives the dmenu -c option.
+	#cat ~/.config/urls | dmenu -i -c -l 30 | awk '{print $1}'| xclip -selection clipboard && firefox "$(xclip -o -selection clipboard)"
+	chosen=$(cat ~/.config/urls | dmenu -i -c -l 30)
+
+	# Exit if none chosen.
+	[ -z "$chosen" ] && exit
+
+	# If you run this command with an argument, it will automatically open
+	brave $chosen
+#+end_src
+
+** dmenupatch.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dmenupatch.sh
+	#     _                                        _       _           _
+	#  __| |_ __ ___   ___ _ __  _   _ _ __   __ _| |_ ___| |__    ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | '_ \ / _` | __/ __| '_ \  / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_) | (_| | || (__| | | |_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_| .__/ \__,_|\__\___|_| |_(_)___/_| |_|
+	#                                 |_|                Created by Prutserdt
+	#
+	# This script gives yes/no option to patch dmenu.
+	#
+	# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
+	# 1: delete files in test directory and restore the stable dmenu verstion.
+	# 2: write the diff filename to the diff_log
+	# 3: Run the patch
+	#
+	# This shell script can be called by the .bashrc alias dmenupatch.
+	echo -n "Are you sure you want to patch the current dwm system? This will first:
+	RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/suckless/dmenu/patches/test. Yes or no? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dmenu &&
+	    mkdir ~/.config/suckless/dmenu &&
+	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+	    cd ~/.config/suckless/dmenu &&
+	    clear && ls -al
+	    ls ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
+	    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
+	    rm ~/.config/suckless/dmenu/config.h &&
+	    patch -p1 < ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff &&
+	    make clean install
+	else
+	    echo No
+	fi
+#+end_src
+
+** dmenustable.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dmenustable.sh
+	#     _                                _        _     _            _
+	#  __| |_ __ ___   ___ _ __  _   _ ___| |_ __ _| |__ | | ___   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | / __| __/ _` | '_ \| |/ _ \ / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| \__ \ || (_| | |_) | |  __/_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|___/\__\__,_|_.__/|_|\___(_)___/_| |_|
+	#                                                    Created by Prutserdt
+	#
+	# This script gives yes/no option to make a local backup of dmenu.
+	# This script can be called by the .bashrc alias dmenustable.
+	echo -n "Are you sure you want to restore to the stable version and DELETE
+	the current dmenu version? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dmenu &&
+	    mkdir ~/.config/suckless/dmenu &&
+	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+	    cd ~/.config/suckless/dmenu &&
+	    clear && ls -al
+	else
+	    echo No
+	fi
+#+end_src
+
+** dmenuthunar.sh
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/dmenuthunar.sh
+	#     _                            _   _                                _
+	#  __| |_ __ ___   ___ _ __  _   _| |_| |__  _   _ _ __   __ _ _ __ ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | __| '_ \| | | | '_ \ / _` | '__/ __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_| | | | |_| | | | | (_| | | _\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__|_| |_|\__,_|_| |_|\__,_|_|(_)___/_| |_|
+	#                                                         Created by Prutserdt
+	#
+	# Script to select directories (~/.config/directories) in Thunar by dmenu.
+	# This requires the dmenu patch: center, which gives the dmenu -c option.
+	chosen=$(cat ~/.config/directories | dmenu -i -c -l 30)
+
+	# Exit if none chosen.
+	[ -z "$chosen" ] && exit
+	thunar $chosen
+#+end_src
+
+** dmenuunicode.sh
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/dmenuunicode.sh
+	#     _                                        _               _            _
+	#  __| |_ __ ___   ___ _ __  _   _ _   _ _ __ (_) ___ ___   __| | ___   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | | | | '_ \| |/ __/ _ \ / _` |/ _ \ / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_| | | | | | (_| (_) | (_| |  __/_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__,_|_| |_|_|\___\___/ \__,_|\___(_)___/_| |_|
+	#                                                             Created by Prutserdt
+	#
+	# Simple script to paste emojis via dmenu.
+	# Requirement: dmenu and the center patch that gives the dmenu -c option.
+	#cat ~/.config/unicode | dmenu -i -l 45 -fn hack-34| awk '{print $1}'| xclip -selection clipboard &&
+	#cat ~/.config/unicode | dmenu -i -l 45| awk '{print $1}'| xclip -selection clipboard &&
+	cat ~/.config/unicode | dmenu -i -c -l 45| awk '{print $1}'| xclip -selection clipboard &&
+	#cat ~/.config/unicode | dmenu -i -l 45 -fn monospace-20| awk '{print $1}'| xclip -selection clipboard &&
+	#cat ~/.config/unicode | dmenu -i -l 45 -fn hack-34| awk '{print $1}'| xclip -selection clipboard &&
+	# Backspace is needed to remove the nextline
+	xdotool key "ctrl+v" "BackSpace"
+#+end_src
+
+** dmenuvanilla.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dmenuvanilla.sh
+	#     _                                             _ _ _             _
+	#  __| |_ __ ___   ___ _ __  _   ___   ____ _ _ __ (_) | | __ _   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | \ \ / / _` | '_ \| | | |/ _` | / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| |\ V / (_| | | | | | | | (_| |_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_| \_/ \__,_|_| |_|_|_|_|\__,_(_)___/_| |_|
+	#                                                       Created by Prutserdt
+	#
+	# This script gives yes/no option to restore to vanilla dmenu.
+	# This script can be called by the .bashrc alias dmenuvanilla.
+	echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dmenu &&
+	    mkdir ~/.config/suckless/dmenu &&
+	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_vanilla/* ~/.config/suckless/dmenu &&
+	    cd ~/.config/suckless/dmenu &&
+	    clear && ls -al
+	else
+	    echo No
+	fi
+#+end_src
+
+** dmenuwallpaper.sh
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/dmenuwallpaper.sh
+	#     _                                          _ _                                 _
+	#  __| |_ __ ___   ___ _ __  _   ___      ____ _| | |_ __   __ _ _ __   ___  _ __ ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | \ \ /\ / / _` | | | '_ \ / _` | '_ \ / _ \| '__/ __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| |\ V  V / (_| | | | |_) | (_| | |_) |  __/| | _\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_| \_/\_/ \__,_|_|_| .__/ \__,_| .__/ \___||_|(_)___/_| |_|
+	#                                                   |_|         |_|
+	#                                                                       Created by Prutserdt
+	#
+	# Script to change the wallpaper by dmenu.
+	# This requires the dmenu patch: center, which gives the dmenu -c option.
+	ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -i -c -l 30 | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
+#+end_src
+
+
+** dwmbackup.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dwmbackup.sh
+	#     _                    _                _                     _
+	#  __| |_      ___ __ ___ | |__   __ _  ___| | ___   _ _ __   ___| |__
+	# / _` \ \ /\ / / '_ ` _ \| '_ \ / _` |/ __| |/ / | | | '_ \ / __| '_ \
+	#| (_| |\ V  V /| | | | | | |_) | (_| | (__|   <| |_| | |_) |\__ \ | | |
+	# \__,_| \_/\_/ |_| |_| |_|_.__/ \__,_|\___|_|\_\\__,_| .__(_)___/_| |_|
+	#                                                     |_|
+	#                                                   Created by Prutserdt
+	#
+	# This script gives yes/no option to mak a local backup of dwmm.
+	# This shell script can be called by the .bashrc alias dwmbackup.
+	echo -n "Are you sure you want to make a backup of the current dwm system? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* &&
+	    cp -r ~/.config/suckless/dwm/* ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable
+	#    rm -r ~/Stack/suckless/dwm/dwm-6.2_stable/* &&
+	#    cp -r ~/suckless/dwm/* ~/Stack/suckless/dwm/dwm-6.2_stable
+	else
+	    echo No
+	fi
+#+end_src
+
+** dwmbar.sh
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/dwmbar.sh
+	#     _                    _                    _
+	#  __| |_      ___ __ ___ | |__   __ _ _ __ ___| |__
+	# / _` \ \ /\ / / '_ ` _ \| '_ \ / _` | '__/ __| '_ \
+	#| (_| |\ V  V /| | | | | | |_) | (_| | | _\__ \ | | |
+	# \__,_| \_/\_/ |_| |_| |_|_.__/ \__,_|_|(_)___/_| |_|
+	#                                 Created by Prutserdt
+	#
+	# Update dwm status bar every minute and give as output
+	# updatebar.sh
+	while true
+	do
+	$HOME/.config/updatebar.sh
+	  sleep 60
+	done
+#+end_src
+
+** dwmpatch.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dwmpatch.sh
+	#     _                                _       _           _
+	#  __| |_      ___ __ ___  _ __   __ _| |_ ___| |__    ___| |__
+	# / _` \ \ /\ / / '_ ` _ \| '_ \ / _` | __/ __| '_ \  / __| '_ \
+	#| (_| |\ V  V /| | | | | | |_) | (_| | || (__| | | |_\__ \ | | |
+	# \__,_| \_/\_/ |_| |_| |_| .__/ \__,_|\__\___|_| |_(_)___/_| |_|
+	#                         |_|                Created by Prutserdt
+	#
+	# This script gives yes/no option to mak a local backup of dwmm.
+	#
+	# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
+	# 1: delete files in test directory and restore the stable dwm verstion.
+	# 2: write the diff filename to the diff_log
+	# 3: Run the patch
+	#
+	# This shell script can be called by the .bashrc alias dwmbackup.
+	echo -n "Are you sure you want to patch the current dwm system? This will
+	first: RESTORE TO THE STABLE DWM and after that make clean install on the .diff
+	file in the direcotory ~/Stack/Dotfiles/suckless/dwm/patches/test. Yes or no? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dwm &&
+	    mkdir ~/.config/suckless/dwm &&
+	    mkdir ~/.config/suckless/dwm/log &&
+	    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm &&
+	    cd ~/.config/suckless/dwm &&
+	    clear && ls -al &&
+	    ls ~/Stack/Dotfiles/suckless/dwm/patches/test/*.diff >> ~/.config/suckless/dwm/log/diff_log &&
+	    cp -r ~/.config/suckless/dwm/config.h ~/.config/suckless/dwm/config.def.h &&
+	    rm ~/.config/suckless/dwm/config.h &&
+	    patch -p1 < ~/Stack/Dotfiles/suckless/dwm/patches/test/*.diff &&
+	    make clean install
+	#    rm -r ~/suckless/dwm &&
+	#    mkdir ~/suckless/dwm &&
+	#    mkdir ~/suckless/dwm/log &&
+	#    cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/suckless/dwm &&
+	#    cd ~/suckless/dwm &&
+	#    clear && ls -al &&
+	#    ls ~/Stack/suckless/dwm/patches/test/*.diff >> ~/suckless/dwm/log/diff_log &&
+	#    cp -r ~/suckless/dwm/config.h ~/suckless/dwm/config.def.h &&
+	#    rm ~/suckless/dwm/config.h &&
+	#    patch -p1 < ~/Stack/suckless/dwm/patches/test/*.diff &&
+	#    make clean install
+	else
+	    echo No
+	fi
+#+end_src
+
+** dwmstable.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dwmstable.sh
+	#     _                        _        _     _            _
+	#  __| |_      ___ __ ___  ___| |_ __ _| |__ | | ___   ___| |__
+	# / _` \ \ /\ / / '_ ` _ \/ __| __/ _` | '_ \| |/ _ \ / __| '_ \
+	#| (_| |\ V  V /| | | | | \__ \ || (_| | |_) | |  __/_\__ \ | | |
+	# \__,_| \_/\_/ |_| |_| |_|___/\__\__,_|_.__/|_|\___(_)___/_| |_|
+	#                                            Created by Prutserdt
+	#
+	# This script gives yes/no option to mak a local backup of dwmm.
+	# This script can be called by the .bashrc alias dwmbackup.
+	echo -n "Are you sure you want to restore to the stable version and DELETE
+	the current dwm version? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dwm &&
+	    mkdir ~/.config/suckless/dwm &&
+	    mkdir ~/.config/suckless/dwm/log &&
+	    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm &&
+	    cd ~/.config/suckless/dwm && # does not change directory, also not after
+	    #entering 'sleep 5' in front of this. strange
+	    clear && ls -al
+	else
+	    echo No
+	fi
+#+end_src
+
+** dwmvanilla.sh
+#+begin_src bash
+	#!/bin/bash
+	# ~/.config/dwmvanilla.sh
+	#    _                                    _ _ _             _
+	# __| |_      ___ __ _____   ____ _ _ __ (_) | | __ _   ___| |__
+	#/ _` \ \ /\ / / '_ ` _ \ \ / / _` | '_ \| | | |/ _` | / __| '_ \
+	# (_| |\ V  V /| | | | | \ V / (_| | | | | | | | (_| |_\__ \ | | |
+	#\__,_| \_/\_/ |_| |_| |_|\_/ \__,_|_| |_|_|_|_|\__,_(_)___/_| |_|
+	#                                             Created by Prutserdt
+	#
+	# This script gives yes/no option to restore to vanilla dwmm.
+	# This script can be called by the .bashrc alias dwmbackup.
+	echo -n "Are you sure you want to restore to vanilla dwm and DELETE the current dwm system? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dwm &&
+	    mkdir ~/.config/suckless/dwm &&
+	    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/.config/suckless/dwm &&
+	    cd ~/.config/suckless/dwm &&
+	    clear && ls -al
+	#    rm -r ~/suckless/dwm &&
+	#    mkdir ~/suckless/dwm &&
+	#    cp -r ~/Stack/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/suckless/dwm &&
+	#    cd ~/suckless/dwm &&
+	#    clear && ls -al
+	else
+	    echo No
+	fi
+#+end_src
+
+** exitdwm.sh
+#+begin_src bash 
+	#!/bin/bash
+	# ~/.config/exitdwm.sh
+	#           _ _      _                          _
+	#  _____  _(_) |_ __| |_      ___ __ ___    ___| |__
+	# / _ \ \/ / | __/ _` \ \ /\ / / '_ ` _ \  / __| '_ \
+	#|  __/>  <| | || (_| |\ V  V /| | | | | |_\__ \ | | |
+	# \___/_/\_\_|\__\__,_| \_/\_/ |_| |_| |_(_)___/_| |_|
+	#                                 Created by Prutserdt
+	#
+	# This script gives yes/no option before exiting dwm.
+	# It is set in config.h of dwm.
+	echo -n "Do you wish to violently exit DWM now and    kill em all?   (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	   killall dwm
+	else
+	    echo No
+	fi
+#+end_src
+** updatebar.sh
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/updatebar.sh
+	#                 _       _       _                    _
+	# _   _ _ __   __| | __ _| |_ ___| |__   __ _ _ __ ___| |__
+	#| | | | '_ \ / _` |/ _` | __/ _ \ '_ \ / _` | '__/ __| '_ \
+	#| |_| | |_) | (_| | (_| | ||  __/ |_) | (_| | | _\__ \ | | |
+	# \__,_| .__/ \__,_|\__,_|\__\___|_.__/ \__,_|_|(_)___/_| |_|
+	#      |_|                               Created by Prutserdt
+	#
+	# Outputs mute icon, master volume, date and time
+	# This script is called after booting by another script: ~/.config/dwmbar.sh
+	# This script is also called after using volume/mute keys, see dwm config.h
+	mute="$(amixer get Master | tail -n1 | sed -r "s/.*\[(.*)].*/\1/")"
+	if [ $mute = "off" ]; then
+	xsetroot -name " 🔇`amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/"`% `date +"%d%h%y %H:%M"`"
+	else
+	xsetroot -name " 🔉`amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/"`% `date +"%d%h%y %H:%M"`"
+	fi
+#+end_src
+
+** wololo.sh
+Simple cheat code for 0ad. Does not properly work.
+
+#+begin_src bash
+	#!/bin/sh
+	#~/.config/wololo.sh
+	#               _       _            _
+	#__      _____ | | ___ | | ___   ___| |__
+	#\ \ /\ / / _ \| |/ _ \| |/ _ \ / __| '_ \
+	# \ V  V / (_) | | (_) | | (_) |\__ \ | | |
+	#  \_/\_/ \___/|_|\___/|_|\___(_)___/_| |_|
+	#                      Created by Prutserdt
+	#
+	# Script to cheat in 0 ad
+	sleep 1 && xdotool type wololo && sleep 1 && xdotool key 0xff0d
+	#sleep 0.6 && xdotool key 0xff0d && sleep 0.6 && xdotool type wololo && sleep 0.6 && xdotool key 0xff0d
+	# sleep 0.4 && xdotool key 0xff0d && sleep 0.4 && xdotool type wololo && xdotool key 0xff0d
+	# xdotool key 0xff0d && sleep 0.4 && xdotool type wololo && xdotool key 0xff0d
+	# xdotool type wololo && xdotool key 0xff0d
+#+end_src
+
+
+
+* Tips and tricks
+
+** Fetch all scrips of ~/.config by this code block
+
+The next code block will give the output of all of the scripts of the ~/.config as separate code blocks. Very handy to import all of the scripts.
+
+#+name: fetch-shell-scripts
+#+BEGIN_SRC bash :results raw output
+cd $HOME/.config;
+for f in *.sh; do
+  echo "** $f"
+  echo "#+begin_src bash " # \ escape voor " character
+  paste /dev/null - < "$f" #Geeft de inhoud van de php file
+  echo "#+end_src"
+  echo ""
+done
+#+end_src
+

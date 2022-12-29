@@ -120,7 +120,7 @@ keys = [
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-")),
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads")),
-    Key(["shift"], "Print", lazy.spawn(home + "/.config/ScreenshotToText.sh")),
+    Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
 
     # Open applications
     Key([mR], "a",

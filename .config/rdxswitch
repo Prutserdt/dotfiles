@@ -1,27 +1,6 @@
-! ~/.config/rdxswitch
-!          _                   _ _       _
-!  _ __ __| |_  _______      _(_) |_ ___| |__
-! | '__/ _` \ \/ / __\ \ /\ / / | __/ __| '_ \
-! | | | (_| |>  <\__ \\ V  V /| | || (__| | | |
-! |_|  \__,_/_/\_\___/ \_/\_/ |_|\__\___|_| |_|
-!                          Created by Prutserdt
-!   
-! Restores the keysetting that are typically lost 
-! after hotswapping keyboards. For Redox kb.
-!
-! Use it by running the .bashrc alias r in terminal
-! or run as: xmodmap ~/.config/rdxswitch
-
-! Redox kb has escape at the right position: next to a. So switching is not 
-! needed, but should be corrected, since probably previously remapped.
-
-!remove Lock = Caps_Lock
+remove Lock = Caps_Lock
 keysym Escape = Escape
 keysym Caps_Lock = Caps_Lock
-!add Lock = Caps_Lock
-
-! With my custom redox build there is a Super-R
-! Remove right super key and make it another mod key (for opening apps)
+add Lock = Caps_Lock
 remove mod4 = Super_R
 add mod3 = Super_R
-
