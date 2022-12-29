@@ -136,9 +136,10 @@ keys = [
     # even kijken of ik het met EzKey ga doen!!! weet niet of mL en mR gaaat werken....
     
 #    Key([mR], "b", lazy.spawn("brave" ),desc="Launch Brave browser"),
-    Key([mR], "b", lazy.spawn("brave")),
+#    Key([mR], "b", lazy.spawn("brave")),
+    Key([mR], "b", lazy.spawn(home + "/.config/dmenuinternet.sh")),
     Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")), 
-    Key([mR], "d", lazy.spawn(home + "/.config/dmenuapps.sh")), 
+    Key([mR], "d", lazy.spawn(home + "/.config/dmenuapps.sh")),
     Key([mR, "shift"], "d", lazy.spawn(home + "/.config/dmenuUpdate.sh")), 
     Key([mR], "f", lazy.spawn("firefox")), 
     Key([mR], "g", lazy.spawn("gimp")), 

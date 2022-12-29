@@ -21,8 +21,6 @@
   - [[#rdxswitch][rdxswitch]]
   - [[#kbswitch][kbswitch]]
   - [[#screenshot2textsh][screenshot2text.sh]]
-- [[#unused-scripts][Unused scripts]]
-  - [[#aandelensh][aandelen.sh]]
   - [[#dmenuupdatesh][dmenuUpdate.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
@@ -33,6 +31,8 @@
   - [[#dmenuunicodesh][dmenuunicode.sh]]
   - [[#dmenuvanillash][dmenuvanilla.sh]]
   - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
+- [[#unused-scripts][Unused scripts]]
+  - [[#aandelensh][aandelen.sh]]
   - [[#dwmbackupsh][dwmbackup.sh]]
   - [[#dwmbarsh][dwmbar.sh]]
   - [[#dwmpatchsh][dwmpatch.sh]]
@@ -47,6 +47,7 @@
 * About this document
 This org document is a literate programming document about the scripts that I use on my GNU/Linux system. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
 
+FIXME: ik wil dmenu gaan updaten. alpha patch gebruiken, of misschien een eenvoudigere en stabiele versie gebruiken???
 
 * My scripts
 
@@ -411,6 +412,264 @@ cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 #+end_src
 
 
+** dmenuUpdate.sh
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuUpdate.sh :padline no
+#!/bin/sh
+#+end_src
+
+
+
+#+begin_src bash :tangle dmenuUpdate.sh :padline no
+	# ~/.config/dmenuUpdate.sh
+	#     _                            _   _           _       _             _
+	#  __| |_ __ ___   ___ _ __  _   _| | | |_ __   __| | __ _| |_ ___   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | | | | '_ \ / _` |/ _` | __/ _ \ / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_| | |_) | (_| | (_| | ||  __/_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|\___/| .__/ \__,_|\__,_|\__\___(_)___/_| |_|
+	#                                       |_|                Created by Prutserdt
+	#
+	# Script to create a list of applications that is used for dmenu.
+	#
+	# Delete the dmenu_run file
+	rm $HOME/'.cache/dmenu_run' &
+
+	# Create a new list of apps from my binaries
+	ls /usr/bin/* > $HOME/.cache/dmenu_run &&
+
+	# Add all of the appimages from $HOME/Applications to the dmenu_run file
+	shopt -s nullglob # When AppImages aren't present then the loop will not be run
+	FILES=$HOME/Applications/*.AppImage
+	for f in $FILES
+	do
+	    #write to first line of the file (AppImages on top of list)
+	    sed -i '1 i '$f  $HOME/.cache/dmenu_run
+	done
+#+end_src
+
+** dmenuapps.sh
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuapps.sh :padline no
+#!/bin/sh
+#+end_src
+
+#+begin_src bash :tangle dmenuapps.sh :padline no
+	#!/bin/sh
+	#~/.config/dmenuapps.sh
+	#     _                                                        _
+	#  __| |_ __ ___   ___ _ __  _   _  __ _ _ __  _ __  ___   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | |/ _` | '_ \| '_ \/ __| / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | (_| | |_) | |_) \__ \_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__,_| .__/| .__/|___(_)___/_| |_|
+	#                                       |_|   |_|
+	#                                                Created by Prutserdt
+	#
+	# Script to open applications (listed in: ~/.cache/dmenu_run) by dmenu.
+	# This requires the dmenu patch: center, which gives the dmenu -c option.
+	#
+	# If applications are missing, then it is time to update dmenu_run by
+	# running dmenuUpdadate.sh or perform it manually:
+	# rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run
+	cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
+#+end_src
+
+** dmenubackup.sh
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenubackup.sh :padline no
+#!/bin/sh
+#+end_src
+
+#+begin_src bash :tangle dmenubackup.sh :padline no
+	#!/bin/bash
+	# ~/.config/dmenubackup.sh
+	#     _                            _                _                           _
+	#  __| |_ __ ___   ___ _ __  _   _| |__   __ _  ___| | ___   _ _ __  ___   ___ | |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | '_ \ / _` |/ __| |/ / | | | '_ \/ __| / __|| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_) | (_| | (__|   <| |_| | |_) \__ \_\__ \| | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|_.__/ \__,_|\___|_|\_\\__,_| .__/|___(_)___/|_| |_|
+	#                                                             |_| Created by Prutserdt
+	#
+	# This script gives yes/no option to mak a local backup of dmenu.
+	# This shell script can be called by the .bashrc alias dmenubackup.
+	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable &&
+	    mkdir ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable &&
+	    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable
+	else
+	    echo No
+	fi
+#+end_src
+
+** dmenuinternet.sh
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuinternet.sh  :padline no
+#!/bin/sh
+#+end_src
+
+#+begin_src bash :tangle dmenuinternet.sh  :padline no
+chosen=$(cat ~/.config/urls | dmenu -i -c -l 65)
+[ -z "$chosen" ] && exit
+	brave $chosen
+#+end_src
+
+** dmenupatch.sh
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle "/sudo::dmenupatch.sh" :padline no
+#!/bin/sh
+#+end_src
+
+#+begin_src bash :tangle "/sudo::dmenupatch.sh" :padline no
+	# ~/.config/dmenupatch.sh
+	#     _                                        _       _           _
+	#  __| |_ __ ___   ___ _ __  _   _ _ __   __ _| |_ ___| |__    ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | '_ \ / _` | __/ __| '_ \  / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_) | (_| | || (__| | | |_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_| .__/ \__,_|\__\___|_| |_(_)___/_| |_|
+	#                                 |_|                Created by Prutserdt
+	#
+	# This script gives yes/no option to patch dmenu.
+	#
+	# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
+	# 1: delete files in test directory and restore the stable dmenu verstion.
+	# 2: write the diff filename to the diff_log
+	# 3: Run the patch
+	#
+	# This shell script can be called by the .bashrc alias dmenupatch.
+	echo -n "Are you sure you want to patch the current dwm system? This will first:
+	RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/suckless/dmenu/patches/test. Yes or no? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dmenu &&
+	    mkdir ~/.config/suckless/dmenu &&
+	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+	    cd ~/.config/suckless/dmenu &&
+	    clear && ls -al
+	    ls ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
+	    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
+	    rm ~/.config/suckless/dmenu/config.h &&
+	    patch -p1 < ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff &&
+	    make clean install
+	else
+	    echo No
+	fi
+#+end_src
+
+** dmenustable.sh
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenustable.sh :padline no
+#!/bin/sh
+#+end_src
+
+#+begin_src bash :tangle dmenustable.sh :padline no
+	# ~/.config/dmenustable.sh
+	#     _                                _        _     _            _
+	#  __| |_ __ ___   ___ _ __  _   _ ___| |_ __ _| |__ | | ___   ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | / __| __/ _` | '_ \| |/ _ \ / __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| \__ \ || (_| | |_) | |  __/_\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|___/\__\__,_|_.__/|_|\___(_)___/_| |_|
+	#                                                    Created by Prutserdt
+	#
+	# This script gives yes/no option to make a local backup of dmenu.
+	# This script can be called by the .bashrc alias dmenustable.
+	echo -n "Are you sure you want to restore to the stable version and DELETE
+	the current dmenu version? (y/n) "
+	read answer
+	# if echo "$answer" | grep -iq "^y" ;then
+	if [ "$answer" != "${answer#[Yy]}" ] ;then
+	    rm -r ~/.config/suckless/dmenu &&
+	    mkdir ~/.config/suckless/dmenu &&
+	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+	    cd ~/.config/suckless/dmenu &&
+	    clear && ls -al
+	else
+	    echo No
+	fi
+#+end_src
+
+** dmenuthunar.sh
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuthunar.sh :padline no
+#!/bin/sh
+#+end_src
+
+#+begin_src bash :tangle dmenuthunar.sh :padline no
+	#~/.config/dmenuthunar.sh
+	#     _                            _   _                                _
+	#  __| |_ __ ___   ___ _ __  _   _| |_| |__  _   _ _ __   __ _ _ __ ___| |__
+	# / _` | '_ ` _ \ / _ \ '_ \| | | | __| '_ \| | | | '_ \ / _` | '__/ __| '_ \
+	#| (_| | | | | | |  __/ | | | |_| | |_| | | | |_| | | | | (_| | | _\__ \ | | |
+	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__|_| |_|\__,_|_| |_|\__,_|_|(_)___/_| |_|
+	#                                                         Created by Prutserdt
+	#
+	# Script to select directories (~/.config/directories) in Thunar by dmenu.
+	# This requires the dmenu patch: center, which gives the dmenu -c option.
+	chosen=$(cat ~/.config/directories | dmenu -i -c -l 30)
+
+	# Exit if none chosen.
+	[ -z "$chosen" ] && exit
+	thunar $chosen
+#+end_src
+
+** dmenuunicode.sh
+Selecting ➡emojis⬅ via dmenu, 🆒.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuunicode.sh :padline no
+#!/bin/sh
+#+end_src
+
+A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
+#+begin_src bash :tangle dmenuunicode.sh :padline no
+	cat ~/.config/unicode | dmenu -i -c -l 45| awk '{print $1}'| xclip -selection clipboard &&
+	xdotool key "ctrl+v" "BackSpace"
+#+end_src
+Remark: the center patch of dmenu is needed for the -c option.
+
+** dmenuvanilla.sh
+Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuvanilla.sh :padline no
+#!/bin/sh
+#+end_src
+
+First give the option to opt out and wait for the user to continue or not.
+#+begin_src bash :tangle dmenuvanilla.sh :padline no
+echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
+read answer
+#+end_src
+
+The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
+#+begin_src bash :tangle dmenuvanilla.sh :padline no
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_vanilla/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
+    clear && ls -al
+else
+    echo No
+fi
+#+end_src
+
+** dmenuwallpaper.sh
+Script to select wallpapers via dmenu.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuwallpaper.sh :padline no
+#!/bin/sh
+#+end_src
+
+This scripts requires the dmenu patch center, which gives the -c option.
+#+begin_src bash :tangle dmenuwallpaper.sh :padline no
+ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -i -c -l 30 | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
+#+end_src
 
 * Unused scripts
 
@@ -465,260 +724,6 @@ My shell script which extracts information from a portfolio and calculates perce
 	# Remove the created temp files
 	rm $XDG_RUNTIME_DIR/temp/Temp*
 #+end_src
-
-
-** dmenuUpdate.sh
-#+begin_src bash
-	#!/bin/bash
-	# ~/.config/dmenuUpdate.sh
-	#     _                            _   _           _       _             _
-	#  __| |_ __ ___   ___ _ __  _   _| | | |_ __   __| | __ _| |_ ___   ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | | | | | '_ \ / _` |/ _` | __/ _ \ / __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| | |_| | |_) | (_| | (_| | ||  __/_\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_|\___/| .__/ \__,_|\__,_|\__\___(_)___/_| |_|
-	#                                       |_|                Created by Prutserdt
-	#
-	# Script to create a list of applications that is used for dmenu.
-	#
-	# Delete the dmenu_run file
-	rm $HOME/'.cache/dmenu_run' &
-
-	# Create a new list of apps from my binaries
-	ls /usr/bin/* > $HOME/.cache/dmenu_run &&
-
-	# Add all of the appimages from $HOME/Applications to the dmenu_run file
-	shopt -s nullglob # When AppImages aren't present then the loop will not be run
-	FILES=$HOME/Applications/*.AppImage
-	for f in $FILES
-	do
-	    #write to first line of the file (AppImages on top of list)
-	    sed -i '1 i '$f  $HOME/.cache/dmenu_run
-	done
-#+end_src
-
-** dmenuapps.sh
-#+begin_src bash
-	#!/bin/sh
-	#~/.config/dmenuapps.sh
-	#     _                                                        _
-	#  __| |_ __ ___   ___ _ __  _   _  __ _ _ __  _ __  ___   ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | |/ _` | '_ \| '_ \/ __| / __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| | (_| | |_) | |_) \__ \_\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__,_| .__/| .__/|___(_)___/_| |_|
-	#                                       |_|   |_|
-	#                                                Created by Prutserdt
-	#
-	# Script to open applications (listed in: ~/.cache/dmenu_run) by dmenu.
-	# This requires the dmenu patch: center, which gives the dmenu -c option.
-	#
-	# If applications are missing, then it is time to update dmenu_run by
-	# running dmenuUpdadate.sh or perform it manually:
-	# rm ~/.cache/dmenu_run ;ls /usr/bin/* > ~/.cache/dmenu_run
-	cat ~/.cache/dmenu_run | dmenu -i -c -l 30 | ${SHELL:-"/bin/sh"}
-#+end_src
-
-** dmenubackup.sh
-#+begin_src bash
-	#!/bin/bash
-	# ~/.config/dmenubackup.sh
-	#     _                            _                _                           _
-	#  __| |_ __ ___   ___ _ __  _   _| |__   __ _  ___| | ___   _ _ __  ___   ___ | |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | | '_ \ / _` |/ __| |/ / | | | '_ \/ __| / __|| '_ \
-	#| (_| | | | | | |  __/ | | | |_| | |_) | (_| | (__|   <| |_| | |_) \__ \_\__ \| | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_|_.__/ \__,_|\___|_|\_\\__,_| .__/|___(_)___/|_| |_|
-	#                                                             |_| Created by Prutserdt
-	#
-	# This script gives yes/no option to mak a local backup of dmenu.
-	# This shell script can be called by the .bashrc alias dmenubackup.
-	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable &&
-	    mkdir ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable &&
-	    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable
-	else
-	    echo No
-	fi
-#+end_src
-
-** dmenuinternet.sh
-#+begin_src bash
-	#!/bin/sh
-	#~/.config/dmenuinternet.sh
-	#     _                            _       _                       _         _
-	#  __| |_ __ ___   ___ _ __  _   _(_)_ __ | |_ ___ _ __ _ __   ___| |_   ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | | | '_ \| __/ _ \ '__| '_ \ / _ \ __| / __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| | | | | | ||  __/ |  | | | |  __/ |_ _\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_|_|_| |_|\__\___|_|  |_| |_|\___|\__(_)___/_| |_|
-	#                                                              Created by Prutserdt
-	#
-	# Script to select webpages (~/.config/urls) in Firefox by dmenu.
-	# It opens: ~/.config/urls
-	# This requires the dmenu patch: center, which gives the dmenu -c option.
-	#cat ~/.config/urls | dmenu -i -c -l 30 | awk '{print $1}'| xclip -selection clipboard && firefox "$(xclip -o -selection clipboard)"
-	chosen=$(cat ~/.config/urls | dmenu -i -c -l 30)
-
-	# Exit if none chosen.
-	[ -z "$chosen" ] && exit
-
-	# If you run this command with an argument, it will automatically open
-	brave $chosen
-#+end_src
-
-** dmenupatch.sh
-#+begin_src bash
-	#!/bin/bash
-	# ~/.config/dmenupatch.sh
-	#     _                                        _       _           _
-	#  __| |_ __ ___   ___ _ __  _   _ _ __   __ _| |_ ___| |__    ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | | '_ \ / _` | __/ __| '_ \  / __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| | |_) | (_| | || (__| | | |_\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_| .__/ \__,_|\__\___|_| |_(_)___/_| |_|
-	#                                 |_|                Created by Prutserdt
-	#
-	# This script gives yes/no option to patch dmenu.
-	#
-	# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
-	# 1: delete files in test directory and restore the stable dmenu verstion.
-	# 2: write the diff filename to the diff_log
-	# 3: Run the patch
-	#
-	# This shell script can be called by the .bashrc alias dmenupatch.
-	echo -n "Are you sure you want to patch the current dwm system? This will first:
-	RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/suckless/dmenu/patches/test. Yes or no? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dmenu &&
-	    mkdir ~/.config/suckless/dmenu &&
-	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
-	    cd ~/.config/suckless/dmenu &&
-	    clear && ls -al
-	    ls ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
-	    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
-	    rm ~/.config/suckless/dmenu/config.h &&
-	    patch -p1 < ~/Stack/Dotfiles/suckless/dmenu/patches/test/*.diff &&
-	    make clean install
-	else
-	    echo No
-	fi
-#+end_src
-
-** dmenustable.sh
-#+begin_src bash
-	#!/bin/bash
-	# ~/.config/dmenustable.sh
-	#     _                                _        _     _            _
-	#  __| |_ __ ___   ___ _ __  _   _ ___| |_ __ _| |__ | | ___   ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | / __| __/ _` | '_ \| |/ _ \ / __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| \__ \ || (_| | |_) | |  __/_\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_|___/\__\__,_|_.__/|_|\___(_)___/_| |_|
-	#                                                    Created by Prutserdt
-	#
-	# This script gives yes/no option to make a local backup of dmenu.
-	# This script can be called by the .bashrc alias dmenustable.
-	echo -n "Are you sure you want to restore to the stable version and DELETE
-	the current dmenu version? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dmenu &&
-	    mkdir ~/.config/suckless/dmenu &&
-	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
-	    cd ~/.config/suckless/dmenu &&
-	    clear && ls -al
-	else
-	    echo No
-	fi
-#+end_src
-
-** dmenuthunar.sh
-#+begin_src bash
-	#!/bin/sh
-	#~/.config/dmenuthunar.sh
-	#     _                            _   _                                _
-	#  __| |_ __ ___   ___ _ __  _   _| |_| |__  _   _ _ __   __ _ _ __ ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | | __| '_ \| | | | '_ \ / _` | '__/ __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| | |_| | | | |_| | | | | (_| | | _\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__|_| |_|\__,_|_| |_|\__,_|_|(_)___/_| |_|
-	#                                                         Created by Prutserdt
-	#
-	# Script to select directories (~/.config/directories) in Thunar by dmenu.
-	# This requires the dmenu patch: center, which gives the dmenu -c option.
-	chosen=$(cat ~/.config/directories | dmenu -i -c -l 30)
-
-	# Exit if none chosen.
-	[ -z "$chosen" ] && exit
-	thunar $chosen
-#+end_src
-
-** dmenuunicode.sh
-#+begin_src bash
-	#!/bin/sh
-	#~/.config/dmenuunicode.sh
-	#     _                                        _               _            _
-	#  __| |_ __ ___   ___ _ __  _   _ _   _ _ __ (_) ___ ___   __| | ___   ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | | | | | '_ \| |/ __/ _ \ / _` |/ _ \ / __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| | |_| | | | | | (_| (_) | (_| |  __/_\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_|\__,_|_| |_|_|\___\___/ \__,_|\___(_)___/_| |_|
-	#                                                             Created by Prutserdt
-	#
-	# Simple script to paste emojis via dmenu.
-	# Requirement: dmenu and the center patch that gives the dmenu -c option.
-	#cat ~/.config/unicode | dmenu -i -l 45 -fn hack-34| awk '{print $1}'| xclip -selection clipboard &&
-	#cat ~/.config/unicode | dmenu -i -l 45| awk '{print $1}'| xclip -selection clipboard &&
-	cat ~/.config/unicode | dmenu -i -c -l 45| awk '{print $1}'| xclip -selection clipboard &&
-	#cat ~/.config/unicode | dmenu -i -l 45 -fn monospace-20| awk '{print $1}'| xclip -selection clipboard &&
-	#cat ~/.config/unicode | dmenu -i -l 45 -fn hack-34| awk '{print $1}'| xclip -selection clipboard &&
-	# Backspace is needed to remove the nextline
-	xdotool key "ctrl+v" "BackSpace"
-#+end_src
-
-** dmenuvanilla.sh
-#+begin_src bash
-	#!/bin/bash
-	# ~/.config/dmenuvanilla.sh
-	#     _                                             _ _ _             _
-	#  __| |_ __ ___   ___ _ __  _   ___   ____ _ _ __ (_) | | __ _   ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | \ \ / / _` | '_ \| | | |/ _` | / __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| |\ V / (_| | | | | | | | (_| |_\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_| \_/ \__,_|_| |_|_|_|_|\__,_(_)___/_| |_|
-	#                                                       Created by Prutserdt
-	#
-	# This script gives yes/no option to restore to vanilla dmenu.
-	# This script can be called by the .bashrc alias dmenuvanilla.
-	echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dmenu &&
-	    mkdir ~/.config/suckless/dmenu &&
-	    cp -r ~/Stack/Dotfiles/suckless/dmenu/dmenu-4.9_vanilla/* ~/.config/suckless/dmenu &&
-	    cd ~/.config/suckless/dmenu &&
-	    clear && ls -al
-	else
-	    echo No
-	fi
-#+end_src
-
-** dmenuwallpaper.sh
-#+begin_src bash
-	#!/bin/sh
-	#~/.config/dmenuwallpaper.sh
-	#     _                                          _ _                                 _
-	#  __| |_ __ ___   ___ _ __  _   ___      ____ _| | |_ __   __ _ _ __   ___  _ __ ___| |__
-	# / _` | '_ ` _ \ / _ \ '_ \| | | \ \ /\ / / _` | | | '_ \ / _` | '_ \ / _ \| '__/ __| '_ \
-	#| (_| | | | | | |  __/ | | | |_| |\ V  V / (_| | | | |_) | (_| | |_) |  __/| | _\__ \ | | |
-	# \__,_|_| |_| |_|\___|_| |_|\__,_| \_/\_/ \__,_|_|_| .__/ \__,_| .__/ \___||_|(_)___/_| |_|
-	#                                                   |_|         |_|
-	#                                                                       Created by Prutserdt
-	#
-	# Script to change the wallpaper by dmenu.
-	# This requires the dmenu patch: center, which gives the dmenu -c option.
-	ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -i -c -l 30 | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
-#+end_src
-
 
 ** dwmbackup.sh
 #+begin_src bash
@@ -903,6 +908,7 @@ My shell script which extracts information from a portfolio and calculates perce
 	    echo No
 	fi
 #+end_src
+
 ** updatebar.sh
 #+begin_src bash
 	#!/bin/sh
