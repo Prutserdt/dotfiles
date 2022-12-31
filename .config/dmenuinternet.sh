@@ -1,4 +1,4 @@
 #!/bin/sh
-chosen=$(cat ~/.config/urls | dmenu -i -c -l 65)
+chosen=$(cat ~/Stack/Command_line/urls | dmenu -i -c -l 65)
 [ -z "$chosen" ] && exit
-	brave $chosen
+xdg-open $chosen

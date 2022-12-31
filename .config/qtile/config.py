@@ -146,7 +146,8 @@ keys = [
     Key([mR], "k", lazy.spawn("keepass")), 
     Key([mR], "m", lazy.spawn("mousepad")), 
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")), 
-    Key([mR], "t", lazy.spawn("thunar")), 
+    Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")),
+    #Key([mR], "t", lazy.spawn("thunar")),
     Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")),
     Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
 
