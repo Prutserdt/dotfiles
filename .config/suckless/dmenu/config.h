@@ -19,7 +19,8 @@ static const char *fonts[] = { "hack:size=11", "JoyPixels:pixelsize=10" };
 static const char *prompt      = NULL;     /* -p  option; prompt to the left of input field */
 static const char *colors[SchemeLast][2] = {
     [SchemeNorm] = { "#bbbbbb", "#000000" },/* foreground,  background*/
-	[SchemeSel] = { "#111111", "#8ec07c" }, /* second color: highlight of dmenu borders*/
+//	[SchemeSel] = { "#111111", "#8ec07c" }, /* second color: highlight of dmenu borders*/
+	[SchemeSel] = { "#111111", "#00ffd2" }, /* second color: highlight of dmenu borders*/
 	[SchemeSelHighlight] = { "#ffc978", "#005577" },
 	[SchemeNormHighlight] = { "#ffc978", "#222222" },
 	[SchemeOut] = { "#111111", "#00ffff" },

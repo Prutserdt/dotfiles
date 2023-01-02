@@ -13,7 +13,7 @@
   - [[#custom-functions][Custom functions]]
   - [[#keybindings-qtile-specific][Keybindings: qtile specific]]
   - [[#keybindings-audio-and-print][Keybindings: Audio and print]]
-  - [[#keybindings-applications][Keybindings: Applications]]
+  - [[#keybindings-applications-and-files-connected-to-these-hotkeys][Keybindings: Applications (and files connected to these hotkeys)]]
   - [[#keybingings-text-files][Keybingings: Text files]]
   - [[#groups][Groups]]
   - [[#layouts][Layouts]]
@@ -188,8 +188,8 @@ Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
     Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
 #+END_SRC
 
-** Keybindings: Applications
-Right super key to open applications.
+** Keybindings: Applications (and files connected to these hotkeys)
+Right super key to open applications, the dmenu related files can be opened by adding shift to the hotkeys.
 #+BEGIN_SRC python :tangle config.py :results none
     # Open applications
     Key([mR], "a",
@@ -203,23 +203,26 @@ Right super key to open applications.
     #(lazy.function(keyb("b","brave", "Launch Brave browser")))
     #lazy.function(keyb("b","brave", "Launch Brave browser")),#FIXME: wil keybinds versimpelen...
     # even kijken of ik het met EzKey ga doen!!! weet niet of mL en mR gaaat werken....
-    
-#    Key([mR], "b", lazy.spawn("brave" ),desc="Launch Brave browser"),
-#    Key([mR], "b", lazy.spawn("brave")),
+
+#   Key([mR], "b", lazy.spawn("brave" ),desc="Launch Brave browser"),
+#   Key([mR], "b", lazy.spawn("brave")),
     Key([mR], "b", lazy.spawn(home + "/.config/dmenuinternet.sh")),
-    Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")), 
+    Key([mR, "shift"], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")),
+    Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
     Key([mR], "d", lazy.spawn(home + "/.config/dmenuapps.sh")),
-    Key([mR, "shift"], "d", lazy.spawn(home + "/.config/dmenuUpdate.sh")), 
-    Key([mR], "f", lazy.spawn("firefox")), 
-    Key([mR], "g", lazy.spawn("gimp")), 
-    Key([mR], "k", lazy.spawn("keepass")), 
-    Key([mR], "m", lazy.spawn("mousepad")), 
-    Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")), 
+    Key([mR, "shift"], "d", lazy.spawn(home + "/.config/dmenuUpdate.sh")),
+    Key([mR], "f", lazy.spawn("firefox")),
+    Key([mR], "g", lazy.spawn("gimp")),
+    Key([mR], "k", lazy.spawn("keepass")),
+    Key([mR], "m", lazy.spawn("mousepad")),
+    Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
     Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")),
-    #Key([mR], "t", lazy.spawn("thunar")),
+    Key([mR, "shift"], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")),
     Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")),
-    Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")), 
+    Key([mR, "shift"], "u", lazy.spawn(home + "/.config/unicode")),
+    Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
 #+END_SRC
+
 
 ** Keybingings: Text files
 The right alt key is used to open text files in Vim or in Emacs.
@@ -227,7 +230,7 @@ The right alt key is used to open text files in Vim or in Emacs.
     Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
     Key([aR], "b", lazy.spawn(Emacs + home + "/.bashrc")), 
     Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")), 
-    Key([aR], "d", lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h")), 
+    Key([aR], "d", lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h")),
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")), 
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")), 
     Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")), 
@@ -434,5 +437,5 @@ picom -b &
 #+end_src
 
 * My TODO list
-It would be nice to dynamically control the space between the windows (not critical).
+It would be nice to dynamically control the gaps size between the windows (not critical).
 I did not get it to work yet with https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input.

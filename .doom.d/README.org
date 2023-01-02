@@ -235,7 +235,8 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Describe function"                "h" #'describe-function
        :desc "Increase font size"               "i" #'doom/increase-font-size
        :desc "Find a file"                      "f" #'find-file
-       :desc "Open recent files"                "o" #'recentf-open-more-files
+;      :desc "Open recent files"                "o" #'recentf-open-more-files
+       :desc "Open recent files"                "o" #'counsel-recentf
        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
        :desc "Hide org blocks"                  "L" #'org-fold-hide-block-all

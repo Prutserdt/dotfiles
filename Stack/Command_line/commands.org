@@ -3415,6 +3415,18 @@ Dus eerst een lijst aanmaken, bijvoorbeeld:
 - [ ] Talk to the neighbors
 
 
+*** Recording macros in Emacs
+
+~F3~ () will start a macro recording.
+~F4~ () will end a macro recording. Pressing again will run the macro again.
+(kmacro-end-or-call-macro ARG 3)
+(kmacro-call-macro)
+
+
+#+begin_src elisp
+
+#+end_src
+
 
 
 *** IRC, inspircd
