@@ -1,16 +1,6 @@
 #+TITLE: Linux tips and tricks
 #+STARTUP: showeverything
-#+OPTIONS: toc:4
 #+AUTHOR: Prutserdt
-
-#+begin_example
-  _     _                    _        _      _
- | |   (_)_ __  _   ___  __ | |_ _ __(_) ___| | _____
- | |   | | '_ \| | | \ \/ / | __| '__| |/ __| |/ / __|
- | |___| | | | | |_| ||  |  | |_| |  | | (__|   <\__ \
- |_____|_|_| |_|\__,_/_/\_\  \__|_|  |_|\___|_|\_\___/
-                                  Created by Prutserdt
-#+end_example
 
 * Table of contents :toc:
 - [[#about-this-document][About this document]]
@@ -29,9 +19,11 @@ In human form:
 ~du -h~
 In megabytes:
 ~du -m~
+
 *** Bekijk size van directies hele systeem, geef weer 1 level dir deep
 ~cd ~
 du -h -d  1| sort -h~
+
 *** Vaak staat veel rommel in trash, ruim op met:
 ~rm -r -f Trash~. This will remove the Trash directory and everything in it.
 
@@ -351,7 +343,6 @@ Als iets misgaat kun je line by line proberen:
 ~for file in *; do cat "$file"| tr -s ' ' > "$file"_tmp && mv "$file"_tmp "$file"; done~
 ~for file in *; do sed 's/,/./g' "$file" > "$file"_tmp && mv "$file"_tmp "$file"; done~
 
-
 *** Removing of password of pdf. Met package xpdf en ps2pdf(ghostscript).
 Verwijder wachtwoord uit een pdf en save de als een postscript en daarna als een pdf:
 ~pdftops -upw password WachtwoordBeveiligd.pdf ZonderWachtwoord.ps~
@@ -402,7 +393,6 @@ Show Calender year:
 ~cal 1999~
 
 *** Rechten bestanden
-
 Bekijk rechten: ~ls -l~ ~ls -a -l~ ~ls -al~ ~ls la~
 Bekijk hidden directories
 ~ls -a~
@@ -615,7 +605,6 @@ Firefox shortcuts
 |------------+------------------------------------------|
 
 *** Batch rename image files
-
 Imagemagick, simpel verkleinen, comprimeren en renamen van files in directory.
 resize: pixel size, quality: compression, en daarachter naamverandering
 #+begin_src shell
@@ -1104,10 +1093,6 @@ rename 20220923 20220923_Amsterdam *
 rename 20220903 20220903_Amsterdam *; rename 20220904 20220904_Malang *; rename 20220905 20220905_Malang *; rename 20220906 20220906_Malang *; rename 20220907 20220907_Malang *; rename 20220908 20220908_Bromo *; rename 20220909 20220909_Bromo *; rename 20220910 20220910_Yogyakarta *; rename 20220911 20220911_Yogyakarta *; rename 20220912 20220912_Yogyakarta *; rename 20220913 20220913_Yogyakarta *; rename 20220914 20220914_Yogyakarta *; rename 20220915 20220915_Yogyakarta *; rename 20220916 20220916_Bandung *; rename 20220917 20220917_Bandung *; rename 20220918 20220918_Bandung *; rename 20220919 20220919_Bandung *; rename 20220920 20220920_Qatar *; rename 20220921 20220921_Qatar *; rename 20220922 20220922_Qatar *; rename 20220923 20220923_Amsterdam *
 #+end_src
 
-
-
-
-
 *** PACMAN/YAOURT/YAY
 
 Je kunt downgraden naar een andere datum (terug in de tijd!) door 
@@ -1219,7 +1204,6 @@ sudo rm -rf /etc/pacman.d/gnupg;
 sudo pacman-key --init;
 sudo pacman-key --populate
 #+end_src
-
 
 *** WIFI
 
@@ -1495,46 +1479,6 @@ curl -s https://corona-stats.online/netherlands > ~/.cache/corona
 PROBLEEM: nu heb ik een goed script, maar hoe voeg ik dit toe aan i3bar.
 Aan i3status kun je geen script hangen... (vim ~/.config/i3status/config)
 
-*** Downloaden DeGiro porfolio data en berekenen percentage.
-
-https://trader.degiro.nl/trader Portfolio openen in Brave, daarna selecteer
-je Export to .csv en save het in ~/Downloads/test.
-hotkey left alt+a runt het script aandelen.sh dat de csv omzet in handig
-formaat van hoog naar laag: BedragAandeel PercentageAandeel NaamAandeel
-
-Voorbeeld:
-357 38.9 %	VANGUARD S&P500
-357 38.5 %	VANGUARD FTSE ALL-WORLD UCITS E...
-895 18.1 %	VANECK VECTORS BITCOIN ETN
-676 4.5 %	ISHARES PROP GLO
-
-Dit script is geen onderdeel van mijn dotfiles en daarom plak ik het hier:
-
-
-#+begin_src shell
-
-#!/bin/sh
-#~/.config/aandelen.sh
-#                      _      _                  _
-#  __ _  __ _ _ __   __| | ___| | ___ _ __    ___| |__
-# / _= |/ _= | '_ \ / _= |/ _ \ |/ _ \ '_ \  / __| '_ \
-#| (_| | (_| | | | | (_| |  __/ |  __/ | | |_\__ \ | | |
-# \__,_|\__,_|_| |_|\__,_|\___|_|\___|_| |_(_)___/_| |_|
-#
-# Automating some routines :-)
-#
-#gnumeric ~/Stack/Documenten/Aandelen/Rekenvoorbeelden.xls & # open spreadsheet
-alacritty -e vim ~/Stack/Documenten/Aandelen/aandelen_log.md & # open md file
-cat ~/Downloads/test/Portfolio.csv | sed "1,2 d" | cut -d , -f 1,7 | sed 's/"//'| sort -r -t ',' --key=6 > ~/Downloads/test/TempSorted &&
-cat ~/Downloads/test/TempSorted | cut -d , -f 2 | awk '{a[NR] = $1; sum+= $1 } END {for (i = 1; i <= NR; i++) printf "%s %1.1f %\n", a[i],(100 * a[i])/sum}' > ~/Downloads/test/TempPerc &&
-cat ~/Downloads/test/TempSorted | cut -d , -f 1  > ~/Downloads/test/TempName &&
-paste ~/Downloads/test/TempPerc ~/Downloads/test/TempName > ~/Downloads/test/TempMerged &&
-cat ~/Downloads/test/TempMerged | xclip -sel clip
-
-#+end_src
-
-Bovenstaande shell script is deprecated en vervangen door Python code.
-
 *** Video card information
 lspci -vnn | grep VGA -A 12
 [AMD/ATI] Oland [Radeon HD 8570 / R7 240/340 / Radeon 520 OEM]
@@ -1574,7 +1518,6 @@ I based it on Luke Smith: https://github.com/LukeSmithxyz/voidrice/blob/master/.
 The macro menu can be called by pressing "."
 To download youtube.dll the tsp program is needed which can be installed by the
 package called ts
-
 
 *** Download movies from BJJ website, met youtube-dl
 
@@ -1764,7 +1707,6 @@ Verander directory namen en file namen recursively van spatie naar underscore:
 find -name "* *" -print0 | sort -rz | \
   while read -d $'\0' f; do mv -v "$f" "$(dirname "$f")/$(basename "${f// /_}")"; done
 #+end_src
-
 
 *** ff2mpv
 Play youtube and other sources automatically by mpv in firefox.
@@ -2364,7 +2306,6 @@ via website nieuwe token aangemaakt
 
 ik gebruik nu ssh dus dit lijkt eigenlijk overbodig...
 
-
 *** Add an additional dotfile to this repo
 ~config add .example~
 ~config commit -m "Add my .example"~
@@ -2794,7 +2735,6 @@ Mijn CameraWebServer_06FEB21 heb ik bewaard
 Verder gegaan 01JUL22 om te kijken of ik de druksensoren hier op kan aansluiten.
 libraries
 
-
 *** ESP32 CAM, alleen voor installatie
 Hieronder staan de stappen die ik heb genomen om ESP32 aan de gang te krijgen.
 De volgende packages geinstalleerd:
@@ -2809,7 +2749,6 @@ Setup the tools:
 
 *** ESP-IDF via VScodium
 28JUL22 heb ik in VSCodium Espressif IDF extension geinstalleerd en daarna de install information gevolgd. Met handige arch linux install dependencies. Daarna via ESP-IDF setup de express optie gekozen en de ~/esp/test/ gekozen met daarin /esp-idf. Ik had denk ik ~/esp/esp-idf al geinstalleerd eerder maar heb het voor vscodium nog maar een keer onder test gegooid.
-
 
 *** Doom Emacs
 
@@ -3075,6 +3014,11 @@ Optellen van waarden in een kolom met vsum. Zet dit onderaan de tabel met #+TBLF
 #+TBLFM: @>$2..@>$11=vsum(@3$0..@-1$0)
 
 **** Org mode en code blocks
+
+***** File rights after tangling (executable)
+
+Make the tangled code block executable by adding ~~tangle-mode (identity #o755)~ to the begin of the block, for example: ~#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755).~ Now the file has executable rights.
+
 ***** Python in code blocks
 In dit voorbeeld wordt een org table als input gebruikt, [[dagtabel]]:
 
@@ -3414,7 +3358,6 @@ Dus eerst een lijst aanmaken, bijvoorbeeld:
 - [X] think about what music to play
 - [ ] Talk to the neighbors
 
-
 *** Recording macros in Emacs
 
 ~F3~ () will start a macro recording.
@@ -3428,10 +3371,8 @@ Dus eerst een lijst aanmaken, bijvoorbeeld:
 #+end_src
 
 
-
 *** IRC, inspircd
 Install by ~yay inspircd~
-
 
 *** Installeren en instellen van LAMP
 Ik heb de volgende packages geinstalleerd: sudo pacman -S apache mariadb php php-apache
@@ -3552,9 +3493,7 @@ Precies hetzelfde gedaan via brave browser en de webinstall procedure, en daarna
 Welke client te kiezen....
 prutserdt
 
-
 * Distros and related stuff
-
 *** XFCE tricks
 XFCE4 in desktop achtergrond terminal services laten draaien.
 Filename: wallterm.sh
@@ -3711,7 +3650,6 @@ it will automatically insert the emoji into the focused program (like browser or
     /*cat ~/.config/unicode | dmenu -i -l 25 -fn Monospace-24| awk '{print $1}'| xclip -selection clipboard && xdotool type "$(xclip -o -selection clipboard)" */
 
 #+end_src
-
 
 *** Install Arch on a persistent USB feb2017
 

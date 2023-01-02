@@ -35,12 +35,11 @@
   - [[#wololosh][wololo.sh]]
 - [[#tips-and-tricks][Tips and tricks]]
   - [[#fetch-all-scrips-of-config-by-this-code-block][Fetch all scrips of ~/.config by this code block]]
-  - [[#set-file-rights-back-chmod][Set file rights back (chmod)]]
+  - [[#some-notes-about-the-code-blocks][Some notes about the code blocks.]]
 
 * About this document
 This document is a noto-to-self about scripts on my GNU/Linux system and is my attempt at literate programming using Emacs org mode. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
-
-FIXME: ik wil dmenu gaan updaten. alpha patch gebruiken, of misschien een eenvoudigere en stabiele versie gebruiken???
+My intention is to modify the scripts from this document and use ~org-babel-tangle~ to export the scripts.
 
 * My scripts
 
@@ -49,7 +48,7 @@ FIXME: ik wil dmenu gaan updaten. alpha patch gebruiken, of misschien een eenvou
 A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. And after that  screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen. The format in the clipboard is optimized for emacs org mode tables.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
-#+begin_src python :tangle aandelen.py :padline no :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 #!/usr/bin/env python3
 #+end_src
 
@@ -63,7 +62,7 @@ from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, 
 The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog
 The aim is to add the amount of cash and surplus value of the house here by hand. After this the script will continue.
 
-#+begin_src python :tangle aandelen.py :padline yes :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
@@ -98,7 +97,7 @@ if __name__ == '__main__':
 #+end_src
 
 A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
-#+begin_src python :tangle aandelen.py :padline yes :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     """Building a dataframe from several CSV files"""
     global df  # This dataframe will be used outside of this def, so make it global
@@ -115,7 +114,7 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
 #+end_src
 
 The filenames of the csv files are generated here.
-#+begin_src python :tangle aandelen.py :padline yes :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
@@ -124,7 +123,7 @@ fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newes
 Creating some variables
 # Omschrijving van overwaarde huis en cash geld
 
-#+begin_src python :tangle aandelen.py :padline yes :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 OmsHuis = "Overwaarde huis     "
 OmsCash = "RaboCash            "
 # Namen van kolommen die ik ga gebruiken:
@@ -134,7 +133,7 @@ AaCol = "AA%"                       # Asset Allocation column naam
 AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
 #+end_src
 
-#+begin_src python :tangle aandelen.py :padline yes :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 # Aanmaken van dataframes van de twee portefeuilles en samenvoegen dataframes.
 # Aanmaken van een leeg dataframe
 df = pd.DataFrame()
@@ -168,7 +167,7 @@ df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje 
 print('=' * 40  + "\n", dfx)  # Alleen voor debugging gebruik
 #+end_src
 
-#+begin_src python :tangle aandelen.py :padline yes :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
     EurCol: ["" , Kapitaal, Kapitaal - Huis],
@@ -192,7 +191,7 @@ t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + s
 
 The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
 
-#+begin_src python :tangle aandelen.py :padline yes :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 # De titel voor in org mode (met drie sterren)
 titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 print('\n\n')
@@ -223,7 +222,7 @@ print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Alleen 
 #+end_src
 
 Writing the data to the clipboard and garbage collection.
-#+begin_src python :tangle aandelen.py :padline no :eval no
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 pyperclip.copy(data)
 
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
@@ -235,12 +234,12 @@ del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
 A script to manage my dotfiles git repo. It checks the status of my dotfiles and gives options how to continue (push/pull/pullpush/exit).
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a shell script is used.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 #+end_src
 
 Two functions are declared; one to push to git and one to pull. The push function contains a commit message that, just because I'm lazy and commit messages for dotfiles are not that necessary.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # ~/.config/dotfiles.sh
 
 function Push()
@@ -258,7 +257,7 @@ function Pull()
 #+end_src
 
 The screen of the terminal is cleared and the status of dotfiles is checked. Then a menu is given in the terminal for the 4 options.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 clear &&
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status &&
 
@@ -275,7 +274,7 @@ Options:
 #+end_src
 
 The read command will take the imput that the user gives from within the terminal and the case statement will perform the push/pull/exit commands. That's all.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no
+#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 read PullPush
 case $PullPush in
             [1])
@@ -312,13 +311,16 @@ esac
 Used to exit the Qtile windowmanager with yes/no option.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle exitqtile.sh :padline no :eval no
+#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 #+end_src
 
 Echo out the options and run the ~killall qtile~ command, or not.
-#+begin_src sh :tangle exitqtile.sh :padline no :eval no
+ +begin_src sh :tangle exitqtile.sh :padline no :eval no
+#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
 echo -n "Do you wish to exit qtile right now? (y/n) "
+
+
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
    killall qtile
@@ -378,27 +380,27 @@ add mod5 = Alt_R
 A script that makes a screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle screenshot2text.sh :padline no
+#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 First a temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
-#+begin_src bash :tangle screenshot2text.sh :padline no
+#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 mkdir $XDG_RUNTIME_DIR/temp &
 #+end_src
 
 The screenshot program xfce4-screenshooter -r flag will select a region to be captured by mouse and the -s flag will save to the path. Here the $XDG_RUNTIME_DIR/temp is selected and the screenshot is saved as 'wismij.jpg' (wismij is Dutch for EraseMe). Note: the next screenshot will overwrite the jpg and txt file.
-#+begin_src bash :tangle screenshot2text.sh :padline no
+#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
 #+end_src
 
 The tesseract program is converting the picture to text and is saved in the RAM directory as 'wismij', which is actually 'wismij.txt'.
-#+begin_src bash :tangle screenshot2text.sh :padline no
+#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 tesseract $XDG_RUNTIME_DIR/temp/wismij.jpg $XDG_RUNTIME_DIR/temp/wismij &&
 #+end_src
 
 Finally the textfile is catted to the system clipboard with xclip. The -sel flag selects the X selection to use and ~clip~ stands for clipboard, where the text will be stored. Ready to be pasted when needed.
-#+begin_src bash :tangle screenshot2text.sh :padline no
+#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 #+end_src
 
@@ -407,19 +409,19 @@ cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 Refreshing my list of installed applications. This list is used in dmenu as an app picker.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no
+#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no
+#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
 #+end_src
 
 Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list.
 write to first line of the file (AppImages on top of list)
-#+begin_src bash :tangle dmenuUpdate.sh :padline no
+#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 shopt -s nullglob # When AppImages aren't present then the loop will not be run
 FILES=$HOME/Applications/*.AppImage
 for f in $FILES
@@ -432,12 +434,12 @@ done
 My app picker. A simple script to select which application to start via dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuapps.sh :padline no
+#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
-#+begin_src bash :tangle dmenuapps.sh :padline no
+#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
 # -a 50 moet 50% doorzichtigheid geven....
 cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
@@ -447,12 +449,12 @@ cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
 Make a backup of the current dmenu version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenubackup.sh :padline no
+#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
 #!/bin/bash
 #+end_src
 
 The *_stable name will be the new stable version of dmenu.
-#+begin_src bash :tangle dmenubackup.sh :padline no
+#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
 	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 	read answer
 	if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -468,12 +470,12 @@ The *_stable name will be the new stable version of dmenu.
 Internet bookmark picker.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuinternet.sh  :padline no
+#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application.
-#+begin_src bash :tangle dmenuinternet.sh  :padline no
+#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 chosen=$(cat ~/Stack/Command_line/urls | dmenu -i -c -l 65)
 [ -z "$chosen" ] && exit
 xdg-open $chosen
@@ -483,7 +485,7 @@ xdg-open $chosen
 Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenupatch.sh :padline no
+#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
@@ -492,7 +494,7 @@ This script will delete all of the current dmenu files. It will build from the s
 2: write the diff filename to the diff_log
 3: Run the patch
 
-#+begin_src bash :tangle dmenupatch.sh :padline no
+#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
 	echo -n "Are you sure you want to patch the current dmenu version? This will first:
 	RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
 	read answer
@@ -548,13 +550,13 @@ patching file drw.h
 Make a backup of the current dmenu version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenustable.sh :padline no
+#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 This script gives yes/no option to make a local backup of dmenu.
 This script can be called by the .bashrc alias dmenustable.
-#+begin_src bash :tangle dmenustable.sh :padline no
+#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
 	echo -n "Are you sure you want to restore to the stable version and DELETE
 	the current dmenu version? (y/n) "
 	read answer
@@ -572,13 +574,13 @@ This script can be called by the .bashrc alias dmenustable.
 ** dmenuthunar.sh
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuthunar.sh :padline no
+#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 Script to select directories (~/.config/directories) in Thunar by dmenu.
 This requires the dmenu patch: center, which gives the dmenu -c option.
-#+begin_src bash :tangle dmenuthunar.sh :padline no
+#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 chosen=$(cat ~/Stack/Command_line/directories | dmenu -i -c -l 65)
 [ -z "$chosen" ] && exit
 thunar $chosen
@@ -588,12 +590,12 @@ thunar $chosen
 Selecting ➡emojis⬅ via dmenu, 🆒.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuunicode.sh :padline no
+#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
-#+begin_src bash :tangle dmenuunicode.sh :padline no
+#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 cat ~/.config/unicode | dmenu -i -c -l 65| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace"
 #+end_src
@@ -613,18 +615,18 @@ Open the text file in emacs and remove the left part of the lines up to the emoj
 Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no
+#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 First give the option to opt out and wait for the user to continue or not.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no
+#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
 read answer
 #+end_src
 
 The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no
+#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/.config/suckless/dmenu &&
     mkdir ~/.config/suckless/dmenu &&
@@ -643,12 +645,12 @@ fi
 Script to select wallpapers via dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuwallpaper.sh :padline no
+#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 #+end_src
 
 This scripts requires the dmenu patch center, which gives the -c option.
-#+begin_src bash :tangle dmenuwallpaper.sh :padline no
+#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -i -c -l 65 | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
 #+end_src
 
@@ -929,8 +931,6 @@ Simple cheat code for 0ad. Does not properly work.
 	sleep 1 && xdotool type wololo && sleep 1 && xdotool key 0xff0d
 #+end_src
 
-
-
 * Tips and tricks
 
 ** Fetch all scrips of ~/.config by this code block
@@ -949,13 +949,13 @@ for f in *.sh; do
 done
 #+end_src
 
+** Some notes about the code blocks.
+Shell scripts need to be executable, and during tangling a flag should be added to keep the file executable, ~tangle:mode (identity #o755).~
+For example: ~#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)~.
 
-** Set file rights back (chmod)
-After running the codeblocks the shell scripts are no longer executable. The following script will make all of the *.sh and *.py files in ~/.config executable again.
-
+My old solution was to run the following command, but this is not needed actually.
 #+BEGIN_SRC bash :dir /sudo::
 chmod a+x /home/icefly/.config/*.sh &
 chmod a+x /home/icefly/.config/*.py
 #+end_src
 
-#+RESULTS:
