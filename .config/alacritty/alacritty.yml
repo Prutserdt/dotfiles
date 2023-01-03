@@ -251,62 +251,53 @@ font:
   #cyan:    '#689d6a'
   #white:   '#ebdbb2'
  
-# Colors (Gruvbox dark, heavily modified)
+# Colors (doom-one, heavily modified)
 colors:
   # Default colors
   primary:
-    # hard contrast: background = '#1d2021'
-    background: '#181818'
-      #background: '#000000'
-      #    background: '#282828'
+    #background: '#272732'
+    background: '#2a2a30'
     # soft contrast: background = '#32302f'
     foreground: '#999999'
 #    foreground: '#ebdbb2'
 
-  # Normal colors, gruvbox
-  #normal:
-  #   black:   '#000000'
-  #    red:     '#cc241d'
-  #    green:   '#98971a'
-  #    yellow:  '#fabd2f' #   yellow:  '#d79921'
-  #    blue:    '#458588'
-  #    magenta: '#b16286'
-  #    cyan:    '#8ec07c' #   cyan:    '#689d6a'
-  #    white:   '#a89984'
+#doom-one theme
+#
+#  (grey       base4)
+#   (red        '("#ff6c6b" "#ff6655" "red"          ))
+#   (orange     '("#da8548" "#dd8844" "brightred"    ))
+#   (green      '("#98be65" "#99bb66" "green"        ))
+#   (teal       '("#4db5bd" "#44b9b1" "brightgreen"  ))
+#   (yellow     '("#ECBE7B" "#ECBE7B" "yellow"       ))
+#   (blue       '("#51afef" "#51afef" "brightblue"   ))
+#   (dark-blue  '("#2257A0" "#2257A0" "blue"         ))
+#   (magenta    '("#c678dd" "#c678dd" "brightmagenta"))
+#   (violet     '("#a9a1e1" "#a9a1e1" "magenta"      ))
+#   (cyan       '("#46D9FF" "#46D9FF" "brightcyan"   ))
+#   (dark-cyan  '("#5699AF" "#5699AF" "cyan"         ))
+#
 
-  # Bright colors, gruvbox
-  #  bright:
-  #    black:   '#000000'
-  #    red:     '#fb4934'
-  #    green:   '#b8bb26'
-  #    yellow:  '#fabd2f'
-  #    blue:    '#81a2be' #   blue:    '#8ec07c'
-  #    magenta: '#d3869b'
-  #    cyan:    '#8ec07c'
-  #    white:   '#ebdbb2'
-
-  # Normal colors, joshdick/onedark
+#doom-one theme
   normal:
-    black:   '#282C34'
-    red:     '#E06C75'
+    black:   '#5B6268'
+    red:     '#ff6c6b'
+    green:   '#98be65'
+    yellow:  '#ECBE7B'
+    blue:    '#4db5bd' # of?:  '#51afef'
+    magenta: '#c678dd'
+    cyan:    '#a9a1e1'
+    white:   '#DFDFDF'
+
+  # Bright colors, dezelfde gekozen...
+  bright:
+    black:   '#5B6268'
+    red:     '#ff6c6b'
     green:   '#98C379'
     yellow:  '#E5C07B'
     blue:    '#61AFEF'
     magenta: '#C678DD'
     cyan:    '#56B6C2'
     white:   '#ABB2BF'
-
-  # Bright colors, gruvbox
-  bright:
-    black:   '#282C34'
-   #black:   '#000000'
-    red:     '#fb4934'
-    green:   '#b8bb26'
-    yellow:  '#fabd2f'
-    blue:    '#81a2be'
-    magenta: '#d3869b'
-    cyan:    '#8ec07c'
-    white:   '#ebdbb2'
 
   # Dim colors
   #
@@ -381,7 +372,7 @@ colors:
 #window_opacity: 0.9
 #background_opacity: 0.7
 #  opacity: 0.8
- #opacity: 0.9
+#opacity: 0.9
 
 #selection:
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"

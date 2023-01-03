@@ -45,7 +45,7 @@ My intention is to modify the scripts from this document and use ~org-babel-tang
 
 ** aandelen.py
 
-A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. And after that  screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen. The format in the clipboard is optimized for emacs org mode tables.
+A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio informatoin are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
 #+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
@@ -60,9 +60,9 @@ from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, 
 #+end_src
 
 The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog
-The aim is to add the amount of cash and surplus value of the house here by hand. After this the script will continue.
+The aim is to add the amount of cash and surplus value of the house here by hand. After this the script take over the heavy lifting.
 
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
@@ -97,32 +97,27 @@ if __name__ == '__main__':
 #+end_src
 
 A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     """Building a dataframe from several CSV files"""
     global df  # This dataframe will be used outside of this def, so make it global
     dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
     dfx.columns = [OmsCol, EurCol] # Harmonizing column names
-    # Harmoniseer notatie. Verwijder punt als duizend separator, en wissel komma om met punt
-    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]
-    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]]
-    # Verander kolom Euro naar integer
-    dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)
-    # Toevoegen van tijdelijke dataframe aan bestaande dataframe
-    df = pd.concat([df, dfx])
+    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]  #  Removal of thousand separator
+    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]] #  Change comma to point
+    dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)     # Change the Euro column to integer.
+    df = pd.concat([df, dfx])    # Add the temp dataframe to dataframe
     print('=' * 40 + "\n", dfx)  # For debugging
 #+end_src
 
-The filenames of the csv files are generated here.
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+The filenames and path of the csv files are generated here.
+#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
 #+end_src
 
-Creating some variables
-# Omschrijving van overwaarde huis en cash geld
-
+Description of two asset allocation and column headers.
 #+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 OmsHuis = "Overwaarde huis     "
 OmsCash = "RaboCash            "
@@ -133,18 +128,13 @@ AaCol = "AA%"                       # Asset Allocation column naam
 AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
 #+end_src
 
+Creation of dataframe and adding data of two portfolios to the dataframe.
 #+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
-# Aanmaken van dataframes van de twee portefeuilles en samenvoegen dataframes.
-# Aanmaken van een leeg dataframe
-df = pd.DataFrame()
-# Toevoegen van data uit csv files aan het lege dataframe.
-AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €")
-#De onderste regel van de rabobank csv is een lege regel dus verwijderen:
-df.drop(3,0,inplace=True)
-
-# Nu de DeGIRO data toevoegen:
-AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product")
-# Nieuw dataframe aanmaken met overwaarde huis en spaargeld data
+df = pd.DataFrame() # Create a new dataframe
+AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
+df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
+AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
+# Create a new dataframe with surplus value house and Cash amount
 d = {
     OmsCol: [OmsHuis, OmsCash],    # kolom omschrijving invullen
     EurCol: [Huis, RaboCash]}      # kolom euros invullen
@@ -154,10 +144,12 @@ df = pd.concat([df, dfx])
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
 print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
-
-# Asset allocations berekenen en toevoegen aan dataframe
-# Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
+# Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
+#+end_src
+
+Asset allocations berekenen en toevoegen aan dataframe
+#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
 # Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA-berekening
 Kapitaal = df[EurCol].sum()
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
@@ -167,7 +159,7 @@ df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje 
 print('=' * 40  + "\n", dfx)  # Alleen voor debugging gebruik
 #+end_src
 
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
     EurCol: ["" , Kapitaal, Kapitaal - Huis],

@@ -124,7 +124,7 @@ keys = [
 
     # Open applications
     Key([mR], "a",
-        lazy.spawn("python " + home + "/.config/Aandelen.py"),
+        lazy.spawn("python " + home + "/.config/aandelen.py"),
         lazy.spawn(Emacs + home + "/Stack/Documenten/Aandelen/aandelen_log.org"),
         desc="Open in vim: run het python aandelen script en open het aandelen log"
         ),
@@ -149,7 +149,6 @@ keys = [
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
     Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")),
     Key([mR, "shift"], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")),
-    #Key([mR], "t", lazy.spawn("thunar")),
     Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")),
     Key([mR, "shift"], "u", lazy.spawn(home + "/.config/unicode")),
     Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
@@ -214,7 +213,7 @@ layout_theme = {"border_width": 2,
                 }
 # A separate theme for floating mode, different color, thicker border width
 floating_theme = {"border_width": 3,
-                "border_focus": "#00ffd2",  #98C379= groen
+                "border_focus": "#98BE65",  #98C379= groen
                 "border_normal": "#006553",
                 }
 
