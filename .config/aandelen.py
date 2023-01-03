@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Not to be edited directly. Please use ~/.config/README.org
 import glob, os, pyperclip, time
 import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
@@ -22,7 +23,6 @@ class InputDialog(QDialog):
 
     def getinputs(self):
         return RaboCash.text(), Huis.text()
-
 
 if __name__ == '__main__':
     import sys

@@ -1,3 +1,4 @@
+# Not to be edited directly. Please use ~/.config/README.org
 #!/bin/bash
 # ~/.config/dotfiles.sh
 

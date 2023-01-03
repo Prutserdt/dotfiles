@@ -48,8 +48,9 @@ My intention is to modify the scripts from this document and use ~org-babel-tang
 A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio informatoin are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 #!/usr/bin/env python3
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 The libraries that are used for this script are imported in the next section.
@@ -63,7 +64,6 @@ The ~InputDialog~ class is defined here, an input screen based on the PyQT5 libr
 The aim is to add the amount of cash and surplus value of the house here by hand. After this the script take over the heavy lifting.
 
 #+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
-
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
 
@@ -83,7 +83,6 @@ class InputDialog(QDialog):
 
     def getinputs(self):
         return RaboCash.text(), Huis.text()
-
 
 if __name__ == '__main__':
     import sys
@@ -227,6 +226,7 @@ A script to manage my dotfiles git repo. It checks the status of my dotfiles and
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a shell script is used.
 #+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
+# Not to be edited directly. Please use ~/.config/README.org
 #!/bin/bash
 #+end_src
 
@@ -298,13 +298,13 @@ case $PullPush in
 esac
 #+end_src
 
-
 ** exitqtile.sh
 Used to exit the Qtile windowmanager with yes/no option.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 Echo out the options and run the ~killall qtile~ command, or not.
@@ -327,6 +327,7 @@ These settings are used in combination with an xmodmap command and are restoring
 
 My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
 #+begin_src sh :tangle rdxswitch :padline no :eval no
+! Not to be edited directly. Please use ~/.config/README.org
 remove Lock = Caps_Lock
 keysym Escape = Escape
 keysym Caps_Lock = Caps_Lock
@@ -346,6 +347,7 @@ I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config
 
 Swap the Escape with the Capslock.
 #+begin_src sh :tangle kbswitch :padline no :eval no
+! Not to be edited directly. Please use ~/.config/README.org
 remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
@@ -367,13 +369,13 @@ remove mod1 = Alt_R
 add mod5 = Alt_R
 #+end_src
 
-
 ** screenshot2text.sh
 A script that makes a screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 First a temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
@@ -396,13 +398,13 @@ Finally the textfile is catted to the system clipboard with xclip. The -sel flag
 cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 #+end_src
 
-
 ** dmenuUpdate.sh
 Refreshing my list of installed applications. This list is used in dmenu as an app picker.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
@@ -428,6 +430,7 @@ My app picker. A simple script to select which application to start via dmenu.
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
@@ -443,6 +446,7 @@ Make a backup of the current dmenu version.
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
 #!/bin/bash
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 The *_stable name will be the new stable version of dmenu.
@@ -464,6 +468,7 @@ Internet bookmark picker.
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application.
@@ -479,6 +484,7 @@ Basic patch automation for dmenu. Make sure that the current version is saved as
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 This script will delete all of the current dmenu files. It will build from the stable version backup location.
@@ -506,44 +512,13 @@ This script will delete all of the current dmenu files. It will build from the s
 	fi
 #+end_src
 
-klad, handmatig patchen:
-dmenustable
-dmenupatch
-
-daarna:
-	    patch -p1 < ~/Stack/Dotfiles/dmenu/patches/test/*.diff &&
-
-
-patching file config.def.h
-Hunk #1 FAILED at 2.
-Hunk #2 succeeded at 25 with fuzz 2 (offset 12 lines).
-1 out of 2 hunks FAILED -- saving rejects to file config.def.h.rej
-patching file dmenu.c
-Hunk #1 succeeded at 11 (offset 1 line).
-Hunk #2 succeeded at 27 with fuzz 2 (offset 1 line).
-Hunk #3 succeeded at 60 (offset 4 lines).
-Hunk #4 succeeded at 862 (offset 251 lines).
-Hunk #5 FAILED at 649.
-Hunk #6 FAILED at 666.
-Hunk #7 succeeded at 1036 (offset 280 lines).
-Hunk #8 succeeded at 1059 (offset 280 lines).
-2 out of 8 hunks FAILED -- saving rejects to file dmenu.c.rej
-patching file drw.c
-Hunk #4 succeeded at 191 (offset -6 lines).
-Hunk #5 succeeded at 216 (offset -6 lines).
-Hunk #6 succeeded at 272 (offset -6 lines).
-patching file drw.h
-
-
-
-
-
 ** dmenustable.sh
 Make a backup of the current dmenu version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 This script gives yes/no option to make a local backup of dmenu.
@@ -568,6 +543,7 @@ This script can be called by the .bashrc alias dmenustable.
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 Script to select directories (~/.config/directories) in Thunar by dmenu.
@@ -584,6 +560,7 @@ Selecting ➡emojis⬅ via dmenu, 🆒.
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
@@ -602,13 +579,13 @@ wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 
 Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~unicode~.
 
-
 ** dmenuvanilla.sh
 Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 First give the option to opt out and wait for the user to continue or not.
@@ -630,15 +607,13 @@ else
 fi
 #+end_src
 
-#+RESULTS:
-: No
-
 ** dmenuwallpaper.sh
 Script to select wallpapers via dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
+# Not to be edited directly. Please use ~/.config/README.org
 #+end_src
 
 This scripts requires the dmenu patch center, which gives the -c option.

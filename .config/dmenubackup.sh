@@ -1,4 +1,5 @@
 #!/bin/bash
+# Not to be edited directly. Please use ~/.config/README.org
 	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 	read answer
 	if [ "$answer" != "${answer#[Yy]}" ] ;then
