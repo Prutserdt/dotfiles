@@ -29,9 +29,8 @@ Check the sourcecode of qtile by running from python shell: ~import libqtile~, ~
 ** Imports
 A note is added to ~config.py~ which reminds *not* to edit this file directly.
 #+BEGIN_SRC python :tangle config.py :results none
-# NOTE: This file is generated from the README.org file. Do not alter
-# config.el directly and only modify the README.org file in emacs by
-# 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
+# NOTE: This file is generated from ~/.config/qtile/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 My configuration requires some modules to be loaded. These are all default settings.
@@ -422,9 +421,8 @@ This shellscript is called in the config.py script and is starting some keyboard
 Again a note is added and this time to ~autostart.sh~ to *not* edit this file directly.
 #+begin_src sh :tangle-mode rwxr-xr-x :tangle autostart.sh
 #!/bin/bash
-# NOTE: This file is generated from the README.org file. Do not alter
-# autostart.sh directly and only modify the README.org file in emacs by
-# 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
+# NOTE: This file is generated from ~/.config/qtile/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started.

@@ -1,8 +1,7 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; NOTE: This file is generated from the README.org file. Do not alter
-;; init.el directly and only modify the README.org file in emacs and
-;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
+;; NOTE: This file is generated from ~/.doom.d/README.org
+;;      Please only edit that file and org-babel-tangle (emacs)
 
 (doom! :completion
        company           ; the ultimate code completion backend

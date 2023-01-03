@@ -443,8 +443,6 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
-#cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
-# -a 50 moet 50% doorzichtigheid geven....
 cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
 #+end_src
 

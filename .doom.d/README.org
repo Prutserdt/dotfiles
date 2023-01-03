@@ -26,10 +26,8 @@ This file controls what Doom modules are enabled and what order they load in and
 
 Add a note to ~init.el~ to highlight that this file should not be edited directly.
 #+begin_src emacs-lisp :tangle init.el
-;; NOTE: This file is generated from the README.org file. Do not alter
-;; init.el directly and only modify the README.org file in emacs and
-;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
-
+;; NOTE: This file is generated from ~/.doom.d/README.org
+;;      Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and can be added to the list of modules listed below.
@@ -104,9 +102,8 @@ Here the packages are defined which should be installed. This is an addition to 
 
 Again a NOTE is added to ~packages.el~ to *not* edit this file.
 #+begin_src emacs-lisp :tangle packages.el
-;; NOTE: This file is generated from the README.org file. Do not alter
-;; packages.el directly and only modify the README.org file in emacs by
-;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
+;; NOTE: This file is generated from ~/.doom.d/README.org
+;;      Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 A package can be installed from MELPA, ELPA or emacsmirror by (package! package_name). The beacon package is not part of the Doom Emacs modules and is added here. /Never lose your cursor again/ by highlighting the cursor after scrolling.
@@ -145,9 +142,8 @@ The custom configurations are set here. For instance theme settings, image to th
 
 Let's remind the reader of ~config.el~ to not edit this file directly.
 #+begin_src emacs-lisp :tangle config.el
-;; NOTE: This file is generated from the README.org file. Do not alter
-;; config.el directly and only modify the README.org file in emacs and
-;; 'M-x' 'org-babel-tangle' and reload by 'M-x' 'doom/reload'
+;; NOTE: This file is generated from ~/.doom.d/README.org
+;;      Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
