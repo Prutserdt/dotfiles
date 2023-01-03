@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# NOTE: This file is generated from the ~/.config/README.org file.
+# NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tange (emacs)
 import glob, os, pyperclip, time
 import pandas as pd

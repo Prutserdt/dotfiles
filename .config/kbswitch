@@ -1,5 +1,5 @@
-# NOTE: This file is generated from the ~/.config/README.org file.
-#       Please only edit that file and org-babel-tange (emacs)
+! NOTE: This file is generated from ~/.config/README.org
+!       Please only edit that file and org-babel-tange (emacs)
 remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape

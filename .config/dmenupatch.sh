@@ -1,5 +1,5 @@
 #!/bin/sh
-# NOTE: This file is generated from the ~/.config/README.org file.
+# NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tange (emacs)
 	echo -n "Are you sure you want to patch the current dmenu version? This will first:
 	RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "

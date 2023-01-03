@@ -1,5 +1,5 @@
 #!/bin/sh
-# NOTE: This file is generated from the ~/.config/README.org file.
+# NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tange (emacs)
 rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
