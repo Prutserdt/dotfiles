@@ -1,5 +1,6 @@
 #!/bin/bash
-# Not to be edited directly. Please use ~/.config/README.org
+# NOTE: This file is generated from the ~/.config/README.org file.
+#       Please only edit that file and org-babel-tange (emacs)
 	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 	read answer
 	if [ "$answer" != "${answer#[Yy]}" ] ;then

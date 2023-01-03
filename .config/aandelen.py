@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Not to be edited directly. Please use ~/.config/README.org
+# NOTE: This file is generated from the ~/.config/README.org file.
+#       Please only edit that file and org-babel-tange (emacs)
 import glob, os, pyperclip, time
 import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)

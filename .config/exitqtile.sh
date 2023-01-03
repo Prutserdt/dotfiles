@@ -1,5 +1,6 @@
 #!/bin/bash
-# Not to be edited directly. Please use ~/.config/README.org
+# NOTE: This file is generated from the ~/.config/README.org file.
+#       Please only edit that file and org-babel-tange (emacs)
 echo -n "Do you wish to exit qtile right now? (y/n) "
 
 
