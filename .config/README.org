@@ -51,7 +51,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 #!/usr/bin/env python3
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 The libraries that are used for this script are imported in the next section.
@@ -228,7 +228,7 @@ A script to manage my dotfiles git repo. It checks the status of my dotfiles and
 Any script should start with a directive, first a shebang ~#!~ and in this case a shell script is used.
 #+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #!/bin/bash
 #+end_src
 
@@ -307,7 +307,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 Echo out the options and run the ~killall qtile~ command, or not.
@@ -331,7 +331,7 @@ These settings are used in combination with an xmodmap command and are restoring
 My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
 #+begin_src sh :tangle rdxswitch :padline no :eval no
 ! NOTE: This file is generated from ~/.config/README.org
-!       Please only edit that file and org-babel-tange (emacs)
+!       Please only edit that file and org-babel-tangle (emacs)
 remove Lock = Caps_Lock
 keysym Escape = Escape
 keysym Caps_Lock = Caps_Lock
@@ -352,7 +352,7 @@ I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config
 Swap the Escape with the Capslock.
 #+begin_src sh :tangle kbswitch :padline no :eval no
 ! NOTE: This file is generated from ~/.config/README.org
-!       Please only edit that file and org-babel-tange (emacs)
+!       Please only edit that file and org-babel-tangle (emacs)
 remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
@@ -381,7 +381,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 First a temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
@@ -411,7 +411,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
@@ -438,7 +438,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
@@ -455,7 +455,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 The *_stable name will be the new stable version of dmenu.
@@ -478,7 +478,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application.
@@ -495,7 +495,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 This script will delete all of the current dmenu files. It will build from the stable version backup location.
@@ -530,7 +530,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 This script gives yes/no option to make a local backup of dmenu.
@@ -556,7 +556,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 Script to select directories (~/.config/directories) in Thunar by dmenu.
@@ -574,7 +574,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
@@ -600,7 +600,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 First give the option to opt out and wait for the user to continue or not.
@@ -629,7 +629,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 This scripts requires the dmenu patch center, which gives the -c option.

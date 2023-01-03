@@ -1,5 +1,5 @@
 # NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tange (emacs)
+#       Please only edit that file and org-babel-tangle (emacs)
 #!/bin/bash
 # ~/.config/dotfiles.sh
 
