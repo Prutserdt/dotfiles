@@ -16,3 +16,4 @@
 (package! eval-in-repl)
 (package! jupyter)
 (package! phpactor)
+(package! org-auto-tangle)

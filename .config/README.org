@@ -1,6 +1,7 @@
 #+TITLE: My Scripts
 #+STARTUP: showeverything
 #+OPTIONS: toc:4
+#+auto_tangle: t
 #+AUTHOR: Prutserdt
 
 * Table of contents :toc:
@@ -35,7 +36,7 @@
   - [[#wololosh][wololo.sh]]
 - [[#tips-and-tricks][Tips and tricks]]
   - [[#fetch-all-scrips-of-config-by-this-code-block][Fetch all scrips of ~/.config by this code block]]
-  - [[#some-notes-about-the-code-blocks][Some notes about the code blocks.]]
+  - [[#some-notes-about-the-code-blocks-and-tangling][Some notes about the code blocks and tangling.]]
 
 * About this document
 This document is a noto-to-self about scripts on my GNU/Linux system and is my attempt at literate programming using Emacs org mode. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
@@ -61,12 +62,12 @@ import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
 #+end_src
 
-The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog
-The aim is to add the amount of cash and surplus value of the house here by hand. After this the script take over the heavy lifting.
+The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog. The aim is to add the amount of cash and surplus value of the house here by hand. After this the script takes over the heavy lifting.
 
 #+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
+
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -470,7 +471,7 @@ The *_stable name will be the new stable version of dmenu.
 #+end_src
 
 ** dmenuinternet.sh
-Internet bookmark picker.
+Internet bookmark pick.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
@@ -479,7 +480,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application.
+My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 chosen=$(cat ~/Stack/Command_line/urls | dmenu -i -c -l 65)
 [ -z "$chosen" ] && exit
@@ -930,13 +931,8 @@ for f in *.sh; do
 done
 #+end_src
 
-** Some notes about the code blocks.
+** Some notes about the code blocks and tangling.
 Shell scripts need to be executable, and during tangling a flag should be added to keep the file executable, ~tangle:mode (identity #o755).~
 For example: ~#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)~.
 
-My old solution was to run the following command, but this is not needed actually.
-#+BEGIN_SRC bash :dir /sudo::
-chmod a+x /home/icefly/.config/*.sh &
-chmod a+x /home/icefly/.config/*.py
-#+end_src
-
+To make the tangling process easier I am using the [[https://github.com/yilkalargaw/org-auto-tangle] org-auto-tangle] package which automatically tangles the files. The file contains ~#+auto_tangle: t~ in the header.

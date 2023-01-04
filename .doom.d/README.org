@@ -1,6 +1,7 @@
 #+TITLE: My configuration of Emacs
 #+STARTUP: showeverything
 #+STARTUP: inlineimages
+#+auto_tangle: t
 #+AUTHOR: Prutserdt
 
 #+CAPTION: Doom Emacs
@@ -84,6 +85,8 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
         +pyright)        ; beautiful is better than ugly
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        php               ; perl's insecure younger brother
+       latex
+
 
        :app
 
@@ -133,6 +136,7 @@ Settings for python hacking, not sure I will use this setup, FIXME
 (package! eval-in-repl)
 (package! jupyter)
 (package! phpactor)
+(package! org-auto-tangle)
 #+end_src
 
 
@@ -273,6 +277,14 @@ Op zich werkt het want via mijn keyboard kan ik met derde muisbutton dit laten w
 No more conformation message after closing emacs.
 #+begin_src emacs-lisp :tangle config.el
 (setq confirm-kill-emacs nil)
+#+end_src
+
+Automatically tangling by this package
+#+begin_src emacs-lisp :tangle config.el
+(use-package org-auto-tangle
+  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
 * Code snippets
