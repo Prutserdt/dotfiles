@@ -56,7 +56,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #+end_src
 
 The libraries that are used for this script are imported in the next section.
-#+begin_src python :tangle aandelen.py :padline no :eval no
+#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
 import glob, os, pyperclip, time
 import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
