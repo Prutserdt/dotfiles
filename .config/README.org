@@ -935,4 +935,4 @@ done
 Shell scripts need to be executable, and during tangling a flag should be added to keep the file executable, ~tangle:mode (identity #o755).~
 For example: ~#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)~.
 
-To make the tangling process easier I am using the [[https://github.com/yilkalargaw/org-auto-tangle] org-auto-tangle] package which automatically tangles the files. The file contains ~#+auto_tangle: t~ in the header.
+To make the tangling process easier I am using the [[https://github.com/yilkalargaw/org-auto-tangle] [org-auto-tangle]] package which automatically tangles the files. The file contains ~#+auto_tangle: t~ in the header.
