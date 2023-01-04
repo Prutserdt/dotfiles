@@ -21,6 +21,7 @@
   - [[#some-hooks][Some hooks]]
 - [[#the-autostartsh-script][The autostart.sh script]]
 - [[#my-todo-list][My TODO list]]
+- [[#about-this-emacs-org-document][About this Emacs org document]]
 
 * Qtile and my config
 [[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org emacs document my configuration of qtile is described and it is used as the source to create the qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
@@ -439,3 +440,8 @@ picom -b &
 * My TODO list
 It would be nice to dynamically control the gaps size between the windows (not critical).
 I did not get it to work yet with https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input.
+
+
+* About this Emacs org document
+
+This is a literate programming document and it describes my qtile window manager customization. It is written in Emacs in org-mode and uses [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]]. The Emacs package ~org-babel-tangle~ exports the code blocks to the actual dotfiles which are used to configure Qtile. Tangling can be done manually. In my case I automated it by the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package. When this orgfile is saved it now automatically tangles the code blocks. The org file should contain ~#+auto_tangle: t~ in the header of the org file..
