@@ -51,6 +51,7 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
+
 OmsHuis = "Overwaarde huis     "
 OmsCash = "RaboCash            "
 # Namen van kolommen die ik ga gebruiken:
@@ -58,6 +59,7 @@ EurCol = "Euro"                     # Euro column naam
 OmsCol = "Omschrijving        "     # Omschrijving column naam
 AaCol = "AA%"                       # Asset Allocation column naam
 AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
+
 df = pd.DataFrame() # Create a new dataframe
 AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
 df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
@@ -74,6 +76,7 @@ df = df.sort_values(by=EurCol, ascending=False)
 print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
+
 # Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA-berekening
 Kapitaal = df[EurCol].sum()
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
@@ -101,6 +104,7 @@ df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO)))
 # Maak een timestamp als 20230131
 t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum)))
+
 # De titel voor in org mode (met drie sterren)
 titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 print('\n\n')
@@ -127,6 +131,7 @@ data = data.replace('||||', str(separator)+'\n\n'+str(separator))    # Verwijder
 data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')    # Verwijder NaN waarden
 
 print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
+
 pyperclip.copy(data)
 
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,

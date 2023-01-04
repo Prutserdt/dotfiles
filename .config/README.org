@@ -49,14 +49,14 @@ My intention is to modify the scripts from this document and use ~org-babel-tang
 A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio informatoin are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
-#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 #!/usr/bin/env python3
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
 The libraries that are used for this script are imported in the next section.
-#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 import glob, os, pyperclip, time
 import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
@@ -64,7 +64,7 @@ from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, 
 
 The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog. The aim is to add the amount of cash and surplus value of the house here by hand. After this the script takes over the heavy lifting.
 
-#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 #+end_src
 
 A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
-#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     """Building a dataframe from several CSV files"""
     global df  # This dataframe will be used outside of this def, so make it global
@@ -112,14 +112,14 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
 #+end_src
 
 The filenames and path of the csv files are generated here.
-#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
 #+end_src
 
 Description of two asset allocation and column headers.
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 OmsHuis = "Overwaarde huis     "
 OmsCash = "RaboCash            "
 # Namen van kolommen die ik ga gebruiken:
@@ -130,7 +130,7 @@ AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend colu
 #+end_src
 
 Creation of dataframe and adding data of two portfolios to the dataframe.
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 df = pd.DataFrame() # Create a new dataframe
 AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
 df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
@@ -150,7 +150,7 @@ df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 #+end_src
 
 Asset allocations berekenen en toevoegen aan dataframe
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 # Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA-berekening
 Kapitaal = df[EurCol].sum()
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
@@ -160,7 +160,7 @@ df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje 
 print('=' * 40  + "\n", dfx)  # Alleen voor debugging gebruik
 #+end_src
 
-#+begin_src python :tangle aandelen.py :padline yes :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
     EurCol: ["" , Kapitaal, Kapitaal - Huis],
@@ -184,7 +184,7 @@ t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + s
 
 The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
 
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 # De titel voor in org mode (met drie sterren)
 titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 print('\n\n')
@@ -215,7 +215,7 @@ print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Alleen 
 #+end_src
 
 Writing the data to the clipboard and garbage collection.
-#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 pyperclip.copy(data)
 
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
