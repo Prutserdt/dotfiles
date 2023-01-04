@@ -17,7 +17,6 @@ function Pull()
 }
 clear &&
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status &&
-
 echo -n "--------------------------------------------------
 Please read the status of the dotfiles carefully above.
 
@@ -26,7 +25,6 @@ Options:
  2 pull (and first reset -hard)
  3 pull and a commit/push
  4 exit
-
 [$USER@github.com/Prutserdt/dotfiles ~]:> "
 read PullPush
 case $PullPush in

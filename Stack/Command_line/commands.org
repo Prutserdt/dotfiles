@@ -11,7 +11,7 @@
 - [[#keebs][Keebs]]
 
 * About this document
-This document consists of notes that I took during my Linux journey. A lot of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference.
+This document consists of notes that I took during my Linux journey. A *lot* of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference.
 
 * Command line tricks
 *** Vind grootte van files/directories in commandline
@@ -2771,13 +2771,7 @@ Configurations files: ~/.doom.d
 
 M: meta key: alt
 
-Je kunt emacs draaien als grafisch programma of in de terminal!
 
-Toevoegen link/hyperlink: 
-C-c C-l
-
-figuur laten zien in org:
-org-toggle-inline-images
 
 **** Help in emacs/doom-emacs
 
@@ -2789,9 +2783,6 @@ Emacs is self documenting. All information is part of the software.
 | C-h ?   | SPC h ?   | Help with the help function               |
 | C-h k   | SPC h k   | Give keystroke, then you get help on that |
 | C-h i   | SPC h i   | info mode.                                |
-|         |           |                                           |
-|         |           |                                           |
-|         |           |                                           |
 |         |           |                                           |
 | C-h d h | SPC h d   | Doom emacs documentation                  |
 | C-h d m | SPC h d m | Show all modules, loaded/not loaded       |
@@ -2956,6 +2947,21 @@ Numbered lists maak je aan met: 1.
    a. Je kunt ook doornummeren met a.
    b. En verder door.
 
+**** Markup in Org-mode
+
+|------+-----------------|
+| sign | Description     |
+|------+-----------------|
+| *    | *bold*            |
+| ~    | ~code~            |
+| /    | /italic/          |
+| +    | +strikethrough+   |
+| _    | _underline_       |
+| =    | =verbatim=        |
+|------+-----------------|
+
+[ [link] [link omschrijving]]: [[duckduckgo.com][de beste zoek website]]. Dit kan ook via ~org-insert-link~.
+[[img:asdf.jpg][asdf]
 
 **** Tabellen in Org-mode
 
@@ -2984,6 +2990,8 @@ Ik heb de tabel uitgebreid met bovenstaande stappen. Scheidingspaneel is gewoon 
 | VIM    | Meerdere modes       | Minder functionaliteit dan emacs |
 | Emacs  | Dit is geen editor   |                                  |
 |--------+----------------------+----------------------------------|
+
+Je kunt regels/kolommen verschuiven met Meta pijltjes 🤩.
 
 ***** Optellen van waarden in kolommen in org-mode tabel
 

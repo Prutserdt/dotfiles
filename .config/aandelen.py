@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, 
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
 
-
     def __init__(self, parent=None):
         super().__init__(parent)
         global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
@@ -29,7 +28,6 @@ class InputDialog(QDialog):
 
 if __name__ == '__main__':
     import sys
-
     app = QApplication(sys.argv)
     dialog = InputDialog()
     if dialog.exec():

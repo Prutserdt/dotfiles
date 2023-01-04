@@ -68,7 +68,6 @@ The ~InputDialog~ class is defined here, an input screen based on the PyQT5 libr
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
 
-
     def __init__(self, parent=None):
         super().__init__(parent)
         global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
@@ -88,7 +87,6 @@ class InputDialog(QDialog):
 
 if __name__ == '__main__':
     import sys
-
     app = QApplication(sys.argv)
     dialog = InputDialog()
     if dialog.exec():
@@ -255,7 +253,6 @@ The screen of the terminal is cleared and the status of dotfiles is checked. The
 #+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 clear &&
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status &&
-
 echo -n "--------------------------------------------------
 Please read the status of the dotfiles carefully above.
 
@@ -264,7 +261,6 @@ Options:
  2 pull (and first reset -hard)
  3 pull and a commit/push
  4 exit
-
 [$USER@github.com/Prutserdt/dotfiles ~]:> "
 #+end_src
 

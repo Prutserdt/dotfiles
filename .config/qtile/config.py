@@ -37,8 +37,6 @@ def monwide2(qtile):
 def cmd_increase_margin(self): ### FIXME werkt NIET!
     self.margin += 10
     self.group.layout_all()
-    #self.group.MonadThreeCol()
-#    self.group.cmd_to_layout_index(2) #2: monadtall with margins
 
 def cmd_decrease_margin(self): ### FIXME werkt NIET!
     new_margin = self.margin - 10
@@ -46,10 +44,9 @@ def cmd_decrease_margin(self): ### FIXME werkt NIET!
         new_margin = 0
     self.margin = new_margin
     self.group.layout_all()
-    #self.group.cmd_to_layout_index(2) #2: monadtall with margins
-    #self.group.MonadThreeCol()
 
 #onderstaande wil ik ombouwen om de keybindings eenvoudiger te maken
+# https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input
 # FIXME: werkt nog NIET!!
 
 def keyb(toets, programma, description):
@@ -66,16 +63,6 @@ keys = [
         ],
         mode="Margins" # als je mode kiest dan moet je eruit met escape....
         ),
-#   KeyChord([mL], "z", [  # example of keychording
-#       Key([], "k", lazy.layout.grow_main()),
-#       Key([], "j", lazy.layout.shrink_main()),
-#       Key([], "i", lazy.layout.grow()),
-#       Key([], "u", lazy.layout.shrink()),
-#       Key([], "n", lazy.layout.normalize()),
-#       Key([], "m", lazy.layout.maximize())
-#       ],
-#       mode="Windows"
-#       ),
     Key([mL], "a",
         lazy.function(cmd_increase_margin), ### FIXME werkt NIET:
         desc="increase margin..."
@@ -127,17 +114,7 @@ keys = [
         lazy.spawn(Emacs + home + "/Stack/Documenten/Aandelen/aandelen_log.org"),
         desc="Open in vim: run het python aandelen script en open het aandelen log"
         ),
-    #keyb(b,brave, LaunchBravebrowser)
-    #lazy.function(keyb(b, brave, LaunchBravebrowser)),
-    #lazy.function(keyb(b, brave, LaunchBravebrowser)),
-    #(lazy.function(keyb("b","brave", "Launch Brave browser")))
-    #lazy.function(keyb("b","brave", "Launch Brave browser")),#FIXME: wil keybinds versimpelen...
-    # even kijken of ik het met EzKey ga doen!!! weet niet of mL en mR gaaat werken....
-
-#   Key([mR], "b", lazy.spawn("brave" ),desc="Launch Brave browser"),
-#   Key([mR], "b", lazy.spawn("brave")),
     Key([mR], "b", lazy.spawn(home + "/.config/dmenuinternet.sh")),
-    Key([mR, "shift"], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")),
     Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
     Key([mR], "d", lazy.spawn(home + "/.config/dmenuapps.sh")),
     Key([mR, "shift"], "d", lazy.spawn(home + "/.config/dmenuUpdate.sh")),
@@ -155,7 +132,8 @@ keys = [
     Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
     Key([aR], "b", lazy.spawn(Emacs + home + "/.bashrc")), 
     Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")), 
-    Key([aR], "d", lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h")),
+    Key([aR], "d", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")),
+#   Key([aR], "d", lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h")),
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")), 
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")), 
     Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")), 
