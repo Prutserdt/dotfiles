@@ -47,7 +47,7 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     print('=' * 40 + "\n", dfx)  # For debugging
 
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
-searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-*"  # Wildcard searching
+searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
 
 OmsHuis = "Overwaarde huis     "

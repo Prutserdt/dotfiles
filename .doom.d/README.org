@@ -287,6 +287,7 @@ Automatically tangling by this package
   :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
+
 * Code snippets
 
 Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:

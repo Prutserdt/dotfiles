@@ -112,7 +112,7 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
 The filenames and path of the csv files are generated here.
 #+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
-searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille-*"  # Wildcard searching
+searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
 #+end_src
 
@@ -381,12 +381,12 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-First a temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
+A temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 mkdir $XDG_RUNTIME_DIR/temp &
 #+end_src
 
-The screenshot program xfce4-screenshooter -r flag will select a region to be captured by mouse and the -s flag will save to the path. Here the $XDG_RUNTIME_DIR/temp is selected and the screenshot is saved as 'wismij.jpg' (wismij is Dutch for EraseMe). Note: the next screenshot will overwrite the jpg and txt file.
+The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. Note: the next screenshot will overwrite the jpg and txt file.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
 #+end_src

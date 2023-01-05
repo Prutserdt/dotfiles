@@ -251,17 +251,8 @@ font:
   #cyan:    '#689d6a'
   #white:   '#ebdbb2'
  
-# Colors (doom-one, heavily modified)
-colors:
-  # Default colors
-  primary:
-    #background: '#272732'
-    background: '#2a2a30'
-    # soft contrast: background = '#32302f'
-    foreground: '#999999'
-#    foreground: '#ebdbb2'
 
-#doom-one theme
+##doom-one theme
 #
 #  (grey       base4)
 #   (red        '("#ff6c6b" "#ff6655" "red"          ))
@@ -276,28 +267,97 @@ colors:
 #   (cyan       '("#46D9FF" "#46D9FF" "brightcyan"   ))
 #   (dark-cyan  '("#5699AF" "#5699AF" "cyan"         ))
 #
+#
+## Colors (doom-one)
+#colors:
+#  # Default colors
+#  primary:
+#    background: '#2a2a30' # doom-one theme
+#    foreground: '#999999' # doom-one theme
+#
+##doom-one theme
+#  normal:
+#    black:   '#5B6268'
+#    red:     '#ff6c6b'
+#    green:   '#98be65'
+#    yellow:  '#ECBE7B'
+#    blue:    '#4db5bd'
+#    magenta: '#c678dd'
+#    cyan:    '#a9a1e1'
+#    white:   '#DFDFDF'
+#
+## Bright colors, dezelfde gekozen...
+#  bright:
+#    black:   '#5B6268'
+#    red:     '#ff6c6b'
+#    green:   '#98C379'
+#    yellow:  '#E5C07B'
+#    blue:    '#61AFEF'
+#    magenta: '#C678DD'
+#    cyan:    '#56B6C2'
+#    white:   '#ABB2BF'
 
-#doom-one theme
+
+# tokyo-night theme
+# bg_dark = "#1e2030", --
+#    bg = "#222436", --
+#    bg_highlight = "#2f334d", --
+#    terminal_black = "#444a73", --
+#    fg = "#c8d3f5", --
+#    fg_dark = "#828bb8", --
+#    fg_gutter = "#3b4261",
+#    dark3 = "#545c7e",
+#    comment = "#7a88cf", --
+#    dark5 = "#737aa2",
+#    blue0 = "#3e68d7", --
+#    blue = "#82aaff", --
+#    cyan = "#86e1fc", --
+#    blue1 = "#65bcff", --
+#    blue2 = "#0db9d7",
+#    blue5 = "#89ddff",
+#    blue6 = "#b4f9f8", --
+#    blue7 = "#394b70",
+#    purple = "#fca7ea", --
+#    magenta2 = "#ff007c",
+#    magenta = "#c099ff", --
+#    orange = "#ff966c", --
+#    yellow = "#ffc777", --
+#    green = "#c3e88d", --
+#    green1 = "#4fd6be", --
+#    green2 = "#41a6b5",
+#    teal = "#4fd6be", --
+#    red = "#ff757f", --
+#    red1 = "#c53b53", --
+
+# Colors tokyo-night
+colors:
+  # Default colors
+  primary:
+    background: '#222436' # tokyo-night theme
+    foreground: '#777777'  # tokyo-night theme
+
+#tokyo-night theme
   normal:
-    black:   '#5B6268'
-    red:     '#ff6c6b'
-    green:   '#98be65'
-    yellow:  '#ECBE7B'
-    blue:    '#4db5bd' # of?:  '#51afef'
-    magenta: '#c678dd'
-    cyan:    '#a9a1e1'
+    black:   '#1e2030'
+    red:     "#ff757f"
+    green:   "#c3e88d"
+    yellow:  "#ffc777"
+    blue:    "#82aaff"
+    magenta: "#c099ff"
+    cyan:    "#86e1fc"
     white:   '#DFDFDF'
 
-  # Bright colors, dezelfde gekozen...
+# Bright colors, dezelfde gekozen...
   bright:
-    black:   '#5B6268'
-    red:     '#ff6c6b'
-    green:   '#98C379'
-    yellow:  '#E5C07B'
-    blue:    '#61AFEF'
-    magenta: '#C678DD'
-    cyan:    '#56B6C2'
-    white:   '#ABB2BF'
+    black:   '#1e2030'
+    red:     "#ff757f"
+    green:   "#c3e88d"
+    yellow:  "#ffc777"
+    blue:    "#82aaff"
+    magenta: "#c099ff"
+    cyan:    "#86e1fc"
+    white:   '#DFDFDF'
+
 
   # Dim colors
   #

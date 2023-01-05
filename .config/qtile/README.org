@@ -106,6 +106,7 @@ def keyb(toets, programma, description):
 #+END_SRC
 
 
+
 ** Keybindings: qtile specific
 My left super key bindings are all related to qtile, for instance moving windows around.
 #+BEGIN_SRC python :tangle config.py :results none
