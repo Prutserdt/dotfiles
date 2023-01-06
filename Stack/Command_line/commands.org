@@ -1792,6 +1792,16 @@ cat  $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 #+end_src
 
 
+*** Transform image to ascii art
+~ascii-image-converter~ will do as advertized and the -n flag makes it negative and the -W flag sets the width.
+
+#+begin_src sh :results output
+ascii-image-converter -n -W 60 ~/Downloads/Logitech_mouse.jpg
+#+end_src
+
+
+
+
 
 * Applications (Command line and GUIs)
 *** Vim
@@ -2771,7 +2781,9 @@ Configurations files: ~/.doom.d
 
 M: meta key: alt
 
+**** Allerlei Lisp functies
 
+Doornummeren van een visual selection block: ~rectangle-number-lines~
 
 **** Help in emacs/doom-emacs
 
@@ -4659,3 +4671,85 @@ ik gewoon compileren. Daarna heb ik het systeem van mijn Manjaro VM geupdate
 (zonder binutils)
 
 /usr/bin/avr-ld: /usr/lib/libctf.so.0: version =LIBCTF_1.1' not found (required by /usr/bin/avr-ld)
+
+*** Logitech G502 hero mouse, configuration on Lixux
+
+Muis ingesteld met ~piper~, gebaseerd op LibRatBag. Er zijn geen dotfiles van de configuratie want er wordt direct naar het device geschreven/gelezen.
+
+~ascii-image-converter~ will do as advertized and the -n flag makes it negative and the -W flag sets the width.
+#+begin_src sh :results output
+ascii-image-converter -n -W 60 ~/Downloads/Logitech_mouse.jpg
+#+end_src
+
+#+NAME: Logitech_G502_mouse_numbering
+#+begin_example
+
+                            ..
+                         .::-.:.
+                        ::  -:  ::
+      1 -------------------  =.  ------------- 2
+                     .-.:    .: .  ::
+                    ::: -     :..:  .:
+                  ..  :  :     -:::. ::
+      8 --------------- .:     .: ..-|-------- 10
+               :.    ::..::    :-. .---------- 3
+      7 -----------------.-    ..: |---------- 9
+              :. ::  -:.  :.    .::.-.  -.
+              :.:.   -=-. .:      =:.-  ..
+      6 --------: .:- :=-. -      :. -:..-.....12
+            .:-: . ..  :.-.:      .-:::  :
+      5 ---------------:.--.       - --------- 11
+          - .:      -  :::--.      -.:: .-
+          :..       .:.-::::-. .....-::..-
+          ::         -:.-:..::.......    :
+      4 ----------------:........        :
+         :::.         - .:..             :
+          ::          :. :               :
+          :=           .:-.             :.
+           .:.           :-.            -
+             .:.          .:-:.        :.
+               .:.           .::::.   .:
+                 .:.             =:  .:
+                   -            :=  .:
+                   :           --  :.
+                  .:         .-:...
+                   :.      :--:..
+                    ......--:.
+                                                            
+                                                            
+#+end_example
+
+
+Profile0
+|--------+---------------------------+---------------------------+---------------------------|
+| button | location of button        | button/macro              | Aim/description of use    |
+|--------+---------------------------+---------------------------+---------------------------|
+|      1 | left mouse                | linkermuisknop            | left mouse button         |
+|      2 | right mouse               | rechtermuisknop           | right mouse button        |
+|      3 | scroll wheel              | middle mouse click        | middle mouse button       |
+|      4 | right thumb back          | Modifier4                 | copy                      |
+|      5 | right thumb forward       | Modifier5                 | paste                     |
+|      6 | right thumb tip           | Escape                    | Escape emacs modes        |
+|      7 | left of left finger, tip  | y                         | emacs evil mode yank      |
+|      8 | left of left finger, back | p                         | emacs evil mode paste     |
+|      9 | scroll wheel left tilt    | leftSuper+1               | move to first workspace   |
+|     10 | scroll wheel right tilt   | leftSuper+4               | move to fourth workspace  |
+|     11 | below scroll wheel        | Logitech Cycle Profile up | Logitech Cycle Profile up |
+|--------+---------------------------+---------------------------+---------------------------|
+
+Profile1
+|--------+---------------------------+---------------------------+---------------------------|
+| button | location of button        | assigned keypress/macro   | Aim/description of use    |
+|--------+---------------------------+---------------------------+---------------------------|
+|      1 | left mouse                | left mouse                | left mouse button         |
+|      2 | right mouse               | right mouse               | right mouse button        |
+|      3 | scroll wheel              | middle mouse              | middle mouse button       |
+|      4 | right thumb back          | Modifier4                 | go back page browser      |
+|      5 | right thumb forward       | Modifier5                 | go forward page browser   |
+|      6 | right thumb tip           | control+W                 | close tab in browser      |
+|      7 | left of left finger, tip  | control+c                 | copy                      |
+|      8 | left of left finger, back | control+v                 | paste                     |
+|      9 | scroll wheel left tilt    | leftcontrol+Pageup        | move tab left             |
+|     10 | scroll wheel right tilt   | leftcontrol+Pagedown      | move tab right            |
+|     11 | below scroll wheel        | Logitech Cycle Profile up | Logitech Cycle Profile up |
+|--------+---------------------------+---------------------------+---------------------------|
