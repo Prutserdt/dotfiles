@@ -2781,6 +2781,22 @@ Configurations files: ~/.doom.d
 
 M: meta key: alt
 
+**** Problems/upgrading etc
+
+|-------------+------------------------------------------------------|
+| alias       | description                                          |
+|-------------+------------------------------------------------------|
+| em          | run emacs in commandline                             |
+| emacs       | run emacs graphically                                |
+| doomdoctor  | diagnose issues of emacs and config                  |
+| doomsync    | synchronize private config                           |
+| doomupgrade | update Doom to latest release and installed packages |
+| doombuild   | recompile all packages, typically after upgrade      |
+| doompurge   | delete old orphaned packages                         |
+| doomhelp    | help                                                 |
+|-------------+------------------------------------------------------|
+
+
 **** Allerlei Lisp functies
 
 Doornummeren van een visual selection block: ~rectangle-number-lines~
@@ -4674,7 +4690,10 @@ ik gewoon compileren. Daarna heb ik het systeem van mijn Manjaro VM geupdate
 
 *** Logitech G502 hero mouse, configuration on Lixux
 
-Muis ingesteld met ~piper~, gebaseerd op LibRatBag. Er zijn geen dotfiles van de configuratie want er wordt direct naar het device geschreven/gelezen.
+Mouse setting modified with ~piper~ (GUI for LibRatBag). This happens directly from the device (read/write), there are no dotfiles.
+
+Current sensitivity: 500 Hz, 12500 DPI.
+
 
 ~ascii-image-converter~ will do as advertized and the -n flag makes it negative and the -W flag sets the width.
 #+begin_src sh :results output

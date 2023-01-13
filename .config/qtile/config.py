@@ -16,6 +16,26 @@ home = os.path.expanduser("~")
 termVim="alacritty -e vim "         # Open vim in alacritty (used for aR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
+
+#added 06jan22:
+@lazy.function
+def set_gaps(qtile, relta):
+    gaps = qtile.current_screen.gaps
+    gaps.top += relta
+    gaps.bottom += relta
+    gaps.left += relta
+    gaps.right += relta
+    relta.group.layout_all()
+    relta.margin = new_margin
+    qtile.current_screen.set_gap(gaps)
+
+@lazy.function
+def increase_gaps(qtile):
+    for gap in qtile.current_screen.gaps:
+        if (gap == "left"):
+          gap.size += 10
+    qtile.current_group.layout_all()
+
 def threecol(qtile):
     qtile.cmd_to_layout_index(0) #0:monadthreecolumn with margins
 
@@ -34,10 +54,12 @@ def monwide(qtile):
 def monwide2(qtile):
     qtile.cmd_to_layout_index(5) #3: monadwide with margins
 
+@lazy.function
 def cmd_increase_margin(self): ### FIXME werkt NIET!
     self.margin += 10
     self.group.layout_all()
 
+@lazy.function
 def cmd_decrease_margin(self): ### FIXME werkt NIET!
     new_margin = self.margin - 10
     if new_margin < 0:
@@ -71,6 +93,11 @@ keys = [
         lazy.function(cmd_decrease_margin), ### FIXME werkt NIET:
         desc="decrease margin..."
         ),
+#toegevoegd 06jan22:
+#    Key([mL], "g", lazy.function(increase_gaps),  desc="Decrease gaps"),
+    Key([mL], "g", lazy.function(set_gaps, -10),  desc="Decrease gaps"),
+    Key([mL, "shift"], "g", lazy.function(set_gaps, 10),   desc="Increase gaps"),
+
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
     Key([mL], "space", lazy.layout.swap_main(),         desc="Make main window of selected window"),
     Key([mL], "b", lazy.hide_show_bar(position="top"),  desc="Toggle the bar"),
@@ -80,7 +107,7 @@ keys = [
     Key([mL], "q", lazy.window.kill(),                  desc="Kill focused window"),
     Key([mL,  "control"], "r", lazy.reload_config(),    desc="Reload the Qtile configuration"),
     Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"), desc="Shutdown Qtile by a shellscript"),
-    
+
     #Hotkeys to move windows around, resize windows and choose layouts
     Key([mL], "h", lazy.layout.left(),                  desc="Move window focus to the left"),
     Key([mL], "l", lazy.layout.right(),                 desc="Move window focus to the right"),
@@ -130,9 +157,9 @@ keys = [
     Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
 
     Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
-    Key([aR], "b", lazy.spawn(Emacs + home + "/.bashrc")), 
+    #Key([aR], "b", lazy.spawn(Emacs + home + "/.bashrc")),
+    Key([aR], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")),
     Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")), 
-    Key([aR], "d", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")),
 #   Key([aR], "d", lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h")),
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")), 
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")), 
@@ -269,6 +296,8 @@ reconfigure_screens = True
 auto_minimize = True # handy for steam games
 
 # Startup scripts
+
+
 @hook.subscribe.startup_once
 def start_once():
     home = os.path.expanduser("~")

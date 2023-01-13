@@ -71,17 +71,16 @@ dfx = pd.DataFrame(d)
 df = pd.concat([df, dfx])
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
-print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
+print('=' * 40 + "\n", df)  # Only for debugging
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 
-# Berekenen het totaal van het kapitaal. Wordt gebruikt voor AA-berekening
-Kapitaal = df[EurCol].sum()
+Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapitaal is Dutch for Capital)
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
-df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int)
-df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int)
-df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # Als >100% dan een sterretje geven
-print('=' * 40  + "\n", dfx)  # Alleen voor debugging gebruik
+df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
+df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
+df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by asterix
+print('=' * 40  + "\n", dfx)                      # Only for debugging
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
@@ -89,29 +88,26 @@ d = {
     OmsCol: ["" , "Assets totaal       ", "Assets totaal - huis  "],
     AaCol: ["", "", ""],
     AminHuisCol: ["", "", ""]}
-dfx = pd.DataFrame(d)
-# Samenvoegen van dataframes
-df = pd.concat([df, dfx])
-print('=' * 40 + "\n", df)  # Alleen voor debugging gebruik
+dfx = pd.DataFrame(d)       # Add the list to a new temporary dataframe
+df = pd.concat([df, dfx])   # Add the dfx dataframe
+print('=' * 40 + "\n", df)  # Only for debugging
 
-# De kolom omschrijving afslanken tot 20 tekens
-df[OmsCol] = df[OmsCol].apply(lambda x: x[:20])
+df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
 
-# Maak introductie regels en combineer dit met de dataframe.
-# Datum vinden van het bestand:fileDeGIRO
-datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO)))
-# Maak een timestamp als 20230131
-t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum)))
+datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
+t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
+
+titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
+print('\n\n') # Only for debugging
 
 # De titel voor in org mode (met drie sterren)
-titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
-print('\n\n')
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
 orgTabelNaam=''.join(orgTabelNaam)
 
-# Transformeer dataframe tot een text string met Emacs org mode table separatoren (|)
+# Transformeer dataframe to a text string that is ready for the Emacs org-mode (with | separators)
 gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
 gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
+#gesorteerdeLijst = (gesorteerdeLijst.replace(" ", "|"))    # Add separators
 gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
@@ -127,8 +123,8 @@ data = data.replace('AA% AA*%', 'AA% |AA*%')    # Verwijder NaN waarden
 data = data.replace('Euro AA%', 'Euro |AA%')    # Verwijder NaN waarden
 data = data.replace('||||', str(separator)+'\n\n'+str(separator))    # Verwijder NaN waarden
 data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')    # Verwijder NaN waarden
-
-print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Alleen voor debugging gebruik
+data = data.replace('|VANECK', 'VANECK')    # Verwijder NaN waarden
+print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
 
 pyperclip.copy(data)
 

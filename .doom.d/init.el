@@ -56,7 +56,6 @@
        php               ; perl's insecure younger brother
        latex
 
-
        :app
 
        :config

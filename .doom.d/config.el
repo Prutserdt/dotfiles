@@ -1,6 +1,8 @@
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
+(setq doom-theme 'doom-tokyo-night)
+
 (setq! evil-want-Y-yank-to-eol nil)
 
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")

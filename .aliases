@@ -57,7 +57,9 @@ alias emacs="emacsclient -c -a 'emacs'"         #emacs graphically
 alias doomsync="~/.emacs.d/bin/doom sync"
 alias doomdoctor="~/.emacs.d/bin/doom doctor"
 alias doomupgrade="~/.emacs.d/bin/doom upgrade"
+alias doombuild="~/.emacs.d/bin/doom build"
 alias doompurge="~/.emacs.d/bin/doom purge"
+alias doomhelp="~/.emacs.d/bin/doom help"
 
 # Jump to directories
 alias db="cd $HOME/Stack/Documenten/Studie/MSQL_developer_LOI/Business_intelligence_en_databasetechnologie"

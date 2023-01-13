@@ -87,7 +87,6 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        php               ; perl's insecure younger brother
        latex
 
-
        :app
 
        :config
@@ -139,7 +138,10 @@ Settings for python hacking, not sure I will use this setup, FIXME
 (package! org-auto-tangle)
 #+end_src
 
-
+Rainbow-mode, highlighting hex code. This funtion I only use manually, to show colors ~Mx rainbow-mode RET~. I did not get it to install via packages.el and instead installed it manually by:
+#+begin_src
+M-x package-install RET rainbow-mode RET
+#+end_src
 
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
@@ -148,6 +150,11 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 #+begin_src emacs-lisp :tangle config.el
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+Set tokyo-night as the theme.
+#+begin_src emacs-lisp :tangle config.el
+(setq doom-theme 'doom-tokyo-night)
 #+end_src
 
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
@@ -312,3 +319,4 @@ Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_
 My configuration of Doom Emacs is partially based on these ones.
 - :book: https://gitlab.com/zzamboni/dot-doom
 - :book: https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
+
