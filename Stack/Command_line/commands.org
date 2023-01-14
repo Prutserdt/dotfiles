@@ -2537,7 +2537,7 @@ Geinstalleerd met optie 1 (amdvlk)en 4(lib32-vulkan-radeon)
 Weer dezelfde foutmelding na starten steam in commmand line.
 Nu geinstalleerd met optie 4 (vulkan-radeon) en 1 (lib43-amdvlk)
 Wederom dezelfde foutmelding.
-Daarna steamcmd geinstalleerd van de AUR
+Daarna steamcmd van geinstalleerd de AUR
 yay steamcmd
 Dit werkt ook niet zo goed.
 Ik heb gedeinstalleerd met yay.

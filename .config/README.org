@@ -4,6 +4,16 @@
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
 
+#+begin_src
+ __  __                       _       _
+|  \/  |_   _   ___  ___ _ __(_)_ __ | |_ ___
+| |\/| | | | | / __|/ __| '__| | '_ \| __/ __|
+| |  | | |_| | \__ \ (__| |  | | |_) | |_\__ \
+|_|  |_|\__, | |___/\___|_|  |_| .__/ \__|___/
+        |___/                  |_|
+#+end_src
+
+
 * Table of contents :toc:
 - [[#about-this-document][About this document]]
 - [[#my-scripts][My scripts]]
@@ -21,7 +31,7 @@
   - [[#dmenustablesh][dmenustable.sh]]
   - [[#dmenuthunarsh][dmenuthunar.sh]]
   - [[#dmenuunicodesh][dmenuunicode.sh]]
-  - [[#creating-a-list-of-emojis-used-in-demenuunicodesh][Creating a list of emojis (used in demenuunicode.sh)]]
+  - [[#how-to-creating-a-list-of-emojis-used-in-demenuunicodesh][How to creating a list of emojis (used in demenuunicode.sh)]]
   - [[#dmenuvanillash][dmenuvanilla.sh]]
   - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
 - [[#unused-scripts][Unused scripts]]
@@ -577,14 +587,14 @@ xdotool key "ctrl+v" "BackSpace"
 #+end_src
 Remark: the center patch of dmenu is needed for the -c option.
 
-** Creating a list of emojis (used in demenuunicode.sh)
+** How to creating a list of emojis (used in demenuunicode.sh)
 
-Download the unicode list by wget.
+Download the current unicode list by wget.
 #+begin_src bash
 wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 #+end_src
 
-Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~unicode~.
+Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
 
 ** dmenuvanilla.sh
 Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
@@ -625,7 +635,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-This scripts requires the dmenu patch center, which gives the -c option.
+This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -i -c -l 65 | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
 #+end_src

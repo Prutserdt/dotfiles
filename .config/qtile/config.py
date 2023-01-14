@@ -141,7 +141,7 @@ keys = [
         lazy.spawn(Emacs + home + "/Stack/Documenten/Aandelen/aandelen_log.org"),
         desc="Open in vim: run het python aandelen script en open het aandelen log"
         ),
-    Key([mR], "b", lazy.spawn(home + "/.config/dmenuinternet.sh")),
+    Key([mR], "b", lazy.spawn(home + "/.config/dmenuinternet.sh")), # browser via dmenu, related to 'urls'
     Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
     Key([mR], "d", lazy.spawn(home + "/.config/dmenuapps.sh")),
     Key([mR, "shift"], "d", lazy.spawn(home + "/.config/dmenuUpdate.sh")),
@@ -150,25 +150,22 @@ keys = [
     Key([mR], "k", lazy.spawn("keepass")),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
-    Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")),
-    Key([mR, "shift"], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")),
-    Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")),
-    Key([mR, "shift"], "u", lazy.spawn(home + "/.config/unicode")),
+    Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")), # related to 'directories'
+    Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")), # related to 'unicode'
     Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
 
     Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
-    #Key([aR], "b", lazy.spawn(Emacs + home + "/.bashrc")),
-    Key([aR], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")),
+    Key([aR], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")), # related to dmenuinternet.sh
     Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")), 
-#   Key([aR], "d", lazy.spawn(Emacs + home + "/.config/suckless/dwm/config.h")),
-    Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")), 
+    Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")), 
     Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")), 
     Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")), 
     Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")), 
-    Key([aR, "shift"], "r", lazy.spawn(Emacs + home + "/README.org")), 
-    Key([aR], "r", lazy.spawn(Emacs + home + "/.Xresources")), 
-    Key([aR], "u", lazy.spawn(Emacs + home + "/.config/urls")), 
+    Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
+#    Key([aR], "r", lazy.spawn(Emacs + home + "/.Xresources")),
+    Key([aR], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")), # related to dmenuthunar.sh
+    Key([aR], "u", lazy.spawn(home + "/.config/unicode")), # related to dmenuunicode.sh
     Key([aR], "v", lazy.spawn(termVim + home + "/.vimrc")), 
     Key([aR], "w", lazy.spawn(home + "/.config/wololo.sh")), 
     Key([aR], "x", lazy.spawn(Emacs + home + "/.xinitrc")), 
