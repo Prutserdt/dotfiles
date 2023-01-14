@@ -33,9 +33,12 @@ This document consists of notes that I took during my Linux journey. A *lot* of 
 #+end_src
 
 #+RESULTS: wordcounting
-: Page has 4796 lines (31 + 4765)
+: Page has 4802 lines (32 + 4771)
 
 #+CALL: wordcounting()
+
+#+RESULTS:
+: Page has 4802 lines (38 + 4765)
 
 
 * Command line tricks
