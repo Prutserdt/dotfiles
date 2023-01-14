@@ -1,4 +1,4 @@
-#+TITLE: My configuration of Qtile
+#+TITLE: My configuration of
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
 
