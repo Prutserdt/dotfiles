@@ -170,7 +170,7 @@ The Doom Emacs welcome screen is modified here. A different image is used, the d
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 #+end_src
 
-Test: kan ik sql gebruiken in org code blocks....
+Setup to use sql in org code blocks.
 #+begin_src emacs-lisp :tangle config.el
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -270,15 +270,6 @@ NOTE: when this part is placed at the start of ~config.el~ then transparency doe
 Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 #+begin_src emacs-lisp :tangle config.el
 (scroll-bar-mode -1)
-#+end_src
-
-Kijken of ik middle mouse button kan gebruiken om te pasten....
-Op zich werkt het want via mijn keyboard kan ik met derde muisbutton dit laten werken, alleen werkt het niet vanuit de muis. Dat is vreemd... TODO: dit moet ik nog oplossen
-#+begin_src emacs-lisp :tangle config.el
-(global-set-key (kbd "<mouse-2>") 'clipboard-yank)
-;; misschien is deze ook nodig:...
-(delete-selection-mode)
-;; https://www.emacswiki.org/emacs/CopyAndPaste
 #+end_src
 
 No more conformation message after closing emacs.

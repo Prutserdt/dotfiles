@@ -1,4 +1,4 @@
-#+TITLE: My configuration of qtile
+#+TITLE: My configuration of Qtile
 #+STARTUP: inlineimages
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
@@ -12,7 +12,7 @@
   - [[#imports][Imports]]
   - [[#variables][Variables]]
   - [[#custom-functions][Custom functions]]
-  - [[#keybindings-qtile-specific][Keybindings: qtile specific]]
+  - [[#keybindings-qtile-specific][Keybindings: Qtile specific]]
   - [[#keybindings-audio-and-print][Keybindings: Audio and print]]
   - [[#keybindings-applications-and-files-connected-to-these-hotkeys][Keybindings: Applications (and files connected to these hotkeys)]]
   - [[#keybingings-text-files][Keybingings: Text files]]
@@ -24,9 +24,9 @@
 - [[#about-this-emacs-org-document][About this Emacs org document]]
 
 * Qtile and my config
-[[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org emacs document my configuration of qtile is described and it is used as the source to create the qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
+[[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
 
-Check the sourcecode of qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
+Check the sourcecode of Qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
 
 ** Imports
 A note is added to ~config.py~ which reminds *not* to edit this file directly.
@@ -35,7 +35,7 @@ A note is added to ~config.py~ which reminds *not* to edit this file directly.
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-My configuration requires some modules to be loaded. These are all default settings.
+My configuration requires some modules to be loaded. These are all default configuratoin settings of Qtile.
 #+BEGIN_SRC python :tangle config.py :results none
 import psutil, subprocess, os
 from typing import List
@@ -57,24 +57,24 @@ termVim="alacritty -e vim "         # Open vim in alacritty (used for aR hotkeys
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
 
-#added 06jan22:
-@lazy.function
-def set_gaps(qtile, relta):
-    gaps = qtile.current_screen.gaps
-    gaps.top += relta
-    gaps.bottom += relta
-    gaps.left += relta
-    gaps.right += relta
-    relta.group.layout_all()
-    relta.margin = new_margin
-    qtile.current_screen.set_gap(gaps)
+#added 06jan22: chatGPT suggestions did not help...
+# @lazy.function
+# def set_gaps(qtile, relta):
+#     gaps = qtile.current_screen.gaps
+#     gaps.top += relta
+#     gaps.bottom += relta
+#     gaps.left += relta
+#     gaps.right += relta
+#     relta.group.layout_all()
+#     relta.margin = new_margin
+#     qtile.current_screen.set_gap(gaps)
 
 @lazy.function
 def increase_gaps(qtile):
     for gap in qtile.current_screen.gaps:
         if (gap == "left"):
           gap.size += 10
-    qtile.current_group.layout_all()
+# qtile.current_group.layout_all()
 #+END_SRC
 
 ** Custom functions
@@ -128,8 +128,8 @@ def keyb(toets, programma, description):
 
 
 
-** Keybindings: qtile specific
-My left super key bindings are all related to qtile, for instance moving windows around.
+** Keybindings: Qtile specific
+My left super key bindings are all related to Qtile, for instance moving windows around.
 #+BEGIN_SRC python :tangle config.py :results none
 
 keys = [
@@ -150,9 +150,9 @@ keys = [
         desc="decrease margin..."
         ),
 #toegevoegd 06jan22:
-#    Key([mL], "g", lazy.function(increase_gaps),  desc="Decrease gaps"),
-    Key([mL], "g", lazy.function(set_gaps, -10),  desc="Decrease gaps"),
-    Key([mL, "shift"], "g", lazy.function(set_gaps, 10),   desc="Increase gaps"),
+    # Key([mL], "g", lazy.function(increase_gaps),  desc="Decrease gaps"),
+    # Key([mL], "g", lazy.function(set_gaps, -10),  desc="Decrease gaps"),
+    # Key([mL, "shift"], "g", lazy.function(set_gaps, 10),   desc="Increase gaps"),
 
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
     Key([mL], "space", lazy.layout.swap_main(),         desc="Make main window of selected window"),
@@ -246,7 +246,7 @@ The right alt key is used to open text files in Vim or in Emacs.
 #+END_SRC
 
 ** Groups
-The workspaces are described here, which are called Groups in qtile. I don't need more then four groups so I limited it to that.
+The workspaces are described here, which are called Groups in Qtile. I don't need more then four groups so I limited it to that.
 #+BEGIN_SRC python :tangle config.py :results none
 groups = [Group(i) for i in "1234"]
 
@@ -378,7 +378,7 @@ auto_minimize = True # handy for steam games
 #+END_SRC
 
 ** Some hooks
-A startup script is ran after startup of qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
+A startup script is ran after startup of Qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
 
 #+BEGIN_SRC python :tangle config.py
 
@@ -444,4 +444,4 @@ I did not get it to work yet with https://stackoverflow.com/questions/67654782/s
 
 * About this Emacs org document
 
-This is a literate programming document and it describes my qtile window manager customization. It is written in Emacs in org-mode and uses [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]]. The Emacs package ~org-babel-tangle~ exports the code blocks to the actual dotfiles which are used to configure Qtile. Tangling can be done manually. In my case I automated it by the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package. When this orgfile is saved it now automatically tangles the code blocks. The org file should contain ~#+auto_tangle: t~ in the header of the org file..
+This is a literate programming document and it describes my Qtile window manager customization. It is written in Emacs in org-mode and uses [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]]. The Emacs package ~org-babel-tangle~ exports the code blocks to the actual dotfiles which are used to configure Qtile. Tangling can be done manually. In my case I automated it by the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package. When this orgfile is saved it now automatically tangles the code blocks. The org file should contain ~#+auto_tangle: t~ in the header of the org file..

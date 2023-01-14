@@ -69,11 +69,6 @@
 
 (scroll-bar-mode -1)
 
-(global-set-key (kbd "<mouse-2>") 'clipboard-yank)
-;; misschien is deze ook nodig:...
-(delete-selection-mode)
-;; https://www.emacswiki.org/emacs/CopyAndPaste
-
 (setq confirm-kill-emacs nil)
 
 (use-package org-auto-tangle

@@ -17,24 +17,24 @@ termVim="alacritty -e vim "         # Open vim in alacritty (used for aR hotkeys
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
 
-#added 06jan22:
-@lazy.function
-def set_gaps(qtile, relta):
-    gaps = qtile.current_screen.gaps
-    gaps.top += relta
-    gaps.bottom += relta
-    gaps.left += relta
-    gaps.right += relta
-    relta.group.layout_all()
-    relta.margin = new_margin
-    qtile.current_screen.set_gap(gaps)
+#added 06jan22: chatGPT suggestions did not help...
+# @lazy.function
+# def set_gaps(qtile, relta):
+#     gaps = qtile.current_screen.gaps
+#     gaps.top += relta
+#     gaps.bottom += relta
+#     gaps.left += relta
+#     gaps.right += relta
+#     relta.group.layout_all()
+#     relta.margin = new_margin
+#     qtile.current_screen.set_gap(gaps)
 
 @lazy.function
 def increase_gaps(qtile):
     for gap in qtile.current_screen.gaps:
         if (gap == "left"):
           gap.size += 10
-    qtile.current_group.layout_all()
+# qtile.current_group.layout_all()
 
 def threecol(qtile):
     qtile.cmd_to_layout_index(0) #0:monadthreecolumn with margins
@@ -94,9 +94,9 @@ keys = [
         desc="decrease margin..."
         ),
 #toegevoegd 06jan22:
-#    Key([mL], "g", lazy.function(increase_gaps),  desc="Decrease gaps"),
-    Key([mL], "g", lazy.function(set_gaps, -10),  desc="Decrease gaps"),
-    Key([mL, "shift"], "g", lazy.function(set_gaps, 10),   desc="Increase gaps"),
+    # Key([mL], "g", lazy.function(increase_gaps),  desc="Decrease gaps"),
+    # Key([mL], "g", lazy.function(set_gaps, -10),  desc="Decrease gaps"),
+    # Key([mL, "shift"], "g", lazy.function(set_gaps, 10),   desc="Increase gaps"),
 
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
     Key([mL], "space", lazy.layout.swap_main(),         desc="Make main window of selected window"),
