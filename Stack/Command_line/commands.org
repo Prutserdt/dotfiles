@@ -35,8 +35,7 @@ This document consists of notes that I took during my Linux journey. A *lot* of 
 #+RESULTS: wordcounting
 : Page has 4796 lines (31 + 4765)
 
-#+CALL: wordcounting
-
+#+CALL: wordcounting()
 
 
 * Command line tricks
