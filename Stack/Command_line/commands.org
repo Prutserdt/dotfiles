@@ -17,8 +17,6 @@
 #+end_src
 
 
-
-
 * Table of contents :toc:
 - [[#about-this-document][About this document]]
 - [[#command-line-tricks][Command line tricks]]
@@ -28,7 +26,14 @@
 - [[#keebs][Keebs]]
 
 * About this document
-This document consists of notes that I took during my Linux journey. A *lot* of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference.
+This document consists of notes that I took during my Linux journey. A *lot* of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference. This file is quite lengthy as counted in the following code block:
+#+NAME: wordcounting
+#+begin_src elisp
+(count-lines-page)
+#+end_src
+
+#+RESULTS: wordcounting
+: Page has 4796 lines (31 + 4765)
 
 * Command line tricks
 *** Vind grootte van files/directories in commandline
@@ -3356,7 +3361,6 @@ echo "b: [" . FALSE . "]<br>";
 #+RESULTS: tellen
 : 3
 
-
 ***** Runnen van een codeblock, vanuit een andere plaats
 Dat gaat met het keyword ~CALL~, niet vergeten om de haakjes na het code block naam te zetten!
 Je kunt ook code blocks uit andere documenten aanroepen!
@@ -3377,6 +3381,7 @@ Je kunt ook code blocks uit andere documenten aanroepen!
 : ['NT SC'] , 1111111 , 9.1
 : ['NT EM'] , 1111111 , 9.1
 
+Zie ook de introductie paragraaf van dit bestand, daar wordt ~#+CALL: woordtellen()~ gebruikt.
 
 ***** Verwijzen naar een codeblock in het document (of tabel)
 
