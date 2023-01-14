@@ -26,20 +26,7 @@
 - [[#keebs][Keebs]]
 
 * About this document
-This document consists of notes that I took during my Linux journey. A *lot* of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference. This file is quite lengthy as counted in the following code block:
-#+NAME: wordcounting
-#+begin_src elisp
-(count-lines-page)
-#+end_src
-
-#+RESULTS: wordcounting
-: Page has 4802 lines (32 + 4771)
-
-#+CALL: wordcounting()
-
-#+RESULTS:
-: Page has 4802 lines (38 + 4765)
-
+This document consists of notes that I took during my Linux journey. A *lot* of them are obsolete, faulty and inefficient. I wrote things down to memorize them better and to keep as a reference. Warning, the file is larger than 4800 lines!
 
 * Command line tricks
 *** Vind grootte van files/directories in commandline
@@ -3367,6 +3354,16 @@ echo "b: [" . FALSE . "]<br>";
 #+RESULTS: tellen
 : 3
 
+Test with counting line numbers:
+#+NAME: wordcounting
+#+begin_src elisp :result value org
+(count-lines-page)
+#+end_src
+
+#+RESULTS: wordcounting
+: Page has 4802 lines (31 + 4771)
+
+
 ***** Runnen van een codeblock, vanuit een andere plaats
 Dat gaat met het keyword ~CALL~, niet vergeten om de haakjes na het code block naam te zetten!
 Je kunt ook code blocks uit andere documenten aanroepen!
@@ -3388,6 +3385,11 @@ Je kunt ook code blocks uit andere documenten aanroepen!
 : ['NT EM'] , 1111111 , 9.1
 
 Zie ook de introductie paragraaf van dit bestand, daar wordt ~#+CALL: woordtellen()~ gebruikt.
+
+#+CALL: wordcounting()
+
+#+RESULTS:
+: Page has 4809 lines (3396 + 1413)
 
 ***** Verwijzen naar een codeblock in het document (of tabel)
 
