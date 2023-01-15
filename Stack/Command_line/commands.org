@@ -3361,7 +3361,7 @@ Test with counting line numbers:
 #+end_src
 
 #+RESULTS: wordcounting
-: Page has 4802 lines (31 + 4771)
+: Page has 4807 lines (3360 + 1448)
 
 
 ***** Runnen van een codeblock, vanuit een andere plaats
@@ -3389,7 +3389,7 @@ Zie ook de introductie paragraaf van dit bestand, daar wordt ~#+CALL: woordtelle
 #+CALL: wordcounting()
 
 #+RESULTS:
-: Page has 4809 lines (3396 + 1413)
+: Page has 4807 lines (3389 + 1419)
 
 ***** Verwijzen naar een codeblock in het document (of tabel)
 
@@ -3558,6 +3558,9 @@ Precies hetzelfde gedaan via brave browser en de webinstall procedure, en daarna
 ~yay mastodon~
 Welke client te kiezen....
 prutserdt
+
+*** Show the keys that are pressed on the screen: screenkey
+A handy tool to show the key presses is screenkey.
 
 * Distros and related stuff
 *** XFCE tricks
@@ -4564,6 +4567,31 @@ do
 done
 
 #+end_src
+
+*** dmenu, upgrade Jan2023, dmenu-distrotube
+
+**** Install
+Downloaded the gitlab repo, unpacked, backup gemaakt van mijn persoonlijke huidige dmenu via dmenubackup.sh.
+
+sudo make clean install && rm config.h
+
+Het onderstaande bash script verwijderd de huidige dmenu versie en schrijft distrotube versie weg.
+#+begin_src bash
+rm -r ~/.config/suckless/dmenu &&
+mkdir ~/.config/suckless/dmenu &&
+cp -r ~/Downloads/dmenu-distrotube-master/dmenu-distrotube-master/* ~/.config/suckless/dmenu
+#cd ~/.config/suckless/dmenu &&
+#clear && ls -al
+#+end_src
+
+#+RESULTS:
+
+Daarna de installatie gedaan maken met ~sudo make clean install~ en daarna ~rm ~/.config/suckless/dmenu/config.h~.
+
+Ik heb een tokyo-night.h file toegevoegd in de colors directory in het orgineel op de download locatie.
+
+
+
 
 * Keebs
 *** Ducky one mechanical keyboard

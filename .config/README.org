@@ -465,9 +465,9 @@ The *_stable name will be the new stable version of dmenu.
 	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 	read answer
 	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable &&
-	    mkdir ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable &&
-	    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable
+	    rm -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+	    mkdir ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+	    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable
 	else
 	    echo No
 	fi
@@ -544,7 +544,7 @@ This script can be called by the .bashrc alias dmenustable.
 	if [ "$answer" != "${answer#[Yy]}" ] ;then
 	    rm -r ~/.config/suckless/dmenu &&
 	    mkdir ~/.config/suckless/dmenu &&
-	    cp -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+	    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
 	    cd ~/.config/suckless/dmenu &&
 	    clear && ls -al
 	else
@@ -616,8 +616,8 @@ The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ direc
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r ~/.config/suckless/dmenu &&
     mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_vanilla/* ~/.config/suckless/dmenu &&
-    cd ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
     clear && ls -al
 else
     echo No

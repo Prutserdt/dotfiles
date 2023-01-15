@@ -142,6 +142,8 @@ Rainbow-mode, highlighting hex code. This funtion I only use manually, to show c
 #+begin_src
 M-x package-install RET rainbow-mode RET
 #+end_src
+FIXME: after an update and purge I cannot it install it by this method, weird!!
+
 
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
