@@ -3,6 +3,7 @@
 #!/bin/bash
 # ~/.config/dotfiles.sh
 
+notify-send "Dotfiles synchronization"
 function Push()
 {
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v;
@@ -32,26 +33,31 @@ case $PullPush in
                 echo --------------------------------------------------
                 echo
                 Push
+                notify-send "Push performed on the Github dotfiles repository"
                 ;;
             [2])
                 echo --------------------------------------------------
                 echo
                 Pull
+                notify-send "Pull performed on the Github dotfiles repository"
                 ;;
             [3])
                 echo --------------------------------------------------
                 echo
                 Pull
                 Push
+                notify-send "Pull and Push performed on the Github dotfiles repository"
                 ;;
             [4])
                 echo --------------------------------------------------
                 echo
                 echo As you whish: exiting
+                notify-send "Exited the dotfiles synchronization with Github"
                 ;;
 
             *)  echo --------------------------------------------------
                 echo
                 echo "Invalid input, exiting"
+                notify-send "Invalid input added during the dotfiles synchronization with Github"
             ;;
 esac

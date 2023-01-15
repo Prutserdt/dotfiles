@@ -248,6 +248,7 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
+                widget.Notify(foreground="#ff966c"),#toegevoegd 15JAN23
                 widget.QuickExit(foreground="#888888"),
                 widget.Volume(foreground="#d75f5f"),
                 widget.Systray(),

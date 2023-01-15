@@ -244,6 +244,7 @@ Two functions are declared; one to push to git and one to pull. The push functio
 #+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # ~/.config/dotfiles.sh
 
+notify-send "Dotfiles synchronization"
 function Push()
 {
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v;
@@ -281,27 +282,32 @@ case $PullPush in
                 echo --------------------------------------------------
                 echo
                 Push
+                notify-send "Push performed on the Github dotfiles repository"
                 ;;
             [2])
                 echo --------------------------------------------------
                 echo
                 Pull
+                notify-send "Pull performed on the Github dotfiles repository"
                 ;;
             [3])
                 echo --------------------------------------------------
                 echo
                 Pull
                 Push
+                notify-send "Pull and Push performed on the Github dotfiles repository"
                 ;;
             [4])
                 echo --------------------------------------------------
                 echo
                 echo As you whish: exiting
+                notify-send "Exited the dotfiles synchronization with Github"
                 ;;
 
             *)  echo --------------------------------------------------
                 echo
                 echo "Invalid input, exiting"
+                notify-send "Invalid input added during the dotfiles synchronization with Github"
             ;;
 esac
 #+end_src
@@ -447,7 +453,8 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
-cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
+#cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
+cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"}
 #+end_src
 
 ** dmenubackup.sh
@@ -485,7 +492,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
-chosen=$(cat ~/Stack/Command_line/urls | dmenu -i -c -l 65)
+chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
 [ -z "$chosen" ] && exit
 xdg-open $chosen
 #+end_src
@@ -564,7 +571,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 Script to select directories (~/.config/directories) in Thunar by dmenu.
 This requires the dmenu patch: center, which gives the dmenu -c option.
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
-chosen=$(cat ~/Stack/Command_line/directories | dmenu -i -c -l 65)
+chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
 thunar $chosen
 #+end_src
@@ -581,8 +588,9 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
-cat ~/.config/unicode | dmenu -i -c -l 65| awk '{print $1}'| xclip -selection clipboard &&
-xdotool key "ctrl+v" "BackSpace"
+cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
+xdotool key "ctrl+v" "BackSpace" &
+notify-send "Emoji copied to clipboard"
 #+end_src
 Remark: the center patch of dmenu is needed for the -c option.
 
@@ -636,7 +644,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
-ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -i -c -l 65 | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
+ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
 #+end_src
 
 * Unused scripts
