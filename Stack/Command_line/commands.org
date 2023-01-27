@@ -1108,6 +1108,41 @@ rename 20220923 20220923_Amsterdam *
 rename 20220903 20220903_Amsterdam *; rename 20220904 20220904_Malang *; rename 20220905 20220905_Malang *; rename 20220906 20220906_Malang *; rename 20220907 20220907_Malang *; rename 20220908 20220908_Bromo *; rename 20220909 20220909_Bromo *; rename 20220910 20220910_Yogyakarta *; rename 20220911 20220911_Yogyakarta *; rename 20220912 20220912_Yogyakarta *; rename 20220913 20220913_Yogyakarta *; rename 20220914 20220914_Yogyakarta *; rename 20220915 20220915_Yogyakarta *; rename 20220916 20220916_Bandung *; rename 20220917 20220917_Bandung *; rename 20220918 20220918_Bandung *; rename 20220919 20220919_Bandung *; rename 20220920 20220920_Qatar *; rename 20220921 20220921_Qatar *; rename 20220922 20220922_Qatar *; rename 20220923 20220923_Amsterdam *
 #+end_src
 
+
+*** Foto's van bezoek Wenen
+
+Eerst de volgende command line commandos uitgevoerd:
+~exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)~
+De foto's van mijn Pixel worden niet renamed. De naam is wel bijna juist, voorbeeld: IMG_20230123_130402_528.jpg. Wat ik wil doen is voor alle files in directory genaamd IMG_* de eerste vier tekens verwijderen en verder met de eerste underscore veranderd worden in een hyphen.
+
+#+begin_src shell
+for filename in IMG_* ; do
+    echo "$filename"
+    newName=${filename:4} # remove first four characters IMG_
+    echo "$newName"
+    echo $newName | sed 's/./-/9' # change underscore at position 9 to hyphen
+    # Up to here nothing is changed. Uncomment the next line to change the name(s).
+    #mv "$filename" $(echo $newName | sed 's/./-/9')
+done
+#+end_src
+
+Rename *.JPG to *.jpg: ~find -name '*.JPG' -exec rename .JPG .jpg {} \;~
+
+Nu nog bestemming toevoegen:
+#+begin_src shell
+rename 20230122 20230122_Arnhem_naar_Wenen *.jpg
+rename 20230123 20230123_Wenen *.jpg
+rename 20230124 20230124_Wenen *.jpg
+rename 20230125 20230125_Wenen *.jpg
+#+end_src
+
+Daarna het bovenstaande samengevoegd tot een enkel commando:
+#+begin_src shell
+rename 20230122 20230122_Arnhem_naar_Wenen *.jpg;rename 20230123 20230123_Wenen *.jpg;rename 20230124 20230124_Wenen *.jpg;rename 20230125 20230125_Wenen *.jpg
+#+end_src
+
+
+
 *** PACMAN/YAOURT/YAY
 
 Je kunt downgraden naar een andere datum (terug in de tijd!) door 
@@ -1146,6 +1181,8 @@ volledige backup van het systeem voor de zekerheid
 For recursively removing orphans and their configuration files
 ~sudo pacman -Rns $(pacman -Qtdq)~
 
+
+Check info van package: ~pacman -Qi qtile~
 number of applications
 ~sudo pacman -Q | wc -l~
 ~sudo pacman -Qet | wc -l~
@@ -1350,7 +1387,7 @@ Bekijken file:
 *** Perform google search from commandline: tuxi
 tuxi wie is de mol
 
-*** Bluetooth instellen
+*** Bluetooth instellen 2018
 
 Geprobeerd aan de gang te krijgen: 07MAY18.
 Install
@@ -1398,6 +1435,26 @@ met dmenu a, alle blueman apps geprobeerd, zonder succes.
 blueman aangezet adapter
 Blijkbaar heb ik geen bluetooth op mijn pc want geen output bij:
 ~sudo lsusb |grep Bluetooth~
+
+
+*** Bluetooth instellen 2023
+Install: ~sudo pacman -S bluez bluez-utils~
+Run the daemon: ~sudo systemctl enable bluetooth.service~
+Check status: ~rfkill~
+Er is geen output, geen bluetooth en wireless lijkt het...
+Install: ~sudo pacman -S blueman~
+
+Je moet als user rechten hebben voor de ~lp~ groep:
+Check of lp erbij staat: ~groups icefly~
+Nee, geen lp...
+Toevoegen van lp via: ~sudo gpasswd -a icefly lp~
+Check of lp erbij staat: ~groups icefly~
+yes 😃.
+
+commandline ~bluetoothctcl~ werkt niet voor pairing helaas.
+
+
+
 
 *** VPN
 19JAN19: ProtonVPN getest in mijn transip console.
@@ -2226,6 +2283,18 @@ zoeken.
 Het programma heeft VIM bindings. Type 7 om de keybindinglijst te zien:
 ~7~
 
+*** ncmpcpp. Weer een andere terminal music player
+Na ~sudo pacman -S ncmpcpp~ stond er geen ~~/ncmpcpp~ configuratie dus die gekopieerd via: ~cp /usr/share/doc/ncmpcpp/config config~
+
+Bovenstaande werkt niet. Blijkt dat mpd geinstalleerd moet worden! Geen depency was het !
+~cp //etc/mpd.conf ~/.config/mpd~
+
+En het is een systemd service: ~systemctl start mpd.service~ .
+De service werkt...
+ncmpcpp werkt nog niet...
+
+
+
 *** cava
 Een audio visualizer voor in de commandline.
 ~yay cava~
@@ -2848,6 +2917,8 @@ Dat komt doordat deze packages niet geinstalleerd zijn op mijn Linux systeem.
 Simpel op te lossen met: ~sudo pacman -S shellcheck pipenv~
 Alleen nosetests en isort geeft nog een warning.
 
+**** Vul selectie met oplopende nummers. Fill selection with increasing numbers.
+Maak bijvoorbeeld met CTL-V een vertikale selectie en plak daar oplopende nummers is met ~rectangle-number-lines~.
 
 **** Snippets (yasnippets)
 Snippets are already part of Doom Emacs (config :editor snippets)

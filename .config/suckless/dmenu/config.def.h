@@ -1,26 +1,3 @@
-/*  ____ _____  */
-/* |  _ \_   _|  Derek Taylor (DistroTube) */
-/* | | | || |  	http://www.youtube.com/c/DistroTube */
-/* | |_| || |  	http://www.gitlab.com/dwt1/ */
-/* |____/ |_|  	*/
-
-/* See LICENSE file for copyright and license details. */
-/* Default settings; can be overriden by command line. */
-/* Config was built with dmenu-flexipatch:             */
-/* https://github.com/bakkeby/dmenu-flexipatch         */
-
-/* The patches I have enabled are:   
-* - alpha
-* - border
-* - center
-* - fuzzyhighlight
-* - fuzzymatch
-* - grid
-* - lineheight
-* - morecolor
-* - mousesupport
-* - numbers
-* - XYW  */
 
 static int topbar = 1;            /* -b  option; if 0, dmenu appears at bottom */
 
@@ -51,7 +28,7 @@ static int restrict_return = 0;   /* -1 option; if 1, disables shift-return and 
 
 /* -fn option overrides fonts[0]; default X11 font or font set */
 #if PANGO_PATCH
-static char font[] = "monospace 10";
+static char font[] = "monospace 12";
 #else
 #if XRESOURCES_PATCH
 static char *fonts[] =
@@ -59,8 +36,10 @@ static char *fonts[] =
 static const char *fonts[] = 
 #endif // XRESOURCES_PATCH
 {
-	"Hack:pixelsize=11:antialias=true:autohint=true",
-	"JoyPixels:pixelsize=8:antialias=true:autohint=true"
+//	"Hack:pixelsize=11:antialias=true:autohint=true",
+//	"JoyPixels:pixelsize=8:antialias=true:autohint=true"
+	"Hack:pixelsize=14:antialias=true:autohint=true",
+	"JoyPixels:pixelsize=14:antialias=true:autohint=true"
 };
 #endif // PANGO_PATCH
 

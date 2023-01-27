@@ -244,7 +244,7 @@ Two functions are declared; one to push to git and one to pull. The push functio
 #+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # ~/.config/dotfiles.sh
 
-notify-send "Dotfiles synchronization"
+notify-send "Dotfiles synchronization start"
 function Push()
 {
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v;
@@ -282,32 +282,32 @@ case $PullPush in
                 echo --------------------------------------------------
                 echo
                 Push
-                notify-send "Push performed on the Github dotfiles repository"
+                notify-send -t 60000 "Push performed on the Github dotfiles repository"
                 ;;
             [2])
                 echo --------------------------------------------------
                 echo
                 Pull
-                notify-send "Pull performed on the Github dotfiles repository"
+                notify-send -t 60000 "Pull performed on the Github dotfiles repository"
                 ;;
             [3])
                 echo --------------------------------------------------
                 echo
                 Pull
                 Push
-                notify-send "Pull and Push performed on the Github dotfiles repository"
+                notify-send -t 60000 "Pull and Push performed on the Github dotfiles repository"
                 ;;
             [4])
                 echo --------------------------------------------------
                 echo
                 echo As you whish: exiting
-                notify-send "Exited the dotfiles synchronization with Github"
+                notify-send -t 60000 "Exited the dotfiles synchronization with Github"
                 ;;
 
             *)  echo --------------------------------------------------
                 echo
                 echo "Invalid input, exiting"
-                notify-send "Invalid input added during the dotfiles synchronization with Github"
+                notify-send -t 60000 "Invalid input added during the dotfiles synchronization with Github"
             ;;
 esac
 #+end_src
@@ -325,6 +325,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 Echo out the options and run the ~killall qtile~ command, or not.
  +begin_src sh :tangle exitqtile.sh :padline no :eval no
 #+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
+notify-send "Really! Are you trying to kill me? 😢"
 echo -n "Do you wish to exit qtile right now? (y/n) "
 
 read answer
@@ -333,6 +334,8 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 else
     echo No
 fi
+
+notify-send "Killing Qtile right now...."
 #+end_src
 
 ** rdxswitch
@@ -402,6 +405,7 @@ mkdir $XDG_RUNTIME_DIR/temp &
 
 The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. Note: the next screenshot will overwrite the jpg and txt file.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+notify-send  "Help for screenshot2text" "Select an area which to convert to text with the mouse"
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
 #+end_src
 
@@ -412,7 +416,8 @@ tesseract $XDG_RUNTIME_DIR/temp/wismij.jpg $XDG_RUNTIME_DIR/temp/wismij &&
 
 Finally the textfile is catted and piped to the system clipboard with xclip. The -sel flag selects the X selection to use and ~clip~ stands for clipboard, where the text will be stored. Ready to be pasted when needed.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
-cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
+cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip &&
+notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp/wismij.txt)"
 #+end_src
 
 ** dmenuUpdate.sh
@@ -439,6 +444,7 @@ for f in $FILES
 do
     sed -i '1 i '$f  $HOME/.cache/dmenu_run
 done
+notify-send -t 60000 "A new list of installed applications is made 😃"
 #+end_src
 
 ** dmenuapps.sh
@@ -453,8 +459,10 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
-#cat ~/.cache/dmenu_run | dmenu -i -c -l 65 | ${SHELL:-"/bin/sh"}
-cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"}
+#cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"} &
+chosen=$(cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
+notify-send -t 6000 "Starting application: " "$chosen" &&
+$chosen
 #+end_src
 
 ** dmenubackup.sh
@@ -494,7 +502,8 @@ My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened 
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
 [ -z "$chosen" ] && exit
-xdg-open $chosen
+xdg-open $chosen &&
+notify-send -t 6000 "Opening webpage: " "$chosen"
 #+end_src
 
 ** dmenupatch.sh
@@ -589,8 +598,8 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
-xdotool key "ctrl+v" "BackSpace" &
-notify-send "Emoji copied to clipboard"
+xdotool key "ctrl+v" "BackSpace" &&
+notify-send -t 60000 "Emoji to clipboard: " "$(xclip -o -selection clipboard)"
 #+end_src
 Remark: the center patch of dmenu is needed for the -c option.
 
@@ -602,6 +611,9 @@ wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 #+end_src
 
 Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
+
+Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
+
 
 ** dmenuvanilla.sh
 Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
@@ -643,8 +655,10 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #+end_src
 
 This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
+The notify-send will send a notification, duh! The -t flag sets the time to show the notification in milliseconds. The left part between brackets will be displayed in bold and the second part between quotes will show in normal font. The cut program removes the directory information, which is 44 characters long.
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
-ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)"
+ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)" &&
+notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
 
 * Unused scripts

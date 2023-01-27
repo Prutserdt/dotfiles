@@ -9,3 +9,4 @@ for f in $FILES
 do
     sed -i '1 i '$f  $HOME/.cache/dmenu_run
 done
+notify-send -t 60000 "A new list of installed applications is made 😃"

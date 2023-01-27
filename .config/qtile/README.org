@@ -109,7 +109,6 @@ def monwide2(qtile):
 
 #+END_SRC
 
-
 #+BEGIN_SRC python :tangle config.py :results none
 @lazy.function
 def cmd_increase_margin(self): ### FIXME werkt NIET!
@@ -125,7 +124,7 @@ def cmd_decrease_margin(self): ### FIXME werkt NIET!
     self.group.layout_all()
 
 #onderstaande wil ik ombouwen om de keybindings eenvoudiger te maken
-# https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input
+# htps://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input
 # FIXME: werkt nog NIET!!
 
 def keyb(toets, programma, description):
@@ -134,7 +133,6 @@ def keyb(toets, programma, description):
     return samengevoegd
 
 #+END_SRC
-
 
 
 ** Keybindings: Qtile specific
@@ -234,20 +232,20 @@ The right alt key is used to open text files in Vim or in Emacs.
 #+BEGIN_SRC python :tangle config.py :results none
     Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
     Key([aR], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")), # related to dmenuinternet.sh
-    Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")), 
+    Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")),
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
-    Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")), 
-    Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")), 
-    Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")), 
-    Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")), 
+    Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
+    Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
+    Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
+    Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
-#    Key([aR], "r", lazy.spawn(Emacs + home + "/.Xresources")),
+    Key([aR], "s", lazy.spawn(Emacs + home + "/.config/README.org")), # shell scripts readme
     Key([aR], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")), # related to dmenuthunar.sh
-    Key([aR], "u", lazy.spawn(home + "/.config/unicode")), # related to dmenuunicode.sh
-    Key([aR], "v", lazy.spawn(termVim + home + "/.vimrc")), 
-    Key([aR], "w", lazy.spawn(home + "/.config/wololo.sh")), 
-    Key([aR], "x", lazy.spawn(Emacs + home + "/.xinitrc")), 
-    Key([aR], "z", lazy.spawn(Emacs + home + "/.zshrc")), 
+    Key([aR], "u", lazy.spawn(Emacs + home + "/.config/unicode")), # related to dmenuunicode.sh
+    Key([aR], "v", lazy.spawn(termVim + home + "/.vimrc")),
+    Key([aR], "w", lazy.spawn(home + "/.config/wololo.sh")),
+    Key([aR], "x", lazy.spawn(Emacs + home + "/.xinitrc")),
+    Key([aR], "z", lazy.spawn(Emacs + home + "/.zshrc")),
 ]
 #+END_SRC
 
@@ -450,5 +448,4 @@ I did not get it to work yet with https://stackoverflow.com/questions/67654782/s
 
 
 * About this Emacs org document
-
 This is a literate programming document and it describes my Qtile window manager customization. It is written in Emacs in org-mode and uses [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]]. The Emacs package ~org-babel-tangle~ exports the code blocks to the actual dotfiles which are used to configure Qtile. Tangling can be done manually. In my case I automated it by the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package. When this orgfile is saved it now automatically tangles the code blocks. The org file should contain ~#+auto_tangle: t~ in the header of the org file..

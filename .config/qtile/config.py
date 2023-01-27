@@ -68,7 +68,7 @@ def cmd_decrease_margin(self): ### FIXME werkt NIET!
     self.group.layout_all()
 
 #onderstaande wil ik ombouwen om de keybindings eenvoudiger te maken
-# https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input
+# htps://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input
 # FIXME: werkt nog NIET!!
 
 def keyb(toets, programma, description):
@@ -156,20 +156,20 @@ keys = [
 
     Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
     Key([aR], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")), # related to dmenuinternet.sh
-    Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")), 
+    Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")),
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
-    Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")), 
-    Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")), 
-    Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")), 
-    Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")), 
+    Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
+    Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
+    Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
+    Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
-#    Key([aR], "r", lazy.spawn(Emacs + home + "/.Xresources")),
+    Key([aR], "s", lazy.spawn(Emacs + home + "/.config/README.org")), # shell scripts readme
     Key([aR], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")), # related to dmenuthunar.sh
-    Key([aR], "u", lazy.spawn(home + "/.config/unicode")), # related to dmenuunicode.sh
-    Key([aR], "v", lazy.spawn(termVim + home + "/.vimrc")), 
-    Key([aR], "w", lazy.spawn(home + "/.config/wololo.sh")), 
-    Key([aR], "x", lazy.spawn(Emacs + home + "/.xinitrc")), 
-    Key([aR], "z", lazy.spawn(Emacs + home + "/.zshrc")), 
+    Key([aR], "u", lazy.spawn(Emacs + home + "/.config/unicode")), # related to dmenuunicode.sh
+    Key([aR], "v", lazy.spawn(termVim + home + "/.vimrc")),
+    Key([aR], "w", lazy.spawn(home + "/.config/wololo.sh")),
+    Key([aR], "x", lazy.spawn(Emacs + home + "/.xinitrc")),
+    Key([aR], "z", lazy.spawn(Emacs + home + "/.zshrc")),
 ]
 
 groups = [Group(i) for i in "1234"]
