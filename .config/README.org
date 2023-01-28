@@ -1,4 +1,4 @@
-#+TITLE: Repository file of all of
+#+TITLE: Repository of all of
 #+STARTUP: showeverything
 #+OPTIONS: toc:4
 #+auto_tangle: t
@@ -49,7 +49,7 @@
   - [[#some-notes-about-the-code-blocks-and-tangling][Some notes about the code blocks and tangling.]]
 
 * About this document
-This document is a noto-to-self about scripts on my GNU/Linux system and is my attempt at literate programming using Emacs org mode. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
+This document is a note-to-self about scripts on my GNU/Linux system and is my attempt at literate programming using Emacs org mode. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
 My intention is to modify the scripts from this document and use ~org-babel-tangle~ to export the scripts.
 
 * My scripts
@@ -405,7 +405,7 @@ mkdir $XDG_RUNTIME_DIR/temp &
 
 The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. Note: the next screenshot will overwrite the jpg and txt file.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
-notify-send  "Help for screenshot2text" "Select an area which to convert to text with the mouse"
+notify-send  "Running screenshot2text" "Select an area with mouse 🐭 to convert to text"
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
 #+end_src
 
@@ -432,6 +432,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
 #+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+notify-send "Running dmenuUpdate.sh" &&
 rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
 #+end_src
@@ -460,6 +461,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"} &
+notify-send -t 6000 "Running dmenuapps.sh" &&
 chosen=$(cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
 notify-send -t 6000 "Starting application: " "$chosen" &&
 $chosen
@@ -500,6 +502,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
+notify-send -t 6000 "Running dmenuinternet.sh" &&
 chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
 [ -z "$chosen" ] && exit
 xdg-open $chosen &&
@@ -580,8 +583,10 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 Script to select directories (~/.config/directories) in Thunar by dmenu.
 This requires the dmenu patch: center, which gives the dmenu -c option.
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuthunar.sh" &&
 chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
+notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen
 #+end_src
 
@@ -599,7 +604,7 @@ A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ 
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace" &&
-notify-send -t 60000 "Emoji to clipboard: " "$(xclip -o -selection clipboard)"
+notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
 #+end_src
 Remark: the center patch of dmenu is needed for the -c option.
 
@@ -611,7 +616,6 @@ wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 #+end_src
 
 Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
-
 Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
 
 
@@ -657,6 +661,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
 The notify-send will send a notification, duh! The -t flag sets the time to show the notification in milliseconds. The left part between brackets will be displayed in bold and the second part between quotes will show in normal font. The cut program removes the directory information, which is 44 characters long.
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
+notify-send  "Running dmenuwallpaper.sh" &&
 ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)" &&
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
@@ -960,4 +965,4 @@ done
 Shell scripts need to be executable, and during tangling a flag should be added to keep the file executable, ~tangle:mode (identity #o755).~
 For example: ~#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)~.
 
-To make the tangling process easier I am using the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package to automate tangling when the file is saved. The org file should contain ~#+auto_tangle: t~ in the header.
+To make the tangling process easier I am using the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package to automate tangling when the file is saved. Therefore in this org file the header contains ~#+auto_tangle: t.

@@ -16,88 +16,34 @@ home = os.path.expanduser("~")
 termVim="alacritty -e vim "         # Open vim in alacritty (used for aR hotkeys)
 Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
-
-#added 06jan22: chatGPT suggestions did not help...
-# @lazy.function
-# def set_gaps(qtile, relta):
-#     gaps = qtile.current_screen.gaps
-#     gaps.top += relta
-#     gaps.bottom += relta
-#     gaps.left += relta
-#     gaps.right += relta
-#     relta.group.layout_all()
-#     relta.margin = new_margin
-#     qtile.current_screen.set_gap(gaps)
-
-@lazy.function
-def increase_gaps(qtile):
-    for gap in qtile.current_screen.gaps:
-        if (gap == "left"):
-          gap.size += 10
-# qtile.current_group.layout_all()
-
 def threecol(qtile):
-    qtile.cmd_to_layout_index(0) #0:monadthreecolumn with margins
-
-def threecol2(qtile):
-    qtile.cmd_to_layout_index(1) #1:monadthreecolumn without margins
+    qtile.cmd_to_layout_index(0) #0:monadthreecolumn
 
 def montall(qtile):
-    qtile.cmd_to_layout_index(2) #2: monadtall with margins
-
-def montall2(qtile):
-    qtile.cmd_to_layout_index(3) #2: monadtall with margins
+    qtile.cmd_to_layout_index(1) #1: monadtall
 
 def monwide(qtile):
-    qtile.cmd_to_layout_index(4) #3: monadwide with margins
+    qtile.cmd_to_layout_index(2) #2: monadwide
 
-def monwide2(qtile):
-    qtile.cmd_to_layout_index(5) #3: monadwide with margins
-
-@lazy.function
-def cmd_increase_margin(self): ### FIXME werkt NIET!
-    self.margin += 10
+@lazy.layout.function
+def increase_margin(self):
+    self.margin += 30
     self.group.layout_all()
 
-@lazy.function
-def cmd_decrease_margin(self): ### FIXME werkt NIET!
-    new_margin = self.margin - 10
+@lazy.layout.function
+def decrease_margin(self):
+    new_margin = self.margin - 5
     if new_margin < 0:
         new_margin = 0
     self.margin = new_margin
     self.group.layout_all()
 
-#onderstaande wil ik ombouwen om de keybindings eenvoudiger te maken
-# htps://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input
-# FIXME: werkt nog NIET!!
-
-def keyb(toets, programma, description):
-    samengevoegd ='Key([mR], "' + toets +'" , lazy.spawn("' + programma + '"), desc="' + description +  '"),'
-    #samengevoegd =str('Key([mR], "' + toets +'" , lazy.spawn("' + programma + '"), desc="' + description +  '"),')
-    return samengevoegd
+@lazy.layout.function
+def reset_margin(self):
+    self.margin = 0
+    self.group.layout_all()
 
 keys = [
-    KeyChord([mL], "m", [      # testje, keychording werkt!! :-)
-        Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
-        Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
-        Key([], "k", lazy.function(cmd_increase_margin)),  ### FIXME werkt NIET:!
-        Key([], "j", lazy.funtion(cmd_decrease_margin))    ### FIXME werkt NIET:!
-        ],
-        mode="Margins" # als je mode kiest dan moet je eruit met escape....
-        ),
-    Key([mL], "a",
-        lazy.function(cmd_increase_margin), ### FIXME werkt NIET:
-        desc="increase margin..."
-        ),
-    Key([mL, "shift"], "a",
-        lazy.function(cmd_decrease_margin), ### FIXME werkt NIET:
-        desc="decrease margin..."
-        ),
-#toegevoegd 06jan22:
-    # Key([mL], "g", lazy.function(increase_gaps),  desc="Decrease gaps"),
-    # Key([mL], "g", lazy.function(set_gaps, -10),  desc="Decrease gaps"),
-    # Key([mL, "shift"], "g", lazy.function(set_gaps, 10),   desc="Increase gaps"),
-
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
     Key([mL], "space", lazy.layout.swap_main(),         desc="Make main window of selected window"),
     Key([mL], "b", lazy.hide_show_bar(position="top"),  desc="Toggle the bar"),
@@ -124,9 +70,9 @@ keys = [
     Key([mL], "y", lazy.function(montall),              desc="Layout: MonadTall no margins"),
     Key([mL], "u", lazy.function(threecol),             desc="Layout: Threecolumn  without margins"),
     Key([mL], "i", lazy.function(monwide),              desc="Layout: MonadWide no margins"),
-    Key([mL], "6", lazy.function(montall2),             desc="Layout: MonadTall margins"),
-    Key([mL], "7", lazy.function(threecol2),            desc="Layout: Threecolumn  margins"),
-    Key([mL], "8", lazy.function(monwide2),             desc="Layout: MonadWide  margins"),
+    Key([mL], 'a', increase_margin,                     desc="Increase gaps"),
+    Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
+    Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
 
     # Hotkeys for audio and printscreen
     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -q set Master 5%+")),
@@ -177,9 +123,8 @@ groups = [Group(i) for i in "1234"]
 for i in groups:
     keys.extend(
         [
-            # mL + letter of group = switch to group
             Key(
-                [mL],
+                [mL],      # mL + letter of group = switch to group
                 i.name,
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
@@ -220,11 +165,8 @@ floating_theme = {"border_width": 3,
 
 layouts = [
    layout.MonadThreeCol(**layout_theme),
-   layout.MonadThreeCol(**layout_theme, margin=60),
    layout.MonadTall(**layout_theme),
-   layout.MonadTall(**layout_theme, margin=60),
    layout.MonadWide(**layout_theme),
-   layout.MonadWide(**layout_theme, margin=60),
 ]
 
 widget_defaults = dict(
@@ -248,7 +190,7 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.Notify(foreground="#ff966c"),#toegevoegd 15JAN23
+                widget.Notify(foreground="#ff966c"),
                 widget.QuickExit(foreground="#888888"),
                 widget.Volume(foreground="#d75f5f"),
                 widget.Systray(),
