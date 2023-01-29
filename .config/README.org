@@ -244,7 +244,7 @@ Two functions are declared; one to push to git and one to pull. The push functio
 #+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # ~/.config/dotfiles.sh
 
-notify-send "Dotfiles synchronization start"
+notify-send -t 60000 "Running dotfiles.sh" &&
 function Push()
 {
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v;
@@ -325,7 +325,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 Echo out the options and run the ~killall qtile~ command, or not.
  +begin_src sh :tangle exitqtile.sh :padline no :eval no
 #+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
-notify-send "Really! Are you trying to kill me? 😢"
+notify-send -t 60000 "Really! Are you trying to kill me? 😢" &&
 echo -n "Do you wish to exit qtile right now? (y/n) "
 
 read answer
@@ -405,7 +405,7 @@ mkdir $XDG_RUNTIME_DIR/temp &
 
 The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. Note: the next screenshot will overwrite the jpg and txt file.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
-notify-send  "Running screenshot2text" "Select an area with mouse 🐭 to convert to text"
+notify-send -t 60000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text" &&
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
 #+end_src
 
@@ -432,7 +432,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
 #+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
-notify-send "Running dmenuUpdate.sh" &&
+notify-send -t 60000 "Running dmenuUpdate.sh" &&
 rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
 #+end_src
@@ -461,9 +461,9 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"} &
-notify-send -t 6000 "Running dmenuapps.sh" &&
+notify-send -t 60000 "Running dmenuapps.sh" &&
 chosen=$(cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
-notify-send -t 6000 "Starting application: " "$chosen" &&
+notify-send -t 60000 "Starting application: " "$chosen" &&
 $chosen
 #+end_src
 
@@ -479,15 +479,18 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 The *_stable name will be the new stable version of dmenu.
 #+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
-	echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
-	read answer
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-	    mkdir ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-	    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable
-	else
-	    echo No
-	fi
+notify-send -t 60000 "Running dmenubackup.sh" &&
+echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    mkdir ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    notify-send -t 60000 "Thank you. A backup of dmenu was made to"
+else
+    echo No
+    notify-send -t 60000 "Exiting dmenubackup.sh" "No backup was made"
+fi
 #+end_src
 
 ** dmenuinternet.sh
@@ -502,11 +505,11 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
-notify-send -t 6000 "Running dmenuinternet.sh" &&
+notify-send -t 60000 "Running dmenuinternet.sh" &&
 chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
 [ -z "$chosen" ] && exit
 xdg-open $chosen &&
-notify-send -t 6000 "Opening webpage: " "$chosen"
+notify-send -t 60000 "Opening webpage: " "$chosen"
 #+end_src
 
 ** dmenupatch.sh
@@ -525,27 +528,30 @@ This script will delete all of the current dmenu files. It will build from the s
 3: Run the patch
 
 #+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
-	echo -n "Are you sure you want to patch the current dmenu version? This will first:
-	RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
-	read answer
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dmenu &&
-	    mkdir ~/.config/suckless/dmenu &&
-	    cp -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
-	    cd ~/.config/suckless/dmenu &&
-	    clear && ls -al
-	    ls ~/Stack/Dotfiles/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
-	    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
-	    rm ~/.config/suckless/dmenu/config.h &&
-	    patch -p1 < ~/Stack/Dotfiles/dmenu/patches/test/*.diff &&
-	    make clean install
-	else
-	    echo No
-	fi
+notify-send -t 6000 "Running dmenupatch.sh" &&
+echo -n "Are you sure you want to patch the current dmenu version? This will first:
+RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
+    clear && ls -al
+    ls ~/Stack/Dotfiles/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
+    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
+    rm ~/.config/suckless/dmenu/config.h &&
+    patch -p1 < ~/Stack/Dotfiles/dmenu/patches/test/*.diff &&
+    make clean install
+    notify-send -t 60000 "dmenu was patched"
+else
+    echo No
+    notify-send -t 60000 "Exited dmenupatch.sh. Nothing was changed"
+fi
 #+end_src
 
 ** dmenustable.sh
-Make a backup of the current dmenu version.
+Restore to the stable version of dmenu and remove the current version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
@@ -557,18 +563,20 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 This script gives yes/no option to make a local backup of dmenu.
 This script can be called by the .bashrc alias dmenustable.
 #+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
-	echo -n "Are you sure you want to restore to the stable version and DELETE
-	the current dmenu version? (y/n) "
-	read answer
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dmenu &&
-	    mkdir ~/.config/suckless/dmenu &&
-	    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
-	    cd ~/.config/suckless/dmenu &&
-	    clear && ls -al
-	else
-	    echo No
-	fi
+notify-send -t 60000 "Running dmenustable" &&
+echo -n "Are you sure you want to restore to the stable version and DELETE the current dmenu version? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
+    clear && ls -al
+    notify-send -t 60000 "The stable version of dmenu was placed back" "Please run sudo make clean install"
+else
+    echo No
+    notify-send -t 60000 "Exited dmenustable.sh. Nothing was changed"
+fi
 #+end_src
 
 ** dmenuthunar.sh
@@ -602,6 +610,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuunicode.sh" &&
 cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace" &&
 notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
@@ -631,6 +640,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 First give the option to opt out and wait for the user to continue or not.
 #+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuvanilla.sh" &&
 echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
 read answer
 #+end_src
@@ -643,8 +653,10 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
     cd ~/.config/suckless/dmenu &&
     clear && ls -al
+    notify-send -t 60000 "The vanilla version of dmenu was restored. Please run sudo make clean instsall" &&
 else
     echo No
+    notify-send -t 60000 "Exited dmenuvanilla.sh. Nothing was changed. "
 fi
 #+end_src
 

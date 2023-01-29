@@ -75,10 +75,11 @@ keys = [
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
 
     # Hotkeys for audio and printscreen
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -q set Master 5%+")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-")),
-    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads")),
+#    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -q set Master 5%+")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 "volume increased"')),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
+    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
+    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads"), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
 
     # Open applications
@@ -96,6 +97,8 @@ keys = [
     Key([mR], "k", lazy.spawn("keepass")),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
+    #volgende is een test, gray icon van signal lijkt niet te werken, 28jan23
+    Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
     Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")), # related to 'directories'
     Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")), # related to 'unicode'
     Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
@@ -191,9 +194,9 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Notify(foreground="#ff966c"),
+                widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
                 widget.Volume(foreground="#d75f5f"),
-                widget.Systray(),
                 widget.Clock(format="%d%b%y %H:%M",foreground="#888888"),
             ],
             24,
