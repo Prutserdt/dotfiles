@@ -141,4 +141,11 @@ inoremap <MiddleMouse> <cr><S-Insert><cr>
 vnoremap <C-c> "*y :let @+=@*<CR> 
 "CTRL-C puts selection in clipboard
 map <C-p> "+P
+
+" Map Ctrl-Backspace to delete the previous word in insert mode.
+:imap <C-BS> <C-W>
+" Map Ctrl-delete to delete the next word in insert mode.
+:imap <C-Del> X<Esc>lbce
+map <C-Del> lbcei
+
 syntax enable             " Enables syntax highlighting. An alternative to 'syntax on'

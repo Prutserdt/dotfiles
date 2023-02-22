@@ -18,12 +18,6 @@
 - [[#about-this-document][About this document]]
 - [[#my-scripts][My scripts]]
   - [[#aandelenpy][aandelen.py]]
-  - [[#dotfilessh][dotfiles.sh]]
-  - [[#exitqtilesh][exitqtile.sh]]
-  - [[#rdxswitch][rdxswitch]]
-  - [[#kbswitch][kbswitch]]
-  - [[#screenshot2textsh][screenshot2text.sh]]
-  - [[#dmenuupdatesh][dmenuUpdate.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
   - [[#dmenuinternetsh][dmenuinternet.sh]]
@@ -31,9 +25,16 @@
   - [[#dmenustablesh][dmenustable.sh]]
   - [[#dmenuthunarsh][dmenuthunar.sh]]
   - [[#dmenuunicodesh][dmenuunicode.sh]]
-  - [[#how-to-creating-a-list-of-emojis-used-in-demenuunicodesh][How to creating a list of emojis (used in demenuunicode.sh)]]
+  - [[#dmenuupdatesh][dmenuUpdate.sh]]
   - [[#dmenuvanillash][dmenuvanilla.sh]]
   - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
+  - [[#dotfilessh][dotfiles.sh]]
+  - [[#exitqtilesh][exitqtile.sh]]
+  - [[#kbswitch][kbswitch]]
+  - [[#notify-logsh][notify-log.sh]]
+  - [[#unicode-how-to-create-a-list-of-emojis-used-in-dmenuunicodesh][unicode. How to create a list of emojis (used in dmenuunicode.sh)]]
+  - [[#rdxswitch][rdxswitch]]
+  - [[#screenshot2textsh][screenshot2text.sh]]
 - [[#unused-scripts][Unused scripts]]
   - [[#aandelensh][aandelen.sh]]
   - [[#dwmbackupsh][dwmbackup.sh]]
@@ -56,7 +57,7 @@ My intention is to modify the scripts from this document and use ~org-babel-tang
 
 ** aandelen.py
 
-A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio informatoin are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
+A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio information are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
 #+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
@@ -185,7 +186,7 @@ df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 charac
 Creation of an introduction line that contains org headers (*****), date and the assets total (minus surplus of house).
 #+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
-t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
+t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
 titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 print('\n\n') # Only for debugging
@@ -207,17 +208,18 @@ gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
 gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
-
 separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
 
+print ('\n' + gesorteerdeLijst + '\n')
 # Combineer de introductieregels met het dataframe
-data = titel + orgTabelNaam + separator +'\n' + gesorteerdeLijst + '\n'+separator               # Combineren van introductieregels+dataframe
+data = titel + orgTabelNaam + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
 data = data.replace('Omschrijving', '|Omschrijving')    # Verwijder NaN waarden
-data = data.replace('AA% AA*%', 'AA% |AA*%')    # Verwijder NaN waarden
+data = data.replace('AA% AA*%', 'AA% |AA*% \n|-|-|-|-|')    # Verwijder NaN waarden, voeg separator toe.
 data = data.replace('Euro AA%', 'Euro |AA%')    # Verwijder NaN waarden
 data = data.replace('||||', str(separator)+'\n\n'+str(separator))    # Verwijder NaN waarden
 data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')    # Verwijder NaN waarden
 data = data.replace('|VANECK', 'VANECK')    # Verwijder NaN waarden
+data = data.replace('- huis', '- huis|')    # Verwijder NaN waarden
 print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
 #+end_src
 
@@ -228,6 +230,258 @@ pyperclip.copy(data)
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
     orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
     OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
+#+end_src
+
+
+** dmenuapps.sh
+My app picker. A simple script to select which application to start via dmenu.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
+#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
+#cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"} &
+notify-send -t 60000 "Running dmenuapps.sh" &&
+chosen=$(cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
+notify-send -t 60000 "Starting application: " "$chosen" &&
+$chosen
+
+#+end_src
+
+** dmenubackup.sh
+Make a backup of the current dmenu version.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+The *_stable name will be the new stable version of dmenu.
+#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenubackup.sh" &&
+echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    mkdir ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    notify-send -t 60000 "Thank you. A backup of dmenu was made to"
+else
+    echo No
+    notify-send -t 60000 "Exiting dmenubackup.sh" "No backup was made"
+fi
+#+end_src
+
+** dmenuinternet.sh
+Internet bookmark pick.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
+#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuinternet.sh" &&
+chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
+[ -z "$chosen" ] && exit
+xdg-open $chosen &&
+notify-send -t 60000 "Opening webpage: " "$chosen"
+#+end_src
+
+
+
+** dmenupatch.sh
+Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+This script will delete all of the current dmenu files. It will build from the stable version backup location.
+1: delete files in test directory and restore the stable dmenu verstion.
+2: write the diff filename to the diff_log
+3: Run the patch
+
+#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 6000 "Running dmenupatch.sh" &&
+echo -n "Are you sure you want to patch the current dmenu version? This will first:
+RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
+    clear && ls -al
+    ls ~/Stack/Dotfiles/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
+    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
+    rm ~/.config/suckless/dmenu/config.h &&
+    patch -p1 < ~/Stack/Dotfiles/dmenu/patches/test/*.diff &&
+    make clean install
+    notify-send -t 60000 "dmenu was patched"
+else
+    echo No
+    notify-send -t 60000 "Exited dmenupatch.sh. Nothing was changed"
+fi
+#+end_src
+
+** dmenustable.sh
+Restore to the stable version of dmenu and remove the current version.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+This script gives yes/no option to make a local backup of dmenu.
+This script can be called by the .bashrc alias dmenustable.
+#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenustable" &&
+echo -n "Are you sure you want to restore to the stable version and DELETE the current dmenu version? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
+    clear && ls -al
+    notify-send -t 60000 "The stable version of dmenu was placed back" "Please run sudo make clean install"
+else
+    echo No
+    notify-send -t 60000 "Exited dmenustable.sh. Nothing was changed"
+fi
+#+end_src
+
+** dmenuthunar.sh
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+Script to select directories (~/.config/directories) in Thunar by dmenu.
+This requires the dmenu patch: center, which gives the dmenu -c option.
+#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuthunar.sh" &&
+chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
+[ -z "$chosen" ] && exit
+notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
+thunar $chosen
+#+end_src
+
+** dmenuunicode.sh
+Selecting ➡emojis⬅ via dmenu, 🆒.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
+#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuunicode.sh" &&
+cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
+xdotool key "ctrl+v" "BackSpace" &&
+notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
+#+end_src
+Remark: the center patch of dmenu is needed for the -c option.
+
+** dmenuUpdate.sh
+Refreshing my list of installed applications. This list is used in dmenu as an app picker.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
+#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#notify-send -t 60000 "Running dmenuUpdate.sh" &&
+rm $HOME/'.cache/dmenu_run' &
+ls /usr/bin/* > $HOME/.cache/dmenu_run &&
+#+end_src
+
+Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list. These Appimages are write to top of the list.
+#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+shopt -s nullglob # When AppImages aren't present then the loop will not be run
+FILES=$HOME/Applications/*.AppImage
+for f in $FILES
+do
+    sed -i '1 i '$f  $HOME/.cache/dmenu_run
+done
+notify-send -t 60000 "A new list of installed applications is made 😃"
+#+end_src
+
+
+** dmenuvanilla.sh
+Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+First give the option to opt out and wait for the user to continue or not.
+#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuvanilla.sh" &&
+echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
+read answer
+#+end_src
+
+The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
+#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r ~/.config/suckless/dmenu &&
+    mkdir ~/.config/suckless/dmenu &&
+    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
+    cd ~/.config/suckless/dmenu &&
+    clear && ls -al
+    notify-send -t 60000 "The vanilla version of dmenu was restored. Please run sudo make clean instsall" &&
+else
+    echo No
+    notify-send -t 60000 "Exited dmenuvanilla.sh. Nothing was changed. "
+fi
+#+end_src
+
+** dmenuwallpaper.sh
+Script to select wallpapers via dmenu.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
+The notify-send will send a notification, duh! The -t flag sets the time to show the notification in milliseconds. The left part between brackets will be displayed in bold and the second part between quotes will show in normal font. The cut program removes the directory information, which is 44 characters long.
+#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
+notify-send  "Running dmenuwallpaper.sh" &&
+ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)" &&
+notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
 
 ** dotfiles.sh
@@ -338,26 +592,6 @@ fi
 notify-send "Killing Qtile right now...."
 #+end_src
 
-** rdxswitch
-
-These settings are used in combination with an xmodmap command and are restoring the keysetting that I use for my Redox keyboard. I run it by the alias ~r~ in my terminal which will execute ~xmodmap ~/.config/rdxswitch~. This is needed when keyboards are swapped.
-
-My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
-#+begin_src sh :tangle rdxswitch :padline no :eval no
-! NOTE: This file is generated from ~/.config/README.org
-!       Please only edit that file and org-babel-tangle (emacs)
-remove Lock = Caps_Lock
-keysym Escape = Escape
-keysym Caps_Lock = Caps_Lock
-add Lock = Caps_Lock
-#+end_src
-
-With my custom redox build there is a Super-R.  Remove right super key and make it another mod key (for opening apps)
-#+begin_src sh :tangle rdxswitch :padline no :eval no
-remove mod4 = Super_R
-add mod3 = Super_R
-#+end_src
-
 ** kbswitch
 
 These settings are used in combination with an xmodmap command and can be used when a normy keyboard is used. It will swap Escape/CapsLock, change the super key to super left and super right and the same for the alt key (switch to alt-left and alt-right)
@@ -387,6 +621,96 @@ The same thing for the alt key. Let's use the Alt-left and Alt-right.
 remove mod1 = Alt_R
 add mod5 = Alt_R
 #+end_src
+
+
+** notify-log.sh
+This script will write the notifications to a logfile.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+#+begin_src sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
+
+logfile=$1
+
+declare -a MSGBUF
+STATE=off
+MSGTIME=
+
+printbuf() {
+  JOINED=$( echo "${MSGBUF[@]}" | sed 's/,$//' )
+  printf "%s\n%s\n" "--- ${MSGTIME} ---" "${JOINED}"
+}
+
+procmsg() {
+  if [[ "${1}" =~ member=Notify$ ]]; then
+    STATE=on
+    MSGTIME=$(date '+%Y-%m-%d %H:%M:%S')
+    MSGBUF=()
+  elif [[ "${1}" =~ member=NotificationClosed$ ]]; then
+    STATE=off
+    printbuf
+  else
+   if [[ "${STATE}" == "on" ]]; then
+      if [[ "${1}" =~ ^string ]]; then
+        case "${1}" in
+          "string \"\"") ;;
+          "string \"urgency\"") ;;
+          "string \"sender-pid\"") ;;
+          *)
+            MSGBUF+=$( echo -n "${1}," )
+          ;;
+        esac
+      fi
+    fi
+  fi
+}
+
+dbus-monitor "interface='org.freedesktop.Notifications'" | \
+    while read -r line; do
+      procmsg "$line" >> "$logfile"
+    done
+
+#+end_src
+
+
+
+
+
+** unicode. How to create a list of emojis (used in dmenuunicode.sh)
+
+Download the current unicode list by wget.
+#+begin_src bash
+wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
+#+end_src
+
+Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
+Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
+
+** rdxswitch
+
+These settings are used in combination with an xmodmap command and are restoring the keysetting that I use for my Redox keyboard. I run it by the alias ~r~ in my terminal which will execute ~xmodmap ~/.config/rdxswitch~. This is needed when keyboards are swapped.
+
+My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
+#+begin_src sh :tangle rdxswitch :padline no :eval no
+! NOTE: This file is generated from ~/.config/README.org
+!       Please only edit that file and org-babel-tangle (emacs)
+remove Lock = Caps_Lock
+keysym Escape = Escape
+keysym Caps_Lock = Caps_Lock
+add Lock = Caps_Lock
+#+end_src
+
+With my custom redox build there is a Super-R.  Remove right super key and make it another mod key (for opening apps)
+#+begin_src sh :tangle rdxswitch :padline no :eval no
+remove mod4 = Super_R
+add mod3 = Super_R
+#+end_src
+
 
 ** screenshot2text.sh
 A script that makes a screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen.
@@ -418,264 +742,6 @@ Finally the textfile is catted and piped to the system clipboard with xclip. The
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip &&
 notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp/wismij.txt)"
-#+end_src
-
-** dmenuUpdate.sh
-Refreshing my list of installed applications. This list is used in dmenu as an app picker.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 60000 "Running dmenuUpdate.sh" &&
-rm $HOME/'.cache/dmenu_run' &
-ls /usr/bin/* > $HOME/.cache/dmenu_run &&
-#+end_src
-
-Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list. These Appimages are write to top of the list.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
-shopt -s nullglob # When AppImages aren't present then the loop will not be run
-FILES=$HOME/Applications/*.AppImage
-for f in $FILES
-do
-    sed -i '1 i '$f  $HOME/.cache/dmenu_run
-done
-notify-send -t 60000 "A new list of installed applications is made 😃"
-#+end_src
-
-** dmenuapps.sh
-My app picker. A simple script to select which application to start via dmenu.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
-#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
-#cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"} &
-notify-send -t 60000 "Running dmenuapps.sh" &&
-chosen=$(cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
-notify-send -t 60000 "Starting application: " "$chosen" &&
-$chosen
-#+end_src
-
-** dmenubackup.sh
-Make a backup of the current dmenu version.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
-#!/bin/bash
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-The *_stable name will be the new stable version of dmenu.
-#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 60000 "Running dmenubackup.sh" &&
-echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    mkdir ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    notify-send -t 60000 "Thank you. A backup of dmenu was made to"
-else
-    echo No
-    notify-send -t 60000 "Exiting dmenubackup.sh" "No backup was made"
-fi
-#+end_src
-
-** dmenuinternet.sh
-Internet bookmark pick.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
-#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
-notify-send -t 60000 "Running dmenuinternet.sh" &&
-chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
-[ -z "$chosen" ] && exit
-xdg-open $chosen &&
-notify-send -t 60000 "Opening webpage: " "$chosen"
-#+end_src
-
-** dmenupatch.sh
-Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-This script will delete all of the current dmenu files. It will build from the stable version backup location.
-1: delete files in test directory and restore the stable dmenu verstion.
-2: write the diff filename to the diff_log
-3: Run the patch
-
-#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 6000 "Running dmenupatch.sh" &&
-echo -n "Are you sure you want to patch the current dmenu version? This will first:
-RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/.config/suckless/dmenu &&
-    mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
-    cd ~/.config/suckless/dmenu &&
-    clear && ls -al
-    ls ~/Stack/Dotfiles/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
-    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
-    rm ~/.config/suckless/dmenu/config.h &&
-    patch -p1 < ~/Stack/Dotfiles/dmenu/patches/test/*.diff &&
-    make clean install
-    notify-send -t 60000 "dmenu was patched"
-else
-    echo No
-    notify-send -t 60000 "Exited dmenupatch.sh. Nothing was changed"
-fi
-#+end_src
-
-** dmenustable.sh
-Restore to the stable version of dmenu and remove the current version.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-This script gives yes/no option to make a local backup of dmenu.
-This script can be called by the .bashrc alias dmenustable.
-#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 60000 "Running dmenustable" &&
-echo -n "Are you sure you want to restore to the stable version and DELETE the current dmenu version? (y/n) "
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/.config/suckless/dmenu &&
-    mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
-    cd ~/.config/suckless/dmenu &&
-    clear && ls -al
-    notify-send -t 60000 "The stable version of dmenu was placed back" "Please run sudo make clean install"
-else
-    echo No
-    notify-send -t 60000 "Exited dmenustable.sh. Nothing was changed"
-fi
-#+end_src
-
-** dmenuthunar.sh
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-Script to select directories (~/.config/directories) in Thunar by dmenu.
-This requires the dmenu patch: center, which gives the dmenu -c option.
-#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 60000 "Running dmenuthunar.sh" &&
-chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
-[ -z "$chosen" ] && exit
-notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
-thunar $chosen
-#+end_src
-
-** dmenuunicode.sh
-Selecting ➡emojis⬅ via dmenu, 🆒.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
-#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 60000 "Running dmenuunicode.sh" &&
-cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
-xdotool key "ctrl+v" "BackSpace" &&
-notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
-#+end_src
-Remark: the center patch of dmenu is needed for the -c option.
-
-** How to creating a list of emojis (used in demenuunicode.sh)
-
-Download the current unicode list by wget.
-#+begin_src bash
-wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
-#+end_src
-
-Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
-Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
-
-
-** dmenuvanilla.sh
-Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-First give the option to opt out and wait for the user to continue or not.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 60000 "Running dmenuvanilla.sh" &&
-echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
-read answer
-#+end_src
-
-The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/.config/suckless/dmenu &&
-    mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
-    cd ~/.config/suckless/dmenu &&
-    clear && ls -al
-    notify-send -t 60000 "The vanilla version of dmenu was restored. Please run sudo make clean instsall" &&
-else
-    echo No
-    notify-send -t 60000 "Exited dmenuvanilla.sh. Nothing was changed. "
-fi
-#+end_src
-
-** dmenuwallpaper.sh
-Script to select wallpapers via dmenu.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
-The notify-send will send a notification, duh! The -t flag sets the time to show the notification in milliseconds. The left part between brackets will be displayed in bold and the second part between quotes will show in normal font. The cut program removes the directory information, which is 44 characters long.
-#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
-notify-send  "Running dmenuwallpaper.sh" &&
-ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)" &&
-notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
 
 * Unused scripts

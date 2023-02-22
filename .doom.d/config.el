@@ -43,24 +43,29 @@
 (map! :leader
       (:prefix ("d" . "Personal Bindings")
           (:prefix ("b" . "Buffer options")
-                :desc "Kill current buffer"     "k" #'kill-this-buffer
-                :desc "Kill some buffers"       "K" #'kill-some-buffers
-                :desc "Open a buffer"           "o" #'buffer-menu)
-       :desc "Search hotkey key briefly"        "d" #'describe-key-briefly
-       :desc "Describe function"                "h" #'describe-function
-       :desc "Increase font size"               "i" #'doom/increase-font-size
-       :desc "Find a file"                      "f" #'find-file
-;      :desc "Open recent files"                "o" #'recentf-open-more-files
-       :desc "Open recent files"                "o" #'counsel-recentf
-       :desc "Reload Doom: doom/reload"         "r" #'doom/reload
-       :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-       :desc "Hide org blocks"                  "L" #'org-fold-hide-block-all
-       :desc "Laat zien org blocks"             "l" #'org-fold-show-all
-       :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
-       :desc "Huidige org block aan/uit"        "s" #'org-fold-hide-block-toggle
-       :desc "Treemacs file navigation"         "." #'treemacs
-       :desc "Write this buffer to file"        "w" #'write-file)
-                )
+                :desc "Kill current buffer"       "k" #'kill-this-buffer
+                :desc "Kill some buffers"         "K" #'kill-some-buffers
+                :desc "Open a buffer"             "o" #'buffer-menu)
+       :desc "Search hotkey key briefly"          "d" #'describe-key-briefly
+       :desc "Describe function"                  "h" #'describe-function
+       :desc "Increase font size"                 "i" #'doom/increase-font-size
+       :desc "Find a file"                        "f" #'find-file
+;      :desc "Open recent files"                  "o" #'recentf-open-more-files
+       :desc "Open recent files"                  "o" #'counsel-recentf
+       :desc "Reload Doom: doom/reload"           "r" #'doom/reload
+       :desc "Tangling: org-babel-tangle"         "t" #'org-babel-tangle
+       :desc "Hide org blocks"                    "L" #'org-fold-hide-block-all
+       :desc "Laat zien org blocks"               "l" #'org-fold-show-all
+       :desc "Plak keuze uit kill ring"           "p" #'consult-yank-from-kill-ring
+       :desc "Huidige org block aan/uit"          "s" #'org-fold-hide-block-toggle
+       :desc "Treemacs file navigation"           "." #'treemacs
+          (:prefix ("w" . "windows op scherm")
+                :desc "Cursor to left window"     "h" #'evil-window-left
+                :desc "Cursor to right window"    "l" #'evil-window-right
+                :desc "split window horizontally" "s" #'split-window-horizontally
+                :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer)
+          ):desc "Write this buffer to file"        "w" #'write-file)
+       ;:desc "Write this buffer to file"        "w" #'write-file)
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 

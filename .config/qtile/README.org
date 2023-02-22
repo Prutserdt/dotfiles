@@ -52,6 +52,7 @@ from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
+
 #+END_SRC
 
 ** Variables
@@ -78,7 +79,10 @@ def montall(qtile):
 
 def monwide(qtile):
     qtile.cmd_to_layout_index(2) #2: monadwide
+#+END_SRC
 
+Three functions to change the gap size between windows, in Qtile this is called margins.
+#+BEGIN_SRC python :tangle config.py
 @lazy.layout.function
 def increase_margin(self):
     self.margin += 30
@@ -100,17 +104,6 @@ def reset_margin(self):
 
 
 ** Keybindings: Qtile specific
-
-The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and not keeping modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected.
-#+BEGIN_SRC :results none
- KeyChord([mL], "m", [      # testje, keychording werkt!! :-)
-     Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
-     Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
-     ],
-     mode="Margins" # als je mode kiest dan moet je eruit met escape....
-     ),
-#+END_SRC
-
 My left super key bindings are all related to Qtile, for instance moving windows around.
 #+BEGIN_SRC python :tangle config.py :results none
 
@@ -145,6 +138,16 @@ keys = [
     Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
     #+END_SRC
+
+The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and not keeping modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected.
+#+BEGIN_SRC :results none
+ KeyChord([mL], "m", [      # testje, keychording werkt!! :-)
+     Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
+     Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
+     ],
+     mode="Margins" # als je mode kiest dan moet je eruit met escape....
+     ),
+#+END_SRC
 
 ** Keybindings: Audio and print
 Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
@@ -193,7 +196,8 @@ The right alt key is used to open text files in Vim or in Emacs.
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
     Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
-    Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
+    #Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
+    Key([aR], "p", lazy.spawn(Emacs + home + "/Stack/Code/git/PowerStrike_code/README.org")),
     Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
     Key([aR], "s", lazy.spawn(Emacs + home + "/.config/README.org")), # shell scripts readme
@@ -220,9 +224,16 @@ for i in groups:
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mL+shift+group letter= move focused window to group(no follow)
+            # mL+shift+group letter= move and follow focused window to group
             Key(
                 [mL, "shift"],
+                i.name,
+                lazy.window.togroup(i.name,switch_group=True), #True=follow window
+                desc="Move and follow the focused window to group {}".format(i.name),
+            ),
+            # Exactly the same as above, but don't follow the moved window to group
+            Key(
+                [mL, "control", "shift"],
                 i.name,
                 lazy.window.togroup(i.name),
                 # add ",switch_group=True" after i.name to follow the window
@@ -246,7 +257,7 @@ layout_theme = {"border_width": 2,
                 "border_focus":  "#d75f5f",
                 "border_normal": "#282C35", #966363
                 "min_ratio": 0.05, "max_ratio": 0.9,
-                "new_client_position":'bottom', # FIXME: does NOT open on bottom!
+                "new_client_position":'bottom',
                 }
 # A separate theme for floating mode, different color, thicker border width
 floating_theme = {"border_width": 3,
@@ -331,7 +342,7 @@ auto_fullscreen = False
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
-auto_minimize = True # handy for steam games
+auto_minimize = True # for steam games
 
 #+END_SRC
 
@@ -341,8 +352,6 @@ A startup script is ran after startup of Qtile and the window swallowing is set 
 #+BEGIN_SRC python :tangle config.py
 
 # Startup scripts
-
-
 @hook.subscribe.startup_once
 def start_once():
     home = os.path.expanduser("~")
@@ -390,6 +399,7 @@ The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
 setxkbmap us &&
 xmodmap $HOME/.config/kbswitch &&
+$HOME/.config/notify-log.sh $HOME/.config/notify.log && # writing notification to a logfile
 xset r rate 300 80 &
 picom -b &
 /usr/bin/emacs --daemon &

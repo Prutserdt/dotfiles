@@ -95,7 +95,7 @@ print('=' * 40 + "\n", df)  # Only for debugging
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
 
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
-t_stamp =   str(time.strftime("%Y", datum) + str(time.strftime("%m", datum)) + str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
+t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
 titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 print('\n\n') # Only for debugging
@@ -113,17 +113,18 @@ gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
 gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
-
 separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
 
+print ('\n' + gesorteerdeLijst + '\n')
 # Combineer de introductieregels met het dataframe
-data = titel + orgTabelNaam + separator +'\n' + gesorteerdeLijst + '\n'+separator               # Combineren van introductieregels+dataframe
+data = titel + orgTabelNaam + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
 data = data.replace('Omschrijving', '|Omschrijving')    # Verwijder NaN waarden
-data = data.replace('AA% AA*%', 'AA% |AA*%')    # Verwijder NaN waarden
+data = data.replace('AA% AA*%', 'AA% |AA*% \n|-|-|-|-|')    # Verwijder NaN waarden, voeg separator toe.
 data = data.replace('Euro AA%', 'Euro |AA%')    # Verwijder NaN waarden
 data = data.replace('||||', str(separator)+'\n\n'+str(separator))    # Verwijder NaN waarden
 data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')    # Verwijder NaN waarden
 data = data.replace('|VANECK', 'VANECK')    # Verwijder NaN waarden
+data = data.replace('- huis', '- huis|')    # Verwijder NaN waarden
 print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
 
 pyperclip.copy(data)

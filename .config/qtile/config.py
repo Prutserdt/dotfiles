@@ -109,7 +109,8 @@ keys = [
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
     Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
-    Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
+    #Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
+    Key([aR], "p", lazy.spawn(Emacs + home + "/Stack/Code/git/PowerStrike_code/README.org")),
     Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
     Key([aR], "s", lazy.spawn(Emacs + home + "/.config/README.org")), # shell scripts readme
@@ -132,9 +133,16 @@ for i in groups:
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mL+shift+group letter= move focused window to group(no follow)
+            # mL+shift+group letter= move and follow focused window to group
             Key(
                 [mL, "shift"],
+                i.name,
+                lazy.window.togroup(i.name,switch_group=True), #True=follow window
+                desc="Move and follow the focused window to group {}".format(i.name),
+            ),
+            # Exactly the same as above, but don't follow the moved window to group
+            Key(
+                [mL, "control", "shift"],
                 i.name,
                 lazy.window.togroup(i.name),
                 # add ",switch_group=True" after i.name to follow the window
@@ -158,7 +166,7 @@ layout_theme = {"border_width": 2,
                 "border_focus":  "#d75f5f",
                 "border_normal": "#282C35", #966363
                 "min_ratio": 0.05, "max_ratio": 0.9,
-                "new_client_position":'bottom', # FIXME: does NOT open on bottom!
+                "new_client_position":'bottom',
                 }
 # A separate theme for floating mode, different color, thicker border width
 floating_theme = {"border_width": 3,
@@ -236,11 +244,9 @@ auto_fullscreen = False
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
-auto_minimize = True # handy for steam games
+auto_minimize = True # for steam games
 
 # Startup scripts
-
-
 @hook.subscribe.startup_once
 def start_once():
     home = os.path.expanduser("~")

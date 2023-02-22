@@ -21,6 +21,7 @@
 - [[#about-this-document][About this document]]
 - [[#command-line-tricks][Command line tricks]]
 - [[#applications-command-line-and-guis][Applications (Command line and GUIs)]]
+- [[#powerstrike-punt-nl][powerstrike punt nl]]
 - [[#distros-and-related-stuff][Distros and related stuff]]
 - [[#tiling-windowmanagers][Tiling windowmanagers]]
 - [[#keebs][Keebs]]
@@ -1871,10 +1872,6 @@ cat  $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip
 ascii-image-converter -n -W 60 ~/Downloads/Logitech_mouse.jpg
 #+end_src
 
-
-
-
-
 * Applications (Command line and GUIs)
 *** Vim
 Installeer gvim, niet om te gebruiken maar om clipboard functionaliteit
@@ -2564,6 +2561,36 @@ https://github.com/Prutserdt/dotfiles/blob/master/.aliases
 download by entering:
 https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.aliases
 
+
+*** Working with an extra github repo
+
+Created an open repo https://github.com/Prutserdt/PowerStrike_code
+Change the current working directory to the location where you want the cloned directory.
+~cd ~/Stack/Code/git~
+Clone git: ~git clone https://github.com/Prutserdt/PowerStrike~
+Edit the README.org file and upload by:
+~git add .
+~git commit -m 'Test commit'~
+~git push origin main~
+foutmelding, probeerd via https aan te melden wat niet meer gaat, op te lossen door:
+go to the .git directory and change the config file:
+url = ssh://git@github.com/Prutserdt/PowerStrikedot
+
+
+*** Working with an extra github repo
+
+Created an open repo https://github.com/Prutserdt/PowerStrike_code
+Change the current working directory to the location where you want the cloned directory.
+~cd ~/Stack/Code/git~
+Clone git: ~git clone ssh://git@github.com/Prutserdt/PowerStrike_code~
+Het gaf een melding dat de repo empty is, dat klopt 😀
+
+~git add .
+~git commit -m 'Upload of the first files to this repo'~
+~git push origin main~
+
+
+
 *** Tox
 Android: Antox
 desktop: qtox
@@ -2879,6 +2906,8 @@ M: meta key: alt
 | doompurge   | delete old orphaned packages                         |
 | doomhelp    | help                                                 |
 |-------------+------------------------------------------------------|
+
+Na een upgrade van mijn configuratie op mijn tweede machine werkte emacs niet meer, er was een missende .el file in de /.emacs.d directory . Dit is eenvoudig opgelost door de org file te saven, daarna ~~/.doom.d~ en ~~/.emacs.d~ te verwijderen en daarna een nieuwe installatie uit te voeren volgens de Doom emacs Github installatie omschrijving (~git clone --depth 1 --single-branch https://github.com/doomemacs/doomemacs ~/.config/emacs ~/.config/emacs/bin/doom install~). Daarna de org file terug zetten en deze tanglen, et viola!
 
 
 **** Allerlei Lisp functies
@@ -3294,6 +3323,38 @@ void resetMax(){
 #+end_src
 
 
+Let op, als je wilt dat de code _NIET_ wordt gewrapped in ~int main() {~ dan moet je ervoor zorgen dat er ~:main no~ komt te staan in de bovenste regel.
+#+begin_src C++ :tangle PowerStrike_code.ino :main no :results raw
+/* -*- c -*- */
+/*********
+wat ik wil: connecten via accesspoint naar esp32 vanuit mobieltje
+Dan inloggen als gebruiker en beginnen met workout die wordt opgeslagen
+#+end_src
+
+
+***** Arduino, .ino debugging: via code block
+
+#+begin_src shell
+arduino --verify ~/Stack/Code/git/PowerStrike_code_Adafruit_IO/PowerStrike_code_Adafruit_IO.ino
+#+end_src
+
+***** Arduino.ino debugging. Snelle debugging in emacs via elisp
+
+Het volgende elisp code block runt een asynchroon shellscript ~arduino --verify code.ino~~. Dit zorgt ervoor dat deze in een apart proces loopt en je emacs kunt blijven gebruiken. De debug output is te lezen in de buffer ~*Async Shell Command*~. Verder wordt deze buffer netjes aande de linkerkant gezet.Een mooie elegante oplossing voor debugging.
+
+#+NAME: debug
+#+begin_src elisp
+(async-shell-command "arduino --verify ~/Stack/Code/git/PowerStrike_code_Adafruit_IO/PowerStrike_code_Adafruit_IO.ino")
+(doom/window-maximize-buffer)
+(split-window-horizontally)
+(switch-to-buffer "*Async Shell Command*")
+(windmove-right)
+#+end_src
+
+Het is ook aan te roepen met:
+#+CALL: debug()
+
+
 ***** Shell in code blocks
 
 Voorbeeld waarbij de output gebokkeerd wordt dmv ~:eval no~.
@@ -3632,6 +3693,20 @@ prutserdt
 
 *** Show the keys that are pressed on the screen: screenkey
 A handy tool to show the key presses is screenkey.
+
+*** Home assistent, hacs
+Installed via ~yay home-assistant-hacs~~. Verder niet gebruikt
+
+
+
+* powerstrike punt nl
+03feb23: wordpress aangemaakt.
+wordpress 6.1.1
+WP Data Access plugin geinstalleerd.
+
+
+
+
 
 * Distros and related stuff
 *** XFCE tricks
