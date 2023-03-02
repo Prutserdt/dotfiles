@@ -22,7 +22,7 @@ void loop() {
   // Enters it
   DigiKeyboard.sendKeyStroke(KEY_ENTER);
 
-  //Finished. Now show a red LED to indicate the the payload is deployed
+  //Finished. Now show a red LED to indicate  the payload is deployed
   digitalWrite(1, HIGH);
   for (;;) {/* Stops the loop */}
 }
