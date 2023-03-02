@@ -5,7 +5,7 @@ $dest = "c:\temp\einstein.txt"
 # Download the file
 Invoke-WebRequest -Uri $url -OutFile $dest
 # Read the contents of the text file into a variable
-$text = Get-Content -Path $dest -Raw
+$text = Get-Content -Path $url -Raw
 
 # Wait for 120 seconds before running next part
 Start-Sleep -Seconds 1
