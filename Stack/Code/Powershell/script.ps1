@@ -5,6 +5,52 @@ $dest = "c:\temp\speech.pdf"
 # Download the file
 Invoke-WebRequest -Uri $url -OutFile $dest
 
+
+using System;
+using System.IO;
+using System.Management.Automation;
+namespace PowerShell.PDF
+{
+    [Cmdlet( VerbsData.ConvertFrom, "PDF" )]
+    public class ConvertFromPDF : Cmdlet
+    {
+        [Parameter( ValueFromPipeline = true, Mandatory = true )]
+        public string PDFFile { get; set; }
+
+        protected override void ProcessRecord()
+        {
+            var parser = new PDFParser();
+            using( Stream s = new MemoryStream() )
+            {
+                if( ! parser.ExtractText(File.OpenRead(PDFFile), s) )
+                {
+                    WriteError(
+                        new ErrorRecord(
+                            new ApplicationException(),
+                            "failed to extract text from pdf",
+                            ErrorCategory.ReadError,
+                            PDFFile
+                        )
+                    );
+                    return;
+                }
+                s.Position = 0;
+                using( StreamReader reader = new StreamReader( s ) )
+                {
+                    WriteObject( reader.ReadToEnd() );
+                }
+            }
+        }
+    }
+}
+
+
+
+c:\temp\speech.pdf | convertfrom-pdf
+
+
+
+
 function convert-PDFtoText {
     param(
        [Parameter(Mandatory=$true)][string]$file
