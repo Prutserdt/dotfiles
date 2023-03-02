@@ -75,7 +75,7 @@ $s.SelectVoice("Microsoft Zira Desktop")
 $s.Speak("Oh yes indeed, hacked and powned. Wave to the camera.")
 Start-Sleep -Seconds 1
 $s.SelectVoice("Microsoft David Desktop")
-$s.Speak("yeah they are checking the camera!
+$s.Speak("yeah they are checking the camera!")
 $s.SelectVoice("Microsoft Zira Desktop")
 $s.Speak("whahaha")
 $s.SelectVoice("Microsoft David Desktop")
