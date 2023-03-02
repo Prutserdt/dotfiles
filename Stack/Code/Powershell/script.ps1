@@ -1,7 +1,5 @@
-# Show a message to the user
-Write-Host "DO NOT PANICK!"
-# Wait for 10 seconds before running next part
-Start-Sleep -Seconds 10
+# Wait for 120 seconds before running next part
+Start-Sleep -Seconds 120
 # Text to speech :-)
 Add-Type -AssemblyName System.speech
 $s = New-Object System.Speech.Synthesis.SpeechSynthesizer

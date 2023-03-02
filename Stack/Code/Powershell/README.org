@@ -51,10 +51,8 @@ The next code block is my current script that is deployed by my Digispark and ho
 
 
 #+begin_src shell :tangle script.ps1
-# Show a message to the user
-Write-Host "DO NOT PANICK!"
-# Wait for 10 seconds before running next part
-Start-Sleep -Seconds 10
+# Wait for 120 seconds before running next part
+Start-Sleep -Seconds 120
 # Text to speech :-)
 Add-Type -AssemblyName System.speech
 $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
@@ -62,7 +60,6 @@ $s.Speak("Yo, yo. You have been hacked. Please wave to the camera. Ha, ha. Fortu
 #+end_src
 
 
-Start-Sleep -Seconds 5
 
 
 
