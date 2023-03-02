@@ -1,5 +1,5 @@
 # Source URL
-$ursl = "https://web-archive.southampton.ac.uk/cogprints.org/1927/1/NEURON_SOMA_SIZE_IN_THE.TEXT"
+$url = "https://web-archive.southampton.ac.uk/cogprints.org/1927/1/NEURON_SOMA_SIZE_IN_THE.TEXT"
 # Destation file
 $dest = "c:\temp\einstein.txt"
 # Download the file

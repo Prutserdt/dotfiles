@@ -55,7 +55,7 @@ The next code block is my current script that is deployed by my Digispark and ho
 
 #+begin_src shell :tangle script.ps1
 # Source URL
-$ursl = "https://web-archive.southampton.ac.uk/cogprints.org/1927/1/NEURON_SOMA_SIZE_IN_THE.TEXT"
+$url = "https://web-archive.southampton.ac.uk/cogprints.org/1927/1/NEURON_SOMA_SIZE_IN_THE.TEXT"
 # Destation file
 $dest = "c:\temp\einstein.txt"
 # Download the file
