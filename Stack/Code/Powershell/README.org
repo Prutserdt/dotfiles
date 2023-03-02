@@ -81,7 +81,7 @@ $s.Speak("whahaha")
 $s.SelectVoice("Microsoft David Desktop")
 $s.Speak("Do re mi fa so la ti do. Don't worry just warming up my vocal chords. I will give a speech to you soon. Downloading some files.")
 $s.SelectVoice("Microsoft Zira Desktop")
-$s.Speak("Hey, you found the GLP. Nice. Go ahead and bore the silly sheeple!
+$s.Speak("Hey, you found the GLP. Nice. Go ahead and bore the silly sheeple!")
 $s.SelectVoice("Microsoft David Desktop")
 $s.Speak($text)
 
