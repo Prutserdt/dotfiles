@@ -62,7 +62,7 @@ $url = "https://web-archive.southampton.ac.uk/cogprints.org/1927/1/NEURON_SOMA_S
 #Invoke-WebRequest -Uri $url -OutFile $dest
 # Read the contents of the text file into a variable
 #$text = Get-Content -Path $dest -Raw
-$text = Get-Content -Path $url -Raw
+$text = Get-Content -Path "https://web-archive.southampton.ac.uk/cogprints.org/1927/1/NEURON_SOMA_SIZE_IN_THE.TEXT" -Raw
 
 # Wait for 120 seconds before running next part
 Start-Sleep -Seconds 1
