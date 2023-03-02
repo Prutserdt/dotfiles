@@ -1,8 +1,15 @@
+# Source URL
+$url = "https://static.pbslearningmedia.org/media/media_files/Full_text_I_Have_a_Dream_.pdf"
+# Destation file
+$dest = "c:\temp\speech.pdf"
+# Download the file
+Invoke-WebRequest -Uri $url -OutFile $dest
+
 function convert-PDFtoText {
     param(
-       [Parameter(Mandatory=true)][string]$file
+       [Parameter(Mandatory=$true)][string]$file
     )
-    Add-Type -path "https://static.pbslearningmedia.org/media/media_files/Full_text_I_Have_a_Dream_.pdf"
+    Add-Type -path "c:\temp\speech.pdf"
     $pdf = New-Object iTextSharp.text.pdf.pdfreader -Argumentlist $file
     for ($page = 1; $page -le $pdf.NumberOfPages; $page++){
         $texto=[iTextSharp.text.pdf.parser.PdfTextExtractor]::GetTextFromPage($pdf, $page)
