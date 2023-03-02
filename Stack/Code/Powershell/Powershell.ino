@@ -1,7 +1,8 @@
 #include "DigiKeyboard.h"
 
 void setup() {
-  // empty
+  //Set Pins 1 as outputs.
+  pinMode(1, OUTPUT); //my digispark red led: 1, others could be 0
 }
 
 void loop() {
@@ -21,5 +22,7 @@ void loop() {
   // Enters it
   DigiKeyboard.sendKeyStroke(KEY_ENTER);
 
+  //Finished. Now show a red LED to indicate the the payload is deployed
+  digitalWrite(1, HIGH);
   for (;;) {/* Stops the loop */}
 }
