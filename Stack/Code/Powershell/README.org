@@ -60,6 +60,11 @@ $url = "https://web-archive.southampton.ac.uk/cogprints.org/1927/1/NEURON_SOMA_S
 $dest = "c:\temp\einstein.txt"
 # Download the file
 Invoke-WebRequest -Uri $url -OutFile $dest
+# Read the contents of the text file into a variable
+$text = Get-Content -Path $dest -Raw
+
+# Create a SpeechSynthesizer object
+
 
 
 # Wait for 120 seconds before running next part
@@ -71,7 +76,7 @@ $s = New-Object System.Speech.Synthesis.SpeechSynthesizer
 #Start-Sleep -Seconds 5
 $s.Speak("hum nom nom. Don't worry just warming up my vocal chords. I will give a speech to you soon. Downloading some files.")
 Start-Sleep -Seconds 5
-$s.Speak($dest)
+$s.Speak($text)
 
 #+end_src
 
