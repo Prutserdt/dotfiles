@@ -1,4 +1,4 @@
-#+TITLE: Digispark speeltuin
+#+TITLE: My Digispark playground
 #+auto_tangle: t
 
 
@@ -6,11 +6,10 @@
 - [[#about][About]]
 - [[#execute_powershell_scriptino][Execute_Powershell_Script.ino]]
 - [[#scriptps1][script.ps1]]
-  - [[#oude-tests--][Oude tests :-)]]
+  - [[#old-payloads][Old payloads]]
 
 * About
-In deze org file speel ik met powershell scripts die ik in mijn cloud zet.
-
+In this org file the arduino script for my digispark is described and several payloads which are hosted on my Github.
 
 * Execute_Powershell_Script.ino
 
@@ -42,14 +41,32 @@ void loop() {
 }
 #+end_src
 
-
+Add-Type -AssemblyName System.speech
+$s = New-Object System.Speech.Synthesis.SpeechSynthesizer
+$s.Speak("You have been hacked. Please wave for the camera")
 
 
 
 * script.ps1
-Mijn huidige script staat hier onder. Deze staat in mijn cloud en klaar om gebruikt te worden met mijn digispark.
+The next code block is my current script that is deployed by my Digispark.
+
 
 #+begin_src shell :tangle script.ps1
+Add-Type -AssemblyName System.speech
+$s = New-Object System.Speech.Synthesis.SpeechSynthesizer
+$s.Speak("Yo, yo. You have been hacked. Please wave to the camera. Ha, ha. Fortunately this is just for shits and giggles. But. Remember. You could have been seriously compromized. Over and out. Peace.")
+#+end_src
+
+
+
+
+** Old payloads
+
+Plays the Imperial March (Star Wars)
+This PowerShell script plays the Imperial March used in the Star Wars film series.
+https://github.com/fleschutz/PowerShell
+NOTES: Author: Markus Fleschutz | License: CC0
+#+begin_src shell
 [System.Console]::beep(440, 500)
 [System.Console]::beep(440, 500)
 [System.Console]::beep(440, 500)
@@ -70,8 +87,3 @@ Mijn huidige script staat hier onder. Deze staat in mijn cloud en klaar om gebru
 [System.Console]::beep(440, 1000)
 exit 0 # success
 #+end_src
-
-
-
-
-** Oude tests :-)
