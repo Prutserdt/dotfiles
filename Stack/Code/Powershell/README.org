@@ -2,16 +2,23 @@
 #+auto_tangle: t
 
 
-:toc:
+* :toc:
 - [[#about][About]]
-- [[#execute_powershell_scriptino][Execute_Powershell_Script.ino]]
-- [[#scriptps1][script.ps1]]
-  - [[#old-payloads][Old payloads]]
+- [[#my-current-digispark-ino-script-and-powershell-payload][My current Digispark .ino script and Powershell payload]]
+  - [[#digispark-script-powershellino][Digispark script (Powershell.ino)]]
+  - [[#my-payload-scriptps1][My payload (script.ps1)]]
+- [[#old-files][Old files]]
+  - [[#digispark-scripts][Digispark scripts]]
+  - [[#payloads][Payloads]]
 
 * About
 In this org file the arduino script for my digispark is described and several payloads which are hosted on my Github.
 
-* Execute_Powershell_Script.ino
+* My current Digispark .ino script and Powershell payload
+
+** Digispark script (Powershell.ino)
+
+A script that will open powershell and run a payload from a server. The powershell script "script.ps1" can be found in the code block below the next. When the Powershell.ino script is executed the red led is switched on and the Digispark can be removed.
 
 #+begin_src C :tangle Powershell.ino
 #include "DigiKeyboard.h"
@@ -44,12 +51,7 @@ void loop() {
 }
 #+end_src
 
-* Some powershell tips
-
-
-
-
-* script.ps1
+** My payload (script.ps1)
 The next code block is my current script that is deployed by my Digispark and hosted on Github.
 
 
@@ -80,25 +82,51 @@ $s.Speak("yeah they are checking the camera!")
 $s.SelectVoice("Microsoft Zira Desktop")
 $s.Speak("whahaha")
 $s.SelectVoice("Microsoft David Desktop")
-$s.Speak("Ninanoninei. Don't worry just warming up my vocal chords. I will give a speech to you soon but i'm gonna download some files first.")
+$s.Speak("Ni nano ninei. Just warming up my vocal chords. I will give a speech to you soon but i'm gonna download some files first.")
 $s.SelectVoice("Microsoft Zira Desktop")
-$s.Speak("Hey, you found the GLP. Nice. Go ahead and bore the silly sheeple!")
+$s.Speak("Hey, you found the GPL. Nice. Go ahead and bore the silly sheeple! Bye the way, sheeple, please log out when you leave your pc, otherwise it can be seriously compromised.")
 $s.SelectVoice("Microsoft David Desktop")
 $s.Speak($text)
 
 #+end_src
 
-#+RESULTS:
+
+* Old files
+
+** Digispark scripts
+
+*** Rickroll
+
+#+begin_src C
+ //This DigiSpark script opens up Rick Astley's - Never Gonna Give You Up and also a fake Windows update screen and then maximizes it using F11
+#include "DigiKeyboard.h"
+void setup() {
+  //Set Pins 1 as outputs.
+  pinMode(1, OUTPUT); //my digispark red led: 1, others could be 0
+}
+void loop() {
+  DigiKeyboard.delay(2000);
+  DigiKeyboard.sendKeyStroke(0);
+  DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
+  DigiKeyboard.delay(600);
+  DigiKeyboard.print("https://youtu.be/dQw4w9WgXcQ?t=43s");
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  DigiKeyboard.delay(5000);
+  DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
+  DigiKeyboard.delay(3000);
+  DigiKeyboard.print("http://fakeupdate.net/win10ue");
+  DigiKeyboard.sendKeyStroke(KEY_ENTER);
+  DigiKeyboard.delay(2000);
+  DigiKeyboard.sendKeyStroke(KEY_F11);
+  //Finished. Now show a red LED to indicate the the payload is deployed
+  digitalWrite(1, HIGH);
+  for(;;){ /*empty*/ }
+}
+#+end_src
 
 
-
-$s.Speak("Yo, yo. You have been hacked. Please wave to the camera. Ha, ha. Fortunately this is just for shits and giggles. But. Remember. You could have been seriously compromised. Over and out. Peace.")
-
-https://static.pbslearningmedia.org/media/media_files/Full_text_I_Have_a_Dream_.pdf
-
-
-** Old payloads
-
+** Payloads
+*** Imperial March on buzzer
 Plays the Imperial March (Star Wars)
 This PowerShell script plays the Imperial March used in the Star Wars film series.
 https://github.com/fleschutz/PowerShell
@@ -124,3 +152,41 @@ NOTES: Author: Markus Fleschutz | License: CC0
 [System.Console]::beep(440, 1000)
 exit 0 # success
 #+end_src
+
+
+*** Talk to user (two voices) and download textfile
+#+begin_src shell
+# Source URL
+$url ="https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"
+# Destation file
+$dest = "c:\temp\gpl.txt"
+# Download the file
+Invoke-WebRequest -Uri $url -OutFile $dest
+# Read the contents of the text file into a variable
+$text = Get-Content -Path $dest -Raw
+# Wait for 120 seconds before running next part
+Start-Sleep -Seconds 120
+# Text to speech :-)
+Add-Type -AssemblyName System.speech
+$s = New-Object System.Speech.Synthesis.SpeechSynthesizer
+#Womans voice
+$s.SelectVoice("Microsoft Zira Desktop")
+$s.Speak("yo yo yo sheeple")
+#Mans voice
+$s.SelectVoice("Microsoft David Desktop")
+$s.Speak("Test test testicles. OMG whats going on. Seems like you are hacked right?")
+$s.SelectVoice("Microsoft Zira Desktop")
+$s.Speak("Oh yes indeed, hacked and powned. Wave to the camera sheeple!")
+$s.SelectVoice("Microsoft David Desktop")
+$s.Speak("yeah they are checking the camera!")
+$s.SelectVoice("Microsoft Zira Desktop")
+$s.Speak("whahaha")
+$s.SelectVoice("Microsoft David Desktop")
+$s.Speak("Ni nano ninei. Just warming up my vocal chords. I will give a speech to you soon but i'm gonna download some files first.")
+$s.SelectVoice("Microsoft Zira Desktop")
+$s.Speak("Hey, you found the GPL. Nice. Go ahead and bore the silly sheeple! Bye the way, please log out when you leave your pc, otherwise it can be seriously compromised.")
+$s.SelectVoice("Microsoft David Desktop")
+$s.Speak($text)
+
+#+end_src
+
