@@ -8,6 +8,9 @@ from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
+# Let op de Class Distraction free is toegevoegd  03MAR23
+#import DistractionFree
+
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
 aR = "mod5"                       # Right alt key, dedicated to opening of files
@@ -178,6 +181,7 @@ layouts = [
    layout.MonadThreeCol(**layout_theme),
    layout.MonadTall(**layout_theme),
    layout.MonadWide(**layout_theme),
+#   layout.DistractionFree(**layout_theme), # toegevoegd 03MAR23
 ]
 
 widget_defaults = dict(

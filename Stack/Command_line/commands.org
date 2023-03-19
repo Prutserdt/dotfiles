@@ -1697,6 +1697,76 @@ do
 done
 #+end_src
 
+side control sliding knee toevoegen!
+opstaan uit guard sleeve toevoegen
+
+
+#+begin_src python :results output
+import os
+
+videolijst = [
+                "https://player.vimeo.com/video/137042644?h=53cbd86d0b&dnt=1&app_id=122963",
+                "https://player.vimeo.com/video/136989993?h=f50eb9223c&dnt=1&app_id=122963"
+        ]
+
+print("Data wordt hier weggeschreven: {0}".format(os.getcwd()))
+
+for element in videolijst:
+    commando=("alacritty -e youtube-dl --verbose '" + element + "'")
+    print(commando)
+    os.system(commando)
+#+end_src
+
+#+RESULTS:
+: Data wordt hier weggeschreven: /home/icefly/Stack/Command_line
+: alacritty -e youtube-dl --verbose 'https://player.vimeo.com/video/137042644?h=53cbd86d0b&dnt=1&app_id=122963'
+: alacritty -e youtube-dl --verbose 'https://player.vimeo.com/video/136989993?h=f50eb9223c&dnt=1&app_id=122963'
+
+Ik heb de spaties via een bash script veranderd in underscores met:
+#+begin_src shell
+for file in *;
+do
+  echo Converting "$file" to "${file// /_}"
+  mv "$file" "${file// /_}"
+done
+#+end_src
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Daarna files in directories gezet als '01_Solo' en daarna het onderstaande script laten lopen:
 
 Batch rename. Verander de naam van bestanden. Zet eerst de foto's in directories met nummer van techniek en omschrijving. Ga in de main directory. Dit scriptje VERPLAATST alleen bestanden uit de directory naar de main directory met als begin de naam van de directory waar het in stond.
