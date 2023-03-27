@@ -2941,6 +2941,10 @@ Setup the tools:
 *** ESP-IDF via VScodium
 28JUL22 heb ik in VSCodium Espressif IDF extension geinstalleerd en daarna de install information gevolgd. Met handige arch linux install dependencies. Daarna via ESP-IDF setup de express optie gekozen en de ~/esp/test/ gekozen met daarin /esp-idf. Ik had denk ik ~/esp/esp-idf al geinstalleerd eerder maar heb het voor vscodium nog maar een keer onder test gegooid.
 
+*** Problemen met vinden van ttyUSB
+Check met ~lsusb~ en ~lsusb -t -v~.
+Probleem opgelost na een reboot.
+
 *** Doom Emacs
 
 **** Install
@@ -3352,7 +3356,6 @@ END { print "Sum of the NT shares is: ", sum}
 #+RESULTS:
 : Sum of the NT shares is:  12222221
 
-
 ***** C code in code blocks
 
 #+begin_src C
@@ -3474,6 +3477,29 @@ for f in *; do
 done
 #+end_src
 
+Laat de inhoud van directory zien
+#+begin_src shell
+cd ~/Downloads/test/C*;
+ls
+#+end_src
+
+#+RESULTS:
+| ELN_upload_file.xlsx          |
+| JUS2-00046_01MAR23-AEX_01.csv |
+| JUS2-00046_01MAR23-AEX_02.csv |
+| JUS2-00046_01MAR23_01.csv     |
+| JUS2-00046_27FEB23_UFDF.csv   |
+| JUS2-00046_27FEB23_UFDF_1.csv |
+| JUS2-00046_27FEB23_VF.csv     |
+| JUS2-00046_27FEB23_VF_1.csv   |
+| JUS2-00046_27FEB23_runIX.csv  |
+
+
+Zoek regel met zoekterm in alle csv files
+#+begin_src shell
+cd ~/Downloads/test/C*;
+grep -i "Dataset Name" *.csv; # show line with name in CSV file
+#+end_src
 
 ***** html in code blocks
 
@@ -3564,6 +3590,23 @@ Test with counting line numbers:
 
 #+RESULTS: wordcounting
 : Page has 4807 lines (3360 + 1448)
+
+
+
+#+begin_src elisp :result value org
+(defun insert-p-tag ()
+  "Insert <p></p> at cursor point."
+  (interactive)
+  (insert "<p></p>")
+  (backward-char 4))
+#+end_src
+
+#+RESULTS:
+: insert-p-tag
+
+
+
+
 
 
 ***** Runnen van een codeblock, vanuit een andere plaats

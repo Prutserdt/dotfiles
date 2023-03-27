@@ -62,6 +62,7 @@
           (:prefix ("w" . "windows op scherm")
                 :desc "Cursor to left window"     "h" #'evil-window-left
                 :desc "Cursor to right window"    "l" #'evil-window-right
+                :desc "Close the window"          "k" #'delete-window
                 :desc "split window horizontally" "s" #'split-window-horizontally
                 :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer)
           ):desc "Write this buffer to file"        "w" #'write-file)
