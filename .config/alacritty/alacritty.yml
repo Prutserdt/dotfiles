@@ -20,7 +20,7 @@
   #TERM: alacritty
 
 window:
-  opacity: 0.95
+  opacity: 0.80
   # Window dimensions (changes require restart)
   #
   # Specified in number of columns/lines, not pixels.

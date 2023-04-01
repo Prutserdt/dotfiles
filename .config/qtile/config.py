@@ -8,6 +8,7 @@ from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
+#from subprocess import check_output # uncomment for battery
 # Let op de Class Distraction free is toegevoegd  03MAR23
 #import DistractionFree
 
@@ -45,6 +46,12 @@ def decrease_margin(self):
 def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
+
+# def get_battery_status():
+#     battery = check_output(['acpi'])
+#     battery = battery.decode("utf-8")
+#     battery = battery.strip()
+#    return battery
 
 keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
@@ -208,6 +215,11 @@ screens = [
                 widget.Notify(foreground="#ff966c"),
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
+                #widget.Battery(
+                #    battery=1,
+                #    format='{char} {percent:2.0%}',
+                #    update_interval=30,
+                #),
                 widget.Volume(foreground="#d75f5f"),
                 widget.Clock(format="%d%b%y %H:%M",foreground="#888888"),
             ],

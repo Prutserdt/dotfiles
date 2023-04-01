@@ -70,8 +70,10 @@
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
+;(set-frame-parameter (selected-frame) 'alpha '(95 90))
+;(add-to-list 'default-frame-alist '(alpha 95 90))
+(set-frame-parameter (selected-frame) 'alpha '(85 80))
+(add-to-list 'default-frame-alist '(alpha 85 80))
 
 (scroll-bar-mode -1)
 

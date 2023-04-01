@@ -678,9 +678,6 @@ dbus-monitor "interface='org.freedesktop.Notifications'" | \
 #+end_src
 
 
-
-
-
 ** unicode. How to create a list of emojis (used in dmenuunicode.sh)
 
 Download the current unicode list by wget.
@@ -708,6 +705,11 @@ add Lock = Caps_Lock
 With my custom redox build there is a Super-R.  Remove right super key and make it another mod key (for opening apps)
 #+begin_src sh :tangle rdxswitch :padline no :eval no
 remove mod4 = Super_R
+! add the keycode that you are going to use for the Super_R. 400 ms on redox keyboard: keycode 134
+keycode 134 = Super_R
+! add the keycode that you are going to use for the Super_R. PrtSc: keycode 107 (Lenode Thinkpad X270)
+!keycode 107 = Super_R
+! Connect mod3 to be Super_R:
 add mod3 = Super_R
 #+end_src
 

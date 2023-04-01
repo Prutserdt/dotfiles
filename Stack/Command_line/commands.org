@@ -23,6 +23,7 @@
 - [[#applications-command-line-and-guis][Applications (Command line and GUIs)]]
 - [[#powerstrike-punt-nl][powerstrike punt nl]]
 - [[#distros-and-related-stuff][Distros and related stuff]]
+- [[#installs][Installs]]
 - [[#tiling-windowmanagers][Tiling windowmanagers]]
 - [[#keebs][Keebs]]
 
@@ -57,8 +58,8 @@ Recursief, oftewel incl subdirectories
 Open a terminal and go to ~/.local/share and type:
 ~rm -r -f Trash~. This will remove the Trash directory and everything in it.
 Open Dolphin go to *Settings-Configure Dolphin-Trash*.
-De-select and Re-select the "Limit to maximum size" check box and press 
-Apply.  This will re-create a new trash can. 
+De-select and Re-select the "Limit to maximum size" check box and press
+Apply.  This will re-create a new trash can.
 
 *Checksum* Voor het vinden, checken en vergelijken van sha256 van een iso
 file. Bijvoorbeeld: md5, sha-1 of sh256. Dit doe je met: ~md5sum~, ~sha1sum~ en
@@ -97,7 +98,7 @@ Vind alle *system users*: ~compgen -u~.
 
 Herstart het systeem: ~sudo reboot~.
 
-Midnight Commander als super user gebruiken, bijvoorbeeld voor het 
+Midnight Commander als super user gebruiken, bijvoorbeeld voor het
 wegschrijven op de 1 Terabyte drive: ~su~ en daarna ~mc~.
 
 Vind de *beeldscherm resolution*: ~xdpyinfo | grep dimensions~
@@ -220,12 +221,12 @@ cpu information: ~lscpu~
 
 ~sudo mount /dev/sda2 /mnt~
 
-Maak iso van cd/DVD. Het is niet perse nodig om de size te bepalen, want ook een te 
+Maak iso van cd/DVD. Het is niet perse nodig om de size te bepalen, want ook een te
 grote iso werkt gewoon.
 Eerst de size van iso file system bepalen met isosize (util-linux), telt aantal blocks
 vast:
 blocks=$(isosize -d 2048 /dev/sr0)
-Voor de grap: kijken hoe groot het bestand is dmv berekenen aantal blocks gedeeld door 
+Voor de grap: kijken hoe groot het bestand is dmv berekenen aantal blocks gedeeld door
 512.
 
 Schrijf de iso weg:
@@ -246,7 +247,7 @@ Mount iso bestand:
 
 Nieuw bestand aanmaken in commandline, inclusief inhoud: ~echo dhcpcd > /home/icefly/info~.
 Nieuw welkom scherm voor terminal toevoegen aan bashrc: ~nano ~/.bashrc~.
-Voeg de volgende twee lijnen toe: 
+Voeg de volgende twee lijnen toe:
 
 Welkomstekst nieuwe terminal:
 
@@ -281,7 +282,7 @@ Specifieke setup op werk, twee monitoren, breedbeeld in A4 en extra beeldscherm,
 gecorrigeerd voor hoogte
 ~xrandr --output VGA-1 --mode 1280x1024 --pos 1050x195 --output DP-1 --mode 1680x1050 --rotate left --pos 0x0~
 
-Jan 12 22:23:32 archPC kernel: [Firmware Bug]: TSC_DEADLINE disabled due to Errata; 
+Jan 12 22:23:32 archPC kernel: [Firmware Bug]: TSC_DEADLINE disabled due to Errata;
 please update microcode to version: 0x22 (or later). Opgelost door een
 intel-ucode installatie en aanpassing aan syslinux:
 ~yaourt -S intel-ucode~
@@ -328,7 +329,10 @@ Frame by frame (Duurt wel langer. Als het bovenstaande niet goed werkt.):
 ~ffmpeg -i Film.mp4 -ss 308 -t 111 -fflags +genpts Filmpje.mp4~
 
 Vind de code van keys van keyboard (toetsenbord): ~xev~.
-   
+
+*** Show the keys that are pressed on the screen: screenkey
+A handy tool to show the key presses is screenkey. keylogger keys strokes
+
 Zet de key repeat snelheid hoger, increase key repeat rate,
 modify .xinitrc:
 ~xset r rate 300 80~
@@ -471,9 +475,9 @@ Mijn AOC beeldscherm werkt niet met mijn LInux pc
 Er zit wel een hdmi connector op maar deze werk toch niet.
 Mijn monitor:           AOC CU34G2/BK
 Mijn grafische kaart:   [AMD/ATI] Oland [Radeon HD 8570 / R7 240/340 / Radeon 520 OEM]
-Mijn moederbord:        
+Mijn moederbord:
 	Manufacturer: LENOVO
-Converteren van pdf naar een tekstfile en verwijderen van bagger en 
+Converteren van pdf naar een tekstfile en verwijderen van bagger en
 	Version: 31900058 STD or WIN
 	Serial Number: ES13354825
 	Chassis Handle: 0x0003
@@ -631,7 +635,7 @@ for f in *.JPG
 done
 #+end_src
 Batch rename. Verander de naam van bestanden. Zet eerst de foto's in
-directories met nummer van dag v.d. vakantie en locatie. Ga in de main 
+directories met nummer van dag v.d. vakantie en locatie. Ga in de main
 directory. Dit scriptje VERPLAATST alleen bestanden uit de directory naar
 de main directory met als begin de naam van de directory waar het in stond
 #+begin_src shell
@@ -647,9 +651,9 @@ done
 In command line:
 ~start=$PWD; for directory in *; do cd "$directory"; for filename in *; do mv "$filename" ../"$directory $filename"; done; cd "$start"; done~
 
-Batch rename. Verander de naam van bestanden. Zet foto's in directories met nummer van 
-dag v.d. vakantie en locatie. Ga in de main directory. Dit scriptje KOPIEERT alle 
-bestanden uit de directory naar de main directory met als begin de naam van de 
+Batch rename. Verander de naam van bestanden. Zet foto's in directories met nummer van
+dag v.d. vakantie en locatie. Ga in de main directory. Dit scriptje KOPIEERT alle
+bestanden uit de directory naar de main directory met als begin de naam van de
 directory waar het in stond.
 PWD = print working directory
 
@@ -689,7 +693,7 @@ In command line:
 start=$PWD; for directory in *; do cd "$directory"; for filename in *; do for i in $(ls *.*); do for i in $(ls *.*); do exiv2 -r '%Y%m%d-%H%M-:basename:' rename $i; done; done; cd "$start"; done
 #+end_src
 
-werkt redelijk, maar niet super want de tijd wordt 3 keer herhaald (original+digitized+modified) Haakjes in naam werkt niet. .mov --> no exif data found in the file. 
+werkt redelijk, maar niet super want de tijd wordt 3 keer herhaald (original+digitized+modified) Haakjes in naam werkt niet. .mov --> no exif data found in the file.
 ~for i in $(ls *.*); do exiv2 -r '%Y%m%d-%H%M-:basename:' rename $i; done~
 
 Find datum van foto metadata:
@@ -751,7 +755,7 @@ Daarom heb ik exiftool gedownload.
 ~exiftool -time:all VID_20190513_113545.mp4~
 #+begin_example
 Creation Date                   : 2019:06:01 14:09:27+07:00
-gif: geen creation date 
+gif: geen creation date
 mov: Creation Date
 mp4: Creation Data
 #+end_example
@@ -765,7 +769,7 @@ Creation Date                   : 2019:06:01 14:09:27+07:00
 **** November 2020, wederom vakantiefotos sorteren.
 Een van de devices lag 66 minuten achter. Daardoor werkte dit niet:
 ~exiv2 -r'%Y%m%d-%H%M_:basename:' rename $(ls)~
-De fotos stonden daarna namelijk niet goed chronologisch. Dit is opgelost door 
+De fotos stonden daarna namelijk niet goed chronologisch. Dit is opgelost door
 de fotos van het device in een directory te zetten (pro tip: mount het geheugen
 om extra snel te kunnen werken) en het volgende:
 ~exifftool -DateTimeOriginal+='0:00:0 1:06:0' *.*~
@@ -1146,7 +1150,7 @@ rename 20230122 20230122_Arnhem_naar_Wenen *.jpg;rename 20230123 20230123_Wenen 
 
 *** PACMAN/YAOURT/YAY
 
-Je kunt downgraden naar een andere datum (terug in de tijd!) door 
+Je kunt downgraden naar een andere datum (terug in de tijd!) door
 replacing your /etc/pacman.d/mirrorlist with the following content:
 Server=https://archive.archlinux.org/repos/2014/03/30/$repo/os/$arch
 Then update the database and force downgrade:
@@ -1175,7 +1179,7 @@ ignoren...
 
 Forcefull install package (liever niet forceren, alleen bij uitzondering)
 ~sudo pacman -S --force packagename~
-Installeer alles geforceerd, alleen bij uitzondering, zorg voor een 
+Installeer alles geforceerd, alleen bij uitzondering, zorg voor een
 volledige backup van het systeem voor de zekerheid
 ~sudo pacman -Syu --force~
 
@@ -1197,7 +1201,7 @@ check orphan packages
 ~sudo pacman -Qdt~
 Remove the application + orphan packages
 ~sudo pacman -Rns packagename~
-combineren van bovenstaande 2 commands, verwijderd automatisch de orphan 
+combineren van bovenstaande 2 commands, verwijderd automatisch de orphan
 packages
 ~sudo pacman -Rns $(pacman -Qdtq)~
 opschonen cache en outdated packages
@@ -1213,14 +1217,14 @@ Zet in misc. gedeelte:
 grafische info over pacman
 ~sudo pacman --version~
 Display clever insults when an incorrect password is entered instead of
-printing the default "wrong password" message. Find /etc/sudoers and 
+printing the default "wrong password" message. Find /etc/sudoers and
 append "insults"
 ~sudo nano /etc/sudoers~
 ~Defaults specification~
 ~Defaults insults~
 ~Cleaning package cache~
 
-26JUN19: overgestapt van Yaourt naar YAY, omdat yaourt niet meer 
+26JUN19: overgestapt van Yaourt naar YAY, omdat yaourt niet meer
 onderhouden wordt. Installatie:
 ~sudo git clone https://aur.archlinux.org/yay.git~
 ~cd yay~
@@ -1244,7 +1248,7 @@ Reflector. Sorteer de beste 20 mirrors en schrijf in mirrorlist. Vergeet niet
 om een backup te maken van /etc/pacman.d/mirrorlist:
 ~sudo reflector --verbose --latest 20 --sort rate --save /etc/pacman.d/mirrorlist~
 Verbetering 20DEC21: Ik wil alleen https sites en zoeken in de lijsten van NL
-en DE. Ik kies de latest 50 om de meeste NL servers mee te nemen in de test, 
+en DE. Ik kies de latest 50 om de meeste NL servers mee te nemen in de test,
 anders zijn er bijna alleen Duitse servers en de NL servers zijn voor mij het snelste:
 ~sudo reflector --verbose --protocol https --country NL,DE --latest 50 --sort rate --save /etc/pacman.d/mirrorlist~
 
@@ -1330,7 +1334,7 @@ Mobieltje het lukt om in te loggen zonder ssh met androidVCN:
 192.168.31.100:1 geeft login.. geen ssh
 stoppen server
 ~vncserver -kill :1~
-Vinden open vnc applicaties 
+Vinden open vnc applicaties
 ~ps -A |grep vnc~
 ~kill -SIGKILL <PID>~
 ~kill -9 <PID>~
@@ -1351,7 +1355,7 @@ Downloaden pycorn v 0.18 script, en daarna dit python script installeren
 via:
 ~sudo pip install pycorn~
 
-Run het script via voorbeelden uit 
+Run het script via voorbeelden uit
 */usr/lib/python3.6/site-packages/pycorn/docs/USAGE_pycorn-bin.txt*:
 ~pycorn-bin.py -p /home/DATA/'HESP preproduct001.res'~
 ~pycorn-bin.py -p -r 3 /home/DATA/'HESP preproduct001.res'~
@@ -1368,9 +1372,9 @@ Volgende geeft geen output...:
 
 Batch script voor het maken van een pdf file van *.res in de huidige directory (WERKEND!):
 ~for i in *.res;do pycorn-bin.py -p "$i";done~
-Proberen om data te lezen van een res file. Handmatig zonder de pycorn 
+Proberen om data te lezen van een res file. Handmatig zonder de pycorn
 script. Uitleg opbouw van .res files staat in het onderstaande document.
-Ik wil de sensor data uitlezen. Dit bevat de volgende informatie (twee 
+Ik wil de sensor data uitlezen. Dit bevat de volgende informatie (twee
 locaties)
 ~nano /home/werk/Downloads/PyCORN-master/pycorn/docs/RES_files_layout.txt~
 ~nano /usr/lib/python3.6/site-packages/pycorn/docs/RES_files_layout.txt~
@@ -1378,13 +1382,13 @@ locaties)
 Structure of sensor data
 8 bytes per pair
 4 bytes sig/int	Accumulated volume, divide by 100 to obtain value in ml
-4 bytes sig/int	Sensor value, divide by 1000/100/10 depending on sensor type. 
+4 bytes sig/int	Sensor value, divide by 1000/100/10 depending on sensor type.
 
 Bekijken file:
 ~ghex /home/werk/Downloads/PyCORN-master/samples/sample1.res~
 ~ghex /home/DATA/'HESP preproduct001.res'~
 ......to be continued....
-    
+
 *** Perform google search from commandline: tuxi
 tuxi wie is de mol
 
@@ -1404,7 +1408,7 @@ ERROR: Module aliaa btusb not found
 Dus de module maar geladen:
 ~modprobe btusb~
 ~modprobe~
-Output: 
+Output:
 #+begin_example
 FATAL: Module btusb not found in directory
 /lib/modules/4.16.6-1-ARCH.  To load a module by filename (i.e. one that
@@ -1417,7 +1421,7 @@ insmod filename [args]
 output: options btusb reset~1
 #+end_example
 Then start the bluetooth.service systemd unit.
-You can enable it to start automatically at boot time. 
+You can enable it to start automatically at boot time.
 
 ~sudo systemctl start bluetooth.service~
 ~modinfo btusb~
@@ -1430,7 +1434,7 @@ dmenu Bluetooth manager geen foutmelding maar er gebeurt niets.
 Daaro blueberry, met gui, geïnstalleerd
 
 ~sudo pacman -S blueberry~
-In Blueberry, gestart in commandline, staat er een x bij devices no 
+In Blueberry, gestart in commandline, staat er een x bij devices no
 plugin adapter found
 met dmenu a, alle blueman apps geprobeerd, zonder succes.
 blueman aangezet adapter
@@ -1461,9 +1465,9 @@ commandline ~bluetoothctcl~ werkt niet voor pairing helaas.
 19JAN19: ProtonVPN getest in mijn transip console.
 Aangemeld bij ProtonVPN via werk email. ProtonVPN gebruikt openvpn.
 Ingelogd op de website. Daar bij account staat de OpenVPN/IKEv2 username
-Transip, rechtsonder networkmanager, add connection, VPN, 
+Transip, rechtsonder networkmanager, add connection, VPN,
 Het probleem is dat ik geen secure core configs kan downloaden. Er werd
-aangegeven dat er drie servers beschikbaar waren voor de gratis versie. 
+aangegeven dat er drie servers beschikbaar waren voor de gratis versie.
 Maar waar kan ik deze vinden en hoe krijg ik een config file....
 Aangemeld voor protonmail...
 
@@ -1485,7 +1489,7 @@ aangepast: ~workgroup ~ WORKGROUP=
 aangepast: ~log file = /var/log/samba/%m.log.~
 scannen locaties: ~smbtree~
 
-installed: 
+installed:
 ~gvfs~
 ~gvfs-smb~
 ~sshfs~
@@ -1566,7 +1570,7 @@ https://www.bol.com/nl/p/asus-r5230-sl-1gd3-l-radeon-r5-230-1gb-gddr3-videokaart
 Tijdelijke ramdisk creeren. Handig voor snel lezen/schrijven in geheugen/memory
 rbeeld manipuleren van fotos enz.
 Check eerst beschikbare ram met free -g of df -T!
-tmpfs zorgt ervoor dat het systeem niet kan crashen als de buffer vol is. 
+tmpfs zorgt ervoor dat het systeem niet kan crashen als de buffer vol is.
 onderaan staat de umount.
   ~free -g~
   # check drives (incl virtual drives)
@@ -1966,7 +1970,7 @@ Helaas werkt het niet als ik op CTR-P druk, er wordt wel een command gegeven:
 ~:call Vim_Markdown_Preview()~
  maar er opent geen webpage.
 
-De manual, ook te openen in vim met :help 
+De manual, ook te openen in vim met :help
 ~man vim~
 Personifieer vimrc
 ~vim ~/.vimrc~
@@ -2161,7 +2165,7 @@ Y: yanks current line completely
 
 *** Batch renaming in vim/vifm
 Open een directory in vifm en tag de namen die je wil veranderen met 't'.
-Selecteer een block met CTRL-v en geef daarna shift-I (insert tekst) Esc om 
+Selecteer een block met CTRL-v en geef daarna shift-I (insert tekst) Esc om
 het over het hele block toe te voegen.
 Je kunt ook een blok doornummeren (na CTRL-v) door g CTRL-a te toetsen!
 
@@ -2193,7 +2197,7 @@ in kunt zoeken.
 Instellen van image preview in ranger.
 https://github.com/ranger/ranger/wiki/Image-Previews
 Installeer w3m web browser: ~sudo pacman -S w3m~
-Voeg toe "set preview_images true" aan in  ~/.config/ranger/rc.conf: 
+Voeg toe "set preview_images true" aan in  ~/.config/ranger/rc.conf:
 nano ~/.config/ranger/rc.conf
 Tips voor gebruik Ranger
 Stoppen is net als VIM: ~:q!~.
@@ -2208,7 +2212,7 @@ Maak asci word art van een woord in command line: ~sudo pacman -S figlet~
 
 *** vifm
 Een terminal file manager die gebruikt maakt van VI bindings :-)
-Ik heb van Distro Tube de volgende twee files toegevoegd aan 
+Ik heb van Distro Tube de volgende twee files toegevoegd aan
 vi ~/.config/vifm/scripts/vifmimg
 #+begin_src shell
 
@@ -2275,7 +2279,7 @@ Make Xdefault file, typ regel en druk op CTR+z
 ~cat > .Xdefaults~
 Open nano
 ~nano ~/.defaults~
-Plak daarin de onderstaande regels om de transparantie en font in te 
+Plak daarin de onderstaande regels om de transparantie en font in te
 stellen, plus extra's die in de comments worden beschreven.
 Created to rice the urxvt terminal.
 
@@ -2303,7 +2307,7 @@ URxvt.keysym.M-u:           perl:url-select:select_next
 URxvt.url-select.underline: True
  Resizing font by CTRL+j and CTRL+k
 URxvt.resize-font.smaller:  C-j
-URxvt.resize-font.bigger:   C-k 
+URxvt.resize-font.bigger:   C-k
  Keyboard select. Je gaat erin met Mod+ESC en eruit met Esc:
 URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
 #+end_src
@@ -2311,12 +2315,12 @@ URxvt.keysym.M-Escape:      Perl:keyboard-select:activate
 #+begin_src shell
 
 # .Xdefaults
-#  __  __   _       __             _ _       
-#  \ \/ /__| | ___ / _| __ _ _   _| | |_ ___ 
+#  __  __   _       __             _ _
+#  \ \/ /__| | ___ / _| __ _ _   _| | |_ ___
 #   \  // _= |/ _ \ |_ / _= | | | | | __/ __|
 # _ /  \ (_| |  __/  _| (_| | |_| | | |_\__ \
 #(_)_/\_\__,_|\___|_|  \__,_|\__,_|_|\__|___/
-#                                            
+#
 # Modified by Prutserdt
 # Created to rice and improve functionality of the URxvt terminal.
 
@@ -2371,12 +2375,12 @@ Een script die in commandline van een foto een colorscheme maakte van
 16 kleuren. Dit wordt de Xdefault. Op deze manier kun je eenvoudig switchen.
 Installeer het script:
 ~sudo pacman -S python-pywal~
-Destilleer de kleuren uit de wallpaper, deze veranderd ook direct de 
+Destilleer de kleuren uit de wallpaper, deze veranderd ook direct de
 wallpaper :-)
 ~wal -i women-arch-linux-wallpaper.jpg~
 ~wal -i wallpaper2.JPEG~
 
-Het wal commando veranderd de huidige kleuren in terminal. Je kunt de kleurselectie 
+Het wal commando veranderd de huidige kleuren in terminal. Je kunt de kleurselectie
 permanent maken door het volgende in .bashrc te zetten:
 # Import colorscheme from 'wal' asynchronously
 # &   # Run the process in the background.
@@ -2388,7 +2392,7 @@ permanent maken door het volgende in .bashrc te zetten:
 *** Nano
 Pid van nano in gebruik... heel irritant als je bijv.
 ~sudo nano /etc/ssh/sshd_config~  wilt aanpassen. Als het verwijderen van
-de PID niet werkt (zie allerlei), dan verwijder de swapfile. Deze staat 
+de PID niet werkt (zie allerlei), dan verwijder de swapfile. Deze staat
 in de directory van het bestand dat je wilt openen dus in dit geval:
 ~cd /etc/ssh~ ~ls *.swp~ ~sudo rm .sshd_config.swp~ of direct:
 ~sudo rm /.sshd_config.swp~ Dit werkt in Ubuntu 16.10 (mijn VPS)
@@ -2406,8 +2410,8 @@ Instellen Git
 ~git config --global user.name "Prutserdt"~
 Automatisch wegschrijven van dotfiles in Github.
 Dit gaat via de procedure van https://www.atlassian.com/git/tutorials/dotfiles
-en https://www.youtube.com/watch?v=tBoLDpTWVOM. Aanmaken van de bare repository 
-op de locale pc. Zorg dat je in de ~/dotfiles directory staat en voer het 
+en https://www.youtube.com/watch?v=tBoLDpTWVOM. Aanmaken van de bare repository
+op de locale pc. Zorg dat je in de ~/dotfiles directory staat en voer het
 volgende in:
 ~git remote add dotfiles https://github.com/Prutserdt/dotfiles.git~
 ~git push dotfiles~
@@ -2692,7 +2696,7 @@ done
 Als je nu in SXIV een image als achtergrond wilt instellen klik je op
 CTRL-x (voor key handler mode) en CTRL-w. :-).
 
-play animated gif: CTRL+space 
+play animated gif: CTRL+space
 a
 
 *** Neomutt
@@ -2712,7 +2716,7 @@ Fatal Error: Failed to load steamui.so
  Corrupt package file (/home/icefly/.local/share/Steam/package/webkit_ubuntu12.zip.vz.6f52fc663b60660500b356e9cf11098f56e312ef_55107636)
 Failed to load steamui.so - dlerror(): steamui.so: cannot open shared object file: No such file or directory
 Afgesloten en opnieuw opgestart met dezelfde foutmelding.
-Deinstalled 
+Deinstalled
 pacman -Rs steam
 Geinstalleerd met optie 1 (amdvlk)en 4(lib32-vulkan-radeon)
 Weer dezelfde foutmelding na starten steam in commmand line.
@@ -2770,23 +2774,23 @@ Zie dmenu onderaan om te zien hoe je appimage koppeld aan dmenu_run
 
 *** Copy pictures of mac to linux
 
-Augustus 2021: verwerken van fotos van Portugal vakantie. De apple fotos heb ik 
+Augustus 2021: verwerken van fotos van Portugal vakantie. De apple fotos heb ik
 verkregen door de fotos te selecteren in apple photo en deze te plakken in een
 mapje in de desktop van de imac en deze te uploaden naar mijn cloud en ze binnen
 gehaald op die manier.
 
 The following is too complicated teh above method is prefered.
-Connect old imac hard drive connected to a usb connector with powersupply to 
+Connect old imac hard drive connected to a usb connector with powersupply to
 new imac pc by the usb C hub. Open the photos application of mac and select
 pictures and copy them to the harddrive (somewhere in top bar this can be
 selected).
-Then connnect the drive to the LINUX PC and reboot. Do a 
+Then connnect the drive to the LINUX PC and reboot. Do a
 sudo mount /dev/sdc2 /mnt/USBdrive
 Get super user rights:
 su
 Open vicd and copypasta
 Change user rights of files, because it is now superuser
-sudo chown icefly:users *.* 
+sudo chown icefly:users *.*
 go directory and:
 sudo chown icefly:users directoryname
 
@@ -2890,12 +2894,12 @@ Klik op het save icoontje.
 Nu krijg ik een foutmelding: error compiling for board Nano32
 
 Dat komt omdat er onder Tools-board de verkeerde is geselecteerd.
-Helaas kan ik in Arduino IDE niet deze manual volgen: 
+Helaas kan ik in Arduino IDE niet deze manual volgen:
 https://dronebotworkshop.com/esp32-cam-intro/
-want Tools-Board-Boardmanager geeft een wit scherm dat niet te lezen is... 
+want Tools-Board-Boardmanager geeft een wit scherm dat niet te lezen is...
 
 Onderaan de pagina staat een voorbeeld van wifiscan. dit ga ik proberen met
-esp32 wrover module, geselecteerd via: 
+esp32 wrover module, geselecteerd via:
 Kies Tools-Board-ESP32Arduino-ESP32 wrover module
 File-examples-wifi-wifiscan
 Klik op verify in de IDE.
@@ -2908,10 +2912,10 @@ AI thinker AI cam gekozen en bovenstaande sketch en aanpassing gedaan, helaas
 weer met fout, maar dit opgelost na installatie van Pyserial via:
 yay python-pyserial
 
-Compileren gaat iig goed. Klik op de upload button in de IDE. Het schrijven 
+Compileren gaat iig goed. Klik op de upload button in de IDE. Het schrijven
 duurt even. Melding in IDE: Done uploading
 USB kabel eruit trekken en de jumper voor flashen verwijderen.
-Daarna usb weer aansluiten, in de IDE klikken op Tools-serial monitor, en daarna 
+Daarna usb weer aansluiten, in de IDE klikken op Tools-serial monitor, en daarna
 de reset button klikken op de ESP32. Zet de baudrate naar 115200.
 ~Brownout detector was triggered~
 Dit heb ik opgelost door 5V aan te sluiten vanuit de usb pin, en ook de jumper
@@ -3837,7 +3841,7 @@ Voeg dit toe aan de file walltem.sh:
 xfce4-terminal -e nload --hide-borders --hide-toolbar --hide-menubar --title=dt1 --geometry=70x25+1420+190 &
 xfce4-terminal -e htop --hide-borders --hide-toolbar --hide-menubar --title=dt2 --geometry=70x30+1420+610 &
 sleep 5
-wmctrl -r dt2 -b add,skip_pager,skip_taskbar 
+wmctrl -r dt2 -b add,skip_pager,skip_taskbar
 wmctrl -r dt1 -b add,skip_pager,skip_taskbar
 #+end_src
 Autostart de wallterm.sh in XFCE4 door dit te doen:
@@ -3861,7 +3865,7 @@ XFCE4-Settings-Window manager -advanced
 Windows snapping: to screen border en To other windows, distance:
 halverwege small-Wide
 
-Quickbuttons voor verplaatsen van tiles (met alt knop) (quickbutton 
+Quickbuttons voor verplaatsen van tiles (met alt knop) (quickbutton
 maximaliseren F11)
 XFCE4-Settings-Window manager -Keyboard
 Het staat in een text file maar dat is minder goed leesbaar:
@@ -3906,22 +3910,22 @@ Windows snapping: to screen border en To other windows, distance: halverwege sma
 Appearance aanpassen
 aanpassen bottom bar, rechtermuis op de bar, dan Panel -panel preferences,
 row size: 20
-start button: Settings: setting manager: Appearance:     Style: Xfce-dusk. 
-                                                         Icons: Faba. 
+start button: Settings: setting manager: Appearance:     Style: Xfce-dusk.
+                                                         Icons: Faba.
                                          Window manager: Style: Coldsteel.
 Terminal aanpassen (onderstaande regels)
 nano ~/.config/xfce4/terminal/terminalrc
 BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
-MiscMenubarDefault=FALSE 
+MiscMenubarDefault=FALSE
 BackgroundDarkness=0.850000
 
-Problemen met XFCE layout (windowsmanager, advanced, wrap workspace when 
-reaching the screen edge). 
-Eerst config files in ~/.config/xfce4 aangepast, zonder succes. oa deze 
+Problemen met XFCE layout (windowsmanager, advanced, wrap workspace when
+reaching the screen edge).
+Eerst config files in ~/.config/xfce4 aangepast, zonder succes. oa deze
 directory:cd ~/.config/xfce4/xfconf/xfce-perchannel-xml
 Daarna de home xfce4 directory verwijderd ~/.config/xfce4, helaas kwam de
 default setting NIET terug...
-Ook geprobeerd om de default settings /xdg/xfce4/xfconf te kopieren 
+Ook geprobeerd om de default settings /xdg/xfce4/xfconf te kopieren
 naar ~/.config/xfce4
 ~cp -r /etc/xdg/xfce4 /home/archie/.config~
 Daarna xfce4 gedeinstalleerd, en opnieuw geinstalleerd:
@@ -3935,7 +3939,7 @@ $ Oplossing: verwijder als super user, via mc de xfce4 cache files!
 *** Thunar
 Settings Manager (XFCE, vanuit superbutton) -Settings Editor -thunar
 Hier kun je last-separator-position aan/uitzetten.
-Of, veel simpeler, klik op CTR-M om het menu aan/uit te zetten in de Thunar 
+Of, veel simpeler, klik op CTR-M om het menu aan/uit te zetten in de Thunar
 balk.
 
 Edit mp3 tags in Thunar, door onderstaande plugin:
@@ -3965,7 +3969,7 @@ Een script ervan gemaakt, ~/.config/unicode.sh, executable gemaakt, de alias u
 aangemaakt (u). Dit werkt. Alleen de unicode lijst nog aanvullen....
 Ook toegevoegd aan de i3 config, zodat menu-U het script runt.
 Ik heb ttf-ancient-fonts van de AUR geinstalleerd, en nu zijn de meeste icons
-zichtbaar. De unicod font lijst heb ik gevonden op: 
+zichtbaar. De unicod font lijst heb ik gevonden op:
 ~https://unicode.org/Public/emoji/13.0/emoji-test.txt~
 Het werkt nog niet perfect.
 if you add the following line to the script that was showed:
@@ -4088,7 +4092,7 @@ genereer keygen op thuis computer
 ~ssh-keygen -t rsa #geen passprase~
 verstuur nu vanuit thuis computer de key naar de host:
 ~ssh-copy-id icefly@149.210.233.43~
-nu moet je wachtwoord vd server intypen.. 
+nu moet je wachtwoord vd server intypen..
 (daarom staat passwordauthentificatino aan!)
 PAS DAARNA naar de server sshd_config aanpassen, backup maken van file
 Verander in sshd_config:
@@ -4115,21 +4119,21 @@ Via ssh het ubuntu systeem updaten, of via de https console:
 
 SSH problemen
 Mijn probleem was:
-If you had previously generated an SSH key pair, you may see a prompt that 
+If you had previously generated an SSH key pair, you may see a prompt that
 looks like this:
 ~/home/username/.ssh/id_rsa already exists.~
 Overwrite (y/n)?
-If you choose to overwrite the key on disk, you will not be able to authenticate using 
-the previous key anymore. Be very careful when selecting yes, as this is a destructive 
+If you choose to overwrite the key on disk, you will not be able to authenticate using
+the previous key anymore. Be very careful when selecting yes, as this is a destructive
 process that cannot be reversed.
 
-Oplossing: op beide kanten openssh uninstallen, client en server. 
+Oplossing: op beide kanten openssh uninstallen, client en server.
 Files op ~/.shh verwijderen aan beide kanten.
 Opnieuw installeren beide kanten. Daarna aan beide kanten keygen doen:
 ~ssh-keygen -t rsa~
 Alleen op lokale pc:
 ~ssh-copy-id icefly@149.210.233.43~
-Nu moet je wachtwoord vd server intypen.. 
+Nu moet je wachtwoord vd server intypen..
 (daarom staat passwordauthentificatino aan!)
 PAS DAARNA naar de server sshd_config aanpassen...
 ~sudo nano /etc/ssh/sshd_configav~
@@ -4140,7 +4144,7 @@ Inloggen werkt hierna weer goed! :-)
 *** Ubuntu Mate op GPD pocket
 
 27APR19 opnieuwe linux installatie, want na Parrot upgrade loopte het systeem vast.
-Ubuntu Mate 18.04.2 LTS (Bionic) 
+Ubuntu Mate 18.04.2 LTS (Bionic)
 De iso gedownload op via torrent (https://ubuntu-mathe.org/download/)
 en op een usb stick gezet.
 ~sudo dd if=//home/archie/Downloads/ubuntu-mate-18.04.2-desktop-amd64-gpd-pocket.iso of=/dev/sdd status=progress~
@@ -4174,14 +4178,14 @@ NAME		MAJ:MIN	RM	SIZE	RO	TYPE	MOUNTPOINT
 loop0		7:0	0	487.8M	0	loop	/run/archiso/sfs/airootfs
 sda		7:0	0	1.9G	0	disk
 sda1		8:0	1	1.9G	0	part	/run/archiso/bootmnt
-sda2		8:1	1	595M	0	part	
+sda2		8:1	1	595M	0	part
 mmcblk0		179:0	1	116.5G	0	disk
-mmcblk0p1	179:1	0	100M	0	part	
-mmcblk0p2	179:2	0	16M	0	part	
-mmcblk0p3	179:3	0	65.8G	0	part	
-mmcblk0p4	179:4	0	800M	0	part	
-mmcblk0p5	179:5	0	49.8G	0	part	
-mmcblk0boot0	179:8	0	4M	1	disk	
+mmcblk0p1	179:1	0	100M	0	part
+mmcblk0p2	179:2	0	16M	0	part
+mmcblk0p3	179:3	0	65.8G	0	part
+mmcblk0p4	179:4	0	800M	0	part
+mmcblk0p5	179:5	0	49.8G	0	part
+mmcblk0boot0	179:8	0	4M	1	disk
 mmcblk0boot1	179:16	0	4M	1	disk
 #+end_src
 
@@ -4205,9 +4209,9 @@ output: wlp1s0 ... UP
 ~modprobe brcmfmac~
 werkt verder nog niet....
 
-06MAY18  Na opstarten is er een zwart scherm... wat gaat er mis... als er 
-op de uitknop wordtgedruk, dan zie je dat Linux afgesloten wordt, er is 
-dus iets niet pluis, maar wat...? #De oplossing lijkt een nieuwe 
+06MAY18  Na opstarten is er een zwart scherm... wat gaat er mis... als er
+op de uitknop wordtgedruk, dan zie je dat Linux afgesloten wordt, er is
+dus iets niet pluis, maar wat...? #De oplossing lijkt een nieuwe
 installatie, en dan direct de juiste packages downloaden...
 mkfs.ext4 /dev/mmcblk0p3
 ~ip link set wlp1s0 up~
@@ -4279,20 +4283,20 @@ UEFI....(onderaan menu) gekozen en installeer ubuntu
 
 kali-linux-rolling-pocket+20180207-1_oud.iso
 
-13JAN19 nieuwe installatie op de GPD pocket, want update van Kali 
+13JAN19 nieuwe installatie op de GPD pocket, want update van Kali
 resulteerde in een niet werkend systeem.
 De iso gedownload op https://whitedome.com.au/re4son/pocket-parrot/
 en op een usb stick gezet.
 
 ~sudo dd if=//home/archie/Downloads/Parrot-home-3.11-Re4son-Pocket_amd64.iso of=/dev/sdd status=progress~
 
-De GPD pocket aangezet en F7 ingedrukt, toen geboot via usb en Installation 
-gekozen. Toen kwam er een old school installer (Debian). Daar doorheen 
+De GPD pocket aangezet en F7 ingedrukt, toen geboot via usb en Installation
+gekozen. Toen kwam er een old school installer (Debian). Daar doorheen
 gelopen.
 root wachtwoord: het gebruikelijke
 user: parrot
 wachtwoord: het gebruikelijke
-Het partioneren heb ik over de hele harde schijf gedaan met een enkele 
+Het partioneren heb ik over de hele harde schijf gedaan met een enkele
 partitie en default settings.
 
 in commandline update kernel:
@@ -4318,7 +4322,7 @@ wlan0 is de alfa usb wifi... waar is de interne wifi...
 ~sudo apt-get upgrade~
 
 *** Install  i3 Arch op werk pc (december 2020), via dotfile en GIT
-*Installatie* 
+*Installatie*
 Eerst met dd de harde schijf gecomprimeerd en opgeslagen, zodat ik deze
 terug kan zetten.
 Daarna Arch linux via een USB drive geinstalleerd. Helaas ging dat niet zo
@@ -4328,6 +4332,40 @@ het shell script te starten. Dit lijkt op de oude Arch installer:
 
 ~wget archfi.sf.net/archfi~
 ~sh archfi~
+
+
+* Installs
+
+*** 01APR23: install Arch linux on Lenovo ThinkPad X270
+
+Arch iso via usb connected. Connectie met internet via ~iwctl~ gemaakt en daarna ~arch-install~ doorheen gelopen voor de base install.
+
+Packages die ik nodig had:
+~yay python-dbus-next feh xev gimp thunar acpi lxappearance ark sxiv screenkey brave alacritty git base-devel xfce4 sfce4-goodies gvim alsa-utils pfetch-git cowsay fortune-mod ttf-hack emacs ripgrep fd picom numlockx pywal python-psutil oh-my-zsh keepass gtk4 libgtk2 gtk2 qalculate-gtk python-pip arduino arduino-cli mpv xclip~
+
+pip install thefuck
+
+
+- Battery monitor is added to qtile, the following three parts should be uncommented in the config files that is generated from the README.org.
+#+begin_src python :results none
+from subprocess import check_output
+
+def get_battery_status():
+    battery = check_output(['acpi'])
+    battery = battery.decode("utf-8")
+    battery = battery.strip()
+    return battery
+
+widget.Battery(
+    battery=1,
+    format='{char} {percent:2.0%}',
+    update_interval=30,
+    ),
+#+end_src
+
+Op de Lenovo wil ik de PrtSc toets gebruiken voor Super_L. Dit heb ik commented aan mijn rdxswitch toegevoegd.
+
+
 
 * Tiling windowmanagers
 *** i3 window manager
@@ -4549,7 +4587,7 @@ Let op: LET OP DIT VERWIJDERD DE HUIDIGE VERSIE!!
 #                  patch -p1 < ~/Stack/dwm/patches/test/*.diff && make clean install"
 # /home/icefly/Stack/Command_line/Stap 1: verwijderen files in test direcotory:
 ~rm ~/Stack/dwm/patches/test/*~
-# Stap 2: Zet je diff file op de volgend locatie: ~/Stack/dwm/patches/test en run 
+# Stap 2: Zet je diff file op de volgend locatie: ~/Stack/dwm/patches/test en run
 # /home/icefly/Stack/Command_line/Stap 3: run .bashrc alias:
 ~dmwpatch~
 
@@ -4579,7 +4617,7 @@ Let op pas aan de .xinitrc:
 # if dwm exits 0, restart -- this allows hot reloading of config.h
 ~while type dwm >/dev/null ; do dwm && continue || break ; done~
 5: Verander modkey in ~/dwm/config.h:
-Veranderen van modkey. 
+Veranderen van modkey.
 ~define MODKEY Mod4Mask~
 ~cp config.h config.def.h~
 ~make clean install~
@@ -4662,9 +4700,9 @@ https://github.com/kusk/dwm/blob/master/config.h
 /* commands */
 	{ 0,			XF86XK_AudioRaiseVolume,   spawn,	       SHCMD("amixer -q set Master 5%+") },
 	{ 0,			XF86XK_AudioLowerVolume,   spawn,	       SHCMD("amixer -q set Master 5%-") },
-	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle, NULL") }, 
-    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") }, 
-    { 0,            XK_Print,   		   spawn,		   SHCMD("xfce4-screenshooter") }, 
+	{ 0,			XF86XK_AudioMute,	       spawn,	       SHCMD("amixer -q set Master toggle, NULL") },
+    { 0,            XF86XK_Calculator,		   spawn,		   SHCMD("st -e bc -l") },
+    { 0,            XK_Print,   		   spawn,		   SHCMD("xfce4-screenshooter") },
 
 	{ MENUKEY,                      XK_u,      spawn,          SHCMD("cat ~/.config/unicode | dmenu -i -l 25 -fn unifont-10| awk '{print $1}'| xclip -selection clipboard") },
     /*{ MENUKEY,                    XK_w,      spawn,          SHCMD("ls ~/Stack/Afbeeldingen/Wallpapers/ | dmenu -i -l 20 -fn unifont-08| awk '{print $1}'| xclip -selection clipboard && wal -i "$(xclip -o -selection clipboard)"") },*/
@@ -5051,8 +5089,8 @@ ascii-image-converter -n -W 60 ~/Downloads/Logitech_mouse.jpg
                   .:         .-:...
                    :.      :--:..
                     ......--:.
-                                                            
-                                                            
+
+
 #+end_example
 
 

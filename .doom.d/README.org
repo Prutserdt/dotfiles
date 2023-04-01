@@ -269,8 +269,10 @@ Arduino .ino files are a type of C++ code. Let's help Emacs remember this by set
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
 NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
 #+begin_src emacs-lisp :tangle config.el
-(set-frame-parameter (selected-frame) 'alpha '(95 90))
-(add-to-list 'default-frame-alist '(alpha 95 90))
+;(set-frame-parameter (selected-frame) 'alpha '(95 90))
+;(add-to-list 'default-frame-alist '(alpha 95 90))
+(set-frame-parameter (selected-frame) 'alpha '(85 80))
+(add-to-list 'default-frame-alist '(alpha 85 80))
 #+end_src
 
 Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
