@@ -35,6 +35,7 @@
   - [[#unicode-how-to-create-a-list-of-emojis-used-in-dmenuunicodesh][unicode. How to create a list of emojis (used in dmenuunicode.sh)]]
   - [[#rdxswitch][rdxswitch]]
   - [[#screenshot2textsh][screenshot2text.sh]]
+  - [[#thunarbookmarkssh][thunarBookmarks.sh]]
 - [[#unused-scripts][Unused scripts]]
   - [[#aandelensh][aandelen.sh]]
   - [[#dwmbackupsh][dwmbackup.sh]]
@@ -385,6 +386,9 @@ chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar 
 notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen
 #+end_src
+
+
+
 
 ** dmenuunicode.sh
 Selecting ➡emojis⬅ via dmenu, 🆒.
@@ -745,6 +749,32 @@ Finally the textfile is catted and piped to the system clipboard with xclip. The
 cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip &&
 notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp/wismij.txt)"
 #+end_src
+
+** thunarBookmarks.sh
+A script that converts the directory text files (~/Stack/Command_line/directories) to a Thunar bookmarks text file (~/.config/gtk-3.0/bookmarks).
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+This script reads in each line of the directories file using a while read loop, and for each directory it appends a corresponding bookmark to the bookmarks file using echo. Note that we prefix the directory path with file:// to format it as a valid bookmark path.
+#+begin_src bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
+
+# Set the paths to the directories file and the bookmarks file
+DIR_FILE=~/Stack/Command_line/directories
+BOOKMARKS_FILE=~/.config/gtk-3.0/bookmarks
+
+# Loop through each directory in the directories file
+#while read -r; do
+while read -r dir; do
+    # Convert the directory path to a bookmark path and append it to the bookmarks file
+    echo "file://$dir" >> $BOOKMARKS_FILE
+done < $DIR_FILE
+#+end_src
+
 
 * Unused scripts
 
