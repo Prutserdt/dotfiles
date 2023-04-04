@@ -7,6 +7,8 @@
 
 (package! visual-fill-column)
 
+(package! centered-cursor-mode)
+
 (package! web-mode)
 
 (package! arduino-cli-mode)

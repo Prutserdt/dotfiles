@@ -118,6 +118,11 @@ Centering text to the middle of the window can be done by the visual-fill-column
 (package! visual-fill-column)
 #+end_src
 
+Centered-cursor mode, keep the cursor in one place while scrolling.
+#+begin_src emacs-lisp :tangle packages.el
+(package! centered-cursor-mode)
+#+end_src
+
 Web-mode for editing of html/php/css
 #+begin_src emacs-lisp :tangle packages.el
 (package! web-mode)
@@ -200,6 +205,15 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 (setq evil-goggles-duration 1.0)
 #+end_src
 
+Make the cursor stay vertically while scrolling. (global-centered-cursor-mode to use everywhere)
+#+begin_src emacs-lisp :tangle config.el
+(use-package centered-cursor-mode
+  :demand
+  :config
+  ;; Optional, enables centered-cursor-mode in all buffers.
+  (global-centered-cursor-mode))
+#+end_src
+
 Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
 #+begin_src emacs-lisp :tangle config.el
 (use-package rainbow-delimiters)
@@ -230,10 +244,41 @@ Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
 (setq display-line-numbers-type 'relative)
 #+end_src
 
+My Arduino ESP32 IDE setup. Uploading PowerStrike testing
+#+begin_src emacs-lisp :tangle config.el
+(defun PowerStrike-testing-upload ()
+  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
+  (doom/window-maximize-buffer)
+  (split-window-horizontally)
+  (switch-to-buffer "*Async Shell Command*")
+  (windmove-right))
+#+end_src
+
+My Arduino ESP32 IDE setup. Uploading PowerStrike code to ESP32 by Arduino and moving windows around mimicking an IDE.
+#+begin_src emacs-lisp :tangle config.el
+(defun PowerStrike-upload ()
+  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/PowerStrike_code.ino")
+  (doom/window-maximize-buffer)
+  (split-window-horizontally)
+  (switch-to-buffer "*Async Shell Command*")
+  (windmove-right))
+#+end_src
+
+Show the serial output of my ESP32.
+#+begin_src emacs-lisp :tangle config.el
+(defun serial-ttyUSB0-115200 ()
+  (doom/window-maximize-buffer)
+  (serial-term "/dev/ttyUSB0" 115200))
+#+end_src
+
 Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use the available ~SPC~ ~d~. This area is under construction. Probably it is better to just use the already present doom keybindings and use them. This part is just an excercize to map a set of keybindings.
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
-      (:prefix ("d" . "Personal Bindings")
+      (:prefix ("d" . "Prutserdt Bindings")
+          (:prefix ("a" . "Aduino IDE")
+                :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
+                :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
+                :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
           (:prefix ("b" . "Buffer options")
                 :desc "Kill current buffer"       "k" #'kill-this-buffer
                 :desc "Kill some buffers"         "K" #'kill-some-buffers
@@ -242,7 +287,6 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Describe function"                  "h" #'describe-function
        :desc "Increase font size"                 "i" #'doom/increase-font-size
        :desc "Find a file"                        "f" #'find-file
-;      :desc "Open recent files"                  "o" #'recentf-open-more-files
        :desc "Open recent files"                  "o" #'counsel-recentf
        :desc "Reload Doom: doom/reload"           "r" #'doom/reload
        :desc "Tangling: org-babel-tangle"         "t" #'org-babel-tangle
@@ -255,11 +299,13 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
                 :desc "Cursor to left window"     "h" #'evil-window-left
                 :desc "Cursor to right window"    "l" #'evil-window-right
                 :desc "Close the window"          "k" #'delete-window
-                :desc "split window horizontally" "s" #'split-window-horizontally
-                :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer)
-          ):desc "Write this buffer to file"        "w" #'write-file)
-       ;:desc "Write this buffer to file"        "w" #'write-file)
+                :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer
+                :desc "split window horizontally" "s" #'split-window-horizontally)
+       :desc "Write this buffer to file"        "z" #'write-file))
 #+end_src
+
+#+RESULTS:
+: write-file
 
 Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
 #+begin_src emacs-lisp :tangle config.el

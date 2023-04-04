@@ -25,6 +25,12 @@
 
 (setq evil-goggles-duration 1.0)
 
+(use-package centered-cursor-mode
+  :demand
+  :config
+  ;; Optional, enables centered-cursor-mode in all buffers.
+  (global-centered-cursor-mode))
+
 (use-package rainbow-delimiters)
 
 (set-frame-font "Hack 12" t t)
@@ -40,8 +46,30 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
+(defun PowerStrike-testing-upload ()
+  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
+  (doom/window-maximize-buffer)
+  (split-window-horizontally)
+  (switch-to-buffer "*Async Shell Command*")
+  (windmove-right))
+
+(defun PowerStrike-upload ()
+  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/PowerStrike_code.ino")
+  (doom/window-maximize-buffer)
+  (split-window-horizontally)
+  (switch-to-buffer "*Async Shell Command*")
+  (windmove-right))
+
+(defun serial-ttyUSB0-115200 ()
+  (doom/window-maximize-buffer)
+  (serial-term "/dev/ttyUSB0" 115200))
+
 (map! :leader
-      (:prefix ("d" . "Personal Bindings")
+      (:prefix ("d" . "Prutserdt Bindings")
+          (:prefix ("a" . "Aduino IDE")
+                :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
+                :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
+                :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
           (:prefix ("b" . "Buffer options")
                 :desc "Kill current buffer"       "k" #'kill-this-buffer
                 :desc "Kill some buffers"         "K" #'kill-some-buffers
@@ -50,7 +78,6 @@
        :desc "Describe function"                  "h" #'describe-function
        :desc "Increase font size"                 "i" #'doom/increase-font-size
        :desc "Find a file"                        "f" #'find-file
-;      :desc "Open recent files"                  "o" #'recentf-open-more-files
        :desc "Open recent files"                  "o" #'counsel-recentf
        :desc "Reload Doom: doom/reload"           "r" #'doom/reload
        :desc "Tangling: org-babel-tangle"         "t" #'org-babel-tangle
@@ -63,10 +90,9 @@
                 :desc "Cursor to left window"     "h" #'evil-window-left
                 :desc "Cursor to right window"    "l" #'evil-window-right
                 :desc "Close the window"          "k" #'delete-window
-                :desc "split window horizontally" "s" #'split-window-horizontally
-                :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer)
-          ):desc "Write this buffer to file"        "w" #'write-file)
-       ;:desc "Write this buffer to file"        "w" #'write-file)
+                :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer
+                :desc "split window horizontally" "s" #'split-window-horizontally)
+       :desc "Write this buffer to file"        "z" #'write-file))
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
