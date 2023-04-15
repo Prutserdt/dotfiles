@@ -24,6 +24,7 @@
 - [[#powerstrike-punt-nl][powerstrike punt nl]]
 - [[#distros-and-related-stuff][Distros and related stuff]]
 - [[#installs][Installs]]
+- [[#keyboard-settings][Keyboard settings]]
 - [[#tiling-windowmanagers][Tiling windowmanagers]]
 - [[#keebs][Keebs]]
 
@@ -1801,12 +1802,8 @@ for file in *; do
 done
 #+end_src
 
-
-
-
 Script dat filenames veranderd.
 - vervangen spatie door underscore, staat hierboven
-
 
 Het volgende script veranderd '&' naar 'and'.
 #+begin_src shell
@@ -1818,7 +1815,6 @@ done
 #+end_src
 
 #+RESULTS:
-
 
 Het volgende script veranderd alle karakters in underscores, dus ook &!
 #+begin_src shell
@@ -1845,9 +1841,6 @@ do
     echo $f;
 done;
 #+end_src
-
-
-
 
 Verander directory namen en file namen recursively van spatie naar underscore:
 #+begin_src shell
@@ -1881,7 +1874,7 @@ Start de C binary met:
 ~./test~
 
 *** ZSH en Oh-my-zhs
-Na oh-my-zsh-git installatie via yay maak een config via:
+Na oh-my-zsh-git installatie via curl commando dat op github staat maak een config via:
 cp /usr/share/oh-my-zsh/zshrc ~/.zshrc
 Nu beginnen met configureren.
 
@@ -4345,7 +4338,6 @@ Packages die ik nodig had:
 
 pip install thefuck
 
-
 - Battery monitor is added to qtile, the following three parts should be uncommented in the config files that is generated from the README.org.
 #+begin_src python :results none
 from subprocess import check_output
@@ -4365,59 +4357,25 @@ widget.Battery(
 
 Op de Lenovo wil ik de PrtSc toets gebruiken voor Super_L. Dit heb ik commented aan mijn rdxswitch toegevoegd.
 
+- Networkmanager install and qtile config
+  ~sudo pacman -S networkmanager network-manager-applet python-iwlib. Start service: ~systemctl start NetworkManager.service~.
+  Check if a static hostname is set, this is needed for networkmanager: ~hostnamectl~. If needed set the Static hostname to in this example linuxbox: ~hostnamectl set-hostname linuxbox~
+  Set the ~sudo systemctl enable NetworkManager.service~. Add to the qtile startup.sh: ~nm-applet~.
 
 
-* Tiling windowmanagers
-*** i3 window manager
+* Keyboard settings
+I prefer custom keyboard settings, for instance swap escape/capslock and use left and right CTRL/Super/Alt keys. This can be set by xmodmap but this resulted in a config that was not stable, and switched back to default regularly. Therefore I switched to XKB.
 
-Tips: https://www.youtube.com/watch?v=8-S0cWnLBKg
+*** By XKB
+...
+nieuwe methode, moet ik nog testen...
 
-Nieuwe installatie:
-sudo pacman -S i3status i3gaps dmenu feh
-Start i3 via startx (oftewel .xinitrc in home directory
-Daarvoor eerst de default .xinitrc kopieren
 
-Delete de regels van het bestand maar laat de laatste tekstblok staan
-en voeg exec i3 toe (plus onderstaande voor logging)
-#+begin_src
-exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
-twm &
-xclock -geometry 50x50-1+1 &y
-xterm -geometry 80x50+494+51 &
-xterm -geometry 80x20+494-0 &
-exec xterm -geometry 80x66+0+0 -name login
-Start i3 (login als archie)
-startx
-#+end_src
- Je kunt de config file aanmaken met
-(locatie /home/archie/.config/i3/config)
-~i3-config-wizard~
- Customize de config
-~nano /home/archie/.config/i3/config~
- Verander look and feel met lxappearance. Kies bijv. xfce-dusk
-lxappearance
- Mooi lettertype: system-san-francisco-font-git
-~yaourt -S system-san-francisco-font-git~
- De font wordt weegegeven in de lijst:
-fc-list : file
-Open lxappearnce, verander de fontsize, klik op apply.
-Nu is een .gtk file aangemaakt, vind het bestand (.gtkrc-2.0)
-~ls -al~
- Pas fontawesome-webfont.ttf de eigenschappen aan in nano, ook in gtk-3.
-Open de bestanden en verander gtk-font-name="Cantarell 13" naar
-gtk-font-name="System San Francisco Display "
-~nano .gtkrc-2.0~
-~nano ~/.config/gtk-3.0/settings.ini~
- Het werkt, ook is dit font is toegevoegd aan /home/archie/.config/i3/config
-(font pango: System San Francisco Display 10)
-Het is ook mogelijk om de font te kiezen in lxappearance, het heet daar
-SFNS display, maar dit geeft een slechte rendering.
-....yosemity font gecopierd naar ~/.fonts
- Pas het i3status.conf file aan, save het in de user directory voor gebruik voor alleen deze gebruiker
-Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
-~mkdir .config/i3status~
-~cp /etc/i3status.conf .config/i3status/config~
-~vim .config/i3status/config~
+
+
+
+*** Do NOT use xmodmap
+This configuration was *not* stable for me, I am not using it anymore and the next part is just for reference in case I need it in the future.
 
 Instellen van Super_R als applications launcher en Capslock als escape
 voor VIM. Wat is de default setting van mijn Ducky keyboard:
@@ -4482,6 +4440,67 @@ add Lock = Caps_Lock
 
 In .bashrc is een alias aangemaakt die deze xmodmap laat lopen:
 alias kbswitch='xmodmap ~/.config/kbswitch'
+
+Helaas werkt deze oplossing niet helemaal en niet altijd.
+Het kan ook via: setxkbmap -option ctrl:swapcaps
+https://bbs.archlinux.org/viewtopic.php?id=172421
+In mijn geval wordt het
+https://bbs.archlinux.org/viewtopic.php?id=172421
+
+
+* Tiling windowmanagers
+
+*** i3 window manager
+
+Tips: https://www.youtube.com/watch?v=8-S0cWnLBKg
+
+Nieuwe installatie:
+sudo pacman -S i3status i3gaps dmenu feh
+Start i3 via startx (oftewel .xinitrc in home directory
+Daarvoor eerst de default .xinitrc kopieren
+
+Delete de regels van het bestand maar laat de laatste tekstblok staan
+en voeg exec i3 toe (plus onderstaande voor logging)
+#+begin_src
+exec i3 -V >> ~/i3log-$(date +'%F-%k-%M-%S') 2>&1
+twm &
+xclock -geometry 50x50-1+1 &y
+xterm -geometry 80x50+494+51 &
+xterm -geometry 80x20+494-0 &
+exec xterm -geometry 80x66+0+0 -name login
+Start i3 (login als archie)
+startx
+#+end_src
+ Je kunt de config file aanmaken met
+(locatie /home/archie/.config/i3/config)
+~i3-config-wizard~
+ Customize de config
+~nano /home/archie/.config/i3/config~
+ Verander look and feel met lxappearance. Kies bijv. xfce-dusk
+lxappearance
+ Mooi lettertype: system-san-francisco-font-git
+~yaourt -S system-san-francisco-font-git~
+ De font wordt weegegeven in de lijst:
+fc-list : file
+Open lxappearnce, verander de fontsize, klik op apply.
+Nu is een .gtk file aangemaakt, vind het bestand (.gtkrc-2.0)
+~ls -al~
+ Pas fontawesome-webfont.ttf de eigenschappen aan in nano, ook in gtk-3.
+Open de bestanden en verander gtk-font-name="Cantarell 13" naar
+gtk-font-name="System San Francisco Display "
+~nano .gtkrc-2.0~
+~nano ~/.config/gtk-3.0/settings.ini~
+ Het werkt, ook is dit font is toegevoegd aan /home/archie/.config/i3/config
+(font pango: System San Francisco Display 10)
+Het is ook mogelijk om de font te kiezen in lxappearance, het heet daar
+SFNS display, maar dit geeft een slechte rendering.
+....yosemity font gecopierd naar ~/.fonts
+ Pas het i3status.conf file aan, save het in de user directory voor gebruik voor alleen deze gebruiker
+Ik heb de iPv6, Wireless en de battery status uitgevinkt met #.
+~mkdir .config/i3status~
+~cp /etc/i3status.conf .config/i3status/config~
+~vim .config/i3status/config~
+
 
 Helaas werkt deze oplossing niet helemaal en niet altijd.
 Het kan ook via: setxkbmap -option ctrl:swapcaps

@@ -46,23 +46,21 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-(defun PowerStrike-testing-upload ()
-  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
-  (doom/window-maximize-buffer)
-  (split-window-horizontally)
-  (switch-to-buffer "*Async Shell Command*")
-  (windmove-right))
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
-(defun PowerStrike-upload ()
-  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/PowerStrike_code.ino")
-  (doom/window-maximize-buffer)
-  (split-window-horizontally)
-  (switch-to-buffer "*Async Shell Command*")
-  (windmove-right))
+;(set-frame-parameter (selected-frame) 'alpha '(95 90))
+;(add-to-list 'default-frame-alist '(alpha 95 90))
+(set-frame-parameter (selected-frame) 'alpha '(85 80))
+(add-to-list 'default-frame-alist '(alpha 85 80))
 
-(defun serial-ttyUSB0-115200 ()
-  (doom/window-maximize-buffer)
-  (serial-term "/dev/ttyUSB0" 115200))
+(scroll-bar-mode -1)
+
+(setq confirm-kill-emacs nil)
+
+(use-package org-auto-tangle
+  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
 
 (map! :leader
       (:prefix ("d" . "Prutserdt Bindings")
@@ -94,18 +92,17 @@
                 :desc "split window horizontally" "s" #'split-window-horizontally)
        :desc "Write this buffer to file"        "z" #'write-file))
 
-(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
+(defun PowerStrike-testing-upload ()
+  (interactive)
+  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
+  (doom/window-maximize-buffer)
+  (split-window-horizontally)
+  (switch-to-buffer "*Async Shell Command*")
+  (windmove-right)))
 
-;(set-frame-parameter (selected-frame) 'alpha '(95 90))
-;(add-to-list 'default-frame-alist '(alpha 95 90))
-(set-frame-parameter (selected-frame) 'alpha '(85 80))
-(add-to-list 'default-frame-alist '(alpha 85 80))
-
-(scroll-bar-mode -1)
-
-(setq confirm-kill-emacs nil)
-
-(use-package org-auto-tangle
-  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
+(defun serial-ttyUSB0-115200 ()
+  (interactive)
+  (split-window-horizontally)
+  (serial-term "/dev/ttyUSB0" 115200)
+;;(switch-to-buffer "/dev/ttyUSB0")
+  (windmove-right))

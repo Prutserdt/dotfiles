@@ -244,31 +244,36 @@ Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
 (setq display-line-numbers-type 'relative)
 #+end_src
 
-My Arduino ESP32 IDE setup. Uploading PowerStrike testing
+Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
 #+begin_src emacs-lisp :tangle config.el
-(defun PowerStrike-testing-upload ()
-  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
-  (doom/window-maximize-buffer)
-  (split-window-horizontally)
-  (switch-to-buffer "*Async Shell Command*")
-  (windmove-right))
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
 
-My Arduino ESP32 IDE setup. Uploading PowerStrike code to ESP32 by Arduino and moving windows around mimicking an IDE.
+Get a glimpse of the desktop background by setting a low transparency for Emacs.
+NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
 #+begin_src emacs-lisp :tangle config.el
-(defun PowerStrike-upload ()
-  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/PowerStrike_code.ino")
-  (doom/window-maximize-buffer)
-  (split-window-horizontally)
-  (switch-to-buffer "*Async Shell Command*")
-  (windmove-right))
+;(set-frame-parameter (selected-frame) 'alpha '(95 90))
+;(add-to-list 'default-frame-alist '(alpha 95 90))
+(set-frame-parameter (selected-frame) 'alpha '(85 80))
+(add-to-list 'default-frame-alist '(alpha 85 80))
 #+end_src
 
-Show the serial output of my ESP32.
+Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 #+begin_src emacs-lisp :tangle config.el
-(defun serial-ttyUSB0-115200 ()
-  (doom/window-maximize-buffer)
-  (serial-term "/dev/ttyUSB0" 115200))
+(scroll-bar-mode -1)
+#+end_src
+
+No more conformation message after closing emacs.
+#+begin_src emacs-lisp :tangle config.el
+(setq confirm-kill-emacs nil)
+#+end_src
+
+Automatically tangling by this package
+#+begin_src emacs-lisp :tangle config.el
+(use-package org-auto-tangle
+  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
 Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use the available ~SPC~ ~d~. This area is under construction. Probably it is better to just use the already present doom keybindings and use them. This part is just an excercize to map a set of keybindings.
@@ -304,40 +309,30 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Write this buffer to file"        "z" #'write-file))
 #+end_src
 
-#+RESULTS:
-: write-file
-
-Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
+Some custom function are added below. Used in my Arduino ESP32 IDE setup. Uploading PowerStrike testing. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el
-(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
+(defun PowerStrike-testing-upload ()
+  (interactive)
+  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
+  (doom/window-maximize-buffer)
+  (split-window-horizontally)
+  (switch-to-buffer "*Async Shell Command*")
+  (windmove-right)))
 #+end_src
 
-Get a glimpse of the desktop background by setting a low transparency for Emacs.
-NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
+
+Close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin..."
+TODO: Does not work yet...
+Show the serial output of ttyUSBo at 115200 baudrate, the setting of ESP32.
 #+begin_src emacs-lisp :tangle config.el
-;(set-frame-parameter (selected-frame) 'alpha '(95 90))
-;(add-to-list 'default-frame-alist '(alpha 95 90))
-(set-frame-parameter (selected-frame) 'alpha '(85 80))
-(add-to-list 'default-frame-alist '(alpha 85 80))
+(defun serial-ttyUSB0-115200 ()
+  (interactive)
+  (split-window-horizontally)
+  (serial-term "/dev/ttyUSB0" 115200)
+;;(switch-to-buffer "/dev/ttyUSB0")
+  (windmove-right))
 #+end_src
 
-Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
-#+begin_src emacs-lisp :tangle config.el
-(scroll-bar-mode -1)
-#+end_src
-
-No more conformation message after closing emacs.
-#+begin_src emacs-lisp :tangle config.el
-(setq confirm-kill-emacs nil)
-#+end_src
-
-Automatically tangling by this package
-#+begin_src emacs-lisp :tangle config.el
-(use-package org-auto-tangle
-  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
-#+end_src
 
 * Code snippets
 
@@ -363,4 +358,3 @@ Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_
 My configuration of Doom Emacs is partially based on these ones.
 - :book: https://gitlab.com/zzamboni/dot-doom
 - :book: https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
-

@@ -8,3 +8,4 @@ $HOME/.config/notify-log.sh $HOME/.config/notify.log && # writing notification t
 xset r rate 300 80 &
 picom -b &
 /usr/bin/emacs --daemon &
+nm-applet &

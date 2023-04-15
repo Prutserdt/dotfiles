@@ -105,6 +105,7 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
+# uncomment for battery
 # def get_battery_status():
 #     battery = check_output(['acpi'])
 #     battery = battery.decode("utf-8")
@@ -313,6 +314,13 @@ screens = [
                 widget.Notify(foreground="#ff966c"),
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
+                # uncomment for klad gedeelte....
+                #widget.wlan(
+                #    battery=1,
+                #    format='{char} {percent:2.0%}',
+                #    update_interval=30,
+                #),
+                # uncomment for battery
                 #widget.Battery(
                 #    battery=1,
                 #    format='{char} {percent:2.0%}',
@@ -411,7 +419,7 @@ Again a note is added and this time to ~autostart.sh~ to *not* edit this file di
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
-The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started.
+The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started. nm-applet is the NetworkManager applet.
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
 setxkbmap us &&
 xmodmap $HOME/.config/kbswitch &&
@@ -419,6 +427,7 @@ $HOME/.config/notify-log.sh $HOME/.config/notify.log && # writing notification t
 xset r rate 300 80 &
 picom -b &
 /usr/bin/emacs --daemon &
+nm-applet &
 #+end_src
 
 * My TODO list
