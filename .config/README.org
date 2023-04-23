@@ -423,7 +423,7 @@ rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
 #+end_src
 
-Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list. These Appimages are write to top of the list.
+Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list. These Appimages are writen to the top of the list.
 #+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 shopt -s nullglob # When AppImages aren't present then the loop will not be run
 FILES=$HOME/Applications/*.AppImage
@@ -649,8 +649,6 @@ printbuf() {
   JOINED=$( echo "${MSGBUF[@]}" | sed 's/,$//' )
   printf "%s\n%s\n" "--- ${MSGTIME} ---" "${JOINED}"
 }
-
-procmsg() {
   if [[ "${1}" =~ member=Notify$ ]]; then
     STATE=on
     MSGTIME=$(date '+%Y-%m-%d %H:%M:%S')
