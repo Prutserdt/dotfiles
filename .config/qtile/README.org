@@ -29,7 +29,6 @@
   - [[#layouts][Layouts]]
   - [[#some-hooks][Some hooks]]
 - [[#the-autostartsh-script][The autostart.sh script]]
-- [[#my-todo-list][My TODO list]]
 - [[#about-this-emacs-org-document][About this Emacs org document]]
 
 * Qtile and my config
@@ -280,6 +279,7 @@ floating_theme = {"border_width": 3,
 
 ** Layouts
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
+Make sure that networkmanager is installed and that nm-applet is part of the autostart.sh, no need to add extras to the top bar.
 
 #+BEGIN_SRC python :tangle config.py :results none
 
@@ -314,12 +314,6 @@ screens = [
                 widget.Notify(foreground="#ff966c"),
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
-                # uncomment for klad gedeelte....
-                #widget.wlan(
-                #    battery=1,
-                #    format='{char} {percent:2.0%}',
-                #    update_interval=30,
-                #),
                 # uncomment for battery
                 #widget.Battery(
                 #    battery=1,
@@ -429,10 +423,6 @@ picom -b &
 /usr/bin/emacs --daemon &
 nm-applet &
 #+end_src
-
-* My TODO list
-It would be nice to dynamically control the gaps size between the windows (not critical).
-I did not get it to work yet with https://stackoverflow.com/questions/67654782/setting-qtile-margins-dynamically-through-keyboard-input.
 
 
 * About this Emacs org document

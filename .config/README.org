@@ -300,7 +300,6 @@ notify-send -t 60000 "Opening webpage: " "$chosen"
 #+end_src
 
 
-
 ** dmenupatch.sh
 Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
 
@@ -386,8 +385,6 @@ chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar 
 notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen
 #+end_src
-
-
 
 
 ** dmenuunicode.sh
@@ -482,11 +479,14 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
 The notify-send will send a notification, duh! The -t flag sets the time to show the notification in milliseconds. The left part between brackets will be displayed in bold and the second part between quotes will show in normal font. The cut program removes the directory information, which is 44 characters long.
+The --bg-fill option makes sure that the image is stretched to the dimensions of the screen.
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 notify-send  "Running dmenuwallpaper.sh" &&
-ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)" &&
+#ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)" &&
+ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
+
 
 ** dotfiles.sh
 A script to manage my dotfiles git repo. It checks the status of my dotfiles and gives options how to continue (push/pull/pullpush/exit).

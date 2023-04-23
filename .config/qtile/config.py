@@ -216,12 +216,6 @@ screens = [
                 widget.Notify(foreground="#ff966c"),
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
-                # uncomment for klad gedeelte....
-                #widget.wlan(
-                #    battery=1,
-                #    format='{char} {percent:2.0%}',
-                #    update_interval=30,
-                #),
                 # uncomment for battery
                 #widget.Battery(
                 #    battery=1,

@@ -13,6 +13,12 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
+  - [[#theming-and-graphical-settings][Theming and graphical settings]]
+  - [[#evil-mode-configuration][Evil mode configuration]]
+  - [[#general-settings][General settings]]
+  - [[#custom-keybindings][Custom keybindings]]
+  - [[#org-mode-configuration][Org-mode configuration]]
+  - [[#custom-elisp-code][Custom Elisp code]]
 - [[#code-snippets][Code snippets]]
 - [[#credits][Credits]]
 
@@ -94,7 +100,6 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        )
 #+end_src
 
-#+RESULTS:
 
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of ~init.el~. This file shouln't be byte compiled.
@@ -157,14 +162,10 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 ;;      Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
+** Theming and graphical settings
 Set tokyo-night as the theme.
 #+begin_src emacs-lisp :tangle config.el
 (setq doom-theme 'doom-tokyo-night)
-#+end_src
-
-The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
-#+begin_src emacs-lisp :tangle config.el
-(setq! evil-want-Y-yank-to-eol nil)
 #+end_src
 
 The Doom Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added.
@@ -175,34 +176,10 @@ The Doom Emacs welcome screen is modified here. A different image is used, the d
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 #+end_src
 
-Setup to use sql in org code blocks.
-#+begin_src emacs-lisp :tangle config.el
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)))
-#+end_src
-
 Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area. /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
 #+begin_src emacs-lisp :tangle config.el
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
-#+end_src
-
-Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. It pops right out. A white bar is set for insert mode and a hollow orange cursor for visual mode. This helps to differentiate between normal/insert/visual mode.
-#+begin_src emacs-lisp :tangle config.el
-(setq evil-normal-state-cursor '(box "tomato")
-      evil-insert-state-cursor '(bar "white")
-      evil-visual-state-cursor '(hollow "orange"))
-#+end_src
-
-More eye candy by superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
-#+begin_src emacs-lisp :tangle config.el
-(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
-#+end_src
-
-Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda slow and like the flashing to take longer. The default is 0.2 second and set it here to a whole second.
-#+begin_src emacs-lisp :tangle config.el
-(setq evil-goggles-duration 1.0)
 #+end_src
 
 Make the cursor stay vertically while scrolling. (global-centered-cursor-mode to use everywhere)
@@ -225,9 +202,11 @@ The superior font is set here.
 (setq default-frame-alist '((font . "Hack 13")))
 #+end_src
 
-Hide emphasis markup (e.g. /italic/, *bold*, ~code~, etc)
+Make the highlighting global for the words TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW with ~hl-todo-mode~.
 #+begin_src emacs-lisp :tangle config.el
-(setq org-hide-emphasis-markers t)
+(define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
+  (lambda () (hl-todo-mode 1)))
+(my-global-hl-todo-mode 1)
 #+end_src
 
 For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This works with the three column layout and is especially nice for maximized windows on an ultrawide. Now it's perfectly in the middle and distraction free.
@@ -236,17 +215,6 @@ For ultrawide monitors I prefer to set my working window in the middle of the sc
 (global-display-fill-column-indicator-mode)
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-center-text t)
-#+end_src
-
-Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
-#+begin_src emacs-lisp :tangle config.el
-(global-display-line-numbers-mode)
-(setq display-line-numbers-type 'relative)
-#+end_src
-
-Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
-#+begin_src emacs-lisp :tangle config.el
-(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
@@ -258,9 +226,38 @@ NOTE: when this part is placed at the start of ~config.el~ then transparency doe
 (add-to-list 'default-frame-alist '(alpha 85 80))
 #+end_src
 
+Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
+#+begin_src emacs-lisp :tangle config.el
+(global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
+
 Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 #+begin_src emacs-lisp :tangle config.el
 (scroll-bar-mode -1)
+#+end_src
+
+** Evil mode configuration
+The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
+#+begin_src emacs-lisp :tangle config.el
+(setq! evil-want-Y-yank-to-eol nil)
+#+end_src
+
+Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. It pops right out. A white bar is set for insert mode and a hollow orange cursor for visual mode. This helps to differentiate between normal/insert/visual mode.
+#+begin_src emacs-lisp :tangle config.el
+(setq evil-normal-state-cursor '(box "tomato")
+      evil-insert-state-cursor '(bar "white")
+      evil-visual-state-cursor '(hollow "orange"))
+#+end_src
+
+Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda slow and like the flashing to take longer. The default is 0.2 second and set it here to a whole second.
+#+begin_src emacs-lisp :tangle config.el
+(setq evil-goggles-duration 1.0)
+#+end_src
+
+** General settings
+Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
+#+begin_src emacs-lisp :tangle config.el
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
 
 No more conformation message after closing emacs.
@@ -268,14 +265,7 @@ No more conformation message after closing emacs.
 (setq confirm-kill-emacs nil)
 #+end_src
 
-Automatically tangling by this package
-#+begin_src emacs-lisp :tangle config.el
-(use-package org-auto-tangle
-  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
-#+end_src
-
+** Custom keybindings
 Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use the available ~SPC~ ~d~. This area is under construction. Probably it is better to just use the already present doom keybindings and use them. This part is just an excercize to map a set of keybindings.
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
@@ -309,7 +299,43 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Write this buffer to file"        "z" #'write-file))
 #+end_src
 
-Some custom function are added below. Used in my Arduino ESP32 IDE setup. Uploading PowerStrike testing. Remark: (interactive) is needed to be able to run with hotkeys.
+** Org-mode configuration
+Setup to use sql in org code blocks.
+#+begin_src emacs-lisp :tangle config.el
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)))
+
+More eye candy by superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
+,#+begin_src emacs-lisp :tangle config.el
+(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+#+end_src
+
+Setting the size of the headers for org mode, ordered by the level of course.
+#+begin_src emacs-lisp :tangle config.el
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.3))))
+  '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
+  '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
+)
+#+end_src
+
+Hide emphasis markup (e.g. /italic/, *bold*, ~code~, etc)
+#+begin_src emacs-lisp :tangle config.el
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+Automatically tangling by the org-auto-tangle package.
+#+begin_src emacs-lisp :tangle config.el
+(use-package org-auto-tangle
+  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
+
+** Custom Elisp code
+A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el
 (defun PowerStrike-testing-upload ()
   (interactive)
@@ -320,10 +346,8 @@ Some custom function are added below. Used in my Arduino ESP32 IDE setup. Upload
   (windmove-right)))
 #+end_src
 
-
-Close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin..."
-TODO: Does not work yet...
-Show the serial output of ttyUSBo at 115200 baudrate, the setting of ESP32.
+Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into a emacs buffer.
+TODO: Eigenlijk wil ik bovenstaande test code laten lopen en daarna meteen serial monitor openen. Maar dat lukt nog niet... Close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin."
 #+begin_src emacs-lisp :tangle config.el
 (defun serial-ttyUSB0-115200 ()
   (interactive)

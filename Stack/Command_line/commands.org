@@ -153,6 +153,30 @@ PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 
 #+end_src
 
+*** Default applicaties in Linux. Bijvoorbeeld de browser.
+
+Brave kun je default browser maken vanuit brave (hamburger menu, settings, 'make browser the default'.).
+Dit wordt ingesteld in een dotfile: ~/.config/mimeapps.list
+Firefox:
+#+begin_src shell
+[Default Applications]
+text/html=userapp-Firefox-M09F31.desktop
+x-scheme-handler/http=userapp-Firefox-M09F31.desktop
+x-scheme-handler/https=userapp-Firefox-M09F31.desktop
+x-scheme-handler/about=brave-browser.desktop
+x-scheme-handler/unknown=brave-browser.desktop
+#+end_src
+Verander naar Brave:
+#+begin_src shell
+[Default Applications]
+text/html=brave-browser.desktop
+x-scheme-handler/http=brave-browser.desktop
+x-scheme-handler/https=brave-browser.desktop
+x-scheme-handler/about=brave-browser.desktop
+x-scheme-handler/unknown=brave-browser.desktop
+#+end_src
+
+
 *** Weergave hard drive, formatting, dd, etc
 ~sudo fdisk -l~
 ~sudo parted -l~
@@ -1735,41 +1759,6 @@ do
   mv "$file" "${file// /_}"
 done
 #+end_src
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Daarna files in directories gezet als '01_Solo' en daarna het onderstaande script laten lopen:
@@ -3808,13 +3797,10 @@ A handy tool to show the key presses is screenkey.
 Installed via ~yay home-assistant-hacs~~. Verder niet gebruikt
 
 
-
 * powerstrike punt nl
 03feb23: wordpress aangemaakt.
 wordpress 6.1.1
 WP Data Access plugin geinstalleerd.
-
-
 
 
 
@@ -4366,15 +4352,8 @@ Op de Lenovo wil ik de PrtSc toets gebruiken voor Super_L. Dit heb ik commented 
 * Keyboard settings
 I prefer custom keyboard settings, for instance swap escape/capslock and use left and right CTRL/Super/Alt keys. This can be set by xmodmap but this resulted in a config that was not stable, and switched back to default regularly. Therefore I switched to XKB.
 
-*** By XKB
-...
-nieuwe methode, moet ik nog testen...
-
-
-
-
-
-*** Do NOT use xmodmap
+TODO: use an alternative to xmodmap
+*** xmodmap
 This configuration was *not* stable for me, I am not using it anymore and the next part is just for reference in case I need it in the future.
 
 Instellen van Super_R als applications launcher en Capslock als escape

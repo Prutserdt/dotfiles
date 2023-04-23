@@ -10,18 +10,12 @@
 (add-hook! '+doom-dashboard-functions :append
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)))
-
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
-
-(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
 (setq evil-goggles-duration 1.0)
 
@@ -36,7 +30,9 @@
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
 
-(setq org-hide-emphasis-markers t)
+(define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
+  (lambda () (hl-todo-mode 1)))
+(my-global-hl-todo-mode 1)
 
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
@@ -91,6 +87,24 @@
                 :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer
                 :desc "split window horizontally" "s" #'split-window-horizontally)
        :desc "Write this buffer to file"        "z" #'write-file))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)))
+
+More eye candy by superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
+#+begin_src emacs-lisp :tangle config.el
+(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.3))))
+  '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
+  '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
+)
+
+(setq org-hide-emphasis-markers t)
 
 (defun PowerStrike-testing-upload ()
   (interactive)

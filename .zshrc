@@ -26,8 +26,8 @@ setopt HIST_REDUCE_BLANKS  ## Delete empty lines from history file
 PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;32m%}%n%{\e[1;30m%}@%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%} - %b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%} - %{\e[0;34m%}%B[%b%{\e[0;33m%}'%D{"%a %b %d, %H:%M"}%b$'%{\e[0;34m%}%B]%b%{\e[0m%}
 %{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B %{\e[0m%}%b'
 
-pfetch              # Display arch logo (asci art) and additional sys info
-cowthink $(fortune) # Let the cow quote! (requires conwsay and fortune-mod)
+pfetch | lolcat              # Display arch logo (asci art) and additional sys info
+cowthink $(fortune) | lolcat # Let the cow quote! (requires conwsay and fortune-mod)
 
 ###########################
 #     oh-my-zsh stuff     #
