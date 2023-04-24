@@ -92,6 +92,9 @@ keys = [
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads"), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
+# toegevoegd
+    Key([], "XF86MonBrightnessUp", lazy.spawn(home + "/config/incrMonitorBrightness.sh"), lazy.spawn('notify-send -t 6000 "Brightness increased"')),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(home + "/config/decrMonitorBrightness.sh"), lazy.spawn('notify-send -t 6000 "Brightness decreased"')),
 
     # Open applications
     Key([mR], "a",

@@ -18,6 +18,7 @@
 - [[#about-this-document][About this document]]
 - [[#my-scripts][My scripts]]
   - [[#aandelenpy][aandelen.py]]
+  - [[#decrmonitorbrightness][decrMonitorBrightness]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
   - [[#dmenuinternetsh][dmenuinternet.sh]]
@@ -30,6 +31,7 @@
   - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
   - [[#dotfilessh][dotfiles.sh]]
   - [[#exitqtilesh][exitqtile.sh]]
+  - [[#incrmonitorbrightness][incrMonitorBrightness]]
   - [[#kbswitch][kbswitch]]
   - [[#notify-logsh][notify-log.sh]]
   - [[#unicode-how-to-create-a-list-of-emojis-used-in-dmenuunicodesh][unicode. How to create a list of emojis (used in dmenuunicode.sh)]]
@@ -231,6 +233,27 @@ pyperclip.copy(data)
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
     orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
     OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
+#+end_src
+
+** decrMonitorBrightness
+TODO: text toevoegen
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+TODO: text toevoegen
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+##!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
+#echo $currentBrightness
+newBrightness=$(echo $currentBrightness-0.1| bc -l)
+xrandr --output HDMI-2 --brightness $newBrightness
 #+end_src
 
 
@@ -595,6 +618,30 @@ fi
 
 notify-send "Killing Qtile right now...."
 #+end_src
+
+** incrMonitorBrightness
+TODO: text toevoegen
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+TODO: text toevoegen
+#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
+echo $currentBrightness
+if [[ "$currentBrightness" == "1.0" ]] ; then
+     echo "niets doen, want grens van 1.0 bereikt"
+else
+#    echo "iets doen, want geen 0.8"
+    newBrightness=$(echo $currentBrightness+0.1| bc -l)
+    xrandr --output HDMI-2 --brightness $newBrightness
+fi
+#+end_src
+
 
 ** kbswitch
 
