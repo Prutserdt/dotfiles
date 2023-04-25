@@ -305,9 +305,10 @@ Setup to use sql in org code blocks.
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((sql . t)))
+#+end_src
 
 More eye candy by superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
-,#+begin_src emacs-lisp :tangle config.el
+#+begin_src emacs-lisp :tangle config.el
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 #+end_src
 
@@ -333,6 +334,7 @@ Automatically tangling by the org-auto-tangle package.
   :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
+#+end_src
 
 ** Custom Elisp code
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.

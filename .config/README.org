@@ -59,7 +59,6 @@ My intention is to modify the scripts from this document and use ~org-babel-tang
 * My scripts
 
 ** aandelen.py
-
 A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio information are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
@@ -236,7 +235,7 @@ del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
 #+end_src
 
 ** decrMonitorBrightness
-TODO: text toevoegen
+Decrease the monitor brightness by xrandr.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -245,17 +244,20 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-TODO: text toevoegen
+First the current brightness is selected by awk. Make sure that the right output device is chosen, for instance ~HDMI-2~. If the value is set to 0.10 then it will not decrease it any further and making the screen completely black.
 #+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
-##!/bin/bash
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
 currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 #echo $currentBrightness
-newBrightness=$(echo $currentBrightness-0.1| bc -l)
-xrandr --output HDMI-2 --brightness $newBrightness
-#+end_src
 
+if [[ "$currentBrightness" == "0.10" ]] ; then
+    echo "niets doen, want grens van 0.1 bereikt"
+else
+    newBrightness=$(echo $currentBrightness-0.1| bc -l)
+    xrandr --output HDMI-2 --brightness $newBrightness
+#   xrandr --output eDP-1 --brightness $newBrightness
+fi
+
+#+end_src
 
 ** dmenuapps.sh
 My app picker. A simple script to select which application to start via dmenu.
@@ -321,7 +323,6 @@ chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: 
 xdg-open $chosen &&
 notify-send -t 60000 "Opening webpage: " "$chosen"
 #+end_src
-
 
 ** dmenupatch.sh
 Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
@@ -391,7 +392,6 @@ fi
 #+end_src
 
 ** dmenuthunar.sh
-
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
@@ -408,7 +408,6 @@ chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar 
 notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen
 #+end_src
-
 
 ** dmenuunicode.sh
 Selecting ➡emojis⬅ via dmenu, 🆒.
@@ -456,7 +455,6 @@ do
 done
 notify-send -t 60000 "A new list of installed applications is made 😃"
 #+end_src
-
 
 ** dmenuvanilla.sh
 Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
@@ -509,7 +507,6 @@ notify-send  "Running dmenuwallpaper.sh" &&
 ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
-
 
 ** dotfiles.sh
 A script to manage my dotfiles git repo. It checks the status of my dotfiles and gives options how to continue (push/pull/pullpush/exit).
@@ -620,7 +617,7 @@ notify-send "Killing Qtile right now...."
 #+end_src
 
 ** incrMonitorBrightness
-TODO: text toevoegen
+Increase the monitor brightness by xrandr.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -629,7 +626,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-TODO: text toevoegen
+First the current brightness is selected by awk. If the value is set to 1.0 then it will not increase it any further and possibly damaging the screen. Make sure that the right output device is chosen, for instance ~HDMI-2~.
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 echo $currentBrightness
@@ -639,12 +636,11 @@ else
 #    echo "iets doen, want geen 0.8"
     newBrightness=$(echo $currentBrightness+0.1| bc -l)
     xrandr --output HDMI-2 --brightness $newBrightness
+#   xrandr --output eDP-1 --brightness $newBrightness
 fi
 #+end_src
 
-
 ** kbswitch
-
 These settings are used in combination with an xmodmap command and can be used when a normy keyboard is used. It will swap Escape/CapsLock, change the super key to super left and super right and the same for the alt key (switch to alt-left and alt-right)
 I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config/kbswitch~.
 
@@ -672,7 +668,6 @@ The same thing for the alt key. Let's use the Alt-left and Alt-right.
 remove mod1 = Alt_R
 add mod5 = Alt_R
 #+end_src
-
 
 ** notify-log.sh
 This script will write the notifications to a logfile.
@@ -726,9 +721,7 @@ dbus-monitor "interface='org.freedesktop.Notifications'" | \
 
 #+end_src
 
-
 ** unicode. How to create a list of emojis (used in dmenuunicode.sh)
-
 Download the current unicode list by wget.
 #+begin_src bash
 wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
@@ -738,7 +731,6 @@ Open the text file in emacs and remove the left part of the lines up to the emoj
 Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
 
 ** rdxswitch
-
 These settings are used in combination with an xmodmap command and are restoring the keysetting that I use for my Redox keyboard. I run it by the alias ~r~ in my terminal which will execute ~xmodmap ~/.config/rdxswitch~. This is needed when keyboards are swapped.
 
 My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
@@ -761,7 +753,6 @@ keycode 134 = Super_R
 ! Connect mod3 to be Super_R:
 add mod3 = Super_R
 #+end_src
-
 
 ** screenshot2text.sh
 A script that makes a screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen.
@@ -1101,7 +1092,6 @@ Simple cheat code for 0ad. Does not properly work.
 * Tips and tricks
 
 ** Fetch all scrips of ~/.config by this code block
-
 The next code block will give the output of all of the ~*.sh~ scripts of the ~~/.config~ as separate code blocks. Very handy to import all of 'em.
 
 #+name: fetch-shell-scripts

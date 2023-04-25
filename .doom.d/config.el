@@ -3,8 +3,6 @@
 
 (setq doom-theme 'doom-tokyo-night)
 
-(setq! evil-want-Y-yank-to-eol nil)
-
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
@@ -12,12 +10,6 @@
 
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
-
-(setq evil-normal-state-cursor '(box "tomato")
-      evil-insert-state-cursor '(bar "white")
-      evil-visual-state-cursor '(hollow "orange"))
-
-(setq evil-goggles-duration 1.0)
 
 (use-package centered-cursor-mode
   :demand
@@ -39,24 +31,29 @@
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-center-text t)
 
-(global-display-line-numbers-mode)
-(setq display-line-numbers-type 'relative)
-
-(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
-
 ;(set-frame-parameter (selected-frame) 'alpha '(95 90))
 ;(add-to-list 'default-frame-alist '(alpha 95 90))
 (set-frame-parameter (selected-frame) 'alpha '(85 80))
 (add-to-list 'default-frame-alist '(alpha 85 80))
 
+(global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
+
+Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
+#+begin_src emacs-lisp :tangle config.el
 (scroll-bar-mode -1)
 
-(setq confirm-kill-emacs nil)
+(setq! evil-want-Y-yank-to-eol nil)
 
-(use-package org-auto-tangle
-  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
+(setq evil-normal-state-cursor '(box "tomato")
+      evil-insert-state-cursor '(bar "white")
+      evil-visual-state-cursor '(hollow "orange"))
+
+(setq evil-goggles-duration 1.0)
+
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
+
+(setq confirm-kill-emacs nil)
 
 (map! :leader
       (:prefix ("d" . "Prutserdt Bindings")
@@ -92,8 +89,6 @@
  'org-babel-load-languages
  '((sql . t)))
 
-More eye candy by superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
-#+begin_src emacs-lisp :tangle config.el
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
 (custom-set-faces
@@ -105,6 +100,11 @@ More eye candy by superstar bullets in org mode instead of the default boring *.
 )
 
 (setq org-hide-emphasis-markers t)
+
+(use-package org-auto-tangle
+  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
 
 (defun PowerStrike-testing-upload ()
   (interactive)

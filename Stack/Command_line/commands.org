@@ -153,6 +153,40 @@ PROMPT_COMMAND="history -n; history -w; history -c; history -r; $PROMPT_COMMAND"
 
 #+end_src
 
+*** cowsay. Most important feature of Linux.
+
+
+
+#+begin_src shell
+# This script gets a random available cow with `cowsay -l` and prints some text, default fortune
+
+FORTUNE="fortune"
+for COWNAME in `cowsay -l | tail -n +2`
+do
+COWS+=$COWNAME
+COWS+='\n'
+done
+COWS=${COWS%??}
+RANDOMCOW=$(echo -e $COWS | sort -R | head -n 1)
+$FORTUNE | cowsay -f $RANDOMCOW
+#+end_src
+
+Some options:
+fortune | cowsay | lolcat # Let the cow quote! (requires conwsay and fortune-mod)
+fortune | cowsay -W 120 -f eye | lolcat
+fortune | cowsay -W 120 -d | lolcat
+fortune | cowsay -W 120 -b | lolcat
+fortune | cowsay -W 120 -g | lolcat
+fortune | cowsay -W 120 -p | lolcat
+fortune | cowsay -W 120 -s | lolcat
+fortune | cowsay -W 120 -t | lolcat
+fortune | cowsay -W 120 -w | lolcat
+fortune | cowsay -W 120 -y | lolcat
+fortune | figlet -w 120 | lolcat
+fortune | figlet -w 120 | lolcat
+fortune | cowsay -W 120 -d | lolcat
+
+
 *** Default applicaties in Linux. Bijvoorbeeld de browser.
 
 Brave kun je default browser maken vanuit brave (hamburger menu, settings, 'make browser the default'.).

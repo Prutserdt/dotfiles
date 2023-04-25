@@ -26,8 +26,16 @@ setopt HIST_REDUCE_BLANKS  ## Delete empty lines from history file
 PROMPT=$'%{\e[0;34m%}%B┌─[%b%{\e[0m%}%{\e[1;32m%}%n%{\e[1;30m%}@%{\e[0m%}%{\e[0;36m%}%m%{\e[0;34m%}%B]%b%{\e[0m%} - %b%{\e[0;34m%}%B[%b%{\e[1;37m%}%~%{\e[0;34m%}%B]%b%{\e[0m%} - %{\e[0;34m%}%B[%b%{\e[0;33m%}'%D{"%a %b %d, %H:%M"}%b$'%{\e[0;34m%}%B]%b%{\e[0m%}
 %{\e[0;34m%}%B└─%B[%{\e[1;35m%}$%{\e[0;34m%}%B %{\e[0m%}%b'
 
-pfetch | lolcat              # Display arch logo (asci art) and additional sys info
-cowthink $(fortune) | lolcat # Let the cow quote! (requires conwsay and fortune-mod)
+pfetch                       # Display arch logo (asci art) and additional sys info
+FORTUNE="fortune"
+for COWNAME in `cowsay -l | tail -n +2`
+do
+COWS+=$COWNAME
+COWS+='\n'
+done
+COWS=${COWS%??}
+RANDOMCOW=$(echo -e $COWS | sort -R | head -n 1)
+$FORTUNE | cowsay -f $RANDOMCOW | lolcat
 
 ###########################
 #     oh-my-zsh stuff     #
