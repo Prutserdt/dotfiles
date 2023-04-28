@@ -230,6 +230,7 @@ Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
 #+begin_src emacs-lisp :tangle config.el
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
+#+end_src
 
 Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 #+begin_src emacs-lisp :tangle config.el
@@ -322,6 +323,8 @@ Setting the size of the headers for org mode, ordered by the level of course.
   '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
 )
 #+end_src
+
+#+RESULTS:
 
 Hide emphasis markup (e.g. /italic/, *bold*, ~code~, etc)
 #+begin_src emacs-lisp :tangle config.el

@@ -39,8 +39,6 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
-#+begin_src emacs-lisp :tangle config.el
 (scroll-bar-mode -1)
 
 (setq! evil-want-Y-yank-to-eol nil)

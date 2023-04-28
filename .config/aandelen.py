@@ -100,14 +100,13 @@ t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum
 titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 print('\n\n') # Only for debugging
 
-# De titel voor in org mode (met drie sterren)
+# Create a title for the org table, with three stars for level three heading
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
 orgTabelNaam=''.join(orgTabelNaam)
 
-# Transformeer dataframe to a text string that is ready for the Emacs org-mode (with | separators)
+# Transform dataframe to a text string that is ready for the Emacs org-mode (with | separators)
 gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
 gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
-#gesorteerdeLijst = (gesorteerdeLijst.replace(" ", "|"))    # Add separators
 gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))

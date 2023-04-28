@@ -18,7 +18,7 @@
 - [[#about-this-document][About this document]]
 - [[#my-scripts][My scripts]]
   - [[#aandelenpy][aandelen.py]]
-  - [[#decrmonitorbrightness][decrMonitorBrightness]]
+  - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
   - [[#dmenuinternetsh][dmenuinternet.sh]]
@@ -31,10 +31,10 @@
   - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
   - [[#dotfilessh][dotfiles.sh]]
   - [[#exitqtilesh][exitqtile.sh]]
-  - [[#incrmonitorbrightness][incrMonitorBrightness]]
+  - [[#incrmonitorbrightnesssh][incrMonitorBrightness.sh]]
   - [[#kbswitch][kbswitch]]
   - [[#notify-logsh][notify-log.sh]]
-  - [[#unicode-how-to-create-a-list-of-emojis-used-in-dmenuunicodesh][unicode. How to create a list of emojis (used in dmenuunicode.sh)]]
+  - [[#unicode][unicode]]
   - [[#rdxswitch][rdxswitch]]
   - [[#screenshot2textsh][screenshot2text.sh]]
   - [[#thunarbookmarkssh][thunarBookmarks.sh]]
@@ -197,14 +197,13 @@ print('\n\n') # Only for debugging
 The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
 
 #+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-# De titel voor in org mode (met drie sterren)
+# Create a title for the org table, with three stars for level three heading
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
 orgTabelNaam=''.join(orgTabelNaam)
 
-# Transformeer dataframe to a text string that is ready for the Emacs org-mode (with | separators)
+# Transform dataframe to a text string that is ready for the Emacs org-mode (with | separators)
 gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
 gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
-#gesorteerdeLijst = (gesorteerdeLijst.replace(" ", "|"))    # Add separators
 gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
@@ -234,8 +233,8 @@ del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
     OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
 #+end_src
 
-** decrMonitorBrightness
-Decrease the monitor brightness by xrandr.
+** decrMonitorBrightness.sh
+Decrease the monitor brightness by xrandr. It's brother, [[incrMonitorBrightness.sh]], is a similar script doing the oposite.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -251,10 +250,11 @@ currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 
 if [[ "$currentBrightness" == "0.10" ]] ; then
     echo "niets doen, want grens van 0.1 bereikt"
+    notify-send -t 60000 "🔆⚠ Brightness minimum reached!: ️" "$currentBrightness"
 else
     newBrightness=$(echo $currentBrightness-0.1| bc -l)
-    xrandr --output HDMI-2 --brightness $newBrightness
-#   xrandr --output eDP-1 --brightness $newBrightness
+    xrandr --output HDMI-2 --brightness $newBrightness # eDP-1 is the screen of my Thinkpad
+    notify-send -t 60000 " 🔆 Brightness decreased to" "$newBrightness"
 fi
 
 #+end_src
@@ -269,7 +269,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu.
+A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"} &
 notify-send -t 60000 "Running dmenuapps.sh" &&
@@ -306,7 +306,7 @@ fi
 #+end_src
 
 ** dmenuinternet.sh
-Internet bookmark pick.
+Internet bookmark picking by dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
@@ -392,6 +392,8 @@ fi
 #+end_src
 
 ** dmenuthunar.sh
+A dmenu script to give some directory options to open in the file manager Thunar.
+
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
@@ -399,14 +401,17 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-Script to select directories (~/.config/directories) in Thunar by dmenu.
+Make sure that the list with directories options for Thunar are generated at ~~/.config/directories~.
+If the bookmarks are not visible in Thunar then please generate them with [[thunarBookmarks.sh]].
 This requires the dmenu patch: center, which gives the dmenu -c option.
+After Thunar is launched there is a microbreak and then F3 is pressed to open l3ts
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuthunar.sh" &&
 chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
+#[ -z "$chosen2" ] && sleep 1 && xdotool key F3 && exit
 [ -z "$chosen" ] && exit
 notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
-thunar $chosen
+thunar $chosen & sleep .3 && xdotool key F3
 #+end_src
 
 ** dmenuunicode.sh
@@ -419,7 +424,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline.
+A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline. If the unicode file is missing then generate it by [[unicode]].
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuunicode.sh" &&
 cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
@@ -616,8 +621,8 @@ fi
 notify-send "Killing Qtile right now...."
 #+end_src
 
-** incrMonitorBrightness
-Increase the monitor brightness by xrandr.
+** incrMonitorBrightness.sh
+Increase the monitor brightness by xrandr. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -626,17 +631,17 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-First the current brightness is selected by awk. If the value is set to 1.0 then it will not increase it any further and possibly damaging the screen. Make sure that the right output device is chosen, for instance ~HDMI-2~.
+First the current brightness is selected by awk. If the value is set to 1.0 then it will not increase it any further and prevent damaging the screen. Make sure that the right output device is chosen, for instance ~HDMI-2~.
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 echo $currentBrightness
 if [[ "$currentBrightness" == "1.0" ]] ; then
      echo "niets doen, want grens van 1.0 bereikt"
+     notify-send -t 60000 "🔆⚠ Brightness maximum reached!⚠️ No need to increase further!🤓"
 else
-#    echo "iets doen, want geen 0.8"
     newBrightness=$(echo $currentBrightness+0.1| bc -l)
-    xrandr --output HDMI-2 --brightness $newBrightness
-#   xrandr --output eDP-1 --brightness $newBrightness
+    xrandr --output HDMI-2 --brightness $newBrightness # eDP-1 for Thinkpad laptop
+    notify-send -t 60000 "🔆 Brightness increased to" "$newBrightness"
 fi
 #+end_src
 
@@ -721,8 +726,8 @@ dbus-monitor "interface='org.freedesktop.Notifications'" | \
 
 #+end_src
 
-** unicode. How to create a list of emojis (used in dmenuunicode.sh)
-Download the current unicode list by wget.
+** unicode
+Create a list of emojis that is used in [[dmenuunicode.sh]] by first downloading the current unicode list by wget.
 #+begin_src bash
 wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 #+end_src

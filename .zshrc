@@ -51,7 +51,7 @@ plugins=(
   colored-man-pages # Increase readibility of man pages, by...
   vi-mode           # Vi-like bindings. (Esc: normal mode, i: insert, etc)
   fzf               # fuzzy find
-  zsh-autosuggestions # Does not work, gitinstall performed by github oh my zsh procedure, after a git clone and adding this line...
+#  zsh-autosuggestions # Does not work, gitinstall performed by github oh my zsh procedure, after a git clone and adding this line...
   )
 
 bindkey -v          # enabling vi bindings, dependency: vi-mode plugin
@@ -82,3 +82,4 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.aliases
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+#source $HOME/.config/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # if cloned in ~/.config

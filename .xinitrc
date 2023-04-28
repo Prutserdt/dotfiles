@@ -23,7 +23,8 @@ xset r rate 300 80      # Move around quicker (increase keyboard rate)
 
 # qtile starten als window manager: uncommenting
 numlockx &              # Switch numlock on
-wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg & # Set wallpaper
+#wal -i ~/Stack/Afbeeldingen/Wallpapers/wp2231064-3440x1440-wallpapers.jpg & # Set wallpaper
+feh --bg-scale ~/Stack/Afbeeldingen/Wallpapers/default.jpg & # Set wallpaper
 exec qtile start
 
 # Gedeelte om te testen

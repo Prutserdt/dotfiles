@@ -2157,10 +2157,10 @@ Control v, selecteer het blok dat je wil aanpassen
 r, en hierna tekst invoeren wat je erover wilt schrijven
 esc esc, om eruit te gaan en aan te passen.
 
-*** Verwijderen spaties aan begin van regel:
+**** Verwijderen spaties aan begin van regel:
 :%s/^\s\+//e
 
-*** Renaming in vim (fout --> goed)
+**** Renaming in vim (fout --> goed)
 /fout
 cgn
 goed
@@ -2168,18 +2168,18 @@ Escape
 n
 .
 
-*** Sorting in vim
+**** Sorting in vim
 alfabetsch sorteren vim document:
 :sort /\s\+/
 
-*** Veranderen van tabbing naar spaces
+**** Veranderen van tabbing naar spaces
 y: yanks whatever specified (modifiers, bijv )
 Y: yanks current line completely
 :reg: Show the register
 "aY: Yank line to register B
 :retab
 
-*** Batch renaming in vim/vifm
+**** Batch renaming in vim/vifm
 Open een directory in vifm en tag de namen die je wil veranderen met 't'.
 Selecteer een block met CTRL-v en geef daarna shift-I (insert tekst) Esc om
 het over het hele block toe te voegen.
@@ -2379,7 +2379,6 @@ Bovenstaande werkt niet. Blijkt dat mpd geinstalleerd moet worden! Geen depency 
 En het is een systemd service: ~systemctl start mpd.service~ .
 De service werkt...
 ncmpcpp werkt nog niet...
-
 
 
 *** cava
