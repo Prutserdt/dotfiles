@@ -339,6 +339,17 @@ Automatically tangling by the org-auto-tangle package.
   :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
+Assign some org files that will be used for org-agena. At this moment I'm testing, not sure if I will use it.
+#+begin_src emacs-lisp :tangle config.el
+(setq org-agenda-files
+      '("~/Stack/Code/Emacs/Tasks.org"))
+#+end_src
+
+
+
+
+
+
 ** Custom Elisp code
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el

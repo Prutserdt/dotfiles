@@ -174,6 +174,7 @@ groups.append(
 
 keys.extend([
         Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1")),
+        #Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1")), # For Thinkpad
 ])
 
 layout_theme = {"border_width": 2,

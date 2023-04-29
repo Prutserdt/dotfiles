@@ -37,6 +37,7 @@
   - [[#unicode][unicode]]
   - [[#rdxswitch][rdxswitch]]
   - [[#screenshot2textsh][screenshot2text.sh]]
+  - [[#stack_startupsh][stack_startup.sh]]
   - [[#thunarbookmarkssh][thunarBookmarks.sh]]
 - [[#unused-scripts][Unused scripts]]
   - [[#aandelensh][aandelen.sh]]
@@ -675,7 +676,7 @@ add mod5 = Alt_R
 #+end_src
 
 ** notify-log.sh
-This script will write the notifications to a logfile.
+This script will write the notifications to a logfile. The script is used by running ~~$HOME/.config/notify-log.sh $HOME/.config/notify.log~
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -686,7 +687,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 
 #+begin_src sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
 
-logfile=$1
+logfile=$1 # Next entree after shell script will become the logfile: *.sh ~HOME/.config/notify.log
 
 declare -a MSGBUF
 STATE=off
@@ -696,6 +697,8 @@ printbuf() {
   JOINED=$( echo "${MSGBUF[@]}" | sed 's/,$//' )
   printf "%s\n%s\n" "--- ${MSGTIME} ---" "${JOINED}"
 }
+
+procmsg() {
   if [[ "${1}" =~ member=Notify$ ]]; then
     STATE=on
     MSGTIME=$(date '+%Y-%m-%d %H:%M:%S')
@@ -710,7 +713,7 @@ printbuf() {
           "string \"\"") ;;
           "string \"urgency\"") ;;
           "string \"sender-pid\"") ;;
-          *)
+          ,*)
             MSGBUF+=$( echo -n "${1}," )
           ;;
         esac
@@ -790,6 +793,32 @@ Finally the textfile is catted and piped to the system clipboard with xclip. The
 cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip &&
 notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp/wismij.txt)"
 #+end_src
+
+** stack_startup.sh
+testje...
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+# The following is opening my current Stack AppImage.
+dir="$HOME/Applications" # directory
+# Search for .AppImage files containing "stack" in their name
+appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
+# Check if an appropriate file was found
+if [ -n "$appimage" ]; then
+#    chmod +x "$appimage"
+    notify-send -t 6000 "Starting the Stack .AppImage..." && #send notification
+    "$appimage"  # Execute the file
+else
+    notify-send -t 6000 "No .AppImage file containing 'stack' in its name was found in $dir"
+fi
+#+end_src
+
 
 ** thunarBookmarks.sh
 A script that converts the directory text files (~/Stack/Command_line/directories) to a Thunar bookmarks text file (~/.config/gtk-3.0/bookmarks).

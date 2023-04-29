@@ -104,6 +104,9 @@
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
+(setq org-agenda-files
+      '("~/Stack/Code/Emacs/Tasks.org"))
+
 (defun PowerStrike-testing-upload ()
   (interactive)
   (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"

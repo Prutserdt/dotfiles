@@ -3073,7 +3073,7 @@ Opmerking: als ik de tekstfile verander dan wordt deze niet gebruikt in org-mode
 
 **** mu4e
 
-***** mu4e installation and settings
+***** TODO mu4e installation and settings
 
 In Arch gedownload: mu, isync
 in init.el uncommented: (mu4e +org +gmail)
