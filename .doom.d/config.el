@@ -53,6 +53,14 @@
 
 (setq confirm-kill-emacs nil)
 
+(use-package! gptel
+ :config
+; (setq! gptel-api-key "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")) ; deze werkt!
+; (setq! gptel-api-key '"~/Stack/Code/OpenAI/api_key"))   ;werkte de eerste keer wel, daarna niet!
+(with-temp-buffer
+  (insert-file-contents "~/Stack/Code/OpenAI/api_key")
+  (setq! gptel-api-key (string-trim (buffer-string)))))
+
 (map! :leader
       (:prefix ("d" . "Prutserdt Bindings")
           (:prefix ("a" . "Aduino IDE")
@@ -63,6 +71,11 @@
                 :desc "Kill current buffer"       "k" #'kill-this-buffer
                 :desc "Kill some buffers"         "K" #'kill-some-buffers
                 :desc "Open a buffer"             "o" #'buffer-menu)
+          (:prefix ("c" . "ChatGPT options")
+                :desc "ChatGPT"                   "a" #'gptel
+                :desc "send"                      "s" #'gptel-send
+                :desc "rewrite"                   "r" #'gptel-rewrite-menu
+                :desc "menu"                      "m" #'gptel-menu)
        :desc "Search hotkey key briefly"          "d" #'describe-key-briefly
        :desc "Describe function"                  "h" #'describe-function
        :desc "Increase font size"                 "i" #'doom/increase-font-size
@@ -77,8 +90,10 @@
        :desc "Treemacs file navigation"           "." #'treemacs
           (:prefix ("w" . "windows op scherm")
                 :desc "Cursor to left window"     "h" #'evil-window-left
+                :desc "Cursor one up"             "j" #'evil-window-up
+                :desc "Cursor one down"           "k" #'evil-window-down
                 :desc "Cursor to right window"    "l" #'evil-window-right
-                :desc "Close the window"          "k" #'delete-window
+                :desc "Close the window"          "c" #'delete-window
                 :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer
                 :desc "split window horizontally" "s" #'split-window-horizontally)
        :desc "Write this buffer to file"        "z" #'write-file))

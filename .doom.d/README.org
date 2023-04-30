@@ -16,6 +16,7 @@
   - [[#theming-and-graphical-settings][Theming and graphical settings]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
+  - [[#test][Test...]]
   - [[#custom-keybindings][Custom keybindings]]
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#custom-elisp-code][Custom Elisp code]]
@@ -145,13 +146,23 @@ Settings for python and php hacking, not sure I will use this setup, FIXME
 (package! eval-in-repl)
 (package! jupyter)
 (package! phpactor)
+#+end_src
+
+To automate tangling, saving of code blocks after saving of an org file, the following package is installed. For auto tangling to work the following line should be added to the start of the org file ~#+auto_tangle: t~
+#+begin_src emacs-lisp :tangle packages.el
 (package! org-auto-tangle)
+#+end_src
+
+Test: chatgpt package gptel. FIXME; does not work yet.
+#+begin_src emacs-lisp :tangle packages.el
+(package! gptel)
 #+end_src
 
 Rainbow-mode, highlighting hex code. This funtion I only use manually, to show colors ~Mx rainbow-mode RET~. I did not get it to install via packages.el and instead installed it manually by:
 #+begin_src
 M-x package-install RET rainbow-mode RET
 #+end_src
+
 
 * config.el
 The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
@@ -168,7 +179,7 @@ Set tokyo-night as the theme.
 (setq doom-theme 'doom-tokyo-night)
 #+end_src
 
-The Doom Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added.
+The Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added.
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
@@ -182,7 +193,7 @@ Finding the cursor can be tricky after scrolling or page up/down. The beacon mod
 (setq beacon-blink-duration 3)
 #+end_src
 
-Make the cursor stay vertically while scrolling. (global-centered-cursor-mode to use everywhere)
+Make the cursor stay vertically while scrolling. Another trick to /Never lose your cursor again/.
 #+begin_src emacs-lisp :tangle config.el
 (use-package centered-cursor-mode
   :demand
@@ -226,7 +237,7 @@ NOTE: when this part is placed at the start of ~config.el~ then transparency doe
 (add-to-list 'default-frame-alist '(alpha 85 80))
 #+end_src
 
-Set relative numbering. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
+For jumping in texts it is nice to know the line position where to jump to from the current line instead of calculating it every time (current line=12, line I want to jump to=20, so move 20-12=8 lines downs: ~8j~). By setting the line numbers to ~relative~ the line numbering is relative to the current line and jumping around in the file will become quick and easy. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
 #+begin_src emacs-lisp :tangle config.el
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
@@ -256,7 +267,7 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 #+end_src
 
 ** General settings
-Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting this as a major mode.
+Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting it as a major mode.
 #+begin_src emacs-lisp :tangle config.el
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
@@ -266,8 +277,24 @@ No more conformation message after closing emacs.
 (setq confirm-kill-emacs nil)
 #+end_src
 
+** Test...
+DEADLINE: <2023-05-04 Thu>
+Trying gptel, for using chatGPT. Let's see if I will like and continue to use this application....
+
+In this custom code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
+#+begin_src emacs-lisp :tangle config.el
+(use-package! gptel
+ :config
+; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
+(with-temp-buffer
+  (insert-file-contents "~/Stack/Code/OpenAI/api_key")
+  (setq! gptel-api-key (string-trim (buffer-string)))))
+#+end_src
+
+
+
 ** Custom keybindings
-Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and use the available ~SPC~ ~d~. This area is under construction. Probably it is better to just use the already present doom keybindings and use them. This part is just an excercize to map a set of keybindings.
+Emacs and Doom Emacs us( a lot of keybindings. I try not to interfere with those and use the) available ~SPC~ ~d~. This area is under construction. Probably it is better to just memorize the already present doom keybindings and use them, or use the Emacs keybindings. This part is just an excercize to map a set of keybindings.
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
       (:prefix ("d" . "Prutserdt Bindings")
@@ -279,6 +306,11 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
                 :desc "Kill current buffer"       "k" #'kill-this-buffer
                 :desc "Kill some buffers"         "K" #'kill-some-buffers
                 :desc "Open a buffer"             "o" #'buffer-menu)
+          (:prefix ("c" . "ChatGPT options")
+                :desc "ChatGPT"                   "a" #'gptel
+                :desc "send"                      "s" #'gptel-send
+                :desc "rewrite"                   "r" #'gptel-rewrite-menu
+                :desc "menu"                      "m" #'gptel-menu)
        :desc "Search hotkey key briefly"          "d" #'describe-key-briefly
        :desc "Describe function"                  "h" #'describe-function
        :desc "Increase font size"                 "i" #'doom/increase-font-size
@@ -293,8 +325,10 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
        :desc "Treemacs file navigation"           "." #'treemacs
           (:prefix ("w" . "windows op scherm")
                 :desc "Cursor to left window"     "h" #'evil-window-left
+                :desc "Cursor one up"             "j" #'evil-window-up
+                :desc "Cursor one down"           "k" #'evil-window-down
                 :desc "Cursor to right window"    "l" #'evil-window-right
-                :desc "Close the window"          "k" #'delete-window
+                :desc "Close the window"          "c" #'delete-window
                 :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer
                 :desc "split window horizontally" "s" #'split-window-horizontally)
        :desc "Write this buffer to file"        "z" #'write-file))
@@ -308,12 +342,12 @@ Setup to use sql in org code blocks.
  '((sql . t)))
 #+end_src
 
-More eye candy by superstar bullets in org mode instead of the default boring *. This requires (org +pretty) in ~init.el~.
+More eye candy by superstar bullets in org mode instead of the default ~*~. This requires (org +pretty) in ~init.el~.
 #+begin_src emacs-lisp :tangle config.el
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 #+end_src
 
-Setting the size of the headers for org mode, ordered by the level of course.
+Setting the size of the headers in org mode, ordered by the level of course.
 #+begin_src emacs-lisp :tangle config.el
 (custom-set-faces
   '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
@@ -326,7 +360,7 @@ Setting the size of the headers for org mode, ordered by the level of course.
 
 #+RESULTS:
 
-Hide emphasis markup (e.g. /italic/, *bold*, ~code~, etc)
+Hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+.
 #+begin_src emacs-lisp :tangle config.el
 (setq org-hide-emphasis-markers t)
 #+end_src
@@ -339,16 +373,11 @@ Automatically tangling by the org-auto-tangle package.
   :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
-Assign some org files that will be used for org-agena. At this moment I'm testing, not sure if I will use it.
+Assign some org files that will be used for org-agenda. At this moment I'm testing, not sure if I will use it.
 #+begin_src emacs-lisp :tangle config.el
 (setq org-agenda-files
       '("~/Stack/Code/Emacs/Tasks.org"))
 #+end_src
-
-
-
-
-
 
 ** Custom Elisp code
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
@@ -362,7 +391,7 @@ A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 proc
   (windmove-right)))
 #+end_src
 
-Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into a emacs buffer.
+Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
 TODO: Eigenlijk wil ik bovenstaande test code laten lopen en daarna meteen serial monitor openen. Maar dat lukt nog niet... Close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin."
 #+begin_src emacs-lisp :tangle config.el
 (defun serial-ttyUSB0-115200 ()
@@ -373,9 +402,7 @@ TODO: Eigenlijk wil ik bovenstaande test code laten lopen en daarna meteen seria
   (windmove-right))
 #+end_src
 
-
 * Code snippets
-
 Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:
 
 #+begin_src snippet :tangle snippets/org-mode/PythonBlock

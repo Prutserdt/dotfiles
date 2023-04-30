@@ -9,8 +9,8 @@ xset r rate 300 80 &
 picom -b &
 /usr/bin/emacs --daemon &
 nm-applet &
-signal-desktop --start-in-tray --use-tray-icon &
-$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
+#signal-desktop --start-in-tray --use-tray-icon &
+#$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
 
 ## Next section is for virtual machines. Uncomment all below
 ## First a short break
