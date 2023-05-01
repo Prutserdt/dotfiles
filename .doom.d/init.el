@@ -50,11 +50,11 @@
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
        (org +pretty)     ; organize your plain life in plain text
-       (python +lsp
-        +pyright)        ; beautiful is better than ugly
+       (python +lsp)     ; beautiful is better than ugly
+                         ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        php               ; perl's insecure younger brother
-       latex
+;       latex
 
        :app
 

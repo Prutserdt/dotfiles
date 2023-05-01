@@ -31,8 +31,6 @@
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-center-text t)
 
-;(set-frame-parameter (selected-frame) 'alpha '(95 90))
-;(add-to-list 'default-frame-alist '(alpha 95 90))
 (set-frame-parameter (selected-frame) 'alpha '(85 80))
 (add-to-list 'default-frame-alist '(alpha 85 80))
 
@@ -55,8 +53,7 @@
 
 (use-package! gptel
  :config
-; (setq! gptel-api-key "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")) ; deze werkt!
-; (setq! gptel-api-key '"~/Stack/Code/OpenAI/api_key"))   ;werkte de eerste keer wel, daarna niet!
+; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))

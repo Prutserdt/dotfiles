@@ -16,7 +16,7 @@
   - [[#theming-and-graphical-settings][Theming and graphical settings]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
-  - [[#test][Test...]]
+  - [[#chatgpt-in-emacs][ChatGPT in emacs]]
   - [[#custom-keybindings][Custom keybindings]]
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#custom-elisp-code][Custom Elisp code]]
@@ -88,11 +88,11 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        emacs-lisp        ; drown in parentheses
        markdown          ; writing docs for people to ignore
        (org +pretty)     ; organize your plain life in plain text
-       (python +lsp
-        +pyright)        ; beautiful is better than ugly
+       (python +lsp)     ; beautiful is better than ugly
+                         ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        php               ; perl's insecure younger brother
-       latex
+;       latex
 
        :app
 
@@ -231,8 +231,6 @@ For ultrawide monitors I prefer to set my working window in the middle of the sc
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
 NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
 #+begin_src emacs-lisp :tangle config.el
-;(set-frame-parameter (selected-frame) 'alpha '(95 90))
-;(add-to-list 'default-frame-alist '(alpha 95 90))
 (set-frame-parameter (selected-frame) 'alpha '(85 80))
 (add-to-list 'default-frame-alist '(alpha 85 80))
 #+end_src
@@ -277,11 +275,10 @@ No more conformation message after closing emacs.
 (setq confirm-kill-emacs nil)
 #+end_src
 
-** Test...
-DEADLINE: <2023-05-04 Thu>
-Trying gptel, for using chatGPT. Let's see if I will like and continue to use this application....
+** ChatGPT in emacs
 
-In this custom code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
+In this elisp code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
+The key can be generated here: https://platform.openai.com/account/api-keys.
 #+begin_src emacs-lisp :tangle config.el
 (use-package! gptel
  :config
@@ -290,7 +287,6 @@ In this custom code, `with-temp-buffer` creates a temporary buffer for reading t
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
 #+end_src
-
 
 
 ** Custom keybindings
