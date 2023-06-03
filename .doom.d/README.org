@@ -305,7 +305,6 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
 
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
-
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
@@ -318,7 +317,6 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
     :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
     :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
     :desc "Write this buffer to file"            "z" #'write-file)
-
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
@@ -344,7 +342,6 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Sync database"                    "s" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
-
     (:prefix ("s")
         (:prefix ("c" . "ChatGPT options")
             :desc "ChatGPT"                      "c" #'gptel
@@ -377,8 +374,6 @@ Setting the size of the headers in org mode, ordered by the level of course.
   '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
   '(org-level-5 ((t (:inherit outline-5 :height 1.1)))))
 #+end_src
-
-#+RESULTS:
 
 Hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+.
 #+begin_src emacs-lisp :tangle config.el

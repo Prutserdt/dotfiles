@@ -59,7 +59,6 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 
 (map! :leader
-
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
@@ -72,8 +71,7 @@
     :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
     :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
     :desc "Write this buffer to file"            "z" #'write-file)
-
-    (:prefix ("r" . "org-roam")
+    (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
         (:prefix ("D" . "dailies")
@@ -98,7 +96,6 @@
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Sync database"                    "s" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
-
     (:prefix ("s")
         (:prefix ("c" . "ChatGPT options")
             :desc "ChatGPT"                      "c" #'gptel
@@ -117,8 +114,7 @@
   '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
   '(org-level-3 ((t (:inherit outline-3 :height 1.3))))
   '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
-  '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
-)
+  '(org-level-5 ((t (:inherit outline-5 :height 1.1)))))
 
 (setq org-hide-emphasis-markers t)
 
@@ -135,14 +131,13 @@
   :custom
  ;(org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
   (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
-  (org-roam-dailies-directory "daily/")
+  (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
   :config
-  (org-roam-setup)
-                )
+  (org-roam-setup))
 
-(custom-set-faces
- '(org-roam-link ((t (:foreground "#e24888" :underline t))))
- '(org-roam-link-current ((t (:foreground "#e24888" :underline t)))))
+;;(custom-set-faces
+;; '(org-roam-link ((t (:foreground "#e24888" :underline t))))
+;; '(org-roam-link-current ((t (:foreground "#e24888" :underline t)))))
 
 (use-package! websocket
     :after org-roam)
