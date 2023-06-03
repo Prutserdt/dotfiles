@@ -59,41 +59,52 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 
 (map! :leader
-      (:prefix ("d" . "Prutserdt Bindings")
-          (:prefix ("a" . "Aduino IDE")
-                :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
-                :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
-                :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
-          (:prefix ("b" . "Buffer options")
-                :desc "Kill current buffer"       "k" #'kill-this-buffer
-                :desc "Kill some buffers"         "K" #'kill-some-buffers
-                :desc "Open a buffer"             "o" #'buffer-menu)
-          (:prefix ("c" . "ChatGPT options")
-                :desc "ChatGPT"                   "a" #'gptel
-                :desc "send"                      "s" #'gptel-send
-                :desc "rewrite"                   "r" #'gptel-rewrite-menu
-                :desc "menu"                      "m" #'gptel-menu)
-       :desc "Search hotkey key briefly"          "d" #'describe-key-briefly
-       :desc "Describe function"                  "h" #'describe-function
-       :desc "Increase font size"                 "i" #'doom/increase-font-size
-       :desc "Find a file"                        "f" #'find-file
-       :desc "Open recent files"                  "o" #'counsel-recentf
-       :desc "Reload Doom: doom/reload"           "r" #'doom/reload
-       :desc "Tangling: org-babel-tangle"         "t" #'org-babel-tangle
-       :desc "Hide org blocks"                    "L" #'org-fold-hide-block-all
-       :desc "Laat zien org blocks"               "l" #'org-fold-show-all
-       :desc "Plak keuze uit kill ring"           "p" #'consult-yank-from-kill-ring
-       :desc "Huidige org block aan/uit"          "s" #'org-fold-hide-block-toggle
-       :desc "Treemacs file navigation"           "." #'treemacs
-          (:prefix ("w" . "windows op scherm")
-                :desc "Cursor to left window"     "h" #'evil-window-left
-                :desc "Cursor one up"             "j" #'evil-window-up
-                :desc "Cursor one down"           "k" #'evil-window-down
-                :desc "Cursor to right window"    "l" #'evil-window-right
-                :desc "Close the window"          "c" #'delete-window
-                :desc "Maximize buffer to window" "m" #'doom/window-maximize-buffer
-                :desc "split window horizontally" "s" #'split-window-horizontally)
-       :desc "Write this buffer to file"        "z" #'write-file))
+
+    (:prefix ("d" . "Prutserdt Bindings")
+        (:prefix ("a" . "Aduino IDE")
+            :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
+            :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
+            :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
+        (:prefix ("b" . "Buffer options")
+            :desc "Open a buffer"                "o" #'buffer-menu)
+    :desc "Open recent files"                    "o" #'counsel-recentf
+    :desc "Reload Doom: doom/reload"             "r" #'doom/reload
+    :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
+    :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
+    :desc "Write this buffer to file"            "z" #'write-file)
+
+    (:prefix ("r" . "org-roam")
+        :desc "Open random node"                 "a" #'org-roam-node-random
+        :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
+        (:prefix ("D" . "dailies")
+            :desc "Find daily dir"               "-" #'org-roam-find-directory
+            :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
+            :desc "Goto date"                    "d" #'org-roam-dailies-goto-date
+            :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
+            :desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
+            :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
+            :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
+            :desc "Goto today"                   "t" #'org-roam-dailies-goto-today
+            :desc "Capture today"                "T" #'org-roam-dailies-capture-today
+            :desc "Goto yesterday"               "y" #'org-roam-dailies-goto-yesterday
+            :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
+        :desc "Find node"                        "f" #'org-roam-node-find
+        :desc "Find ref"                         "F" #'org-roam-ref-find
+        :desc "Show graph"                       "g" #'org-roam-graph
+        :desc "Insert node"                      "i" #'org-roam-node-insert
+        :desc "Capture to node"                  "n" #'org-roam-capture
+        :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
+ ;;       :desc "Launch roam buffer"               "R" #'org-roam-buffer
+        :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
+        :desc "Sync database"                    "s" #'org-roam-db-sync
+        :desc "UI in browser"                    "u" #'org-roam-ui-mode)
+
+    (:prefix ("s")
+        (:prefix ("c" . "ChatGPT options")
+            :desc "ChatGPT"                      "c" #'gptel
+            :desc "send"                         "s" #'gptel-send
+            :desc "rewrite"                      "r" #'gptel-rewrite-menu
+            :desc "menu"                         "m" #'gptel-menu)))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -118,6 +129,35 @@
 
 (setq org-agenda-files
       '("~/Stack/Code/Emacs/Tasks.org"))
+
+(use-package org-roam
+  :ensure t
+  :custom
+ ;(org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
+  (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
+  (org-roam-dailies-directory "daily/")
+  :config
+  (org-roam-setup)
+                )
+
+(custom-set-faces
+ '(org-roam-link ((t (:foreground "#e24888" :underline t))))
+ '(org-roam-link-current ((t (:foreground "#e24888" :underline t)))))
+
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 
 (defun PowerStrike-testing-upload ()
   (interactive)

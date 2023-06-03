@@ -428,7 +428,6 @@ picom -b &
 nm-applet &
 signal-desktop --start-in-tray --use-tray-icon &
 $HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
-
 ## Next section is for virtual machines. Uncomment all below
 ## First a short break
 #sleep .2 &&
