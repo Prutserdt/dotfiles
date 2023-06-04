@@ -11,11 +11,11 @@
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 
-(use-package centered-cursor-mode
-  :demand
-  :config
-  ;; Optional, enables centered-cursor-mode in all buffers.
-  (global-centered-cursor-mode))
+;;(use-package centered-cursor-mode
+;;  :demand
+;;  :config
+;;  ;; Optional, enables centered-cursor-mode in all buffers.
+;;  (global-centered-cursor-mode))
 
 (use-package rainbow-delimiters)
 
@@ -124,7 +124,8 @@
   :hook (org-mode . org-auto-tangle-mode))
 
 (setq org-agenda-files
-      '("~/Stack/Code/Emacs/Tasks.org"))
+      '("~/Stack/Command_line/RoamNotes"))
+;;      '("~/Stack/Code/Emacs/Tasks.org"))
 
 (use-package org-roam
   :ensure t
@@ -135,19 +136,11 @@
   :config
   (org-roam-setup))
 
-;;(custom-set-faces
-;; '(org-roam-link ((t (:foreground "#e24888" :underline t))))
-;; '(org-roam-link-current ((t (:foreground "#e24888" :underline t)))))
-
 (use-package! websocket
     :after org-roam)
 
 (use-package! org-roam-ui
     :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t

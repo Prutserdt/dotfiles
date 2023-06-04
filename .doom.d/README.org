@@ -1,4 +1,4 @@
-#+TITLE: My configuration of Emacs
+#+TITLE: My configuration of
 #+STARTUP: showeverything
 #+STARTUP: inlineimages
 #+auto_tangle: t
@@ -21,7 +21,6 @@
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-Roam-ui configuration]]
-  - [[#custom-elisp-code][Custom Elisp code]]
 - [[#code-snippets][Code snippets]]
 - [[#credits][Credits]]
 
@@ -103,7 +102,6 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        )
 #+end_src
 
-
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of ~init.el~. This file shouln't be byte compiled.
 #+begin_src emacs-lisp :tangle packages.el
@@ -126,7 +124,7 @@ Centering text to the middle of the window can be done by the visual-fill-column
 (package! visual-fill-column)
 #+end_src
 
-Centered-cursor mode, keep the cursor in one place while scrolling.
+Centered-cursor mode, keep the cursor in one place while scrolling. At this moment I am not using it anymore, I will keep this package for a while .
 #+begin_src emacs-lisp :tangle packages.el
 (package! centered-cursor-mode)
 #+end_src
@@ -136,13 +134,13 @@ Web-mode for editing of html/php/css
 (package! web-mode)
 #+end_src
 
-Adding arduino-mode, testing, not working properly yet FIXME
+Adding arduino-mode, testing, not working properly yet.
 #+begin_src emacs-lisp :tangle packages.el
 (package! arduino-cli-mode)
 (package! arduino-mode)
 #+end_src
 
-Settings for python and php hacking, not sure I will use this setup, FIXME
+Settings for python and php hacking.
 #+begin_src emacs-lisp :tangle packages.el
 (package! org-babel-eval-in-repl)
 (package! eval-in-repl)
@@ -150,33 +148,24 @@ Settings for python and php hacking, not sure I will use this setup, FIXME
 (package! phpactor)
 #+end_src
 
-To automate tangling, saving of code blocks after saving of an org file, the following package is installed. For auto tangling to work the following line should be added to the start of the org file ~#+auto_tangle: t~
+To automate tangling of code blocks, the following package is installed. For auto tangling to work the following line should be added to the start of the org file ~#+auto_tangle: t~. When this is added the source blocks are automatically tangled when an org document is saved, pretty sweet😃.
 #+begin_src emacs-lisp :tangle packages.el
 (package! org-auto-tangle)
 #+end_src
 
-Test: chatgpt package gptel. FIXME; does not work yet.
+The chatgpt package gptel.
 #+begin_src emacs-lisp :tangle packages.el
 (package! gptel)
 #+end_src
 
-org roam ui....
+~org-roam~ is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem. ~org-roam-ui~ is a frontend for exploring and interacting with your org-roam notes.
 #+begin_src emacs-lisp :tangle packages.el
 (unpin! org-roam) ; unpinning is necessary for Room emacs according to de developer of org-roam-ui
 (package! org-roam-ui)
 #+end_src
 
-
-
-
-Rainbow-mode, highlighting hex code. This funtion I only use manually, to show colors ~Mx rainbow-mode RET~. I did not get it to install via packages.el and instead installed it manually by:
-#+begin_src
-M-x package-install RET rainbow-mode RET
-#+end_src
-
-
 * config.el
-The custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and email settings.
+My custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering, org settings.
 
 Let's remind the reader of ~config.el~ to not edit this file directly.
 #+begin_src emacs-lisp :tangle config.el
@@ -185,12 +174,12 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 #+end_src
 
 ** Theming and graphical settings
-Set tokyo-night as the theme.
+Setting the *superior* tokyo-night theme. 🤩
 #+begin_src emacs-lisp :tangle config.el
 (setq doom-theme 'doom-tokyo-night)
 #+end_src
 
-The Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added.
+The Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added. This is pretty but kind of useless. I will add functionality later. Perhaps some
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
@@ -204,13 +193,13 @@ Finding the cursor can be tricky after scrolling or page up/down. The beacon mod
 (setq beacon-blink-duration 3)
 #+end_src
 
-Make the cursor stay vertically while scrolling. Another trick to /Never lose your cursor again/.
+Make the cursor stay in the middle of the screen while scrolling. Another trick to /Never lose your cursor again/. I switched this mode off since I am not getting used to it. NOTE; remove this package in the future if this is not used anymore...
 #+begin_src emacs-lisp :tangle config.el
-(use-package centered-cursor-mode
-  :demand
-  :config
-  ;; Optional, enables centered-cursor-mode in all buffers.
-  (global-centered-cursor-mode))
+;;(use-package centered-cursor-mode
+;;  :demand
+;;  :config
+;;  ;; Optional, enables centered-cursor-mode in all buffers.
+;;  (global-centered-cursor-mode))
 #+end_src
 
 Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
@@ -218,7 +207,7 @@ Elisp is parentheses galore! The package rainbow-delimiters is matching the colo
 (use-package rainbow-delimiters)
 #+end_src
 
-The superior font is set here.
+A *superior* font is set here.
 #+begin_src emacs-lisp :tangle config.el
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
@@ -287,9 +276,8 @@ No more conformation message after closing emacs.
 #+end_src
 
 ** ChatGPT in emacs
-
 In this elisp code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
-The key can be generated here: https://platform.openai.com/account/api-keys.
+A chatGPT key can be generated here: https://platform.openai.com/account/api-keys.
 #+begin_src emacs-lisp :tangle config.el
 (use-package! gptel
  :config
@@ -298,7 +286,6 @@ The key can be generated here: https://platform.openai.com/account/api-keys.
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
 #+end_src
-
 
 ** Custom keybindings
 Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and add a few of my own.
@@ -350,8 +337,6 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
             :desc "menu"                         "m" #'gptel-menu)))
 #+end_src
 
-
-
 ** Org-mode configuration
 Setup to use sql in org code blocks.
 #+begin_src emacs-lisp :tangle config.el
@@ -388,15 +373,15 @@ Automatically tangling by the org-auto-tangle package.
   :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
-Assign some org files that will be used for org-agenda. At this moment I'm testing, not sure if I will use it.
+Assign some org files that will be used for org-agenda. At this moment I'm testing, not sure if I will keep using it.
 #+begin_src emacs-lisp :tangle config.el
 (setq org-agenda-files
-      '("~/Stack/Code/Emacs/Tasks.org"))
+      '("~/Stack/Command_line/RoamNotes"))
+;;      '("~/Stack/Code/Emacs/Tasks.org"))
 #+end_src
 
 ** Org-roam configuration
-
-Org-roam is a plain text knowledge management system. Org-roam borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
+~org-roam~ is a plain text knowledge management system. Org-roam borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
 The directory is set where the atomic files will be stored.
 #+begin_src emacs-lisp :tangle config.el
 (use-package org-roam
@@ -409,17 +394,8 @@ The directory is set where the atomic files will be stored.
   (org-roam-setup))
 #+end_src
 
-color setting: does *NOT* work... FIXME
-#+begin_src emacs-lisp :tangle config.el
-;;(custom-set-faces
-;; '(org-roam-link ((t (:foreground "#e24888" :underline t))))
-;; '(org-roam-link-current ((t (:foreground "#e24888" :underline t)))))
-#+end_src
-
-
 ** Org-Roam-ui configuration
-
-Org-Roam-UI is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes.
+~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes.
 
 #+begin_src emacs-lisp :tangle config.el
 (use-package! websocket
@@ -427,10 +403,6 @@ Org-Roam-UI is a graphical front end for org-roam. It will open a browser for ex
 
 (use-package! org-roam-ui
     :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
@@ -438,8 +410,6 @@ Org-Roam-UI is a graphical front end for org-roam. It will open a browser for ex
           org-roam-ui-open-on-start t))
 #+end_src
 
-
-** Custom Elisp code
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el
 (defun PowerStrike-testing-upload ()
@@ -452,7 +422,6 @@ A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 proc
 #+end_src
 
 Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
-TODO: Eigenlijk wil ik bovenstaande test code laten lopen en daarna meteen serial monitor openen. Maar dat lukt nog niet... Close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin."
 #+begin_src emacs-lisp :tangle config.el
 (defun serial-ttyUSB0-115200 ()
   (interactive)
@@ -461,10 +430,10 @@ TODO: Eigenlijk wil ik bovenstaande test code laten lopen en daarna meteen seria
 ;;(switch-to-buffer "/dev/ttyUSB0")
   (windmove-right))
 #+end_src
+TODO: I would like to run ~serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin." but this did not work.
 
 * Code snippets
 Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:
-
 #+begin_src snippet :tangle snippets/org-mode/PythonBlock
 # -*- mode: snippet -*-
 # name: PythonBlock
@@ -483,5 +452,6 @@ Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_
 
 * Credits
 My configuration of Doom Emacs is partially based on these ones.
-- :book: https://gitlab.com/zzamboni/dot-doom
-- :book: https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
+- :book:   https://gitlab.com/zzamboni/dot-doom
+- :book:   https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
+- :online: https://systemcrafters.net/
