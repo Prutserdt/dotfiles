@@ -454,4 +454,4 @@ Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_
 My configuration of Doom Emacs is partially based on these ones.
 - :book:   https://gitlab.com/zzamboni/dot-doom
 - :book:   https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
-- :online: https://systemcrafters.net/
+- :book: https://systemcrafters.net/
