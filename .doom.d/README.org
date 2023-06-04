@@ -124,11 +124,6 @@ Centering text to the middle of the window can be done by the visual-fill-column
 (package! visual-fill-column)
 #+end_src
 
-Centered-cursor mode, keep the cursor in one place while scrolling. At this moment I am not using it anymore, I will keep this package for a while .
-#+begin_src emacs-lisp :tangle packages.el
-(package! centered-cursor-mode)
-#+end_src
-
 Web-mode for editing of html/php/css
 #+begin_src emacs-lisp :tangle packages.el
 (package! web-mode)
@@ -179,7 +174,7 @@ Setting the *superior* tokyo-night theme. 🤩
 (setq doom-theme 'doom-tokyo-night)
 #+end_src
 
-The Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added. This is pretty but kind of useless. I will add functionality later. Perhaps some
+The Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added. This is pretty but kind of useless. I will add some functionality later. Probably a list of recently worked on files...
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
@@ -191,15 +186,6 @@ Finding the cursor can be tricky after scrolling or page up/down. The beacon mod
 #+begin_src emacs-lisp :tangle config.el
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
-#+end_src
-
-Make the cursor stay in the middle of the screen while scrolling. Another trick to /Never lose your cursor again/. I switched this mode off since I am not getting used to it. NOTE; remove this package in the future if this is not used anymore...
-#+begin_src emacs-lisp :tangle config.el
-;;(use-package centered-cursor-mode
-;;  :demand
-;;  :config
-;;  ;; Optional, enables centered-cursor-mode in all buffers.
-;;  (global-centered-cursor-mode))
 #+end_src
 
 Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.

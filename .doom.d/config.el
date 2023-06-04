@@ -11,12 +11,6 @@
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
 
-;;(use-package centered-cursor-mode
-;;  :demand
-;;  :config
-;;  ;; Optional, enables centered-cursor-mode in all buffers.
-;;  (global-centered-cursor-mode))
-
 (use-package rainbow-delimiters)
 
 (set-frame-font "Hack 12" t t)
