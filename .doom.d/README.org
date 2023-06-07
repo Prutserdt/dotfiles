@@ -274,22 +274,23 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 #+end_src
 
 ** Custom keybindings
-Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those and add a few of my own.
+Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top of it. I try not to interfere with those and add a few of my own, respecting the Doom keybinding framework.
 
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
+    (:prefix ("b") ;; default Doom keybinding
+        :desc "Open a buffer"                    "o" #'buffer-menu)
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
             :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
             :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
-        (:prefix ("b" . "Buffer options")
-            :desc "Open a buffer"                "o" #'buffer-menu)
-    :desc "Open recent files"                    "o" #'counsel-recentf
     :desc "Reload Doom: doom/reload"             "r" #'doom/reload
     :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
     :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
-    :desc "Write this buffer to file"            "z" #'write-file)
+    :desc "Write this buffer to file"            "w" #'write-file)
+    (:prefix ("o") ;; default Doom keybinding
+        :desc "Open recent files"                "o" #'counsel-recentf)
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
@@ -311,11 +312,11 @@ Emacs and Doom Emacs use a lot of keybindings. I try not to interfere with those
         :desc "Insert node"                      "i" #'org-roam-node-insert
         :desc "Capture to node"                  "n" #'org-roam-capture
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
- ;;       :desc "Launch roam buffer"               "R" #'org-roam-buffer
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-        :desc "Sync database"                    "s" #'org-roam-db-sync
+        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
+        :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
-    (:prefix ("s")
+    (:prefix ("s") ;; Default Doom keybinding
         (:prefix ("c" . "ChatGPT options")
             :desc "ChatGPT"                      "c" #'gptel
             :desc "send"                         "s" #'gptel-send
