@@ -1,4 +1,4 @@
-#+TITLE: My configuration of
+#+TITLE: My condiguration of
 #+STARTUP: showeverything
 #+STARTUP: inlineimages
 #+auto_tangle: t
@@ -18,14 +18,14 @@
   - [[#general-settings][General settings]]
   - [[#chatgpt-in-emacs][ChatGPT in emacs]]
   - [[#custom-keybindings][Custom keybindings]]
-  - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-Roam-ui configuration]]
+  - [[#custom-code][Custom code]]
 - [[#code-snippets][Code snippets]]
 - [[#credits][Credits]]
 
 * About this config
-This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs, after modifying this README.org!
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs, after modifying this README.org!
 
 * init.el
 This file controls what Doom modules are enabled and what order they load in and the first line of the file is lexical binding. This makes the file run (sligthly) faster.
@@ -179,7 +179,7 @@ The Emacs welcome screen is modified here. A different image is used, the defaul
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
-  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 #+end_src
 
 Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area. /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
@@ -202,7 +202,7 @@ A *superior* font is set here.
 Make the highlighting global for the words TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW with ~hl-todo-mode~.
 #+begin_src emacs-lisp :tangle config.el
 (define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
-  (lambda () (hl-todo-mode 1)))
+    (lambda () (hl-todo-mode 1)))
 (my-global-hl-todo-mode 1)
 #+end_src
 
@@ -278,8 +278,8 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
 
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
-    (:prefix ("b") ;; default Doom keybinding
-        :desc "Open a buffer"                    "o" #'buffer-menu)
+;;    (:prefix ("b") ;; default Doom keybinding
+;;        :desc "Open a buffer"                    "o" #'buffer-menu)
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
@@ -289,8 +289,9 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
     :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
     :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
     :desc "Write this buffer to file"            "w" #'write-file)
-    (:prefix ("o") ;; default Doom keybinding
-        :desc "Open recent files"                "o" #'counsel-recentf)
+;; Remove since SPC f r is the default doom keybinding to find a recent file...
+;;    (:prefix ("o") ;; default Doom keybinding
+;;        :desc "Open recent files"                "o" #'counsel-recentf)
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
@@ -324,70 +325,45 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
             :desc "menu"                         "m" #'gptel-menu)))
 #+end_src
 
-** Org-mode configuration
-Setup to use sql in org code blocks.
-#+begin_src emacs-lisp :tangle config.el
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)))
-#+end_src
-
-More eye candy by superstar bullets in org mode instead of the default ~*~. This requires (org +pretty) in ~init.el~.
-#+begin_src emacs-lisp :tangle config.el
-(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
-#+end_src
-
-Setting the size of the headers in org mode, ordered by the level of course.
-#+begin_src emacs-lisp :tangle config.el
-(custom-set-faces
-  '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
-  '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
-  '(org-level-3 ((t (:inherit outline-3 :height 1.3))))
-  '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
-  '(org-level-5 ((t (:inherit outline-5 :height 1.1)))))
-#+end_src
-
-Hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+.
-#+begin_src emacs-lisp :tangle config.el
-(setq org-hide-emphasis-markers t)
-#+end_src
-
-Automatically tangling by the org-auto-tangle package.
-#+begin_src emacs-lisp :tangle config.el
-(use-package org-auto-tangle
-  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
-#+end_src
-
-Assign some org files that will be used for org-agenda. At this moment I'm testing, not sure if I will keep using it.
-#+begin_src emacs-lisp :tangle config.el
-(setq org-agenda-files
-      '("~/Stack/Command_line/RoamNotes"))
-;;      '("~/Stack/Code/Emacs/Tasks.org"))
-#+end_src
-
 ** Org-roam configuration
 ~org-roam~ is a plain text knowledge management system. Org-roam borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
 The directory is set where the atomic files will be stored.
 #+begin_src emacs-lisp :tangle config.el
 (use-package org-roam
-  :ensure t
-  :custom
+;;  :ensure t
+;;  :init
+;;  (setq org-roam-v2-ack t)
+    :custom
  ;(org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
-  (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
-  (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
-  :config
-  (org-roam-setup))
+    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
+    (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
+    (org-roam-completion-everywhere t)
+    :config
+    (org-roam-setup))
+#+end_src
+
+Several types of captures can be configured here. I added a TODO template next to the default. These options are presented when =org-roam-capture= or =org-roam-node-insert= is executed.
+#+begin_src emacs-lisp :tangle config.el
+(setq org-roam-capture-templates
+    '(("d" "default" plain
+       "%?"
+       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)
+      ("t" "todo notes" plain
+       "\n* TODO list [0/2]\n- [ ] %?\n- [ ] "
+       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)))
 #+end_src
 
 ** Org-Roam-ui configuration
-~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes.
-
+~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes and therefore a websocket package is needed.
 #+begin_src emacs-lisp :tangle config.el
 (use-package! websocket
     :after org-roam)
+#+end_src
 
+Now that the websocket is setup the org-roam-ui can be set.
+#+begin_src emacs-lisp :tangle config.el
 (use-package! org-roam-ui
     :after org-roam ;; or :after org
     :config
@@ -397,25 +373,26 @@ The directory is set where the atomic files will be stored.
           org-roam-ui-open-on-start t))
 #+end_src
 
+** Custom code
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el
 (defun PowerStrike-testing-upload ()
-  (interactive)
-  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
-  (doom/window-maximize-buffer)
-  (split-window-horizontally)
-  (switch-to-buffer "*Async Shell Command*")
-  (windmove-right)))
+    (interactive)
+    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
+    (doom/window-maximize-buffer)
+    (split-window-horizontally)
+    (switch-to-buffer "*Async Shell Command*")
+    (windmove-right)))
 #+end_src
 
 Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
 #+begin_src emacs-lisp :tangle config.el
 (defun serial-ttyUSB0-115200 ()
-  (interactive)
-  (split-window-horizontally)
-  (serial-term "/dev/ttyUSB0" 115200)
+    (interactive)
+    (split-window-horizontally)
+    (serial-term "/dev/ttyUSB0" 115200)
 ;;(switch-to-buffer "/dev/ttyUSB0")
-  (windmove-right))
+    (windmove-right))
 #+end_src
 TODO: I would like to run ~serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin." but this did not work.
 
@@ -438,7 +415,7 @@ $0
 Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
 
 * Credits
-My configuration of Doom Emacs is partially based on these ones.
+My configuration of Doom Emacs is partially based on these ones, .
 - :book:   https://gitlab.com/zzamboni/dot-doom
 - :book:   https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
-- :book: https://systemcrafters.net/
+- :book:   https://systemcrafters.net/

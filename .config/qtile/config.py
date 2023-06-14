@@ -66,8 +66,8 @@ keys = [
     Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"), desc="Shutdown Qtile by a shellscript"),
 
     #Hotkeys to move windows around, resize windows and choose layouts
-    Key([mL], "h", lazy.layout.left(),                  desc="Move window focus to the left"),
-    Key([mL], "l", lazy.layout.right(),                 desc="Move window focus to the right"),
+#   Key([mL], "h", lazy.layout.left(),                  desc="Move window focus to the left"),
+#   Key([mL], "l", lazy.layout.right(),                 desc="Move window focus to the right"),
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
     Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
     Key([mL, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),

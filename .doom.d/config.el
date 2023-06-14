@@ -6,7 +6,7 @@
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (add-hook! '+doom-dashboard-functions :append
-  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 
 (beacon-mode 1)
 (setq beacon-blink-duration 3)
@@ -17,7 +17,7 @@
 (setq default-frame-alist '((font . "Hack 13")))
 
 (define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
-  (lambda () (hl-todo-mode 1)))
+    (lambda () (hl-todo-mode 1)))
 (my-global-hl-todo-mode 1)
 
 (setq-default fill-column 110)
@@ -53,8 +53,8 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 
 (map! :leader
-    (:prefix ("b") ;; default Doom keybinding
-        :desc "Open a buffer"                    "o" #'buffer-menu)
+;;    (:prefix ("b") ;; default Doom keybinding
+;;        :desc "Open a buffer"                    "o" #'buffer-menu)
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
@@ -64,8 +64,9 @@
     :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
     :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
     :desc "Write this buffer to file"            "w" #'write-file)
-    (:prefix ("o") ;; default Doom keybinding
-        :desc "Open recent files"                "o" #'counsel-recentf)
+;; Remove since SPC f r is the default doom keybinding to find a recent file...
+;;    (:prefix ("o") ;; default Doom keybinding
+;;        :desc "Open recent files"                "o" #'counsel-recentf)
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
@@ -98,38 +99,27 @@
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
             :desc "menu"                         "m" #'gptel-menu)))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)))
-
-(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
-
-(custom-set-faces
-  '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
-  '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
-  '(org-level-3 ((t (:inherit outline-3 :height 1.3))))
-  '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
-  '(org-level-5 ((t (:inherit outline-5 :height 1.1)))))
-
-(setq org-hide-emphasis-markers t)
-
-(use-package org-auto-tangle
-  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode))
-
-(setq org-agenda-files
-      '("~/Stack/Command_line/RoamNotes"))
-;;      '("~/Stack/Code/Emacs/Tasks.org"))
-
 (use-package org-roam
-  :ensure t
-  :custom
+;;  :ensure t
+;;  :init
+;;  (setq org-roam-v2-ack t)
+    :custom
  ;(org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
-  (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
-  (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
-  :config
-  (org-roam-setup))
+    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
+    (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
+    (org-roam-completion-everywhere t)
+    :config
+    (org-roam-setup))
+
+(setq org-roam-capture-templates
+    '(("d" "default" plain
+       "%?"
+       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)
+      ("t" "todo notes" plain
+       "\n* TODO list [0/2]\n- [ ] %?\n- [ ] "
+       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+       :unnarrowed t)))
 
 (use-package! websocket
     :after org-roam)
@@ -143,16 +133,16 @@
           org-roam-ui-open-on-start t))
 
 (defun PowerStrike-testing-upload ()
-  (interactive)
-  (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
-  (doom/window-maximize-buffer)
-  (split-window-horizontally)
-  (switch-to-buffer "*Async Shell Command*")
-  (windmove-right)))
+    (interactive)
+    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
+    (doom/window-maximize-buffer)
+    (split-window-horizontally)
+    (switch-to-buffer "*Async Shell Command*")
+    (windmove-right)))
 
 (defun serial-ttyUSB0-115200 ()
-  (interactive)
-  (split-window-horizontally)
-  (serial-term "/dev/ttyUSB0" 115200)
+    (interactive)
+    (split-window-horizontally)
+    (serial-term "/dev/ttyUSB0" 115200)
 ;;(switch-to-buffer "/dev/ttyUSB0")
-  (windmove-right))
+    (windmove-right))
