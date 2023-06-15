@@ -33,9 +33,12 @@
   - [[#exitqtilesh][exitqtile.sh]]
   - [[#incrmonitorbrightnesssh][incrMonitorBrightness.sh]]
   - [[#kbswitch][kbswitch]]
+  - [[#nightcolordownsh][nightColorDown.sh]]
+  - [[#nightcolorupsh][nightColorUp.sh]]
   - [[#notify-logsh][notify-log.sh]]
   - [[#unicode][unicode]]
   - [[#rdxswitch][rdxswitch]]
+  - [[#resetrgbsh][resetRGB.sh]]
   - [[#screenshot2textsh][screenshot2text.sh]]
   - [[#stack_startupsh][stack_startup.sh]]
   - [[#thunarbookmarkssh][thunarBookmarks.sh]]
@@ -58,7 +61,6 @@ This document is a note-to-self about scripts on my GNU/Linux system and is my a
 My intention is to modify the scripts from this document and use ~org-babel-tangle~ to export the scripts.
 
 * My scripts
-
 ** aandelen.py
 A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio information are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
@@ -675,6 +677,71 @@ remove mod1 = Alt_R
 add mod5 = Alt_R
 #+end_src
 
+
+** nightColorDown.sh
+A script to make the screen more reddish.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+Get the current individual Red/Green/Blue gamma values.
+#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
+echo "Gamma value: $gamma_value is currently used"
+IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
+#+end_src
+
+Calculate the new gamma values. NOTE: the 1/ is needed because of an bug in xrandr, see https://gitlab.freedesktop.org/xorg/app/xrandr/-/issues/33
+#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+new_gamma_r=$(echo "1/$gamma_r" | bc -l)
+new_gamma_g=$(echo "1/$gamma_g * 1.1" | bc -l)
+new_gamma_b=$(echo "1/$gamma_b * 1.1" | bc -l)
+new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
+#+end_src
+
+Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
+#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
+echo "New gamma value, after xrandr: $new_gamma_value"
+notify-send -t 60000 "🔆⚠ Red decreased to: " "$new_gamma_value"️
+#+end_src
+
+** nightColorUp.sh
+A script to make the screen more reddish.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+Get the current individual Red/Green/Blue gamma values.
+#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
+echo "Gamma value: $gamma_value is currently used"
+IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
+#+end_src
+
+Calculate the new gamma values. NOTE: the =1/gamma= is needed because of an bug in xrandr, see https://gitlab.freedesktop.org/xorg/app/xrandr/-/issues/33
+#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+new_gamma_r=$(echo "1/$gamma_r" | bc -l)
+new_gamma_g=$(echo "1/$gamma_g * 0.9" | bc -l)
+new_gamma_b=$(echo "1/$gamma_b * 0.9" | bc -l)
+new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
+#+end_src
+
+Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
+#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
+echo "New gamma value, after xrandr: $new_gamma_value"
+notify-send -t 60000 "🔆⚠ Red increased to: " "$new_gamma_value"️
+#+end_src
+
 ** notify-log.sh
 This script will write the notifications to a logfile. The script is used by running ~~$HOME/.config/notify-log.sh $HOME/.config/notify.log~
 
@@ -760,6 +827,22 @@ keycode 134 = Super_R
 !keycode 107 = Super_R
 ! Connect mod3 to be Super_R:
 add mod3 = Super_R
+#+end_src
+
+** resetRGB.sh
+Reset the gamma settings (RGB) to a default value of 1:1:1.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
+#+begin_src sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
+xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma 1:1:1
+notify-send -t 60000 "🔆⚠ RGB was reset!"
 #+end_src
 
 ** screenshot2text.sh
