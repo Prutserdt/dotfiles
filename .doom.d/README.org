@@ -284,7 +284,7 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
 
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
-    (:prefix ("b") ;; default Doom keybinding. I now use ~Spc b B~ which is similar
+    (:prefix ("b") ;; default Doom keybinding. Another option is the build in =Spc b B=
         :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
@@ -394,6 +394,8 @@ The directory is set where the atomic files will be stored.
 #+end_src
 
 Several types of captures can be configured here. I added a TODO template next to the default. These options are presented when =org-roam-capture= or =org-roam-node-insert= is executed.
+
+
 #+begin_src emacs-lisp :tangle config.el
 (setq org-roam-capture-templates
     '(("d" "default" plain
@@ -404,6 +406,30 @@ Several types of captures can be configured here. I added a TODO template next t
        "\n* TODO list [0/2]\n- [ ] %?\n- [ ] "
        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
        :unnarrowed t)))
+#+end_src
+
+FIXME: first setup of my dailies capture tempate... copy/paste of https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16
+Really cool! Need to add a todo list... :-)
+
+#+begin_src emacs-lisp :tangle config.el
+(setq org-roam-dailies-capture-templates
+    (let ((head
+           (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n* Daily Overview\n"
+                   "#+begin_src emacs-lisp :results value raw\n"
+                    "(as/get-daily-agenda \"%<%Y-%m-%d>\")\n"
+                    "#+end_src\n"
+                    "* [/] Do Today\n* [/] Maybe Do Today\n* Journal\n")))
+        `(("j" "journal" entry
+           "* %<%H:%M> %?"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Journal")))
+          ("t" "do today" item
+           "[ ] %a"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Do Today"))
+           :immediate-finish t)
+          ("m" "maybe do today" item
+           "[ ] %a"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Maybe Do Today"))
+           :immediate-finish t))))
 #+end_src
 
 ** Org-Roam-ui configuration

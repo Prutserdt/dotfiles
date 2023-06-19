@@ -55,7 +55,7 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 
 (map! :leader
-    (:prefix ("b") ;; default Doom keybinding. I now use ~Spc b B~ which is similar
+    (:prefix ("b") ;; default Doom keybinding. Another option is the build in =Spc b B=
         :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
@@ -147,6 +147,25 @@
        "\n* TODO list [0/2]\n- [ ] %?\n- [ ] "
        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
        :unnarrowed t)))
+
+(setq org-roam-dailies-capture-templates
+    (let ((head
+           (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n* Daily Overview\n"
+                   "#+begin_src emacs-lisp :results value raw\n"
+                    "(as/get-daily-agenda \"%<%Y-%m-%d>\")\n"
+                    "#+end_src\n"
+                    "* [/] Do Today\n* [/] Maybe Do Today\n* Journal\n")))
+        `(("j" "journal" entry
+           "* %<%H:%M> %?"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Journal")))
+          ("t" "do today" item
+           "[ ] %a"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Do Today"))
+           :immediate-finish t)
+          ("m" "maybe do today" item
+           "[ ] %a"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Maybe Do Today"))
+           :immediate-finish t))))
 
 (use-package! websocket
     :after org-roam)
