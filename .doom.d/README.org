@@ -18,6 +18,7 @@
   - [[#general-settings][General settings]]
   - [[#chatgpt-in-emacs][ChatGPT in emacs]]
   - [[#custom-keybindings][Custom keybindings]]
+  - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-Roam-ui configuration]]
   - [[#custom-code][Custom code]]
@@ -174,7 +175,7 @@ Setting the *superior* tokyo-night theme. 🤩
 (setq doom-theme 'doom-tokyo-night)
 #+end_src
 
-The Emacs welcome screen is modified here. A different image is used, the default widgets are removed and alternative text is added. This is pretty but kind of useless. I will add some functionality later. Probably a list of recently worked on files...
+A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
@@ -184,7 +185,7 @@ The Emacs welcome screen is modified here. A different image is used, the defaul
 
 Finding the cursor can be tricky after scrolling or page up/down. The beacon module comes to the resque by highlighing the cursor area. /Never lose your cursor again/. Because I'm slow I set the blinkin duration to a whole 3 seconds.
 #+begin_src emacs-lisp :tangle config.el
-(beacon-mode 1)
+(beacon-mode 0)
 (setq beacon-blink-duration 3)
 #+end_src
 
@@ -251,12 +252,17 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 #+end_src
 
 ** General settings
+Make the scrolling experience more smooth by the following package:
+#+begin_src emacs-lisp :tangle config.el
+(pixel-scroll-mode 0)
+#+end_src
+
 Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting it as a major mode.
 #+begin_src emacs-lisp :tangle config.el
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+end_src
 
-No more conformation message after closing emacs.
+No more conformation messages whilst closing emacs.
 #+begin_src emacs-lisp :tangle config.el
 (setq confirm-kill-emacs nil)
 #+end_src
@@ -278,8 +284,8 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
 
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
-;;    (:prefix ("b") ;; default Doom keybinding
-;;        :desc "Open a buffer"                    "o" #'buffer-menu)
+    (:prefix ("b") ;; default Doom keybinding. I now use ~Spc b B~ which is similar
+        :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
@@ -325,6 +331,49 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
             :desc "menu"                         "m" #'gptel-menu)))
 #+end_src
 
+** Org-mode configuration
+Setup to use sql in org code blocks.
+#+begin_src emacs-lisp :tangle config.el
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)))
+#+end_src
+
+More eye candy by superstar bullets in org mode instead of the default ~*~. This requires (org +pretty) in ~init.el~.
+#+begin_src emacs-lisp :tangle config.el
+(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+#+end_src
+
+Setting the size of the headers in org mode, ordered by the level of course.
+#+begin_src emacs-lisp :tangle config.el
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.3))))
+  '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
+  '(org-level-5 ((t (:inherit outline-5 :height 1.1)))))
+#+end_src
+
+Hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+.
+#+begin_src emacs-lisp :tangle config.el
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+Automatically tangling by the org-auto-tangle package.
+#+begin_src emacs-lisp :tangle config.el
+(use-package org-auto-tangle
+  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
+#+end_src
+
+Assign some org files that will be used for org-agenda. At this moment I'm testing, not sure if I will keep using it.
+#+begin_src emacs-lisp :tangle config.el
+(setq org-agenda-files
+      '("~/Stack/Command_line/RoamNotes"))
+;;      '("~/Stack/Code/Emacs/Tasks.org"))
+#+end_src
+
 ** Org-roam configuration
 ~org-roam~ is a plain text knowledge management system. Org-roam borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
 The directory is set where the atomic files will be stored.
@@ -339,7 +388,9 @@ The directory is set where the atomic files will be stored.
     (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
     :config
-    (org-roam-setup))
+    (org-roam-db-autosync-enable))
+;;  (org-roam-setup))
+
 #+end_src
 
 Several types of captures can be configured here. I added a TODO template next to the default. These options are presented when =org-roam-capture= or =org-roam-node-insert= is executed.
@@ -378,11 +429,11 @@ A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 proc
 #+begin_src emacs-lisp :tangle config.el
 (defun PowerStrike-testing-upload ()
     (interactive)
-    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
+    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
     (split-window-horizontally)
     (switch-to-buffer "*Async Shell Command*")
-    (windmove-right)))
+    (windmove-right))
 #+end_src
 
 Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.

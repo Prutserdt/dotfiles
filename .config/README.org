@@ -743,7 +743,7 @@ notify-send -t 60000 "🔆⚠ Red increased to: " "$new_gamma_value"️
 #+end_src
 
 ** notify-log.sh
-This script will write the notifications to a logfile. The script is used by running ~~$HOME/.config/notify-log.sh $HOME/.config/notify.log~
+This script will write the notifications to a logfile. The script is used by running ~$HOME/.config/notify-log.sh $HOME/.config/notify.log~
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)

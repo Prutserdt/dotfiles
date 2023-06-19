@@ -8,7 +8,7 @@
 (add-hook! '+doom-dashboard-functions :append
     (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 
-(beacon-mode 1)
+(beacon-mode 0)
 (setq beacon-blink-duration 3)
 
 (use-package rainbow-delimiters)
@@ -41,6 +41,8 @@
 
 (setq evil-goggles-duration 1.0)
 
+(pixel-scroll-mode 0)
+
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
 (setq confirm-kill-emacs nil)
@@ -53,8 +55,8 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 
 (map! :leader
-;;    (:prefix ("b") ;; default Doom keybinding
-;;        :desc "Open a buffer"                    "o" #'buffer-menu)
+    (:prefix ("b") ;; default Doom keybinding. I now use ~Spc b B~ which is similar
+        :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         (:prefix ("a" . "Aduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
@@ -99,6 +101,30 @@
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
             :desc "menu"                         "m" #'gptel-menu)))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sql . t)))
+
+(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.3))))
+  '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
+  '(org-level-5 ((t (:inherit outline-5 :height 1.1)))))
+
+(setq org-hide-emphasis-markers t)
+
+(use-package org-auto-tangle
+  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
+
+(setq org-agenda-files
+      '("~/Stack/Command_line/RoamNotes"))
+;;      '("~/Stack/Code/Emacs/Tasks.org"))
+
 (use-package org-roam
 ;;  :ensure t
 ;;  :init
@@ -109,7 +135,8 @@
     (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
     :config
-    (org-roam-setup))
+    (org-roam-db-autosync-enable))
+;;  (org-roam-setup))
 
 (setq org-roam-capture-templates
     '(("d" "default" plain
@@ -134,11 +161,11 @@
 
 (defun PowerStrike-testing-upload ()
     (interactive)
-    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino"
+    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
     (split-window-horizontally)
     (switch-to-buffer "*Async Shell Command*")
-    (windmove-right)))
+    (windmove-right))
 
 (defun serial-ttyUSB0-115200 ()
     (interactive)
