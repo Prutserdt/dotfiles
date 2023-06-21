@@ -1,4 +1,4 @@
-#+TITLE: My condiguration of
+#+TITLE: My configuration of
 #+STARTUP: showeverything
 #+STARTUP: inlineimages
 #+auto_tangle: t
@@ -26,7 +26,7 @@
 - [[#credits][Credits]]
 
 * About this config
-This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs, after modifying this README.org!
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs, after modifying this README.org!
 
 * init.el
 This file controls what Doom modules are enabled and what order they load in and the first line of the file is lexical binding. This makes the file run (sligthly) faster.
@@ -241,7 +241,7 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 #+end_src
 
 ** General settings
-Set the default mode of the scratch buffer to be org, inspired by [[https://blog.karssen.org/2014/07/28/changing-the-default-mode-of-the-emacs-scratch-buffer][this source]] and add a initial scratch message.
+Set the default mode of the scratch buffer to org-mode as inspired by [[https://blog.karssen.org/2014/07/28/changing-the-default-mode-of-the-emacs-scratch-buffer][this source]] and add a initial scratch message.
 #+begin_src emacs-lisp :tangle config.el
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message
