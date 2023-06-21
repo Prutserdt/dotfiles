@@ -8,9 +8,6 @@
 (add-hook! '+doom-dashboard-functions :append
     (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 
-(beacon-mode 0)
-(setq beacon-blink-duration 3)
-
 (use-package rainbow-delimiters)
 
 (set-frame-font "Hack 12" t t)
@@ -41,7 +38,9 @@
 
 (setq evil-goggles-duration 1.0)
 
-(pixel-scroll-mode 0)
+(setq initial-major-mode 'org-mode)
+(setq initial-scratch-message
+    (concat "* Hack away❗\n A _temporary_ *org-mode* ~scratch buffer~ /for/ *hacking*. =This buffer is *not* saved.= \n\n"))
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
@@ -92,6 +91,7 @@
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
+        :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
     (:prefix ("s") ;; Default Doom keybinding
@@ -126,9 +126,6 @@
 ;;      '("~/Stack/Code/Emacs/Tasks.org"))
 
 (use-package org-roam
-;;  :ensure t
-;;  :init
-;;  (setq org-roam-v2-ack t)
     :custom
  ;(org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
     (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
@@ -136,36 +133,19 @@
     (org-roam-completion-everywhere t)
     :config
     (org-roam-db-autosync-enable))
-;;  (org-roam-setup))
-
-(setq org-roam-capture-templates
-    '(("d" "default" plain
-       "%?"
-       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-       :unnarrowed t)
-      ("t" "todo notes" plain
-       "\n* TODO list [0/2]\n- [ ] %?\n- [ ] "
-       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-       :unnarrowed t)))
 
 (setq org-roam-dailies-capture-templates
     (let ((head
-           (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n* Daily Overview\n"
-                   "#+begin_src emacs-lisp :results value raw\n"
-                    "(as/get-daily-agenda \"%<%Y-%m-%d>\")\n"
-                    "#+end_src\n"
-                    "* [/] Do Today\n* [/] Maybe Do Today\n* Journal\n")))
-        `(("j" "journal" entry
+           (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
+;;                    "* [/] TODO vandaag\n\n* Aantekeningen vandaag\n")))
+                    "* Aantekeningen vandaag\n* [/] TODO vandaag\n")))
+         `(("a" "Aantekeningen vandaag" entry
            "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Journal")))
-          ("t" "do today" item
-           "[ ] %a"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Do Today"))
-           :immediate-finish t)
-          ("m" "maybe do today" item
-           "[ ] %a"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Maybe Do Today"))
-           :immediate-finish t))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen vandaag")))
+          ("t" "TODO vandaag" item
+           "[ ] %?"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO vandaag"))))))
+;;           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("[/] TODO vandaag"))))))
 
 (use-package! websocket
     :after org-roam)
