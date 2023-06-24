@@ -57,8 +57,7 @@
   - [[#some-notes-about-the-code-blocks-and-tangling][Some notes about the code blocks and tangling.]]
 
 * About this document
-This document is a note-to-self about scripts on my GNU/Linux system and is my attempt at literate programming using Emacs org mode. This file is situated in my $HOME/.config and named as README.org so that it will be recognized by github as the title page.
-My intention is to modify the scripts from this document and use ~org-babel-tangle~ to export the scripts.
+This document is a note-to-self about my scripts on my GNU/Linux system and is my attempt at [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] in [[https://www.gnu.org/software/emacs/][Emacs]] using org-mode. This README.org is the source file and is converted to the individual shell scripts by tangling in Emacs: ~M-x~ ~org-babel-tangle~.
 
 * My scripts
 ** aandelen.py
@@ -237,7 +236,7 @@ del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
 #+end_src
 
 ** decrMonitorBrightness.sh
-Decrease the monitor brightness by xrandr. It's brother, [[incrMonitorBrightness.sh]], is a similar script doing the oposite.
+Decrease the monitor brightness by xrandr and also make the color more red. It's brother, [[incrMonitorBrightness.sh]], is a similar script doing the oposite.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -246,20 +245,33 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-First the current brightness is selected by awk. Make sure that the right output device is chosen, for instance ~HDMI-2~. If the value is set to 0.10 then it will not decrease it any further and making the screen completely black.
+Information is retrieved from xrandr about the connected monitor and the current brightness and RGB values (gamma_value).
 #+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+monitor=$(xrandr | awk '/ connected/ {print $1}')
 currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
-#echo $currentBrightness
+gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
+#+end_src
 
+The RGB values are cut into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
+new_gamma_r=$(echo "1/$gamma_r" | bc -l)
+new_gamma_g=$(echo "1/$gamma_g * 0.9" | bc -l)
+new_gamma_b=$(echo "1/$gamma_b * 0.9" | bc -l)
+new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
+#+end_src
+
+When the brightness reaches 0.1 then it should not be any lower, therefore and if-else statement is applied. The newBrightness is calculated to be -0.1 lower then the currentBrightness, this is calculated by the bc program.
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 if [[ "$currentBrightness" == "0.10" ]] ; then
-    echo "niets doen, want grens van 0.1 bereikt"
+    echo "The current brightness is 0.1 and should not be any lower!"
     notify-send -t 60000 "🔆⚠ Brightness minimum reached!: ️" "$currentBrightness"
 else
     newBrightness=$(echo $currentBrightness-0.1| bc -l)
-    xrandr --output HDMI-2 --brightness $newBrightness # eDP-1 is the screen of my Thinkpad
-    notify-send -t 60000 " 🔆 Brightness decreased to" "$newBrightness"
+    xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
+    notify-send -t 60000 "🔆⚠ Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
-
 #+end_src
 
 ** dmenuapps.sh
@@ -625,26 +637,35 @@ notify-send "Killing Qtile right now...."
 #+end_src
 
 ** incrMonitorBrightness.sh
-Increase the monitor brightness by xrandr. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
+Increase the monitor brightness by xrandrand also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
 
-Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+Information is retrieved from xrandr about the connected monitor and the current brightness and RGB values (gamma_value).
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
-#!/bin/bash
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
+monitor=$(xrandr | awk '/ connected/ {print $1}')
+currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
+gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
 #+end_src
 
-First the current brightness is selected by awk. If the value is set to 1.0 then it will not increase it any further and prevent damaging the screen. Make sure that the right output device is chosen, for instance ~HDMI-2~.
+The RGB values are cut into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
-currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
-echo $currentBrightness
+IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
+new_gamma_r=$(echo "1/$gamma_r" | bc -l)
+new_gamma_g=$(echo "1/$gamma_g * 1.1" | bc -l)
+new_gamma_b=$(echo "1/$gamma_b * 1.1" | bc -l)
+new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
+#+end_src
+
+When the brightness reaches 1 then it should not be any lower, therefore and if-else statement is applied. NOTE: when this is reached then the RGB is reset to 1:1:1 as well. The newBrightness is calculated to be +0.1 lower then the currentBrightness, this is calculated by the bc program.
+#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 if [[ "$currentBrightness" == "1.0" ]] ; then
-     echo "niets doen, want grens van 1.0 bereikt"
-     notify-send -t 60000 "🔆⚠ Brightness maximum reached!⚠️ No need to increase further!🤓"
+    echo "niets doen, want grens van 1.0 bereikt"
+    xrandr --output $monitor --brightness 1.0 --gamma "1:1:1"
+    notify-send -t 60000 "🔆⚠ Brightness maximum reached!⚠️ No need to increase further!🤓"
 else
     newBrightness=$(echo $currentBrightness+0.1| bc -l)
-    xrandr --output HDMI-2 --brightness $newBrightness # eDP-1 for Thinkpad laptop
-    notify-send -t 60000 "🔆 Brightness increased to" "$newBrightness"
+    xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
+    notify-send -t 60000 "🔆⚠ Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
 #+end_src
 
@@ -677,9 +698,8 @@ remove mod1 = Alt_R
 add mod5 = Alt_R
 #+end_src
 
-
 ** nightColorDown.sh
-A script to make the screen more reddish.
+A script to make the screen more reddish. See the related [[nightColorUp.sh]], [[resetRGB.sh]] and also [[decrMonitorBrightness.sh]] [[incrMonitorBrightness.sh]].
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -711,7 +731,9 @@ notify-send -t 60000 "🔆⚠ Red decreased to: " "$new_gamma_value"️
 #+end_src
 
 ** nightColorUp.sh
-A script to make the screen more reddish.
+A script to make the screen more reddish. See the related [[nightColorDown.sh]], [[resetRGB.sh]] and also [[nightColorDown.sh]], [[decrMonitorBrightness.sh]].
+
+
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -830,7 +852,7 @@ add mod3 = Super_R
 #+end_src
 
 ** resetRGB.sh
-Reset the gamma settings (RGB) to a default value of 1:1:1.
+Reset the gamma settings (RGB) to a default value of 1:1:1. Related to the shell scripts [[nightColorUp.sh]] and [[nightColorDown.sh]].
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -878,7 +900,7 @@ notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp
 #+end_src
 
 ** stack_startup.sh
-testje...
+A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
@@ -887,21 +909,18 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
+First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
 #+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
-# The following is opening my current Stack AppImage.
 dir="$HOME/Applications" # directory
-# Search for .AppImage files containing "stack" in their name
 appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
-# Check if an appropriate file was found
+
 if [ -n "$appimage" ]; then
-#    chmod +x "$appimage"
     notify-send -t 6000 "Starting the Stack .AppImage..." && #send notification
     "$appimage"  # Execute the file
 else
     notify-send -t 6000 "No .AppImage file containing 'stack' in its name was found in $dir"
 fi
 #+end_src
-
 
 ** thunarBookmarks.sh
 A script that converts the directory text files (~/Stack/Command_line/directories) to a Thunar bookmarks text file (~/.config/gtk-3.0/bookmarks).
@@ -930,6 +949,8 @@ done < $DIR_FILE
 
 
 * Unused scripts
+
+Note: the following code blocks are not being tangled and not part of my current system.
 
 ** aandelen.sh
 My shell script which extracts information from a portfolio and calculates percentages and pastes the information to the system clipboards.

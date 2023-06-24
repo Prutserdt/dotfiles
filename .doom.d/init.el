@@ -16,10 +16,10 @@
        modeline            ; snazzy, Atom-inspired modeline, plus API
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-       vc-gutter           ; vcs diff in the fringe
+;;     vc-gutter           ; vcs diff in the fringe
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
        workspaces          ; tab emulation, persistence & separate workspaces
-       treemacs            ; a project drawer, like neotree but cooler
+;;     treemacs            ; a project drawer, like neotree but cooler
 
        :editor
        (evil +everywhere)  ; come to the dark side, we have cookies
@@ -44,17 +44,17 @@
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
        lsp                 ; M-x vscode
-       magit               ; a git porcelain for Emacs
+;;     magit               ; a git porcelain for Emacs
 
        :lang
        emacs-lisp          ; drown in parentheses
-       markdown            ; writing docs for people to ignore
+;;     markdown            ; writing docs for people to ignore
        (org +pretty +roam2); organize your plain life in plain text
        (python +lsp)       ; beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
-       php                 ; perl's insecure younger brother
-       latex
+;;     php                 ; perl's insecure younger brother
+;;     latex
 
        :app
 

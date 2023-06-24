@@ -46,6 +46,24 @@
 
 (setq confirm-kill-emacs nil)
 
+(use-package! vterm-toggle
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (add-to-list 'display-buffer-alist
+               '((lambda (buffer-or-name _)
+                     (let ((buffer (get-buffer buffer-or-name)))
+                       (with-current-buffer buffer
+                         (or (equal major-mode 'vterm-mode)
+                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                  (display-buffer-reuse-window display-buffer-at-bottom)
+                  ;;(display-buffer-reuse-window display-buffer-in-direction)
+                  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                  ;;(direction . bottom)
+                  ;;(dedicated . t) ;dedicated is supported in emacs27
+                  (reusable-frames . visible)
+                  (window-height . 0.5))))
+
 (use-package! gptel
  :config
 ; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
@@ -57,17 +75,17 @@
     (:prefix ("b") ;; default Doom keybinding. Another option is the build in =Spc b B=
         :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
-        (:prefix ("a" . "Aduino IDE")
+        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
+;;      :desc "r;r;k run"                        "d" #'vterm-toggle "r;r;k"
+        :desc "r;r;k run"                        "d" #'(async-shell-command "r")
+        (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
             :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
             :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
-    :desc "Reload Doom: doom/reload"             "r" #'doom/reload
-    :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
-    :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
-    :desc "Write this buffer to file"            "w" #'write-file)
-;; Remove since SPC f r is the default doom keybinding to find a recent file...
-;;    (:prefix ("o") ;; default Doom keybinding
-;;        :desc "Open recent files"                "o" #'counsel-recentf)
+        :desc "Reload Doom: doom/reload"             "r" #'doom/reload
+        :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
+        :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
+        :desc "Write this buffer to file"            "w" #'write-file)
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
@@ -122,8 +140,9 @@
   :hook (org-mode . org-auto-tangle-mode))
 
 (setq org-agenda-files
-      '("~/Stack/Command_line/RoamNotes"))
-;;      '("~/Stack/Code/Emacs/Tasks.org"))
+;;      '("~/Stack/Command_line/RoamNotes/daily"))
+;;      '("~/Stack/Command_line/RoamNotes"))
+      '("~/Stack/Code/Emacs/Tasks.org"))
 
 (use-package org-roam
     :custom
@@ -137,15 +156,14 @@
 (setq org-roam-dailies-capture-templates
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
-;;                    "* [/] TODO vandaag\n\n* Aantekeningen vandaag\n")))
-                    "* Aantekeningen vandaag\n* [/] TODO vandaag\n")))
-         `(("a" "Aantekeningen vandaag" entry
+                    "* Aantekeningen van vandaag\n\n* TODO(s) van vandaag [/]\n")))
+         `(("a" "Aantekeningen van vandaag" entry
+;;         "* %<%H:%M> %?"
            "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen vandaag")))
-          ("t" "TODO vandaag" item
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag")))
+          ("t" "TODO(s) van vandaag" item
            "[ ] %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO vandaag"))))))
-;;           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("[/] TODO vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO(s) van vandaag"))))))
 
 (use-package! websocket
     :after org-roam)

@@ -17,6 +17,8 @@
 
 (package! org-auto-tangle)
 
+(package! vterm-toggle)
+
 (package! gptel)
 
 (unpin! org-roam) ; unpinning is necessary for Room emacs according to de developer of org-roam-ui

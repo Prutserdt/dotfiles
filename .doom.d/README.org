@@ -16,6 +16,7 @@
   - [[#theming-and-graphical-settings][Theming and graphical settings]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
+  - [[#vterm-toggle][Vterm-toggle]]
   - [[#chatgpt-in-emacs][ChatGPT in emacs]]
   - [[#custom-keybindings][Custom keybindings]]
   - [[#org-mode-configuration][Org-mode configuration]]
@@ -56,10 +57,10 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        modeline            ; snazzy, Atom-inspired modeline, plus API
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-       vc-gutter           ; vcs diff in the fringe
+;;     vc-gutter           ; vcs diff in the fringe
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
        workspaces          ; tab emulation, persistence & separate workspaces
-       treemacs            ; a project drawer, like neotree but cooler
+;;     treemacs            ; a project drawer, like neotree but cooler
 
        :editor
        (evil +everywhere)  ; come to the dark side, we have cookies
@@ -84,17 +85,17 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
        lsp                 ; M-x vscode
-       magit               ; a git porcelain for Emacs
+;;     magit               ; a git porcelain for Emacs
 
        :lang
        emacs-lisp          ; drown in parentheses
-       markdown            ; writing docs for people to ignore
+;;     markdown            ; writing docs for people to ignore
        (org +pretty +roam2); organize your plain life in plain text
        (python +lsp)       ; beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
-       php                 ; perl's insecure younger brother
-       latex
+;;     php                 ; perl's insecure younger brother
+;;     latex
 
        :app
 
@@ -144,6 +145,11 @@ To automate tangling of code blocks, the following package is installed. For aut
 (package! org-auto-tangle)
 #+end_src
 
+The vterm-toggle package.
+#+begin_src emacs-lisp :tangle packages.el
+(package! vterm-toggle)
+#+end_src
+
 The chatgpt package gptel.
 #+begin_src emacs-lisp :tangle packages.el
 (package! gptel)
@@ -156,7 +162,7 @@ The chatgpt package gptel.
 #+end_src
 
 * config.el
-My custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering, org settings.
+My custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and org-mode settings.
 
 Let's remind the reader of ~config.el~ to not edit this file directly.
 #+begin_src emacs-lisp :tangle config.el
@@ -189,7 +195,7 @@ A *superior* font is set here.
 (setq default-frame-alist '((font . "Hack 13")))
 #+end_src
 
-Make the highlighting global for the words TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW with ~hl-todo-mode~.
+Make the highlighting global for the hl-words TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW with ~hl-todo-mode~.
 #+begin_src emacs-lisp :tangle config.el
 (define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
     (lambda () (hl-todo-mode 1)))
@@ -258,6 +264,29 @@ No more conformation messages whilst closing emacs.
 (setq confirm-kill-emacs nil)
 #+end_src
 
+** Vterm-toggle
+I like to use Vterm as a scratch terminal, this can be done by the vterm-toggle package.
+
+#+begin_src emacs-lisp :tangle config.el
+(use-package! vterm-toggle
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (add-to-list 'display-buffer-alist
+               '((lambda (buffer-or-name _)
+                     (let ((buffer (get-buffer buffer-or-name)))
+                       (with-current-buffer buffer
+                         (or (equal major-mode 'vterm-mode)
+                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                  (display-buffer-reuse-window display-buffer-at-bottom)
+                  ;;(display-buffer-reuse-window display-buffer-in-direction)
+                  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                  ;;(direction . bottom)
+                  ;;(dedicated . t) ;dedicated is supported in emacs27
+                  (reusable-frames . visible)
+                  (window-height . 0.5))))
+#+end_src
+
 ** ChatGPT in emacs
 In this elisp code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
 A chatGPT key can be generated here: https://platform.openai.com/account/api-keys.
@@ -272,23 +301,22 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 
 ** Custom keybindings
 Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top of it. I try not to interfere with those and add a few of my own, respecting the Doom keybinding framework.
-
 #+begin_src emacs-lisp :tangle config.el
 (map! :leader
     (:prefix ("b") ;; default Doom keybinding. Another option is the build in =Spc b B=
         :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
-        (:prefix ("a" . "Aduino IDE")
+        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
+;;      :desc "r;r;k run"                        "d" #'vterm-toggle "r;r;k"
+        :desc "r;r;k run"                        "d" #'(async-shell-command "r")
+        (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
             :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
             :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
-    :desc "Reload Doom: doom/reload"             "r" #'doom/reload
-    :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
-    :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
-    :desc "Write this buffer to file"            "w" #'write-file)
-;; Remove since SPC f r is the default doom keybinding to find a recent file...
-;;    (:prefix ("o") ;; default Doom keybinding
-;;        :desc "Open recent files"                "o" #'counsel-recentf)
+        :desc "Reload Doom: doom/reload"             "r" #'doom/reload
+        :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
+        :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
+        :desc "Write this buffer to file"            "w" #'write-file)
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
@@ -362,8 +390,9 @@ Automatically tangling by the org-auto-tangle package.
 Assign some org files that will be used for org-agenda. At this moment I'm testing, not sure if I will keep using it.
 #+begin_src emacs-lisp :tangle config.el
 (setq org-agenda-files
-      '("~/Stack/Command_line/RoamNotes"))
-;;      '("~/Stack/Code/Emacs/Tasks.org"))
+;;      '("~/Stack/Command_line/RoamNotes/daily"))
+;;      '("~/Stack/Command_line/RoamNotes"))
+      '("~/Stack/Code/Emacs/Tasks.org"))
 #+end_src
 
 ** Org-roam configuration
@@ -385,15 +414,14 @@ For quick daily notes and a TODO list I am using roam-dailies and in the next co
 (setq org-roam-dailies-capture-templates
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
-;;                    "* [/] TODO vandaag\n\n* Aantekeningen vandaag\n")))
-                    "* Aantekeningen vandaag\n* [/] TODO vandaag\n")))
-         `(("a" "Aantekeningen vandaag" entry
+                    "* Aantekeningen van vandaag\n\n* TODO(s) van vandaag [/]\n")))
+         `(("a" "Aantekeningen van vandaag" entry
+;;         "* %<%H:%M> %?"
            "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen vandaag")))
-          ("t" "TODO vandaag" item
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag")))
+          ("t" "TODO(s) van vandaag" item
            "[ ] %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO vandaag"))))))
-;;           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("[/] TODO vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO(s) van vandaag"))))))
 #+end_src
 
 ** Org-Roam-ui configuration
