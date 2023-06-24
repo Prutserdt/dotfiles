@@ -286,9 +286,8 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
 #+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
-#cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ' | ${SHELL:-"/bin/sh"} &
 notify-send -t 60000 "Running dmenuapps.sh" &&
-chosen=$(cat ~/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
+chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
 notify-send -t 60000 "Starting application: " "$chosen" &&
 $chosen
 
@@ -310,9 +309,9 @@ notify-send -t 60000 "Running dmenubackup.sh" &&
 echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    mkdir ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    rm -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    mkdir $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    cp -r $HOME/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
     notify-send -t 60000 "Thank you. A backup of dmenu was made to"
 else
     echo No
@@ -333,7 +332,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
 #+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuinternet.sh" &&
-chosen=$(cat ~/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
+chosen=$(cat $HOME/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
 [ -z "$chosen" ] && exit
 xdg-open $chosen &&
 notify-send -t 60000 "Opening webpage: " "$chosen"
@@ -360,15 +359,15 @@ echo -n "Are you sure you want to patch the current dmenu version? This will fir
 RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/.config/suckless/dmenu &&
-    mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/Dotfiles/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
-    cd ~/.config/suckless/dmenu &&
+    rm -r $HOME/.config/suckless/dmenu &&
+    mkdir $HOME/.config/suckless/dmenu &&
+    cp -r $HOME/Stack/Dotfiles/dmenu/dmenu-4.9_stable/* ~/.config/suckless/dmenu &&
+    cd $HOME/.config/suckless/dmenu &&
     clear && ls -al
-    ls ~/Stack/Dotfiles/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
-    cp -r ~/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
-    rm ~/.config/suckless/dmenu/config.h &&
-    patch -p1 < ~/Stack/Dotfiles/dmenu/patches/test/*.diff &&
+    ls $HOME/Stack/Dotfiles/dmenu/patches/test/*.diff >> ~/.config/suckless/dmenu/log/diff_log &&
+    cp -r $HOME/.config/suckless/dmenu/config.h ~/.config/suckless/dmenu/config.def.h &&
+    rm $HOME/.config/suckless/dmenu/config.h &&
+    patch -p1 < $HOME/Stack/Dotfiles/dmenu/patches/test/*.diff &&
     make clean install
     notify-send -t 60000 "dmenu was patched"
 else
@@ -394,10 +393,10 @@ notify-send -t 60000 "Running dmenustable" &&
 echo -n "Are you sure you want to restore to the stable version and DELETE the current dmenu version? (y/n) "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/.config/suckless/dmenu &&
-    mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
-    cd ~/.config/suckless/dmenu &&
+    rm -r $HOME/.config/suckless/dmenu &&
+    mkdir $HOME/.config/suckless/dmenu &&
+    cp -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
+    cd $HOME/.config/suckless/dmenu &&
     clear && ls -al
     notify-send -t 60000 "The stable version of dmenu was placed back" "Please run sudo make clean install"
 else
@@ -422,8 +421,7 @@ This requires the dmenu patch: center, which gives the dmenu -c option.
 After Thunar is launched there is a microbreak and then F3 is pressed to open l3ts
 #+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuthunar.sh" &&
-chosen=$(cat ~/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
-#[ -z "$chosen2" ] && sleep 1 && xdotool key F3 && exit
+chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
 notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen & sleep .3 && xdotool key F3
@@ -442,7 +440,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline. If the unicode file is missing then generate it by [[unicode]].
 #+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuunicode.sh" &&
-cat ~/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
+cat $HOME/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace" &&
 notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
 #+end_src
@@ -496,10 +494,10 @@ read answer
 The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
 #+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/.config/suckless/dmenu &&
-    mkdir ~/.config/suckless/dmenu &&
-    cp -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
-    cd ~/.config/suckless/dmenu &&
+    rm -r $HOME/.config/suckless/dmenu &&
+    mkdir $HOME/.config/suckless/dmenu &&
+    cp -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
+    cd $HOME/.config/suckless/dmenu &&
     clear && ls -al
     notify-send -t 60000 "The vanilla version of dmenu was restored. Please run sudo make clean instsall" &&
 else
@@ -523,8 +521,7 @@ The notify-send will send a notification, duh! The -t flag sets the time to show
 The --bg-fill option makes sure that the image is stretched to the dimensions of the screen.
 #+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 notify-send  "Running dmenuwallpaper.sh" &&
-#ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-center "$(xclip -o -selection clipboard)" &&
-ls ~/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
+ls $HOME/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
 
@@ -731,9 +728,7 @@ notify-send -t 60000 "🔆⚠ Red decreased to: " "$new_gamma_value"️
 #+end_src
 
 ** nightColorUp.sh
-A script to make the screen more reddish. See the related [[nightColorDown.sh]], [[resetRGB.sh]] and also [[nightColorDown.sh]], [[decrMonitorBrightness.sh]].
-
-
+A script to make the screen more reddish. See the related [[nightColorDown.sh]], [[resetRGB.sh]] and also [[incrMonitorBrightness.sh]], [[decrMonitorBrightness.sh]].
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -936,8 +931,8 @@ This script reads in each line of the directories file using a while read loop, 
 #+begin_src bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
 
 # Set the paths to the directories file and the bookmarks file
-DIR_FILE=~/Stack/Command_line/directories
-BOOKMARKS_FILE=~/.config/gtk-3.0/bookmarks
+DIR_FILE=$HOME/Stack/Command_line/directories
+BOOKMARKS_FILE=$HOME/.config/gtk-3.0/bookmarks
 
 # Loop through each directory in the directories file
 #while read -r; do

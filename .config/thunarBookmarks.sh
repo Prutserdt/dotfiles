@@ -2,8 +2,8 @@
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 # Set the paths to the directories file and the bookmarks file
-DIR_FILE=~/Stack/Command_line/directories
-BOOKMARKS_FILE=~/.config/gtk-3.0/bookmarks
+DIR_FILE=$HOME/Stack/Command_line/directories
+BOOKMARKS_FILE=$HOME/.config/gtk-3.0/bookmarks
 
 # Loop through each directory in the directories file
 #while read -r; do

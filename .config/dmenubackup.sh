@@ -5,9 +5,9 @@ notify-send -t 60000 "Running dmenubackup.sh" &&
 echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    mkdir ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    cp -r ~/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    rm -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    mkdir $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    cp -r $HOME/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
     notify-send -t 60000 "Thank you. A backup of dmenu was made to"
 else
     echo No
