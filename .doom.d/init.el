@@ -38,6 +38,8 @@
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
+;;     spell               ; spelling checker, used it briefly. Can be used manually by running
+                           ; ispell-buffer, which suits my needs better
 
        :tools
        debugger            ; stepping through code, to help you add bugs
@@ -56,7 +58,9 @@
 ;;     php                 ; perl's insecure younger brother
 ;;     latex
 
-       :app
+       :os
+       tty                 ; ?test, zou terminal experience moeten verbeteren,
+                           ;kijken of dit een verbetering geeft..
 
        :config
        (default +bindings +smartparens)

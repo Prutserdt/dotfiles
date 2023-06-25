@@ -30,7 +30,7 @@
 This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs, after modifying this README.org!
 
 * init.el
-This file controls what Doom modules are enabled and what order they load in and the first line of the file is lexical binding. This makes the file run (sligthly) faster.
+This file controls what Doom modules are enabled and what order they load in and the first line of the file is lexical binding. This makes the file run (slightly) faster.
 #+begin_src emacs-lisp :tangle init.el
 ;;; init.el -*- lexical-binding: t; -*-
 #+end_src
@@ -41,7 +41,7 @@ Add a note to ~init.el~ to highlight that this file should not be edited directl
 ;;      Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
-The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and can be added to the list of modules listed below.
+The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and can be added to the list of modules listed below. Online module info can also be found [[https://github.com/doomemacs/doomemacs/blob/master/docs/modules.org][here]].
 #+begin_src emacs-lisp :tangle init.el
 
 (doom! :completion
@@ -79,6 +79,8 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
+;;     spell               ; spelling checker, used it briefly. Can be used manually by running
+                           ; ispell-buffer, which suits my needs better
 
        :tools
        debugger            ; stepping through code, to help you add bugs
@@ -97,7 +99,9 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
 ;;     php                 ; perl's insecure younger brother
 ;;     latex
 
-       :app
+       :os
+       tty                 ; ?test, zou terminal experience moeten verbeteren,
+                           ;kijken of dit een verbetering geeft..
 
        :config
        (default +bindings +smartparens)
@@ -463,7 +467,7 @@ Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, he
 ;;(switch-to-buffer "/dev/ttyUSB0")
     (windmove-right))
 #+end_src
-TODO: I would like to run ~serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resettign via RTS pin." but this did not work.
+TODO: I would like to run ~serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resetting via RTS pin." but this did not work.
 
 * Code snippets
 Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:
