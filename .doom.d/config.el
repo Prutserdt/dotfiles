@@ -3,11 +3,6 @@
 
 (setq doom-theme 'doom-tokyo-night)
 
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
-(add-hook! '+doom-dashboard-functions :append
-    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
-
 (use-package rainbow-delimiters)
 
 (set-frame-font "Hack 12" t t)
@@ -29,6 +24,26 @@
 (setq display-line-numbers-type 'relative)
 
 (scroll-bar-mode -1)
+
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(add-hook! '+doom-dashboard-functions :append
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\nA melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.\n\n")
+    (+doom-dashboard--center +doom-dashboard--width "f  : Change font type\nt  : Change theme\n+  : Increase font size\n-  : Decrease font size\n")
+    (+doom-dashboard--center +doom-dashboard--width "\ne  : Open my Emacs config\nZZ : Exiting Emacs the Evil way")))
+
+(defun +doom-dashboard-setup-modified-keymap ()
+  (setq +doom-dashboard-mode-map (make-sparse-keymap))
+  (map! :map +doom-dashboard-mode-map
+        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
+        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
+        :desc "Change font(temporary)" :ng "f" #'menu-set-font
+        :desc "Change theme(temporary)" :ng "t" #'consult-theme
+        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
+        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
+(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
+(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
+(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
 
 (setq! evil-want-Y-yank-to-eol nil)
 
@@ -106,9 +121,11 @@
         :desc "Show graph"                       "g" #'org-roam-graph
         :desc "Insert node"                      "i" #'org-roam-node-insert
         :desc "Capture to node"                  "n" #'org-roam-capture
+        :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
+;;        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)

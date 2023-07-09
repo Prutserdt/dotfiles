@@ -97,7 +97,7 @@ df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 charac
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
-titel = ("\n" '*** ' + t_stamp + ", assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
+titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 print('\n\n') # Only for debugging
 
 # Create a title for the org table, with three stars for level three heading

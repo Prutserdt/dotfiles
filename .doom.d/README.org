@@ -14,6 +14,7 @@
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
   - [[#theming-and-graphical-settings][Theming and graphical settings]]
+  - [[#splash-screen][Splash screen]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
   - [[#vterm-toggle][Vterm-toggle]]
@@ -144,7 +145,7 @@ Settings for python and php hacking.
 (package! phpactor)
 #+end_src
 
-To automate tangling of code blocks, the following package is installed. For auto tangling to work the following line should be added to the start of the org file ~#+auto_tangle: t~. When this is added the source blocks are automatically tangled when an org document is saved, pretty sweet😃.
+To automate tangling of code blocks in org-mode, the following package is installed. For auto tangling to work the following line should be added to the start of the org file ~#+auto_tangle: t~. When this is added the source blocks are automatically tangled when an org document is saved, pretty sweet😃.
 #+begin_src emacs-lisp :tangle packages.el
 (package! org-auto-tangle)
 #+end_src
@@ -175,17 +176,9 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 #+end_src
 
 ** Theming and graphical settings
-Setting the *superior* tokyo-night theme. 🤩
+Setting the *superior* tokyo-night theme.😎
 #+begin_src emacs-lisp :tangle config.el
 (setq doom-theme 'doom-tokyo-night)
-#+end_src
-
-A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
-#+begin_src emacs-lisp :tangle config.el
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
-(add-hook! '+doom-dashboard-functions :append
-    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "A melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.")))
 #+end_src
 
 Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
@@ -230,6 +223,33 @@ For jumping in texts it is nice to know the line position where to jump to from 
 Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 #+begin_src emacs-lisp :tangle config.el
 (scroll-bar-mode -1)
+#+end_src
+
+** Splash screen
+A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
+#+begin_src emacs-lisp :tangle config.el
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(add-hook! '+doom-dashboard-functions :append
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\nA melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.\n\n")
+    (+doom-dashboard--center +doom-dashboard--width "f  : Change font type\nt  : Change theme\n+  : Increase font size\n-  : Decrease font size\n")
+    (+doom-dashboard--center +doom-dashboard--width "\ne  : Open my Emacs config\nZZ : Exiting Emacs the Evil way")))
+#+end_src
+
+A function is created to make a special keymap for the splash screen.
+#+begin_src emacs-lisp :tangle config.el
+(defun +doom-dashboard-setup-modified-keymap ()
+  (setq +doom-dashboard-mode-map (make-sparse-keymap))
+  (map! :map +doom-dashboard-mode-map
+        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
+        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
+        :desc "Change font(temporary)" :ng "f" #'menu-set-font
+        :desc "Change theme(temporary)" :ng "t" #'consult-theme
+        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
+        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
+(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
+(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
+(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
 #+end_src
 
 ** Evil mode configuration
@@ -341,9 +361,11 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
         :desc "Show graph"                       "g" #'org-roam-graph
         :desc "Insert node"                      "i" #'org-roam-node-insert
         :desc "Capture to node"                  "n" #'org-roam-capture
+        :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
+;;        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
@@ -488,7 +510,9 @@ $0
 Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
 
 * Credits
-My configuration of Doom Emacs is partially based on these ones, .
-- :book:   https://gitlab.com/zzamboni/dot-doom
-- :book:   https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
-- :book:   https://systemcrafters.net/
+My configuration of Doom Emacs is partially based on these ones.
+- 🔗 https://github.com/doomemacs/doomemacs
+- 🔗 https://tecosaur.github.io/emacs-config/config.html#
+- 🔗 https://gitlab.com/zzamboni/dot-doom
+- 🔗 https://systemcrafters.net/
+- 🔗 https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
