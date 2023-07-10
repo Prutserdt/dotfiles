@@ -76,16 +76,12 @@
                          (or (equal major-mode 'vterm-mode)
                              (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
                   (display-buffer-reuse-window display-buffer-at-bottom)
-                  ;;(display-buffer-reuse-window display-buffer-in-direction)
-                  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-                  ;;(direction . bottom)
-                  ;;(dedicated . t) ;dedicated is supported in emacs27
                   (reusable-frames . visible)
                   (window-height . 0.5))))
 
 (use-package! gptel
  :config
-; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
+;; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
@@ -95,7 +91,6 @@
         :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
-;;      :desc "r;r;k run"                        "d" #'vterm-toggle "r;r;k"
         :desc "r;r;k run"                        "d" #'(async-shell-command "r")
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
@@ -129,7 +124,6 @@
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
-;;        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
@@ -167,7 +161,7 @@
 
 (use-package org-roam
     :custom
- ;(org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
+;; (org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
     (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
     (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
@@ -179,7 +173,6 @@
            (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
                     "* Aantekeningen van vandaag\n\n* TODO(s) van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
-;;         "* %<%H:%M> %?"
            "* %<%H:%M> %?"
            :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag")))
           ("t" "TODO(s) van vandaag" item
