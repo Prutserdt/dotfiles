@@ -6,7 +6,8 @@
 
 #+CAPTION: Doom Emacs
 #+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align center
-[[https://github.com/Prutserdt/dotfiles/raw/master/.doom.d/doom-emacs.png]]
+[[file:doom-emacs.png]]
+
 
 * Table Of Contents :toc:
 - [[#about-this-config][About this config]]
@@ -230,13 +231,17 @@ A useless but pretty Emacs welcome screen is created including an image and some
 #+begin_src emacs-lisp :tangle config.el
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+
 (add-hook! '+doom-dashboard-functions :append
-    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\nA melodramatic vimmer spirals into despair before he succumbs to the dark side: this config.\n\n")
-    (+doom-dashboard--center +doom-dashboard--width "f  : Change font type\nt  : Change theme\n+  : Increase font size\n-  : Decrease font size\n")
-    (+doom-dashboard--center +doom-dashboard--width "\ne  : Open my Emacs config\nZZ : Exiting Emacs the Evil way")))
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\n\n")
+    (+doom-dashboard--center +doom-dashboard--width "It is a story as old as time.\n")
+    (+doom-dashboard--center +doom-dashboard--width "A stubborn, shell-dwelling and melodramatic\n")
+    (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
+    (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
+    (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
 #+end_src
 
-A function is created to make a special keymap for the splash screen.
+A function is created to make a special keymap for the splash screen. NOTE: I'm not sure if I will keep all of these ones here...
 #+begin_src emacs-lisp :tangle config.el
 (defun +doom-dashboard-setup-modified-keymap ()
   (setq +doom-dashboard-mode-map (make-sparse-keymap))
@@ -251,6 +256,9 @@ A function is created to make a special keymap for the splash screen.
 (add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
 (add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
 #+end_src
+
+Note, more details about doom-dashboard can be found in: =~/.emacs.d/modules/ui/doom-dashboard/config.el=.
+
 
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
@@ -511,8 +519,8 @@ Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_
 
 * Credits
 My configuration of Doom Emacs is partially based on these ones.
-- 🔗 https://github.com/doomemacs/doomemacs
-- 🔗 https://tecosaur.github.io/emacs-config/config.html#
-- 🔗 https://gitlab.com/zzamboni/dot-doom
-- 🔗 https://systemcrafters.net/
-- 🔗 https://gitlab.com/dwt1/dotfiles/-/tree/master/.emacs.d.gnu
+🔗 https://github.com/doomemacs/doomemacs
+🔗 https://tecosaur.github.io/emacs-config/config.html
+🔗 https://gitlab.com/zzamboni/dot-doom
+🔗 https://systemcrafters.net/
+🔗 https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/doom/config.org
