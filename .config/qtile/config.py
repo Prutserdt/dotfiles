@@ -1,5 +1,5 @@
 # NOTE: This file is generated from ~/.config/qtile/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
+#       Please only edit that file and org-babel-tangle (Emacs)
 
 import psutil, subprocess, os
 from typing import List
@@ -8,8 +8,9 @@ from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
-#from subprocess import check_output # uncomment for battery
-# Let op de Class Distraction free is toegevoegd  03MAR23
+#from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
+
+# Let op de Class Distraction free is toegevoegd, zie DistractionFree.py, werkt niet :-(
 #import DistractionFree
 
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
@@ -47,7 +48,7 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
-# uncomment for battery
+# uncomment for battery, for my Lenovo laptop
 # def get_battery_status():
 #     battery = check_output(['acpi'])
 #     battery = battery.decode("utf-8")
@@ -66,8 +67,6 @@ keys = [
     Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"), desc="Shutdown Qtile by a shellscript"),
 
     #Hotkeys to move windows around, resize windows and choose layouts
-#   Key([mL], "h", lazy.layout.left(),                  desc="Move window focus to the left"),
-#   Key([mL], "l", lazy.layout.right(),                 desc="Move window focus to the right"),
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
     Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
     Key([mL, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -86,13 +85,11 @@ keys = [
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
 
     # Hotkeys for audio and printscreen
-#    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -q set Master 5%+")),
     Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 "volume increased"')),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads"), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
-# toegevoegd
     Key([], "XF86MonBrightnessUp", lazy.spawn(home + "/.config/incrMonitorBrightness.sh")),
     Key([], "XF86MonBrightnessDown", lazy.spawn(home + "/.config/decrMonitorBrightness.sh")),
 
@@ -111,7 +108,6 @@ keys = [
     Key([mR], "k", lazy.spawn("keepass")),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
-    #volgende is een test, gray icon van signal lijkt niet te werken, 28jan23
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
     Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")), # related to 'directories'
     Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")), # related to 'unicode'
@@ -123,7 +119,6 @@ keys = [
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
     Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
-    #Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
     Key([aR], "p", lazy.spawn(Emacs + home + "/Stack/Code/git/PowerStrike_code/README.org")),
     Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
@@ -193,7 +188,7 @@ layouts = [
    layout.MonadThreeCol(**layout_theme),
    layout.MonadTall(**layout_theme),
    layout.MonadWide(**layout_theme),
-#   layout.DistractionFree(**layout_theme), # toegevoegd 03MAR23
+#  layout.DistractionFree(**layout_theme), # toegevoegd 03MAR23
 ]
 
 widget_defaults = dict(
@@ -220,7 +215,7 @@ screens = [
                 widget.Notify(foreground="#ff966c"),
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
-                # uncomment for battery
+                # uncomment for battery, Lenovo Thinkpad
                 #widget.Battery(
                 #    battery=1,
                 #    format='{char} {percent:2.0%}',

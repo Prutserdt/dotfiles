@@ -1,6 +1,6 @@
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/qtile/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
+#       Please only edit that file and org-babel-tangle (Emacs)
 
 setxkbmap us &&
 xmodmap $HOME/.config/kbswitch &&

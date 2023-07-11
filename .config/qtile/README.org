@@ -1,20 +1,13 @@
 #+TITLE: My configuration of
+#+STARTUP: show everything
+#+STARTUP: inlineimages
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
 
-#+begin_src
-  ___  _   _ _       __        ___           _
- / _ \| |_(_) | ___  \ \      / (_)_ __   __| | _____      __
-| | | | __| | |/ _ \  \ \ /\ / /| | '_ \ / _` |/ _ \ \ /\ / /
-| |_| | |_| | |  __/   \ V  V / | | | | | (_| | (_) \ V  V /
- \__\_\\__|_|_|\___|    \_/\_/  |_|_| |_|\__,_|\___/ \_/\_/
- __  __
-|  \/  | __ _ _ __   __ _  __ _  ___ _ __
-| |\/| |/ _` | '_ \ / _` |/ _` |/ _ \ '__|
-| |  | | (_| | | | | (_| | (_| |  __/ |
-|_|  |_|\__,_|_| |_|\__,_|\__, |\___|_|
-                          |___/
-#+end_src
+
+#+CAPTION: Qtile
+#+ATTR_HTML: :alt Qtile :title Qtile :align center :width 400px
+[[file:Qtile.png]]
 
 * Table of contents :toc:
 - [[#qtile-and-my-config][Qtile and my config]]
@@ -32,18 +25,18 @@
 - [[#about-this-emacs-org-document][About this Emacs org document]]
 
 * Qtile and my config
-[[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
+[[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org Emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
 
-Check the sourcecode of Qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
+Check the source code of Qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
 
 ** Imports
 A note is added to ~config.py~ which reminds *not* to edit this file directly.
 #+BEGIN_SRC python :tangle config.py :results none
 # NOTE: This file is generated from ~/.config/qtile/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
+#       Please only edit that file and org-babel-tangle (Emacs)
 #+end_src
 
-My configuration requires some modules to be loaded. These are all default configuratoin settings of Qtile.
+My configuration requires some modules to be loaded. These are all default configuration settings of Qtile.
 #+BEGIN_SRC python :tangle config.py :results none
 import psutil, subprocess, os
 from typing import List
@@ -52,8 +45,9 @@ from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 
-#from subprocess import check_output # uncomment for battery
-# Let op de Class Distraction free is toegevoegd  03MAR23
+#from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
+
+# Let op de Class Distraction free is toegevoegd, zie DistractionFree.py, werkt niet :-(
 #import DistractionFree
 
 #+END_SRC
@@ -104,7 +98,7 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
-# uncomment for battery
+# uncomment for battery, for my Lenovo laptop
 # def get_battery_status():
 #     battery = check_output(['acpi'])
 #     battery = battery.decode("utf-8")
@@ -129,8 +123,6 @@ keys = [
     Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"), desc="Shutdown Qtile by a shellscript"),
 
     #Hotkeys to move windows around, resize windows and choose layouts
-#   Key([mL], "h", lazy.layout.left(),                  desc="Move window focus to the left"),
-#   Key([mL], "l", lazy.layout.right(),                 desc="Move window focus to the right"),
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
     Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
     Key([mL, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -160,16 +152,14 @@ The next code block example is about keychording, a concept used in Emacs that c
 #+END_SRC
 
 ** Keybindings: Audio, monitor brightness and print
-Hotkeys to control the volume, muting, printscreen and OCR from printscreen.
+Hotkeys to control the volume, muting, printscreen, OCR from printscreen and change monitor brightness and color.
 #+BEGIN_SRC python :tangle config.py :results none
     # Hotkeys for audio and printscreen
-#    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -q set Master 5%+")),
     Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 "volume increased"')),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads"), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
-# toegevoegd
     Key([], "XF86MonBrightnessUp", lazy.spawn(home + "/.config/incrMonitorBrightness.sh")),
     Key([], "XF86MonBrightnessDown", lazy.spawn(home + "/.config/decrMonitorBrightness.sh")),
 #+END_SRC
@@ -192,7 +182,6 @@ Right super key to open applications. Shift is usesd to update the application.
     Key([mR], "k", lazy.spawn("keepass")),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
-    #volgende is een test, gray icon van signal lijkt niet te werken, 28jan23
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
     Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")), # related to 'directories'
     Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")), # related to 'unicode'
@@ -209,7 +198,6 @@ The right alt key is used to open text files in Vim or in Emacs.
     Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
     Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
     Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
-    #Key([aR], "p", lazy.spawn(Emacs + home + "/Arduino/PowerStrike/README.org")),
     Key([aR], "p", lazy.spawn(Emacs + home + "/Stack/Code/git/PowerStrike_code/README.org")),
     Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
@@ -291,7 +279,7 @@ layouts = [
    layout.MonadThreeCol(**layout_theme),
    layout.MonadTall(**layout_theme),
    layout.MonadWide(**layout_theme),
-#   layout.DistractionFree(**layout_theme), # toegevoegd 03MAR23
+#  layout.DistractionFree(**layout_theme), # toegevoegd 03MAR23
 ]
 
 widget_defaults = dict(
@@ -318,7 +306,7 @@ screens = [
                 widget.Notify(foreground="#ff966c"),
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
-                # uncomment for battery
+                # uncomment for battery, Lenovo Thinkpad
                 #widget.Battery(
                 #    battery=1,
                 #    format='{char} {percent:2.0%}',
@@ -407,14 +395,14 @@ wmname = "LG3D"
 
 
 * The autostart.sh script
-This shellscript is called in the config.py script and is starting some keyboard specific stuff.
+This shell script is called in the config.py script and is starting some keyboard specific stuff.
 
 Again a note is added and this time to ~autostart.sh~ to *not* edit this file directly.
 
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/qtile/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
+#       Please only edit that file and org-babel-tangle (Emacs)
 #+END_SRC
 
 The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started. nm-applet is the NetworkManager applet. Signal is also opened in the tray with the icon.
@@ -439,4 +427,4 @@ $HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppI
 
 
 * About this Emacs org document
-This is a literate programming document and it describes my Qtile window manager customization. It is written in Emacs in org-mode and uses [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]]. The Emacs package ~org-babel-tangle~ exports the code blocks to the actual dotfiles which are used to configure Qtile. Tangling can be done manually. In my case I automated it by the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package. When this orgfile is saved it now automatically tangles the code blocks. The org file should contain ~#+auto_tangle: t~ in the header of the org file..
+This is a literate programming document and it describes my Qtile window manager customization. It is written in Emacs in org-mode and uses [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]]. The Emacs package ~org-babel-tangle~ exports the code blocks to the actual dotfiles which are used to configure Qtile. Tangling can be done manually. In my case I automated it by the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package. When this orgfile is saved it now automatically tangles the code blocks. The org file should contain ~#+auto_tangle: t~ in the header of the org file.
