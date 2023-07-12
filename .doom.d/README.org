@@ -329,20 +329,22 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         :desc "r;r;k run"                        "d" #'(async-shell-command "r")
         (:prefix ("a" . "Arduino IDE")
-            :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
-            :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
+            :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload
+            :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
         :desc "Reload Doom: doom/reload"             "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
         :desc "Write this buffer to file"            "w" #'write-file)
+    (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
-        :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
-        (:prefix ("D" . "dailies")
+;;      :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
+        (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
-            :desc "Goto date"                    "d" #'org-roam-dailies-goto-date
+            :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
+;;            :desc "Goto date"                    "d" #'org-roam-dailies-goto-date
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
             :desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
@@ -359,8 +361,9 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
         :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
-        :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
+;;        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
+        :desc "Search Roam dir"                  "s" #'my-counsel-rg-roam-dir
+;;      :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
     (:prefix ("s") ;; Default Doom keybinding
@@ -370,6 +373,8 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
             :desc "menu"                         "m" #'gptel-menu)))
 #+end_src
+
+
 
 ** Org-mode configuration
 Setup to use sql in org code blocks.
@@ -407,40 +412,48 @@ Automatically tangling by the org-auto-tangle package.
   :hook (org-mode . org-auto-tangle-mode))
 #+end_src
 
-Assign some org files that will be used for org-agenda. At this moment I'm testing, not sure if I will keep using it.
+Assign a directory with org daily files that will be used for org-agenda en my todo lists.
 #+begin_src emacs-lisp :tangle config.el
 (setq org-agenda-files
-;;      '("~/Stack/Command_line/RoamNotes/daily"))
-;;      '("~/Stack/Command_line/RoamNotes"))
-      '("~/Stack/Code/Emacs/Tasks.org"))
+;;  '("~/Shared_directory/RoamNotes/daily"))   ;; Virtual machine Arch dir
+    '("~/Stack/Command_line/RoamNotes/daily")) ;; default location
 #+end_src
 
 ** Org-roam configuration
-~org-roam~ is a plain text knowledge management system. Org-roam borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
-The directory is set where the atomic files will be stored and also the dailies directory is set here.
+~Org-roam~ is a plain text knowledge management system that borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
+In the code block below the directory is set where the atomic files will be stored and also the dailies directory is set here.
 #+begin_src emacs-lisp :tangle config.el
 (use-package org-roam
     :custom
-;; (org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
-    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
-    (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
+    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; default location
+;;  (org-roam-directory "~/Shared_directory/RoamNotes")    ;; Virtual machine Arch dir
+    (org-roam-dailies-directory "daily/")                  ;; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
     :config
     (org-roam-db-autosync-enable))
 #+end_src
 
-For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
+For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as already set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
 #+begin_src emacs-lisp :tangle config.el
 (setq org-roam-dailies-capture-templates
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
-                    "* Aantekeningen van vandaag\n\n* TODO(s) van vandaag [/]\n")))
+                    "* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
            "* %<%H:%M> %?"
            :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag")))
-          ("t" "TODO(s) van vandaag" item
+          ("t" "TODO van vandaag" item
            "[ ] %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO(s) van vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO van vandaag"))))))
+#+end_src
+
+To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory. This function is used in the  [[#custom-keybindings][Custom keybindings]].
+#+begin_src emacs-lisp :tangle config.el
+(defun my-counsel-rg-roam-dir ()
+    "Search using `counsel-rg` in ~/Stack/Command_line/RoamNotes"
+    (interactive)
+    (counsel-rg nil "~/Stack/Command_line/RoamNotes")) ;; Default location
+;;  (counsel-rg nil "~/Shared_directory/RoamNotes"))   ;; Virtual machine Arch dir
 #+end_src
 
 ** Org-Roam-ui configuration
@@ -464,7 +477,8 @@ Now that the websocket is setup the org-roam-ui can be set.
 ** Custom code
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el
-(defun PowerStrike-testing-upload ()
+(defun my-PowerStrike-testing-upload ()
+    "Upload arduino Powerstrike code to ESP32"
     (interactive)
     (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
@@ -475,14 +489,26 @@ A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 proc
 
 Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
 #+begin_src emacs-lisp :tangle config.el
-(defun serial-ttyUSB0-115200 ()
+(defun my-serial-ttyUSB0-115200 ()
+    "Serial monitor to ttyUSB0 115200 baudrate"
     (interactive)
     (split-window-horizontally)
     (serial-term "/dev/ttyUSB0" 115200)
-;;(switch-to-buffer "/dev/ttyUSB0")
+;; (switch-to-buffer "/dev/ttyUSB0")
     (windmove-right))
 #+end_src
 TODO: I would like to run ~serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resetting via RTS pin." but this did not work.
+
+Evaluating a region or buffer, a tip from [[https://www.masteringemacs.org/article/evaluating-elisp-emacs][mastering Emacs]]. Not sure if I will keep using this one..
+#+begin_src emacs-lisp :tangle config.el
+(defun mp-elisp-mode-eval-buffer ()
+  (interactive)
+  (message "Evaluated buffer")
+  (eval-buffer))
+
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
+(define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
+#+end_src
 
 * Code snippets
 Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:

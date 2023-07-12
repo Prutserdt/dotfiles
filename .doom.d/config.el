@@ -93,20 +93,22 @@
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         :desc "r;r;k run"                        "d" #'(async-shell-command "r")
         (:prefix ("a" . "Arduino IDE")
-            :desc "ESP32 PWRSTRK testing upload" "t" #'PowerStrike-testing-upload
-            :desc "ESP32 PWRSTRK upload"         "p" #'PowerStrike-upload
+            :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload
+            :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
         :desc "Reload Doom: doom/reload"             "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
         :desc "Write this buffer to file"            "w" #'write-file)
+    (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
-        :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
-        (:prefix ("D" . "dailies")
+;;      :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
+        (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
-            :desc "Goto date"                    "d" #'org-roam-dailies-goto-date
+            :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
+;;            :desc "Goto date"                    "d" #'org-roam-dailies-goto-date
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
             :desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
@@ -123,8 +125,9 @@
         :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
-        :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
+;;        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
+        :desc "Search Roam dir"                  "s" #'my-counsel-rg-roam-dir
+;;      :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
     (:prefix ("s") ;; Default Doom keybinding
@@ -155,15 +158,14 @@
   :hook (org-mode . org-auto-tangle-mode))
 
 (setq org-agenda-files
-;;      '("~/Stack/Command_line/RoamNotes/daily"))
-;;      '("~/Stack/Command_line/RoamNotes"))
-      '("~/Stack/Code/Emacs/Tasks.org"))
+;;  '("~/Shared_directory/RoamNotes/daily"))   ;; Virtual machine Arch dir
+    '("~/Stack/Command_line/RoamNotes/daily")) ;; default location
 
 (use-package org-roam
     :custom
-;; (org-roam-directory "~/Shared_directory/RoamNotes")    ; directory on Virtualbox Arch image
-    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ; directory on Arch linux
-    (org-roam-dailies-directory "daily/")                  ; the subdir for dailies in roam-dir
+    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; default location
+;;  (org-roam-directory "~/Shared_directory/RoamNotes")    ;; Virtual machine Arch dir
+    (org-roam-dailies-directory "daily/")                  ;; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
     :config
     (org-roam-db-autosync-enable))
@@ -171,13 +173,19 @@
 (setq org-roam-dailies-capture-templates
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
-                    "* Aantekeningen van vandaag\n\n* TODO(s) van vandaag [/]\n")))
+                    "* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
            "* %<%H:%M> %?"
            :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag")))
-          ("t" "TODO(s) van vandaag" item
+          ("t" "TODO van vandaag" item
            "[ ] %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO(s) van vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO van vandaag"))))))
+
+(defun my-counsel-rg-roam-dir ()
+    "Search using `counsel-rg` in ~/Stack/Command_line/RoamNotes"
+    (interactive)
+    (counsel-rg nil "~/Stack/Command_line/RoamNotes")) ;; Default location
+;;  (counsel-rg nil "~/Shared_directory/RoamNotes"))   ;; Virtual machine Arch dir
 
 (use-package! websocket
     :after org-roam)
@@ -190,7 +198,8 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
-(defun PowerStrike-testing-upload ()
+(defun my-PowerStrike-testing-upload ()
+    "Upload arduino Powerstrike code to ESP32"
     (interactive)
     (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
@@ -198,9 +207,18 @@
     (switch-to-buffer "*Async Shell Command*")
     (windmove-right))
 
-(defun serial-ttyUSB0-115200 ()
+(defun my-serial-ttyUSB0-115200 ()
+    "Serial monitor to ttyUSB0 115200 baudrate"
     (interactive)
     (split-window-horizontally)
     (serial-term "/dev/ttyUSB0" 115200)
-;;(switch-to-buffer "/dev/ttyUSB0")
+;; (switch-to-buffer "/dev/ttyUSB0")
     (windmove-right))
+
+(defun mp-elisp-mode-eval-buffer ()
+  (interactive)
+  (message "Evaluated buffer")
+  (eval-buffer))
+
+(define-key emacs-lisp-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
+(define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
