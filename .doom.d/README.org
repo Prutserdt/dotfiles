@@ -1,4 +1,4 @@
-#+TITLE: My configuration of
++TITLE: My configuration of
 #+STARTUP: showeverything
 #+STARTUP: inlineimages
 #+auto_tangle: t
@@ -331,7 +331,7 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
-            :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
+            :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200)
         :desc "Reload Doom: doom/reload"             "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
@@ -373,8 +373,6 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
             :desc "menu"                         "m" #'gptel-menu)))
 #+end_src
-
-
 
 ** Org-mode configuration
 Setup to use sql in org code blocks.
@@ -475,6 +473,7 @@ Now that the websocket is setup the org-roam-ui can be set.
 #+end_src
 
 ** Custom code
+*** Custom code used with hotkeys
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el
 (defun my-PowerStrike-testing-upload ()
@@ -490,24 +489,43 @@ A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 proc
 Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
 #+begin_src emacs-lisp :tangle config.el
 (defun my-serial-ttyUSB0-115200 ()
-    "Serial monitor to ttyUSB0 115200 baudrate"
+;;   "Serial monitor to ttyUSB0 115200 baudrate"
     (interactive)
     (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200)
-;; (switch-to-buffer "/dev/ttyUSB0")
+    (serial-term "/dev/ttyUSB0" 115200))
+ (switch-to-buffer "/dev/ttyUSB0")
     (windmove-right))
 #+end_src
-TODO: I would like to run ~serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resetting via RTS pin." but this did not work.
+TODO: I would like to run ~my-serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resetting via RTS pin." but this did not work.
+
+*** Custom code, not used with hotkeys
 
 Evaluating a region or buffer, a tip from [[https://www.masteringemacs.org/article/evaluating-elisp-emacs][mastering Emacs]]. Not sure if I will keep using this one..
 #+begin_src emacs-lisp :tangle config.el
-(defun mp-elisp-mode-eval-buffer ()
+(defun my-elisp-mode-eval-buffer ()
   (interactive)
   (message "Evaluated buffer")
   (eval-buffer))
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
 (define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
+#+end_src
+
+**** Redox keyboard
+Open my Redox keyboard QMK directory.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+(defun my-redox-directory ()
+  "Open the keymap.c of my Redox qmk firmware"
+  (interactive)
+  (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
+#+end_src
+
+Open my =keymap.c= file of my redox keyboard.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+(defun my-redox-config-qmk_file ()
+  "Open the keymap.c of my Redox qmk firmware"
+  (interactive)
+  (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 #+end_src
 
 * Code snippets

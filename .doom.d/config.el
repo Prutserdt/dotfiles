@@ -95,7 +95,7 @@
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
-            :desc "ESP32 serial"                 "s" #'serial-ttyUSB0-115200)
+            :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200)
         :desc "Reload Doom: doom/reload"             "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
@@ -208,17 +208,27 @@
     (windmove-right))
 
 (defun my-serial-ttyUSB0-115200 ()
-    "Serial monitor to ttyUSB0 115200 baudrate"
+;;   "Serial monitor to ttyUSB0 115200 baudrate"
     (interactive)
     (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200)
-;; (switch-to-buffer "/dev/ttyUSB0")
+    (serial-term "/dev/ttyUSB0" 115200))
+ (switch-to-buffer "/dev/ttyUSB0")
     (windmove-right))
 
-(defun mp-elisp-mode-eval-buffer ()
+(defun my-elisp-mode-eval-buffer ()
   (interactive)
   (message "Evaluated buffer")
   (eval-buffer))
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
 (define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
+
+(defun my-redox-directory ()
+  "Open the keymap.c of my Redox qmk firmware"
+  (interactive)
+  (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
+
+(defun my-redox-config-qmk_file ()
+  "Open the keymap.c of my Redox qmk firmware"
+  (interactive)
+  (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))

@@ -9,10 +9,10 @@ new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_ga
 if [[ "$currentBrightness" == "1.0" ]] ; then
     echo "niets doen, want grens van 1.0 bereikt"
     xrandr --output $monitor --brightness 1.0 --gamma "1:1:1"
-    notify-send -t 60000 "🔆⚠ Brightness maximum reached!⚠️ No need to increase further!🤓"
+    notify-send -t 60000 "🔆 Brightness maximum already reached! ⚠"
 else
     newBrightness=$(echo $currentBrightness+0.1| bc -l)
     xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
-    notify-send -t 60000 "🔆⚠ Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi

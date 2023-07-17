@@ -252,7 +252,7 @@ currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
 #+end_src
 
-The RGB values are cut into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
+The RGB values are separated into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
 #+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
 new_gamma_r=$(echo "1/$gamma_r" | bc -l)
@@ -265,11 +265,11 @@ When the brightness reaches 0.1 then it should not be any lower, therefore and i
 #+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 if [[ "$currentBrightness" == "0.10" ]] ; then
     echo "The current brightness is 0.1 and should not be any lower!"
-    notify-send -t 60000 "🔆⚠ Brightness minimum reached!: ️" "$currentBrightness"
+    notify-send -t 60000 "🔆 Brightness minimum reached!: ️" "$currentBrightness"
 else
     newBrightness=$(echo $currentBrightness-0.1| bc -l)
     xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
-    notify-send -t 60000 "🔆⚠ Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
 #+end_src
@@ -643,7 +643,7 @@ currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
 #+end_src
 
-The RGB values are cut into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
+The RGB values are separated into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
 new_gamma_r=$(echo "1/$gamma_r" | bc -l)
@@ -657,11 +657,11 @@ When the brightness reaches 1 then it should not be any lower, therefore and if-
 if [[ "$currentBrightness" == "1.0" ]] ; then
     echo "niets doen, want grens van 1.0 bereikt"
     xrandr --output $monitor --brightness 1.0 --gamma "1:1:1"
-    notify-send -t 60000 "🔆⚠ Brightness maximum reached!⚠️ No need to increase further!🤓"
+    notify-send -t 60000 "🔆 Brightness maximum already reached! ⚠"
 else
     newBrightness=$(echo $currentBrightness+0.1| bc -l)
     xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
-    notify-send -t 60000 "🔆⚠ Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
 #+end_src
@@ -724,7 +724,7 @@ Apply the new gamma values. The awk connected part makes shure that the right ou
 #+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
 echo "New gamma value, after xrandr: $new_gamma_value"
-notify-send -t 60000 "🔆⚠ Red decreased to: " "$new_gamma_value"️
+notify-send -t 60000 "🔆 Red decreased to: " "$new_gamma_value"️
 #+end_src
 
 ** nightColorUp.sh
@@ -756,7 +756,7 @@ Apply the new gamma values. The awk connected part makes shure that the right ou
 #+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
 echo "New gamma value, after xrandr: $new_gamma_value"
-notify-send -t 60000 "🔆⚠ Red increased to: " "$new_gamma_value"️
+notify-send -t 60000 "🔆 Red increased to: " "$new_gamma_value"️
 #+end_src
 
 ** notify-log.sh
@@ -859,7 +859,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
 #+begin_src sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma 1:1:1
-notify-send -t 60000 "🔆⚠ RGB was reset!"
+notify-send -t 60000 "🔆 RGB reset!"
 #+end_src
 
 ** screenshot2text.sh
