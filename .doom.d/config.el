@@ -91,11 +91,12 @@
         :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
-        :desc "r;r;k run"                        "d" #'(async-shell-command "r")
+        :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("a" . "Arduino IDE")
-            :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
-            :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200)
+            :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
+            :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
+            :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
         :desc "Reload Doom: doom/reload"             "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
@@ -208,12 +209,24 @@
     (windmove-right))
 
 (defun my-serial-ttyUSB0-115200 ()
-;;   "Serial monitor to ttyUSB0 115200 baudrate"
+   "Serial monitor to ttyUSB0 115200 baudrate"
     (interactive)
     (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200))
- (switch-to-buffer "/dev/ttyUSB0")
+    (serial-term "/dev/ttyUSB0" 115200)
+    (switch-to-buffer "/dev/ttyUSB0")
     (windmove-right))
+
+(defun my-PowerStrike-README-org-file ()
+  "Open the README.org of my PowerStrike ESP32 project"
+  (interactive)
+  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
+
+(defun my-keyboard-reset ()
+  "Change Esc/caps, right mod, right alt, for my redox keyboard."
+  (interactive)
+  (shell-command "xmodmap $HOME/.config/kbswitch && xset r rate 300 80 &&
+   notify-send -t 6000 'The keyboard was reset by Emacs'"))
+;;  (shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
 
 (defun my-elisp-mode-eval-buffer ()
   (interactive)
@@ -228,7 +241,7 @@
   (interactive)
   (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
-(defun my-redox-config-qmk_file ()
+(defun my-redox-config-qmk-file ()
   "Open the keymap.c of my Redox qmk firmware"
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
