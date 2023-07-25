@@ -1,3 +1,6 @@
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
 monitor=$(xrandr | awk '/ connected/ {print $1}')
 currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')

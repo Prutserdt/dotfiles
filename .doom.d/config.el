@@ -51,6 +51,9 @@
 
 (setq! evil-want-Y-yank-to-eol nil)
 
+(after! evil
+  (define-key evil-normal-state-map "U" 'undo-redo))
+
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
@@ -97,6 +100,12 @@
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
             :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
+        (:prefix ("c" . "Cloud stuff")
+            :desc "ediff myorg backups 3 dirs"   "e" #'my-ediff-compare-org-files-between-three-directories
+            :desc "Thunar connect my cloud"      "t" #'my-thunar-cloud-connection
+            (:prefix ("b" . "Backup to cloud")
+            :desc "Thinkpad backup to cloud"         "t" #'doom/tangle
+            :desc "VBox Arch backup to cloud"        "v" #'doom/tangle))
         :desc "Reload Doom: doom/reload"             "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
@@ -224,9 +233,25 @@
 (defun my-keyboard-reset ()
   "Change Esc/caps, right mod, right alt, for my redox keyboard."
   (interactive)
-  (shell-command "xmodmap $HOME/.config/kbswitch && xset r rate 300 80 &&
-   notify-send -t 6000 'The keyboard was reset by Emacs'"))
+  (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
+  ;;(shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
 ;;  (shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
+
+(defun my-thunar-cloud-connection ()
+  "Connect my cloud to Thunar filebrowser."
+  (interactive)
+  (with-temp-buffer
+  (insert-file-contents "~/Stack/Command_line/myThunarCloud")
+  (shell-command (string-trim (buffer-string)))))
+
+(defun my-ediff-compare-org-files-between-three-directories ()
+  "Select a file from DesktopDir and compare it between three directories using ediff."
+  (interactive)
+  (let ((dirA "~/Stack/Command_line/RoamNotes/")
+        (dirB "~/Stack/Thinkpad/RoamNotes/")
+        (dirC "~/Stack/VBox_Arch/RoamNotes/")
+        (regex "\\(.*\\.org\\)")) ;; Regex to filter files with .org extension
+    (ediff-directories3 dirA dirB dirC regex)))
 
 (defun my-elisp-mode-eval-buffer ()
   (interactive)

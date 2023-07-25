@@ -1,20 +1,20 @@
 /* Modified by Prutserdt from the default config.h created by Mattia Dal Ben
  *
- * This program is free software: GNU General Public License version 2 as 
+ * This program is free software: GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
 
 #pragma once
 
-/* Longer holdtime for my CTL/GUI/ALT modkeys, otherwise it screws up typing 
+/* Longer holdtime for my CTL/GUI/ALT modkeys, otherwise it screws up typing
  * A/S/D/K/L/: (see keymap.c for details)
  * The default tapping term is set to 200 ms, changed to 400 ms.
  */
 #define TAPPING_TERM 400
-#define IGNORE_MOD_TAP_INTERRUPT
+/* #define IGNORE_MOD_TAP_INTERRUPT */
 
-/* Four taps are needed to switch on/of a layer. 
- * Two and tree taps led to a lot of annoying unintentional layer switching 
+/* Four taps are needed to switch on/of a layer.
+ * Two and tree taps led to a lot of annoying unintentional layer switching
  */
 #define TAPPING_TOGGLE 4
 

@@ -636,6 +636,13 @@ notify-send "Killing Qtile right now...."
 ** incrMonitorBrightness.sh
 Increase the monitor brightness by xrandrand also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
 
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
 Information is retrieved from xrandr about the connected monitor and the current brightness and RGB values (gamma_value).
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 monitor=$(xrandr | awk '/ connected/ {print $1}')
