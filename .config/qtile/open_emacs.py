@@ -1,3 +1,6 @@
+# NOTE: This file is generated from ~/.config/qtile/README.org
+#       Please only edit that file and org-babel-tangle (Emacs)
+
 #!/usr/bin/env python3
 import subprocess
 import sys
@@ -14,9 +17,9 @@ def open_file_with_emacs(FILENAME):
         subprocess.run(["emacsclient", "-n", FILENAME])
     else:
         subprocess.run(["emacsclient", "-c", "-a", "emacs", FILENAME])
-
-    # Send a message to Emacs with the filename
-    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened file {FILENAME}")'])
+    # Send a message to Emacs and notify-send what was done
+    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened {FILENAME}")'])
+    subprocess.run(["notify-send", f"Opening of '{FILENAME}' in Emacs"])
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

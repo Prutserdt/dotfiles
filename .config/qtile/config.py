@@ -91,7 +91,6 @@ keys = [
     # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch8", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-    # On my systems and my particular Redox configuration F23, that I use for resetting of Monitor brightness gives the XF86TouchPadOff, therefore it is used here
     Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
     Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
     Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
