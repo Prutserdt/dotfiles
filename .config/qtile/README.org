@@ -136,48 +136,16 @@ def open_file_with_emacs(FILENAME):
     subprocess.run(["emacsclient", "-e", f'(message "Emacs opened file {FILENAME}")'])
 #+END_SRC
 
-The code execution starts here. The code will run if the filename is a single one
+The code execution starts here and the code will only run if the filename is a single one (sys.argv !=2).
 #+BEGIN_SRC python :tangle open_emacs.py
 if __name__ == "__main__":
     if len(sys.argv) != 2:
- #       print("Usage: python3 open_emacs.py <FILENAME>")
         sys.exit(1)
 
     FILENAME = sys.argv[1]
     open_file_with_emacs(FILENAME)
 #+END_SRC
 
-
-
-onderstaande is oude code, weghalen als het werkt....
-#+BEGIN_SRC python
-import subprocess
-import sys
-
-def is_emacsclient_running():
-    try:
-        subprocess.check_output(["emacsclient", "-e", "(message \"Emacs is running\")"])
-        return True
-    except subprocess.CalledProcessError:
-        return False
-
-def open_file_with_emacs(FILENAME):
-    if is_emacsclient_running():
-        subprocess.run(["emacsclient", "-n", FILENAME])
-    else:
-        subprocess.run(["emacsclient -c -a 'emacs'", FILENAME])
-
-    # Send a message to Emacs with the filename
-    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened file {FILENAME}")'])
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 open_emacs.py <FILENAME>")
-        sys.exit(1)
-
-    FILENAME = sys.argv[1]
-    open_file_with_emacs(FILENAME)
-#+END_SRC
 
 ** Keybindings: Qtile specific
 My left super key bindings are all related to Qtile, for instance moving windows around.
