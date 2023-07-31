@@ -9,7 +9,6 @@
 [[file:Qtile.png]]
 
 * Table of contents :toc:
-- [[#my-configuration-of-qtile][My configuration of Qtile]]
 - [[#configpy][Config.py]]
   - [[#imports][Imports]]
   - [[#variables][Variables]]
@@ -23,9 +22,6 @@
   - [[#some-hooks][Some hooks]]
 - [[#emacs-python-script][Emacs Python script]]
 - [[#the-autostartsh-script][The autostart.sh script]]
-
-* My configuration of Qtile
-[[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org Emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]], a small script named [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
 
 * Config.py
 This is the configuration file of Qtile.
