@@ -1,30 +1,6 @@
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
-(setq doom-theme 'doom-tokyo-night)
-
-(use-package rainbow-delimiters)
-
-(set-frame-font "Hack 12" t t)
-(setq default-frame-alist '((font . "Hack 13")))
-
-(define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
-    (lambda () (hl-todo-mode 1)))
-(my-global-hl-todo-mode 1)
-
-(setq-default fill-column 110)
-(global-display-fill-column-indicator-mode)
-(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
-(setq-default visual-fill-column-center-text t)
-
-(set-frame-parameter (selected-frame) 'alpha '(85 80))
-(add-to-list 'default-frame-alist '(alpha 85 80))
-
-(global-display-line-numbers-mode)
-(setq display-line-numbers-type 'relative)
-
-(scroll-bar-mode -1)
-
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
@@ -48,6 +24,30 @@
 (add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
 (add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
 (add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
+
+(setq doom-theme 'doom-tokyo-night)
+
+(use-package rainbow-delimiters)
+
+(set-frame-font "Hack 12" t t)
+(setq default-frame-alist '((font . "Hack 13")))
+
+(define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
+    (lambda () (hl-todo-mode 1)))
+(my-global-hl-todo-mode 1)
+
+(setq-default fill-column 110)
+(global-display-fill-column-indicator-mode)
+(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
+(setq-default visual-fill-column-center-text t)
+
+(set-frame-parameter (selected-frame) 'alpha '(85 80))
+(add-to-list 'default-frame-alist '(alpha 85 80))
+
+(global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
+
+(scroll-bar-mode -1)
 
 (setq! evil-want-Y-yank-to-eol nil)
 

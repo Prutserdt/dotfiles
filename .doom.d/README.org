@@ -14,8 +14,8 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
-  - [[#theming-and-graphical-settings][Theming and graphical settings]]
   - [[#splash-screen][Splash screen]]
+  - [[#theming-and-graphical-settings][Theming and graphical settings]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
   - [[#vterm-toggle][Vterm-toggle]]
@@ -168,6 +168,39 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 ;;      Please only edit that file and org-babel-tangle (emacs)
 #+end_src
 
+** Splash screen
+A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
+#+begin_src emacs-lisp :tangle config.el
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+
+(add-hook! '+doom-dashboard-functions :append
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\n\n")
+    (+doom-dashboard--center +doom-dashboard--width "It is a story as old as time.\n")
+    (+doom-dashboard--center +doom-dashboard--width "A stubborn, shell-dwelling and melodramatic\n")
+    (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
+    (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
+    (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
+#+end_src
+
+A function is created to make a special keymap for the splash screen. NOTE: I'm not sure if I will keep all of these ones here...
+#+begin_src emacs-lisp :tangle config.el
+(defun +doom-dashboard-setup-modified-keymap ()
+  (setq +doom-dashboard-mode-map (make-sparse-keymap))
+  (map! :map +doom-dashboard-mode-map
+        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
+        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
+        :desc "Change font(temporary)" :ng "f" #'menu-set-font
+        :desc "Change theme(temporary)" :ng "t" #'consult-theme
+        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
+        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
+(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
+(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
+(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
+#+end_src
+
+Note, more details about doom-dashboard can be found in: =~/.emacs.d/modules/ui/doom-dashboard/config.el=.
+
 ** Theming and graphical settings
 Setting the *superior* tokyo-night theme.😎
 #+begin_src emacs-lisp :tangle config.el
@@ -217,40 +250,6 @@ Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
 #+begin_src emacs-lisp :tangle config.el
 (scroll-bar-mode -1)
 #+end_src
-
-** Splash screen
-A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
-#+begin_src emacs-lisp :tangle config.el
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
-
-(add-hook! '+doom-dashboard-functions :append
-    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\n\n")
-    (+doom-dashboard--center +doom-dashboard--width "It is a story as old as time.\n")
-    (+doom-dashboard--center +doom-dashboard--width "A stubborn, shell-dwelling and melodramatic\n")
-    (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
-    (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
-    (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
-#+end_src
-
-A function is created to make a special keymap for the splash screen. NOTE: I'm not sure if I will keep all of these ones here...
-#+begin_src emacs-lisp :tangle config.el
-(defun +doom-dashboard-setup-modified-keymap ()
-  (setq +doom-dashboard-mode-map (make-sparse-keymap))
-  (map! :map +doom-dashboard-mode-map
-        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
-        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
-        :desc "Change font(temporary)" :ng "f" #'menu-set-font
-        :desc "Change theme(temporary)" :ng "t" #'consult-theme
-        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
-        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
-(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
-(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
-(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
-#+end_src
-
-Note, more details about doom-dashboard can be found in: =~/.emacs.d/modules/ui/doom-dashboard/config.el=.
-
 
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
@@ -486,7 +485,7 @@ Now that the websocket is setup the org-roam-ui can be set.
 #+end_src
 
 ** Custom code
-*** Custom code used with hotkeys
+*** Custom elisp funtions (used with hotkeys)
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+begin_src emacs-lisp :tangle config.el
 (defun my-PowerStrike-testing-upload ()
@@ -551,7 +550,7 @@ Comparing my org files from three different directories, wow, seems complicated 
     (ediff-directories3 dirA dirB dirC regex)))
 #+end_src
 
-*** Custom code, not used with hotkeys
+*** Custom elisp functions (not used with hotkeys)
 Evaluating a region or buffer, a tip from [[https://www.masteringemacs.org/article/evaluating-elisp-emacs][mastering Emacs]]. Not sure if I will keep using this one..
 #+begin_src emacs-lisp :tangle config.el :results none
 (defun my-elisp-mode-eval-buffer ()
@@ -594,6 +593,7 @@ Kind of pointless
     (windmove-right)
     (dired "~/Stack/VBox_Arch/RoamNotes"))
 #+end_src
+
 
 * Code snippets
 Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:

@@ -38,6 +38,9 @@ alias h="history | fzf"             # Fuzzy find history
 alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # Search and execute
 alias fzlog='fzf < $HOME/i3_log/"$(ls -Art $HOME/i3_log | tail -n1)"' # Fuzzy find in the most recent i3_log file
 
+#check vulnerabilities microcode
+alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
+
 # sxiv
 # Thumbnail mode current directory. Sort by name and give output if files are selected (m)
 alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | sxiv -ftio"

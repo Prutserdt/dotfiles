@@ -13,6 +13,7 @@
   - [[#imports][Imports]]
   - [[#variables][Variables]]
   - [[#custom-functions][Custom functions]]
+  - [[#emacs-python-script][Emacs Python script]]
   - [[#keybindings-qtile-specific][Keybindings: Qtile specific]]
   - [[#keybindings-audio-monitor-brightness-and-print][Keybindings: Audio, monitor brightness and print]]
   - [[#keybindings-applications-and-files-connected-to-these-hotkeys][Keybindings: Applications (and files connected to these hotkeys)]]
@@ -43,25 +44,19 @@ from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
-
+from os.path import expanduser
 #from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
-
-# Let op de Class Distraction free is toegevoegd, zie DistractionFree.py, werkt niet :-(
-#import DistractionFree
 
 #+END_SRC
 
 ** Variables
-Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Vim and Emacs variables for opening files in these editors.
+Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Emacs variables for opening files in these editors.
 #+BEGIN_SRC python :tangle config.py :results none
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
 aR = "mod5"                       # Right alt key, dedicated to opening of files
-
+emacs_script = expanduser("~/.config/qtile/open_emacs.py")
 home = os.path.expanduser("~")
-termVim="alacritty -e vim "         # Open vim in alacritty (used for aR hotkeys)
-Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
-
 #+END_SRC
 
 ** Custom functions
@@ -96,6 +91,10 @@ def decrease_margin(self):
 def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
+#+END_SRC
+
+The status of the battery of a laptop can be monitored by uncommenting the next part.
+#+BEGIN_SRC python :tangle config.py
 
 # uncomment for battery, for my Lenovo laptop
 # def get_battery_status():
@@ -105,6 +104,80 @@ def reset_margin(self):
 #    return battery
 #+END_SRC
 
+The status of the battery of a laptop can be monitored by uncommenting the next part.
+
+** Emacs Python script
+The next piece of code is written to a separate script, named =open_emacs.py= and is used to open emacs files. First the required libraries are imported.
+#+BEGIN_SRC python :tangle open_emacs.py
+#!/usr/bin/env python3
+import subprocess
+import sys
+#+END_SRC
+
+The script is using two funtions, the first one is checking if emacs is already running
+#+BEGIN_SRC python :tangle open_emacs.py
+def is_emacsclient_running():
+    try:
+        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs*"])
+        return True
+    except subprocess.CalledProcessError:
+        return False
+#+END_SRC
+
+The second function is to open a files with Emacs. If the client is running then is should open the current emacsclient and else open a separate emacsclient.
+#+BEGIN_SRC python :tangle open_emacs.py
+def open_file_with_emacs(FILENAME):
+    if is_emacsclient_running():
+        subprocess.run(["emacsclient", "-n", FILENAME])
+    else:
+        subprocess.run(["emacsclient", "-c", "-a", "emacs", FILENAME])
+
+    # Send a message to Emacs with the filename
+    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened file {FILENAME}")'])
+#+END_SRC
+
+The code execution starts here. The code will run if the filename is a single one
+#+BEGIN_SRC python :tangle open_emacs.py
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+ #       print("Usage: python3 open_emacs.py <FILENAME>")
+        sys.exit(1)
+
+    FILENAME = sys.argv[1]
+    open_file_with_emacs(FILENAME)
+#+END_SRC
+
+
+
+onderstaande is oude code, weghalen als het werkt....
+#+BEGIN_SRC python
+import subprocess
+import sys
+
+def is_emacsclient_running():
+    try:
+        subprocess.check_output(["emacsclient", "-e", "(message \"Emacs is running\")"])
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+def open_file_with_emacs(FILENAME):
+    if is_emacsclient_running():
+        subprocess.run(["emacsclient", "-n", FILENAME])
+    else:
+        subprocess.run(["emacsclient -c -a 'emacs'", FILENAME])
+
+    # Send a message to Emacs with the filename
+    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened file {FILENAME}")'])
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python3 open_emacs.py <FILENAME>")
+        sys.exit(1)
+
+    FILENAME = sys.argv[1]
+    open_file_with_emacs(FILENAME)
+#+END_SRC
 
 ** Keybindings: Qtile specific
 My left super key bindings are all related to Qtile, for instance moving windows around.
@@ -119,7 +192,7 @@ keys = [
     Key([mL], "t", lazy.window.toggle_floating(),       desc="Toggle floating state"),
     Key([mL], "q", lazy.window.kill(),                  desc="Kill focused window"),
     Key([mL,  "control"], "r", lazy.reload_config(),    desc="Reload the Qtile configuration"),
-    Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"), desc="Shutdown Qtile by a shellscript"),
+    Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ expanduser("~/.config/exitqtile.sh")), desc="Shutdown Qtile by a shellscript"),
 
     #Hotkeys to move windows around, resize windows and choose layouts
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
@@ -140,7 +213,7 @@ keys = [
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
     #+END_SRC
 
-The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and not keeping modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected.
+The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and not keeping modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected. I keep this here just for future reference.
 #+BEGIN_SRC :results none
  KeyChord([mL], "m", [      # testje, keychording werkt!! :-)
      Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
@@ -157,66 +230,65 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
     Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 "volume increased"')),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
-    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads"), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
-    Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
+    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
+    #Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
+    Key(["shift"], "Print", lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
     # The following hotkeys of my Redox keyboard are free to be used..!
     # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch8", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-    #Key([], "XF86Launch9", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # On my systems and my particular Redox configuration F23, that I use for resetting of Monitor brightness gives the XF86TouchPadOff, therefore it is used here
-    Key([], "XF86Launch9", lazy.spawn(home + "/.config/resetRGB.sh")),
-    Key([], "XF86MonBrightnessUp", lazy.spawn(home + "/.config/incrMonitorBrightness.sh")),
-    Key([], "XF86MonBrightnessDown", lazy.spawn(home + "/.config/decrMonitorBrightness.sh")),
+    Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
+    Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
 #+END_SRC
 
-
-
 ** Keybindings: Applications (and files connected to these hotkeys)
-Right super key to open applications. Shift is usesd to update the application.
+Right super key to open applications. Shift is used to update the application.
 #+BEGIN_SRC python :tangle config.py :results none
     # Open applications
     Key([mR], "a",
-        lazy.spawn("python " + home + "/.config/aandelen.py"),
-        lazy.spawn(Emacs + home + "/Stack/Documenten/Aandelen/aandelen_log.org"),
-        desc="Open in vim: run het python aandelen script en open het aandelen log"
-        ),
-    Key([mR], "b", lazy.spawn(home + "/.config/dmenuinternet.sh")), # browser via dmenu, related to 'urls'
+        lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
+        lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),
+        desc="Open in emacs: run het python aandelen script en open het aandelen log"),
+    Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))), # browser via dmenu, related to 'urls'
+    Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
+    Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
     Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
-    Key([mR], "d", lazy.spawn(home + "/.config/dmenuapps.sh")),
-    Key([mR, "shift"], "d", lazy.spawn(home + "/.config/dmenuUpdate.sh")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "k", lazy.spawn("keepass")),
     Key([mR], "m", lazy.spawn("mousepad")),
-    Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
+    Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
-    Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")), # related to 'directories'
-    Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")), # related to 'unicode'
-    Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
+    Key([mR], "t", lazy.spawn(expanduser("~/.config/dmenuthunar.sh"))), # related to 'directories'
+    Key([mR], "u", lazy.spawn(expanduser("~/.config/dmenuunicode.sh"))), # related to 'unicode'
+    Key([mR], "v", lazy.spawn("alacritty -e vim")),
+    Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
 #+END_SRC
 
-
 ** Keybingings: Text files
-The right alt key is used to open text files in Vim or in Emacs.
+The right alt key is used to open text files in Emacs.
 #+BEGIN_SRC python :tangle config.py :results none
-    Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
-    Key([aR], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")), # related to dmenuinternet.sh
-    Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")),
-    Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
-    Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
-    Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
-    Key([aR], "p", lazy.spawn(Emacs + home + "/Stack/Code/git/PowerStrike_code/README.org")),
-    Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
-    Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
-    Key([aR], "s", lazy.spawn(Emacs + home + "/.config/README.org")), # shell scripts readme
-    Key([aR], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")), # related to dmenuthunar.sh
-    Key([aR], "u", lazy.spawn(Emacs + home + "/.config/unicode")), # related to dmenuunicode.sh
-    Key([aR], "v", lazy.spawn(termVim + home + "/.vimrc")),
-    Key([aR], "w", lazy.spawn(home + "/.config/wololo.sh")),
-    Key([aR], "x", lazy.spawn(Emacs + home + "/.xinitrc")),
-    Key([aR], "z", lazy.spawn(Emacs + home + "/.zshrc")),
+    # Open text files in emaca
+    Key([aR], "a", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}")),
+    Key([aR], "b", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
+    Key([aR], "c", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/commands.org')}")),
+    Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
+    Key([aR], "e", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.doom.d/README.org')}")),
+    Key([aR], "i", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/i3/config')}")),
+    Key([aR], "n", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.newsboat/config')}")),
+    Key([aR], "p", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Code/git/PowerStrike_code/README.org')}")),
+    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
+    Key([aR], "r", lazy.spawn(f"python3 {emacs_script} {expanduser('~/README.org')}")), # github readme
+    Key([aR], "s", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/README.org')}")),  # shell scripts readme
+    Key([aR], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/directories')}")),  # related to dmenuthunar.sh
+    Key([aR], "u", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/unicode')}")),  # related to dmenuunicode.sh
+    Key([aR], "v", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.vimrc')}")),
+    Key([aR], "w", lazy.spawn(expanduser("~/.config/wololo.sh"))),
+    Key([aR], "x", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.xinitrc')}")),
+    Key([aR], "z", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.zshrc')}")),
 ]
 #+END_SRC
 
@@ -234,7 +306,7 @@ for i in groups:
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mL+shift+group letter= move and follow focused window to group
+            # Move and follow focused window to group
             Key(
                 [mL, "shift"],
                 i.name,
@@ -246,7 +318,6 @@ for i in groups:
                 [mL, "control", "shift"],
                 i.name,
                 lazy.window.togroup(i.name),
-                # add ",switch_group=True" after i.name to follow the window
                 desc="Move the focused window to group {}".format(i.name),
             ),
         ]
@@ -275,7 +346,6 @@ floating_theme = {"border_width": 3,
                 "border_focus": "#98BE65",  #98C379= groen
                 "border_normal": "#006553",
                 }
-
 #+END_SRC
 
 ** Layouts
@@ -283,7 +353,6 @@ I mainly use the MonadThreeCol layout, which is similar to DWM's centered master
 Make sure that networkmanager is installed and that nm-applet is part of the autostart.sh, no need to add extras to the top bar.
 
 #+BEGIN_SRC python :tangle config.py :results none
-
 layouts = [
    layout.MonadThreeCol(**layout_theme),
    layout.MonadTall(**layout_theme),
@@ -375,6 +444,8 @@ A startup script is ran after startup of Qtile and the window swallowing is set 
 def start_once():
     home = os.path.expanduser("~")
     subprocess.call([home + "/.config/qtile/autostart.sh"])
+    home = os.path.expanduser("~")
+#    subprocess.call([expanduser("~/.config/qtile/autostart.sh")])
 
 # swallow window when starting application from terminal
 @hook.subscribe.client_new

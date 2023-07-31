@@ -55,7 +55,7 @@ plugins=(
   )
 
 bindkey -v          # enabling vi bindings, dependency: vi-mode plugin
-# VI_MODE_SET_CURSOR=true # change cursor style after switching input mode,
+VI_MODE_SET_CURSOR=true # change cursor style after switching input mode,
 
 export FZF_BASE=/usr/share/fzf
 

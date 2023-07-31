@@ -7,19 +7,14 @@ from libqtile import bar, layout, widget,hook
 from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
-
+from os.path import expanduser
 #from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
-
-# Let op de Class Distraction free is toegevoegd, zie DistractionFree.py, werkt niet :-(
-#import DistractionFree
 
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
 aR = "mod5"                       # Right alt key, dedicated to opening of files
-
+emacs_script = expanduser("~/.config/qtile/open_emacs.py")
 home = os.path.expanduser("~")
-termVim="alacritty -e vim "         # Open vim in alacritty (used for aR hotkeys)
-Emacs="emacsclient -c -a 'emacs' "  # Opens Emacs via the EmacsClient
 
 def threecol(qtile):
     qtile.cmd_to_layout_index(0) #0:monadthreecolumn
@@ -64,7 +59,7 @@ keys = [
     Key([mL], "t", lazy.window.toggle_floating(),       desc="Toggle floating state"),
     Key([mL], "q", lazy.window.kill(),                  desc="Kill focused window"),
     Key([mL,  "control"], "r", lazy.reload_config(),    desc="Reload the Qtile configuration"),
-    Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ home + "/.config/exitqtile.sh"), desc="Shutdown Qtile by a shellscript"),
+    Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ expanduser("~/.config/exitqtile.sh")), desc="Shutdown Qtile by a shellscript"),
 
     #Hotkeys to move windows around, resize windows and choose layouts
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
@@ -88,55 +83,57 @@ keys = [
     Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 "volume increased"')),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
-    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + home + "/Downloads"), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
-    Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
+    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
+    #Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
+    Key(["shift"], "Print", lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
     # The following hotkeys of my Redox keyboard are free to be used..!
     # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch8", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-    #Key([], "XF86Launch9", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # On my systems and my particular Redox configuration F23, that I use for resetting of Monitor brightness gives the XF86TouchPadOff, therefore it is used here
-    Key([], "XF86Launch9", lazy.spawn(home + "/.config/resetRGB.sh")),
-    Key([], "XF86MonBrightnessUp", lazy.spawn(home + "/.config/incrMonitorBrightness.sh")),
-    Key([], "XF86MonBrightnessDown", lazy.spawn(home + "/.config/decrMonitorBrightness.sh")),
+    Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
+    Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
 
     # Open applications
     Key([mR], "a",
-        lazy.spawn("python " + home + "/.config/aandelen.py"),
-        lazy.spawn(Emacs + home + "/Stack/Documenten/Aandelen/aandelen_log.org"),
-        desc="Open in vim: run het python aandelen script en open het aandelen log"
-        ),
-    Key([mR], "b", lazy.spawn(home + "/.config/dmenuinternet.sh")), # browser via dmenu, related to 'urls'
+        lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
+        lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),
+        desc="Open in emacs: run het python aandelen script en open het aandelen log"),
+    Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))), # browser via dmenu, related to 'urls'
+    Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
+    Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
     Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
-    Key([mR], "d", lazy.spawn(home + "/.config/dmenuapps.sh")),
-    Key([mR, "shift"], "d", lazy.spawn(home + "/.config/dmenuUpdate.sh")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "k", lazy.spawn("keepass")),
     Key([mR], "m", lazy.spawn("mousepad")),
-    Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + home + "~/Downloads")),
+    Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
-    Key([mR], "t", lazy.spawn(home + "/.config/dmenuthunar.sh")), # related to 'directories'
-    Key([mR], "u", lazy.spawn(home + "/.config/dmenuunicode.sh")), # related to 'unicode'
-    Key([mR], "w", lazy.spawn(home + "/.config/dmenuwallpaper.sh")),
+    Key([mR], "t", lazy.spawn(expanduser("~/.config/dmenuthunar.sh"))), # related to 'directories'
+    Key([mR], "u", lazy.spawn(expanduser("~/.config/dmenuunicode.sh"))), # related to 'unicode'
+    Key([mR], "v", lazy.spawn("alacritty -e vim")),
+    Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
 
-    Key([aR], "a", lazy.spawn(Emacs + home + ("/Stack/Documenten/Aandelen/aandelen_log.org"))),
-    Key([aR], "b", lazy.spawn(Emacs + home + "/Stack/Command_line/urls")), # related to dmenuinternet.sh
-    Key([aR], "c", lazy.spawn(Emacs + home + "/Stack/Command_line/commands.org")),
-    Key([aR], "e", lazy.spawn(Emacs + home + "/.doom.d/README.org")),
-    Key([aR], "i", lazy.spawn(Emacs + home + "/.config/i3/config")),
-    Key([aR], "n", lazy.spawn(Emacs + home + "/.newsboat/config")),
-    Key([aR], "p", lazy.spawn(Emacs + home + "/Stack/Code/git/PowerStrike_code/README.org")),
-    Key([aR], "q", lazy.spawn(Emacs + home + "/.config/qtile/README.org")),
-    Key([aR], "r", lazy.spawn(Emacs + home + "/README.org")), # github readme
-    Key([aR], "s", lazy.spawn(Emacs + home + "/.config/README.org")), # shell scripts readme
-    Key([aR], "t", lazy.spawn(Emacs + home + "/Stack/Command_line/directories")), # related to dmenuthunar.sh
-    Key([aR], "u", lazy.spawn(Emacs + home + "/.config/unicode")), # related to dmenuunicode.sh
-    Key([aR], "v", lazy.spawn(termVim + home + "/.vimrc")),
-    Key([aR], "w", lazy.spawn(home + "/.config/wololo.sh")),
-    Key([aR], "x", lazy.spawn(Emacs + home + "/.xinitrc")),
-    Key([aR], "z", lazy.spawn(Emacs + home + "/.zshrc")),
+    # Open text files in emaca
+    Key([aR], "a", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}")),
+    Key([aR], "b", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
+    Key([aR], "c", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/commands.org')}")),
+    Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
+    Key([aR], "e", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.doom.d/README.org')}")),
+    Key([aR], "i", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/i3/config')}")),
+    Key([aR], "n", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.newsboat/config')}")),
+    Key([aR], "p", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Code/git/PowerStrike_code/README.org')}")),
+    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
+    Key([aR], "r", lazy.spawn(f"python3 {emacs_script} {expanduser('~/README.org')}")), # github readme
+    Key([aR], "s", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/README.org')}")),  # shell scripts readme
+    Key([aR], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/directories')}")),  # related to dmenuthunar.sh
+    Key([aR], "u", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/unicode')}")),  # related to dmenuunicode.sh
+    Key([aR], "v", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.vimrc')}")),
+    Key([aR], "w", lazy.spawn(expanduser("~/.config/wololo.sh"))),
+    Key([aR], "x", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.xinitrc')}")),
+    Key([aR], "z", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.zshrc')}")),
 ]
 
 groups = [Group(i) for i in "1234"]
@@ -150,7 +147,7 @@ for i in groups:
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # mL+shift+group letter= move and follow focused window to group
+            # Move and follow focused window to group
             Key(
                 [mL, "shift"],
                 i.name,
@@ -162,7 +159,6 @@ for i in groups:
                 [mL, "control", "shift"],
                 i.name,
                 lazy.window.togroup(i.name),
-                # add ",switch_group=True" after i.name to follow the window
                 desc="Move the focused window to group {}".format(i.name),
             ),
         ]
@@ -276,6 +272,8 @@ auto_minimize = True # for steam games
 def start_once():
     home = os.path.expanduser("~")
     subprocess.call([home + "/.config/qtile/autostart.sh"])
+    home = os.path.expanduser("~")
+#    subprocess.call([expanduser("~/.config/qtile/autostart.sh")])
 
 # swallow window when starting application from terminal
 @hook.subscribe.client_new

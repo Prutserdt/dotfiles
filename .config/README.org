@@ -21,6 +21,7 @@
   - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
+  - [[#dmenuemacssh][dmenuemacs.sh]]
   - [[#dmenuinternetsh][dmenuinternet.sh]]
   - [[#dmenupatchsh][dmenupatch.sh]]
   - [[#dmenustablesh][dmenustable.sh]]
@@ -319,6 +320,34 @@ else
 fi
 #+end_src
 
+** dmenuemacs.sh
+Bookmarkst to textfiles picked by dmenu.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+My list of textfiles is piped into dmenu and the selected one is opened in a new instance of emacs or on the already opened emacs client. Note: the 'textfile' is a textfiles that consists of a list of filenames including the directory location.
+#+begin_src bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenuemacs.sh" &&
+chosen=$(cat $HOME/Stack/Command_line/textfiles | dmenu -c -bw 2 -l 40 -p 'Open textfiles: ')
+[ -z "$chosen" ] && exit
+#+end_src
+
+Then my running processes are checked and when an emacs instance if found running then the file is opened in that instance and otherwise emacs is opened.
+#+begin_src bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+if pgrep -f "emacsclient -c -a emacs*" > /dev/null; then
+  emacsclient -n "$chosen"
+  emacsclient -e "(message \"Opened $chosen in Emacs\")" > /dev/null 2>&1
+# emacclient -e '(message "Emacs is running")'
+else
+  emacsclient -c -a emacs "$chosen"
+fi
+#+end_src
+
 ** dmenuinternet.sh
 Internet bookmark picking by dmenu.
 
@@ -493,7 +522,7 @@ read answer
 
 The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
 #+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
-if [ "$answer" != "${answer#[Yy]}" ] ;then
+if [ "$answer" != "${Ganswer#[Yy]}" ] ;then
     rm -r $HOME/.config/suckless/dmenu &&
     mkdir $HOME/.config/suckless/dmenu &&
     cp -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
