@@ -9,11 +9,11 @@
 [[file:Qtile.png]]
 
 * Table of contents :toc:
+- [[#about-this-emacs-org-document][About this Emacs org document]]
 - [[#qtile-and-my-config][Qtile and my config]]
   - [[#imports][Imports]]
   - [[#variables][Variables]]
   - [[#custom-functions][Custom functions]]
-  - [[#emacs-python-script][Emacs Python script]]
   - [[#keybindings-qtile-specific][Keybindings: Qtile specific]]
   - [[#keybindings-audio-monitor-brightness-and-print][Keybindings: Audio, monitor brightness and print]]
   - [[#keybindings-applications-and-files-connected-to-these-hotkeys][Keybindings: Applications (and files connected to these hotkeys)]]
@@ -22,12 +22,15 @@
   - [[#layouts][Layouts]]
   - [[#some-hooks][Some hooks]]
 - [[#the-autostartsh-script][The autostart.sh script]]
-- [[#about-this-emacs-org-document][About this Emacs org document]]
+- [[#emacs-python-script][Emacs Python script]]
+
+* About this Emacs org document
+This is a literate programming document and it describes my Qtile window manager customization and is the source of my configuration as well. The Emacs package ~org-babel-tangle~ exports the [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]] to the actual configuration files. This information might not be important to you and the files, [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]], [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]] can be checked individually as well.
 
 * Qtile and my config
 [[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org Emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]], a small script named [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
 
-Check the source code of Qtile by running from python shell: ~import libqtile~, ~print(help(libqtile))~, ~dir(libqtile)~ etc.
+It is possible to check the source code of Qtile if it installed on your system by running from python shell: ~import libqtile~ and start by ~print(help(libqtile))~ and ~dir(libqtile)~.
 
 ** Imports
 A note is added to ~config.py~ which reminds *not* to edit this file directly.
@@ -50,7 +53,7 @@ from os.path import expanduser
 #+END_SRC
 
 ** Variables
-Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Emacs variables for opening files in these editors.
+Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Also a variable is used to refer to my open_emacs.py script and home.
 #+BEGIN_SRC python :tangle config.py :results none
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
@@ -60,7 +63,7 @@ home = os.path.expanduser("~")
 #+END_SRC
 
 ** Custom functions
-These functions are used for keybindings and are utilized in the next keybinding section.
+These functions are used for keybindings and are utilized in the following keybinding section.
 #+BEGIN_SRC python :tangle config.py
 def threecol(qtile):
     qtile.cmd_to_layout_index(0) #0:monadthreecolumn
@@ -104,54 +107,6 @@ The status of the battery of a laptop can be monitored by uncommenting the next 
 #    return battery
 #+END_SRC
 
-The status of the battery of a laptop can be monitored by uncommenting the next part.
-
-** Emacs Python script
-The next piece of code is written to a separate script, named =open_emacs.py= and is used to open emacs files. A note is added to ~open_emacs.py~ which reminds *not* to edit this file directly.
-#+BEGIN_SRC python :tangle open_emacs.py :results none
-# NOTE: This file is generated from ~/.config/qtile/README.org
-#       Please only edit that file and org-babel-tangle (Emacs)
-#+end_src
-
-First the required libraries are imported.
-#+BEGIN_SRC python :tangle open_emacs.py
-#!/usr/bin/env python3
-import subprocess
-import sys
-#+END_SRC
-
-The script is using two funtions, the first one is checking if emacs is already running
-#+BEGIN_SRC python :tangle open_emacs.py
-def is_emacsclient_running():
-    try:
-        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs*"])
-        return True
-    except subprocess.CalledProcessError:
-        return False
-#+END_SRC
-
-The second function is to open a files with Emacs. If the client is running then is should open the current emacsclient and else open a separate emacsclient.
-#+BEGIN_SRC python :tangle open_emacs.py
-def open_file_with_emacs(FILENAME):
-    if is_emacsclient_running():
-        subprocess.run(["emacsclient", "-n", FILENAME])
-    else:
-        subprocess.run(["emacsclient", "-c", "-a", "emacs", FILENAME])
-    # Send a message to Emacs and notify-send what was done
-    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened {FILENAME}")'])
-    subprocess.run(["notify-send", f"Opening of '{FILENAME}' in Emacs"])
-#+END_SRC
-
-The code execution starts here and the code will only run if the filename is a single one (sys.argv !=2).
-#+BEGIN_SRC python :tangle open_emacs.py
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit(1)
-
-    FILENAME = sys.argv[1]
-    open_file_with_emacs(FILENAME)
-#+END_SRC
-
 
 ** Keybindings: Qtile specific
 My left super key bindings are all related to Qtile, for instance moving windows around.
@@ -187,7 +142,7 @@ keys = [
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
     #+END_SRC
 
-The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and not keeping modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected. I keep this here just for future reference.
+The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and no more need to keep modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected. I keep this here just for future reference.
 #+BEGIN_SRC :results none
  KeyChord([mL], "m", [      # testje, keychording werkt!! :-)
      Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
@@ -205,7 +160,6 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
-    #Key(["shift"], "Print", lazy.spawn(home + "/.config/screenshot2text.sh")),
     Key(["shift"], "Print", lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
     # The following hotkeys of my Redox keyboard are free to be used..!
     # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
@@ -256,6 +210,7 @@ The right alt key is used to open text files in Emacs.
     Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
     Key([aR], "r", lazy.spawn(f"python3 {emacs_script} {expanduser('~/README.org')}")), # github readme
     Key([aR], "s", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/README.org')}")),  # shell scripts readme
+    Key([aR, "shift"], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/textfiles')}")),
     Key([aR], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/directories')}")),  # related to dmenuthunar.sh
     Key([aR], "u", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/unicode')}")),  # related to dmenuunicode.sh
     Key([aR], "v", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.vimrc')}")),
@@ -480,5 +435,50 @@ thunar --daemon &
 #+end_src
 
 
-* About this Emacs org document
-This is a literate programming document and it describes my Qtile window manager customization. It is written in Emacs in org-mode and uses [[https://orgmode.org/manual/Extracting-Source-Code.html][code blocks]]. The Emacs package ~org-babel-tangle~ exports the code blocks to the actual dotfiles which are used to configure Qtile. Tangling can be done manually. In my case I automated it by the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package. When this orgfile is saved it now automatically tangles the code blocks. The org file should contain ~#+auto_tangle: t~ in the header of the org file.
+
+
+* Emacs Python script
+The next piece of code is written to a separate script, named [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]], and is used to open emacs files. A note is added to ~open_emacs.py~ which reminds *not* to edit this file directly.
+#+BEGIN_SRC python :tangle open_emacs.py :results none
+# NOTE: This file is generated from ~/.config/qtile/README.org
+#       Please only edit that file and org-babel-tangle (Emacs)
+#+end_src
+
+First the required libraries are imported.
+#+BEGIN_SRC python :tangle open_emacs.py
+#!/usr/bin/env python3
+import subprocess
+import sys
+#+END_SRC
+
+The script is using two funtions, the first one is checking if emacs is already running
+#+BEGIN_SRC python :tangle open_emacs.py
+def is_emacsclient_running():
+    try:
+        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs*"])
+        return True
+    except subprocess.CalledProcessError:
+        return False
+#+END_SRC
+
+The second function is to open a files with Emacs. If the client is running then is should open the current emacsclient and else open a separate emacsclient.
+#+BEGIN_SRC python :tangle open_emacs.py
+def open_file_with_emacs(FILENAME):
+    if is_emacsclient_running():
+        subprocess.run(["emacsclient", "-n", FILENAME])
+    else:
+        subprocess.run(["emacsclient", "-c", "-a", "emacs", FILENAME])
+    # Send a message to Emacs and notify-send what was done
+    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened {FILENAME}")'])
+    subprocess.run(["notify-send", f"Opening of '{FILENAME}' in Emacs"])
+#+END_SRC
+
+The code execution starts here and the code will only run if the filename is a single one (sys.argv !=2).
+#+BEGIN_SRC python :tangle open_emacs.py
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit(1)
+
+    FILENAME = sys.argv[1]
+    open_file_with_emacs(FILENAME)
+#+END_SRC
