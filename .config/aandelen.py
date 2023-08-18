@@ -17,7 +17,8 @@ class InputDialog(QDialog):
         Huis = QLineEdit(self)
         buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
         layout = QFormLayout(self)
-        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
+#        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
+        layout.addRow("Voer Bunq en Rabo cash in:", RaboCash)
         layout.addRow("Voer overwaarde huis in:", Huis)
         layout.addWidget(buttonbox)
         buttonbox.accepted.connect(self.accept)
@@ -51,7 +52,7 @@ searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard s
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
 
 OmsHuis = "Overwaarde huis     "
-OmsCash = "RaboCash            "
+OmsCash = "Cash (Rabo en Bunq) "
 # Namen van kolommen die ik ga gebruiken:
 EurCol = "Euro"                     # Euro column naam
 OmsCol = "Omschrijving        "     # Omschrijving column naam
@@ -71,7 +72,7 @@ dfx = pd.DataFrame(d)
 df = pd.concat([df, dfx])
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
-print('=' * 40 + "\n", df)  # Only for debugging
+#print('=' * 40 + "\n", df)  # Only for debugging
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 
@@ -80,7 +81,7 @@ Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapi
 df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
 df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
 df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by asterix
-print('=' * 40  + "\n", dfx)                      # Only for debugging
+#print('=' * 40  + "\n", dfx)                      # Only for debugging
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
@@ -90,7 +91,7 @@ d = {
     AminHuisCol: ["", "", ""]}
 dfx = pd.DataFrame(d)       # Add the list to a new temporary dataframe
 df = pd.concat([df, dfx])   # Add the dfx dataframe
-print('=' * 40 + "\n", df)  # Only for debugging
+#print('=' * 40 + "\n", df)  # Only for debugging
 
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
 
@@ -98,7 +99,7 @@ datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
 titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
-print('\n\n') # Only for debugging
+#print('\n\n') # Only for debugging
 
 # Create a title for the org table, with three stars for level three heading
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
@@ -114,17 +115,17 @@ gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
 gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
 separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
 
-print ('\n' + gesorteerdeLijst + '\n')
+#print ('\n' + gesorteerdeLijst + '\n')
 # Combineer de introductieregels met het dataframe
 data = titel + orgTabelNaam + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
-data = data.replace('Omschrijving', '|Omschrijving')    # Verwijder NaN waarden
-data = data.replace('AA% AA*%', 'AA% |AA*% \n|-|-|-|-|')    # Verwijder NaN waarden, voeg separator toe.
-data = data.replace('Euro AA%', 'Euro |AA%')    # Verwijder NaN waarden
-data = data.replace('||||', str(separator)+'\n\n'+str(separator))    # Verwijder NaN waarden
-data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')    # Verwijder NaN waarden
-data = data.replace('|VANECK', 'VANECK')    # Verwijder NaN waarden
-data = data.replace('- huis', '- huis|')    # Verwijder NaN waarden
-print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
+data = data.replace('Omschrijving', '|Omschrijving')
+data = data.replace('AA% AA*%', 'AA% |AA*% ')
+data = data.replace('Euro AA%', 'Euro |AA%')
+data = data.replace('||||', str(separator)+'\n\n'+str(separator)) # scheiding van twee tabellen
+data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')
+data = data.replace('|VANECK', 'VANECK')
+data = data.replace('- huis', '- huis|')
+#print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
 
 pyperclip.copy(data)
 

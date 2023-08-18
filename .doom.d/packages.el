@@ -21,5 +21,10 @@
 
 (package! gptel)
 
+(package! org-ai
+  :recipe (:host github
+           :repo "rksm/org-ai"
+           :files ("*.el" "README.md" "snippets")))
+
 (unpin! org-roam) ; unpinning is necessary for Room emacs according to de developer of org-roam-ui
 (package! org-roam-ui)

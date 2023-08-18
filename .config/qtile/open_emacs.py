@@ -7,7 +7,9 @@ import sys
 
 def is_emacsclient_running():
     try:
-        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs*"])
+        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs"])
+#       subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs*"])
+#       subprocess.check_output(["pgrep", "-f", "emacs*"])
         return True
     except subprocess.CalledProcessError:
         return False
@@ -17,9 +19,10 @@ def open_file_with_emacs(FILENAME):
         subprocess.run(["emacsclient", "-n", FILENAME])
     else:
         subprocess.run(["emacsclient", "-c", "-a", "emacs", FILENAME])
+#        subprocess.run(["emacs", FILENAME])
     # Send a message to Emacs and notify-send what was done
     subprocess.run(["emacsclient", "-e", f'(message "Emacs opened {FILENAME}")'])
-    subprocess.run(["notify-send", f"Opening of '{FILENAME}' in Emacs"])
+    subprocess.run(["notify-send", f"Emacs opened '{FILENAME}'"])
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

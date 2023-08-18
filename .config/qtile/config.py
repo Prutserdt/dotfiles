@@ -59,8 +59,7 @@ keys = [
     Key([mL], "t", lazy.window.toggle_floating(),       desc="Toggle floating state"),
     Key([mL], "q", lazy.window.kill(),                  desc="Kill focused window"),
     Key([mL,  "control"], "r", lazy.reload_config(),    desc="Reload the Qtile configuration"),
-    Key([mL,  "shift"], "q", lazy.spawn("alacritty -e"+ expanduser("~/.config/exitqtile.sh")), desc="Shutdown Qtile by a shellscript"),
-
+    Key([mL,  "shift"], "q", lazy.spawn(expanduser("~/.config/exitqtile.sh")), desc="Shutdown Qtile by a shellscript with dmenu options"),
     #Hotkeys to move windows around, resize windows and choose layouts
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
     Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
@@ -100,12 +99,14 @@ keys = [
         lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),
         desc="Open in emacs: run het python aandelen script en open het aandelen log"),
     Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))), # browser via dmenu, related to 'urls'
+    Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
     Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "k", lazy.spawn("keepass")),
+    Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),

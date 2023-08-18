@@ -57,7 +57,7 @@ alias r='xmodmap $HOME/.config/rdxswitch && xset r rate 300 80'     # Change to 
 
 # emacs
 alias em="/usr/bin/emacs -nw"                   #emacs commandline
-alias emacs="emacsclient -c -a 'emacs'"         #emacs graphically
+#alias emacs="emacsclient -c -a 'emacs'"         #emacs graphically
 alias doomsync="~/.emacs.d/bin/doom sync"
 alias doomdoctor="~/.emacs.d/bin/doom doctor"
 alias doomupgrade="~/.emacs.d/bin/doom upgrade"

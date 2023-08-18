@@ -1,14 +1,29 @@
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-notify-send -t 60000 "Really! Are you trying to kill me? 😢" &&
-echo -n "Do you wish to exit qtile right now? (y/n) "
+notify-send -t 60000 "Leaving the system!"
+choices=("Close Window Manager" "Reboot" "Shutdown")
+colors="-nb #FFFFFF -nf #000000 -sb #DC5A5A -sf  #FFFFFF"  # Pale red background outside, red inside
+chosen=$(printf '%s\n' "${choices[@]}" | dmenu -c -l "${#choices[@]}" $colors)
 
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-   killall qtile
-else
-    echo No
-fi
 
-notify-send "Killing Qtile right now...."
+case "$chosen" in
+    "Close Window Manager")
+        # Command to close the window manager (qtile in this case)
+        killall qtile
+        notify-send -t 60000 "Closing down qtile!"
+        ;;
+    "Reboot")
+        # Command to reboot the system
+        systemctl reboot
+        notify-send -t 60000 "Rebooting the system!"
+        ;;
+    "Shutdown")
+        # Command to shut down the system
+        systemctl poweroff
+        notify-send -t 60000 "Shutting down the system!"
+        ;;
+    *)
+        echo "No option selected."
+        ;;
+esac

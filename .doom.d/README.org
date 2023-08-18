@@ -14,7 +14,6 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
-  - [[#splash-screen][Splash screen]]
   - [[#theming-and-graphical-settings][Theming and graphical settings]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
@@ -25,6 +24,7 @@
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-Roam-ui configuration]]
   - [[#custom-code][Custom code]]
+  - [[#splash-screen][Splash screen]]
 - [[#code-snippets][Code snippets]]
 - [[#credits][Credits]]
 
@@ -88,7 +88,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
 
        :lang
        emacs-lisp          ; drown in parentheses
-       (org +pretty +roam2); organize your plain life in plain text
+       (org +pretty +roam2 +gnuplot); organize your plain life in plain text
        (python +lsp)       ; beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
@@ -148,10 +148,20 @@ The vterm-toggle package.
 (package! vterm-toggle)
 #+end_src
 
+
 The chatgpt package gptel.
 #+begin_src emacs-lisp :tangle packages.el
 (package! gptel)
 #+end_src
+
+another chatgpt package....
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-ai
+  :recipe (:host github
+           :repo "rksm/org-ai"
+           :files ("*.el" "README.md" "snippets")))
+#+end_src
+
 
 ~org-roam~ is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem. ~org-roam-ui~ is a frontend for exploring and interacting with your org-roam notes.
 #+begin_src emacs-lisp :tangle packages.el
@@ -167,39 +177,6 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 #+end_src
-
-** Splash screen
-A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
-#+begin_src emacs-lisp :tangle config.el
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
-
-(add-hook! '+doom-dashboard-functions :append
-    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\n\n")
-    (+doom-dashboard--center +doom-dashboard--width "It is a story as old as time.\n")
-    (+doom-dashboard--center +doom-dashboard--width "A stubborn, shell-dwelling and melodramatic\n")
-    (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
-    (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
-    (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
-#+end_src
-
-A function is created to make a special keymap for the splash screen. NOTE: I'm not sure if I will keep all of these ones here...
-#+begin_src emacs-lisp :tangle config.el
-(defun +doom-dashboard-setup-modified-keymap ()
-  (setq +doom-dashboard-mode-map (make-sparse-keymap))
-  (map! :map +doom-dashboard-mode-map
-        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
-        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
-        :desc "Change font(temporary)" :ng "f" #'menu-set-font
-        :desc "Change theme(temporary)" :ng "t" #'consult-theme
-        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
-        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
-(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
-(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
-(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
-#+end_src
-
-Note, more details about doom-dashboard can be found in: =~/.emacs.d/modules/ui/doom-dashboard/config.el=.
 
 ** Theming and graphical settings
 Setting the *superior* tokyo-night theme.😎
@@ -324,6 +301,7 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
   (setq! gptel-api-key (string-trim (buffer-string)))))
 #+end_src
 
+
 ** Custom keybindings
 Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top of it. I try not to interfere with those and add a few of my own, respecting the Doom keybinding framework.
 #+begin_src emacs-lisp :tangle config.el
@@ -381,17 +359,18 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
     (:prefix ("s") ;; Default Doom keybinding
         (:prefix ("c" . "ChatGPT options")
             :desc "ChatGPT"                      "c" #'gptel
-            :desc "send"                         "s" #'gptel-send
+        ;;    :desc "chat with personal notes"     "k" #'khoj
+            :desc "menu"                         "m" #'gptel-menu
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
-            :desc "menu"                         "m" #'gptel-menu)))
+            :desc "send"                         "s" #'gptel-send)))
 #+end_src
 
 ** Org-mode configuration
 Setup to use sql in org code blocks.
 #+begin_src emacs-lisp :tangle config.el
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)))
+;;(org-babel-do-load-languages
+;; 'org-babel-load-languages
+;; '((sql . t)))
 #+end_src
 
 More eye candy by superstar bullets in org mode instead of the default ~*~. This requires (org +pretty) in ~init.el~.
@@ -483,6 +462,7 @@ Now that the websocket is setup the org-roam-ui can be set.
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 #+end_src
+
 
 ** Custom code
 *** Custom elisp funtions (used with hotkeys)
@@ -593,6 +573,39 @@ Kind of pointless
     (windmove-right)
     (dired "~/Stack/VBox_Arch/RoamNotes"))
 #+end_src
+
+** Splash screen
+A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
+#+begin_src emacs-lisp :tangle config.el
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+
+(add-hook! '+doom-dashboard-functions :append
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\n\n")
+    (+doom-dashboard--center +doom-dashboard--width "It is a story as old as time.\n")
+    (+doom-dashboard--center +doom-dashboard--width "A stubborn, shell-dwelling and melodramatic\n")
+    (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
+    (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
+    (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
+#+end_src
+
+A function is created to make a special keymap for the splash screen. NOTE: I'm not sure if I will keep all of these ones here...
+#+begin_src emacs-lisp :tangle config.el
+(defun +doom-dashboard-setup-modified-keymap ()
+  (setq +doom-dashboard-mode-map (make-sparse-keymap))
+  (map! :map +doom-dashboard-mode-map
+        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
+        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
+        :desc "Change font(temporary)" :ng "f" #'menu-set-font
+        :desc "Change theme(temporary)" :ng "t" #'consult-theme
+        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
+        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
+(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
+(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
+(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
+#+end_src
+
+Note, more details about doom-dashboard can be found in: =~/.emacs.d/modules/ui/doom-dashboard/config.el=.
 
 
 * Code snippets

@@ -9,6 +9,7 @@
 #     Basic config        #
 ###########################
 export PATH="$HOME/bin:$PATH"           # ~/bin added, for local dwm install by .xinitrc.
+#export PATH=”$HOME/.config/emacs/bin:$PATH”  # Run Doom Emacs from the shell
 export PATH=”$HOME/.emacs.d/bin:$PATH”  # Run Doom Emacs from the shell
 
 HISTFILE=~/.histfile

@@ -1,30 +1,6 @@
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
-(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
-
-(add-hook! '+doom-dashboard-functions :append
-    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\n\n")
-    (+doom-dashboard--center +doom-dashboard--width "It is a story as old as time.\n")
-    (+doom-dashboard--center +doom-dashboard--width "A stubborn, shell-dwelling and melodramatic\n")
-    (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
-    (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
-    (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
-
-(defun +doom-dashboard-setup-modified-keymap ()
-  (setq +doom-dashboard-mode-map (make-sparse-keymap))
-  (map! :map +doom-dashboard-mode-map
-        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
-        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
-        :desc "Change font(temporary)" :ng "f" #'menu-set-font
-        :desc "Change theme(temporary)" :ng "t" #'consult-theme
-        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
-        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
-(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
-(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
-(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
-
 (setq doom-theme 'doom-tokyo-night)
 
 (use-package rainbow-delimiters)
@@ -143,13 +119,14 @@
     (:prefix ("s") ;; Default Doom keybinding
         (:prefix ("c" . "ChatGPT options")
             :desc "ChatGPT"                      "c" #'gptel
-            :desc "send"                         "s" #'gptel-send
+        ;;    :desc "chat with personal notes"     "k" #'khoj
+            :desc "menu"                         "m" #'gptel-menu
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
-            :desc "menu"                         "m" #'gptel-menu)))
+            :desc "send"                         "s" #'gptel-send)))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sql . t)))
+;;(org-babel-do-load-languages
+;; 'org-babel-load-languages
+;; '((sql . t)))
 
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
@@ -270,3 +247,27 @@
   "Open the keymap.c of my Redox qmk firmware"
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
+
+(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+
+(add-hook! '+doom-dashboard-functions :append
+    (insert "\n" (+doom-dashboard--center +doom-dashboard--width "An Emacs framework for the stubborn martian hacker, modified.\n\n")
+    (+doom-dashboard--center +doom-dashboard--width "It is a story as old as time.\n")
+    (+doom-dashboard--center +doom-dashboard--width "A stubborn, shell-dwelling and melodramatic\n")
+    (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
+    (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
+    (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
+
+(defun +doom-dashboard-setup-modified-keymap ()
+  (setq +doom-dashboard-mode-map (make-sparse-keymap))
+  (map! :map +doom-dashboard-mode-map
+        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
+        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
+        :desc "Change font(temporary)" :ng "f" #'menu-set-font
+        :desc "Change theme(temporary)" :ng "t" #'consult-theme
+        :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
+        :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
+(add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
+(add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
+(add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))

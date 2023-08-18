@@ -18,11 +18,14 @@
 - [[#about-this-document][About this document]]
 - [[#my-scripts][My scripts]]
   - [[#aandelenpy][aandelen.py]]
+  - [[#clipboard_dmsh][clipboard_dm.sh]]
+  - [[#stack_startupsh][stack_startup.sh]]
   - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
   - [[#dmenuemacssh][dmenuemacs.sh]]
   - [[#dmenuinternetsh][dmenuinternet.sh]]
+  - [[#dmenukillsh][dmenukill.sh]]
   - [[#dmenupatchsh][dmenupatch.sh]]
   - [[#dmenustablesh][dmenustable.sh]]
   - [[#dmenuthunarsh][dmenuthunar.sh]]
@@ -41,7 +44,7 @@
   - [[#rdxswitch][rdxswitch]]
   - [[#resetrgbsh][resetRGB.sh]]
   - [[#screenshot2textsh][screenshot2text.sh]]
-  - [[#stack_startupsh][stack_startup.sh]]
+  - [[#stack_startupsh-1][stack_startup.sh]]
   - [[#thunarbookmarkssh][thunarBookmarks.sh]]
 - [[#unused-scripts][Unused scripts]]
   - [[#aandelensh][aandelen.sh]]
@@ -92,7 +95,8 @@ class InputDialog(QDialog):
         Huis = QLineEdit(self)
         buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
         layout = QFormLayout(self)
-        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
+#        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
+        layout.addRow("Voer Bunq en Rabo cash in:", RaboCash)
         layout.addRow("Voer overwaarde huis in:", Huis)
         layout.addWidget(buttonbox)
         buttonbox.accepted.connect(self.accept)
@@ -135,7 +139,7 @@ fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newes
 Description of two asset allocation and column headers.
 #+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 OmsHuis = "Overwaarde huis     "
-OmsCash = "RaboCash            "
+OmsCash = "Cash (Rabo en Bunq) "
 # Namen van kolommen die ik ga gebruiken:
 EurCol = "Euro"                     # Euro column naam
 OmsCol = "Omschrijving        "     # Omschrijving column naam
@@ -158,7 +162,7 @@ dfx = pd.DataFrame(d)
 df = pd.concat([df, dfx])
 # Sorteer op euros, aflopend (ascending=False)
 df = df.sort_values(by=EurCol, ascending=False)
-print('=' * 40 + "\n", df)  # Only for debugging
+#print('=' * 40 + "\n", df)  # Only for debugging
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 #+end_src
@@ -170,7 +174,7 @@ Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapi
 df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
 df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
 df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by asterix
-print('=' * 40  + "\n", dfx)                      # Only for debugging
+#print('=' * 40  + "\n", dfx)                      # Only for debugging
 #+end_src
 
 Create a new temporary dataframe which become another org table with only the total amount of assets and the total amound of assets minus the surplus of the house.
@@ -183,7 +187,7 @@ d = {
     AminHuisCol: ["", "", ""]}
 dfx = pd.DataFrame(d)       # Add the list to a new temporary dataframe
 df = pd.concat([df, dfx])   # Add the dfx dataframe
-print('=' * 40 + "\n", df)  # Only for debugging
+#print('=' * 40 + "\n", df)  # Only for debugging
 
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
 #+end_src
@@ -194,11 +198,10 @@ datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
 titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
-print('\n\n') # Only for debugging
+#print('\n\n') # Only for debugging
 #+end_src
 
 The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
-
 #+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 # Create a title for the org table, with three stars for level three heading
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
@@ -214,17 +217,17 @@ gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
 gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
 separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
 
-print ('\n' + gesorteerdeLijst + '\n')
+#print ('\n' + gesorteerdeLijst + '\n')
 # Combineer de introductieregels met het dataframe
 data = titel + orgTabelNaam + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
-data = data.replace('Omschrijving', '|Omschrijving')    # Verwijder NaN waarden
-data = data.replace('AA% AA*%', 'AA% |AA*% \n|-|-|-|-|')    # Verwijder NaN waarden, voeg separator toe.
-data = data.replace('Euro AA%', 'Euro |AA%')    # Verwijder NaN waarden
-data = data.replace('||||', str(separator)+'\n\n'+str(separator))    # Verwijder NaN waarden
-data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')    # Verwijder NaN waarden
-data = data.replace('|VANECK', 'VANECK')    # Verwijder NaN waarden
-data = data.replace('- huis', '- huis|')    # Verwijder NaN waarden
-print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
+data = data.replace('Omschrijving', '|Omschrijving')
+data = data.replace('AA% AA*%', 'AA% |AA*% ')
+data = data.replace('Euro AA%', 'Euro |AA%')
+data = data.replace('||||', str(separator)+'\n\n'+str(separator)) # scheiding van twee tabellen
+data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')
+data = data.replace('|VANECK', 'VANECK')
+data = data.replace('- huis', '- huis|')
+#print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
 #+end_src
 
 Writing the data to the clipboard and garbage collection.
@@ -234,6 +237,198 @@ pyperclip.copy(data)
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
     orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
     OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
+#+end_src
+
+** clipboard_dm.sh
+A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to Ram and will not be permanent, reboot will remove the data.
+
+#+begin_src bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+#+begin_src bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
+
+# Define the clipboard directory, in the ram
+clipboard_dir="$XDG_RUNTIME_DIR/temp/clipboard"
+
+# Create the directory if it doesn't exist
+mkdir -p "$clipboard_dir"
+
+notify-send -t 6000 "Clipboard management opened"
+
+while true; do
+    # Use dmenu to choose an action from a list
+    selected_action=$(echo -e "1. Show Current Clipboard\n2. Show List of Saved Clipboards\n3. Save Current Clipboard to List\n4. Select Clipboard from List. This will become new clipboard\n5. Modify Clipboard from List in Emacs\n6. Modify Current Clipboard in Emacs\n7. Delete Single Entry from List\n8. Exit" | dmenu -c -bw 2 -l 40 -p "Clipboard options: ")
+
+    # Check if Escape was pressed or dmenu was closed
+    if [[ -z "$selected_action" ]]; then
+        notify-send -t 6000 "Exiting clipboard menu"
+        exit 0
+    fi
+
+    case "$selected_action" in
+        "1. Show Current Clipboard")
+            # Get the current clipboard content
+            current_clipboard=$(xclip -o -selection clipboard)
+
+            # Show the current clipboard content using dmenu
+            echo -n "$current_clipboard" | dmenu -c -bw 2 -l 60 -p "Current Clipboard:"
+            ;;
+
+       "2. Show List of Saved Clipboards")
+            # List saved clipboard files using dmenu and choose a file
+            selected_file=$(ls "$clipboard_dir" | dmenu -c -bw 2 -l 30 -p "Choose a file to show:")
+
+            notify-send -t 6000 "Viewing $selected_file"
+            # Check if the selected file exists
+            if [[ -f "$clipboard_dir/$selected_file" ]]; then
+                # Read the content of the selected file
+                clipboard_content=$(cat "$clipboard_dir/$selected_file")
+
+                # Extract the number from the filename
+                filename_number="${selected_file%%_*}"
+
+                # Show the content in dmenu with the number
+                echo -n "$clipboard_content" | dmenu -c -bw 2 -l 60 -p "Clipboard Content (File $filename_number):"
+                notify-send -t 6000 "Back to clipboard menu"
+            else
+                notify-send "File Not Found" "The selected file does not exist."
+            fi
+            ;;
+
+        "3. Save Current Clipboard to List")
+            # Get the highest number used in existing filenames
+            highest_number=0
+            for file in "$clipboard_dir"/*; do
+                if [[ -f "$file" ]]; then
+                    filename=$(basename "$file")
+                    number="${filename%%_*}"
+                    if [[ $number =~ ^0*([1-9][0-9]*)$ ]]; then
+                        current_number="${BASH_REMATCH[1]}"
+                        if ((current_number > highest_number)); then
+                            highest_number=$current_number
+                        fi
+                    fi
+                fi
+            done
+
+            # Calculate the next filename number with two digits
+            next_number=$(printf "%02d" $((highest_number + 1)))
+
+            # Use dmenu to get additional text for the filename
+            additional_text=$(echo "" | dmenu -c -bw 2 -p "Enter additional text for the filename (without spaces):")
+
+            # Generate the filename
+            filename="${next_number}_${additional_text}.txt"
+
+            # Get clipboard content
+            clipboard_content=$(xclip -o -selection clipboard)
+
+            # Save clipboard content to a file
+            echo "$clipboard_content" > "$clipboard_dir/$filename"
+
+            # Display a notification
+            notify-send "Clipboard Saved" "Clipboard content saved to $clipboard_dir/$filename"
+            ;;
+
+        "4. Select Clipboard from List. This will become new clipboard")
+            # List saved clipboard files using dmenu and choose a file
+            selected_file=$(ls "$clipboard_dir" | dmenu -c -bw 2 -l 30 -p "Choose a clipboard file to copy to clipboard:")
+
+            # Check if the selected file exists
+            if [[ -f "$clipboard_dir/$selected_file" ]]; then
+                # Read the content of the selected file
+                clipboard_content=$(cat "$clipboard_dir/$selected_file")
+
+                # Copy the content to clipboard
+                echo -n "$clipboard_content" | xclip -i -selection clipboard
+                notify-send "Clipboard Content Copied" "Clipboard content from $selected_file copied to clipboard."
+            else
+                notify-send "File Not Found" "The selected file does not exist."
+            fi
+            ;;
+
+        "5. Modify Clipboard from List in Emacs")
+            # List saved clipboard files using dmenu and choose a file to edit
+            selected_file=$(ls "$clipboard_dir" | dmenu -c -bw 2 -l 30 -p "Choose a file to edit:")
+
+            # Check if the selected file exists
+            if [[ -f "$clipboard_dir/$selected_file" ]]; then
+                # Open the selected file in Emacs for editing in the background
+                emacsclient -n "$clipboard_dir/$selected_file" &
+                exit 0
+            else
+                notify-send "File Not Found" "The selected file does not exist."
+            fi
+            ;;
+
+        "6. Modify Current Clipboard in Emacs")
+            # Get the current clipboard content
+            current_clipboard=$(xclip -o -selection clipboard)
+
+            # Save the current clipboard content to a temporary file in the clipboard_dir
+            temp_file="$clipboard_dir/00_temp_clipboard.txt"
+            echo "$current_clipboard" > "$temp_file"
+
+            # Open the temporary file in Emacs for editing
+            emacsclient -n "$temp_file" &
+
+            # Exit the script to close dmenu
+            exit 0
+            ;;
+
+        "7. Delete Single Entry from List")
+            # List saved clipboard files using dmenu and choose a file to delete
+            selected_file=$(ls "$clipboard_dir" | dmenu -c -bw 2 -l 30 -p "Choose a file to delete:")
+
+            # Check if the selected file exists
+            if [[ -f "$clipboard_dir/$selected_file" ]]; then
+                # Use dmenu to confirm deletion
+                confirm_delete=$(echo -e "No\nYes" | dmenu -c -bw 2 -p "Are you sure you want to delete '$selected_file'?")
+
+                if [[ "$confirm_delete" == "Yes" ]]; then
+                    # Delete the selected clipboard file
+                    rm "$clipboard_dir/$selected_file"
+                    notify-send "Clipboard Entry Deleted" "Clipboard entry '$selected_file' has been deleted."
+                else
+                    notify-send "Deletion Canceled" "Clipboard entry '$selected_file' was not deleted."
+                fi
+            else
+                notify-send "File Not Found" "The selected file does not exist."
+            fi
+            ;;
+
+        "8. Exit")
+            exit 0
+            ;;
+    esac
+done
+#+end_src
+
+
+** stack_startup.sh
+A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
+#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+dir="$HOME/Applications" # directory
+appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
+
+if [ -n "$appimage" ]; then
+    notify-send -t 6000 "Starting the Stack .AppImage..." && #send notification
+    "$appimage"  # Execute the file
+else
+    notify-send -t 6000 "No .AppImage file containing 'stack' in its name was found in $dir"
+fi
 #+end_src
 
 ** decrMonitorBrightness.sh
@@ -366,6 +561,50 @@ chosen=$(cat $HOME/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open websi
 xdg-open $chosen &&
 notify-send -t 60000 "Opening webpage: " "$chosen"
 #+end_src
+
+** dmenukill.sh
+Killing processes by dmenu, with menu options, use wisely!
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
+#!/usr/bin/env bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+#+begin_src bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenukill.sh, a script to kill processes!" &&
+chosen="$(ps -a -u $USER |dmenu -c -bw 2 -l 40 -p "Delete process:"| awk '{print $1}')"
+[ -z "$chosen" ] && exit
+#pwd &&
+#kill $chosen &
+#notify-send -t 60000 "The process: $chosen was killed!"
+
+A menu with four options is created to kill the selected process, copy process information to the clipboard or exit.
+# Display options and read user choice
+selected_option=$(echo -e "d Delete process\nc Copy process name\np Copy PID\ne Exit" | dmenu -c -bw 2 -l 4 -p "Choose an option:")
+process_name=$(ps -p "$chosen" -o comm=)
+
+case "$selected_option" in
+    "d Delete process")
+        kill "$chosen"
+        notify-send -t 60000 "The process '$process_name' with PID '$chosen' was killed!"
+        ;;
+    "c Copy process name")
+        echo "$process_name" | xclip -selection clipboard
+        notify-send -t 60000 "Process name '$process_name', coupled to PID '$chosen', was copied to clipboard!"
+        ;;
+    "p Copy PID")
+        echo "$chosen" | xclip -selection clipboard
+        notify-send -t 60000 "Selected PID '$chosen', coupled to process name '$process_name', was copied to clipboard!"
+        ;;
+    "e Exit")
+        notify-send -t 60000 "Exiting dmenukill.sh"
+        exit
+        ;;
+esac
+#+end_src
+
 
 ** dmenupatch.sh
 Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
@@ -647,23 +886,38 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 #+end_src
 
 Echo out the options and run the ~killall qtile~ command, or not.
- +begin_src sh :tangle exitqtile.sh :padline no :eval no
 #+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
-notify-send -t 60000 "Really! Are you trying to kill me? 😢" &&
-echo -n "Do you wish to exit qtile right now? (y/n) "
+notify-send -t 60000 "Leaving the system!"
+choices=("Close Window Manager" "Reboot" "Shutdown")
+colors="-nb #FFFFFF -nf #000000 -sb #DC5A5A -sf  #FFFFFF"  # Pale red background outside, red inside
+chosen=$(printf '%s\n' "${choices[@]}" | dmenu -c -l "${#choices[@]}" $colors)
 
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-   killall qtile
-else
-    echo No
-fi
 
-notify-send "Killing Qtile right now...."
+case "$chosen" in
+    "Close Window Manager")
+        # Command to close the window manager (qtile in this case)
+        killall qtile
+        notify-send -t 60000 "Closing down qtile!"
+        ;;
+    "Reboot")
+        # Command to reboot the system
+        systemctl reboot
+        notify-send -t 60000 "Rebooting the system!"
+        ;;
+    "Shutdown")
+        # Command to shut down the system
+        systemctl poweroff
+        notify-send -t 60000 "Shutting down the system!"
+        ;;
+    ,*)
+        echo "No option selected."
+        ;;
+esac
 #+end_src
 
+
 ** incrMonitorBrightness.sh
-Increase the monitor brightness by xrandrand also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
+Increase the monitor brightness by xrandr and also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
 #+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
@@ -913,7 +1167,7 @@ A temporary directory is made in the system RAM. The files for this script will 
 mkdir $XDG_RUNTIME_DIR/temp &
 #+end_src
 
-The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. Note: the next screenshot will overwrite the jpg and txt file.
+The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. NOTE: the next screenshot will overwrite the jpg and txt file.
 #+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text" &&
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
