@@ -1,7 +1,7 @@
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-notify-send -t 60000 "Leaving the system!"
+notify-send -t 60000 "Do you want to leave the system?"
 choices=("Close Window Manager" "Reboot" "Shutdown")
 colors="-nb #FFFFFF -nf #000000 -sb #DC5A5A -sf  #FFFFFF"  # Pale red background outside, red inside
 chosen=$(printf '%s\n' "${choices[@]}" | dmenu -c -l "${#choices[@]}" $colors)

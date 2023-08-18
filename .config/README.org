@@ -16,11 +16,8 @@
 
 * Table of contents :toc:
 - [[#about-this-document][About this document]]
-- [[#my-scripts][My scripts]]
-  - [[#aandelenpy][aandelen.py]]
+- [[#my-dmenu-scripts][My dmenu scripts]]
   - [[#clipboard_dmsh][clipboard_dm.sh]]
-  - [[#stack_startupsh][stack_startup.sh]]
-  - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
   - [[#dmenuemacssh][dmenuemacs.sh]]
@@ -33,10 +30,14 @@
   - [[#dmenuupdatesh][dmenuUpdate.sh]]
   - [[#dmenuvanillash][dmenuvanilla.sh]]
   - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
-  - [[#dotfilessh][dotfiles.sh]]
   - [[#exitqtilesh][exitqtile.sh]]
-  - [[#incrmonitorbrightnesssh][incrMonitorBrightness.sh]]
+- [[#other-scripts][Other scripts]]
+  - [[#aandelenpy][aandelen.py]]
+  - [[#stack_startupsh][stack_startup.sh]]
+  - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
+  - [[#dotfilessh][dotfiles.sh]]
   - [[#kbswitch][kbswitch]]
+  - [[#incrmonitorbrightnesssh][incrMonitorBrightness.sh]]
   - [[#nightcolordownsh][nightColorDown.sh]]
   - [[#nightcolorupsh][nightColorUp.sh]]
   - [[#notify-logsh][notify-log.sh]]
@@ -63,181 +64,7 @@
 * About this document
 This document is a note-to-self about my scripts on my GNU/Linux system and is my attempt at [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] in [[https://www.gnu.org/software/emacs/][Emacs]] using org-mode. This README.org is the source file and is converted to the individual shell scripts by tangling in Emacs: ~M-x~ ~org-babel-tangle~.
 
-* My scripts
-** aandelen.py
-A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio information are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
-
-Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-#!/usr/bin/env python3
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-The libraries that are used for this script are imported in the next section.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-import glob, os, pyperclip, time
-import pandas as pd
-from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
-#+end_src
-
-The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog. The aim is to add the amount of cash and surplus value of the house here by hand. After this the script takes over the heavy lifting.
-
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-class InputDialog(QDialog):
-    """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
-        global RaboCash  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
-        RaboCash = QLineEdit(self)
-        Huis = QLineEdit(self)
-        buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
-        layout = QFormLayout(self)
-#        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
-        layout.addRow("Voer Bunq en Rabo cash in:", RaboCash)
-        layout.addRow("Voer overwaarde huis in:", Huis)
-        layout.addWidget(buttonbox)
-        buttonbox.accepted.connect(self.accept)
-        buttonbox.rejected.connect(self.reject)
-
-    def getinputs(self):
-        return RaboCash.text(), Huis.text()
-
-if __name__ == '__main__':
-    import sys
-    app = QApplication(sys.argv)
-    dialog = InputDialog()
-    if dialog.exec():
-        RaboCash, Huis = dialog.getinputs()
-        Huis = int(Huis)          # Moet integer zijn voor latere berekening
-        RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
-#+end_src
-
-A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-def AddCSVtoDataFrame(filename, delimiter, column1, column2):
-    """Building a dataframe from several CSV files"""
-    global df  # This dataframe will be used outside of this def, so make it global
-    dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
-    dfx.columns = [OmsCol, EurCol] # Harmonizing column names
-    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]  #  Removal of thousand separator
-    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]] #  Change comma to point
-    dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)     # Change the Euro column to integer.
-    df = pd.concat([df, dfx])    # Add the temp dataframe to dataframe
-    print('=' * 40 + "\n", dfx)  # For debugging
-#+end_src
-
-The filenames and path of the csv files are generated here.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
-searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
-fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
-#+end_src
-
-Description of two asset allocation and column headers.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-OmsHuis = "Overwaarde huis     "
-OmsCash = "Cash (Rabo en Bunq) "
-# Namen van kolommen die ik ga gebruiken:
-EurCol = "Euro"                     # Euro column naam
-OmsCol = "Omschrijving        "     # Omschrijving column naam
-AaCol = "AA%"                       # Asset Allocation column naam
-AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
-#+end_src
-
-Creation of dataframe and adding data of two portfolios to the dataframe.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-df = pd.DataFrame() # Create a new dataframe
-AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
-df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
-AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
-# Create a new dataframe with surplus value house and Cash amount
-d = {
-    OmsCol: [OmsHuis, OmsCash],    # kolom omschrijving invullen
-    EurCol: [Huis, RaboCash]}      # kolom euros invullen
-dfx = pd.DataFrame(d)
-# Samenvoegen van dataframes
-df = pd.concat([df, dfx])
-# Sorteer op euros, aflopend (ascending=False)
-df = df.sort_values(by=EurCol, ascending=False)
-#print('=' * 40 + "\n", df)  # Only for debugging
-df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
-# Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
-#+end_src
-
-Asset allocation calculation of percentages and adding of calculated values to the dataframe.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapitaal is Dutch for Capital)
-# AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
-df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
-df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
-df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by asterix
-#print('=' * 40  + "\n", dfx)                      # Only for debugging
-#+end_src
-
-Create a new temporary dataframe which become another org table with only the total amount of assets and the total amound of assets minus the surplus of the house.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-# Nieuw dataframe aanmaken met streepjes en totale assets enz
-d = {
-    EurCol: ["" , Kapitaal, Kapitaal - Huis],
-    OmsCol: ["" , "Assets totaal       ", "Assets totaal - huis  "],
-    AaCol: ["", "", ""],
-    AminHuisCol: ["", "", ""]}
-dfx = pd.DataFrame(d)       # Add the list to a new temporary dataframe
-df = pd.concat([df, dfx])   # Add the dfx dataframe
-#print('=' * 40 + "\n", df)  # Only for debugging
-
-df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
-#+end_src
-
-Creation of an introduction line that contains org headers (*****), date and the assets total (minus surplus of house).
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
-t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
-
-titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
-#print('\n\n') # Only for debugging
-#+end_src
-
-The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-# Create a title for the org table, with three stars for level three heading
-orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
-orgTabelNaam=''.join(orgTabelNaam)
-
-# Transform dataframe to a text string that is ready for the Emacs org-mode (with | separators)
-gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
-gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
-gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
-gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
-gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
-gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
-gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
-separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
-
-#print ('\n' + gesorteerdeLijst + '\n')
-# Combineer de introductieregels met het dataframe
-data = titel + orgTabelNaam + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
-data = data.replace('Omschrijving', '|Omschrijving')
-data = data.replace('AA% AA*%', 'AA% |AA*% ')
-data = data.replace('Euro AA%', 'Euro |AA%')
-data = data.replace('||||', str(separator)+'\n\n'+str(separator)) # scheiding van twee tabellen
-data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')
-data = data.replace('|VANECK', 'VANECK')
-data = data.replace('- huis', '- huis|')
-#print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
-#+end_src
-
-Writing the data to the clipboard and garbage collection.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-pyperclip.copy(data)
-
-del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
-    orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
-    OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
-#+end_src
+* My dmenu scripts
 
 ** clipboard_dm.sh
 A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to Ram and will not be permanent, reboot will remove the data.
@@ -408,67 +235,7 @@ done
 #+end_src
 
 
-** stack_startup.sh
-A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
 
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
-#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
-dir="$HOME/Applications" # directory
-appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
-
-if [ -n "$appimage" ]; then
-    notify-send -t 6000 "Starting the Stack .AppImage..." && #send notification
-    "$appimage"  # Execute the file
-else
-    notify-send -t 6000 "No .AppImage file containing 'stack' in its name was found in $dir"
-fi
-#+end_src
-
-** decrMonitorBrightness.sh
-Decrease the monitor brightness by xrandr and also make the color more red. It's brother, [[incrMonitorBrightness.sh]], is a similar script doing the oposite.
-
-Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
-#!/bin/bash
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
-
-Information is retrieved from xrandr about the connected monitor and the current brightness and RGB values (gamma_value).
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
-monitor=$(xrandr | awk '/ connected/ {print $1}')
-currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
-gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
-#+end_src
-
-The RGB values are separated into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
-IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
-new_gamma_r=$(echo "1/$gamma_r" | bc -l)
-new_gamma_g=$(echo "1/$gamma_g * 0.9" | bc -l)
-new_gamma_b=$(echo "1/$gamma_b * 0.9" | bc -l)
-new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
-#+end_src
-
-When the brightness reaches 0.1 then it should not be any lower, therefore and if-else statement is applied. The newBrightness is calculated to be -0.1 lower then the currentBrightness, this is calculated by the bc program.
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
-if [[ "$currentBrightness" == "0.10" ]] ; then
-    echo "The current brightness is 0.1 and should not be any lower!"
-    notify-send -t 60000 "🔆 Brightness minimum reached!: ️" "$currentBrightness"
-else
-    newBrightness=$(echo $currentBrightness-0.1| bc -l)
-    xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
-    notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
-    echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
-fi
-#+end_src
 
 ** dmenuapps.sh
 My app picker. A simple script to select which application to start via dmenu.
@@ -604,7 +371,6 @@ case "$selected_option" in
         ;;
 esac
 #+end_src
-
 
 ** dmenupatch.sh
 Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
@@ -793,6 +559,285 @@ ls $HOME/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper:
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+end_src
 
+** exitqtile.sh
+Used to exit the Qtile windowmanager with yes/no option.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+Echo out the options and run the ~killall qtile~ command, or not.
+#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
+notify-send -t 60000 "Do you want to leave the system?"
+choices=("Close Window Manager" "Reboot" "Shutdown")
+colors="-nb #FFFFFF -nf #000000 -sb #DC5A5A -sf  #FFFFFF"  # Pale red background outside, red inside
+chosen=$(printf '%s\n' "${choices[@]}" | dmenu -c -l "${#choices[@]}" $colors)
+
+
+case "$chosen" in
+    "Close Window Manager")
+        # Command to close the window manager (qtile in this case)
+        killall qtile
+        notify-send -t 60000 "Closing down qtile!"
+        ;;
+    "Reboot")
+        # Command to reboot the system
+        systemctl reboot
+        notify-send -t 60000 "Rebooting the system!"
+        ;;
+    "Shutdown")
+        # Command to shut down the system
+        systemctl poweroff
+        notify-send -t 60000 "Shutting down the system!"
+        ;;
+    ,*)
+        echo "No option selected."
+        ;;
+esac
+#+end_src
+
+* Other scripts
+** aandelen.py
+A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio information are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#!/usr/bin/env python3
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+The libraries that are used for this script are imported in the next section.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+import glob, os, pyperclip, time
+import pandas as pd
+from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
+#+end_src
+
+The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog. The aim is to add the amount of cash and surplus value of the house here by hand. After this the script takes over the heavy lifting.
+
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+class InputDialog(QDialog):
+    """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
+        global RaboCash  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
+        RaboCash = QLineEdit(self)
+        Huis = QLineEdit(self)
+        buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
+        layout = QFormLayout(self)
+#        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
+        layout.addRow("Voer Bunq en Rabo cash in:", RaboCash)
+        layout.addRow("Voer overwaarde huis in:", Huis)
+        layout.addWidget(buttonbox)
+        buttonbox.accepted.connect(self.accept)
+        buttonbox.rejected.connect(self.reject)
+
+    def getinputs(self):
+        return RaboCash.text(), Huis.text()
+
+if __name__ == '__main__':
+    import sys
+    app = QApplication(sys.argv)
+    dialog = InputDialog()
+    if dialog.exec():
+        RaboCash, Huis = dialog.getinputs()
+        Huis = int(Huis)          # Moet integer zijn voor latere berekening
+        RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
+#+end_src
+
+A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+def AddCSVtoDataFrame(filename, delimiter, column1, column2):
+    """Building a dataframe from several CSV files"""
+    global df  # This dataframe will be used outside of this def, so make it global
+    dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
+    dfx.columns = [OmsCol, EurCol] # Harmonizing column names
+    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]  #  Removal of thousand separator
+    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]] #  Change comma to point
+    dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)     # Change the Euro column to integer.
+    df = pd.concat([df, dfx])    # Add the temp dataframe to dataframe
+    print('=' * 40 + "\n", dfx)  # For debugging
+#+end_src
+
+The filenames and path of the csv files are generated here.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
+searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
+fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
+#+end_src
+
+Description of two asset allocation and column headers.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+OmsHuis = "Overwaarde huis     "
+OmsCash = "Cash (Rabo en Bunq) "
+# Namen van kolommen die ik ga gebruiken:
+EurCol = "Euro"                     # Euro column naam
+OmsCol = "Omschrijving        "     # Omschrijving column naam
+AaCol = "AA%"                       # Asset Allocation column naam
+AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
+#+end_src
+
+Creation of dataframe and adding data of two portfolios to the dataframe.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+df = pd.DataFrame() # Create a new dataframe
+AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
+df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
+AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
+# Create a new dataframe with surplus value house and Cash amount
+d = {
+    OmsCol: [OmsHuis, OmsCash],    # kolom omschrijving invullen
+    EurCol: [Huis, RaboCash]}      # kolom euros invullen
+dfx = pd.DataFrame(d)
+# Samenvoegen van dataframes
+df = pd.concat([df, dfx])
+# Sorteer op euros, aflopend (ascending=False)
+df = df.sort_values(by=EurCol, ascending=False)
+#print('=' * 40 + "\n", df)  # Only for debugging
+df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
+# Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
+#+end_src
+
+Asset allocation calculation of percentages and adding of calculated values to the dataframe.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapitaal is Dutch for Capital)
+# AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
+df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
+df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
+df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by asterix
+#print('=' * 40  + "\n", dfx)                      # Only for debugging
+#+end_src
+
+Create a new temporary dataframe which become another org table with only the total amount of assets and the total amound of assets minus the surplus of the house.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+# Nieuw dataframe aanmaken met streepjes en totale assets enz
+d = {
+    EurCol: ["" , Kapitaal, Kapitaal - Huis],
+    OmsCol: ["" , "Assets totaal       ", "Assets totaal - huis  "],
+    AaCol: ["", "", ""],
+    AminHuisCol: ["", "", ""]}
+dfx = pd.DataFrame(d)       # Add the list to a new temporary dataframe
+df = pd.concat([df, dfx])   # Add the dfx dataframe
+#print('=' * 40 + "\n", df)  # Only for debugging
+
+df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
+#+end_src
+
+Creation of an introduction line that contains org headers (*****), date and the assets total (minus surplus of house).
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
+t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
+
+titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
+#print('\n\n') # Only for debugging
+#+end_src
+
+The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+# Create a title for the org table, with three stars for level three heading
+orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
+orgTabelNaam=''.join(orgTabelNaam)
+
+# Transform dataframe to a text string that is ready for the Emacs org-mode (with | separators)
+gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
+gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
+gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
+gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
+gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
+separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
+
+#print ('\n' + gesorteerdeLijst + '\n')
+# Combineer de introductieregels met het dataframe
+data = titel + orgTabelNaam + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
+data = data.replace('Omschrijving', '|Omschrijving')
+data = data.replace('AA% AA*%', 'AA% |AA*% ')
+data = data.replace('Euro AA%', 'Euro |AA%')
+data = data.replace('||||', str(separator)+'\n\n'+str(separator)) # scheiding van twee tabellen
+data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')
+data = data.replace('|VANECK', 'VANECK')
+data = data.replace('- huis', '- huis|')
+#print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
+#+end_src
+
+Writing the data to the clipboard and garbage collection.
+#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+pyperclip.copy(data)
+
+del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
+    orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
+    OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
+#+end_src
+
+
+** stack_startup.sh
+A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
+#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+dir="$HOME/Applications" # directory
+appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
+
+if [ -n "$appimage" ]; then
+    notify-send -t 6000 "Starting the Stack .AppImage..." && #send notification
+    "$appimage"  # Execute the file
+else
+    notify-send -t 6000 "No .AppImage file containing 'stack' in its name was found in $dir"
+fi
+#+end_src
+
+** decrMonitorBrightness.sh
+Decrease the monitor brightness by xrandr and also make the color more red. It's brother, [[incrMonitorBrightness.sh]], is a similar script doing the oposite.
+
+Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+end_src
+
+Information is retrieved from xrandr about the connected monitor and the current brightness and RGB values (gamma_value).
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+monitor=$(xrandr | awk '/ connected/ {print $1}')
+currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
+gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
+#+end_src
+
+The RGB values are separated into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
+new_gamma_r=$(echo "1/$gamma_r" | bc -l)
+new_gamma_g=$(echo "1/$gamma_g * 0.9" | bc -l)
+new_gamma_b=$(echo "1/$gamma_b * 0.9" | bc -l)
+new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
+#+end_src
+
+When the brightness reaches 0.1 then it should not be any lower, therefore and if-else statement is applied. The newBrightness is calculated to be -0.1 lower then the currentBrightness, this is calculated by the bc program.
+#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+if [[ "$currentBrightness" == "0.10" ]] ; then
+    echo "The current brightness is 0.1 and should not be any lower!"
+    notify-send -t 60000 "🔆 Brightness minimum reached!: ️" "$currentBrightness"
+else
+    newBrightness=$(echo $currentBrightness-0.1| bc -l)
+    xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
+    notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
+fi
+#+end_src
+
 ** dotfiles.sh
 A script to manage my dotfiles git repo. It checks the status of my dotfiles and gives options how to continue (push/pull/pullpush/exit).
 
@@ -875,46 +920,34 @@ case $PullPush in
 esac
 #+end_src
 
-** exitqtile.sh
-Used to exit the Qtile windowmanager with yes/no option.
+** kbswitch
+These settings are used in combination with an xmodmap command and can be used when a normy keyboard is used. It will swap Escape/CapsLock, change the super key to super left and super right and the same for the alt key (switch to alt-left and alt-right)
+I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config/kbswitch~.
 
-Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
-#!/bin/bash
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
+Swap the Escape with the Capslock.
+#+begin_src sh :tangle kbswitch :padline no :eval no
+! NOTE: This file is generated from ~/.config/README.org
+!       Please only edit that file and org-babel-tangle (emacs)
+remove Lock = Caps_Lock
+keysym Escape = Caps_Lock
+keysym Caps_Lock = Escape
+add Lock = Caps_Lock
 #+end_src
 
-Echo out the options and run the ~killall qtile~ command, or not.
-#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
-notify-send -t 60000 "Leaving the system!"
-choices=("Close Window Manager" "Reboot" "Shutdown")
-colors="-nb #FFFFFF -nf #000000 -sb #DC5A5A -sf  #FFFFFF"  # Pale red background outside, red inside
-chosen=$(printf '%s\n' "${choices[@]}" | dmenu -c -l "${#choices[@]}" $colors)
-
-
-case "$chosen" in
-    "Close Window Manager")
-        # Command to close the window manager (qtile in this case)
-        killall qtile
-        notify-send -t 60000 "Closing down qtile!"
-        ;;
-    "Reboot")
-        # Command to reboot the system
-        systemctl reboot
-        notify-send -t 60000 "Rebooting the system!"
-        ;;
-    "Shutdown")
-        # Command to shut down the system
-        systemctl poweroff
-        notify-send -t 60000 "Shutting down the system!"
-        ;;
-    ,*)
-        echo "No option selected."
-        ;;
-esac
+Change the setting so that the left and right super keys are both functional. More modifiers is better...
+#+begin_src sh :tangle kbswitch :padline no :eval no
+remove mod4 = Super_R
+add mod3 = Super_R
 #+end_src
 
+The same thing for the alt key. Let's use the Alt-left and Alt-right.
+#+begin_src sh :tangle kbswitch :padline no :eval no
+! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift, uncomment next lines if needed.
+!remove mod1 = ISO_Level3_Shift
+!add mod5 = ISO_Level3_Shift
+remove mod1 = Alt_R
+add mod5 = Alt_R
+#+end_src
 
 ** incrMonitorBrightness.sh
 Increase the monitor brightness by xrandr and also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
@@ -954,35 +987,6 @@ else
     notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
-#+end_src
-
-** kbswitch
-These settings are used in combination with an xmodmap command and can be used when a normy keyboard is used. It will swap Escape/CapsLock, change the super key to super left and super right and the same for the alt key (switch to alt-left and alt-right)
-I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config/kbswitch~.
-
-Swap the Escape with the Capslock.
-#+begin_src sh :tangle kbswitch :padline no :eval no
-! NOTE: This file is generated from ~/.config/README.org
-!       Please only edit that file and org-babel-tangle (emacs)
-remove Lock = Caps_Lock
-keysym Escape = Caps_Lock
-keysym Caps_Lock = Escape
-add Lock = Caps_Lock
-#+end_src
-
-Change the setting so that the left and right super keys are both functional. More modifiers is better...
-#+begin_src sh :tangle kbswitch :padline no :eval no
-remove mod4 = Super_R
-add mod3 = Super_R
-#+end_src
-
-The same thing for the alt key. Let's use the Alt-left and Alt-right.
-#+begin_src sh :tangle kbswitch :padline no :eval no
-! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift, uncomment next lines if needed.
-!remove mod1 = ISO_Level3_Shift
-!add mod5 = ISO_Level3_Shift
-remove mod1 = Alt_R
-add mod5 = Alt_R
 #+end_src
 
 ** nightColorDown.sh
@@ -1231,7 +1235,6 @@ while read -r dir; do
     echo "file://$dir" >> $BOOKMARKS_FILE
 done < $DIR_FILE
 #+end_src
-
 
 * Unused scripts
 
