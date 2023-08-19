@@ -105,6 +105,7 @@ keys = [
     Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
+    Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
     Key([mR], "k", lazy.spawn("keepass")),
     Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
