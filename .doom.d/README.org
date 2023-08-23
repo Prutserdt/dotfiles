@@ -148,20 +148,10 @@ The vterm-toggle package.
 (package! vterm-toggle)
 #+end_src
 
-
-The chatgpt package gptel.
+A chatgpt package gptel.
 #+begin_src emacs-lisp :tangle packages.el
 (package! gptel)
 #+end_src
-
-another chatgpt package....
-#+begin_src emacs-lisp :tangle packages.el
-(package! org-ai
-  :recipe (:host github
-           :repo "rksm/org-ai"
-           :files ("*.el" "README.md" "snippets")))
-#+end_src
-
 
 ~org-roam~ is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem. ~org-roam-ui~ is a frontend for exploring and interacting with your org-roam notes.
 #+begin_src emacs-lisp :tangle packages.el
@@ -627,9 +617,9 @@ $0
 Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
 
 * Credits
-My configuration of Doom Emacs is partially based on these ones.
-🔗 https://github.com/doomemacs/doomemacs
-🔗 https://tecosaur.github.io/emacs-config/config.html
-🔗 https://gitlab.com/zzamboni/dot-doom
-🔗 https://systemcrafters.net/
-🔗 https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/doom/config.org
+My configuration of Doom Emacs is partially based on these:
+- 🔗 https://github.com/doomemacs/doomemacs
+- 🔗 https://tecosaur.github.io/emacs-config/config.html
+- 🔗 https://gitlab.com/zzamboni/dot-doom
+- 🔗 https://systemcrafters.net/
+- 🔗 https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/doom/config.org

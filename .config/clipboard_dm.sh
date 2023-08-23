@@ -11,7 +11,7 @@ notify-send -t 6000 "Clipboard management opened"
 
 while true; do
     # Use dmenu to choose an action from a list
-    selected_action=$(echo -e "1. Show Current Clipboard\n2. Show List of Saved Clipboards\n3. Save Current Clipboard to List\n4. Select Clipboard from List. This will become new clipboard\n5. Modify Clipboard from List in Emacs\n6. Modify Current Clipboard in Emacs\n7. Delete Single Entry from List\n8. Exit" | dmenu -c -bw 2 -l 40 -p "Clipboard options: ")
+    selected_action=$(echo -e "1. Show Current Clipboard\n2. Show List of Saved Clipboards\n3. Save Current Clipboard to List\n4. Select Clipboard from List. This will become new clipboard\n5. Modify Clipboard from List in Emacs\n6. Modify Current Clipboard in Emacs and save as 00_temp_clipboard.txt\n7. Delete Single Entry from List\n8. Exit" | dmenu -c -bw 2 -l 40 -p "Clipboard options: ")
 
     # Check if Escape was pressed or dmenu was closed
     if [[ -z "$selected_action" ]]; then
@@ -115,7 +115,7 @@ while true; do
             fi
             ;;
 
-        "6. Modify Current Clipboard in Emacs")
+        "6. Modify Current Clipboard in Emacs and save as 00_temp_clipboard.txt")
             # Get the current clipboard content
             current_clipboard=$(xclip -o -selection clipboard)
 
