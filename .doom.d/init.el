@@ -45,8 +45,8 @@
 
        :lang
        emacs-lisp          ; drown in parentheses
-       (org +pretty +roam2 +gnuplot); organize your plain life in plain text
-       (python +lsp)       ; beautiful is better than ugly
+       (org +pretty +roam2); organize your plain life in plain text
+       (python +lsp +pyenv)       ; beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
 
