@@ -15,7 +15,7 @@
 PS1='[\u@\h \W]\$ '
 PROMPT_COMMAND='printf "\033]0;[%s@%s]$ %s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/"~"}"' # Make windowname: [user@host]$ directory 
 pfetch                              # Display arch logo (asci art) and additional info in terminal
-cowthink $(fortune)                 # Let the cow quote! (requires conwsay and fortune-mod)
+#cowthink $(fortune)                 # Let the cow quote! (requires conwsay and fortune-mod)
 HISTSIZE=5000                       # Make size of bash history 5000 (500= default) 
 HISTFILESIZE=10000                  # and the total amount of maximally saved lines
 HISTCONTROL=ignoredups:erasedups    # Do not add duplicate entries and no spaces

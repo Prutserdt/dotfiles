@@ -4,14 +4,14 @@
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
 
-#+begin_src
+#+BEGIN_SRC
  __  __                       _       _
 |  \/  |_   _   ___  ___ _ __(_)_ __ | |_ ___
 | |\/| | | | | / __|/ __| '__| | '_ \| __/ __|
 | |  | | |_| | \__ \ (__| |  | | |_) | |_\__ \
 |_|  |_|\__, | |___/\___|_|  |_| .__/ \__|___/
         |___/                  |_|
-#+end_src
+#+END_SRC
 
 * Table of contents :toc:
 - [[#about-this-document][About this document]]
@@ -69,13 +69,13 @@ This document is a note-to-self about my scripts on my GNU/Linux system and is m
 ** clipboard_dm.sh
 A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to Ram and will not be permanent, reboot will remove the data.
 
-#+begin_src bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
-#+begin_src bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
 
 # Define the clipboard directory, in the ram
 clipboard_dir="$XDG_RUNTIME_DIR/temp/clipboard"
@@ -83,7 +83,7 @@ clipboard_dir="$XDG_RUNTIME_DIR/temp/clipboard"
 # Create the directory if it doesn't exist
 mkdir -p "$clipboard_dir"
 
-notify-send -t 6000 "Clipboard management opened"
+notify-send -t 60000 "Clipboard management opened"
 
 while true; do
     # Use dmenu to choose an action from a list
@@ -91,7 +91,7 @@ while true; do
 
     # Check if Escape was pressed or dmenu was closed
     if [[ -z "$selected_action" ]]; then
-        notify-send -t 6000 "Exiting clipboard menu"
+        notify-send -t 60000 "Exiting clipboard menu"
         exit 0
     fi
 
@@ -108,7 +108,7 @@ while true; do
             # List saved clipboard files using dmenu and choose a file
             selected_file=$(ls "$clipboard_dir" | dmenu -c -bw 2 -l 30 -p "Choose a file to show:")
 
-            notify-send -t 6000 "Viewing $selected_file"
+            notify-send -t 60000 "Viewing $selected_file"
             # Check if the selected file exists
             if [[ -f "$clipboard_dir/$selected_file" ]]; then
                 # Read the content of the selected file
@@ -119,7 +119,7 @@ while true; do
 
                 # Show the content in dmenu with the number
                 echo -n "$clipboard_content" | dmenu -c -bw 2 -l 60 -p "Clipboard Content (File $filename_number):"
-                notify-send -t 6000 "Back to clipboard menu"
+                notify-send -t 60000 "Back to clipboard menu"
             else
                 notify-send "File Not Found" "The selected file does not exist."
             fi
@@ -232,39 +232,39 @@ while true; do
             ;;
     esac
 done
-#+end_src
+#+END_SRC
 
 ** dmenuapps.sh
 My app picker. A simple script to select which application to start via dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
-#+begin_src bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuapps.sh" &&
 chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
 notify-send -t 60000 "Starting application: " "$chosen" &&
 $chosen
 
-#+end_src
+#+END_SRC
 
 ** dmenubackup.sh
 Make a backup of the current dmenu version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 The *_stable name will be the new stable version of dmenu.
-#+begin_src bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenubackup.sh" &&
 echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 read answer
@@ -277,27 +277,27 @@ else
     echo No
     notify-send -t 60000 "Exiting dmenubackup.sh" "No backup was made"
 fi
-#+end_src
+#+END_SRC
 
 ** dmenuemacs.sh
 Bookmarkst to textfiles picked by dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 My list of textfiles is piped into dmenu and the selected one is opened in a new instance of emacs or on the already opened emacs client. Note: the 'textfile' is a textfiles that consists of a list of filenames including the directory location.
-#+begin_src bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuemacs.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/textfiles | dmenu -c -bw 2 -l 40 -p 'Open textfiles: ')
 [ -z "$chosen" ] && exit
-#+end_src
+#+END_SRC
 
 Then my running processes are checked and when an emacs instance if found running then the file is opened in that instance and otherwise emacs is opened.
-#+begin_src bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
 if pgrep -f "emacsclient -c -a emacs*" > /dev/null; then
   emacsclient -n "$chosen"
   emacsclient -e "(message \"Opened $chosen in Emacs\")" > /dev/null 2>&1
@@ -305,38 +305,38 @@ if pgrep -f "emacsclient -c -a emacs*" > /dev/null; then
 else
   emacsclient -c -a emacs "$chosen"
 fi
-#+end_src
+#+END_SRC
 
 ** dmenuinternet.sh
 Internet bookmark picking by dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
-#+begin_src bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuinternet.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
 [ -z "$chosen" ] && exit
 xdg-open $chosen &&
 notify-send -t 60000 "Opening webpage: " "$chosen"
-#+end_src
+#+END_SRC
 
 ** dmenukill.sh
 Killing processes by dmenu, with menu options, use wisely!
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
 #!/usr/bin/env bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
-#+begin_src bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenukill.sh, a script to kill processes!" &&
 chosen="$(ps -a -u $USER |dmenu -c -bw 2 -l 40 -p "Delete process:"| awk '{print $1}')"
 [ -z "$chosen" ] && exit
@@ -367,25 +367,25 @@ case "$selected_option" in
         exit
         ;;
 esac
-#+end_src
+#+END_SRC
 
 ** dmenupatch.sh
 Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 This script will delete all of the current dmenu files. It will build from the stable version backup location.
 1: delete files in test directory and restore the stable dmenu verstion.
 2: write the diff filename to the diff_log
 3: Run the patch
 
-#+begin_src bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
-notify-send -t 6000 "Running dmenupatch.sh" &&
+#+BEGIN_SRC bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
+notify-send -t 60000 "Running dmenupatch.sh" &&
 echo -n "Are you sure you want to patch the current dmenu version? This will first:
 RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
 read answer
@@ -405,21 +405,21 @@ else
     echo No
     notify-send -t 60000 "Exited dmenupatch.sh. Nothing was changed"
 fi
-#+end_src
+#+END_SRC
 
 ** dmenustable.sh
 Restore to the stable version of dmenu and remove the current version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 This script gives yes/no option to make a local backup of dmenu.
 This script can be called by the .bashrc alias dmenustable.
-#+begin_src bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenustable" &&
 echo -n "Are you sure you want to restore to the stable version and DELETE the current dmenu version? (y/n) "
 read answer
@@ -434,68 +434,68 @@ else
     echo No
     notify-send -t 60000 "Exited dmenustable.sh. Nothing was changed"
 fi
-#+end_src
+#+END_SRC
 
 ** dmenuthunar.sh
 A dmenu script to give some directory options to open in the file manager Thunar.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Make sure that the list with directories options for Thunar are generated at ~~/.config/directories~.
 If the bookmarks are not visible in Thunar then please generate them with [[thunarBookmarks.sh]].
 This requires the dmenu patch: center, which gives the dmenu -c option.
 After Thunar is launched there is a microbreak and then F3 is pressed to open l3ts
-#+begin_src bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuthunar.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
 notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen & sleep .3 && xdotool key F3
-#+end_src
+#+END_SRC
 
 ** dmenuunicode.sh
 Selecting ➡emojis⬅ via dmenu, 🆒.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline. If the unicode file is missing then generate it by [[unicode]].
-#+begin_src bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuunicode.sh" &&
 cat $HOME/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace" &&
 notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
-#+end_src
+#+END_SRC
 Remark: the center patch of dmenu is needed for the -c option.
 
 ** dmenuUpdate.sh
 Refreshing my list of installed applications. This list is used in dmenu as an app picker.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 #notify-send -t 60000 "Running dmenuUpdate.sh" &&
 rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
-#+end_src
+#+END_SRC
 
 Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list. These Appimages are writen to the top of the list.
-#+begin_src bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
 shopt -s nullglob # When AppImages aren't present then the loop will not be run
 FILES=$HOME/Applications/*.AppImage
 for f in $FILES
@@ -503,27 +503,27 @@ do
     sed -i '1 i '$f  $HOME/.cache/dmenu_run
 done
 notify-send -t 60000 "A new list of installed applications is made 😃"
-#+end_src
+#+END_SRC
 
 ** dmenuvanilla.sh
 Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 First give the option to opt out and wait for the user to continue or not.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running dmenuvanilla.sh" &&
 echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
 read answer
-#+end_src
+#+END_SRC
 
 The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
-#+begin_src bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
 if [ "$answer" != "${Ganswer#[Yy]}" ] ;then
     rm -r $HOME/.config/suckless/dmenu &&
     mkdir $HOME/.config/suckless/dmenu &&
@@ -535,39 +535,39 @@ else
     echo No
     notify-send -t 60000 "Exited dmenuvanilla.sh. Nothing was changed. "
 fi
-#+end_src
+#+END_SRC
 
 ** dmenuwallpaper.sh
 Script to select wallpapers via dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
 The notify-send will send a notification, duh! The -t flag sets the time to show the notification in milliseconds. The left part between brackets will be displayed in bold and the second part between quotes will show in normal font. The cut program removes the directory information, which is 44 characters long.
 The --bg-fill option makes sure that the image is stretched to the dimensions of the screen.
-#+begin_src bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
 notify-send  "Running dmenuwallpaper.sh" &&
 ls $HOME/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
-#+end_src
+#+END_SRC
 
 ** exitqtile.sh
 Used to exit the Qtile windowmanager with yes/no option.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Echo out the options and run the ~killall qtile~ command, or not.
-#+begin_src sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
 notify-send -t 60000 "Do you want to leave the system?"
 choices=("Close Window Manager" "Reboot" "Shutdown")
 colors="-nb #FFFFFF -nf #000000 -sb #DC5A5A -sf  #FFFFFF"  # Pale red background outside, red inside
@@ -594,29 +594,29 @@ case "$chosen" in
         echo "No option selected."
         ;;
 esac
-#+end_src
+#+END_SRC
 
 * Other scripts
 ** aandelen.py
 A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio information are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 #!/usr/bin/env python3
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 The libraries that are used for this script are imported in the next section.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 import glob, os, pyperclip, time
 import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
-#+end_src
+#+END_SRC
 
 The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog. The aim is to add the amount of cash and surplus value of the house here by hand. After this the script takes over the heavy lifting.
 
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 class InputDialog(QDialog):
     """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
 
@@ -646,10 +646,10 @@ if __name__ == '__main__':
         RaboCash, Huis = dialog.getinputs()
         Huis = int(Huis)          # Moet integer zijn voor latere berekening
         RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
-#+end_src
+#+END_SRC
 
 A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     """Building a dataframe from several CSV files"""
     global df  # This dataframe will be used outside of this def, so make it global
@@ -660,17 +660,17 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)     # Change the Euro column to integer.
     df = pd.concat([df, dfx])    # Add the temp dataframe to dataframe
     print('=' * 40 + "\n", dfx)  # For debugging
-#+end_src
+#+END_SRC
 
 The filenames and path of the csv files are generated here.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
-#+end_src
+#+END_SRC
 
 Description of two asset allocation and column headers.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 OmsHuis = "Overwaarde huis     "
 OmsCash = "Cash (Rabo en Bunq) "
 # Namen van kolommen die ik ga gebruiken:
@@ -678,10 +678,10 @@ EurCol = "Euro"                     # Euro column naam
 OmsCol = "Omschrijving        "     # Omschrijving column naam
 AaCol = "AA%"                       # Asset Allocation column naam
 AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
-#+end_src
+#+END_SRC
 
 Creation of dataframe and adding data of two portfolios to the dataframe.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 df = pd.DataFrame() # Create a new dataframe
 AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
 df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
@@ -698,20 +698,20 @@ df = df.sort_values(by=EurCol, ascending=False)
 #print('=' * 40 + "\n", df)  # Only for debugging
 df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
-#+end_src
+#+END_SRC
 
 Asset allocation calculation of percentages and adding of calculated values to the dataframe.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapitaal is Dutch for Capital)
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
 df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
 df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
 df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by asterix
 #print('=' * 40  + "\n", dfx)                      # Only for debugging
-#+end_src
+#+END_SRC
 
 Create a new temporary dataframe which become another org table with only the total amount of assets and the total amound of assets minus the surplus of the house.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
     EurCol: ["" , Kapitaal, Kapitaal - Huis],
@@ -723,19 +723,19 @@ df = pd.concat([df, dfx])   # Add the dfx dataframe
 #print('=' * 40 + "\n", df)  # Only for debugging
 
 df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
-#+end_src
+#+END_SRC
 
 Creation of an introduction line that contains org headers (*****), date and the assets total (minus surplus of house).
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
 titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
 #print('\n\n') # Only for debugging
-#+end_src
+#+END_SRC
 
 The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 # Create a title for the org table, with three stars for level three heading
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
 orgTabelNaam=''.join(orgTabelNaam)
@@ -761,36 +761,37 @@ data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')
 data = data.replace('|VANECK', 'VANECK')
 data = data.replace('- huis', '- huis|')
 #print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
-#+end_src
+#+END_SRC
 
 Writing the data to the clipboard and garbage collection.
-#+begin_src python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
 pyperclip.copy(data)
 
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
     orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
     OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
-#+end_src
+#+END_SRC
 
 ** bitcoin_notification.py
 A simple Python script to fetch current bitcoin price, in euros, and date and placing output in the notifications. No API key needed.
 
-#+begin_src python :results output :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 #!/usr/bin/env python3
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 The libraries that are used for this script are imported in the next section.
-#+begin_src python :results output :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 import requests
 import json
 from datetime import datetime
 from notifypy import Notify
-#+end_src
+#+END_SRC
+
 
 Fetching information from the coingecko api, without a key.
-#+begin_src python :results output :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 def coingecko():
     global rate
     global time
@@ -806,74 +807,74 @@ def coingecko():
         time = date_time.strftime("%H:%M:%S %d%h%y")   # convert to string
     else:
         rate = time = "Error fetching data"
-#+end_src
+#+END_SRC
 
 Funtion that will output the rate and time in the notification area.
-#+begin_src python :results output :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 def output_to_notifications():
     notification = Notify()
     notification.title = "Bitcoin price (euro):"
     notification.message = rate, time
     notification.send()
-#+end_src
+#+END_SRC
 
-#+begin_src python :results output :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 # aanroepen van gewenste functies
 coingecko()
 output_to_notifications()
-#+end_src
+#+END_SRC
 
 ** stack_startup.sh
 A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
-#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
 dir="$HOME/Applications" # directory
 appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
 
 if [ -n "$appimage" ]; then
-    notify-send -t 6000 "Starting the Stack .AppImage..." && #send notification
+    notify-send -t 60000 "Starting the Stack .AppImage..." && #send notification
     "$appimage"  # Execute the file
 else
-    notify-send -t 6000 "No .AppImage file containing 'stack' in its name was found in $dir"
+    notify-send -t 60000 "No .AppImage file containing 'stack' in its name was found in $dir"
 fi
-#+end_src
+#+END_SRC
 
 ** decrMonitorBrightness.sh
 Decrease the monitor brightness by xrandr and also make the color more red. It's brother, [[incrMonitorBrightness.sh]], is a similar script doing the oposite.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Information is retrieved from xrandr about the connected monitor and the current brightness and RGB values (gamma_value).
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 monitor=$(xrandr | awk '/ connected/ {print $1}')
 currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
-#+end_src
+#+END_SRC
 
 The RGB values are separated into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
 new_gamma_r=$(echo "1/$gamma_r" | bc -l)
 new_gamma_g=$(echo "1/$gamma_g * 0.9" | bc -l)
 new_gamma_b=$(echo "1/$gamma_b * 0.9" | bc -l)
 new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
-#+end_src
+#+END_SRC
 
 When the brightness reaches 0.1 then it should not be any lower, therefore and if-else statement is applied. The newBrightness is calculated to be -0.1 lower then the currentBrightness, this is calculated by the bc program.
-#+begin_src sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 if [[ "$currentBrightness" == "0.10" ]] ; then
     echo "The current brightness is 0.1 and should not be any lower!"
     notify-send -t 60000 "🔆 Brightness minimum reached!: ️" "$currentBrightness"
@@ -883,20 +884,20 @@ else
     notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
-#+end_src
+#+END_SRC
 
 ** dotfiles.sh
 A script to manage my dotfiles git repo. It checks the status of my dotfiles and gives options how to continue (push/pull/pullpush/exit).
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a shell script is used.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #!/bin/bash
-#+end_src
+#+END_SRC
 
 Two functions are declared; one to push to git and one to pull. The push function contains a commit message that, just because I'm lazy and commit messages for dotfiles are not that necessary.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # ~/.config/dotfiles.sh
 
 notify-send -t 60000 "Running dotfiles.sh" &&
@@ -912,10 +913,10 @@ function Pull()
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME reset --hard;
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME pull
 }
-#+end_src
+#+END_SRC
 
 The screen of the terminal is cleared and the status of dotfiles is checked. Then a menu is given in the terminal for the 4 options.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 clear &&
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME status &&
 echo -n "--------------------------------------------------
@@ -927,10 +928,10 @@ Options:
  3 pull and a commit/push
  4 exit
 [$USER@github.com/Prutserdt/dotfiles ~]:> "
-#+end_src
+#+END_SRC
 
 The read command will take the imput that the user gives from within the terminal and the case statement will perform the push/pull/exit commands. That's all.
-#+begin_src sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 read PullPush
 case $PullPush in
             [1])
@@ -965,65 +966,65 @@ case $PullPush in
                 notify-send -t 60000 "Invalid input added during the dotfiles synchronization with Github"
             ;;
 esac
-#+end_src
+#+END_SRC
 
 ** kbswitch
 These settings are used in combination with an xmodmap command and can be used when a normy keyboard is used. It will swap Escape/CapsLock, change the super key to super left and super right and the same for the alt key (switch to alt-left and alt-right)
 I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config/kbswitch~.
 
 Swap the Escape with the Capslock.
-#+begin_src sh :tangle kbswitch :padline no :eval no
+#+BEGIN_SRC sh :tangle kbswitch :padline no :eval no
 ! NOTE: This file is generated from ~/.config/README.org
 !       Please only edit that file and org-babel-tangle (emacs)
 remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
-#+end_src
+#+END_SRC
 
 Change the setting so that the left and right super keys are both functional. More modifiers is better...
-#+begin_src sh :tangle kbswitch :padline no :eval no
+#+BEGIN_SRC sh :tangle kbswitch :padline no :eval no
 remove mod4 = Super_R
 add mod3 = Super_R
-#+end_src
+#+END_SRC
 
 The same thing for the alt key. Let's use the Alt-left and Alt-right.
-#+begin_src sh :tangle kbswitch :padline no :eval no
+#+BEGIN_SRC sh :tangle kbswitch :padline no :eval no
 ! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift, uncomment next lines if needed.
 !remove mod1 = ISO_Level3_Shift
 !add mod5 = ISO_Level3_Shift
 remove mod1 = Alt_R
 add mod5 = Alt_R
-#+end_src
+#+END_SRC
 
 ** incrMonitorBrightness.sh
 Increase the monitor brightness by xrandr and also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Information is retrieved from xrandr about the connected monitor and the current brightness and RGB values (gamma_value).
-#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 monitor=$(xrandr | awk '/ connected/ {print $1}')
 currentBrightness=$(xrandr --verbose | awk '/Brightness/ { print $2; exit }')
 gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
-#+end_src
+#+END_SRC
 
 The RGB values are separated into the individual values and the green and blue values are multiplied by 0.9 to get a lower number. The three numbers are used to create a new RGB setting which is called "new_gamma_value".
-#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
 new_gamma_r=$(echo "1/$gamma_r" | bc -l)
 new_gamma_g=$(echo "1/$gamma_g * 1.1" | bc -l)
 new_gamma_b=$(echo "1/$gamma_b * 1.1" | bc -l)
 new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
-#+end_src
+#+END_SRC
 
 When the brightness reaches 1 then it should not be any lower, therefore and if-else statement is applied. NOTE: when this is reached then the RGB is reset to 1:1:1 as well. The newBrightness is calculated to be +0.1 lower then the currentBrightness, this is calculated by the bc program.
-#+begin_src sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle incrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 if [[ "$currentBrightness" == "1.0" ]] ; then
     echo "niets doen, want grens van 1.0 bereikt"
     xrandr --output $monitor --brightness 1.0 --gamma "1:1:1"
@@ -1034,83 +1035,83 @@ else
     notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
-#+end_src
+#+END_SRC
 
 ** nightColorDown.sh
 A script to make the screen more reddish. See the related [[nightColorUp.sh]], [[resetRGB.sh]] and also [[decrMonitorBrightness.sh]] [[incrMonitorBrightness.sh]].
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Get the current individual Red/Green/Blue gamma values.
-#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
 gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
 echo "Gamma value: $gamma_value is currently used"
 IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
-#+end_src
+#+END_SRC
 
 Calculate the new gamma values. NOTE: the 1/ is needed because of an bug in xrandr, see https://gitlab.freedesktop.org/xorg/app/xrandr/-/issues/33
-#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
 new_gamma_r=$(echo "1/$gamma_r" | bc -l)
 new_gamma_g=$(echo "1/$gamma_g * 1.1" | bc -l)
 new_gamma_b=$(echo "1/$gamma_b * 1.1" | bc -l)
 new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
-#+end_src
+#+END_SRC
 
 Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
-#+begin_src sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
 echo "New gamma value, after xrandr: $new_gamma_value"
 notify-send -t 60000 "🔆 Red decreased to: " "$new_gamma_value"️
-#+end_src
+#+END_SRC
 
 ** nightColorUp.sh
 A script to make the screen more reddish. See the related [[nightColorDown.sh]], [[resetRGB.sh]] and also [[incrMonitorBrightness.sh]], [[decrMonitorBrightness.sh]].
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Get the current individual Red/Green/Blue gamma values.
-#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
 gamma_value=$(xrandr --verbose | awk '/^\s*Gamma:./ {print $NF}')
 echo "Gamma value: $gamma_value is currently used"
 IFS=':' read -r gamma_r gamma_g gamma_b <<< "$gamma_value"
-#+end_src
+#+END_SRC
 
 Calculate the new gamma values. NOTE: the =1/gamma= is needed because of an bug in xrandr, see https://gitlab.freedesktop.org/xorg/app/xrandr/-/issues/33
-#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
 new_gamma_r=$(echo "1/$gamma_r" | bc -l)
 new_gamma_g=$(echo "1/$gamma_g * 0.9" | bc -l)
 new_gamma_b=$(echo "1/$gamma_b * 0.9" | bc -l)
 new_gamma_value=$(printf "%.2f:%.2f:%.2f" "$new_gamma_r" "$new_gamma_g" "$new_gamma_b")
-#+end_src
+#+END_SRC
 
 Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
-#+begin_src sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
 echo "New gamma value, after xrandr: $new_gamma_value"
 notify-send -t 60000 "🔆 Red increased to: " "$new_gamma_value"️
-#+end_src
+#+END_SRC
 
 ** notify-log.sh
 This script will write the notifications to a logfile. The script is used by running ~$HOME/.config/notify-log.sh $HOME/.config/notify.log~
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
-#+begin_src sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle notify-log.sh :padline no :eval no :tangle-mode (identity #o755)
 
 logfile=$1 # Next entree after shell script will become the logfile: *.sh ~HOME/.config/notify.log
 
@@ -1152,13 +1153,13 @@ dbus-monitor "interface='org.freedesktop.Notifications'" | \
       procmsg "$line" >> "$logfile"
     done
 
-#+end_src
+#+END_SRC
 
 ** unicode
 Create a list of emojis that is used in [[dmenuunicode.sh]] by first downloading the current unicode list by wget.
-#+begin_src bash
+#+BEGIN_SRC bash
 wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
-#+end_src
+#+END_SRC
 
 Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
 Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
@@ -1167,17 +1168,17 @@ Or copy an existing lists online, like this one of [[https://github.com/LukeSmit
 These settings are used in combination with an xmodmap command and are restoring the keysetting that I use for my Redox keyboard. I run it by the alias ~r~ in my terminal which will execute ~xmodmap ~/.config/rdxswitch~. This is needed when keyboards are swapped.
 
 My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
-#+begin_src sh :tangle rdxswitch :padline no :eval no
+#+BEGIN_SRC sh :tangle rdxswitch :padline no :eval no
 ! NOTE: This file is generated from ~/.config/README.org
 !       Please only edit that file and org-babel-tangle (emacs)
 remove Lock = Caps_Lock
 keysym Escape = Escape
 keysym Caps_Lock = Caps_Lock
 add Lock = Caps_Lock
-#+end_src
+#+END_SRC
 
 With my custom redox build there is a Super-R.  Remove right super key and make it another mod key (for opening apps)
-#+begin_src sh :tangle rdxswitch :padline no :eval no
+#+BEGIN_SRC sh :tangle rdxswitch :padline no :eval no
 remove mod4 = Super_R
 ! add the keycode that you are going to use for the Super_R. 400 ms on redox keyboard: keycode 134
 keycode 134 = Super_R
@@ -1185,91 +1186,91 @@ keycode 134 = Super_R
 !keycode 107 = Super_R
 ! Connect mod3 to be Super_R:
 add mod3 = Super_R
-#+end_src
+#+END_SRC
 
 ** resetRGB.sh
 Reset the gamma settings (RGB) to a default value of 1:1:1. Related to the shell scripts [[nightColorUp.sh]] and [[nightColorDown.sh]].
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a bash script is used.
-#+begin_src sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
-#+begin_src sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
+#+BEGIN_SRC sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma 1:1:1
 notify-send -t 60000 "🔆 RGB reset!"
-#+end_src
+#+END_SRC
 
 ** screenshot2text.sh
 A script that makes a screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 A temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
-#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 mkdir $XDG_RUNTIME_DIR/temp &
-#+end_src
+#+END_SRC
 
 The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. NOTE: the next screenshot will overwrite the jpg and txt file.
-#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 notify-send -t 60000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text" &&
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
-#+end_src
+#+END_SRC
 
 The tesseract program is converting the picture to text and is saved in the RAM directory as 'wismij', which is actually 'wismij.txt'.
-#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 tesseract $XDG_RUNTIME_DIR/temp/wismij.jpg $XDG_RUNTIME_DIR/temp/wismij &&
-#+end_src
+#+END_SRC
 
 Finally the textfile is catted and piped to the system clipboard with xclip. The -sel flag selects the X selection to use and ~clip~ stands for clipboard, where the text will be stored. Ready to be pasted when needed.
-#+begin_src bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
 cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip &&
 notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp/wismij.txt)"
-#+end_src
+#+END_SRC
 
 ** stack_startup.sh
 A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
-#+begin_src bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
 dir="$HOME/Applications" # directory
 appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
 
 if [ -n "$appimage" ]; then
-    notify-send -t 6000 "Starting the Stack .AppImage..." && #send notification
+    notify-send -t 60000 "Starting the Stack .AppImage..." && #send notification
     "$appimage"  # Execute the file
 else
-    notify-send -t 6000 "No .AppImage file containing 'stack' in its name was found in $dir"
+    notify-send -t 60000 "No .AppImage file containing 'stack' in its name was found in $dir"
 fi
-#+end_src
+#+END_SRC
 
 ** thunarBookmarks.sh
 A script that converts the directory text files (~/Stack/Command_line/directories) to a Thunar bookmarks text file (~/.config/gtk-3.0/bookmarks).
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+begin_src bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 This script reads in each line of the directories file using a while read loop, and for each directory it appends a corresponding bookmark to the bookmarks file using echo. Note that we prefix the directory path with file:// to format it as a valid bookmark path.
-#+begin_src bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
 
 # Set the paths to the directories file and the bookmarks file
 DIR_FILE=$HOME/Stack/Command_line/directories
@@ -1281,7 +1282,7 @@ while read -r dir; do
     # Convert the directory path to a bookmark path and append it to the bookmarks file
     echo "file://$dir" >> $BOOKMARKS_FILE
 done < $DIR_FILE
-#+end_src
+#+END_SRC
 
 * Unused scripts
 
@@ -1290,7 +1291,7 @@ Note: the following code blocks are not being tangled and not part of my current
 ** aandelen.sh
 My shell script which extracts information from a portfolio and calculates percentages and pastes the information to the system clipboards.
 
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/sh
 	#~/.config/aandelen.sh
 	#                       _      _                  _
@@ -1337,10 +1338,10 @@ My shell script which extracts information from a portfolio and calculates perce
 	cat $XDG_RUNTIME_DIR/temp/TempNieuw | xclip -sel clip &&
 	# Remove the created temp files
 	rm $XDG_RUNTIME_DIR/temp/Temp*
-#+end_src
+#+END_SRC
 
 ** dwmbackup.sh
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/bash
 	# ~/.config/dwmbackup.sh
 	#     _                    _                _                     _
@@ -1364,10 +1365,10 @@ My shell script which extracts information from a portfolio and calculates perce
 	else
 	    echo No
 	fi
-#+end_src
+#+END_SRC
 
 ** dwmbar.sh
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/sh
 	#~/.config/dwmbar.sh
 	#     _                    _                    _
@@ -1384,10 +1385,10 @@ My shell script which extracts information from a portfolio and calculates perce
 	$HOME/.config/updatebar.sh
 	  sleep 60
 	done
-#+end_src
+#+END_SRC
 
 ** dwmpatch.sh
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/bash
 	# ~/.config/dwmpatch.sh
 	#     _                                _       _           _
@@ -1436,10 +1437,10 @@ My shell script which extracts information from a portfolio and calculates perce
 	else
 	    echo No
 	fi
-#+end_src
+#+END_SRC
 
 ** dwmstable.sh
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/bash
 	# ~/.config/dwmstable.sh
 	#     _                        _        _     _            _
@@ -1466,10 +1467,10 @@ My shell script which extracts information from a portfolio and calculates perce
 	else
 	    echo No
 	fi
-#+end_src
+#+END_SRC
 
 ** dwmvanilla.sh
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/bash
 	# ~/.config/dwmvanilla.sh
 	#    _                                    _ _ _             _
@@ -1498,10 +1499,10 @@ My shell script which extracts information from a portfolio and calculates perce
 	else
 	    echo No
 	fi
-#+end_src
+#+END_SRC
 
 ** exitdwm.sh
-#+begin_src bash 
+#+BEGIN_SRC bash
 	#!/bin/bash
 	# ~/.config/exitdwm.sh
 	#           _ _      _                          _
@@ -1521,10 +1522,10 @@ My shell script which extracts information from a portfolio and calculates perce
 	else
 	    echo No
 	fi
-#+end_src
+#+END_SRC
 
 ** updatebar.sh
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/sh
 	#~/.config/updatebar.sh
 	#                 _       _       _                    _
@@ -1543,12 +1544,12 @@ My shell script which extracts information from a portfolio and calculates perce
 	else
 	xsetroot -name " 🔉`amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/"`% `date +"%d%h%y %H:%M"`"
 	fi
-#+end_src
+#+END_SRC
 
 ** wololo.sh
 Simple cheat code for 0ad. Does not properly work.
 
-#+begin_src bash
+#+BEGIN_SRC bash
 	#!/bin/sh
 	#~/.config/wololo.sh
 	#               _       _            _
@@ -1560,7 +1561,7 @@ Simple cheat code for 0ad. Does not properly work.
 	#
 	# Script to cheat in 0 ad
 	sleep 1 && xdotool type wololo && sleep 1 && xdotool key 0xff0d
-#+end_src
+#+END_SRC
 
 * Tips and tricks
 
@@ -1572,15 +1573,15 @@ The next code block will give the output of all of the ~*.sh~ scripts of the ~~/
 cd $HOME/.config;
 for f in *.sh; do
   echo "** $f"
-  echo "#+begin_src bash " # \ escape voor " character
+  echo "#+BEGIN_SRC bash " # \ escape voor " character
   paste /dev/null - < "$f" #Geeft de inhoud van de php file
-  echo "#+end_src"
+  echo "#+END_SRC"
   echo ""
 done
-#+end_src
+#+END_SRC
 
 ** Some notes about the code blocks and tangling.
 Shell scripts need to be executable, and during tangling a flag should be added to keep the file executable, ~tangle:mode (identity #o755).~
-For example: ~#+begin_src python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)~.
+For example: ~#+BEGIN_SRC python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)~.
 
 To make the tangling process easier I am using the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package to automate tangling when the file is saved. Therefore in this org file the header contains ~#+auto_tangle: t.

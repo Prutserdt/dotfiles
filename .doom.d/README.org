@@ -33,18 +33,18 @@ This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] confi
 
 * init.el
 This file controls what Doom modules are enabled and what order they load in and the first line of the file is lexical binding. This makes the file run (slightly) faster.
-#+begin_src emacs-lisp :tangle init.el
+#+BEGIN_SRC emacs-lisp :tangle init.el :results silent
 ;;; init.el -*- lexical-binding: t; -*-
-#+end_src
+#+END_SRC
 
 Add a note to ~init.el~ to highlight that this file should not be edited directly.
-#+begin_src emacs-lisp :tangle init.el
+#+BEGIN_SRC emacs-lisp :tangle init.el :results silent
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and can be added to the list of modules listed below. Online module info can also be found [[https://github.com/doomemacs/doomemacs/blob/master/docs/modules.org][here]].
-#+begin_src emacs-lisp :tangle init.el
+#+BEGIN_SRC emacs-lisp :tangle init.el :results silent
 
 (doom! :completion
        company             ; the ultimate code completion backend
@@ -100,170 +100,173 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        :config
        (default +bindings +smartparens)
        )
-#+end_src
+#+END_SRC
+
+NOTES: some packages should be installed on the system, separate from the doom configuration:
+=sudo pacman -S python-pytest python-nose=
 
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of ~init.el~. This file shouln't be byte compiled.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 ;; -*- no-byte-compile: t; -*-
-#+end_src
+#+END_SRC
 
 Again a NOTE is added to ~packages.el~ to *not* edit this file.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 Centering text to the middle of the window can be done by the visual-fill-column package.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! visual-fill-column)
-#+end_src
+#+END_SRC
 
 Web-mode for editing of html/php/css
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! web-mode)
-#+end_src
+#+END_SRC
 
 Adding arduino-mode, testing, not working properly yet.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! arduino-cli-mode)
 (package! arduino-mode)
-#+end_src
+#+END_SRC
 
 Settings for python and php hacking.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! org-babel-eval-in-repl)
 (package! eval-in-repl)
 (package! jupyter)
 (package! phpactor)
-#+end_src
+#+END_SRC
 
 To automate tangling of code blocks in org-mode, the following package is installed. For auto tangling to work the following line should be added to the start of the org file ~#+auto_tangle: t~. When this is added the source blocks are automatically tangled when an org document is saved, pretty sweet😃.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! org-auto-tangle)
-#+end_src
+#+END_SRC
 
 The vterm-toggle package.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! vterm-toggle)
-#+end_src
+#+END_SRC
 
 A chatgpt package gptel.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! gptel)
-#+end_src
+#+END_SRC
 
 ~org-roam~ is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem. ~org-roam-ui~ is a frontend for exploring and interacting with your org-roam notes.
-#+begin_src emacs-lisp :tangle packages.el
+#+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (unpin! org-roam) ; unpinning is necessary for Room emacs according to de developer of org-roam-ui
 (package! org-roam-ui)
-#+end_src
+#+END_SRC
 
 * config.el
 My custom configurations are set here. For instance theme settings, image to the doom splash screen, transparency, relative numbering and org-mode settings.
 
 Let's remind the reader of ~config.el~ to not edit this file directly.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 ;; NOTE: This file is generated from ~/.doom.d/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
-#+end_src
+#+END_SRC
 
 ** Theming and graphical settings
 Setting the *superior* tokyo-night theme.😎
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq doom-theme 'doom-tokyo-night)
-#+end_src
+#+END_SRC
 
 Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package rainbow-delimiters)
-#+end_src
+#+END_SRC
 
 A *superior* font is set here.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (set-frame-font "Hack 12" t t)
 (setq default-frame-alist '((font . "Hack 13")))
-#+end_src
+#+END_SRC
 
 Make the highlighting global for the hl-words TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW with ~hl-todo-mode~.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
     (lambda () (hl-todo-mode 1)))
 (my-global-hl-todo-mode 1)
-#+end_src
+#+END_SRC
 
 For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This works with the three column layout and is especially nice for maximized windows on an ultrawide. Now it's perfectly in the middle and distraction free.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-center-text t)
-#+end_src
+#+END_SRC
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
 NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (set-frame-parameter (selected-frame) 'alpha '(85 80))
 (add-to-list 'default-frame-alist '(alpha 85 80))
-#+end_src
+#+END_SRC
 
 For jumping in texts it is nice to know the line position where to jump to from the current line instead of calculating it every time (current line=12, line I want to jump to=20, so move 20-12=8 lines downs: ~8j~). By setting the line numbers to ~relative~ the line numbering is relative to the current line and jumping around in the file will become quick and easy. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
-#+end_src
+#+END_SRC
 
 Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (scroll-bar-mode -1)
-#+end_src
+#+END_SRC
 
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq! evil-want-Y-yank-to-eol nil)
-#+end_src
+#+END_SRC
 
 I want to use the =undo-redo= package in evil mode and therefore I add the keybinding to =U= here.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (after! evil
   (define-key evil-normal-state-map "U" 'undo-redo))
-#+end_src
+#+END_SRC
 
 Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. It pops right out. A white bar is set for insert mode and a hollow orange cursor for visual mode. This helps to differentiate between normal/insert/visual mode.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
-#+end_src
+#+END_SRC
 
 Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda slow and like the flashing to take longer. The default is 0.2 second and set it here to a whole second.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq evil-goggles-duration 1.0)
-#+end_src
+#+END_SRC
 
 ** General settings
 Set the default mode of the scratch buffer to org-mode as inspired by [[https://blog.karssen.org/2014/07/28/changing-the-default-mode-of-the-emacs-scratch-buffer][this source]] and add a initial scratch message.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (setq initial-major-mode 'org-mode)
 (setq initial-scratch-message
     (concat "* Hack away❗\n A _temporary_ *org-mode* ~scratch buffer~ /for/ *hacking*. =This buffer is *not* saved.= \n\n"))
-#+end_src
+#+END_SRC
 
 Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting it as a major mode.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
-#+end_src
+#+END_SRC
 
 No more conformation messages whilst closing emacs.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq confirm-kill-emacs nil)
-#+end_src
+#+END_SRC
 
 ** Vterm-toggle
 I like to use Vterm as a scratch terminal, this can be done by the vterm-toggle package.
 
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package! vterm-toggle
   :after vterm
   :config
@@ -277,24 +280,23 @@ I like to use Vterm as a scratch terminal, this can be done by the vterm-toggle 
                   (display-buffer-reuse-window display-buffer-at-bottom)
                   (reusable-frames . visible)
                   (window-height . 0.5))))
-#+end_src
+#+END_SRC
 
 ** ChatGPT in emacs
 In this elisp code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
 A chatGPT key can be generated here: https://platform.openai.com/account/api-keys.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package! gptel
  :config
 ;; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
-#+end_src
-
+#+END_SRC
 
 ** Custom keybindings
 Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top of it. I try not to interfere with those and add a few of my own, respecting the Doom keybinding framework.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (map! :leader
     (:prefix ("b") ;; default Doom keybinding. Another option is the build in =Spc b B=
         :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
@@ -310,21 +312,24 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
             :desc "ediff myorg backups 3 dirs"   "e" #'my-ediff-compare-org-files-between-three-directories
             :desc "Thunar connect my cloud"      "t" #'my-thunar-cloud-connection
             (:prefix ("b" . "Backup to cloud")
-            :desc "Thinkpad backup to cloud"         "t" #'doom/tangle
-            :desc "VBox Arch backup to cloud"        "v" #'doom/tangle))
-        :desc "Reload Doom: doom/reload"             "r" #'doom/reload
-        :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
-        :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
-        :desc "Write this buffer to file"            "w" #'write-file)
+            :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
+            :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
+        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+        :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
+        :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
-;;      :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
+        (:prefix ("c" . "Change to anoter notes dir")
+            :desc "Goto default notes"      "d" #'my-org-roam-notes-default-dir
+            :desc "Goto Thinkpad notes"     "t" #'my-org-roam-notes-thinkpad-dir
+            :desc "Goto work notes @ home" "w" #'my-org-roam-notes-work-dir
+            :desc "Goto work notes @ work" "W" #'my-org-roam-notes-at-work-about-work-dir)
         (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
             :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
-;;            :desc "Goto date"                    "d" #'org-roam-dailies-goto-date
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
             :desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
@@ -341,9 +346,7 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
         :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-;;        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
         :desc "Search Roam dir"                  "s" #'my-counsel-rg-roam-dir
-;;      :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
     (:prefix ("s") ;; Default Doom keybinding
@@ -353,23 +356,23 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
             :desc "menu"                         "m" #'gptel-menu
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
             :desc "send"                         "s" #'gptel-send)))
-#+end_src
+#+END_SRC
 
 ** Org-mode configuration
 Setup to use sql in org code blocks.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 ;;(org-babel-do-load-languages
 ;; 'org-babel-load-languages
 ;; '((sql . t)))
-#+end_src
+#+END_SRC
 
 More eye candy by superstar bullets in org mode instead of the default ~*~. This requires (org +pretty) in ~init.el~.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
-#+end_src
+#+END_SRC
 
 Setting the size of the headers in org mode and the document titled, ordered by the level of course.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (custom-set-faces
   '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
   '(org-level-2 ((t (:inherit outline-2 :height 1.4))))
@@ -377,44 +380,49 @@ Setting the size of the headers in org mode and the document titled, ordered by 
   '(org-level-4 ((t (:inherit outline-4 :height 1.2))))
   '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
   '(org-document-title ((t (:inherit org-level-1 :height 1.6)))))
-#+end_src
+#+END_SRC
 
 Hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-hide-emphasis-markers t)
-#+end_src
+#+END_SRC
+
+Show a custom folding character, in my case three time lightning ⚡⚡⚡.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(setq org-ellipsis "⚡⚡⚡") ;; alternatives: ⤵↖↩ ⤵)⥆,⬎ ↴, ⬎,↻ ⤷
+#+END_SRC
 
 Automatically tangling by the org-auto-tangle package.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package org-auto-tangle
   :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
-#+end_src
+#+END_SRC
 
 Assign a directory with org daily files that will be used for org-agenda en my todo lists.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-agenda-files
 ;;  '("~/Shared_directory/RoamNotes/daily"))   ;; Virtual machine Arch dir
     '("~/Stack/Command_line/RoamNotes/daily")) ;; default location
-#+end_src
+#+END_SRC
 
 ** Org-roam configuration
 ~Org-roam~ is a plain text knowledge management system that borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
 In the code block below the directory is set where the atomic files will be stored and also the dailies directory is set here.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package org-roam
     :custom
-    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; default location
+    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; desktop normal location
 ;;  (org-roam-directory "~/Shared_directory/RoamNotes")    ;; Virtual machine Arch dir
     (org-roam-dailies-directory "daily/")                  ;; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
     :config
     (org-roam-db-autosync-enable))
-#+end_src
+#+END_SRC
 
 For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as already set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-roam-dailies-capture-templates
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
@@ -425,26 +433,26 @@ For quick daily notes and a TODO list I am using roam-dailies and in the next co
           ("t" "TODO van vandaag" item
            "[ ] %?"
            :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO van vandaag"))))))
-#+end_src
+#+END_SRC
 
 To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory. This function is used in the  [[#custom-keybindings][Custom keybindings]].
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-counsel-rg-roam-dir ()
     "Search using `counsel-rg` in ~/Stack/Command_line/RoamNotes"
     (interactive)
     (counsel-rg nil "~/Stack/Command_line/RoamNotes")) ;; Default location
 ;;  (counsel-rg nil "~/Shared_directory/RoamNotes"))   ;; Virtual machine Arch dir
-#+end_src
+#+END_SRC
 
 ** Org-Roam-ui configuration
 ~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes and therefore a websocket package is needed.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package! websocket
     :after org-roam)
-#+end_src
+#+END_SRC
 
 Now that the websocket is setup the org-roam-ui can be set.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package! org-roam-ui
     :after org-roam ;; or :after org
     :config
@@ -452,13 +460,12 @@ Now that the websocket is setup the org-roam-ui can be set.
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
-#+end_src
-
+#+END_SRC
 
 ** Custom code
 *** Custom elisp funtions (used with hotkeys)
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-PowerStrike-testing-upload ()
     "Upload arduino Powerstrike code to ESP32"
     (interactive)
@@ -467,10 +474,10 @@ A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 proc
     (split-window-horizontally)
     (switch-to-buffer "*Async Shell Command*")
     (windmove-right))
-#+end_src
+#+END_SRC
 
 Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-serial-ttyUSB0-115200 ()
    "Serial monitor to ttyUSB0 115200 baudrate"
     (interactive)
@@ -478,39 +485,38 @@ Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, he
     (serial-term "/dev/ttyUSB0" 115200)
     (switch-to-buffer "/dev/ttyUSB0")
     (windmove-right))
-#+end_src
+#+END_SRC
 TODO: I would like to run ~my-serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resetting via RTS pin." but this did not work.
 
 Open my Arduino PowerStrike README.org file.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-PowerStrike-README-org-file ()
   "Open the README.org of my PowerStrike ESP32 project"
   (interactive)
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
-#+end_src
+#+END_SRC
 
 Remap my keyboard with xmodmap
-#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-keyboard-reset ()
   "Change Esc/caps, right mod, right alt, for my redox keyboard."
   (interactive)
   (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-  ;;(shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-;;  (shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
-#+end_src
+;;(shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
+#+END_SRC
 
 Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be in the =myThunarCloud= textfile of course 😀.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-thunar-cloud-connection ()
   "Connect my cloud to Thunar filebrowser."
   (interactive)
   (with-temp-buffer
   (insert-file-contents "~/Stack/Command_line/myThunarCloud")
   (shell-command (string-trim (buffer-string)))))
-#+end_src
+#+END_SRC
 
 Comparing my org files from three different directories, wow, seems complicated to compare files....
-#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-ediff-compare-org-files-between-three-directories ()
   "Select a file from DesktopDir and compare it between three directories using ediff."
   (interactive)
@@ -519,11 +525,61 @@ Comparing my org files from three different directories, wow, seems complicated 
         (dirC "~/Stack/VBox_Arch/RoamNotes/")
         (regex "\\(.*\\.org\\)")) ;; Regex to filter files with .org extension
     (ediff-directories3 dirA dirB dirC regex)))
-#+end_src
+#+END_SRC
+
+*** org-roam related
+Switch to the roam-notes of my work on my desktop/Thinkpad.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-org-roam-notes-work-dir ()
+  "Switch to the roam notes of my work (not at work)"
+  (interactive)
+  (setq org-roam-directory "~/Stack/VBox_Arch/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/VBox_Arch/RoamNotes"))
+#+END_SRC
+
+Switch to the roam-notes of my Thinkpad on my desktop.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-org-roam-notes-thinkpad-dir ()
+  "Switch to the roam notes of my Thinkpad, on my desktop"
+  (interactive)
+  (setq org-roam-directory "~/Stack/Thinkpad/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
+#+END_SRC
+
+Switch to the work notes on my Virtual box distro at my work.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-org-roam-notes-at-work-about-work-dir ()
+  "Switch to the work roam notes on virtual box (at work)"
+  (interactive)
+  (setq org-roam-directory "~/Shared_directory/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
+#+END_SRC
+
+
+Switch back to the default roam-notes.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-org-roam-notes-default-dir ()
+  "Switch to my default desktop roam notes"
+  (interactive)
+  (setq org-roam-directory "~/Stack/Command_line/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/Command_line/RoamNotes"))
+#+END_SRC
 
 *** Custom elisp functions (not used with hotkeys)
 Evaluating a region or buffer, a tip from [[https://www.masteringemacs.org/article/evaluating-elisp-emacs][mastering Emacs]]. Not sure if I will keep using this one..
-#+begin_src emacs-lisp :tangle config.el :results none
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-elisp-mode-eval-buffer ()
   (interactive)
   (message "Evaluated buffer")
@@ -531,24 +587,24 @@ Evaluating a region or buffer, a tip from [[https://www.masteringemacs.org/artic
 
 (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
 (define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
-#+end_src
+#+END_SRC
 
 **** Redox keyboard
 Open my Redox keyboard QMK directory.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-redox-directory ()
   "Open the keymap.c of my Redox qmk firmware"
   (interactive)
   (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
-#+end_src
+#+END_SRC
 
 Open my =keymap.c= file of my redox keyboard.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results none
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-redox-config-qmk-file ()
   "Open the keymap.c of my Redox qmk firmware"
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
-#+end_src
+#+END_SRC
 
 **** Play with roam directories
 Kind of pointless
@@ -563,11 +619,11 @@ Kind of pointless
     (dired "~/Stack/Thinkpad/RoamNotes")
     (windmove-right)
     (dired "~/Stack/VBox_Arch/RoamNotes"))
-#+end_src
+#+END_SRC
 
 ** Splash screen
 A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
@@ -578,10 +634,10 @@ A useless but pretty Emacs welcome screen is created including an image and some
     (+doom-dashboard--center +doom-dashboard--width "vimmer spirals into despair\n")
     (+doom-dashboard--center +doom-dashboard--width "before he succumbs to the dark side. \n\n")
     (+doom-dashboard--center +doom-dashboard--width "To get into the rabbit hole press 'e'")))
-#+end_src
+#+END_SRC
 
 A function is created to make a special keymap for the splash screen. NOTE: I'm not sure if I will keep all of these ones here...
-#+begin_src emacs-lisp :tangle config.el
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun +doom-dashboard-setup-modified-keymap ()
   (setq +doom-dashboard-mode-map (make-sparse-keymap))
   (map! :map +doom-dashboard-mode-map
@@ -594,28 +650,27 @@ A function is created to make a special keymap for the splash screen. NOTE: I'm 
 (add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
 (add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
 (add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
-#+end_src
+#+END_SRC
 
 Note, more details about doom-dashboard can be found in: =~/.emacs.d/modules/ui/doom-dashboard/config.el=.
 
-
 * Code snippets
 Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:
-#+begin_src snippet :tangle snippets/org-mode/PythonBlock
+#+BEGIN_SRC snippet :tangle snippets/org-mode/PythonBlock
 # -*- mode: snippet -*-
 # name: PythonBlock
 # key: <p
 # --
-#+begin_src python :tangle ${2:wismij}.py :results output
+#+BEGIN_SRC python :tangle ${2:wismij}.py :results output
 # NOTE, this file is generated from the org file:
 # `(file-name-nondirectory (buffer-file-name))`
 # Only modify the org file and not this Python file.
 
 $0
-#+end_sr${1:c}
-#+end_src
+#+END_SR${1:C}
+#+END_SRC
 
-Remark: Github cannot handle a code block inside a codeblock. The line ~#+begin_src python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
+Remark: Github cannot handle a code block inside a codeblock. The line ~#+BEGIN_SRC python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
 
 * Credits
 My configuration of Doom Emacs is partially based on these:

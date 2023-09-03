@@ -7,7 +7,7 @@ clipboard_dir="$XDG_RUNTIME_DIR/temp/clipboard"
 # Create the directory if it doesn't exist
 mkdir -p "$clipboard_dir"
 
-notify-send -t 6000 "Clipboard management opened"
+notify-send -t 60000 "Clipboard management opened"
 
 while true; do
     # Use dmenu to choose an action from a list
@@ -15,7 +15,7 @@ while true; do
 
     # Check if Escape was pressed or dmenu was closed
     if [[ -z "$selected_action" ]]; then
-        notify-send -t 6000 "Exiting clipboard menu"
+        notify-send -t 60000 "Exiting clipboard menu"
         exit 0
     fi
 
@@ -32,7 +32,7 @@ while true; do
             # List saved clipboard files using dmenu and choose a file
             selected_file=$(ls "$clipboard_dir" | dmenu -c -bw 2 -l 30 -p "Choose a file to show:")
 
-            notify-send -t 6000 "Viewing $selected_file"
+            notify-send -t 60000 "Viewing $selected_file"
             # Check if the selected file exists
             if [[ -f "$clipboard_dir/$selected_file" ]]; then
                 # Read the content of the selected file
@@ -43,7 +43,7 @@ while true; do
 
                 # Show the content in dmenu with the number
                 echo -n "$clipboard_content" | dmenu -c -bw 2 -l 60 -p "Clipboard Content (File $filename_number):"
-                notify-send -t 6000 "Back to clipboard menu"
+                notify-send -t 60000 "Back to clipboard menu"
             else
                 notify-send "File Not Found" "The selected file does not exist."
             fi

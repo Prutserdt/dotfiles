@@ -1,5 +1,4 @@
 #+TITLE: My configuration of
-#+end_src
 #+STARTUP: show everything
 #+STARTUP: inlineimages
 #+auto_tangle: t
@@ -32,27 +31,82 @@
 This is the configuration file of Qtile.
 ** Imports
 A note is added to ~config.py~ which reminds *not* to edit this file directly.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
 # NOTE: This file is generated from ~/.config/qtile/README.org
 #       Please only edit that file and org-babel-tangle (Emacs)
-#+end_src
+#+END_SRC
 
 My configuration requires some modules to be loaded. These are all default configuration settings of Qtile.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
 import psutil, subprocess, os
 from typing import List
-from libqtile import bar, layout, widget,hook
+from libqtile import bar, layout, widget, hook
 from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 from os.path import expanduser
 #from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
+#+END_SRC
 
+The following class is a personal piece of code that makes my notifications scrollable in the top bar when a notification is displayed.
+#+BEGIN_SRC python :tangle config.py :results none :eval never
+class ScrollableTextWidget(widget.base._TextBox):
+    def __init__(self, file_path, **config):
+        super().__init__(text="", **config)
+        self.file_path = file_path
+        self.lines = []
+        self.current_line_index = -1  # Start with the last line
+
+    def load_file(self):
+        try:
+            with open(self.file_path, "r") as file:
+                self.lines = file.readlines()
+        except FileNotFoundError:
+            self.lines = []
+
+    def scroll(self, direction):
+        if direction == "up":
+            self.current_line_index = max(self.current_line_index - 1, -len(self.lines))
+        elif direction == "down":
+            self.current_line_index = min(self.current_line_index + 1, -1)
+        self.update_text()
+
+    def update_text(self):
+        if self.lines:
+            self.text = self.lines[self.current_line_index].strip()
+        else:
+            self.text = "No notifications"
+
+    def button_press(self, x, y, button):
+        if button == 4:
+            self.scroll("up")
+        elif button == 5:
+            self.scroll("down")
+
+    def poll(self):
+        self.load_file()
+        self.update_text()
+#+END_SRC
+
+
+
+The following function will show the last notification in the bar, after that previouss notifications can be showed by scrolling up/down.
+# Define the ScrollableTextWidget
+#+BEGIN_SRC python :tangle config.py :results none :eval never
+def open_last_notification(qtile):
+    try:
+        with open(expanduser("~/.config/notify.log"), "r") as file:
+            lines = file.readlines()
+            if lines:
+                notification = lines[-1].strip()
+                qtile.cmd_spawn(["notify-send", notification])  #
+    except FileNotFoundError:
+        pass
 #+END_SRC
 
 ** Variables
 Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Also a variable is used to refer to my open_emacs.py script and home.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
 aR = "mod5"                       # Right alt key, dedicated to opening of files
@@ -62,7 +116,7 @@ home = os.path.expanduser("~")
 
 ** Custom functions
 These functions are used for keybindings and are utilized in the following keybinding section.
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :eval never
 def threecol(qtile):
     qtile.cmd_to_layout_index(0) #0:monadthreecolumn
 
@@ -74,15 +128,15 @@ def monwide(qtile):
 #+END_SRC
 
 Three functions to change the gap size between windows, in Qtile this is called margins.
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :eval never
 @lazy.layout.function
 def increase_margin(self):
-    self.margin += 30
+    self.margin += 20
     self.group.layout_all()
 
 @lazy.layout.function
 def decrease_margin(self):
-    new_margin = self.margin - 5
+    new_margin = self.margin - 1
     if new_margin < 0:
         new_margin = 0
     self.margin = new_margin
@@ -108,7 +162,7 @@ The status of the battery of a laptop can be monitored by uncommenting the next 
 
 ** Keybindings: Qtile specific
 My left super key bindings are all related to Qtile, for instance moving windows around.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
 
 keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
@@ -133,14 +187,15 @@ keys = [
     Key([mL, "control"], "l", lazy.layout.shrink(),     desc="Shrink the selected window"),
     Key([mL], "y", lazy.function(montall),              desc="Layout: MonadTall no margins"),
     Key([mL], "u", lazy.function(threecol),             desc="Layout: Threecolumn  without margins"),
+    Key([mL], "n", lazy.function(open_last_notification)),
     Key([mL], "i", lazy.function(monwide),              desc="Layout: MonadWide no margins"),
     Key([mL], 'a', increase_margin,                     desc="Increase gaps"),
     Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
-    #+END_SRC
+#+END_SRC
 
 The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and no more need to keep modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected. I keep this here just for future reference.
-#+BEGIN_SRC :results none
+#+BEGIN_SRC :results none :eval never
  KeyChord([mL], "m", [      # testje, keychording werkt!! :-)
      Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
      Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
@@ -151,18 +206,18 @@ The next code block example is about keychording, a concept used in Emacs that c
 
 ** Keybindings: Audio, monitor brightness and print
 Hotkeys to control the volume, muting, printscreen, OCR from printscreen and change monitor brightness and color.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
     # Hotkeys for audio and printscreen
-    Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 "volume increased"')),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
-    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 " 🔊 Volume increased"')),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "🔈 Volume decreased"')),
+    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "🔇 Volume muting toggled"')),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(["shift"], "Print", lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
     # The following hotkeys of my Redox keyboard are free to be used..!
     # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-    # Key([], "XF86Launch8", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
+    Key([], "XF86Launch8", lazy.spawn('xmodmap $HOME/.config/kbswitch && xset r rate 300 80'), lazy.spawn('notify-send -t 6000 "⌨️Keyboard settings changed (kbswitch)"')),
     Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
     Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
     Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
@@ -170,7 +225,7 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
 
 ** Keybindings: Applications (and files connected to these hotkeys)
 Right super key to open applications. Shift is used to update the application.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
     # Open applications
     Key([mR], "a",
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
@@ -180,7 +235,10 @@ Right super key to open applications. Shift is used to update the application.
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -n -a 'emacs'")),
+    Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
@@ -197,7 +255,7 @@ Right super key to open applications. Shift is used to update the application.
 
 ** Keybingings: Text files
 The right alt key is used to open text files in Emacs.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
     # Open text files in emaca
     Key([aR], "a", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}")),
     Key([aR], "b", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
@@ -222,7 +280,7 @@ The right alt key is used to open text files in Emacs.
 
 ** Groups
 The workspaces are described here, which are called Groups in Qtile. I don't need more then four groups so I limited it to that.
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
 groups = [Group(i) for i in "1234"]
 
 for i in groups:
@@ -259,7 +317,7 @@ groups.append(
 )
 
 keys.extend([
-        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 6000 "Running qalculate-gtk"')),
+        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')),
         #Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1")), # For Thinkpad
 ])
 
@@ -280,7 +338,7 @@ floating_theme = {"border_width": 3,
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
 Make sure that networkmanager is installed and that nm-applet is part of the autostart.sh, no need to add extras to the top bar.
 
-#+BEGIN_SRC python :tangle config.py :results none
+#+BEGIN_SRC python :tangle config.py :results none :eval never
 layouts = [
    layout.MonadThreeCol(**layout_theme),
    layout.MonadTall(**layout_theme),
@@ -310,6 +368,7 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Notify(foreground="#ff966c"),
+                ScrollableTextWidget(file_path="~/.config/notify.log", foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
                 # uncomment for battery, Lenovo Thinkpad
@@ -365,7 +424,7 @@ auto_minimize = True # for steam games
 ** Some hooks
 A startup script is ran after startup of Qtile and the window swallowing is set here to swallow the terminal window when an application is started in it (which is reopened after closing of the applications).
 
-#+BEGIN_SRC python :tangle config.py
+#+BEGIN_SRC python :tangle config.py :eval never
 
 # Startup scripts
 @hook.subscribe.startup_once
@@ -401,24 +460,22 @@ def _unswallow(window):
 wmname = "LG3D"
 #+END_SRC
 
-
-
 * Emacs Python script
 The next piece of code is written to a separate script, named [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]], and is used to open text files in emacs. A note is added to ~open_emacs.py~ which reminds *not* to edit this file directly.
-#+BEGIN_SRC python :tangle open_emacs.py :results none
+#+BEGIN_SRC python :tangle open_emacs.py :results none :eval never
 # NOTE: This file is generated from ~/.config/qtile/README.org
 #       Please only edit that file and org-babel-tangle (Emacs)
-#+end_src
+#+END_SRC
 
 First the required libraries are imported.
-#+BEGIN_SRC python :tangle open_emacs.py
+#+BEGIN_SRC python :tangle open_emacs.py :eval never
 #!/usr/bin/env python3
 import subprocess
 import sys
 #+END_SRC
 
 The script is using two funtions, the first one is checking if emacs is already running
-#+BEGIN_SRC python :tangle open_emacs.py
+#+BEGIN_SRC python :tangle open_emacs.py :eval never
 def is_emacsclient_running():
     try:
         subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs"])
@@ -430,7 +487,7 @@ def is_emacsclient_running():
 #+END_SRC
 
 The second function is to open a files with Emacs. If the client is running then is should open the current emacsclient and else open a separate emacsclient.
-#+BEGIN_SRC python :tangle open_emacs.py
+#+BEGIN_SRC python :tangle open_emacs.py :eval never
 def open_file_with_emacs(FILENAME):
     if is_emacsclient_running():
         subprocess.run(["emacsclient", "-n", FILENAME])
@@ -443,7 +500,7 @@ def open_file_with_emacs(FILENAME):
 #+END_SRC
 
 The code execution starts here and the code will only run if the filename is a single one (sys.argv !=2).
-#+BEGIN_SRC python :tangle open_emacs.py
+#+BEGIN_SRC python :tangle open_emacs.py :eval never
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         sys.exit(1)
@@ -483,4 +540,4 @@ thunar --daemon &
 #sleep .2 &&
 #VboxClient --clipboard &&
 #VboxClient --draganddrop &&
-#+end_src
+#+END_SRC

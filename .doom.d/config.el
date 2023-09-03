@@ -80,21 +80,24 @@
             :desc "ediff myorg backups 3 dirs"   "e" #'my-ediff-compare-org-files-between-three-directories
             :desc "Thunar connect my cloud"      "t" #'my-thunar-cloud-connection
             (:prefix ("b" . "Backup to cloud")
-            :desc "Thinkpad backup to cloud"         "t" #'doom/tangle
-            :desc "VBox Arch backup to cloud"        "v" #'doom/tangle))
-        :desc "Reload Doom: doom/reload"             "r" #'doom/reload
-        :desc "Tangling: org-babel-tangle"           "t" #'org-babel-tangle
-        :desc "Plak keuze uit kill ring"             "p" #'consult-yank-from-kill-ring
-        :desc "Write this buffer to file"            "w" #'write-file)
+            :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
+            :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
+        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+        :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
+        :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
-;;      :desc "Open new daily"                   "d" #'org-roam-dailies-capture-today
+        (:prefix ("c" . "Change to anoter notes dir")
+            :desc "Goto default notes"      "d" #'my-org-roam-notes-default-dir
+            :desc "Goto Thinkpad notes"     "t" #'my-org-roam-notes-thinkpad-dir
+            :desc "Goto work notes @ home" "w" #'my-org-roam-notes-work-dir
+            :desc "Goto work notes @ work" "W" #'my-org-roam-notes-at-work-about-work-dir)
         (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
             :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
-;;            :desc "Goto date"                    "d" #'org-roam-dailies-goto-date
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
             :desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
@@ -111,9 +114,7 @@
         :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-;;        :desc "Search directory"                 "s" #'counsel-rg ;;NOTE: this is not the right place!
         :desc "Search Roam dir"                  "s" #'my-counsel-rg-roam-dir
-;;      :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
     (:prefix ("s") ;; Default Doom keybinding
@@ -140,6 +141,8 @@
 
 (setq org-hide-emphasis-markers t)
 
+(setq org-ellipsis "⚡⚡⚡") ;; alternatives: ⤵↖↩ ⤵)⥆,⬎ ↴, ⬎,↻ ⤷
+
 (use-package org-auto-tangle
   :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
   :defer t
@@ -151,7 +154,7 @@
 
 (use-package org-roam
     :custom
-    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; default location
+    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; desktop normal location
 ;;  (org-roam-directory "~/Shared_directory/RoamNotes")    ;; Virtual machine Arch dir
     (org-roam-dailies-directory "daily/")                  ;; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
@@ -212,8 +215,7 @@
   "Change Esc/caps, right mod, right alt, for my redox keyboard."
   (interactive)
   (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-  ;;(shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-;;  (shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
+;;(shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
 
 (defun my-thunar-cloud-connection ()
   "Connect my cloud to Thunar filebrowser."
@@ -230,6 +232,42 @@
         (dirC "~/Stack/VBox_Arch/RoamNotes/")
         (regex "\\(.*\\.org\\)")) ;; Regex to filter files with .org extension
     (ediff-directories3 dirA dirB dirC regex)))
+
+(defun my-org-roam-notes-work-dir ()
+  "Switch to the roam notes of my work (not at work)"
+  (interactive)
+  (setq org-roam-directory "~/Stack/VBox_Arch/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/VBox_Arch/RoamNotes"))
+
+(defun my-org-roam-notes-thinkpad-dir ()
+  "Switch to the roam notes of my Thinkpad, on my desktop"
+  (interactive)
+  (setq org-roam-directory "~/Stack/Thinkpad/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
+
+(defun my-org-roam-notes-at-work-about-work-dir ()
+  "Switch to the work roam notes on virtual box (at work)"
+  (interactive)
+  (setq org-roam-directory "~/Shared_directory/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
+
+(defun my-org-roam-notes-default-dir ()
+  "Switch to my default desktop roam notes"
+  (interactive)
+  (setq org-roam-directory "~/Stack/Command_line/RoamNotes")
+  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
+  (setq org-roam-completion-everywhere t)
+  (org-roam-db-sync)
+  (message "Switched to ~/Stack/Command_line/RoamNotes"))
 
 (defun my-elisp-mode-eval-buffer ()
   (interactive)

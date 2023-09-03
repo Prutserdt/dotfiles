@@ -3,12 +3,59 @@
 
 import psutil, subprocess, os
 from typing import List
-from libqtile import bar, layout, widget,hook
+from libqtile import bar, layout, widget, hook
 from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 from os.path import expanduser
 #from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
+
+class ScrollableTextWidget(widget.base._TextBox):
+    def __init__(self, file_path, **config):
+        super().__init__(text="", **config)
+        self.file_path = file_path
+        self.lines = []
+        self.current_line_index = -1  # Start with the last line
+
+    def load_file(self):
+        try:
+            with open(self.file_path, "r") as file:
+                self.lines = file.readlines()
+        except FileNotFoundError:
+            self.lines = []
+
+    def scroll(self, direction):
+        if direction == "up":
+            self.current_line_index = max(self.current_line_index - 1, -len(self.lines))
+        elif direction == "down":
+            self.current_line_index = min(self.current_line_index + 1, -1)
+        self.update_text()
+
+    def update_text(self):
+        if self.lines:
+            self.text = self.lines[self.current_line_index].strip()
+        else:
+            self.text = "No notifications"
+
+    def button_press(self, x, y, button):
+        if button == 4:
+            self.scroll("up")
+        elif button == 5:
+            self.scroll("down")
+
+    def poll(self):
+        self.load_file()
+        self.update_text()
+
+def open_last_notification(qtile):
+    try:
+        with open(expanduser("~/.config/notify.log"), "r") as file:
+            lines = file.readlines()
+            if lines:
+                notification = lines[-1].strip()
+                qtile.cmd_spawn(["notify-send", notification])  #
+    except FileNotFoundError:
+        pass
 
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
@@ -27,12 +74,12 @@ def monwide(qtile):
 
 @lazy.layout.function
 def increase_margin(self):
-    self.margin += 30
+    self.margin += 20
     self.group.layout_all()
 
 @lazy.layout.function
 def decrease_margin(self):
-    new_margin = self.margin - 5
+    new_margin = self.margin - 1
     if new_margin < 0:
         new_margin = 0
     self.margin = new_margin
@@ -73,22 +120,23 @@ keys = [
     Key([mL, "control"], "l", lazy.layout.shrink(),     desc="Shrink the selected window"),
     Key([mL], "y", lazy.function(montall),              desc="Layout: MonadTall no margins"),
     Key([mL], "u", lazy.function(threecol),             desc="Layout: Threecolumn  without margins"),
+    Key([mL], "n", lazy.function(open_last_notification)),
     Key([mL], "i", lazy.function(monwide),              desc="Layout: MonadWide no margins"),
     Key([mL], 'a', increase_margin,                     desc="Increase gaps"),
     Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
 
     # Hotkeys for audio and printscreen
-    Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 "volume increased"')),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "volume decreased"')),
-    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "Volume muting toggled"')),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 " 🔊 Volume increased"')),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "🔈 Volume decreased"')),
+    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "🔇 Volume muting toggled"')),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(["shift"], "Print", lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
     # The following hotkeys of my Redox keyboard are free to be used..!
     # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-    # Key([], "XF86Launch8", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
+    Key([], "XF86Launch8", lazy.spawn('xmodmap $HOME/.config/kbswitch && xset r rate 300 80'), lazy.spawn('notify-send -t 6000 "⌨️Keyboard settings changed (kbswitch)"')),
     Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
     Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
     Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
@@ -102,7 +150,10 @@ keys = [
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -n -a 'emacs'")),
+    Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
@@ -173,7 +224,7 @@ groups.append(
 )
 
 keys.extend([
-        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 6000 "Running qalculate-gtk"')),
+        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')),
         #Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1")), # For Thinkpad
 ])
 
@@ -218,6 +269,7 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Notify(foreground="#ff966c"),
+                ScrollableTextWidget(file_path="~/.config/notify.log", foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
                 # uncomment for battery, Lenovo Thinkpad
