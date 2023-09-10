@@ -104,3 +104,5 @@ alias dmenuupdate='$HOME/.config/dmenuUpdate.sh'    # Update the application lis
 # zsh
 alias ze="vim $HOME/.zshrc"                         # edit the .zshrc file
 alias zs="source $HOME/.zshrc"                      # source the .zshrc 
+
+alias eric6_browser="/usr/bin/eric7_browser"        # my appimage needs eric6_browser, hacky solution...

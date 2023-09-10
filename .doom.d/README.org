@@ -295,11 +295,9 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 #+END_SRC
 
 ** Custom keybindings
-Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top of it. I try not to interfere with those and add a few of my own, respecting the Doom keybinding framework.
+Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next to that I add a few myself.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (map! :leader
-    (:prefix ("b") ;; default Doom keybinding. Another option is the build in =Spc b B=
-        :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
@@ -358,8 +356,13 @@ Emacs uses a lot of keybindings. The framework Doom Emacs adds even more on top 
             :desc "send"                         "s" #'gptel-send)))
 #+END_SRC
 
+Often I get into the wrong keycord and want to exit quickly. This is possible by =C-g= but I think =Esc= is more intuitive and I will change the default Doom Emacs behaviour. Let's see if this will give conflicts somewhere else. NOTE: in case of conflicts then a custom function can be used to only use this behaviour once a keychord is active.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(global-set-key (kbd "<escape>")      'keyboard-escape-quit)
+#+END_SRC
+
 ** Org-mode configuration
-Setup to use sql in org code blocks.
+Setup to use sql in org code blocks. Commented out because I am not using it at the time.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 ;;(org-babel-do-load-languages
 ;; 'org-babel-load-languages
@@ -563,7 +566,6 @@ Switch to the work notes on my Virtual box distro at my work.
   (org-roam-db-sync)
   (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
 #+END_SRC
-
 
 Switch back to the default roam-notes.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent

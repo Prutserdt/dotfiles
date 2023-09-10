@@ -66,8 +66,6 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 
 (map! :leader
-    (:prefix ("b") ;; default Doom keybinding. Another option is the build in =Spc b B=
-        :desc "Open a buffer"                    "o" #'ivy-switch-buffer)
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
@@ -124,6 +122,8 @@
             :desc "menu"                         "m" #'gptel-menu
             :desc "rewrite"                      "r" #'gptel-rewrite-menu
             :desc "send"                         "s" #'gptel-send)))
+
+(global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 
 ;;(org-babel-do-load-languages
 ;; 'org-babel-load-languages

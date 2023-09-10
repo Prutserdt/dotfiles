@@ -8,8 +8,6 @@ from datetime import datetime
 from notifypy import Notify
 
 def coingecko():
-    global rate
-    global time
     url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_last_updated_at=true"
 
     response = requests.get(url)
@@ -22,13 +20,16 @@ def coingecko():
         time = date_time.strftime("%H:%M:%S %d%h%y")   # convert to string
     else:
         rate = time = "Error fetching data"
+    return (rate, time)  #NOTE: added because I want to use it in another script.
 
-def output_to_notifications():
+def output_to_notifications(rate, time):
     notification = Notify()
     notification.title = "Bitcoin price (euro):"
     notification.message = rate, time
     notification.send()
 
-# aanroepen van gewenste functies
 coingecko()
-output_to_notifications()
+fetch_coingecko_info = coingecko()
+rate = fetch_coingecko_info[0]
+time = fetch_coingecko_info[1]
+output_to_notifications(rate, time)

@@ -33,6 +33,7 @@
 - [[#other-scripts][Other scripts]]
   - [[#aandelenpy][aandelen.py]]
   - [[#bitcoin_notificationpy][bitcoin_notification.py]]
+  - [[#bitcoin_email_botpy][bitcoin_email_bot.py]]
   - [[#stack_startupsh][stack_startup.sh]]
   - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dotfilessh][dotfiles.sh]]
@@ -789,12 +790,9 @@ from datetime import datetime
 from notifypy import Notify
 #+END_SRC
 
-
 Fetching information from the coingecko api, without a key.
 #+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 def coingecko():
-    global rate
-    global time
     url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_last_updated_at=true"
 
     response = requests.get(url)
@@ -807,21 +805,119 @@ def coingecko():
         time = date_time.strftime("%H:%M:%S %d%h%y")   # convert to string
     else:
         rate = time = "Error fetching data"
+    return (rate, time)  #NOTE: added because I want to use it in another script.
 #+END_SRC
 
 Funtion that will output the rate and time in the notification area.
 #+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
-def output_to_notifications():
+def output_to_notifications(rate, time):
     notification = Notify()
     notification.title = "Bitcoin price (euro):"
     notification.message = rate, time
     notification.send()
 #+END_SRC
 
+Now let's run the functions 😀.
 #+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
-# aanroepen van gewenste functies
 coingecko()
-output_to_notifications()
+fetch_coingecko_info = coingecko()
+rate = fetch_coingecko_info[0]
+time = fetch_coingecko_info[1]
+output_to_notifications(rate, time)
+#+END_SRC
+
+** bitcoin_email_bot.py
+A Python script that will email an alarm when the bitcoin price will reaches a certain level. The idea is to schedule this script with a systemd timer (or cron job).
+
+First a disclaimer to only edit the file from org-mode.
+#+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
+#!/usr/bin/env python3
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+END_SRC
+
+The libraries that are used for this script are imported in the next section. Including the coingecko function from my bitcoin_notification.
+#+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
+import os, configparser, smtplib, ssl
+from bitcoin_notification import coingecko
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+#+END_SRC
+
+The following fuction =get_info= will fetch relevant information from a textfile. For instance the email recipient address.
+#+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
+def get_info():
+    # Fetching email information from a local textfile.
+    print("start van functie get_info")
+    # Create a ConfigParser object
+    config = configparser.ConfigParser()
+
+    file_link = os.path.expanduser("~") + "/Stack/Command_line/settings_for_bitcoin_alarm"
+
+    # Read the configuration file
+    config.read(file_link)
+
+    # Get the values from the configuration file
+    global port, smtp_server, sender_email, password_email, receiver_email, bitcoin_target_price
+    port = config.getint('email_config', 'port')
+    smtp_server = config.get('email_config', 'smtp_server')
+    sender_email = config.get('email_config', 'sender_email')
+    password_email = config.get('email_config', 'password_email')
+    receiver_email = config.get('email_config', 'receiver_email')
+    bitcoin_target_price = config.getint('bitcoin_info', 'bitcoin_target_price')
+#+END_SRC
+
+Another function, =send_email=, will send the email if the bitcoin price reached a treshhold value.
+#+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
+def send_email():
+    # Compose the email message
+    print("start van functie send_email")
+    bitcoin_current_price = fetch_coingecko_info[0] # get current bitcoin price
+    subject = "Let op: verkopen"
+    message_body = f"""Goed nieuws!
+
+    Mijn Bitcoin threshold prijs van {bitcoin_target_price} euro is gehaald! Dat betekend dat ik een gedeelte moet verkopen!
+    Ter info: de prijs om {fetch_coingecko_info[1]} was {bitcoin_current_price} euro.
+
+    Groetjes,
+    email-bot
+    """
+    print("message:", message_body)
+    print("bitcoin current price:", bitcoin_current_price )
+    print("bitcoin target price:", bitcoin_target_price)
+    # Create the email message
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
+    message.attach(MIMEText(message_body, 'plain'))
+
+    # Connect to the SMTP server
+    try:
+        # Connecting to SMTP server
+        context = ssl.create_default_context()
+        server = smtplib.SMTP_SSL(smtp_server, port, context=context)
+        server.login(sender_email, password_email)
+
+        # Check if the Bitcoin price is higher the target price and send email if so
+        if bitcoin_current_price<bitcoin_target_price:
+            print("de prijs is te laag helaas...")
+        else:
+            print("Yes! De prijs is goed, verstuur email")
+            server.sendmail(sender_email, receiver_email, message.as_string())
+            server.quit()
+            print("Email sent successfully!")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+#+END_SRC
+
+And finally I call the functions here
+#+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
+get_info()
+fetch_coingecko_info = coingecko() #
+print("Info van coingecko, rate:", fetch_coingecko_info[0])
+print("Info van coingecko, time:", fetch_coingecko_info[1])
+send_email()
 #+END_SRC
 
 ** stack_startup.sh
