@@ -70,13 +70,13 @@ This document is a note-to-self about my scripts on my GNU/Linux system and is m
 ** clipboard_dm.sh
 A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to RAM and therefor are not permanent, after a reboot the content will be gone.
 
-#+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
-#+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755) :eval never
 
 # Define the clipboard directory, in the ram
 clipboard_dir="$XDG_RUNTIME_DIR/temp/clipboard"
@@ -239,14 +239,14 @@ done
 My app picker. A simple script to select which application to start via dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
-#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuapps.sh" &&
 chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
 notify-send -t 60000 "Starting application: " "$chosen" &&
@@ -258,14 +258,14 @@ $chosen
 Make a backup of the current dmenu version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 The *_stable name will be the new stable version of dmenu.
-#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenubackup.sh" &&
 echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 read answer
@@ -284,21 +284,21 @@ fi
 Bookmarkst to textfiles picked by dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 My list of textfiles is piped into dmenu and the selected one is opened in a new instance of emacs or on the already opened emacs client. Note: the 'textfile' is a textfiles that consists of a list of filenames including the directory location.
-#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuemacs.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/textfiles | dmenu -c -bw 2 -l 40 -p 'Open textfiles: ')
 [ -z "$chosen" ] && exit
 #+END_SRC
 
 Then my running processes are checked and when an emacs instance if found running then the file is opened in that instance and otherwise emacs is opened.
-#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755) :eval never
 if pgrep -f "emacsclient -c -a emacs*" > /dev/null; then
   emacsclient -n "$chosen"
   emacsclient -e "(message \"Opened $chosen in Emacs\")" > /dev/null 2>&1
@@ -312,14 +312,14 @@ fi
 Internet bookmark picking by dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
-#+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuinternet.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
 [ -z "$chosen" ] && exit
@@ -331,13 +331,13 @@ notify-send -t 60000 "Opening webpage: " "$chosen"
 Killing processes by dmenu, with menu options, use wisely!
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755) :eval never
 #!/usr/bin/env bash
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
-#+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenukill.sh, a script to kill processes!" &&
 chosen="$(ps -a -u $USER |dmenu -c -bw 2 -l 40 -p "Delete process:"| awk '{print $1}')"
 [ -z "$chosen" ] && exit
@@ -374,7 +374,7 @@ esac
 Basic patch automation for dmenu. Make sure that the current version is saved as the stable version before running this script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
@@ -385,7 +385,7 @@ This script will delete all of the current dmenu files. It will build from the s
 2: write the diff filename to the diff_log
 3: Run the patch
 
-#+BEGIN_SRC bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenupatch.sh" &&
 echo -n "Are you sure you want to patch the current dmenu version? This will first:
 RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
@@ -412,7 +412,7 @@ fi
 Restore to the stable version of dmenu and remove the current version.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
@@ -420,7 +420,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 This script gives yes/no option to make a local backup of dmenu.
 This script can be called by the .bashrc alias dmenustable.
-#+BEGIN_SRC bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenustable" &&
 echo -n "Are you sure you want to restore to the stable version and DELETE the current dmenu version? (y/n) "
 read answer
@@ -441,7 +441,7 @@ fi
 A dmenu script to give some directory options to open in the file manager Thunar.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
@@ -451,7 +451,7 @@ Make sure that the list with directories options for Thunar are generated at ~~/
 If the bookmarks are not visible in Thunar then please generate them with [[thunarBookmarks.sh]].
 This requires the dmenu patch: center, which gives the dmenu -c option.
 After Thunar is launched there is a microbreak and then F3 is pressed to open l3ts
-#+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuthunar.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
@@ -463,14 +463,14 @@ thunar $chosen & sleep .3 && xdotool key F3
 Selecting ➡emojis⬅ via dmenu, 🆒.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline. If the unicode file is missing then generate it by [[unicode]].
-#+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuunicode.sh" &&
 cat $HOME/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace" &&
@@ -482,21 +482,21 @@ Remark: the center patch of dmenu is needed for the -c option.
 Refreshing my list of installed applications. This list is used in dmenu as an app picker.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
-#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755) :eval never
 #notify-send -t 60000 "Running dmenuUpdate.sh" &&
 rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
 #+END_SRC
 
 Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list. These Appimages are writen to the top of the list.
-#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755) :eval never
 shopt -s nullglob # When AppImages aren't present then the loop will not be run
 FILES=$HOME/Applications/*.AppImage
 for f in $FILES
@@ -510,21 +510,21 @@ notify-send -t 60000 "A new list of installed applications is made 😃"
 Return to the vanilla version of dmenu by this terminal script. This is typically used after patching and crashing 😢.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 First give the option to opt out and wait for the user to continue or not.
-#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuvanilla.sh" &&
 echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
 read answer
 #+END_SRC
 
 The 'live' version of dmenu is deleted from the ~~/.config/suckless/dmenu~ directory and the vanilla version is copied to the 'live' directory. After this dmenu is restored back to vanilla.
-#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755) :eval never
 if [ "$answer" != "${Ganswer#[Yy]}" ] ;then
     rm -r $HOME/.config/suckless/dmenu &&
     mkdir $HOME/.config/suckless/dmenu &&
@@ -542,7 +542,7 @@ fi
 Script to select wallpapers via dmenu.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
@@ -551,7 +551,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 This scripts pipes the files that are in the Wallpaper directory to dmenu. It requires the dmenu patch center, which gives the -c option. The selection from dmenu is piped into the clipboard which is usting it as standard out (not saved to clipboard) and then entered into the ~feh~ application to change the wallpaper.
 The notify-send will send a notification, duh! The -t flag sets the time to show the notification in milliseconds. The left part between brackets will be displayed in bold and the second part between quotes will show in normal font. The cut program removes the directory information, which is 44 characters long.
 The --bg-fill option makes sure that the image is stretched to the dimensions of the screen.
-#+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send  "Running dmenuwallpaper.sh" &&
 ls $HOME/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
@@ -602,14 +602,14 @@ esac
 A script that makes an overview of my asset allocation and saves it to my clipboard. Two entries are manually made in an input dialog: cash amount and surplus value of my house. After that two csv files with portfolio information are opened, relevant information is extracted/sorted/calculated/formated-to-emacs-org-tables and saved to the clipboard.
 
 Any script should start with a directive, first a shebang ~#!~ and in this case a python 3 scripts is used.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 #!/usr/bin/env python3
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 The libraries that are used for this script are imported in the next section.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 import glob
 import os
 import pyperclip
@@ -620,19 +620,18 @@ from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, 
 
 The ~InputDialog~ class is defined here, an input screen based on the PyQT5 library. This code is based on https://stackoverflow.com/questions/56019273/how-can-i-get-more-input-text-in-pyqt5-inputdialog. The aim is to add the amount of cash and surplus value of the house here by hand. After this the script takes over the heavy lifting.
 
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 class InputDialog(QDialog):
-    """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
+    """Input screen for cash and house surplus value"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
-        global RaboCash  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
+        global Huis
+        global RaboCash
         RaboCash = QLineEdit(self)
         Huis = QLineEdit(self)
         buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
         layout = QFormLayout(self)
-#        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
         layout.addRow("Voer Bunq en Rabo cash in:", RaboCash)
         layout.addRow("Voer overwaarde huis in:", Huis)
         layout.addWidget(buttonbox)
@@ -648,14 +647,16 @@ if __name__ == '__main__':
     dialog = InputDialog()
     if dialog.exec():
         RaboCash, Huis = dialog.getinputs()
-        Huis = int(Huis)          # Moet integer zijn voor latere berekening
-        RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
+        Huis = int(Huis)
+        RaboCash = int(RaboCash)
 #+END_SRC
 
 A function is created which will add data of a CSV file to a dataframe. The input is the filename of the CSV, the delimiter of the file (, or ;) and the column names. The column names are harmonized by the dfx.column
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 def AddCSVtoDataFrame(filename, delimiter, column1, column2):
-    """Building a dataframe from several CSV files"""
+    """Adding CSV data to the general dataframe,
+       different CSVs can be used, the delimter must be set,
+       and only two columns are imported to the dataframe"""
     global df  # This dataframe will be used outside of this def, so make it global
     dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
     dfx.columns = [OmsCol, EurCol] # Harmonizing column names
@@ -667,14 +668,14 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
 #+END_SRC
 
 The filenames and path of the csv files are generated here.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
 fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
 #+END_SRC
 
 Description of two asset allocation and column headers.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 OmsHuis = "Overwaarde huis     "
 OmsCash = "Cash (Rabo en Bunq) "
 # Namen van kolommen die ik ga gebruiken:
@@ -685,7 +686,7 @@ AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend colu
 #+END_SRC
 
 Creation of dataframe and adding data of two portfolios to the dataframe.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 df = pd.DataFrame() # Create a new dataframe
 AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
 df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
@@ -705,7 +706,7 @@ df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
 #+END_SRC
 
 Asset allocation calculation of percentages and adding of calculated values to the dataframe.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapitaal is Dutch for Capital)
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
 df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
@@ -715,7 +716,7 @@ df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by ast
 #+END_SRC
 
 Create a new temporary dataframe which become another org table with only the total amount of assets and the total amound of assets minus the surplus of the house.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 d = {
     EurCol: ["" , Kapitaal, Kapitaal - Huis],
@@ -730,7 +731,7 @@ df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 charac
 #+END_SRC
 
 Creation of an introduction line that contains org headers (*****), date and the assets total (minus surplus of house).
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
@@ -738,13 +739,13 @@ titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).
 #print('\n\n') # Only for debugging
 #+END_SRC
 
-The next part of the code is about getting the format ready to import in org, with a table format, the alignment is not complete, but can be easily done by a tab in org mode after pasting the data....
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+The next part of the code is about getting the format ready to import in org, with a table format. When the data is pasted in Emacs org-mode the table will be aligned by presssing <tab>,
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 # Create a title for the org table, with three stars for level three heading
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
 orgTabelNaam=''.join(orgTabelNaam)
 
-# Transform dataframe to a text string that is ready for the Emacs org-mode (with | separators)
+# Transform dataframe to a text string that is ready for Emacs org-mode (with '|' separators)
 gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
 gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
 gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
@@ -768,7 +769,7 @@ data = data.replace('- huis', '- huis|')
 #+END_SRC
 
 Writing the data to the clipboard and garbage collection.
-#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 pyperclip.copy(data)
 
 del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
@@ -832,7 +833,7 @@ output_to_notifications(rate, time)
 #+END_SRC
 
 ** bitcoin_email_bot.py
-A Python script that will email an alarm when the bitcoin price will reaches a certain level. The idea is to schedule this script with a systemd timer (or cron job).
+A Python script that will email an alarm when the bitcoin price will reach a certain level. The idea is to schedule this script with a systemd timer (or cron job).
 
 First a disclaimer to only edit the file from org-mode.
 #+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
@@ -932,14 +933,14 @@ send_email()
 A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
-#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755) :eval never
 dir="$HOME/Applications" # directory
 appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
 
@@ -1060,7 +1061,7 @@ case $PullPush in
             [4])
                 echo --------------------------------------------------
                 echo
-                echo As you whish: exiting
+                echo As you wish: exiting
                 notify-send -t 60000 "Exited the dotfiles synchronization with Github"
                 ;;
 
@@ -1261,7 +1262,7 @@ dbus-monitor "interface='org.freedesktop.Notifications'" | \
 
 ** unicode
 Create a list of emojis that is used in [[dmenuunicode.sh]] by first downloading the current unicode list by wget.
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 #+END_SRC
 
@@ -1312,30 +1313,30 @@ notify-send -t 60000 "🔆 RGB reset!"
 A script that makes a screenshot and magically converts it to text in the system clipboard. I use it with the keybinding shift-printscreen.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 A temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
-#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
 mkdir $XDG_RUNTIME_DIR/temp &
 #+END_SRC
 
 The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. NOTE: the next screenshot will overwrite the jpg and txt file.
-#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text" &&
 xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
 #+END_SRC
 
 The tesseract program is converting the picture to text and is saved in the RAM directory as 'wismij', which is actually 'wismij.txt'.
-#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
 tesseract $XDG_RUNTIME_DIR/temp/wismij.jpg $XDG_RUNTIME_DIR/temp/wismij &&
 #+END_SRC
 
 Finally the textfile is catted and piped to the system clipboard with xclip. The -sel flag selects the X selection to use and ~clip~ stands for clipboard, where the text will be stored. Ready to be pasted when needed.
-#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
 cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip &&
 notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp/wismij.txt)"
 #+END_SRC
@@ -1344,14 +1345,14 @@ notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp
 A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
-#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755) :eval never
 dir="$HOME/Applications" # directory
 appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
 
@@ -1367,14 +1368,14 @@ fi
 A script that converts the directory text files (~/Stack/Command_line/directories) to a Thunar bookmarks text file (~/.config/gtk-3.0/bookmarks).
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
 This script reads in each line of the directories file using a while read loop, and for each directory it appends a corresponding bookmark to the bookmarks file using echo. Note that we prefix the directory path with file:// to format it as a valid bookmark path.
-#+BEGIN_SRC bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755)
+#+BEGIN_SRC bash :tangle thunarBookmarks.sh :padline no :tangle-mode (identity #o755) :eval never
 
 # Set the paths to the directories file and the bookmarks file
 DIR_FILE=$HOME/Stack/Command_line/directories
@@ -1395,7 +1396,7 @@ Note: the following code blocks are not being tangled and not part of my current
 ** aandelen.sh
 My shell script which extracts information from a portfolio and calculates percentages and pastes the information to the system clipboards.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/sh
 	#~/.config/aandelen.sh
 	#                       _      _                  _
@@ -1445,7 +1446,7 @@ My shell script which extracts information from a portfolio and calculates perce
 #+END_SRC
 
 ** dwmbackup.sh
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/bash
 	# ~/.config/dwmbackup.sh
 	#     _                    _                _                     _
@@ -1472,7 +1473,7 @@ My shell script which extracts information from a portfolio and calculates perce
 #+END_SRC
 
 ** dwmbar.sh
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/sh
 	#~/.config/dwmbar.sh
 	#     _                    _                    _
@@ -1492,7 +1493,7 @@ My shell script which extracts information from a portfolio and calculates perce
 #+END_SRC
 
 ** dwmpatch.sh
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/bash
 	# ~/.config/dwmpatch.sh
 	#     _                                _       _           _
@@ -1544,7 +1545,7 @@ My shell script which extracts information from a portfolio and calculates perce
 #+END_SRC
 
 ** dwmstable.sh
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/bash
 	# ~/.config/dwmstable.sh
 	#     _                        _        _     _            _
@@ -1574,7 +1575,7 @@ My shell script which extracts information from a portfolio and calculates perce
 #+END_SRC
 
 ** dwmvanilla.sh
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/bash
 	# ~/.config/dwmvanilla.sh
 	#    _                                    _ _ _             _
@@ -1606,7 +1607,7 @@ My shell script which extracts information from a portfolio and calculates perce
 #+END_SRC
 
 ** exitdwm.sh
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/bash
 	# ~/.config/exitdwm.sh
 	#           _ _      _                          _
@@ -1629,7 +1630,7 @@ My shell script which extracts information from a portfolio and calculates perce
 #+END_SRC
 
 ** updatebar.sh
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/sh
 	#~/.config/updatebar.sh
 	#                 _       _       _                    _
@@ -1653,7 +1654,7 @@ My shell script which extracts information from a portfolio and calculates perce
 ** wololo.sh
 Simple cheat code for 0ad. Does not properly work.
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :eval never
 	#!/bin/sh
 	#~/.config/wololo.sh
 	#               _       _            _
@@ -1673,7 +1674,7 @@ Simple cheat code for 0ad. Does not properly work.
 The next code block will give the output of all of the ~*.sh~ scripts of the ~~/.config~ as separate code blocks. Very handy to import all of 'em.
 
 #+name: fetch-shell-scripts
-#+BEGIN_SRC bash :results raw output
+#+BEGIN_SRC bash :results raw output :eval never
 cd $HOME/.config;
 for f in *.sh; do
   echo "** $f"

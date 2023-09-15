@@ -10,17 +10,16 @@ import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
 
 class InputDialog(QDialog):
-    """Invoerscherm voor hoeveelheid geld en overwaarde huis"""
+    """Input screen for cash and house surplus value"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        global Huis  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
-        global RaboCash  # Zorg ervoor dat variabel buiten dialog te gebruiken is.
+        global Huis
+        global RaboCash
         RaboCash = QLineEdit(self)
         Huis = QLineEdit(self)
         buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
         layout = QFormLayout(self)
-#        layout.addRow("Voer Rabo cash in (spaar+courant):", RaboCash)
         layout.addRow("Voer Bunq en Rabo cash in:", RaboCash)
         layout.addRow("Voer overwaarde huis in:", Huis)
         layout.addWidget(buttonbox)
@@ -36,11 +35,13 @@ if __name__ == '__main__':
     dialog = InputDialog()
     if dialog.exec():
         RaboCash, Huis = dialog.getinputs()
-        Huis = int(Huis)          # Moet integer zijn voor latere berekening
-        RaboCash = int(RaboCash)  # Moet integer zijn voor latere berekening
+        Huis = int(Huis)
+        RaboCash = int(RaboCash)
 
 def AddCSVtoDataFrame(filename, delimiter, column1, column2):
-    """Building a dataframe from several CSV files"""
+    """Adding CSV data to the general dataframe,
+       different CSVs can be used, the delimter must be set,
+       and only two columns are imported to the dataframe"""
     global df  # This dataframe will be used outside of this def, so make it global
     dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
     dfx.columns = [OmsCol, EurCol] # Harmonizing column names
@@ -108,7 +109,7 @@ titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).
 orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
 orgTabelNaam=''.join(orgTabelNaam)
 
-# Transform dataframe to a text string that is ready for the Emacs org-mode (with | separators)
+# Transform dataframe to a text string that is ready for Emacs org-mode (with '|' separators)
 gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
 gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
 gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators

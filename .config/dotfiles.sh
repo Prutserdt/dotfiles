@@ -51,7 +51,7 @@ case $PullPush in
             [4])
                 echo --------------------------------------------------
                 echo
-                echo As you whish: exiting
+                echo As you wish: exiting
                 notify-send -t 60000 "Exited the dotfiles synchronization with Github"
                 ;;
 
