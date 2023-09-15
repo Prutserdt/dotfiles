@@ -88,10 +88,10 @@
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("c" . "Change to anoter notes dir")
-            :desc "Goto default notes"      "d" #'my-org-roam-notes-default-dir
-            :desc "Goto Thinkpad notes"     "t" #'my-org-roam-notes-thinkpad-dir
-            :desc "Goto work notes @ home" "w" #'my-org-roam-notes-work-dir
-            :desc "Goto work notes @ work" "W" #'my-org-roam-notes-at-work-about-work-dir)
+            :desc "Goto default notes"           "d" #'my-org-roam-default
+            :desc "Goto Thinkpad notes"          "t" #'my-org-roam-thinkpad
+            :desc "Goto work notes @ home"       "w" #'my-org-roam-work
+            :desc "Goto work notes @ work"       "W" #'my-org-roam-at-work-about-work)
         (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
@@ -173,10 +173,9 @@
            :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO van vandaag"))))))
 
 (defun my-counsel-rg-roam-dir ()
-    "Search using `counsel-rg` in ~/Stack/Command_line/RoamNotes"
+    "Search using `counsel-rg` in the set org-roam-directory"
     (interactive)
-    (counsel-rg nil "~/Stack/Command_line/RoamNotes")) ;; Default location
-;;  (counsel-rg nil "~/Shared_directory/RoamNotes"))   ;; Virtual machine Arch dir
+    (counsel-rg nil org-roam-directory))
 
 (use-package! websocket
     :after org-roam)
@@ -224,50 +223,36 @@
   (insert-file-contents "~/Stack/Command_line/myThunarCloud")
   (shell-command (string-trim (buffer-string)))))
 
-(defun my-ediff-compare-org-files-between-three-directories ()
-  "Select a file from DesktopDir and compare it between three directories using ediff."
-  (interactive)
-  (let ((dirA "~/Stack/Command_line/RoamNotes/")
-        (dirB "~/Stack/Thinkpad/RoamNotes/")
-        (dirC "~/Stack/VBox_Arch/RoamNotes/")
-        (regex "\\(.*\\.org\\)")) ;; Regex to filter files with .org extension
-    (ediff-directories3 dirA dirB dirC regex)))
+(defun my-org-roam-switch (roam-dir)
+  "Switch to the roam notes in the specified directory."
+  (interactive "DSet Roam Directory:")
+  (if (string= org-roam-directory roam-dir)
+      (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
+    (progn
+      (setq org-roam-directory roam-dir)
+      (setq org-roam-dailies-directory "daily/")
+      (org-roam-db-sync)
+      (message (format "Switched to %s" roam-dir)))))
 
-(defun my-org-roam-notes-work-dir ()
-  "Switch to the roam notes of my work (not at work)"
-  (interactive)
-  (setq org-roam-directory "~/Stack/VBox_Arch/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/VBox_Arch/RoamNotes"))
-
-(defun my-org-roam-notes-thinkpad-dir ()
-  "Switch to the roam notes of my Thinkpad, on my desktop"
-  (interactive)
-  (setq org-roam-directory "~/Stack/Thinkpad/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
-
-(defun my-org-roam-notes-at-work-about-work-dir ()
-  "Switch to the work roam notes on virtual box (at work)"
-  (interactive)
-  (setq org-roam-directory "~/Shared_directory/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
-
-(defun my-org-roam-notes-default-dir ()
+(defun my-org-roam-default ()
   "Switch to my default desktop roam notes"
   (interactive)
-  (setq org-roam-directory "~/Stack/Command_line/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/Command_line/RoamNotes"))
+  (my-org-roam-switch "~/Stack/Command_line/RoamNotes"))
+
+(defun my-org-roam-thinkpad ()
+  "Switch to the roam notes of my Thinkpad, on my desktop"
+  (interactive)
+  (my-org-roam-switch "~/Stack/Thinkpad/RoamNotes"))
+
+(defun my-org-roam-work ()
+  "Switch to the roam notes of my work (not at work)"
+  (interactive)
+  (my-org-roam-switch "~/Stack/VBox_Arch/RoamNotes"))
+
+(defun my-org-roam-at-work-about-work ()
+  "Switch to the work roam notes on VirtualBox (at work)"
+  (interactive)
+  (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 
 (defun my-elisp-mode-eval-buffer ()
   (interactive)

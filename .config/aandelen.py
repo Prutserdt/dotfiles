@@ -2,7 +2,10 @@
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 
-import glob, os, pyperclip, time
+import glob
+import os
+import pyperclip
+import time
 import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
 

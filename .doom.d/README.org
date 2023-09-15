@@ -29,7 +29,7 @@
 - [[#credits][Credits]]
 
 * About this config
-This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs, after modifying this README.org!
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs after modifying this README.org!
 
 * init.el
 This file controls what Doom modules are enabled and what order they load in and the first line of the file is lexical binding. This makes the file run (slightly) faster.
@@ -320,10 +320,10 @@ Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next
     (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("c" . "Change to anoter notes dir")
-            :desc "Goto default notes"      "d" #'my-org-roam-notes-default-dir
-            :desc "Goto Thinkpad notes"     "t" #'my-org-roam-notes-thinkpad-dir
-            :desc "Goto work notes @ home" "w" #'my-org-roam-notes-work-dir
-            :desc "Goto work notes @ work" "W" #'my-org-roam-notes-at-work-about-work-dir)
+            :desc "Goto default notes"           "d" #'my-org-roam-default
+            :desc "Goto Thinkpad notes"          "t" #'my-org-roam-thinkpad
+            :desc "Goto work notes @ home"       "w" #'my-org-roam-work
+            :desc "Goto work notes @ work"       "W" #'my-org-roam-at-work-about-work)
         (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
@@ -356,7 +356,7 @@ Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next
             :desc "send"                         "s" #'gptel-send)))
 #+END_SRC
 
-Often I get into the wrong keycord and want to exit quickly. This is possible by =C-g= but I think =Esc= is more intuitive and I will change the default Doom Emacs behaviour. Let's see if this will give conflicts somewhere else. NOTE: in case of conflicts then a custom function can be used to only use this behaviour once a keychord is active.
+I want to use the escape key to exit keychords, similar to C-g. Let's see if this will give conflicts somewhere else....
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 #+END_SRC
@@ -441,10 +441,9 @@ For quick daily notes and a TODO list I am using roam-dailies and in the next co
 To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory. This function is used in the  [[#custom-keybindings][Custom keybindings]].
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-counsel-rg-roam-dir ()
-    "Search using `counsel-rg` in ~/Stack/Command_line/RoamNotes"
+    "Search using `counsel-rg` in the set org-roam-directory"
     (interactive)
-    (counsel-rg nil "~/Stack/Command_line/RoamNotes")) ;; Default location
-;;  (counsel-rg nil "~/Shared_directory/RoamNotes"))   ;; Virtual machine Arch dir
+    (counsel-rg nil org-roam-directory))
 #+END_SRC
 
 ** Org-Roam-ui configuration
@@ -466,7 +465,7 @@ Now that the websocket is setup the org-roam-ui can be set.
 #+END_SRC
 
 ** Custom code
-*** Custom elisp funtions (used with hotkeys)
+*** Custom elisp functions (used with hotkeys)
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-PowerStrike-testing-upload ()
@@ -518,65 +517,51 @@ Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be i
   (shell-command (string-trim (buffer-string)))))
 #+END_SRC
 
-Comparing my org files from three different directories, wow, seems complicated to compare files....
+*** org-roam related
+A general function that is used to switch to roam directories, the ones below are using this function.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-ediff-compare-org-files-between-three-directories ()
-  "Select a file from DesktopDir and compare it between three directories using ediff."
-  (interactive)
-  (let ((dirA "~/Stack/Command_line/RoamNotes/")
-        (dirB "~/Stack/Thinkpad/RoamNotes/")
-        (dirC "~/Stack/VBox_Arch/RoamNotes/")
-        (regex "\\(.*\\.org\\)")) ;; Regex to filter files with .org extension
-    (ediff-directories3 dirA dirB dirC regex)))
+(defun my-org-roam-switch (roam-dir)
+  "Switch to the roam notes in the specified directory."
+  (interactive "DSet Roam Directory:")
+  (if (string= org-roam-directory roam-dir)
+      (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
+    (progn
+      (setq org-roam-directory roam-dir)
+      (setq org-roam-dailies-directory "daily/")
+      (org-roam-db-sync)
+      (message (format "Switched to %s" roam-dir)))))
 #+END_SRC
 
-*** org-roam related
-Switch to the roam-notes of my work on my desktop/Thinkpad.
+Switch to the default roam-notes.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-notes-work-dir ()
-  "Switch to the roam notes of my work (not at work)"
+(defun my-org-roam-default ()
+  "Switch to my default desktop roam notes"
   (interactive)
-  (setq org-roam-directory "~/Stack/VBox_Arch/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/VBox_Arch/RoamNotes"))
+  (my-org-roam-switch "~/Stack/Command_line/RoamNotes"))
 #+END_SRC
 
 Switch to the roam-notes of my Thinkpad on my desktop.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-notes-thinkpad-dir ()
+(defun my-org-roam-thinkpad ()
   "Switch to the roam notes of my Thinkpad, on my desktop"
   (interactive)
-  (setq org-roam-directory "~/Stack/Thinkpad/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
+  (my-org-roam-switch "~/Stack/Thinkpad/RoamNotes"))
+#+END_SRC
+
+Switch to the roam-notes of my work on my desktop/Thinkpad.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-org-roam-work ()
+  "Switch to the roam notes of my work (not at work)"
+  (interactive)
+  (my-org-roam-switch "~/Stack/VBox_Arch/RoamNotes"))
 #+END_SRC
 
 Switch to the work notes on my Virtual box distro at my work.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-notes-at-work-about-work-dir ()
-  "Switch to the work roam notes on virtual box (at work)"
+(defun my-org-roam-at-work-about-work ()
+  "Switch to the work roam notes on VirtualBox (at work)"
   (interactive)
-  (setq org-roam-directory "~/Shared_directory/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/Thinkpad/RoamNotes"))
-#+END_SRC
-
-Switch back to the default roam-notes.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-notes-default-dir ()
-  "Switch to my default desktop roam notes"
-  (interactive)
-  (setq org-roam-directory "~/Stack/Command_line/RoamNotes")
-  (setq org-roam-dailies-directory "daily/")     ;; the subdir for dailies in roam-dir
-  (setq org-roam-completion-everywhere t)
-  (org-roam-db-sync)
-  (message "Switched to ~/Stack/Command_line/RoamNotes"))
+  (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 #+END_SRC
 
 *** Custom elisp functions (not used with hotkeys)
@@ -606,21 +591,6 @@ Open my =keymap.c= file of my redox keyboard.
   "Open the keymap.c of my Redox qmk firmware"
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
-#+END_SRC
-
-**** Play with roam directories
-Kind of pointless
-#+BEGIN_SRC emacs-lisp :results none
-(defun my-three-roam-directories ()
-  "Opens my three Roam directories; Desktop - Thinkpad - VBox_Arch"
-    (interactive)
-    (split-window-horizontally)
-    (dired "~/Stack/Command_line/RoamNotes")
-    (windmove-right)
-    (split-window-horizontally)
-    (dired "~/Stack/Thinkpad/RoamNotes")
-    (windmove-right)
-    (dired "~/Stack/VBox_Arch/RoamNotes"))
 #+END_SRC
 
 ** Splash screen

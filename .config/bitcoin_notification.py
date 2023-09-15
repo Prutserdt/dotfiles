@@ -8,6 +8,7 @@ from datetime import datetime
 from notifypy import Notify
 
 def coingecko():
+    """Get the rate and time from the coingecko free api, returns as a tuple"""
     url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_last_updated_at=true"
 
     response = requests.get(url)
@@ -23,6 +24,7 @@ def coingecko():
     return (rate, time)  #NOTE: added because I want to use it in another script.
 
 def output_to_notifications(rate, time):
+    """Sending two variables as a notification"""
     notification = Notify()
     notification.title = "Bitcoin price (euro):"
     notification.message = rate, time

@@ -68,7 +68,7 @@ This document is a note-to-self about my scripts on my GNU/Linux system and is m
 * My dmenu scripts
 
 ** clipboard_dm.sh
-A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to Ram and will not be permanent, reboot will remove the data.
+A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to RAM and therefor are not permanent, after a reboot the content will be gone.
 
 #+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755)
 #!/bin/bash
@@ -610,7 +610,10 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 
 The libraries that are used for this script are imported in the next section.
 #+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755)
-import glob, os, pyperclip, time
+import glob
+import os
+import pyperclip
+import time
 import pandas as pd
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
 #+END_SRC
@@ -793,6 +796,7 @@ from notifypy import Notify
 Fetching information from the coingecko api, without a key.
 #+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 def coingecko():
+    """Get the rate and time from the coingecko free api, returns as a tuple"""
     url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_last_updated_at=true"
 
     response = requests.get(url)
@@ -811,6 +815,7 @@ def coingecko():
 Funtion that will output the rate and time in the notification area.
 #+BEGIN_SRC python :results none :tangle bitcoin_notification.py :padline yes :tangle-mode (identity #o755)
 def output_to_notifications(rate, time):
+    """Sending two variables as a notification"""
     notification = Notify()
     notification.title = "Bitcoin price (euro):"
     notification.message = rate, time
@@ -838,8 +843,11 @@ First a disclaimer to only edit the file from org-mode.
 
 The libraries that are used for this script are imported in the next section. Including the coingecko function from my bitcoin_notification.
 #+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
-import os, configparser, smtplib, ssl
-from bitcoin_notification import coingecko
+import os
+import configparser
+import smtplib
+import ssl
+from bitcoin_notification import coingecko # From personal library
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 #+END_SRC
@@ -847,7 +855,7 @@ from email.mime.multipart import MIMEMultipart
 The following fuction =get_info= will fetch relevant information from a textfile. For instance the email recipient address.
 #+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
 def get_info():
-    # Fetching email information from a local textfile.
+    """Fetching email information from a local textfile"""
     print("start van functie get_info")
     # Create a ConfigParser object
     config = configparser.ConfigParser()
@@ -870,7 +878,7 @@ def get_info():
 Another function, =send_email=, will send the email if the bitcoin price reached a treshhold value.
 #+BEGIN_SRC python :results none :tangle bitcoin_email_bot.py :padline yes :tangle-mode (identity #o755)
 def send_email():
-    # Compose the email message
+    """Compose the email message"""
     print("start van functie send_email")
     bitcoin_current_price = fetch_coingecko_info[0] # get current bitcoin price
     subject = "Let op: verkopen"
