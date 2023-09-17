@@ -577,8 +577,8 @@ Switch to the work notes on my Virtual box distro at my work.
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 #+END_SRC
 
-Show the current roam directory in the notification area of Emacs and show additional information as: the amount of org files, amount of total lines in all org files and word count in all files.
-FIXME: I would like to include the information in the daily subdirectory, but did not get this to work yet...
+Show the current roam directory in the notification area of Emacs and show additional information as: the amount of org files, total lines and word count of all org files.
+FIXME: I would like to include the information of the daily subdirectory, but did not get this to work yet...
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-show-org-roam-directory-info ()
   "Show information about the current org-roam directory in the message area of Emacs."
