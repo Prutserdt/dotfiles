@@ -68,18 +68,18 @@
 (map! :leader
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
-        :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
             :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
         (:prefix ("c" . "Cloud stuff")
-            :desc "ediff myorg backups 3 dirs"   "e" #'my-ediff-compare-org-files-between-three-directories
-            :desc "Thunar connect my cloud"      "t" #'my-thunar-cloud-connection
             (:prefix ("b" . "Backup to cloud")
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
+        :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
+        (:prefix ("f" . "Financial stuff")
+            :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
@@ -108,6 +108,7 @@
         :desc "Find ref"                         "F" #'org-roam-ref-find
         :desc "Show graph"                       "g" #'org-roam-graph
         :desc "Insert node"                      "i" #'org-roam-node-insert
+        :desc "Message: show roam dir info"      "m" #'my-show-org-roam-directory-info
         :desc "Capture to node"                  "n" #'org-roam-capture
         :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
@@ -223,8 +224,18 @@
   (insert-file-contents "~/Stack/Command_line/myThunarCloud")
   (shell-command (string-trim (buffer-string)))))
 
+(defun my-asset-allocation-in-time ()
+  "Show my asset allocation vs time in a chart"
+  (interactive)
+  (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
+    (setq default-directory (file-name-directory script-path))
+    (shell-command (concat "notify-send -t 6000 'Displaying my AA plot: " script-path "'"))
+    (shell-command (concat "python3 " script-path)
+                   "*Python Output*")
+    (message (concat "Python script executed: " script-path))))
+
 (defun my-org-roam-switch (roam-dir)
-  "Switch to the roam notes in the specified directory."
+  "Switch to the roam notes in the specified directory"
   (interactive "DSet Roam Directory:")
   (if (string= org-roam-directory roam-dir)
       (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
@@ -253,6 +264,26 @@
   "Switch to the work roam notes on VirtualBox (at work)"
   (interactive)
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
+
+(defun my-show-org-roam-directory-info ()
+  "Show information about the current org-roam directory in the message area of Emacs."
+  (interactive)
+  (let* ((roam-dir org-roam-directory)
+         (all-files (directory-files roam-dir nil))
+         (org-files (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files))
+         (non-org-files (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files))
+         (org-file-count (length org-files))
+         (non-org-file-count (length non-org-files))
+         (total-lines 0)
+         (total-words 0))
+    (dolist (file org-files)
+      (let* ((file-path (expand-file-name file roam-dir))
+             (lines (count-lines (point-min) (point-max)))
+             (words (count-words (point-min) (point-max))))
+        (setq total-lines (+ total-lines lines))
+        (setq total-words (+ total-words words))))
+    (message "Org Roam Directory: %s\nNumber of Org Files: %d\nNumber of Non-Org Files: %d\nTotal Lines: %d\nTotal Words: %d\nNon-Org Files: %s\nNOTE: the daily directory is NOT included!"
+             roam-dir org-file-count non-org-file-count total-lines total-words non-org-files)))
 
 (defun my-elisp-mode-eval-buffer ()
   (interactive)
