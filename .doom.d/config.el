@@ -266,24 +266,59 @@
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 
 (defun my-show-org-roam-directory-info ()
-  "Show information about the current org-roam directory in the message area of Emacs."
+  "Show information about the current org-roam directory and its 'daily' subdirectory."
   (interactive)
   (let* ((roam-dir org-roam-directory)
-         (all-files (directory-files roam-dir nil))
-         (org-files (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files))
-         (non-org-files (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files))
-         (org-file-count (length org-files))
-         (non-org-file-count (length non-org-files))
-         (total-lines 0)
-         (total-words 0))
-    (dolist (file org-files)
-      (let* ((file-path (expand-file-name file roam-dir))
-             (lines (count-lines (point-min) (point-max)))
-             (words (count-words (point-min) (point-max))))
-        (setq total-lines (+ total-lines lines))
-        (setq total-words (+ total-words words))))
-    (message "Org Roam Directory: %s\nNumber of Org Files: %d\nNumber of Non-Org Files: %d\nTotal Lines: %d\nTotal Words: %d\nNon-Org Files: %s\nNOTE: the daily directory is NOT included!"
-             roam-dir org-file-count non-org-file-count total-lines total-words non-org-files)))
+         (daily-dir (expand-file-name "daily" roam-dir))
+         (all-files-roam (directory-files roam-dir nil))
+         (org-files-roam (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
+         (non-org-files-roam (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
+         (all-files-daily (directory-files daily-dir nil))
+         (org-files-daily (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files-daily))
+         (non-org-files-daily (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files-daily))
+         (org-file-count-roam (length org-files-roam))
+         (org-file-count-daily (length org-files-daily))
+         (org-file-count-total (+ org-file-count-roam org-file-count-daily))
+         (total-lines-org 0)
+         (total-words-org 0)
+         (total-lines-daily 0)
+         (total-words-daily 0))
+
+    ;; Calculate lines and words for org files in the 'daily' directory
+    (dolist (file (directory-files daily-dir nil "\\.org$"))
+      (with-temp-buffer
+        (insert-file-contents (expand-file-name file daily-dir))
+        (setq total-lines-daily (+ total-lines-daily (count-lines (point-min) (point-max))))
+        (setq total-words-daily (+ total-words-daily (count-words (point-min) (point-max))))))
+
+    ;; Calculate lines and words for org files in the main directory
+    (dolist (file org-files-roam)
+      (with-temp-buffer
+        (insert-file-contents (expand-file-name file roam-dir))
+        (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
+        (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
+
+    (message "Statistics about my second brain 🤓
+Brain shelve: %s.
+
+Number of org files
+Roam dir:  %d
+Daily dir: %d
+Total:     %d
+
+Lines
+Roam dir:  %d
+Daily dir: %d
+Total:     %d
+
+Word count
+Roam dir:  %d
+Daily dir: %d
+Total:     %d"
+             roam-dir
+             org-file-count-roam org-file-count-daily org-file-count-total
+             total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
+             total-words-org total-words-daily (+ total-words-org total-words-daily))))
 
 (defun my-elisp-mode-eval-buffer ()
   (interactive)

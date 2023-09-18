@@ -44,6 +44,7 @@ Add a note to ~init.el~ to highlight that this file should not be edited directl
 #+END_SRC
 
 The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and can be added to the list of modules listed below. Online module info can also be found [[https://github.com/doomemacs/doomemacs/blob/master/docs/modules.org][here]].
+NOTES: some packages should be installed on the system: =sudo pacman -S python-pytest python-nose=
 #+BEGIN_SRC emacs-lisp :tangle init.el :results silent
 
 (doom! :completion
@@ -101,8 +102,6 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        (default +bindings +smartparens)
        )
 #+END_SRC
-
-NOTES: some packages should be installed on the system: =sudo pacman -S python-pytest python-nose=
 
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of ~init.el~. This file shouln't be byte compiled.
@@ -264,7 +263,6 @@ No more conformation messages whilst closing emacs.
 
 ** Vterm-toggle
 I like to use Vterm as a scratch terminal, this can be done by the vterm-toggle package.
-
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package! vterm-toggle
   :after vterm
@@ -356,7 +354,7 @@ Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next
             :desc "send"                         "s" #'gptel-send)))
 #+END_SRC
 
-I want to use the escape key to exit keychords, similar to C-g. Let's see if this will give conflicts somewhere else....
+I want to use the escape key to exit keychords, similar to C-g. Let's see if this will give conflicts somewhere else, for now it seems to work 😌.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 #+END_SRC
@@ -517,7 +515,7 @@ Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be i
   (shell-command (string-trim (buffer-string)))))
 #+END_SRC
 
-Show a map of my asset allocation in time, a Python script.
+Show a map of my asset allocation in time by running a Python script.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-asset-allocation-in-time ()
   "Show my asset allocation vs time in a chart"
@@ -577,28 +575,62 @@ Switch to the work notes on my Virtual box distro at my work.
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 #+END_SRC
 
-Show the current roam directory in the notification area of Emacs and show additional information as: the amount of org files, total lines and word count of all org files.
-FIXME: I would like to include the information of the daily subdirectory, but did not get this to work yet...
+Show information about the org-roam files, list the amount of org files, amount of lines and amount of words in the org-roam directory and daily subdirectory.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-show-org-roam-directory-info ()
-  "Show information about the current org-roam directory in the message area of Emacs."
+  "Show information about the current org-roam directory and its 'daily' subdirectory."
   (interactive)
   (let* ((roam-dir org-roam-directory)
-         (all-files (directory-files roam-dir nil))
-         (org-files (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files))
-         (non-org-files (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files))
-         (org-file-count (length org-files))
-         (non-org-file-count (length non-org-files))
-         (total-lines 0)
-         (total-words 0))
-    (dolist (file org-files)
-      (let* ((file-path (expand-file-name file roam-dir))
-             (lines (count-lines (point-min) (point-max)))
-             (words (count-words (point-min) (point-max))))
-        (setq total-lines (+ total-lines lines))
-        (setq total-words (+ total-words words))))
-    (message "Org Roam Directory: %s\nNumber of Org Files: %d\nNumber of Non-Org Files: %d\nTotal Lines: %d\nTotal Words: %d\nNon-Org Files: %s\nNOTE: the daily directory is NOT included!"
-             roam-dir org-file-count non-org-file-count total-lines total-words non-org-files)))
+         (daily-dir (expand-file-name "daily" roam-dir))
+         (all-files-roam (directory-files roam-dir nil))
+         (org-files-roam (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
+         (non-org-files-roam (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
+         (all-files-daily (directory-files daily-dir nil))
+         (org-files-daily (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files-daily))
+         (non-org-files-daily (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files-daily))
+         (org-file-count-roam (length org-files-roam))
+         (org-file-count-daily (length org-files-daily))
+         (org-file-count-total (+ org-file-count-roam org-file-count-daily))
+         (total-lines-org 0)
+         (total-words-org 0)
+         (total-lines-daily 0)
+         (total-words-daily 0))
+
+    ;; Calculate lines and words for org files in the 'daily' directory
+    (dolist (file (directory-files daily-dir nil "\\.org$"))
+      (with-temp-buffer
+        (insert-file-contents (expand-file-name file daily-dir))
+        (setq total-lines-daily (+ total-lines-daily (count-lines (point-min) (point-max))))
+        (setq total-words-daily (+ total-words-daily (count-words (point-min) (point-max))))))
+
+    ;; Calculate lines and words for org files in the main directory
+    (dolist (file org-files-roam)
+      (with-temp-buffer
+        (insert-file-contents (expand-file-name file roam-dir))
+        (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
+        (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
+
+    (message "Statistics about my second brain 🤓
+Brain shelve: %s.
+
+Number of org files
+Roam dir:  %d
+Daily dir: %d
+Total:     %d
+
+Lines
+Roam dir:  %d
+Daily dir: %d
+Total:     %d
+
+Word count
+Roam dir:  %d
+Daily dir: %d
+Total:     %d"
+             roam-dir
+             org-file-count-roam org-file-count-daily org-file-count-total
+             total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
+             total-words-org total-words-daily (+ total-words-org total-words-daily))))
 #+END_SRC
 
 *** Custom elisp functions (not used with hotkeys)
