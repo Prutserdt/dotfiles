@@ -103,6 +103,8 @@ NOTES: some packages should be installed on the system: =sudo pacman -S python-p
        )
 #+END_SRC
 
+NOTES: some packages should be installed on the system: =sudo pacman -S python-pytest python-nose=
+
 * packages.el
 Here the packages are defined which should be installed. This is an addition to the already installed and loaded modules of ~init.el~. This file shouln't be byte compiled.
 #+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
