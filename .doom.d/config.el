@@ -243,7 +243,8 @@
       (setq org-roam-directory roam-dir)
       (setq org-roam-dailies-directory "daily/")
       (org-roam-db-sync)
-      (message (format "Switched to %s" roam-dir)))))
+      (message (format "Switched to %s" roam-dir))
+      (my-show-org-roam-directory-info))))
 
 (defun my-org-roam-default ()
   "Switch to my default desktop roam notes"
@@ -297,24 +298,13 @@
         (insert-file-contents (expand-file-name file roam-dir))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
-
     (message "Statistics about my second brain 🤓
 Brain shelve: %s.
 
-Number of org files
-Roam dir:  %d
-Daily dir: %d
-Total:     %d
-
-Lines
-Roam dir:  %d
-Daily dir: %d
-Total:     %d
-
-Word count
-Roam dir:  %d
-Daily dir: %d
-Total:     %d"
+             Roam dir, daily dir, total
+org files    %d, %d, %d
+line numbers %d, %d, %d
+word count   %d, %d, %d"
              roam-dir
              org-file-count-roam org-file-count-daily org-file-count-total
              total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
