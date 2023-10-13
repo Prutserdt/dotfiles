@@ -337,19 +337,18 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 #       Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
+A notification is send and the system processess, fetched by running =ps -a iu=, are piped into dmenu.
 #+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenukill.sh, a script to kill processes!" &&
 chosen="$(ps -a -u $USER |dmenu -c -bw 2 -l 40 -p "Delete process:"| awk '{print $1}')"
 [ -z "$chosen" ] && exit
-#pwd &&
-#kill $chosen &
-#notify-send -t 60000 "The process: $chosen was killed!"
-
-A menu with four options is created to kill the selected process, copy process information to the clipboard or exit.
-# Display options and read user choice
 selected_option=$(echo -e "d Delete process\nc Copy process name\np Copy PID\ne Exit" | dmenu -c -bw 2 -l 4 -p "Choose an option:")
 process_name=$(ps -p "$chosen" -o comm=)
+#+END_SRC
 
+When the process is selected by the user then a menu with four options is created to kill the selected process, or copy the process name, or copy the PID or exit.
+#+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755) :eval never
+# Display options and read user choice
 case "$selected_option" in
     "d Delete process")
         kill "$chosen"
