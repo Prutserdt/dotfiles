@@ -23,6 +23,28 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
+(defun set-line-number-color-according-to-evil-state ()
+  (when (and (bound-and-true-p evil-mode)
+             (not buffer-read-only))
+    (cond
+      ((evil-insert-state-p)
+       (set-face-foreground 'line-number "#FFAD99"))
+      ((evil-visual-state-p)
+       (set-face-foreground 'line-number "#80B3FF"))
+      (t
+       (set-face-foreground 'line-number "D7DDE3")))))
+
+(add-hook 'doom-switch-buffer-hook 'set-line-number-color-according-to-evil-state)
+(add-hook 'doom-first-buffer-hook 'set-line-number-color-according-to-evil-state)
+
+(add-hook 'evil-insert-state-entry-hook 'set-line-number-color-according-to-evil-state)
+(add-hook 'evil-normal-state-entry-hook 'set-line-number-color-according-to-evil-state)
+(add-hook 'evil-visual-state-entry-hook 'set-line-number-color-according-to-evil-state)
+
+;; Customize the face for the current line's line number
+(custom-set-faces!
+  '(line-number-current-line :foreground "#EF7168"))
+
 (scroll-bar-mode -1)
 
 (setq! evil-want-Y-yank-to-eol nil)
@@ -82,7 +104,7 @@
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-;;      :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
+        ;;      :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
@@ -116,6 +138,8 @@
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search Roam dir"                  "s" #'my-counsel-rg-roam-dir
         :desc "Sync database"                    "S" #'org-roam-db-sync
+        :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
+        :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
     (:prefix ("s") ;; Default Doom keybinding
         (:prefix ("c" . "ChatGPT options")
@@ -175,7 +199,7 @@
            :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO van vandaag"))))))
 
 (defun my-counsel-rg-roam-dir ()
-    "Search using `counsel-rg` in the set org-roam-directory"
+    "Search using `counsel-rg` in the set org-roam-directory."
     (interactive)
     (counsel-rg nil org-roam-directory))
 
@@ -191,7 +215,7 @@
           org-roam-ui-open-on-start t))
 
 (defun my-PowerStrike-testing-upload ()
-    "Upload arduino Powerstrike code to ESP32"
+    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
     (interactive)
     (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
@@ -200,7 +224,7 @@
     (windmove-right))
 
 (defun my-serial-ttyUSB0-115200 ()
-   "Serial monitor to ttyUSB0 115200 baudrate"
+   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
     (interactive)
     (split-window-horizontally)
     (serial-term "/dev/ttyUSB0" 115200)
@@ -208,7 +232,7 @@
     (windmove-right))
 
 (defun my-PowerStrike-README-org-file ()
-  "Open the README.org of my PowerStrike ESP32 project"
+  "Open the README.org of my PowerStrike ESP32 project."
   (interactive)
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 
@@ -226,7 +250,7 @@
   (shell-command (string-trim (buffer-string)))))
 
 (defun my-asset-allocation-in-time ()
-  "Show my asset allocation vs time in a chart"
+  "Show my asset allocation vs time in a chart. Done by running a Python script."
   (interactive)
   (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
     (setq default-directory (file-name-directory script-path))
@@ -236,7 +260,7 @@
     (message (concat "Python script executed: " script-path))))
 
 (defun my-org-roam-switch (roam-dir)
-  "Switch to the roam notes in the specified directory"
+  "Switch to the roam notes in the specified directory. This function is not intended to be used separately, although this is possible. It is used by other Elisp code which will inject the desired Roam directory."
   (interactive "DSet Roam Directory:")
   (if (string= org-roam-directory roam-dir)
       (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
@@ -244,31 +268,30 @@
       (setq org-roam-directory roam-dir)
       (setq org-roam-dailies-directory "daily/")
       (org-roam-db-sync)
-      (message (format "Switched to %s" roam-dir))
-      (my-show-org-roam-directory-info))))
+      (message (format "Switched to %s" roam-dir)))))
 
 (defun my-org-roam-default ()
-  "Switch to my default desktop roam notes"
+  "Switch to my default desktop roam notes. This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Stack/Command_line/RoamNotes"))
 
 (defun my-org-roam-thinkpad ()
-  "Switch to the roam notes of my Thinkpad, on my desktop"
+  "Switch to the roam notes of my Thinkpad, on my desktop. This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Stack/Thinkpad/RoamNotes"))
 
 (defun my-org-roam-work ()
-  "Switch to the roam notes of my work (not at work)"
+  "Switch to the roam notes of my work (not at work). This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Stack/VBox_Arch/RoamNotes"))
 
 (defun my-org-roam-at-work-about-work ()
-  "Switch to the work roam notes on VirtualBox (at work)"
+  "Switch to the work roam notes on VirtualBox (at work). This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 
 (defun my-show-org-roam-directory-info ()
-  "Show information about the current org-roam directory and its 'daily' subdirectory."
+  "Show information about the current org-roam directory and its 'daily' subdirectory. Files are counted, number of lines and words as well."
   (interactive)
   (let* ((roam-dir org-roam-directory)
          (daily-dir (expand-file-name "daily" roam-dir))
@@ -320,12 +343,12 @@ word count   %d, %d, %d"
 (define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
 
 (defun my-redox-directory ()
-  "Open the keymap.c of my Redox qmk firmware"
+  "Open the keymap.c file of my Redox qmk firmware."
   (interactive)
   (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
 (defun my-redox-config-qmk-file ()
-  "Open the keymap.c of my Redox qmk firmware"
+  "Open the keymap.c file of my Redox qmk firmware."
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 

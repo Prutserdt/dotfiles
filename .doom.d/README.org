@@ -44,7 +44,7 @@ Add a note to ~init.el~ to highlight that this file should not be edited directl
 #+END_SRC
 
 The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and can be added to the list of modules listed below. Online module info can also be found [[https://github.com/doomemacs/doomemacs/blob/master/docs/modules.org][here]].
-NOTES: some packages should be installed on the system: =sudo pacman -S python-pytest python-nose=
+NOTES: some packages that should be installed on the system are, =python-pytest= and =python-nose=.
 #+BEGIN_SRC emacs-lisp :tangle init.el :results silent
 
 (doom! :completion
@@ -102,6 +102,7 @@ NOTES: some packages should be installed on the system: =sudo pacman -S python-p
        (default +bindings +smartparens)
        )
 #+END_SRC
+
 NOTES: some packages should be installed on the system: =sudo pacman -S python-pytest python-nose=
 
 * packages.el
@@ -215,7 +216,39 @@ For jumping in texts it is nice to know the line position where to jump to from 
 (setq display-line-numbers-type 'relative)
 #+END_SRC
 
-Remove the scroll bar. NOTE: does not work when it's at the start of config.el.
+Sometimes I forget if I'm in insert or normal mode, even with the different cursors that are set. To help me remember the current state I am coloring the line numbers accordingly.
+Here, we define an Emacs Lisp function to set the line number color based on the Evil state.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun set-line-number-color-according-to-evil-state ()
+  (when (and (bound-and-true-p evil-mode)
+             (not buffer-read-only))
+    (cond
+      ((evil-insert-state-p)
+       (set-face-foreground 'line-number "#FFAD99"))
+      ((evil-visual-state-p)
+       (set-face-foreground 'line-number "#80B3FF"))
+      (t
+       (set-face-foreground 'line-number "D7DDE3")))))
+#+END_SRC
+
+Next, we'll set up hooks and customize line number colors based on the Evil state. We add hooks for Doom Emacs buffer switching events and hook for changing line number color when entering insert/normal/visual mode.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(add-hook 'doom-switch-buffer-hook 'set-line-number-color-according-to-evil-state)
+(add-hook 'doom-first-buffer-hook 'set-line-number-color-according-to-evil-state)
+
+(add-hook 'evil-insert-state-entry-hook 'set-line-number-color-according-to-evil-state)
+(add-hook 'evil-normal-state-entry-hook 'set-line-number-color-according-to-evil-state)
+(add-hook 'evil-visual-state-entry-hook 'set-line-number-color-according-to-evil-state)
+#+END_SRC
+
+I want the color of the line number of the cursor to have a different color and this is accomplished by custom-set-faces.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+;; Customize the face for the current line's line number
+(custom-set-faces!
+  '(line-number-current-line :foreground "#EF7168"))
+#+END_SRC
+
+The scroll bar is not needed and removed here. NOTE: does not work when it's at the start of config.el.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (scroll-bar-mode -1)
 #+END_SRC
@@ -312,7 +345,7 @@ Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-;;      :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
+        ;;      :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
@@ -346,6 +379,8 @@ Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search Roam dir"                  "s" #'my-counsel-rg-roam-dir
         :desc "Sync database"                    "S" #'org-roam-db-sync
+        :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
+        :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode)
     (:prefix ("s") ;; Default Doom keybinding
         (:prefix ("c" . "ChatGPT options")
@@ -441,7 +476,7 @@ For quick daily notes and a TODO list I am using roam-dailies and in the next co
 To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory. This function is used in the  [[#custom-keybindings][Custom keybindings]].
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-counsel-rg-roam-dir ()
-    "Search using `counsel-rg` in the set org-roam-directory"
+    "Search using `counsel-rg` in the set org-roam-directory."
     (interactive)
     (counsel-rg nil org-roam-directory))
 #+END_SRC
@@ -469,7 +504,7 @@ Now that the websocket is setup the org-roam-ui can be set.
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-PowerStrike-testing-upload ()
-    "Upload arduino Powerstrike code to ESP32"
+    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
     (interactive)
     (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
@@ -481,7 +516,7 @@ A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 proc
 Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-serial-ttyUSB0-115200 ()
-   "Serial monitor to ttyUSB0 115200 baudrate"
+   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
     (interactive)
     (split-window-horizontally)
     (serial-term "/dev/ttyUSB0" 115200)
@@ -493,7 +528,7 @@ TODO: I would like to run ~my-serial-ttyUSB0-115200~ directly after ~PowerStrike
 Open my Arduino PowerStrike README.org file.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-PowerStrike-README-org-file ()
-  "Open the README.org of my PowerStrike ESP32 project"
+  "Open the README.org of my PowerStrike ESP32 project."
   (interactive)
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 #+END_SRC
@@ -520,7 +555,7 @@ Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be i
 Show a map of my asset allocation in time by running a Python script.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-asset-allocation-in-time ()
-  "Show my asset allocation vs time in a chart"
+  "Show my asset allocation vs time in a chart. Done by running a Python script."
   (interactive)
   (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
     (setq default-directory (file-name-directory script-path))
@@ -534,7 +569,7 @@ Show a map of my asset allocation in time by running a Python script.
 A general function that is used to switch to roam directories, the ones below are using this function.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-switch (roam-dir)
-  "Switch to the roam notes in the specified directory"
+  "Switch to the roam notes in the specified directory. This function is not intended to be used separately, although this is possible. It is used by other Elisp code which will inject the desired Roam directory."
   (interactive "DSet Roam Directory:")
   (if (string= org-roam-directory roam-dir)
       (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
@@ -542,14 +577,13 @@ A general function that is used to switch to roam directories, the ones below ar
       (setq org-roam-directory roam-dir)
       (setq org-roam-dailies-directory "daily/")
       (org-roam-db-sync)
-      (message (format "Switched to %s" roam-dir))
-      (my-show-org-roam-directory-info))))
+      (message (format "Switched to %s" roam-dir)))))
 #+END_SRC
 
 Switch to the default roam-notes.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-default ()
-  "Switch to my default desktop roam notes"
+  "Switch to my default desktop roam notes. This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Stack/Command_line/RoamNotes"))
 #+END_SRC
@@ -557,7 +591,7 @@ Switch to the default roam-notes.
 Switch to the roam-notes of my Thinkpad on my desktop.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-thinkpad ()
-  "Switch to the roam notes of my Thinkpad, on my desktop"
+  "Switch to the roam notes of my Thinkpad, on my desktop. This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Stack/Thinkpad/RoamNotes"))
 #+END_SRC
@@ -565,7 +599,7 @@ Switch to the roam-notes of my Thinkpad on my desktop.
 Switch to the roam-notes of my work on my desktop/Thinkpad.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-work ()
-  "Switch to the roam notes of my work (not at work)"
+  "Switch to the roam notes of my work (not at work). This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Stack/VBox_Arch/RoamNotes"))
 #+END_SRC
@@ -573,7 +607,7 @@ Switch to the roam-notes of my work on my desktop/Thinkpad.
 Switch to the work notes on my Virtual box distro at my work.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-at-work-about-work ()
-  "Switch to the work roam notes on VirtualBox (at work)"
+  "Switch to the work roam notes on VirtualBox (at work). This uses the Elisp function my-org-roam-switch."
   (interactive)
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 #+END_SRC
@@ -581,7 +615,7 @@ Switch to the work notes on my Virtual box distro at my work.
 Show information about the org-roam files, list the amount of org files, amount of lines and amount of words in the org-roam directory and daily subdirectory.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-show-org-roam-directory-info ()
-  "Show information about the current org-roam directory and its 'daily' subdirectory."
+  "Show information about the current org-roam directory and its 'daily' subdirectory. Files are counted, number of lines and words as well."
   (interactive)
   (let* ((roam-dir org-roam-directory)
          (daily-dir (expand-file-name "daily" roam-dir))
@@ -641,7 +675,7 @@ Evaluating a region or buffer, a tip from [[https://www.masteringemacs.org/artic
 Open my Redox keyboard QMK directory.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-redox-directory ()
-  "Open the keymap.c of my Redox qmk firmware"
+  "Open the keymap.c file of my Redox qmk firmware."
   (interactive)
   (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 #+END_SRC
@@ -649,7 +683,7 @@ Open my Redox keyboard QMK directory.
 Open my =keymap.c= file of my redox keyboard.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-redox-config-qmk-file ()
-  "Open the keymap.c of my Redox qmk firmware"
+  "Open the keymap.c file of my Redox qmk firmware."
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 #+END_SRC
