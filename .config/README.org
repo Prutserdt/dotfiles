@@ -30,6 +30,9 @@
   - [[#dmenuvanillash][dmenuvanilla.sh]]
   - [[#dmenuwallpapersh][dmenuwallpaper.sh]]
   - [[#exitqtilesh][exitqtile.sh]]
+- [[#pictures-manipulation-scripts][Pictures manipulation scripts]]
+  - [[#dm_image_to_maps][dm_image_to_maps]]
+  - [[#get-gps-coordinates-in-google-maps-format-for-all-jpg-files-in-directory][Get gps coordinates in Google maps format for all .jpg files in directory]]
 - [[#other-scripts][Other scripts]]
   - [[#aandelenpy][aandelen.py]]
   - [[#bitcoin_notificationpy][bitcoin_notification.py]]
@@ -595,6 +598,446 @@ case "$chosen" in
         ;;
 esac
 #+END_SRC
+
+* Pictures manipulation scripts
+
+** dm_image_to_maps
+A script that will select an image, convert GPS information and feed it into google maps to see the location in a web browser. This script required dmenu, zenity, nsxiv, xorg and a web browser.
+
+#+BEGIN_SRC sh :tangle dm_image_to_maps.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+
+# Use dmenu to select the directory containing your images
+selected_directory=$(find "$HOME/Stack/Afbeeldingen/Vakantie" -maxdepth 2 -type d | dmenu -c -bw 2 -l 40 -p "Select a directory for pictures to select in google maps:")
+
+# Check if a directory was selected
+if [ -n "$selected_directory" ]; then
+    while true; do
+        # Give the user information how to select the image in nsxiv
+        zenity --question --title="Reminder" --text="Please select a single picture in nsxiv by pressing 'm' or exit by pressing 'q'.\n\nDo you want to continue?"
+
+        # Check the user's response to the question dialog
+        response=$?
+
+        if [ $response -eq 1 ]; then
+            # User clicked "No," exit the loop
+            break
+        fi
+
+        # Use find to locate image files in the selected directory
+        image_files=$(find "$selected_directory" -maxdepth 1 -type f \( -iname '*.jpeg' -o -iname '*.jpg' \) | sort)
+
+        # Use nsxiv to display the images in the selected directory and allow you to choose one
+        selected_image=$(echo "$image_files" | nsxiv -ftio)
+
+        # Check if an image was selected
+        if [ -n "$selected_image" ]; then
+            # Run exiftool and get the GPS Position
+            exif_info=$(exiftool "$selected_image" | grep "GPS Position")
+
+            if [ -n "$exif_info" ]; then
+                # Extract and process the GPS Position to the format for google maps.
+                # First select data at the right after the : sign.', then remove all spaces
+                # and change 'deg' to °.
+                gps_position=$(echo "$exif_info" | awk -F ': ' '{print $2}' | tr -d ' ' | sed 's/deg/°/g')
+
+                maps_url="https://www.google.com/maps/place/$gps_position"
+
+                # Open the URL in the default web browser
+                xdg-open "$maps_url"
+
+                notify-send -t 60000 "Google maps opened with GPS location: $gps_position"
+            else
+                # No GPS information found
+                zenity --info --title="No GPS Information" --text="The selected picture does not contain GPS information."
+            fi
+        else
+            # No image selected, exit the loop
+            break
+        fi
+    done
+fi
+#+end_src
+
+
+** Get gps coordinates in Google maps format for all .jpg files in directory
+
+#+begin_src  shell :results output
+#!/bin/bash
+
+# Specify the directory where the pictures are located
+picture_directory="$HOME/Stack/Afbeeldingen/Vakantie/2023_Bali/Minder_en_dubbelop"
+
+# Display the working directory
+echo "Working Directory: $picture_directory"
+
+# Check if the directory exists
+if [ ! -d "$picture_directory" ]; then
+    echo "Directory not found: $picture_directory"
+    exit 1
+fi
+
+# Iterate through all image files in the directory
+for image_file in "$picture_directory"/*.jpg; do
+    if [ -f "$image_file" ]; then
+        # Run exiftool and get the GPS Position
+        exif_info=$(exiftool "$image_file" | grep "GPS Position")
+
+        # Check if GPS Position information is present
+        if [ -n "$exif_info" ]; then
+            # Extract and process the GPS Position
+            gps_position=$(echo "$exif_info" | awk -F ': ' '{print $2}' | tr -d ' ' | sed 's/deg/°/g')
+
+            # Print the file name and GPS Position
+            echo "$(basename "$image_file"), $gps_position"
+        fi
+    fi
+done
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Working Directory: /home/icefly/Stack/Afbeeldingen/Vakantie/2023_Bali/Minder_en_dubbelop
+14926841-D0FA-4BEF-AAB2-53F59286EA4A.jpg, 8°15'52.06"S,115°3'57.30"E
+20230507_Denpasar_Ubud-1005_IMG_3102.jpg, 8°44'35.99"S,115°9'59.30"E
+20230507_Denpasar_Ubud-1415_IMG_3104.jpg, 8°30'44.27"S,115°15'30.71"E
+20230507_Denpasar_Ubud-1601_IMG_0395.jpg, 8°30'2.59"S,115°15'35.90"E
+20230507_Denpasar_Ubud-1609_IMG_3109.jpg, 8°30'1.87"S,115°15'36.20"E
+20230507_Denpasar_Ubud-1610_IMG_3110.jpg, 8°30'1.87"S,115°15'36.28"E
+20230507_Denpasar_Ubud-1655_IMG_3111.jpg, 8°30'2.54"S,115°15'35.57"E
+20230507_Denpasar_Ubud-1657_IMG_3114.jpg, 8°30'2.06"S,115°15'36.15"E
+20230507_Denpasar_Ubud-1658_IMG_3116.jpg, 8°30'2.01"S,115°15'36.34"E
+20230507_Denpasar_Ubud-1723_IMG_3119.jpg, 8°30'4.23"S,115°15'36.39"E
+20230507_Denpasar_Ubud-1724_IMG_0396.jpg, 8°30'4.46"S,115°15'36.39"E
+20230507_Denpasar_Ubud-1724_IMG_0397.jpg, 8°30'4.23"S,115°15'36.53"E
+20230507_Denpasar_Ubud-1734_IMG_0399.jpg, 8°30'15.62"S,115°15'37.27"E
+20230507_Denpasar_Ubud-1742_IMG_0400.jpg, 8°30'20.83"S,115°15'37.52"E
+20230507_Denpasar_Ubud-1801_IMG_3121.jpg, 8°30'18.93"S,115°15'30.62"E
+20230508_Ubud-0920_IMG_3124.jpg, 8°30'44.13"S,115°15'31.37"E
+20230508_Ubud-0922_IMG_0402.jpg, 8°30'44.17"S,115°15'31.37"E
+20230508_Ubud-1315_IMG_3127.jpg, 8°30'22.29"S,115°15'41.20"E
+20230508_Ubud-1316_IMG_0408.jpg, 8°30'21.97"S,115°15'41.31"E
+20230508_Ubud-1316_IMG_0409.jpg, 8°30'21.69"S,115°15'41.17"E
+20230508_Ubud-1316_IMG_3128.jpg, 8°30'22.27"S,115°15'41.17"E
+20230508_Ubud-1316_IMG_3129.jpg, 8°30'21.67"S,115°15'41.50"E
+20230508_Ubud-1317_IMG_3132.jpg, 8°30'21.51"S,115°15'41.61"E
+20230508_Ubud-1317_IMG_3133.jpg, 8°30'21.51"S,115°15'41.61"E
+20230508_Ubud-1318_IMG_0410.jpg, 8°30'21.45"S,115°15'41.34"E
+20230508_Ubud-1319_IMG_0411.jpg, 8°30'21.28"S,115°15'41.23"E
+20230508_Ubud-1323_IMG_3135.jpg, 8°30'21.35"S,115°15'41.14"E
+20230508_Ubud-1324_IMG_0414.jpg, 8°30'21.54"S,115°15'41.06"E
+20230508_Ubud-1338_IMG_3136.jpg, 8°30'24.43"S,115°15'45.76"E
+20230508_Ubud-1339_IMG_0416.jpg, 8°30'24.39"S,115°15'45.48"E
+20230508_Ubud-1340_IMG_0417.jpg, 8°30'24.42"S,115°15'45.59"E
+20230508_Ubud-1340_IMG_3138.jpg, 8°30'24.71"S,115°15'46.14"E
+20230508_Ubud-1344_IMG_0418.jpg, 8°30'24.47"S,115°15'46.58"E
+20230508_Ubud-1344_IMG_3139.jpg, 8°30'24.23"S,115°15'46.64"E
+20230508_Ubud-1344_IMG_3140.jpg, 8°30'24.27"S,115°15'46.64"E
+20230508_Ubud-1345_IMG_0419.jpg, 8°30'24.38"S,115°15'46.61"E
+20230508_Ubud-1346_IMG_0421.jpg, 8°30'25.02"S,115°15'47.10"E
+20230508_Ubud-1347_IMG_3141.jpg, 8°30'24.30"S,115°15'47.21"E
+20230508_Ubud-1356_IMG_3142.jpg, 8°30'28.53"S,115°15'52.08"E
+20230508_Ubud-1525_IMG_3145.jpg, 8°30'29.97"S,115°15'51.80"E
+20230508_Ubud-1758_IMG_3148.jpg, 8°30'13.24"S,115°15'23.87"E
+20230508_Ubud-1758_IMG_3150.jpg, 8°30'13.31"S,115°15'23.90"E
+20230509_Ubud-0712_IMG_3154.jpg, 8°30'49.74"S,115°15'28.65"E
+20230509_Ubud-0917_IMG_3157.jpg, 8°30'15.42"S,115°15'17.55"E
+20230509_Ubud-0933_IMG_3158.jpg, 8°30'2.86"S,115°15'16.89"E
+20230509_Ubud-1014_IMG_3159.jpg, 8°29'22.48"S,115°15'30.21"E
+20230509_Ubud-1129_IMG_3160.jpg, 8°29'22.42"S,115°15'29.91"E
+20230509_Ubud-1130_IMG_3163.jpg, 8°29'22.49"S,115°15'29.44"E
+20230509_Ubud-1659_IMG_0426.jpg, 8°30'43.64"S,115°15'30.87"E
+20230509_Ubud-1738_IMG_0428.jpg, 8°31'3.67"S,115°15'33.95"E
+20230509_Ubud-1738_IMG_0429.jpg, 8°31'3.70"S,115°15'33.89"E
+20230509_Ubud-1738_IMG_0430.jpg, 8°31'3.70"S,115°15'33.89"E
+20230510_Ubud-0932_IMG_0434.jpg, 8°31'7.43"S,115°15'36.89"E
+20230510_Ubud-0933_IMG_0435.jpg, 8°31'7.01"S,115°15'36.39"E
+20230510_Ubud-0933_IMG_0436.jpg, 8°31'7.01"S,115°15'36.39"E
+20230510_Ubud-0933_IMG_0437.jpg, 8°31'7.01"S,115°15'36.36"E
+20230510_Ubud-0933_IMG_0438.jpg, 8°31'7.01"S,115°15'36.36"E
+20230510_Ubud-0934_IMG_0441.jpg, 8°31'7.07"S,115°15'36.36"E
+20230510_Ubud-0934_IMG_0443.jpg, 8°31'7.22"S,115°15'35.49"E
+20230510_Ubud-0934_IMG_0444.jpg, 8°31'7.28"S,115°15'35.40"E
+20230510_Ubud-0935_IMG_0445.jpg, 8°31'7.70"S,115°15'35.87"E
+20230510_Ubud-0936_IMG_0446.jpg, 8°31'7.37"S,115°15'35.60"E
+20230510_Ubud-0937_IMG_0447.jpg, 8°31'7.24"S,115°15'34.30"E
+20230510_Ubud-0939_IMG_0449.jpg, 8°31'6.72"S,115°15'33.59"E
+20230510_Ubud-0945_IMG_0450.jpg, 8°31'4.20"S,115°15'32.74"E
+20230510_Ubud-0945_IMG_0451.jpg, 8°31'6.40"S,115°15'31.15"E
+20230510_Ubud-0945_IMG_3165.jpg, 8°31'6.40"S,115°15'31.28"E
+20230510_Ubud-0946_IMG_0452.jpg, 8°31'6.32"S,115°15'31.20"E
+20230510_Ubud-0948_IMG_0453.jpg, 8°31'6.58"S,115°15'30.65"E
+20230510_Ubud-0948_IMG_0454.jpg, 8°31'6.60"S,115°15'30.79"E
+20230510_Ubud-0954_IMG_0456.jpg, 8°31'7.00"S,115°15'29.86"E
+20230510_Ubud-0954_IMG_3167.jpg, 8°31'7.19"S,115°15'29.75"E
+20230510_Ubud-0954_IMG_3168.jpg, 8°31'7.17"S,115°15'29.75"E
+20230510_Ubud-0954_IMG_3169.jpg, 8°31'7.17"S,115°15'29.75"E
+20230510_Ubud-0954_IMG_3170.jpg, 8°31'7.14"S,115°15'29.88"E
+20230510_Ubud-0955_IMG_3171.jpg, 8°31'7.12"S,115°15'29.94"E
+20230510_Ubud-0955_IMG_3172.jpg, 8°31'7.12"S,115°15'29.94"E
+20230510_Ubud-1004_IMG_3173.jpg, 8°31'7.34"S,115°15'29.33"E
+20230510_Ubud-1004_IMG_3174.jpg, 8°31'7.34"S,115°15'29.33"E
+20230510_Ubud-1004_IMG_3175.jpg, 8°31'7.35"S,115°15'29.33"E
+20230510_Ubud-1004_IMG_3176.jpg, 8°31'7.35"S,115°15'29.33"E
+20230510_Ubud-1004_IMG_3177.jpg, 8°31'7.35"S,115°15'29.31"E
+20230510_Ubud-1004_IMG_3178.jpg, 8°31'7.33"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_0457.jpg, 8°31'7.39"S,115°15'29.28"E
+20230510_Ubud-1005_IMG_0458.jpg, 8°31'7.34"S,115°15'29.22"E
+20230510_Ubud-1005_IMG_0459.jpg, 8°31'7.33"S,115°15'29.20"E
+20230510_Ubud-1005_IMG_0460.jpg, 8°31'7.28"S,115°15'29.25"E
+20230510_Ubud-1005_IMG_3179.jpg, 8°31'7.32"S,115°15'29.25"E
+20230510_Ubud-1005_IMG_3181.jpg, 8°31'7.30"S,115°15'29.25"E
+20230510_Ubud-1005_IMG_3182.jpg, 8°31'7.30"S,115°15'29.25"E
+20230510_Ubud-1005_IMG_3183.jpg, 8°31'7.31"S,115°15'29.25"E
+20230510_Ubud-1005_IMG_3184.jpg, 8°31'7.32"S,115°15'29.25"E
+20230510_Ubud-1005_IMG_3185.jpg, 8°31'7.33"S,115°15'29.22"E
+20230510_Ubud-1005_IMG_3186.jpg, 8°31'7.32"S,115°15'29.20"E
+20230510_Ubud-1005_IMG_3192.jpg, 8°31'7.28"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_3193.jpg, 8°31'7.30"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_3194.jpg, 8°31'7.31"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_3195.jpg, 8°31'7.31"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_3196.jpg, 8°31'7.31"S,115°15'29.36"E
+20230510_Ubud-1005_IMG_3197.jpg, 8°31'7.31"S,115°15'29.36"E
+20230510_Ubud-1005_IMG_3198.jpg, 8°31'7.32"S,115°15'29.36"E
+20230510_Ubud-1005_IMG_3199.jpg, 8°31'7.38"S,115°15'29.33"E
+20230510_Ubud-1005_IMG_3200.jpg, 8°31'7.38"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_3202.jpg, 8°31'7.39"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_3203.jpg, 8°31'7.39"S,115°15'29.31"E
+20230510_Ubud-1005_IMG_3204.jpg, 8°31'7.39"S,115°15'29.33"E
+20230510_Ubud-1005_IMG_3205.jpg, 8°31'7.36"S,115°15'29.33"E
+20230510_Ubud-1005_IMG_3206.jpg, 8°31'7.36"S,115°15'29.33"E
+20230510_Ubud-1006_IMG_3207.jpg, 8°31'7.36"S,115°15'29.36"E
+20230510_Ubud-1006_IMG_3209.jpg, 8°31'7.34"S,115°15'29.28"E
+20230510_Ubud-1006_IMG_3210.jpg, 8°31'7.33"S,115°15'29.31"E
+20230510_Ubud-1006_IMG_3211.jpg, 8°31'7.32"S,115°15'29.28"E
+20230510_Ubud-1006_IMG_3213.jpg, 8°31'7.34"S,115°15'29.31"E
+20230510_Ubud-1006_IMG_3214.jpg, 8°31'7.37"S,115°15'29.31"E
+20230510_Ubud-1006_IMG_3215.jpg, 8°31'7.37"S,115°15'29.31"E
+20230510_Ubud-1006_IMG_3216.jpg, 8°31'7.38"S,115°15'29.28"E
+20230510_Ubud-1010_IMG_0461.jpg, 8°31'8.30"S,115°15'29.28"E
+20230510_Ubud-1010_IMG_0462.jpg, 8°31'8.48"S,115°15'29.31"E
+20230510_Ubud-1020_IMG_0463.jpg, 8°31'11.54"S,115°15'25.35"E
+20230510_Ubud-1021_IMG_0465.jpg, 8°31'11.50"S,115°15'25.35"E
+20230510_Ubud-1043_IMG_3217.jpg, 8°31'7.18"S,115°15'28.40"E
+20230510_Ubud-1047_IMG_0467.jpg, 8°31'4.89"S,115°15'31.92"E
+20230510_Ubud-1050_IMG_0469.jpg, 8°31'4.68"S,115°15'31.78"E
+20230510_Ubud-1050_IMG_3219.jpg, 8°31'4.88"S,115°15'31.37"E
+20230510_Ubud-1050_IMG_3221.jpg, 8°31'4.94"S,115°15'31.45"E
+20230510_Ubud-1231_IMG_3225.jpg, 8°30'44.38"S,115°15'31.20"E
+20230510_Ubud-1446_IMG_3231.jpg, 8°30'12.94"S,115°15'24.01"E
+20230510_Ubud-1508_IMG_0471.jpg, 8°30'6.17"S,115°15'26.72"E
+20230510_Ubud-1509_IMG_0473.jpg, 8°30'6.35"S,115°15'26.78"E
+20230510_Ubud-1510_IMG_0474.jpg, 8°30'6.30"S,115°15'26.72"E
+20230510_Ubud-1608_IMG_3236.jpg, 8°29'38.81"S,115°15'34.63"E
+20230510_Ubud-1638_IMG_3238.jpg, 8°30'12.45"S,115°15'24.11"E
+20230510_Ubud-1639_IMG_3239.jpg, 8°30'12.44"S,115°15'24.09"E
+20230510_Ubud-1932_IMG_3241.jpg, 8°30'35.07"S,115°15'48.97"E
+20230511_Ubud-0835_IMG_0477.jpg, 8°22'5.15"S,115°7'48.05"E
+20230511_Ubud-0836_IMG_0479.jpg, 8°22'4.94"S,115°7'48.07"E
+20230511_Ubud-0836_IMG_0480.jpg, 8°22'4.93"S,115°7'48.07"E
+20230511_Ubud-0911_IMG_0483.jpg, 8°22'9.20"S,115°7'48.21"E
+20230511_Ubud-0944_IMG_3252.jpg, 8°22'9.31"S,115°7'52.00"E
+20230511_Ubud-0953_IMG_0487.jpg, 8°22'11.78"S,115°7'50.71"E
+20230511_Ubud-0958_IMG_3255.jpg, 8°22'12.98"S,115°7'52.38"E
+20230511_Ubud-0958_IMG_3257.jpg, 8°22'13.00"S,115°7'52.47"E
+20230511_Ubud-1010_IMG_0491.jpg, 8°22'23.82"S,115°8'5.65"E
+20230511_Ubud-1024_IMG_0493.jpg, 8°22'29.43"S,115°8'15.04"E
+20230511_Ubud-1024_IMG_3260.jpg, 8°22'29.41"S,115°8'14.96"E
+20230511_Ubud-1028_IMG_3261.jpg, 8°22'28.73"S,115°8'16.77"E
+20230511_Ubud-1044_IMG_3262.jpg, 8°22'25.69"S,115°8'19.25"E
+20230511_Ubud-1044_IMG_3264.jpg, 8°22'25.67"S,115°8'19.25"E
+20230511_Ubud-1045_IMG_0497.jpg, 8°22'25.85"S,115°8'19.30"E
+20230511_Ubud-1100_IMG_3269.jpg, 8°22'17.53"S,115°8'13.48"E
+20230511_Ubud-1103_IMG_3271.jpg, 8°22'15.98"S,115°8'11.94"E
+20230511_Ubud-1104_IMG_0498.jpg, 8°22'15.79"S,115°8'12.08"E
+20230511_Ubud-1104_IMG_3272.jpg, 8°22'16.11"S,115°8'11.91"E
+20230511_Ubud-1116_IMG_3276.jpg, 8°22'16.72"S,115°8'5.29"E
+20230511_Ubud-1116_IMG_3277.jpg, 8°22'16.72"S,115°8'5.29"E
+20230511_Ubud-1136_IMG_3279.jpg, 8°22'18.38"S,115°8'2.71"E
+20230511_Ubud-1207_IMG_0500.jpg, 8°21'37.75"S,115°9'3.55"E
+20230511_Ubud-1210_IMG_0501.jpg, 8°21'38.44"S,115°9'2.53"E
+20230511_Ubud-1400_IMG_3288.jpg, 8°29'2.97"S,115°12'44.32"E
+20230511_Ubud-1401_IMG_0507.jpg, 8°29'2.86"S,115°12'44.48"E
+20230511_Ubud-1407_IMG_3291.jpg, 8°29'1.06"S,115°12'45.09"E
+20230511_Ubud-1409_IMG_0508.jpg, 8°29'0.66"S,115°12'44.84"E
+20230511_Ubud-1409_IMG_3293.jpg, 8°29'0.41"S,115°12'44.37"E
+20230511_Ubud-1410_IMG_3295.jpg, 8°29'0.35"S,115°12'44.43"E
+20230511_Ubud-1411_IMG_3297.jpg, 8°29'0.37"S,115°12'44.40"E
+20230511_Ubud-1414_IMG_3301.jpg, 8°28'59.38"S,115°12'44.26"E
+20230511_Ubud-1414_IMG_3303.jpg, 8°28'59.38"S,115°12'44.48"E
+20230511_Ubud-2006_IMG_3305.jpg, 8°30'42.89"S,115°15'29.91"E
+20230512_Ubud-1009_IMG_3309.jpg, 8°24'18.93"S,115°17'36.77"E
+20230512_Ubud-1010_IMG_3311.jpg, 8°24'18.73"S,115°17'36.09"E
+20230512_Ubud-1013_IMG_0511.jpg, 8°24'18.39"S,115°17'36.50"E
+20230512_Ubud-1021_IMG_0518.jpg, 8°24'16.75"S,115°17'35.95"E
+20230512_Ubud-1021_IMG_0519.jpg, 8°24'16.81"S,115°17'36.14"E
+20230512_Ubud-1021_IMG_3320.jpg, 8°24'16.71"S,115°17'36.17"E
+20230512_Ubud-1021_IMG_3321.jpg, 8°24'16.73"S,115°17'36.20"E
+20230512_Ubud-1021_IMG_3322.jpg, 8°24'16.74"S,115°17'36.20"E
+20230512_Ubud-1023_IMG_3326.jpg, 8°24'16.64"S,115°17'36.69"E
+20230512_Ubud-1025_IMG_0522.jpg, 8°24'16.73"S,115°17'36.91"E
+20230512_Ubud-1026_IMG_0523.jpg, 8°24'16.73"S,115°17'37.08"E
+20230512_Ubud-1032_IMG_0525.jpg, 8°24'16.85"S,115°17'36.23"E
+20230512_Ubud-1032_IMG_3330.jpg, 8°24'16.89"S,115°17'36.06"E
+20230512_Ubud-1033_IMG_3332.jpg, 8°24'16.69"S,115°17'36.01"E
+20230512_Ubud-1043_IMG_0528.jpg, 8°24'18.93"S,115°17'37.05"E
+20230512_Ubud-1045_IMG_0529.jpg, 8°24'18.55"S,115°17'36.56"E
+20230512_Ubud-1051_IMG_3336.jpg, 8°24'18.95"S,115°17'37.87"E
+20230512_Ubud-1051_IMG_3337.jpg, 8°24'18.95"S,115°17'37.87"E
+20230512_Ubud-1051_IMG_3338.jpg, 8°24'18.95"S,115°17'37.87"E
+20230512_Ubud-1058_IMG_0531.jpg, 8°24'17.40"S,115°17'34.74"E
+20230512_Ubud-1058_IMG_3341.jpg, 8°24'17.38"S,115°17'34.58"E
+20230512_Ubud-1117_IMG_0533.jpg, 8°25'54.60"S,115°16'43.22"E
+20230512_Ubud-1119_IMG_3344.jpg, 8°25'56.19"S,115°16'42.53"E
+20230512_Ubud-1234_IMG_0535.jpg, 8°31'22.86"S,115°17'11.51"E
+20230512_Ubud-1234_IMG_0536.jpg, 8°31'22.98"S,115°17'11.59"E
+20230512_Ubud-1234_IMG_3345.jpg, 8°31'23.11"S,115°17'11.23"E
+20230512_Ubud-1237_IMG_0537.jpg, 8°31'23.39"S,115°17'11.95"E
+20230512_Ubud-1239_IMG_3346.jpg, 8°31'23.82"S,115°17'11.86"E
+20230512_Ubud-1811_IMG_3360.jpg, 8°30'25.01"S,115°15'45.21"E
+20230512_Ubud-2321_IMG_0544.jpg, 8°30'44.14"S,115°15'30.87"E
+20230513_Ubud-1104_IMG_0545.jpg, 8°30'33.46"S,115°15'39.11"E
+20230513_Ubud-1105_IMG_3368.jpg, 8°30'33.77"S,115°15'38.97"E
+20230513_Ubud-1106_IMG_0548.jpg, 8°30'33.66"S,115°15'39.00"E
+20230513_Ubud-1106_IMG_0549.jpg, 8°30'33.58"S,115°15'39.00"E
+20230513_Ubud-1107_IMG_3370.jpg, 8°30'33.46"S,115°15'37.99"E
+20230513_Ubud-1111_IMG_0553.jpg, 8°30'33.43"S,115°15'37.19"E
+20230513_Ubud-1126_IMG_3372.jpg, 8°30'30.96"S,115°15'42.54"E
+20230513_Ubud-1457_IMG_3374.jpg, 8°30'15.81"S,115°15'17.66"E
+20230513_Ubud-1509_IMG_3378.jpg, 8°30'0.59"S,115°15'17.44"E
+20230513_Ubud-1510_IMG_3379.jpg, 8°30'0.60"S,115°15'17.44"E
+20230513_Ubud-1521_IMG_3381.jpg, 8°29'38.00"S,115°15'22.88"E
+20230513_Ubud-1528_IMG_3383.jpg, 8°29'24.82"S,115°15'29.94"E
+20230513_Ubud-1529_IMG_3384.jpg, 8°29'22.47"S,115°15'30.60"E
+20230513_Ubud-1532_IMG_3386.jpg, 8°29'18.37"S,115°15'30.68"E
+20230513_Ubud-1543_IMG_3389.jpg, 8°29'16.81"S,115°15'26.94"E
+20230513_Ubud-1543_IMG_3390.jpg, 8°29'18.01"S,115°15'26.94"E
+20230513_Ubud-1552_IMG_0555.jpg, 8°30'44.62"S,115°15'31.50"E
+20230513_Ubud-1604_IMG_3398.jpg, 8°29'20.13"S,115°15'26.50"E
+20230513_Ubud-1634_IMG_3401.jpg, 8°29'18.63"S,115°15'30.73"E
+20230513_Ubud-1636_IMG_3402.jpg, 8°29'20.34"S,115°15'30.46"E
+20230513_Ubud-1639_IMG_3406.jpg, 8°29'22.74"S,115°15'30.35"E
+20230513_Ubud-1703_IMG_3408.jpg, 8°29'23.29"S,115°15'30.08"E
+20230513_Ubud-1707_IMG_3412.jpg, 8°29'22.60"S,115°15'29.09"E
+20230513_Ubud-1708_IMG_3413.jpg, 8°29'22.33"S,115°15'28.59"E
+20230513_Ubud-1708_IMG_3415.jpg, 8°29'22.36"S,115°15'28.76"E
+20230513_Ubud-1708_IMG_3416.jpg, 8°29'22.62"S,115°15'29.42"E
+20230513_Ubud-1710_IMG_3418.jpg, 8°29'24.47"S,115°15'29.99"E
+20230513_Ubud-1719_IMG_3421.jpg, 8°29'35.13"S,115°15'23.07"E
+20230513_Ubud-1724_IMG_3423.jpg, 8°29'41.58"S,115°15'21.56"E
+20230513_Ubud-1730_IMG_3425.jpg, 8°29'53.16"S,115°15'19.03"E
+20230513_Ubud-1730_IMG_3426.jpg, 8°29'53.23"S,115°15'19.01"E
+20230513_Ubud-1730_IMG_3427.jpg, 8°29'53.72"S,115°15'19.17"E
+20230513_Ubud-1731_IMG_3428.jpg, 8°29'55.81"S,115°15'18.65"E
+20230513_Ubud-1734_IMG_3430.jpg, 8°30'0.69"S,115°15'17.52"E
+20230513_Ubud-1748_IMG_3435.jpg, 8°30'15.82"S,115°15'16.84"E
+20230513_Ubud-1803_IMG_3437.jpg, 8°30'32.47"S,115°15'31.97"E
+20230513_Ubud-1927_IMG_3439.jpg, 8°30'23.38"S,115°15'55.81"E
+20230513_Ubud-1927_IMG_3440.jpg, 8°30'23.69"S,115°15'55.73"E
+20230513_Ubud-1928_IMG_0557.jpg, 8°30'23.50"S,115°15'55.65"E
+20230513_Ubud-1929_IMG_0558.jpg, 8°30'23.55"S,115°15'55.67"E
+20230513_Ubud-1929_IMG_0559.jpg, 8°30'23.56"S,115°15'55.70"E
+20230513_Ubud-1930_IMG_0560.jpg, 8°30'23.41"S,115°15'55.65"E
+20230513_Ubud-1932_IMG_0561.jpg, 8°30'23.45"S,115°15'55.65"E
+20230513_Ubud-1935_IMG_0562.jpg, 8°30'23.47"S,115°15'55.76"E
+20230513_Ubud-2230_IMG_3443.jpg, 8°30'49.90"S,115°15'29.58"E
+20230514_Ubud_Sidemen-1033_IMG_0565.jpg, 8°30'44.54"S,115°15'30.87"E
+20230514_Ubud_Sidemen-1350_IMG_0567.jpg, 8°28'31.27"S,115°26'28.05"E
+20230514_Ubud_Sidemen-1417_IMG_3451.jpg, 8°28'30.78"S,115°26'27.61"E
+20230514_Ubud_Sidemen-1421_IMG_3453.jpg, 8°28'30.85"S,115°26'27.72"E
+20230514_Ubud_Sidemen-1547_IMG_3464.jpg, 8°28'31.12"S,115°26'27.72"E
+20230514_Ubud_Sidemen-1608_IMG_0572.jpg, 8°28'24.84"S,115°26'30.30"E
+20230514_Ubud_Sidemen-1634_IMG_3467.jpg, 8°28'31.67"S,115°26'26.87"E
+20230514_Ubud_Sidemen-1720_IMG_0573.jpg, 8°28'9.04"S,115°26'43.34"E
+20230514_Ubud_Sidemen-1720_IMG_0574.jpg, 8°28'8.92"S,115°26'43.40"E
+20230514_Ubud_Sidemen-1727_IMG_0576.jpg, 8°28'8.03"S,115°26'40.16"E
+20230514_Ubud_Sidemen-1740_IMG_3475.jpg, 8°27'53.94"S,115°26'52.08"E
+20230514_Ubud_Sidemen-1750_IMG_3476.jpg, 8°28'4.63"S,115°26'43.48"E
+20230514_Ubud_Sidemen-1803_IMG_3478.jpg, 8°28'23.23"S,115°26'37.58"E
+20230515_Sidemen-0609_IMG_3481.jpg, 8°28'31.19"S,115°26'27.99"E
+20230515_Sidemen-0624_IMG_3490.jpg, 8°28'30.85"S,115°26'27.72"E
+20230515_Sidemen-0627_IMG_3492.jpg, 8°28'30.54"S,115°26'28.54"E
+20230515_Sidemen-0627_IMG_3494.jpg, 8°28'30.60"S,115°26'28.54"E
+20230515_Sidemen-0735_IMG_3499.jpg, 8°28'30.80"S,115°26'27.72"E
+20230515_Sidemen-0750_IMG_3503.jpg, 8°28'31.70"S,115°26'26.59"E
+20230515_Sidemen-0752_IMG_3504.jpg, 8°28'31.74"S,115°26'26.56"E
+20230515_Sidemen-0919_IMG_3506.jpg, 8°28'24.89"S,115°26'35.71"E
+20230515_Sidemen-0920_IMG_0578.jpg, 8°28'24.75"S,115°26'35.76"E
+20230515_Sidemen-0920_IMG_0579.jpg, 8°28'24.75"S,115°26'35.71"E
+20230515_Sidemen-0920_IMG_0580.jpg, 8°28'24.73"S,115°26'35.76"E
+20230515_Sidemen-0952_IMG_3507.jpg, 8°28'2.82"S,115°26'31.12"E
+20230515_Sidemen-1002_IMG_3509.jpg, 8°28'5.19"S,115°26'20.19"E
+20230515_Sidemen-1004_IMG_0584.jpg, 8°28'5.38"S,115°26'20.00"E
+20230515_Sidemen-1006_IMG_3511.jpg, 8°28'5.06"S,115°26'19.97"E
+20230515_Sidemen-1009_IMG_3512.jpg, 8°28'3.08"S,115°26'19.89"E
+20230515_Sidemen-1016_IMG_0587.jpg, 8°28'9.33"S,115°26'16.35"E
+20230515_Sidemen-1020_IMG_0588.jpg, 8°28'11.30"S,115°26'15.63"E
+20230515_Sidemen-1020_IMG_0589.jpg, 8°28'11.34"S,115°26'15.66"E
+20230515_Sidemen-1025_IMG_0590.jpg, 8°28'13.52"S,115°26'14.07"E
+20230515_Sidemen-1025_IMG_3514.jpg, 8°28'13.66"S,115°26'13.82"E
+20230515_Sidemen-1026_IMG_0591.jpg, 8°28'13.49"S,115°26'13.85"E
+20230515_Sidemen-1026_IMG_0593.jpg, 8°28'13.54"S,115°26'13.65"E
+20230515_Sidemen-1027_IMG_3516.jpg, 8°28'14.78"S,115°26'13.41"E
+20230515_Sidemen-1027_IMG_3517.jpg, 8°28'14.74"S,115°26'13.41"E
+20230515_Sidemen-1030_IMG_0594.jpg, 8°28'15.59"S,115°26'11.40"E
+20230515_Sidemen-1030_IMG_0595.jpg, 8°28'15.60"S,115°26'11.40"E
+20230515_Sidemen-1030_IMG_0596.jpg, 8°28'15.57"S,115°26'11.37"E
+20230515_Sidemen-1031_IMG_0598.jpg, 8°28'15.58"S,115°26'11.37"E
+20230515_Sidemen-1032_IMG_0599.jpg, 8°28'16.55"S,115°26'11.10"E
+20230515_Sidemen-1033_IMG_0600.jpg, 8°28'18.77"S,115°26'9.48"E
+20230515_Sidemen-1035_IMG_3519.jpg, 8°28'22.24"S,115°26'8.66"E
+20230515_Sidemen-1037_IMG_0601.jpg, 8°28'22.53"S,115°26'8.49"E
+20230515_Sidemen-1037_IMG_3522.jpg, 8°28'22.58"S,115°26'8.33"E
+20230515_Sidemen-1038_IMG_0602.jpg, 8°28'22.51"S,115°26'8.38"E
+20230515_Sidemen-1040_IMG_3524.jpg, 8°28'23.10"S,115°26'8.00"E
+20230515_Sidemen-1050_IMG_0604.jpg, 8°28'27.86"S,115°26'5.69"E
+20230515_Sidemen-1051_IMG_0605.jpg, 8°28'27.76"S,115°26'5.66"E
+20230515_Sidemen-1059_IMG_3526.jpg, 8°28'30.75"S,115°26'5.14"E
+20230515_Sidemen-1103_IMG_3527.jpg, 8°28'32.76"S,115°26'5.19"E
+20230515_Sidemen-1104_IMG_3528.jpg, 8°28'33.52"S,115°26'5.39"E
+20230515_Sidemen-1547_IMG_3532.jpg, 8°28'30.48"S,115°26'28.24"E
+20230515_Sidemen-1637_IMG_3533.jpg, 8°28'30.96"S,115°26'28.57"E
+20230515_Sidemen-1638_IMG_3535.jpg, 8°28'30.96"S,115°26'28.62"E
+20230515_Sidemen-1648_IMG_3539.jpg, 8°28'32.67"S,115°26'30.63"E
+20230515_Sidemen-1648_IMG_3540.jpg, 8°28'32.64"S,115°26'30.41"E
+20230515_Sidemen-1649_IMG_3541.jpg, 8°28'32.43"S,115°26'30.22"E
+20230515_Sidemen-1702_IMG_3544.jpg, 8°28'31.13"S,115°26'27.77"E
+20230515_Sidemen-1827_IMG_3546.jpg, 8°28'31.58"S,115°26'24.61"E
+20230515_Sidemen-2001_IMG_0609.jpg, 8°28'26.96"S,115°26'26.26"E
+20230515_Sidemen-2005_IMG_3550.jpg, 8°28'26.98"S,115°26'26.23"E
+20230516_Sidemen-0711_IMG_3552.jpg, 8°28'24.75"S,115°26'35.63"E
+20230516_Sidemen-0819_IMG_0612.jpg, 8°27'50.33"S,115°26'35.85"E
+20230516_Sidemen-0819_IMG_3554.jpg, 8°27'50.64"S,115°26'35.60"E
+20230516_Sidemen-0823_IMG_3557.jpg, 8°27'49.53"S,115°26'37.80"E
+20230516_Sidemen-0828_IMG_0613.jpg, 8°27'49.93"S,115°26'42.80"E
+20230516_Sidemen-0836_IMG_3560.jpg, 8°27'49.04"S,115°26'44.97"E
+20230516_Sidemen-1406_IMG_0616.jpg, 8°28'9.07"S,115°26'43.43"E
+20230516_Sidemen-1406_IMG_0617.jpg, 8°28'9.02"S,115°26'43.37"E
+20230516_Sidemen-1735_IMG_0618.jpg, 8°28'31.53"S,115°26'29.31"E
+20230516_Sidemen-1735_IMG_0619.jpg, 8°28'31.81"S,115°26'29.67"E
+20230516_Sidemen-1735_IMG_0620.jpg, 8°28'32.01"S,115°26'30.02"E
+20230516_Sidemen-1736_IMG_0621.jpg, 8°28'32.02"S,115°26'30.02"E
+20230516_Sidemen-1737_IMG_0622.jpg, 8°28'32.04"S,115°26'30.02"E
+20230516_Sidemen-1746_IMG_3572.jpg, 8°28'29.86"S,115°26'29.04"E
+20230516_Sidemen-2048_IMG_0624.jpg, 8°28'31.86"S,115°26'26.48"E
+20230516_Sidemen-2048_IMG_0625.jpg, 8°28'31.82"S,115°26'26.51"E
+20230516_Sidemen-2122_IMG_3575.jpg, 8°28'31.55"S,115°26'26.87"E
+20230517_Sidemen_Munduk-0948_IMG_3579.jpg, 8°28'30.75"S,115°26'27.52"E
+20230517_Sidemen_Munduk-1312_IMG_0627.jpg, 8°18'49.29"S,115°10'55.75"E
+20230517_Sidemen_Munduk-1518_IMG_3589.jpg, 8°15'52.02"S,115°3'58.40"E
+20230517_Sidemen_Munduk-1635_IMG_3590.jpg, 8°16'20.71"S,115°3'45.91"E
+20230517_Sidemen_Munduk-1636_IMG_3591.jpg, 8°16'20.92"S,115°3'44.31"E
+20230517_Sidemen_Munduk-1638_IMG_3593.jpg, 8°16'21.01"S,115°3'43.08"E
+20230517_Sidemen_Munduk-1638_IMG_3594.jpg, 8°16'21.01"S,115°3'43.08"E
+20230517_Sidemen_Munduk-1641_IMG_3595.jpg, 8°16'21.29"S,115°3'39.95"E
+20230517_Sidemen_Munduk-1641_IMG_3596.jpg, 8°16'21.29"S,115°3'39.95"E
+20230517_Sidemen_Munduk-1646_IMG_3597.jpg, 8°16'21.36"S,115°3'40.47"E
+
+
+
+
 
 * Other scripts
 ** aandelen.py
