@@ -612,7 +612,7 @@ Switch to the work notes on my Virtual box distro at my work.
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 #+END_SRC
 
-Show information about the org-roam files, list the amount of org files, amount of lines and amount of words in the org-roam directory and daily subdirectory.
+Show information about the org-roam files and list the amount of org files, the amount of lines and words in the org-roam directory and daily subdirectory as well.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-show-org-roam-directory-info ()
   "Show information about the current org-roam directory and its 'daily' subdirectory. Files are counted, number of lines and words as well."

@@ -41,11 +41,11 @@ alias fzlog='fzf < $HOME/i3_log/"$(ls -Art $HOME/i3_log | tail -n1)"' # Fuzzy fi
 #check vulnerabilities microcode
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
-# sxiv
+# nsxiv
 # Thumbnail mode current directory. Sort by name and give output if files are selected (m)
-alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | sxiv -ftio"
+alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | nsxiv -ftio"
 # Including underlaying subdirectories
-alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sxiv -ftio"
+alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| nsxiv -ftio"
 
 # Dotfiles
 alias dotfiles='$HOME/.config/dotfiles.sh'                                  # Dotfiles repository Github

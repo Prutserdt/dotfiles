@@ -42,3 +42,6 @@
 *.color15: #ebdbb2
 *.color256: #1d2021
 *.color257: #ebdbb2
+
+Nsxiv.*.background: #000000
+Nsxiv.*.foreground: #ff757f
