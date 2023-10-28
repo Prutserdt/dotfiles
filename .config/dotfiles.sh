@@ -27,37 +27,41 @@ Options:
  3 pull and a commit/push
  4 exit
 [$USER@github.com/Prutserdt/dotfiles ~]:> "
-read PullPush
-case $PullPush in
-            [1])
-                echo --------------------------------------------------
-                echo
-                Push
-                notify-send -t 60000 "Push performed on the Github dotfiles repository"
-                ;;
-            [2])
-                echo --------------------------------------------------
-                echo
-                Pull
-                notify-send -t 60000 "Pull performed on the Github dotfiles repository"
-                ;;
-            [3])
-                echo --------------------------------------------------
-                echo
-                Pull
-                Push
-                notify-send -t 60000 "Pull and Push performed on the Github dotfiles repository"
-                ;;
-            [4])
-                echo --------------------------------------------------
-                echo
-                echo As you wish: exiting
-                notify-send -t 60000 "Exited the dotfiles synchronization with Github"
-                ;;
+read choice
 
-            *)  echo --------------------------------------------------
-                echo
-                echo "Invalid input, exiting"
-                notify-send -t 60000 "Invalid input added during the dotfiles synchronization with Github"
-            ;;
+case "$choice" in
+  1)
+    echo "Are you sure you want to push to Github? (y/n)"
+    read confirm
+    if [ "$confirm" = "y" ]; then
+      Push
+    else
+      echo "Push operation canceled."
+    fi
+    ;;
+  2)
+    echo "Are you sure you want to pull from Github? This will overwrite all of your local files. (y/n)"
+    read confirm
+    if [ "$confirm" = "y" ]; then
+      Pull
+    else
+      echo "Pull operation canceled."
+    fi
+    ;;
+  3)
+    echo "Are you sure you want to pull and commit/push? (y/n)"
+    read confirm
+    if [ "$confirm" = "y" ]; then
+      Pull
+      Push
+    else
+      echo "Pull and commit/push operation canceled."
+    fi
+    ;;
+  4)
+    exit
+    ;;
+  *)
+    echo "Invalid option. Please select a valid option (1-4)."
+    ;;
 esac

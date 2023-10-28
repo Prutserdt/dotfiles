@@ -161,6 +161,7 @@ keys = [
     Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR], "p", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
+    Key([mR, "shift"], "p", lazy.spawn(expanduser("~/.config/dm_move_images.sh"))), # show location of picture in google maps
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
     Key([mR], "t", lazy.spawn(expanduser("~/.config/dmenuthunar.sh"))), # related to 'directories'
@@ -272,7 +273,7 @@ screens = [
                 widget.Notify(foreground="#ff966c"),
                 ScrollableTextWidget(file_path="~/.config/notify.log", foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
-                widget.QuickExit(foreground="#888888"),
+                #widget.QuickExit(foreground="#888888"),
                 # uncomment for battery, Lenovo Thinkpad
                 #widget.Battery(
                 #    battery=1,

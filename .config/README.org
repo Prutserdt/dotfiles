@@ -19,6 +19,8 @@
   - [[#clipboard_dmsh][clipboard_dm.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
+  - [[#dmenuappssh-1][dmenuapps.sh]]
+  - [[#dmenubackupsh-1][dmenubackup.sh]]
   - [[#dmenuemacssh][dmenuemacs.sh]]
   - [[#dmenuinternetsh][dmenuinternet.sh]]
   - [[#dmenukillsh][dmenukill.sh]]
@@ -33,6 +35,7 @@
 - [[#pictures-manipulation-scripts][Pictures manipulation scripts]]
   - [[#dm_image_to_maps][dm_image_to_maps]]
   - [[#get-gps-coordinates-in-google-maps-format-for-all-jpg-files-in-directory][Get gps coordinates in Google maps format for all .jpg files in directory]]
+  - [[#dm_move_images][dm_move_images]]
 - [[#other-scripts][Other scripts]]
   - [[#aandelenpy][aandelen.py]]
   - [[#bitcoin_notificationpy][bitcoin_notification.py]]
@@ -71,7 +74,7 @@ This document is a note-to-self about my scripts on my GNU/Linux system and is m
 * My dmenu scripts
 
 ** clipboard_dm.sh
-A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to RAM and therefor are not permanent, after a reboot the content will be gone.
+A tool to show/save/open clipboards via dmenu. The clipboard contents are saved to RAM (/dev/shm) and therefore not permanent, after a reboot the content will be gone.
 
 #+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/bash
@@ -82,12 +85,15 @@ A tool to show/save/open clipboards via dmenu. The clipboard contents are saved 
 #+BEGIN_SRC bash :tangle clipboard_dm.sh :padline no :tangle-mode (identity #o755) :eval never
 
 # Define the clipboard directory, in the ram
-clipboard_dir="$XDG_RUNTIME_DIR/temp/clipboard"
+clipboard_dir="/dev/shm/temp/clipboard"
 
 # Create the directory if it doesn't exist
 mkdir -p "$clipboard_dir"
 
 notify-send -t 60000 "Clipboard management opened"
+
+# Go to a RAM directory, is dit wel nodig:
+cd /dev/shm
 
 while true; do
     # Use dmenu to choose an action from a list
@@ -254,7 +260,50 @@ notify-send -t 60000 "Running dmenuapps.sh" &&
 chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
 notify-send -t 60000 "Starting application: " "$chosen" &&
 $chosen
+#+END_SRC
 
+** dmenubackup.sh
+Make a backup of the current dmenu version.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755) :eval never
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+END_SRC
+
+The *_stable name will be the new stable version of dmenu.
+#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755) :eval never
+notify-send -t 60000 "Running dmenubackup.sh" &&
+echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    rm -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    mkdir $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    cp -r $HOME/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
+    notify-send -t 60000 "Thank you. A backup of dmenu was made to"
+else
+    echo No
+    notify-send -t 60000 "Exiting dmenubackup.sh" "No backup was made"
+fi
+#+END_SRC
+
+** dmenuapps.sh
+My app picker. A simple script to select which application to start via dmenu.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+END_SRC
+
+A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
+#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
+notify-send -t 60000 "Running dmenuapps.sh" &&
+chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
+notify-send -t 60000 "Starting application: " "$chosen" &&
+$chosen
 #+END_SRC
 
 ** dmenubackup.sh
@@ -661,7 +710,6 @@ if [ -n "$selected_directory" ]; then
 fi
 #+end_src
 
-
 ** Get gps coordinates in Google maps format for all .jpg files in directory
 
 #+begin_src  shell :results output
@@ -697,8 +745,80 @@ for image_file in "$picture_directory"/*.jpg; do
 done
 #+end_src
 
+** dm_move_images
+A script that will select images and move them to a subdirectory. This script required dmenu, zenity, and nsxiv.
 
+#+BEGIN_SRC sh :tangle dm_move_images.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
 
+# Use dmenu to select the directory containing your images
+selected_directory=$(find "$HOME/Downloads" -maxdepth 1 -type d | sort | dmenu -c -bw 2 -l 40 -p "Select a directory for pictures which you want to move to the subdir Minder_en_dubbelop:")
+
+# Check if a directory was selected
+if [ -n "$selected_directory" ]; then
+    # Define the subdirectory
+    subdirectory="$selected_directory/Minder_en_dubbelop"
+
+    # Check if the "Minder_en_dubbelop" subdirectory exists
+    if [ -d "$subdirectory" ]; then
+        zenity --warning --title="Warning" --text="The 'Minder_en_dubbelop' subdirectory already exists. Selected files will be moved to this directory."
+
+        # Sleep for a moment to allow the user to see the warning
+        sleep 2
+    fi
+
+    # Create the subdirectory if it doesn't exist
+    if [ ! -d "$subdirectory" ]; then
+        mkdir -p "$subdirectory"
+    fi
+
+    # Create a temporary file to store selected files
+    temp_file=$(mktemp)
+
+    while true; do
+        # Give the user information on how to select the image in nsxiv
+        zenity --question --title="Reminder" --text="Please select the pictures in nsxiv by pressing 'm' to move the files to a subdirectory, or exit by pressing 'q'.\n\nDo you want to continue?"
+
+        # Check the user's response to the question dialog
+        response=$?
+
+        if [ $response -eq 1 ]; then
+            # User clicked "No," exit the loop
+            break
+        fi
+
+        # Use find to locate image files in the selected directory
+        image_files=$(find "$selected_directory" -maxdepth 1 -type f \( -iname '*.jpeg' -o -iname '*.jpg' \) | sort)
+
+        # Use nsxiv to display the images in the selected directory and allow you to choose one
+        selected_image=$(echo "$image_files" | nsxiv -ftio)
+
+        # Check if the selected image is not empty
+        if [ -n "$selected_image" ]; then
+            # Add the selected image to the list of selected files
+            echo "$selected_image" >> "$temp_file"
+        fi
+    done
+
+    # Move all selected files to the "Minder_en_dubbelop" subdirectory
+    while IFS= read -r file; do
+        mv "$file" "$subdirectory"
+    done < "$temp_file"
+
+    # Notify the user of the file moving result and count
+    count=$(wc -l < "$temp_file")
+    if [ $count -gt 0 ]; then
+        zenity --info --title="Files Moved" --text="Moved $count file(s) to $subdirectory."
+    else
+        zenity --info --title="No Files Moved" --text="No files were moved."
+    fi
+
+    # Remove the temporary file
+    rm "$temp_file"
+fi
+#+end_src
 
 
 * Other scripts
@@ -1141,40 +1261,45 @@ Options:
 
 The read command will take the imput that the user gives from within the terminal and the case statement will perform the push/pull/exit commands. That's all.
 #+BEGIN_SRC sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
-read PullPush
-case $PullPush in
-            [1])
-                echo --------------------------------------------------
-                echo
-                Push
-                notify-send -t 60000 "Push performed on the Github dotfiles repository"
-                ;;
-            [2])
-                echo --------------------------------------------------
-                echo
-                Pull
-                notify-send -t 60000 "Pull performed on the Github dotfiles repository"
-                ;;
-            [3])
-                echo --------------------------------------------------
-                echo
-                Pull
-                Push
-                notify-send -t 60000 "Pull and Push performed on the Github dotfiles repository"
-                ;;
-            [4])
-                echo --------------------------------------------------
-                echo
-                echo As you wish: exiting
-                notify-send -t 60000 "Exited the dotfiles synchronization with Github"
-                ;;
+read choice
 
-            *)  echo --------------------------------------------------
-                echo
-                echo "Invalid input, exiting"
-                notify-send -t 60000 "Invalid input added during the dotfiles synchronization with Github"
-            ;;
+case "$choice" in
+  1)
+    echo "Are you sure you want to push to Github? (y/n)"
+    read confirm
+    if [ "$confirm" = "y" ]; then
+      Push
+    else
+      echo "Push operation canceled."
+    fi
+    ;;
+  2)
+    echo "Are you sure you want to pull from Github? This will overwrite all of your local files. (y/n)"
+    read confirm
+    if [ "$confirm" = "y" ]; then
+      Pull
+    else
+      echo "Pull operation canceled."
+    fi
+    ;;
+  3)
+    echo "Are you sure you want to pull and commit/push? (y/n)"
+    read confirm
+    if [ "$confirm" = "y" ]; then
+      Pull
+      Push
+    else
+      echo "Pull and commit/push operation canceled."
+    fi
+    ;;
+  4)
+    exit
+    ;;
+  ,*)
+    echo "Invalid option. Please select a valid option (1-4)."
+    ;;
 esac
+
 #+END_SRC
 
 ** kbswitch
@@ -1425,24 +1550,27 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A temporary directory is made in the system RAM. The files for this script will be stored there. The advantage is that RAM is very quick for read/writing and after a reboot the files are gone. There is no need to save these files.
 #+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
-mkdir $XDG_RUNTIME_DIR/temp &
+ramdir="/dev/shm/temp"
+mkdir $ramdir &
 #+END_SRC
 
-The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the ~$XDG_RUNTIME_DIR/temp~ is selected and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. NOTE: the next screenshot will overwrite the jpg and txt file.
+The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the links to the picture and textfile are created and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. NOTE: the next screenshot will overwrite the jpg and txt file.
 #+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text" &&
-xfce4-screenshooter -r -s $XDG_RUNTIME_DIR/temp/wismij.jpg &&
+screenshot_pic="$ramdir/wismij.jpg"
+screenshot_txt="$ramdir/wismij"
+xfce4-screenshooter -r -s $screenshot_pic &&
 #+END_SRC
 
 The tesseract program is converting the picture to text and is saved in the RAM directory as 'wismij', which is actually 'wismij.txt'.
 #+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
-tesseract $XDG_RUNTIME_DIR/temp/wismij.jpg $XDG_RUNTIME_DIR/temp/wismij &&
+tesseract $screenshot_pic $screenshot_txt &&
 #+END_SRC
 
 Finally the textfile is catted and piped to the system clipboard with xclip. The -sel flag selects the X selection to use and ~clip~ stands for clipboard, where the text will be stored. Ready to be pasted when needed.
 #+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
-cat $XDG_RUNTIME_DIR/temp/wismij.txt | xclip -sel clip &&
-notify-send -t 60000 "Text created from screenshot" "$(cat $XDG_RUNTIME_DIR/temp/wismij.txt)"
+cat $screenshot_txt | xclip -sel clip &&
+notify-send -t 60000 "Text created from screenshot" "$(cat ${ramdir}/wismij.txt)"
 #+END_SRC
 
 ** stack_startup.sh

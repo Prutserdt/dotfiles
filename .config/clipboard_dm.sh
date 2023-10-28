@@ -2,12 +2,15 @@
 # NOTE: This file is generated from ~/.config/README.org
 #       Please only edit that file and org-babel-tangle (emacs)
 # Define the clipboard directory, in the ram
-clipboard_dir="$XDG_RUNTIME_DIR/temp/clipboard"
+clipboard_dir="/dev/shm/temp/clipboard"
 
 # Create the directory if it doesn't exist
 mkdir -p "$clipboard_dir"
 
 notify-send -t 60000 "Clipboard management opened"
+
+# Go to a RAM directory, is dit wel nodig:
+cd /dev/shm
 
 while true; do
     # Use dmenu to choose an action from a list
