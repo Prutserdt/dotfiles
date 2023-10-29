@@ -31,13 +31,7 @@ read choice
 
 case "$choice" in
   1)
-    echo "Are you sure you want to push to Github? (y/n)"
-    read confirm
-    if [ "$confirm" = "y" ]; then
       Push
-    else
-      echo "Push operation canceled."
-    fi
     ;;
   2)
     echo "Are you sure you want to pull from Github? This will overwrite all of your local files. (y/n)"

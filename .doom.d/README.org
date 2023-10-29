@@ -153,6 +153,7 @@ The vterm-toggle package.
 
 A chatgpt package gptel.
 #+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
+;; gptel is old, and will remove it later.
 (package! gptel)
 #+END_SRC
 
@@ -259,11 +260,15 @@ The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yan
 (setq! evil-want-Y-yank-to-eol nil)
 #+END_SRC
 
-I want to use the =undo-redo= package in evil mode and therefore I add the keybinding to =U= here.
+I want to use the =undo-redo= package in evil mode and therefore I add the keybinding to =U= here. Another addition to the default doom evil mode is that I want to use =[= and =]= to switch buffers.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo))
-#+END_SRC
+  (define-key evil-normal-state-map "U" 'undo-redo)
+  (define-key evil-normal-state-map "]" 'next-buffer)
+  (define-key evil-normal-state-map "[" 'previous-buffer))
+;;  (key-chord-define evil-normal-state-map "sa" (lambda () (interactive) (switch-to-buffer "*scratch*"))))
+
+#+end_src
 
 Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. It pops right out. A white bar is set for insert mode and a hollow orange cursor for visual mode. This helps to differentiate between normal/insert/visual mode.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -329,6 +334,14 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next to that I add a few myself.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (map! :leader
+      :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
+    (:prefix ("c") ;; Default Doom keybinding, 
+        (:prefix ("h" . "ChatGPT, GPTel options")
+            :desc "ChatGPT of selected region"   "a" #'gptel-send
+            :desc "Open ChatGPT in new buffer"   "A" #'gptel
+            :desc "gptel-menu"                   "m" #'gptel-menu
+            :desc "API for LLM interaction"      "R" #'gptel-request
+            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         (:prefix ("a" . "Arduino IDE")
@@ -381,14 +394,7 @@ Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
-        :desc "UI in browser"                    "u" #'org-roam-ui-mode)
-    (:prefix ("s") ;; Default Doom keybinding
-        (:prefix ("c" . "ChatGPT options")
-            :desc "ChatGPT"                      "c" #'gptel
-        ;;    :desc "chat with personal notes"     "k" #'khoj
-            :desc "menu"                         "m" #'gptel-menu
-            :desc "rewrite"                      "r" #'gptel-rewrite-menu
-            :desc "send"                         "s" #'gptel-send)))
+        :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 #+END_SRC
 
 I want to use the escape key to exit keychords, similar to C-g. Let's see if this will give conflicts somewhere else, for now it seems to work 😌.

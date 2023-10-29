@@ -19,6 +19,7 @@
 
 (package! vterm-toggle)
 
+;; gptel is old, and will remove it later.
 (package! gptel)
 
 (unpin! org-roam) ; unpinning is necessary for Room emacs according to de developer of org-roam-ui

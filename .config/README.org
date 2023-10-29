@@ -711,7 +711,6 @@ fi
 #+end_src
 
 ** Get gps coordinates in Google maps format for all .jpg files in directory
-
 #+begin_src  shell :results output
 #!/bin/bash
 
@@ -1265,13 +1264,7 @@ read choice
 
 case "$choice" in
   1)
-    echo "Are you sure you want to push to Github? (y/n)"
-    read confirm
-    if [ "$confirm" = "y" ]; then
       Push
-    else
-      echo "Push operation canceled."
-    fi
     ;;
   2)
     echo "Are you sure you want to pull from Github? This will overwrite all of your local files. (y/n)"
@@ -1622,7 +1615,6 @@ done < $DIR_FILE
 #+END_SRC
 
 * Unused scripts
-
 Note: the following code blocks are not being tangled and not part of my current system.
 
 ** aandelen.sh
@@ -1901,7 +1893,6 @@ Simple cheat code for 0ad. Does not properly work.
 #+END_SRC
 
 * Tips and tricks
-
 ** Fetch all scrips of ~/.config by this code block
 The next code block will give the output of all of the ~*.sh~ scripts of the ~~/.config~ as separate code blocks. Very handy to import all of 'em.
 

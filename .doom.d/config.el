@@ -50,7 +50,10 @@
 (setq! evil-want-Y-yank-to-eol nil)
 
 (after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo))
+  (define-key evil-normal-state-map "U" 'undo-redo)
+  (define-key evil-normal-state-map "]" 'next-buffer)
+  (define-key evil-normal-state-map "[" 'previous-buffer))
+;;  (key-chord-define evil-normal-state-map "sa" (lambda () (interactive) (switch-to-buffer "*scratch*"))))
 
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
@@ -88,6 +91,14 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 
 (map! :leader
+      :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
+    (:prefix ("c") ;; Default Doom keybinding, 
+        (:prefix ("h" . "ChatGPT, GPTel options")
+            :desc "ChatGPT of selected region"   "a" #'gptel-send
+            :desc "Open ChatGPT in new buffer"   "A" #'gptel
+            :desc "gptel-menu"                   "m" #'gptel-menu
+            :desc "API for LLM interaction"      "R" #'gptel-request
+            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         (:prefix ("a" . "Arduino IDE")
@@ -140,14 +151,7 @@
         :desc "Sync database"                    "S" #'org-roam-db-sync
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
-        :desc "UI in browser"                    "u" #'org-roam-ui-mode)
-    (:prefix ("s") ;; Default Doom keybinding
-        (:prefix ("c" . "ChatGPT options")
-            :desc "ChatGPT"                      "c" #'gptel
-        ;;    :desc "chat with personal notes"     "k" #'khoj
-            :desc "menu"                         "m" #'gptel-menu
-            :desc "rewrite"                      "r" #'gptel-rewrite-menu
-            :desc "send"                         "s" #'gptel-send)))
+        :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 
