@@ -2,6 +2,7 @@
 #       Please only edit that file and org-babel-tangle (Emacs)
 
 import psutil, subprocess, os
+
 from typing import List
 from libqtile import bar, layout, widget, hook
 from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
@@ -60,6 +61,8 @@ def open_last_notification(qtile):
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
 aR = "mod5"                       # Right alt key, dedicated to opening of files
+
+# Declare the variable for the file path
 emacs_script = expanduser("~/.config/qtile/open_emacs.py")
 home = os.path.expanduser("~")
 
@@ -142,6 +145,7 @@ keys = [
     Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
 
     # Open applications
+
     Key([mR], "a",
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
         lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),

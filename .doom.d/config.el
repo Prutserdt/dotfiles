@@ -67,6 +67,8 @@
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
+;;(add-hook 'python-mode-hook #'(lambda () (setq flycheck-checker 'python-pylint)))
+
 (setq confirm-kill-emacs nil)
 
 (use-package! vterm-toggle
@@ -89,6 +91,8 @@
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
+;;(setq gpt-openai-engine "gpt-4") ;; this does not work, gpt-4 not available yet
+(setq gpt-openai-engine "gpt-4-1106-preview")
 
 (map! :leader
       :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))

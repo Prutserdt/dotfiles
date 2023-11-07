@@ -19,8 +19,6 @@
   - [[#clipboard_dmsh][clipboard_dm.sh]]
   - [[#dmenuappssh][dmenuapps.sh]]
   - [[#dmenubackupsh][dmenubackup.sh]]
-  - [[#dmenuappssh-1][dmenuapps.sh]]
-  - [[#dmenubackupsh-1][dmenubackup.sh]]
   - [[#dmenuemacssh][dmenuemacs.sh]]
   - [[#dmenuinternetsh][dmenuinternet.sh]]
   - [[#dmenukillsh][dmenukill.sh]]
@@ -288,49 +286,6 @@ else
 fi
 #+END_SRC
 
-** dmenuapps.sh
-My app picker. A simple script to select which application to start via dmenu.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+END_SRC
-
-A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
-#+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenuapps.sh" &&
-chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
-notify-send -t 60000 "Starting application: " "$chosen" &&
-$chosen
-#+END_SRC
-
-** dmenubackup.sh
-Make a backup of the current dmenu version.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755) :eval never
-#!/bin/bash
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+END_SRC
-
-The *_stable name will be the new stable version of dmenu.
-#+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenubackup.sh" &&
-echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-    rm -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    mkdir $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    cp -r $HOME/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    notify-send -t 60000 "Thank you. A backup of dmenu was made to"
-else
-    echo No
-    notify-send -t 60000 "Exiting dmenubackup.sh" "No backup was made"
-fi
-#+END_SRC
 
 ** dmenuemacs.sh
 Bookmarkst to textfiles picked by dmenu.
@@ -880,14 +835,17 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     """Adding CSV data to the general dataframe,
        different CSVs can be used, the delimter must be set,
        and only two columns are imported to the dataframe"""
+    print(filename)
+    print()
     global df  # This dataframe will be used outside of this def, so make it global
     dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
-    dfx.columns = [OmsCol, EurCol] # Harmonizing column names
-    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]  #  Removal of thousand separator
-    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]] #  Change comma to point
-    dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)     # Change the Euro column to integer.
-    df = pd.concat([df, dfx])    # Add the temp dataframe to dataframe
-    print('=' * 40 + "\n", dfx)  # For debugging
+    dfx.columns = [OmsCol, EurCol]
+    dfx = dfx.dropna(subset=[EurCol])  # Exclude rows with NaN values in the Euro column
+    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]
+    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]]
+    dfx[EurCol] = dfx[EurCol].astype(float).apply(int)
+    df = pd.concat([df, dfx])
+    print('=' * 40 + "\n", dfx)
 #+END_SRC
 
 The filenames and path of the csv files are generated here.
@@ -912,7 +870,7 @@ Creation of dataframe and adding data of two portfolios to the dataframe.
 #+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 df = pd.DataFrame() # Create a new dataframe
 AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
-df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
+#df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, not needed anymore since the csv file was modified in layout by the Rabobank
 AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
 # Create a new dataframe with surplus value house and Cash amount
 d = {

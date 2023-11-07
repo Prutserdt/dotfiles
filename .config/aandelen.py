@@ -42,14 +42,17 @@ def AddCSVtoDataFrame(filename, delimiter, column1, column2):
     """Adding CSV data to the general dataframe,
        different CSVs can be used, the delimter must be set,
        and only two columns are imported to the dataframe"""
+    print(filename)
+    print()
     global df  # This dataframe will be used outside of this def, so make it global
     dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
-    dfx.columns = [OmsCol, EurCol] # Harmonizing column names
-    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]  #  Removal of thousand separator
-    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]] #  Change comma to point
-    dfx[EurCol] = (dfx[EurCol].astype(float)).apply(int)     # Change the Euro column to integer.
-    df = pd.concat([df, dfx])    # Add the temp dataframe to dataframe
-    print('=' * 40 + "\n", dfx)  # For debugging
+    dfx.columns = [OmsCol, EurCol]
+    dfx = dfx.dropna(subset=[EurCol])  # Exclude rows with NaN values in the Euro column
+    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]
+    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]]
+    dfx[EurCol] = dfx[EurCol].astype(float).apply(int)
+    df = pd.concat([df, dfx])
+    print('=' * 40 + "\n", dfx)
 
 fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
 searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
@@ -65,7 +68,7 @@ AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend colu
 
 df = pd.DataFrame() # Create a new dataframe
 AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
-df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, it is empty
+#df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, not needed anymore since the csv file was modified in layout by the Rabobank
 AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
 # Create a new dataframe with surplus value house and Cash amount
 d = {

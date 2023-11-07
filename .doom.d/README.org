@@ -90,7 +90,7 @@ NOTES: some packages that should be installed on the system are, =python-pytest=
        :lang
        emacs-lisp          ; drown in parentheses
        (org +pretty +roam2); organize your plain life in plain text
-       (python +lsp +pyenv)       ; beautiful is better than ugly
+       (python +lsp +pyenv); beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
 
@@ -295,6 +295,11 @@ Arduino .ino files are a type of C++ code. Let's help Emacs remember this by set
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+END_SRC
 
+A Python mode hook to set the checker explicitly, see [[https://github.com/flycheck/flycheck/issues/185#issuecomment-22289167][this post]].
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+;;(add-hook 'python-mode-hook #'(lambda () (setq flycheck-checker 'python-pylint)))
+#+END_SRC
+
 No more conformation messages whilst closing emacs.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq confirm-kill-emacs nil)
@@ -328,6 +333,8 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
+;;(setq gpt-openai-engine "gpt-4") ;; this does not work, gpt-4 not available yet
+(setq gpt-openai-engine "gpt-4-1106-preview")
 #+END_SRC
 
 ** Custom keybindings

@@ -39,6 +39,7 @@ A note is added to ~config.py~ which reminds *not* to edit this file directly.
 My configuration requires some modules to be loaded. These are all default configuration settings of Qtile.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 import psutil, subprocess, os
+
 from typing import List
 from libqtile import bar, layout, widget, hook
 from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
@@ -110,6 +111,8 @@ Some variables are declared. The left super key, right super key and right alt k
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
 aR = "mod5"                       # Right alt key, dedicated to opening of files
+
+# Declare the variable for the file path
 emacs_script = expanduser("~/.config/qtile/open_emacs.py")
 home = os.path.expanduser("~")
 #+END_SRC
@@ -227,6 +230,7 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
 Right super key to open applications. Shift is used to update the application.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
     # Open applications
+
     Key([mR], "a",
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
         lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),
