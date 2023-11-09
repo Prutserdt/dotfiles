@@ -49,12 +49,6 @@
 
 (setq! evil-want-Y-yank-to-eol nil)
 
-(after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo)
-  (define-key evil-normal-state-map "]" 'next-buffer)
-  (define-key evil-normal-state-map "[" 'previous-buffer))
-;;  (key-chord-define evil-normal-state-map "sa" (lambda () (interactive) (switch-to-buffer "*scratch*"))))
-
 (setq evil-normal-state-cursor '(box "tomato")
       evil-insert-state-cursor '(bar "white")
       evil-visual-state-cursor '(hollow "orange"))
@@ -94,9 +88,14 @@
 ;;(setq gpt-openai-engine "gpt-4") ;; this does not work, gpt-4 not available yet
 (setq gpt-openai-engine "gpt-4-1106-preview")
 
+(after! evil
+  (define-key evil-normal-state-map "U" 'undo-redo)
+  (define-key evil-normal-state-map "]" 'next-buffer)
+  (define-key evil-normal-state-map "[" 'previous-buffer))
+
 (map! :leader
       :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
-    (:prefix ("c") ;; Default Doom keybinding, 
+    (:prefix ("c") ;; Default Doom keybinding,
         (:prefix ("h" . "ChatGPT, GPTel options")
             :desc "ChatGPT of selected region"   "a" #'gptel-send
             :desc "Open ChatGPT in new buffer"   "A" #'gptel
@@ -158,6 +157,8 @@
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
+
+(global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
 
 ;;(org-babel-do-load-languages
 ;; 'org-babel-load-languages

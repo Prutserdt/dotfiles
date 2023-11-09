@@ -260,16 +260,6 @@ The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yan
 (setq! evil-want-Y-yank-to-eol nil)
 #+END_SRC
 
-I want to use the =undo-redo= package in evil mode and therefore I add the keybinding to =U= here. Another addition to the default doom evil mode is that I want to use =[= and =]= to switch buffers.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo)
-  (define-key evil-normal-state-map "]" 'next-buffer)
-  (define-key evil-normal-state-map "[" 'previous-buffer))
-;;  (key-chord-define evil-normal-state-map "sa" (lambda () (interactive) (switch-to-buffer "*scratch*"))))
-
-#+end_src
-
 Another trick to make the cursor stand out more in Evil mode is to use the color tomato for the cursor in normal mode. It pops right out. A white bar is set for insert mode and a hollow orange cursor for visual mode. This helps to differentiate between normal/insert/visual mode.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq evil-normal-state-cursor '(box "tomato")
@@ -338,11 +328,22 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 #+END_SRC
 
 ** Custom keybindings
-Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next to that I add a few myself.
+Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, which is not enough!
+
+*** Evil keybindings
+I want to use the =undo-redo= package in Evil mode and therefore I add the keybinding to =U= here. Another addition to the default Doom Evil mode is that I want to use =[= and =]= to switch buffers.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(after! evil
+  (define-key evil-normal-state-map "U" 'undo-redo)
+  (define-key evil-normal-state-map "]" 'next-buffer)
+  (define-key evil-normal-state-map "[" 'previous-buffer))
+#+end_src
+
+The following are keybindings that are bound to my leader key, which is =space=, the default leader key in Doom Emacs that uses the Evil, which is mimicking Vim .
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (map! :leader
       :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
-    (:prefix ("c") ;; Default Doom keybinding, 
+    (:prefix ("c") ;; Default Doom keybinding,
         (:prefix ("h" . "ChatGPT, GPTel options")
             :desc "ChatGPT of selected region"   "a" #'gptel-send
             :desc "Open ChatGPT in new buffer"   "A" #'gptel
@@ -402,11 +403,17 @@ Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it. Next
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
-#+END_SRC
+#+end_src
 
+*** Emacs keybindings
 I want to use the escape key to exit keychords, similar to C-g. Let's see if this will give conflicts somewhere else, for now it seems to work 😌.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
+#+END_SRC
+
+In Doom Emacs the =transpose-words= is using the keybinding Meta-t. For the oposite transposition I will use the keybinding Meta-T.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
 #+END_SRC
 
 ** Org-mode configuration
@@ -703,6 +710,8 @@ Open my =keymap.c= file of my redox keyboard.
 
 ** Splash screen
 A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
+
+A useless pretty but Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
