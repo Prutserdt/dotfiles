@@ -145,7 +145,6 @@ keys = [
     Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
 
     # Open applications
-
     Key([mR], "a",
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
         lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),

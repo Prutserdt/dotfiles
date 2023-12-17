@@ -244,7 +244,6 @@ Next, we'll set up hooks and customize line number colors based on the Evil stat
 
 I want the color of the line number of the cursor to have a different color and this is accomplished by custom-set-faces.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;; Customize the face for the current line's line number
 (custom-set-faces!
   '(line-number-current-line :foreground "#EF7168"))
 #+END_SRC
@@ -285,11 +284,6 @@ Arduino .ino files are a type of C++ code. Let's help Emacs remember this by set
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 #+END_SRC
 
-A Python mode hook to set the checker explicitly, see [[https://github.com/flycheck/flycheck/issues/185#issuecomment-22289167][this post]].
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;;(add-hook 'python-mode-hook #'(lambda () (setq flycheck-checker 'python-pylint)))
-#+END_SRC
-
 No more conformation messages whilst closing emacs.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq confirm-kill-emacs nil)
@@ -319,12 +313,10 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package! gptel
  :config
-;; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
-;;(setq gpt-openai-engine "gpt-4") ;; this does not work, gpt-4 not available yet
-(setq gpt-openai-engine "gpt-4-1106-preview")
+(setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 #+END_SRC
 
 ** Custom keybindings
@@ -366,7 +358,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-        ;;      :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
@@ -417,7 +408,7 @@ In Doom Emacs the =transpose-words= is using the keybinding Meta-t. For the opos
 #+END_SRC
 
 ** Org-mode configuration
-Setup to use sql in org code blocks. Commented out because I am not using it at the time.
+Setup to use sql in org code blocks. Commented out because I am not using it anymore.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 ;;(org-babel-do-load-languages
 ;; 'org-babel-load-languages
@@ -559,7 +550,6 @@ Remap my keyboard with xmodmap
   "Change Esc/caps, right mod, right alt, for my redox keyboard."
   (interactive)
   (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-;;(shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
 #+END_SRC
 
 Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be in the =myThunarCloud= textfile of course 😀.

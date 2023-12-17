@@ -41,7 +41,6 @@
 (add-hook 'evil-normal-state-entry-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'evil-visual-state-entry-hook 'set-line-number-color-according-to-evil-state)
 
-;; Customize the face for the current line's line number
 (custom-set-faces!
   '(line-number-current-line :foreground "#EF7168"))
 
@@ -61,8 +60,6 @@
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
-;;(add-hook 'python-mode-hook #'(lambda () (setq flycheck-checker 'python-pylint)))
-
 (setq confirm-kill-emacs nil)
 
 (use-package! vterm-toggle
@@ -81,12 +78,10 @@
 
 (use-package! gptel
  :config
-;; (setq! gptel-api-key "write out api key here")) ; alternatively the api key can be added here
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
-;;(setq gpt-openai-engine "gpt-4") ;; this does not work, gpt-4 not available yet
-(setq gpt-openai-engine "gpt-4-1106-preview")
+(setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 
 (after! evil
   (define-key evil-normal-state-map "U" 'undo-redo)
@@ -118,7 +113,6 @@
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-        ;;      :desc "Plak keuze uit kill ring"         "p" #'consult-yank-from-kill-ring
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
@@ -249,7 +243,6 @@
   "Change Esc/caps, right mod, right alt, for my redox keyboard."
   (interactive)
   (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-;;(shell-command (xmodmap $HOME/.config/rdxswitch && xset r rate 300 80))
 
 (defun my-thunar-cloud-connection ()
   "Connect my cloud to Thunar filebrowser."

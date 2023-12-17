@@ -7,113 +7,153 @@ import os
 import pyperclip
 import time
 import pandas as pd
-from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication)
+from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication, QMessageBox)
 
 class InputDialog(QDialog):
     """Input screen for cash and house surplus value"""
 
     def __init__(self, parent=None):
+        """
+        Initialize the InputDialog class.
+
+        Args:
+            parent: The parent widget (default: None).
+        """
         super().__init__(parent)
-        global Huis
-        global RaboCash
-        RaboCash = QLineEdit(self)
-        Huis = QLineEdit(self)
+        self.rabo_cash = QLineEdit(self)  # Assign QLineEdit object to self.rabo_cash
+        self.huis = QLineEdit(self)  # Assign QLineEdit object to self.huis
         buttonbox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
         layout = QFormLayout(self)
-        layout.addRow("Voer Bunq en Rabo cash in:", RaboCash)
-        layout.addRow("Voer overwaarde huis in:", Huis)
+        layout.addRow("Voer Bunq en Rabo cash in:", self.rabo_cash)
+        layout.addRow("Voer overwaarde huis in:", self.huis)
         layout.addWidget(buttonbox)
         buttonbox.accepted.connect(self.accept)
         buttonbox.rejected.connect(self.reject)
 
-    def getinputs(self):
-        return RaboCash.text(), Huis.text()
+
+    def get_inputs(self):
+        """
+        Get the input values of rabo_cash and huis.
+
+        Returns:
+            A tuple containing the input values of rabo_cash and huis.
+        """
+        #return rabo_cash.text(), huis.text()
+        return self.rabo_cash.text(), self.huis.text()
+        #return huis.text(), rabo_cash.text()
 
 if __name__ == '__main__':
-    import sys
-    app = QApplication(sys.argv)
-    dialog = InputDialog()
-    if dialog.exec():
-        RaboCash, Huis = dialog.getinputs()
-        Huis = int(Huis)
-        RaboCash = int(RaboCash)
+        import sys
+        app = QApplication(sys.argv)
+        dialog = InputDialog()
+        if dialog.exec():
+            huis, rabo_cash = dialog.get_inputs()
+            huis = int(huis)
+            rabo_cash = int(rabo_cash)
 
-def AddCSVtoDataFrame(filename, delimiter, column1, column2):
-    """Adding CSV data to the general dataframe,
-       different CSVs can be used, the delimter must be set,
-       and only two columns are imported to the dataframe"""
-    print(filename)
-    print()
-    global df  # This dataframe will be used outside of this def, so make it global
-    dfx = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
-    dfx.columns = [OmsCol, EurCol]
-    dfx = dfx.dropna(subset=[EurCol])  # Exclude rows with NaN values in the Euro column
-    dfx[EurCol] = [x.replace(".", "") for x in dfx[EurCol]]
-    dfx[EurCol] = [x.replace(",", ".") for x in dfx[EurCol]]
-    dfx[EurCol] = dfx[EurCol].astype(float).apply(int)
-    df = pd.concat([df, dfx])
-    print('=' * 40 + "\n", dfx)
+def read_csv_and_add_to_dataframe(filename, delimiter, column1, column2):
+    """
+    Add data of a CSV file to a dataframe.
 
-fileDeGIRO = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
-searchRabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*"  # Wildcard searching
-fileRabo = max(glob.iglob(searchRabo), key=os.path.getctime)        # Find newest file
+    Args:
+        filename: The path of the CSV file.
+        delimiter: The delimiter used in the CSV file.
+        column1: The name of the first column.
+        column2: The name of the second column.
 
-OmsHuis = "Overwaarde huis     "
-OmsCash = "Cash (Rabo en Bunq) "
+    Returns:
+        The dataframe containing the data from the CSV file.
+    """
+
+    try:
+        print(filename)
+        print()
+        global asset_allocation_df  # This dataframe will be used outside of this def, so make it global
+        temp_asset_allocation_df = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
+        temp_asset_allocation_df.columns = [omschr_col, eur_col]
+        temp_asset_allocation_df = temp_asset_allocation_df.dropna(subset=[eur_col])  # Exclude rows with NaN values in the Euro column
+        temp_asset_allocation_df[eur_col] = [x.replace(".", "") for x in temp_asset_allocation_df[eur_col]]
+        temp_asset_allocation_df[eur_col] = [x.replace(",", ".") for x in temp_asset_allocation_df[eur_col]]
+        temp_asset_allocation_df[eur_col] = temp_asset_allocation_df[eur_col].astype(float).apply(int)
+        asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])
+        print('=' * 40 + "\n", temp_asset_allocation_df)
+        return temp_asset_allocation_df
+    except FileNotFoundError:
+        error_message = f"File '{filename}' not found."   
+        #QMessageBox.critical(None, "Error", error_message)
+        QMessageBox.critical(None, "aandelen.py error message", error_message)
+        return None
+    except pd.errors.EmptyDataError:
+        error_message = f"File '{filename}' is empty."
+        #QMessageBox.critical(None, "Error", error_message)
+        QMessageBox.critical(None, "aandelen.py error message", error_message)
+        return None
+    except Exception as e:
+        error_message = f"An error occurred while processing file '{filename}': {str(e)}"
+        #QMessageBox.critical(None, "Error", error_message)
+        QMessageBox.critical(None, "aandelen.py error message", error_message)
+
+        return None
+
+file_degiro = os.path.expanduser("~") + "/Downloads/Portfolio.csv"
+search_rabo = os.path.expanduser("~") + "/Downloads/Portefeuille_*.csv"  # Wildcard searching
+latest_file_rabo = max(glob.iglob(search_rabo), key=os.path.getctime)        # Find newest file
+
+omschr_huis = "Overwaarde huis     "
+omschr_cash = "Cash (Rabo en Bunq) "
 # Namen van kolommen die ik ga gebruiken:
-EurCol = "Euro"                     # Euro column naam
-OmsCol = "Omschrijving        "     # Omschrijving column naam
-AaCol = "AA%"                       # Asset Allocation column naam
-AminHuisCol = "AA*%"                # Asset Allocation zonder huis berekend column naam
+eur_col = "Euro"                     # Euro column naam
+omschr_col = "Omschrijving        "  # Omschrijving column naam
+asset_allocation_col = "AA%"         # Asset Allocation column naam
+a_min_huis_col = "AA*%"              # Asset Allocation zonder huis berekend column naam
 
-df = pd.DataFrame() # Create a new dataframe
-AddCSVtoDataFrame(fileRabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
-#df.drop(3,0,inplace=True) # Remove the bottom row of the Rabobank CSV, not needed anymore since the csv file was modified in layout by the Rabobank
-AddCSVtoDataFrame(fileDeGIRO, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
+asset_allocation_df = pd.DataFrame() # Create a new dataframe
+read_csv_and_add_to_dataframe(latest_file_rabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
+read_csv_and_add_to_dataframe(file_degiro, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
 # Create a new dataframe with surplus value house and Cash amount
-d = {
-    OmsCol: [OmsHuis, OmsCash],    # kolom omschrijving invullen
-    EurCol: [Huis, RaboCash]}      # kolom euros invullen
-dfx = pd.DataFrame(d)
+asset_values_dict = {
+    omschr_col: [omschr_huis, omschr_cash],    # kolom omschrijving invullen
+    eur_col: [huis, rabo_cash]}      # kolom euros invullen
+temp_asset_allocation_df = pd.DataFrame(asset_values_dict)
 # Samenvoegen van dataframes
-df = pd.concat([df, dfx])
+asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])
 # Sorteer op euros, aflopend (ascending=False)
-df = df.sort_values(by=EurCol, ascending=False)
-#print('=' * 40 + "\n", df)  # Only for debugging
-df = pd.DataFrame(df, columns=[OmsCol, EurCol, AaCol, AminHuisCol])
+asset_allocation_df = asset_allocation_df.sort_values(by=eur_col, ascending=False)
+#print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
+asset_allocation_df = pd.DataFrame(asset_allocation_df, columns=[omschr_col, eur_col, asset_allocation_col, a_min_huis_col])
 # Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 
-Kapitaal = df[EurCol].sum()  # Calculate the sum of all of the allocations (Kapitaal is Dutch for Capital)
+kapitaal = asset_allocation_df[eur_col].sum()  # Calculate the sum of all of the allocations (kapitaal is Dutch for Capital)
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
-df[AaCol] = (df[EurCol] / Kapitaal * 100).astype(int) # Calculate values for column AaCol, % of total)
-df[AminHuisCol] = (df[EurCol] / (Kapitaal - Huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
-df.loc[df[AminHuisCol] > 100, AminHuisCol] = "*"  # If >100% then replace by asterix
-#print('=' * 40  + "\n", dfx)                      # Only for debugging
+asset_allocation_df[asset_allocation_col] = (asset_allocation_df[eur_col] / kapitaal * 100).astype(int) # Calculate values for column asset_allocation_col, % of total)
+asset_allocation_df[a_min_huis_col] = (asset_allocation_df[eur_col] / (kapitaal - huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
+asset_allocation_df.loc[asset_allocation_df[a_min_huis_col] > 100, a_min_huis_col] = "*"  # If >100% then replace by asterix
+#print('=' * 40  + "\n", asset_allocation_temp_asset_allocation_df)                      # Only for debugging
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
-d = {
-    EurCol: ["" , Kapitaal, Kapitaal - Huis],
-    OmsCol: ["" , "Assets totaal       ", "Assets totaal - huis  "],
-    AaCol: ["", "", ""],
-    AminHuisCol: ["", "", ""]}
-dfx = pd.DataFrame(d)       # Add the list to a new temporary dataframe
-df = pd.concat([df, dfx])   # Add the dfx dataframe
-#print('=' * 40 + "\n", df)  # Only for debugging
+asset_values_dict = {
+    eur_col: ["" , kapitaal, kapitaal - huis],
+    omschr_col: ["" , "Assets totaal       ", "Assets totaal - huis  "],
+    asset_allocation_col: ["", "", ""],
+    a_min_huis_col: ["", "", ""]}
+temp_asset_allocation_df = pd.DataFrame(asset_values_dict)       # Add the list to a new temporary dataframe
+asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])   # Add the temp_asset_allocation_df dataframe
+#print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
 
-df[OmsCol] = df[OmsCol].apply(lambda x: x[:20]) # Slim the "OmsCol" to 20 characters
+asset_allocation_df[omschr_col] = asset_allocation_df[omschr_col].apply(lambda x: x[:20]) # Slim the "omschr_col" to 20 characters
 
-datum = time.strptime(time.ctime(os.path.getctime(fileDeGIRO))) # Search date of file: fileDeGIRO
+datum = time.strptime(time.ctime(os.path.getctime(file_degiro))) # Search date of file: file_degiro
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
-titel = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (Kapitaal - Huis).astype(str) + " Euro." "\n" + "\n")
+title = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (kapitaal - huis).astype(str) + " Euro." "\n" + "\n")
 #print('\n\n') # Only for debugging
 
 # Create a title for the org table, with three stars for level three heading
-orgTabelNaam=('#+Name: tbl_', str(t_stamp), '\n')
-orgTabelNaam=''.join(orgTabelNaam)
+org_table_name=('#+Name: tbl_', str(t_stamp), '\n')
+org_table_name=''.join(org_table_name)
 
 # Transform dataframe to a text string that is ready for Emacs org-mode (with '|' separators)
-gesorteerdeLijst = df.to_string(index=False)   # Index verwijderen van dataframe en string maken
+gesorteerdeLijst = asset_allocation_df.to_string(index=False)   # Index verwijderen van dataframe en string maken
 gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
 gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
 gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
@@ -124,7 +164,7 @@ separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
 
 #print ('\n' + gesorteerdeLijst + '\n')
 # Combineer de introductieregels met het dataframe
-data = titel + orgTabelNaam + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
+data = title + org_table_name + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
 data = data.replace('Omschrijving', '|Omschrijving')
 data = data.replace('AA% AA*%', 'AA% |AA*% ')
 data = data.replace('Euro AA%', 'Euro |AA%')
@@ -136,6 +176,6 @@ data = data.replace('- huis', '- huis|')
 
 pyperclip.copy(data)
 
-del(AaCol, df, dfx, separator, gesorteerdeLijst, d, data, datum, t_stamp,
-    orgTabelNaam, AminHuisCol, EurCol, Huis, Kapitaal, OmsCash, OmsCol,
-    OmsHuis, RaboCash, fileDeGIRO, fileRabo, searchRabo, titel)
+del(asset_allocation_col, asset_allocation_df, temp_asset_allocation_df, separator, gesorteerdeLijst, data, datum, t_stamp,
+    org_table_name, a_min_huis_col, eur_col, huis, kapitaal, omschr_cash, omschr_col,
+    omschr_huis, rabo_cash, file_degiro, latest_file_rabo, search_rabo, title)
