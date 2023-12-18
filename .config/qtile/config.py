@@ -9,6 +9,7 @@ from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
                                 Screen, ScratchPad, DropDown,)
 from libqtile.lazy import lazy
 from os.path import expanduser
+from qtile_extras.widget.decorations import RectDecoration
 #from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
 
 class ScrollableTextWidget(widget.base._TextBox):
@@ -274,7 +275,9 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Notify(foreground="#ff966c"),
-                ScrollableTextWidget(file_path="~/.config/notify.log", foreground="#ff966c"),  # Use the widget here
+                ScrollableTextWidget(
+                    file_path="~/.config/notify.log",
+                    foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
                 #widget.QuickExit(foreground="#888888"),
                 # uncomment for battery, Lenovo Thinkpad
@@ -283,8 +286,19 @@ screens = [
                 #    format='{char} {percent:2.0%}',
                 #    update_interval=30,
                 #),
+                widget.OpenWeather(
+                    app_key = "4cf3731a25d1d1f4e4a00207afd451a2",
+                    cityid = "2759661",
+                    format = '{main_temp}°C {icon}',
+                    foreground="#888888",
+                    metric = True,
+                    mouse_callbacks={"Button1": lazy.spawn("xdg-open https://buienradar.nl")}
+                ),
                 widget.Volume(foreground="#d75f5f"),
-                widget.Clock(format="%d%b%y %H:%M",foreground="#888888"),
+                widget.Clock(format="%d%b%y %H:%M",
+                             foreground="#888888",
+                             mouse_callbacks={"Button1": lazy.spawn("xdg-open https://www.timeanddate.com/calendar/")}
+                ),
             ],
             24,
             opacity=0.85,

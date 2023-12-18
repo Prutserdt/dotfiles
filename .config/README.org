@@ -255,7 +255,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
 #+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuapps.sh" &&
-chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -p 'run: ') &&
+chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -i -p 'run: ') &&
 notify-send -t 60000 "Starting application: " "$chosen" &&
 $chosen
 #+END_SRC
@@ -300,7 +300,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 My list of textfiles is piped into dmenu and the selected one is opened in a new instance of emacs or on the already opened emacs client. Note: the 'textfile' is a textfiles that consists of a list of filenames including the directory location.
 #+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuemacs.sh" &&
-chosen=$(cat $HOME/Stack/Command_line/textfiles | dmenu -c -bw 2 -l 40 -p 'Open textfiles: ')
+chosen=$(cat $HOME/Stack/Command_line/textfiles | dmenu -c -bw 2 -l 40 -i -p 'Open textfiles: ')
 [ -z "$chosen" ] && exit
 #+END_SRC
 
@@ -328,7 +328,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
 #+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuinternet.sh" &&
-chosen=$(cat $HOME/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -p 'Open website: ')
+chosen=$(cat $HOME/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -i -p 'Open website: ')
 [ -z "$chosen" ] && exit
 xdg-open $chosen &&
 notify-send -t 60000 "Opening webpage: " "$chosen"
@@ -459,7 +459,7 @@ This requires the dmenu patch: center, which gives the dmenu -c option.
 After Thunar is launched there is a microbreak and then F3 is pressed to open l3ts
 #+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuthunar.sh" &&
-chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -p 'Thunar open dir: ')
+chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -i -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
 notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen & sleep .3 && xdotool key F3
@@ -478,7 +478,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline. If the unicode file is missing then generate it by [[unicode]].
 #+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send -t 60000 "Running dmenuunicode.sh" &&
-cat $HOME/.config/unicode | dmenu -c -bw 2 -l 40 -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
+cat $HOME/.config/unicode | dmenu -c -bw 2 -l 40 -i -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace" &&
 notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
 #+END_SRC
@@ -559,7 +559,7 @@ The notify-send will send a notification, duh! The -t flag sets the time to show
 The --bg-fill option makes sure that the image is stretched to the dimensions of the screen.
 #+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send  "Running dmenuwallpaper.sh" &&
-ls $HOME/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
+ls $HOME/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -i -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
 notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+END_SRC
 
@@ -614,7 +614,7 @@ A script that will select an image, convert GPS information and feed it into goo
 #       Please only edit that file and org-babel-tangle (emacs)
 
 # Use dmenu to select the directory containing your images
-selected_directory=$(find "$HOME/Stack/Afbeeldingen/Vakantie" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -p "Select a directory for pictures to select in google maps:")
+selected_directory=$(find "$HOME/Stack/Afbeeldingen/Vakantie" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures to select in google maps:")
 
 # Check if a directory was selected
 if [ -n "$selected_directory" ]; then
@@ -699,6 +699,9 @@ for image_file in "$picture_directory"/*.jpg; do
 done
 #+end_src
 
+#+RESULTS:
+: Working Directory: /home/icefly/Stack/Afbeeldingen
+
 ** dm_move_images
 A script that will select images and move them to a subdirectory. This script required dmenu, zenity, and nsxiv.
 
@@ -708,7 +711,7 @@ A script that will select images and move them to a subdirectory. This script re
 #       Please only edit that file and org-babel-tangle (emacs)
 
 # Use dmenu to select the directory containing your images
-selected_directory=$(find "$HOME/Downloads" -maxdepth 1 -type d | sort | dmenu -c -bw 2 -l 40 -p "Select a directory for pictures which you want to move to the subdir Minder_en_dubbelop:")
+selected_directory=$(find "$HOME/Downloads" -maxdepth 1 -type d | sort | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures which you want to move to the subdir Minder_en_dubbelop:")
 
 # Check if a directory was selected
 if [ -n "$selected_directory" ]; then
@@ -820,7 +823,6 @@ class InputDialog(QDialog):
         buttonbox.accepted.connect(self.accept)
         buttonbox.rejected.connect(self.reject)
 
-
     def get_inputs(self):
         """
         Get the input values of rabo_cash and huis.
@@ -828,9 +830,7 @@ class InputDialog(QDialog):
         Returns:
             A tuple containing the input values of rabo_cash and huis.
         """
-        #return rabo_cash.text(), huis.text()
-        return self.rabo_cash.text(), self.huis.text()
-        #return huis.text(), rabo_cash.text()
+        return self.huis.text(), self.rabo_cash.text()
 
 if __name__ == '__main__':
         import sys
@@ -858,10 +858,8 @@ def read_csv_and_add_to_dataframe(filename, delimiter, column1, column2):
     Returns:
         The dataframe containing the data from the CSV file.
     """
-
     try:
-        print(filename)
-        print()
+        #print(filename)
         global asset_allocation_df  # This dataframe will be used outside of this def, so make it global
         temp_asset_allocation_df = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
         temp_asset_allocation_df.columns = [omschr_col, eur_col]
@@ -870,25 +868,39 @@ def read_csv_and_add_to_dataframe(filename, delimiter, column1, column2):
         temp_asset_allocation_df[eur_col] = [x.replace(",", ".") for x in temp_asset_allocation_df[eur_col]]
         temp_asset_allocation_df[eur_col] = temp_asset_allocation_df[eur_col].astype(float).apply(int)
         asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])
-        print('=' * 40 + "\n", temp_asset_allocation_df)
+        #print('=' * 40 + "\n", temp_asset_allocation_df)
         return temp_asset_allocation_df
     except FileNotFoundError:
         error_message = f"File '{filename}' not found."   
-        #QMessageBox.critical(None, "Error", error_message)
         QMessageBox.critical(None, "aandelen.py error message", error_message)
         return None
     except pd.errors.EmptyDataError:
         error_message = f"File '{filename}' is empty."
-        #QMessageBox.critical(None, "Error", error_message)
         QMessageBox.critical(None, "aandelen.py error message", error_message)
         return None
     except Exception as e:
         error_message = f"An error occurred while processing file '{filename}': {str(e)}"
-        #QMessageBox.critical(None, "Error", error_message)
         QMessageBox.critical(None, "aandelen.py error message", error_message)
-
         return None
+#+END_SRC
 
+
+
+#+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
+def replace_data(data, replacements):
+    """
+    Replaces specific columns in the given data with their corresponding replacements.
+
+    Args:
+        data (str): The input data to modify.
+        replacements (list): A list of tuples representing the before/after text replacements.
+
+    Returns:
+        str: The modified data with the specified replacements applied.
+    """
+    for before, after in replacements:
+        data = data.replace(before, after)
+    return data
 #+END_SRC
 
 The filenames and paths of the CSV files are generated using the =os.path.expanduser= and =glob= functions.
@@ -913,20 +925,18 @@ Next, a dataframe is created and data from the latest Rabobank CSV file and the 
 Creation of dataframe and adding data of two portfolios to the dataframe.
 #+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 asset_allocation_df = pd.DataFrame() # Create a new dataframe
-read_csv_and_add_to_dataframe(latest_file_rabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
 read_csv_and_add_to_dataframe(file_degiro, ",", "Waarde in EUR", "Product") # Add DeGIRO data to dataframe
+read_csv_and_add_to_dataframe(latest_file_rabo, ";", "Naam", "Huidig €") # Add data from csv files to dataframe
 # Create a new dataframe with surplus value house and Cash amount
 asset_values_dict = {
     omschr_col: [omschr_huis, omschr_cash],    # kolom omschrijving invullen
     eur_col: [huis, rabo_cash]}      # kolom euros invullen
 temp_asset_allocation_df = pd.DataFrame(asset_values_dict)
-# Samenvoegen van dataframes
 asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])
-# Sorteer op euros, aflopend (ascending=False)
+# Sortt by euros, descencding
 asset_allocation_df = asset_allocation_df.sort_values(by=eur_col, ascending=False)
 #print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
 asset_allocation_df = pd.DataFrame(asset_allocation_df, columns=[omschr_col, eur_col, asset_allocation_col, a_min_huis_col])
-# Rangschik de volgorde van de kolommen en voeg nieuwe kolommen AA% en AA*% toe
 #+END_SRC
 
 Asset allocation calculation of percentages and adding of calculated values to the dataframe.
@@ -959,7 +969,7 @@ The next code block creates an introduction line containing org headers, the dat
 datum = time.strptime(time.ctime(os.path.getctime(file_degiro))) # Search date of file: file_degiro
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
-title = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (kapitaal - huis).astype(str) + " Euro." "\n" + "\n")
+title = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (kapitaal - huis).astype(str) + " Euro.\n\n")
 #print('\n\n') # Only for debugging
 #+END_SRC
 
@@ -970,25 +980,29 @@ org_table_name=('#+Name: tbl_', str(t_stamp), '\n')
 org_table_name=''.join(org_table_name)
 
 # Transform dataframe to a text string that is ready for Emacs org-mode (with '|' separators)
-gesorteerdeLijst = asset_allocation_df.to_string(index=False)   # Index verwijderen van dataframe en string maken
-gesorteerdeLijst = gesorteerdeLijst.replace('NaN', '')      # Replace NaN values
-gesorteerdeLijst = (gesorteerdeLijst.replace("  ", "|"))    # Add separators
-gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))    # Remove duplicates
-gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
-gesorteerdeLijst = (gesorteerdeLijst.replace("||", "|"))
-gesorteerdeLijst = '|'.join((gesorteerdeLijst.splitlines(True)))
+sorted_list = asset_allocation_df.to_string(index=False)   # Index verwijderen van dataframe en string maken
+sorted_list = sorted_list.replace('NaN', '')      # Replace NaN values
+sorted_list = (sorted_list.replace("  ", "|"))    # Add separators
+for i in range(3):
+    sorted_list = sorted_list.replace("||", "|")
+sorted_list = '|'.join((sorted_list.splitlines(True)))
 separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
 
-#print ('\n' + gesorteerdeLijst + '\n')
+#print ('\n' + sorted_list + '\n')
 # Combineer de introductieregels met het dataframe
-data = title + org_table_name + separator + '\n' + gesorteerdeLijst + '\n' + separator # Combineren van introductieregels+dataframe
-data = data.replace('Omschrijving', '|Omschrijving')
-data = data.replace('AA% AA*%', 'AA% |AA*% ')
-data = data.replace('Euro AA%', 'Euro |AA%')
-data = data.replace('||||', str(separator)+'\n\n'+str(separator)) # scheiding van twee tabellen
-data = data.replace('|Overwaarde', str(separator)+'\n| Overwaarde ')
-data = data.replace('|VANECK', 'VANECK')
-data = data.replace('- huis', '- huis|')
+data = title + org_table_name + separator + '\n' + sorted_list + '\n' + separator # Combineren van introductieregels+dataframe
+
+replacements = [
+    ('Omschrijving',       '|Omschrijving'),
+    ('AA% AA*%',           'AA% |AA*% '),
+    ('Euro AA%',           'Euro |AA%'),
+    ('||||',               '|-|-|-|-|\n\n|-|-|-|-|'),
+    ('|Overwaarde',        '|-|-|-|-|\n| Overwaarde '),
+    ('|VANECK',            'VANECK'),
+    ('- huis',             '- huis|')
+]
+
+data = replace_data(data, replacements)
 #print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
 #+END_SRC
 
@@ -996,9 +1010,7 @@ Finally, the data is written to the clipboard and unnecessary variables are dele
 #+BEGIN_SRC python :tangle aandelen.py :padline yes :tangle-mode (identity #o755) :eval never
 pyperclip.copy(data)
 
-del(asset_allocation_col, asset_allocation_df, temp_asset_allocation_df, separator, gesorteerdeLijst, data, datum, t_stamp,
-    org_table_name, a_min_huis_col, eur_col, huis, kapitaal, omschr_cash, omschr_col,
-    omschr_huis, rabo_cash, file_degiro, latest_file_rabo, search_rabo, title)
+del(asset_allocation_col, asset_allocation_df, temp_asset_allocation_df, separator, sorted_list, data, datum, t_stamp, org_table_name, a_min_huis_col, eur_col, huis, kapitaal, omschr_cash, omschr_col, omschr_huis, rabo_cash, file_degiro, latest_file_rabo, search_rabo, title)
 #+END_SRC
 
 ** bitcoin_notification.py
