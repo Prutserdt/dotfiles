@@ -292,7 +292,7 @@ screens = [
                     format = '{main_temp}°C {icon}',
                     foreground="#888888",
                     metric = True,
-                    mouse_callbacks={"Button1": lazy.spawn("xdg-open https://buienradar.nl")}
+                    mouse_callbacks={"Button1": lazy.spawn("xdg-open https://buienradar.nl"), "Button3": lazy.spawn("xdg-open https://openweathermap.org/city/2759661")}
                 ),
                 widget.Volume(foreground="#d75f5f"),
                 widget.Clock(format="%d%b%y %H:%M",

@@ -217,50 +217,6 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
-(defun my-PowerStrike-testing-upload ()
-    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
-    (interactive)
-    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
-    (doom/window-maximize-buffer)
-    (split-window-horizontally)
-    (switch-to-buffer "*Async Shell Command*")
-    (windmove-right))
-
-(defun my-serial-ttyUSB0-115200 ()
-   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
-    (interactive)
-    (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200)
-    (switch-to-buffer "/dev/ttyUSB0")
-    (windmove-right))
-
-(defun my-PowerStrike-README-org-file ()
-  "Open the README.org of my PowerStrike ESP32 project."
-  (interactive)
-  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
-
-(defun my-keyboard-reset ()
-  "Change Esc/caps, right mod, right alt, for my redox keyboard."
-  (interactive)
-  (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-
-(defun my-thunar-cloud-connection ()
-  "Connect my cloud to Thunar filebrowser."
-  (interactive)
-  (with-temp-buffer
-  (insert-file-contents "~/Stack/Command_line/myThunarCloud")
-  (shell-command (string-trim (buffer-string)))))
-
-(defun my-asset-allocation-in-time ()
-  "Show my asset allocation vs time in a chart. Done by running a Python script."
-  (interactive)
-  (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
-    (setq default-directory (file-name-directory script-path))
-    (shell-command (concat "notify-send -t 6000 'Displaying my AA plot: " script-path "'"))
-    (shell-command (concat "python3 " script-path)
-                   "*Python Output*")
-    (message (concat "Python script executed: " script-path))))
-
 (defun my-org-roam-switch (roam-dir)
   "Switch to the roam notes in the specified directory. This function is not intended to be used separately, although this is possible. It is used by other Elisp code which will inject the desired Roam directory."
   (interactive "DSet Roam Directory:")
@@ -336,13 +292,91 @@ word count   %d, %d, %d"
              total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
              total-words-org total-words-daily (+ total-words-org total-words-daily))))
 
-(defun my-elisp-mode-eval-buffer ()
-  (interactive)
-  (message "Evaluated buffer")
-  (eval-buffer))
+(defvar data-bits nil
+  "Number of data bits for the serial monitor")
 
-(define-key emacs-lisp-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
-(define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
+(defvar my-serial-current-index 0
+  "Current index of the baudrate in the list")
+
+(defvar my-serial-baudrates '(300 600 1200 2400 4800 9600 19200 38400 57600 115200 230400 460800 57600 921600 1000000 2000000 3000000)
+  "List of baudrates to cycle through")
+
+(defvar my-serial-process nil
+  "Serial process")
+
+(defun my-serial-next-baudrate ()
+  "Switch to the next baudrate in the list"
+  (interactive)
+  (when my-serial-process
+    (delete-process my-serial-process))
+  (setq my-serial-current-index (mod (1+ my-serial-current-index)
+                                     (length my-serial-baudrates)))
+  (let* ((baudrate (nth my-serial-current-index my-serial-baudrates))
+         (command (concat "screen /dev/ttyUSB0 " (number-to-string baudrate))))
+    (setq my-serial-process (start-process "serial-terminal" nil shell-file-name "-c" command))
+    (message "Switched to baudrate: %s" baudrate)))
+
+(defun my-serial-ttyUSB0 (data-bits)
+  "Serial monitor to ttyUSB0 using baudrates in a cycle with specified data bits"
+  (interactive "sEnter 7 or 8 for data bits: ")
+  (when (not (or (string= data-bits "7") (string= data-bits "8")))
+    (error "Invalid data bits specified. Please enter 7 or 8."))
+  (split-window-horizontally)
+  (my-serial-next-baudrate)
+  (switch-to-buffer "/dev/ttyUSB0")
+  (windmove-right)
+  (setq my-serial-process-filter
+        (lambda (proc str)
+          (process-send-string proc (concat "sb " data-bits "\n"))))
+  (set-process-filter my-serial-process my-serial-process-filter)
+  (process-send-string my-serial-process (concat "sb " data-bits "\n")))
+
+(global-set-key (kbd "C-c C-g") 'my-serial-next-baudrate)
+(global-set-key (kbd "C-c C-m") 'my-serial-ttyUSB0)
+
+(defun my-PowerStrike-testing-upload ()
+    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
+    (interactive)
+    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
+    (doom/window-maximize-buffer)
+    (split-window-horizontally)
+    (switch-to-buffer "*Async Shell Command*")
+    (windmove-right))
+
+(defun my-serial-ttyUSB0-115200 ()
+   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
+    (interactive)
+    (split-window-horizontally)
+    (serial-term "/dev/ttyUSB0" 115200)
+    (switch-to-buffer "/dev/ttyUSB0")
+    (windmove-right))
+
+(defun my-PowerStrike-README-org-file ()
+  "Open the README.org of my PowerStrike ESP32 project."
+  (interactive)
+  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
+
+(defun my-keyboard-reset ()
+  "Change Esc/caps, right mod, right alt, for my redox keyboard."
+  (interactive)
+  (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
+
+(defun my-thunar-cloud-connection ()
+  "Connect my cloud to Thunar filebrowser."
+  (interactive)
+  (with-temp-buffer
+  (insert-file-contents "~/Stack/Command_line/myThunarCloud")
+  (shell-command (string-trim (buffer-string)))))
+
+(defun my-asset-allocation-in-time ()
+  "Show my asset allocation vs time in a chart. Done by running a Python script."
+  (interactive)
+  (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
+    (setq default-directory (file-name-directory script-path))
+    (shell-command (concat "notify-send -t 6000 'Displaying my AA plot: " script-path "'"))
+    (shell-command (concat "python3 " script-path)
+                   "*Python Output*")
+    (message (concat "Python script executed: " script-path))))
 
 (defun my-redox-directory ()
   "Open the keymap.c file of my Redox qmk firmware."

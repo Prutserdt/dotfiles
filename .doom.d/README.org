@@ -511,71 +511,7 @@ Now that the websocket is setup the org-roam-ui can be set.
 #+END_SRC
 
 ** Custom code
-*** Custom elisp functions (used with hotkeys)
-A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-PowerStrike-testing-upload ()
-    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
-    (interactive)
-    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
-    (doom/window-maximize-buffer)
-    (split-window-horizontally)
-    (switch-to-buffer "*Async Shell Command*")
-    (windmove-right))
-#+END_SRC
-
-Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-serial-ttyUSB0-115200 ()
-   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
-    (interactive)
-    (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200)
-    (switch-to-buffer "/dev/ttyUSB0")
-    (windmove-right))
-#+END_SRC
-TODO: I would like to run ~my-serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resetting via RTS pin." but this did not work.
-
-Open my Arduino PowerStrike README.org file.
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-PowerStrike-README-org-file ()
-  "Open the README.org of my PowerStrike ESP32 project."
-  (interactive)
-  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
-#+END_SRC
-
-Remap my keyboard with xmodmap
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-keyboard-reset ()
-  "Change Esc/caps, right mod, right alt, for my redox keyboard."
-  (interactive)
-  (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-#+END_SRC
-
-Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be in the =myThunarCloud= textfile of course 😀.
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-thunar-cloud-connection ()
-  "Connect my cloud to Thunar filebrowser."
-  (interactive)
-  (with-temp-buffer
-  (insert-file-contents "~/Stack/Command_line/myThunarCloud")
-  (shell-command (string-trim (buffer-string)))))
-#+END_SRC
-
-Show a map of my asset allocation in time by running a Python script.
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-asset-allocation-in-time ()
-  "Show my asset allocation vs time in a chart. Done by running a Python script."
-  (interactive)
-  (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
-    (setq default-directory (file-name-directory script-path))
-    (shell-command (concat "notify-send -t 6000 'Displaying my AA plot: " script-path "'"))
-    (shell-command (concat "python3 " script-path)
-                   "*Python Output*")
-    (message (concat "Python script executed: " script-path))))
-#+END_SRC
-
-*** org-roam related
+*** elisp: org-roam
 A general function that is used to switch to roam directories, the ones below are using this function.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-switch (roam-dir)
@@ -669,19 +605,117 @@ word count   %d, %d, %d"
              total-words-org total-words-daily (+ total-words-org total-words-daily))))
 #+END_SRC
 
-*** Custom elisp functions (not used with hotkeys)
-Evaluating a region or buffer, a tip from [[https://www.masteringemacs.org/article/evaluating-elisp-emacs][mastering Emacs]]. Not sure if I will keep using this one..
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-elisp-mode-eval-buffer ()
-  (interactive)
-  (message "Evaluated buffer")
-  (eval-buffer))
 
-(define-key emacs-lisp-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
-(define-key lisp-interaction-mode-map (kbd "C-c C-c") #'mp-elisp-mode-eval-buffer)
+*** elisp: ESP32, Arduino and serial communication
+The following code will open ttyUSB0 and gives the options to cycle through baudrates.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defvar data-bits nil
+  "Number of data bits for the serial monitor")
+
+(defvar my-serial-current-index 0
+  "Current index of the baudrate in the list")
+
+(defvar my-serial-baudrates '(300 600 1200 2400 4800 9600 19200 38400 57600 115200 230400 460800 57600 921600 1000000 2000000 3000000)
+  "List of baudrates to cycle through")
+
+(defvar my-serial-process nil
+  "Serial process")
+
+(defun my-serial-next-baudrate ()
+  "Switch to the next baudrate in the list"
+  (interactive)
+  (when my-serial-process
+    (delete-process my-serial-process))
+  (setq my-serial-current-index (mod (1+ my-serial-current-index)
+                                     (length my-serial-baudrates)))
+  (let* ((baudrate (nth my-serial-current-index my-serial-baudrates))
+         (command (concat "screen /dev/ttyUSB0 " (number-to-string baudrate))))
+    (setq my-serial-process (start-process "serial-terminal" nil shell-file-name "-c" command))
+    (message "Switched to baudrate: %s" baudrate)))
+
+(defun my-serial-ttyUSB0 (data-bits)
+  "Serial monitor to ttyUSB0 using baudrates in a cycle with specified data bits"
+  (interactive "sEnter 7 or 8 for data bits: ")
+  (when (not (or (string= data-bits "7") (string= data-bits "8")))
+    (error "Invalid data bits specified. Please enter 7 or 8."))
+  (split-window-horizontally)
+  (my-serial-next-baudrate)
+  (switch-to-buffer "/dev/ttyUSB0")
+  (windmove-right)
+  (setq my-serial-process-filter
+        (lambda (proc str)
+          (process-send-string proc (concat "sb " data-bits "\n"))))
+  (set-process-filter my-serial-process my-serial-process-filter)
+  (process-send-string my-serial-process (concat "sb " data-bits "\n")))
+
+(global-set-key (kbd "C-c C-g") 'my-serial-next-baudrate)
+(global-set-key (kbd "C-c C-m") 'my-serial-ttyUSB0)
+#+end_src
+
+A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-PowerStrike-testing-upload ()
+    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
+    (interactive)
+    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
+    (doom/window-maximize-buffer)
+    (split-window-horizontally)
+    (switch-to-buffer "*Async Shell Command*")
+    (windmove-right))
 #+END_SRC
 
-**** Redox keyboard
+Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-serial-ttyUSB0-115200 ()
+   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
+    (interactive)
+    (split-window-horizontally)
+    (serial-term "/dev/ttyUSB0" 115200)
+    (switch-to-buffer "/dev/ttyUSB0")
+    (windmove-right))
+#+END_SRC
+TODO: I would like to run ~my-serial-ttyUSB0-115200~ directly after ~PowerStrike-testing-upload~ , but did not figure out how to do this. I tried to close the *Async Shell Command* window when it generates the output "Hard resetting via RTS pin." but this did not work.
+
+Open my Arduino PowerStrike README.org file.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-PowerStrike-README-org-file ()
+  "Open the README.org of my PowerStrike ESP32 project."
+  (interactive)
+  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
+#+END_SRC
+
+*** elisp: miscelaneous
+Remap my keyboard with xmodmap
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-keyboard-reset ()
+  "Change Esc/caps, right mod, right alt, for my redox keyboard."
+  (interactive)
+  (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
+#+END_SRC
+
+Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be in the =myThunarCloud= textfile of course 😀.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-thunar-cloud-connection ()
+  "Connect my cloud to Thunar filebrowser."
+  (interactive)
+  (with-temp-buffer
+  (insert-file-contents "~/Stack/Command_line/myThunarCloud")
+  (shell-command (string-trim (buffer-string)))))
+#+END_SRC
+
+Show a map of my asset allocation in time by running a Python script.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-asset-allocation-in-time ()
+  "Show my asset allocation vs time in a chart. Done by running a Python script."
+  (interactive)
+  (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
+    (setq default-directory (file-name-directory script-path))
+    (shell-command (concat "notify-send -t 6000 'Displaying my AA plot: " script-path "'"))
+    (shell-command (concat "python3 " script-path)
+                   "*Python Output*")
+    (message (concat "Python script executed: " script-path))))
+#+END_SRC
+
 Open my Redox keyboard QMK directory.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-redox-directory ()
@@ -700,8 +734,6 @@ Open my =keymap.c= file of my redox keyboard.
 
 ** Splash screen
 A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
-
-A useless pretty but Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
