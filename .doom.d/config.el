@@ -30,9 +30,9 @@
       ((evil-insert-state-p)
        (set-face-foreground 'line-number "#FFAD99"))
       ((evil-visual-state-p)
-       (set-face-foreground 'line-number "#80B3FF"))
+       (set-face-foreground 'line-number "#B978C4"))
       (t
-       (set-face-foreground 'line-number "D7DDE3")))))
+       (set-face-foreground 'line-number "#4C6985")))))
 
 (add-hook 'doom-switch-buffer-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'doom-first-buffer-hook 'set-line-number-color-according-to-evil-state)

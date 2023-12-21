@@ -227,9 +227,9 @@ Here, we define an Emacs Lisp function to set the line number color based on the
       ((evil-insert-state-p)
        (set-face-foreground 'line-number "#FFAD99"))
       ((evil-visual-state-p)
-       (set-face-foreground 'line-number "#80B3FF"))
+       (set-face-foreground 'line-number "#B978C4"))
       (t
-       (set-face-foreground 'line-number "D7DDE3")))))
+       (set-face-foreground 'line-number "#4C6985")))))
 #+END_SRC
 
 Next, we'll set up hooks and customize line number colors based on the Evil state. We add hooks for Doom Emacs buffer switching events and hook for changing line number color when entering insert/normal/visual mode.

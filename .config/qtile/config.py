@@ -68,13 +68,32 @@ emacs_script = expanduser("~/.config/qtile/open_emacs.py")
 home = os.path.expanduser("~")
 
 def threecol(qtile):
-    qtile.cmd_to_layout_index(0) #0:monadthreecolumn
+    qtile.cmd_to_layout_index(0) # monadthreecolumn
 
 def montall(qtile):
-    qtile.cmd_to_layout_index(1) #1: monadtall
+    qtile.cmd_to_layout_index(1) # monadtall
 
 def monwide(qtile):
-    qtile.cmd_to_layout_index(2) #2: monadwide
+    qtile.cmd_to_layout_index(2) # monadwide
+
+def Max(qtile):
+    qtile.cmd_to_layout_index(3) # Max
+
+# Define a global variable to track the current layout
+current_layout = 0  # threecol is the default layout
+
+# Toggle between the max layout and monadthreecolumn
+def toggle_max_and_bar(qtile):
+    global current_layout
+
+    if current_layout == 3:  # If Max is currently selected
+        qtile.cmd_to_layout_index(0)  # Switch to threecol layout
+        qtile.cmd_hide_show_bar()  # Show the bar
+        current_layout = 0  # Update the current layout
+    else:
+        qtile.cmd_to_layout_index(3)  # Switch to Max layout
+        qtile.cmd_hide_show_bar()  # Hide the bar
+        current_layout = 3  # Update the current layout
 
 @lazy.layout.function
 def increase_margin(self):
@@ -105,7 +124,8 @@ keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
     Key([mL], "space", lazy.layout.swap_main(),         desc="Make main window of selected window"),
     Key([mL], "b", lazy.hide_show_bar(position="top"),  desc="Toggle the bar"),
-    Key([mL], "f", lazy.window.toggle_fullscreen(),     desc="Fullscreen the current window"),
+    Key([mL], "c", lazy.spawncmd(),                     desc="Spawn a command using a prompt widget"),
+    Key([mL], "f", lazy.function(toggle_max_and_bar), desc="Toggle layout and bar"),
     Key([mL], "r", lazy.spawncmd(),                     desc="Prompt commands from taskbar"),
     Key([mL], "t", lazy.window.toggle_floating(),       desc="Toggle floating state"),
     Key([mL], "q", lazy.window.kill(),                  desc="Kill focused window"),
@@ -122,10 +142,11 @@ keys = [
     Key([mL, "control"], "j", lazy.layout.shrink_main(),desc="Shrink the main window"),
     Key([mL, "control"], "k", lazy.layout.grow_main(),  desc="Grow the main window"),
     Key([mL, "control"], "l", lazy.layout.shrink(),     desc="Shrink the selected window"),
-    Key([mL], "y", lazy.function(montall),              desc="Layout: MonadTall no margins"),
+    Key([mL], "y", lazy.function(Max),                  desc="Layout: max"),
     Key([mL], "u", lazy.function(threecol),             desc="Layout: Threecolumn  without margins"),
-    Key([mL], "n", lazy.function(open_last_notification)),
     Key([mL], "i", lazy.function(monwide),              desc="Layout: MonadWide no margins"),
+    Key([mL], "n", lazy.function(open_last_notification)),
+    Key([mL], "o", lazy.function(montall),              desc="Layout: MonadTall no margins"),
     Key([mL], 'a', increase_margin,                     desc="Increase gaps"),
     Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
@@ -240,6 +261,13 @@ layout_theme = {"border_width": 2,
                 "min_ratio": 0.05, "max_ratio": 0.9,
                 "new_client_position":'bottom',
                 }
+
+layout_theme_max = {"border_width": 0,
+                "border_focus": False,
+                "min_ratio": 0.05, "max_ratio": 0.9,
+                "new_client_position":'bottom',
+                }
+
 # A separate theme for floating mode, different color, thicker border width
 floating_theme = {"border_width": 3,
                 "border_focus": "#98BE65",  #98C379= groen
@@ -250,7 +278,7 @@ layouts = [
    layout.MonadThreeCol(**layout_theme),
    layout.MonadTall(**layout_theme),
    layout.MonadWide(**layout_theme),
-#  layout.DistractionFree(**layout_theme), # toegevoegd 03MAR23
+   layout.Max(**layout_theme_max),  # Set border_focus to False for Max layout
 ]
 
 widget_defaults = dict(
@@ -338,6 +366,12 @@ focus_on_window_activation = "smart"
 reconfigure_screens = True
 
 auto_minimize = True # for steam games
+
+@hook.subscribe.layout_change
+def update_current_layout(layout):
+    global current_layout
+    current_layout = layout.index()
+
 
 # Startup scripts
 @hook.subscribe.startup_once
