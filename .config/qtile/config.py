@@ -1,16 +1,16 @@
 # NOTE: This file is generated from ~/.config/qtile/README.org
 #       Please only edit that file and org-babel-tangle (Emacs)
 
-import psutil, subprocess, os
+import psutil
+import subprocess
+import os
 
 from typing import List
 from libqtile import bar, layout, widget, hook
-from libqtile.config import ( Click, Drag, Group, Key, KeyChord, Match,
-                                Screen, ScratchPad, DropDown,)
+from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from os.path import expanduser
-from qtile_extras.widget.decorations import RectDecoration
-#from subprocess import check_output # uncomment for battery, Lenovo Thinkpad
+# from subprocess import check_output  # uncomment for battery, Lenovo Thinkpad
 
 class ScrollableTextWidget(widget.base._TextBox):
     def __init__(self, file_path, **config):
@@ -372,8 +372,7 @@ def update_current_layout(layout):
     global current_layout
     current_layout = layout.index()
 
-
-# Startup scripts
+# Startup script
 @hook.subscribe.startup_once
 def start_once():
     home = os.path.expanduser("~")
