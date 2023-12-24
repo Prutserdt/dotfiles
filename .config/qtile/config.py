@@ -10,7 +10,7 @@ from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from os.path import expanduser
-# from subprocess import check_output  # uncomment for battery, Lenovo Thinkpad
+# from subprocess imprt check_output  # uncomment for battery, Lenovo Thinkpad
 
 class ScrollableTextWidget(widget.base._TextBox):
     def __init__(self, file_path, **config):
@@ -175,9 +175,6 @@ keys = [
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    #Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
-    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
-    #Key([mR], "e", lazy.spawn("emacsclient -n -a 'emacs'")),
     Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
@@ -307,7 +304,7 @@ screens = [
                     file_path="~/.config/notify.log",
                     foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
-                #widget.QuickExit(foreground="#888888"),
+                widget.QuickExit(foreground="#888888"),
                 # uncomment for battery, Lenovo Thinkpad
                 #widget.Battery(
                 #    battery=1,

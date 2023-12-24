@@ -765,11 +765,44 @@ For reference: the default doom-dashboard can be found here: =~/.emacs.d/modules
 #+END_SRC
 
 * Code snippets
-Code snippets can automate lots of stuff. Here below is an example. In org-mode <p tab will insert the following snippet:
-#+BEGIN_SRC snippet :tangle snippets/org-mode/PythonBlock
+A code snippet is a piece of reusable code that can be inserted into a buffer using a predefined trigger or command.
+
+The next one is inserting the start of a Python code block, ~#+BEGIN_SRC~, and is triggered by ~<ps~.
+#+BEGIN_SRC snippet #:tangle snippets/org-mode/python-block-start
 # -*- mode: snippet -*-
-# name: PythonBlock
+# name: python-block-start
+# key: <ps
+# --
+,#+BEGIN_SRC python
+
+#+END_SRC
+
+Another snippet, this time to end a code block. This one requires a hack since adding ~#END_SRC~ to this code block will end the code block in org-mode and there will be no text inserted. With this case the ~#+END_SR~ will be added and after that the ~C~ is overwritten over the ~$~ sign, et viola, fixed.
+#+BEGIN_SRC emacs-lisp #:tangle snippets/org-mode/end-src
+# -*- mode: snippet -*-
+# name: end-src
+# key: <end
+# --
+$0
+#+END_SR${1:C}
+#+END_SRC
+
+The next one is inserting the start of a Python code block, ~#+BEGIN_SRC~, and is triggered by ~<ps~. The ~END_SRC~ is added by the same trick as describe above.
+#+BEGIN_SRC snippet #:tangle snippets/org-mode/python-block
+# -*- mode: snippet -*-
+# name: python-block
 # key: <p
+# --
+#+BEGIN_SRC python
+$0
+#+END_SR${1:C}
+#+END_SRC
+
+Another snippet, this time to insert a python code block with tangle and result options plus the tab will jump to the filename ~wismij~ and another tab to jump to the inside of the code block ~$0~.
+#+BEGIN_SRC snippet #:tangle snippets/org-mode/python-block-tangling-name
+# -*- mode: snippet -*-
+# name: python-block-tangling-name
+# key: <pt
 # --
 #+BEGIN_SRC python :tangle ${2:wismij}.py :results output
 # NOTE, this file is generated from the org file:

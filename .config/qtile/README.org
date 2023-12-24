@@ -47,10 +47,10 @@ from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from os.path import expanduser
-# from subprocess import check_output  # uncomment for battery, Lenovo Thinkpad
+# from subprocess imprt check_output  # uncomment for battery, Lenovo Thinkpad
 #+END_SRC
 
-The following class is a personal piece of code that makes my notifications scrollable in the top bar when a notification is displayed.
+The following class is that makes my notifications scrollable in the top bar when a notification is displayed.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 class ScrollableTextWidget(widget.base._TextBox):
     def __init__(self, file_path, **config):
@@ -256,9 +256,6 @@ Right super key to open applications. Shift is used to update the application.
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    #Key([mR], "e", lazy.spawn("emacsclient -c -a 'emacs'")),
-    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
-    #Key([mR], "e", lazy.spawn("emacsclient -n -a 'emacs'")),
     Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
@@ -402,7 +399,7 @@ screens = [
                     file_path="~/.config/notify.log",
                     foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
-                #widget.QuickExit(foreground="#888888"),
+                widget.QuickExit(foreground="#888888"),
                 # uncomment for battery, Lenovo Thinkpad
                 #widget.Battery(
                 #    battery=1,
@@ -559,7 +556,6 @@ if __name__ == "__main__":
 This shell script is called in the config.py script and is autostarting some services when Qtile starts.
 
 Again a note is added and this time to ~autostart.sh~ to *not* edit this file directly.
-
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 # NOTE: This file is generated from ~/.config/qtile/README.org
