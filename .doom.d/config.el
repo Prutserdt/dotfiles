@@ -24,19 +24,14 @@
 (setq display-line-numbers-type 'relative)
 
 (defun set-line-number-color-according-to-evil-state ()
-  (when (and (bound-and-true-p evil-mode)
-             (not buffer-read-only))
-    (cond
-      ((evil-insert-state-p)
-       (set-face-foreground 'line-number "#FFAD99"))
-      ((evil-visual-state-p)
-       (set-face-foreground 'line-number "#B978C4"))
-      (t
-       (set-face-foreground 'line-number "#4C6985")))))
+  (when (and evil-mode (not buffer-read-only))
+    (set-face-foreground 'line-number
+                         (cond ((evil-insert-state-p) "#FFAD99")
+                               ((evil-visual-state-p) "#B978C4")
+                               (t "#4C6985")))))
 
 (add-hook 'doom-switch-buffer-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'doom-first-buffer-hook 'set-line-number-color-according-to-evil-state)
-
 (add-hook 'evil-insert-state-entry-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'evil-normal-state-entry-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'evil-visual-state-entry-hook 'set-line-number-color-according-to-evil-state)

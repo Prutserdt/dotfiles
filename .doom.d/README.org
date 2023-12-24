@@ -217,32 +217,26 @@ For jumping in texts it is nice to know the line position where to jump to from 
 (setq display-line-numbers-type 'relative)
 #+END_SRC
 
-Sometimes I forget if I'm in insert or normal mode, even with the different cursors that are set. To help me remember the current state I am coloring the line numbers accordingly.
-Here, we define an Emacs Lisp function to set the line number color based on the Evil state.
+To remember the current state (normal, insert or visual mode), we can customize the line number colors using Emacs Lisp. Here's the code that sets the line number color based on the Evil state:
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun set-line-number-color-according-to-evil-state ()
-  (when (and (bound-and-true-p evil-mode)
-             (not buffer-read-only))
-    (cond
-      ((evil-insert-state-p)
-       (set-face-foreground 'line-number "#FFAD99"))
-      ((evil-visual-state-p)
-       (set-face-foreground 'line-number "#B978C4"))
-      (t
-       (set-face-foreground 'line-number "#4C6985")))))
+  (when (and evil-mode (not buffer-read-only))
+    (set-face-foreground 'line-number
+                         (cond ((evil-insert-state-p) "#FFAD99")
+                               ((evil-visual-state-p) "#B978C4")
+                               (t "#4C6985")))))
 #+END_SRC
 
-Next, we'll set up hooks and customize line number colors based on the Evil state. We add hooks for Doom Emacs buffer switching events and hook for changing line number color when entering insert/normal/visual mode.
+Next, we add hooks to trigger the line number color customization when certain events occur. Here are the hooks we can use:
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (add-hook 'doom-switch-buffer-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'doom-first-buffer-hook 'set-line-number-color-according-to-evil-state)
-
 (add-hook 'evil-insert-state-entry-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'evil-normal-state-entry-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'evil-visual-state-entry-hook 'set-line-number-color-according-to-evil-state)
 #+END_SRC
 
-I want the color of the line number of the cursor to have a different color and this is accomplished by custom-set-faces.
+To make the line number of the cursor have a different color, we can customize it using =custom-set-faces=:
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (custom-set-faces!
   '(line-number-current-line :foreground "#EF7168"))
@@ -604,7 +598,6 @@ word count   %d, %d, %d"
              total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
              total-words-org total-words-daily (+ total-words-org total-words-daily))))
 #+END_SRC
-
 
 *** elisp: ESP32, Arduino and serial communication
 The following code will open ttyUSB0 and gives the options to cycle through baudrates.
