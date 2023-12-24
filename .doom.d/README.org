@@ -196,7 +196,7 @@ Make the highlighting global for the hl-words TODO/FIXME/NOTE/DEPRECATED/HACK/RE
 (my-global-hl-todo-mode 1)
 #+END_SRC
 
-For ultrawide monitors I prefer to set my working window in the middle of the screen. In my case I use qtile window manager with monadthreecolumn and emacs in the middle column. With visual-fill emacs can be set to be in the middle of the window. This works with the three column layout and is especially nice for maximized windows on an ultrawide. Now it's perfectly in the middle and distraction free.
+To position your Emacs window in the middle of the screen you can employ visual-fill to center Emacs in the middle column. This configuration is especially useful for maximized windows on an ultrawide monitor, providing a clean and centered workspace.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
@@ -211,7 +211,7 @@ NOTE: when this part is placed at the start of ~config.el~ then transparency doe
 (add-to-list 'default-frame-alist '(alpha 85 80))
 #+END_SRC
 
-For jumping in texts it is nice to know the line position where to jump to from the current line instead of calculating it every time (current line=12, line I want to jump to=20, so move 20-12=8 lines downs: ~8j~). By setting the line numbers to ~relative~ the line numbering is relative to the current line and jumping around in the file will become quick and easy. In Doom Emacs it can also be toggled by ~SPC~ ~t~ ~l~.
+By setting the line numbers to relative it makes jumping in texts easier, allowing you to quickly find the line position to jump to from the current line.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
