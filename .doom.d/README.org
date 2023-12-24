@@ -6,8 +6,7 @@
 
 #+CAPTION: Doom Emacs
 #+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align center
-[[file:doom-emacs.png]]
-
+[[file:doom-emacs-stallman.png]]
 
 * Table Of Contents :toc:
 - [[#about-this-config][About this config]]
@@ -196,7 +195,7 @@ Make the highlighting global for the hl-words TODO/FIXME/NOTE/DEPRECATED/HACK/RE
 (my-global-hl-todo-mode 1)
 #+END_SRC
 
-To position your Emacs window in the middle of the screen you can employ visual-fill to center Emacs in the middle column. This configuration is especially useful for maximized windows on an ultrawide monitor, providing a clean and centered workspace.
+To position your Emacs window in the middle of the screen you can employ visual-fill. This configuration is especially useful for maximized windows on an ultrawide monitor, providing a clean and centered workspace.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
@@ -728,7 +727,10 @@ Open my =keymap.c= file of my redox keyboard.
 ** Splash screen
 A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+;;(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(setq fancy-splash-image (if (zerop (random 2))
+                           "~/.doom.d/doom-emacs.png"
+                           "~/.doom.d/doom-emacs-stallman.png"))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
 (add-hook! '+doom-dashboard-functions :append
@@ -766,8 +768,7 @@ The next one is inserting the start of a Python code block, ~#+BEGIN_SRC~, and i
 # name: python-block-start
 # key: <ps
 # --
-,#+BEGIN_SRC python
-
+#+BEGIN_SRC python
 #+END_SRC
 
 Another snippet, this time to end a code block. This one requires a hack since adding ~#END_SRC~ to this code block will end the code block in org-mode and there will be no text inserted. With this case the ~#+END_SR~ will be added and after that the ~C~ is overwritten over the ~$~ sign, et viola, fixed.
@@ -781,15 +782,16 @@ $0
 #+END_SRC
 
 The next one is inserting the start of a Python code block, ~#+BEGIN_SRC~, and is triggered by ~<ps~. The ~END_SRC~ is added by the same trick as describe above.
-#+BEGIN_SRC snippet #:tangle snippets/org-mode/python-block
+#+BEGIN_SRC snippet :tangle snippets/org-mode/python-block
 # -*- mode: snippet -*-
 # name: python-block
 # key: <p
 # --
 #+BEGIN_SRC python
-$0
+`%`$0
 #+END_SR${1:C}
 #+END_SRC
+#+BEGIN_SRC python
 
 Another snippet, this time to insert a python code block with tangle and result options plus the tab will jump to the filename ~wismij~ and another tab to jump to the inside of the code block ~$0~.
 #+BEGIN_SRC snippet #:tangle snippets/org-mode/python-block-tangling-name

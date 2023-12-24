@@ -383,7 +383,10 @@ word count   %d, %d, %d"
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
-(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+;;(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
+(setq fancy-splash-image (if (zerop (random 2))
+                           "~/.doom.d/doom-emacs.png"
+                           "~/.doom.d/doom-emacs-stallman.png"))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
 (add-hook! '+doom-dashboard-functions :append
