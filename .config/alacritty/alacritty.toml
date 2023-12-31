@@ -1,3 +1,4 @@
+#tokyo-night theme, same as colors.normal
 [colors.bright]
 black = "#1e2030"
 blue = "#82aaff"
@@ -8,6 +9,7 @@ red = "#ff757f"
 white = "#DFDFDF"
 yellow = "#ffc777"
 
+#tokyo-night theme
 [colors.normal]
 black = "#1e2030"
 blue = "#82aaff"
