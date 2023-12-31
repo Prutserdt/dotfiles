@@ -3,6 +3,7 @@
 #       Please only edit that file and org-babel-tangle (Emacs)
 
 setxkbmap us &&
+xmodmap $HOME/.config/rdxwitch &&
 xmodmap $HOME/.config/kbswitch &&
 $HOME/.config/notify-log.sh $HOME/.config/notify.log && # writing notification to a logfile
 xset r rate 300 80 &

@@ -276,7 +276,7 @@ Right super key to open applications. Shift is used to update the application.
 ** Keybingings: Text files
 The right alt key is used to open text files in Emacs.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
-    # Open text files in emaca
+    # Open text files in emacs
     Key([aR], "a", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}")),
     Key([aR], "b", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
     Key([aR], "c", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/commands.org')}")),
@@ -565,6 +565,7 @@ Again a note is added and this time to ~autostart.sh~ to *not* edit this file di
 The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started. nm-applet is the NetworkManager applet. Signal is also opened in the tray with the icon.
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
 setxkbmap us &&
+xmodmap $HOME/.config/rdxwitch &&
 xmodmap $HOME/.config/kbswitch &&
 $HOME/.config/notify-log.sh $HOME/.config/notify.log && # writing notification to a logfile
 xset r rate 300 80 &

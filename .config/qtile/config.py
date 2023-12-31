@@ -191,7 +191,7 @@ keys = [
     Key([mR], "v", lazy.spawn("alacritty -e vim")),
     Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
 
-    # Open text files in emaca
+    # Open text files in emacs
     Key([aR], "a", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}")),
     Key([aR], "b", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
     Key([aR], "c", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/commands.org')}")),

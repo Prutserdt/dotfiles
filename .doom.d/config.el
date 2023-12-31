@@ -26,9 +26,9 @@
 (defun set-line-number-color-according-to-evil-state ()
   (when (and evil-mode (not buffer-read-only))
     (set-face-foreground 'line-number
-                         (cond ((evil-insert-state-p) "#FFAD99")
-                               ((evil-visual-state-p) "#B978C4")
-                               (t "#4C6985")))))
+                         (cond ((evil-insert-state-p) "#9f85dd")
+                               ((evil-visual-state-p) "#fcbb4a")
+                               (t "#b0bdb6")))))
 
 (add-hook 'doom-switch-buffer-hook 'set-line-number-color-according-to-evil-state)
 (add-hook 'doom-first-buffer-hook 'set-line-number-color-according-to-evil-state)

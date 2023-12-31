@@ -221,10 +221,13 @@ To remember the current state (normal, insert or visual mode), we can customize 
 (defun set-line-number-color-according-to-evil-state ()
   (when (and evil-mode (not buffer-read-only))
     (set-face-foreground 'line-number
+                         (cond ((evil-insert-state-p) "#9f85dd")
+                               ((evil-visual-state-p) "#fcbb4a")
+                               (t "#b0bdb6")))))
+#+END_SRC
                          (cond ((evil-insert-state-p) "#FFAD99")
                                ((evil-visual-state-p) "#B978C4")
                                (t "#4C6985")))))
-#+END_SRC
 
 Next, we add hooks to trigger the line number color customization when certain events occur. Here are the hooks we can use:
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -313,7 +316,7 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 #+END_SRC
 
 ** Custom keybindings
-Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, which is not enough!
+Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, let's add some more!
 
 *** Evil keybindings
 I want to use the =undo-redo= package in Evil mode and therefore I add the keybinding to =U= here. Another addition to the default Doom Evil mode is that I want to use =[= and =]= to switch buffers.
