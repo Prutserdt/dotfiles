@@ -12,7 +12,7 @@ The qmk configurations of the ortholinear ergonomic split keyboards Redox and Ge
 My old dwm and i3 gaps config file and surf and st builds are still a part of this repo although I do not use them anymore.
 
 * Managing my dotfiles
-The ~dotfiles~ command is  an [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] which runs a simple [[https://github.com/Prutserdt/dotfiles/blob/master/.config/dotfiles.sh][bash script]] and push/pulls to this github repo and uses the [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] ~config~.
+The ~dotfiles~ command is an [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] which runs a simple [[https://github.com/Prutserdt/dotfiles/blob/master/.config/dotfiles.sh][bash script]] and push/pulls to this github repo and uses the [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] ~config~.
 ** Add a new dotfile to my repo
 #+BEGIN_SRC sh
     config add .example

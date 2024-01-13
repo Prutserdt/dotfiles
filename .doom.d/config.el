@@ -201,17 +201,6 @@
     (interactive)
     (counsel-rg nil org-roam-directory))
 
-(use-package! websocket
-    :after org-roam)
-
-(use-package! org-roam-ui
-    :after org-roam ;; or :after org
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
-
 (defun my-org-roam-switch (roam-dir)
   "Switch to the roam notes in the specified directory. This function is not intended to be used separately, although this is possible. It is used by other Elisp code which will inject the desired Roam directory."
   (interactive "DSet Roam Directory:")
@@ -275,17 +264,27 @@
         (insert-file-contents (expand-file-name file roam-dir))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
-    (message "Statistics about my second brain 🤓
-Brain shelve: %s.
+    (message "Statistics about my second brain 🤓. Brain shelve: %s.
 
-             Roam dir, daily dir, total
-org files    %d, %d, %d
-line numbers %d, %d, %d
-word count   %d, %d, %d"
+             Total  Roam dir Daily dir
+org files    %d    %d        %d
+line numbers %d   %d        %d
+word count   %d  %d        %d"
              roam-dir
              org-file-count-roam org-file-count-daily org-file-count-total
              total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
              total-words-org total-words-daily (+ total-words-org total-words-daily))))
+
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 
 (defvar data-bits nil
   "Number of data bits for the serial monitor")

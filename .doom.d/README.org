@@ -488,27 +488,7 @@ To perform a quick word search through all of my notes I use the rip-grep (rg) p
     (counsel-rg nil org-roam-directory))
 #+END_SRC
 
-** Org-Roam-ui configuration
-~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes and therefore a websocket package is needed.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(use-package! websocket
-    :after org-roam)
-#+END_SRC
-
-Now that the websocket is setup the org-roam-ui can be set.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(use-package! org-roam-ui
-    :after org-roam ;; or :after org
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
-#+END_SRC
-
-** Custom code
-*** elisp: org-roam
-A general function that is used to switch to roam directories, the ones below are using this function.
+Switch to roam directories is managed in the =my-org-roam-switch= function.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-switch (roam-dir)
   "Switch to the roam notes in the specified directory. This function is not intended to be used separately, although this is possible. It is used by other Elisp code which will inject the desired Roam directory."
@@ -588,18 +568,37 @@ Show information about the org-roam files and list the amount of org files, the 
         (insert-file-contents (expand-file-name file roam-dir))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
-    (message "Statistics about my second brain 🤓
-Brain shelve: %s.
+    (message "Statistics about my second brain 🤓. Brain shelve: %s.
 
-             Roam dir, daily dir, total
-org files    %d, %d, %d
-line numbers %d, %d, %d
-word count   %d, %d, %d"
+             Total  Roam dir Daily dir
+org files    %d    %d        %d
+line numbers %d   %d        %d
+word count   %d  %d        %d"
              roam-dir
              org-file-count-roam org-file-count-daily org-file-count-total
              total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
              total-words-org total-words-daily (+ total-words-org total-words-daily))))
 #+END_SRC
+
+** Org-Roam-ui configuration
+~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes and therefore a websocket package is needed.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(use-package! websocket
+    :after org-roam)
+#+END_SRC
+
+Now that the websocket is setup the org-roam-ui can be set.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+#+END_SRC
+
+** Custom code
 
 *** elisp: ESP32, Arduino and serial communication
 The following code will open ttyUSB0 and gives the options to cycle through baudrates.

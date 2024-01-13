@@ -38,6 +38,7 @@
   - [[#aandelenpy][aandelen.py]]
   - [[#bitcoin_notificationpy][bitcoin_notification.py]]
   - [[#bitcoin_email_botpy][bitcoin_email_bot.py]]
+  - [[#copy_with_datesh][copy_with_date.sh]]
   - [[#stack_startupsh][stack_startup.sh]]
   - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dotfilessh][dotfiles.sh]]
@@ -1164,6 +1165,39 @@ print("Info van coingecko, rate:", fetch_coingecko_info[0])
 print("Info van coingecko, time:", fetch_coingecko_info[1])
 send_email()
 #+END_SRC
+
+
+** copy_with_date.sh
+FIXME: this does not work in Thunar, very weird!!!!
+
+A script deployed in Thunar to make a quick copy from the selected file that will add the date behind the filename.
+
+Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+#+BEGIN_SRC bash :tangle copy_with_date.sh :padline no :tangle-mode (identity #o755) :eval never
+#!/bin/sh
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+#+END_SRC
+
+#+BEGIN_SRC bash :tangle copy_with_date.sh :padline no :tangle-mode (identity #o755) :eval never
+FILE="$1"
+DEST_DIR=$(dirname "$FILE")
+BASENAME=$(basename "$FILE")
+DATE=$(date +%Y%m%d)
+NEW_FILENAME="${BASENAME%.*}_${DATE}.${BASENAME##*.}"
+cp "$FILE" "$DEST_DIR/$NEW_FILENAME"
+#+end_src
+
+1. Open Thunar and go to "Edit" -> "Configure Custom Actions".
+2. Click on the "+" button to create a new custom action.
+3. In the "Basic" tab, enter the following details for the custom action:
+   - Name: "Copy with Date"
+   - Command: "path/to/copy_with_date.sh %F"
+   Make sure to replace "path/to/copy_with_date.sh" with the actual path to the script file you created.
+4. In the "Appearance Conditions" tab, you can set the desired conditions or leave them blank to enable the action for all file types.
+5. Click "OK" to save the custom action.
+Now, whenever you want to copy a file in Thunar, you can use the "Copy with Date" option from the right-click context menu. This will create a copy of the file with the current date appended to the filename in the same directory.
+FIXME: does NOT work.... No addition to Thunar after right click...
 
 ** stack_startup.sh
 A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
