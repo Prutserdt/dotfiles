@@ -14,8 +14,15 @@
 
 (setq-default fill-column 110)
 (global-display-fill-column-indicator-mode)
-(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-center-text t)
+(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
+
+(defun my-prog-mode-hook ()
+  (setq-local fill-column 140)
+  (toggle-truncate-lines 0)
+  (visual-fill-column-mode))
+
+(add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
 (set-frame-parameter (selected-frame) 'alpha '(85 80))
 (add-to-list 'default-frame-alist '(alpha 85 80))
@@ -174,13 +181,15 @@
   :hook (org-mode . org-auto-tangle-mode))
 
 (setq org-agenda-files
-;;  '("~/Shared_directory/RoamNotes/daily"))   ;; Virtual machine Arch dir
-    '("~/Stack/Command_line/RoamNotes/daily")) ;; default location
+  '("~/Stack/Command_line/RoamNotes/daily")) ;; Desktop normal location
+;;'("~/Shared_directory/RoamNotes/daily"))   ;; Virtual machine Arch dir
+;;'("~/Stack/Thinkpad/RoamNotes/daily"))     ;; Thinkpad
 
 (use-package org-roam
     :custom
-    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; desktop normal location
+    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; Desktop normal location
 ;;  (org-roam-directory "~/Shared_directory/RoamNotes")    ;; Virtual machine Arch dir
+;;  (org-roam-directory "~/Stack/Thinkpad/RoamNotes")      ;; Thinkpad
     (org-roam-dailies-directory "daily/")                  ;; the subdir for dailies in roam-dir
     (org-roam-completion-everywhere t)
     :config
@@ -383,11 +392,16 @@ word count   %d  %d        %d"
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
-(set-input-method "latin-prefix")
+(setq default-input-method "latin-prefix") ;; FIXME: if I remove this line the following function will not run, I do not understand why...
 
-(defun my-switch-input-method ()
-  (interactive)
-  (toggle-input-method))
+(defun my-switch-to-latin-prefix ()
+  "Switch to the Latin prefix input method in Org and .el files."
+  (when (and (stringp buffer-file-name)
+             (string-match "\\(\\.org\\|\\.el\\)\\'" buffer-file-name))
+    (activate-input-method "latin-prefix")))
+
+(add-hook 'org-mode-hook 'my-switch-to-latin-prefix)
+(add-hook 'emacs-lisp-mode-hook 'my-switch-to-latin-prefix)
 
 (defun my-insert-characters-and-text ()
   "Inserts a selected special character at point and switches to insert state in Evil mode when in normal state."
