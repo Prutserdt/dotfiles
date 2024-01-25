@@ -23,6 +23,7 @@
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-Roam-ui configuration]]
   - [[#custom-code][Custom code]]
+  - [[#inserting-characters-words-and-strings][Inserting characters, words and strings]]
   - [[#splash-screen][Splash screen]]
 - [[#code-snippets][Code snippets]]
 - [[#credits][Credits]]
@@ -352,6 +353,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
+        :desc "Switch latin-1-prefix on/off"     "i" #'my-switch-input-method
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
@@ -725,6 +727,50 @@ Open my =keymap.c= file of my redox keyboard.
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 #+END_SRC
+
+** Inserting characters, words and strings
+Set multilingual text input to ~latin-prefix~ as the default. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and therefor the function =my-switch-input-method= can be used to exit out of the multilingual input. The function is mapped to an evil keybinding (SPC d i).
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(set-input-method "latin-prefix")
+
+(defun my-switch-input-method ()
+  (interactive)
+  (toggle-input-method))
+#+end_src
+
+Inserting often used characters and words can be done by this simple function. After inserting it will end in insert state of evil mode to continue the editing.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-insert-characters-and-text ()
+  "Inserts a selected special character at point and switches to insert state in Evil mode when in normal state."
+  (interactive)
+  (let* ((characters '(
+                       ("Äkta akta woord"   . "Äkta")
+                       ("laboratory woord"  . "laboratory")
+                       ("Emacs woord"       . "Emacs")
+                       ("℃ Graad Celsius"   . "℃")
+                       ("° Graad"           . "°")
+                       ("µ micro"           . "µ")
+                       ("µm micro meter"    . "µm")
+                       ("µS micro Siemens"  . "µS")
+                       ("Ä A trema"         . "Ä")
+                       ("à a accent grave"  . "à")
+                       ("á a accent aigu"   . "á")
+                       ("ä a trema"         . "ä")
+                       ("è e acent grave"   . "è")
+                       ("é e accent aigu"   . "é")
+                       ("ë e trema"         . "ë")
+                       ("ï i trema"         . "ï")
+                       ("string test"  . "dit is een test met string")
+                      ))
+         (chosen-character (cdr (assoc (completing-read "Select a character: " characters)
+                                      characters))))
+    (when chosen-character
+      (evil-change-state 'insert)
+      (insert chosen-character))))
+
+(global-set-key (kbd "C-c k")      'my-insert-characters-and-text)
+(global-set-key (kbd "C-c i")      'insert-char)
+#+end_src
 
 ** Splash screen
 A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.

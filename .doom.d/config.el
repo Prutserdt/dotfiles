@@ -106,6 +106,7 @@
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
+        :desc "Switch latin-1-prefix on/off"     "i" #'my-switch-input-method
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
@@ -381,6 +382,43 @@ word count   %d  %d        %d"
   "Open the keymap.c file of my Redox qmk firmware."
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
+
+(set-input-method "latin-prefix")
+
+(defun my-switch-input-method ()
+  (interactive)
+  (toggle-input-method))
+
+(defun my-insert-characters-and-text ()
+  "Inserts a selected special character at point and switches to insert state in Evil mode when in normal state."
+  (interactive)
+  (let* ((characters '(
+                       ("Äkta akta woord"   . "Äkta")
+                       ("laboratory woord"  . "laboratory")
+                       ("Emacs woord"       . "Emacs")
+                       ("℃ Graad Celsius"   . "℃")
+                       ("° Graad"           . "°")
+                       ("µ micro"           . "µ")
+                       ("µm micro meter"    . "µm")
+                       ("µS micro Siemens"  . "µS")
+                       ("Ä A trema"         . "Ä")
+                       ("à a accent grave"  . "à")
+                       ("á a accent aigu"   . "á")
+                       ("ä a trema"         . "ä")
+                       ("è e acent grave"   . "è")
+                       ("é e accent aigu"   . "é")
+                       ("ë e trema"         . "ë")
+                       ("ï i trema"         . "ï")
+                       ("string test"  . "dit is een test met string")
+                      ))
+         (chosen-character (cdr (assoc (completing-read "Select a character: " characters)
+                                      characters))))
+    (when chosen-character
+      (evil-change-state 'insert)
+      (insert chosen-character))))
+
+(global-set-key (kbd "C-c k")      'my-insert-characters-and-text)
+(global-set-key (kbd "C-c i")      'insert-char)
 
 ;;(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (setq fancy-splash-image (if (zerop (random 2))
