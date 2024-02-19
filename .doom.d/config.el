@@ -416,7 +416,6 @@ word count   %d  %d        %d"
 (setq default-input-method "latin-prefix")
 
 (add-hook 'org-mode-hook 'toggle-input-method)
-;;(add-hook 'emacs-lisp-mode-hook 'toggle-input-method)
 
 (defun my-insert-characters-and-text ()
   "Inserts a character at point and switches to insert state in Evil mode when in normal state."

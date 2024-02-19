@@ -272,7 +272,6 @@ An emergency switch to be used at very bright light conditions, for instance at 
       (message "Theme switched to my dark theme."))))
 #+end_src
 
-
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -292,7 +291,6 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 #+END_SRC
 
 ** General settings
-
 I want to use an org file as a permanent scratch buffer. If it does not exist then it should be created.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (unless (file-exists-p "~/.doom.d/scratch.org")
@@ -760,12 +758,11 @@ Open my =keymap.c= file of my redox keyboard.
 #+END_SRC
 
 ** Inserting characters, words and strings
-Set multilingual text input to ~latin-prefix~ as the default input method in .org and .el files. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and this can easily be switched off by running ~toggle-input-method~ with the emacs hotkeys ~C-\~.
+Set multilingual text input to ~latin-prefix~ as the default input method in .org files. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and this can easily be switched off by running ~toggle-input-method~ with the emacs hotkeys ~C-\~.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq default-input-method "latin-prefix")
 
 (add-hook 'org-mode-hook 'toggle-input-method)
-;;(add-hook 'emacs-lisp-mode-hook 'toggle-input-method)
 #+end_src
 
 Inserting often used characters and words can be done by this simple function. After inserting it will end in insert state of evil mode to continue the editing.
@@ -895,4 +892,3 @@ My configuration of Doom Emacs is partially based on these:
 - 🔗 https://gitlab.com/zzamboni/dot-doom
 - 🔗 https://systemcrafters.net/
 - 🔗 https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/doom/config.org
-
