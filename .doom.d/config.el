@@ -48,6 +48,21 @@
 
 (scroll-bar-mode -1)
 
+(defun my-beach-or-dark-theme-switch ()
+  "Switch between my-beach-theme and my-dark-theme."
+  (interactive)
+  (if (eq (car custom-enabled-themes) 'doom-tokyo-night)
+      (progn
+        ;; Switch to my beach theme, to be able to work at the beach at bright light
+        (load-theme 'leuven t)
+        (set-frame-parameter (selected-frame) 'alpha '(100 100))
+        (message "Theme switched for beach settings; in bright light conditions."))
+    (progn
+      ;; Switch to my dark theme
+      (load-theme 'doom-tokyo-night t)
+      (set-frame-parameter (selected-frame) 'alpha '(85 80))
+      (message "Theme switched to my dark theme."))))
+
 (setq! evil-want-Y-yank-to-eol nil)
 
 (setq evil-normal-state-cursor '(box "tomato")
@@ -56,9 +71,13 @@
 
 (setq evil-goggles-duration 1.0)
 
-(setq initial-major-mode 'org-mode)
-(setq initial-scratch-message
-    (concat "* Hack away❗\n A _temporary_ *org-mode* ~scratch buffer~ /for/ *hacking*. =This buffer is *not* saved.= \n\n"))
+(unless (file-exists-p "~/.doom.d/scratch.org")
+  (with-temp-file "~/.doom.d/scratch.org"
+    (insert "* ❗ A _temporary_ *org-mode* ~scratch buffer~ /for/ *hacking* ❗\n")))
+
+(eval-after-load 'org
+  '(find-file "~/.doom.d/scratch.org"))
+;;(find-file "~/.doom.d/scratch.org")
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
@@ -92,6 +111,8 @@
 
 (map! :leader
       :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
+    (:prefix ("b") ;; Default Doom keybinding,
+         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
     (:prefix ("c") ;; Default Doom keybinding,
         (:prefix ("h" . "ChatGPT, GPTel options")
             :desc "ChatGPT of selected region"   "a" #'gptel-send
@@ -113,8 +134,8 @@
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
-        :desc "Switch latin-1-prefix on/off"     "i" #'my-switch-input-method
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+        :desc "Switch dark/beach mode"           "s" #'my-beach-or-dark-theme-switch
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
@@ -212,7 +233,7 @@
     (counsel-rg nil org-roam-directory))
 
 (defun my-org-roam-switch (roam-dir)
-  "Switch to the roam notes in the specified directory. This function is not intended to be used separately, although this is possible. It is used by other Elisp code which will inject the desired Roam directory."
+  "Switch to the roam notes in the specified directory. Not working standalone "
   (interactive "DSet Roam Directory:")
   (if (string= org-roam-directory roam-dir)
       (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
@@ -243,7 +264,7 @@
   (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 
 (defun my-show-org-roam-directory-info ()
-  "Show information about the current org-roam directory and its 'daily' subdirectory. Files are counted, number of lines and words as well."
+  "Show info of current org-roam dir and 'daily' subdirectory."
   (interactive)
   (let* ((roam-dir org-roam-directory)
          (daily-dir (expand-file-name "daily" roam-dir))
@@ -339,7 +360,7 @@ word count   %d  %d        %d"
 (global-set-key (kbd "C-c C-m") 'my-serial-ttyUSB0)
 
 (defun my-PowerStrike-testing-upload ()
-    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
+    "My IDE of arduino Powerstrike uploading to ESP32."
     (interactive)
     (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
@@ -392,25 +413,19 @@ word count   %d  %d        %d"
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
-(setq default-input-method "latin-prefix") ;; FIXME: if I remove this line the following function will not run, I do not understand why...
+(setq default-input-method "latin-prefix")
 
-(defun my-switch-to-latin-prefix ()
-  "Switch to the Latin prefix input method in Org and .el files."
-  (when (and (stringp buffer-file-name)
-             (string-match "\\(\\.org\\|\\.el\\)\\'" buffer-file-name))
-    (activate-input-method "latin-prefix")))
-
-(add-hook 'org-mode-hook 'my-switch-to-latin-prefix)
-(add-hook 'emacs-lisp-mode-hook 'my-switch-to-latin-prefix)
+(add-hook 'org-mode-hook 'toggle-input-method)
+;;(add-hook 'emacs-lisp-mode-hook 'toggle-input-method)
 
 (defun my-insert-characters-and-text ()
-  "Inserts a selected special character at point and switches to insert state in Evil mode when in normal state."
+  "Inserts a character at point and switches to insert state in Evil mode when in normal state."
   (interactive)
   (let* ((characters '(
                        ("Äkta akta woord"   . "Äkta")
                        ("laboratory woord"  . "laboratory")
                        ("Emacs woord"       . "Emacs")
-                       ("℃ Graad Celsius"   . "℃")
+                       ("℃ Graad Celsius"  . "℃")
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
                        ("µm micro meter"    . "µm")

@@ -254,6 +254,25 @@ The scroll bar is not needed and removed here. NOTE: does not work when it's at 
 (scroll-bar-mode -1)
 #+END_SRC
 
+An emergency switch to be used at very bright light conditions, for instance at a beach!
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-beach-or-dark-theme-switch ()
+  "Switch between my-beach-theme and my-dark-theme."
+  (interactive)
+  (if (eq (car custom-enabled-themes) 'doom-tokyo-night)
+      (progn
+        ;; Switch to my beach theme, to be able to work at the beach at bright light
+        (load-theme 'leuven t)
+        (set-frame-parameter (selected-frame) 'alpha '(100 100))
+        (message "Theme switched for beach settings; in bright light conditions."))
+    (progn
+      ;; Switch to my dark theme
+      (load-theme 'doom-tokyo-night t)
+      (set-frame-parameter (selected-frame) 'alpha '(85 80))
+      (message "Theme switched to my dark theme."))))
+#+end_src
+
+
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -273,12 +292,17 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 #+END_SRC
 
 ** General settings
-Set the default mode of the scratch buffer to org-mode as inspired by [[https://blog.karssen.org/2014/07/28/changing-the-default-mode-of-the-emacs-scratch-buffer][this source]] and add a initial scratch message.
+
+I want to use an org file as a permanent scratch buffer. If it does not exist then it should be created.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(setq initial-major-mode 'org-mode)
-(setq initial-scratch-message
-    (concat "* Hack away❗\n A _temporary_ *org-mode* ~scratch buffer~ /for/ *hacking*. =This buffer is *not* saved.= \n\n"))
-#+END_SRC
+(unless (file-exists-p "~/.doom.d/scratch.org")
+  (with-temp-file "~/.doom.d/scratch.org"
+    (insert "* ❗ A _temporary_ *org-mode* ~scratch buffer~ /for/ *hacking* ❗\n")))
+
+(eval-after-load 'org
+  '(find-file "~/.doom.d/scratch.org"))
+;;(find-file "~/.doom.d/scratch.org")
+#+end_src
 
 Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting it as a major mode.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -336,6 +360,8 @@ The following are keybindings that are bound to my leader key, which is =space=,
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (map! :leader
       :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
+    (:prefix ("b") ;; Default Doom keybinding,
+         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
     (:prefix ("c") ;; Default Doom keybinding,
         (:prefix ("h" . "ChatGPT, GPTel options")
             :desc "ChatGPT of selected region"   "a" #'gptel-send
@@ -357,8 +383,8 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
-        :desc "Switch latin-1-prefix on/off"     "i" #'my-switch-input-method
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+        :desc "Switch dark/beach mode"           "s" #'my-beach-or-dark-theme-switch
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
@@ -474,8 +500,6 @@ In the code block below the directory is set where the atomic files will be stor
     (org-roam-db-autosync-enable))
 #+END_SRC
 
-
-
 For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as already set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-roam-dailies-capture-templates
@@ -501,7 +525,7 @@ To perform a quick word search through all of my notes I use the rip-grep (rg) p
 Switch to roam directories is managed in the =my-org-roam-switch= function.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-switch (roam-dir)
-  "Switch to the roam notes in the specified directory. This function is not intended to be used separately, although this is possible. It is used by other Elisp code which will inject the desired Roam directory."
+  "Switch to the roam notes in the specified directory. Not working standalone "
   (interactive "DSet Roam Directory:")
   (if (string= org-roam-directory roam-dir)
       (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
@@ -547,7 +571,7 @@ Switch to the work notes on my Virtual box distro at my work.
 Show information about the org-roam files and list the amount of org files, the amount of lines and words in the org-roam directory and daily subdirectory as well.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-show-org-roam-directory-info ()
-  "Show information about the current org-roam directory and its 'daily' subdirectory. Files are counted, number of lines and words as well."
+  "Show info of current org-roam dir and 'daily' subdirectory."
   (interactive)
   (let* ((roam-dir org-roam-directory)
          (daily-dir (expand-file-name "daily" roam-dir))
@@ -609,7 +633,6 @@ Now that the websocket is setup the org-roam-ui can be set.
 #+END_SRC
 
 ** Custom code
-
 *** elisp: ESP32, Arduino and serial communication
 The following code will open ttyUSB0 and gives the options to cycle through baudrates.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -659,7 +682,7 @@ The following code will open ttyUSB0 and gives the options to cycle through baud
 A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-PowerStrike-testing-upload ()
-    "Upload arduino Powerstrike code to ESP32. Opens an async shell command and runs arduino code on ESP32 and port ttyUSB0. The windows are manipulated to be a kind of an IDE."
+    "My IDE of arduino Powerstrike uploading to ESP32."
     (interactive)
     (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
     (doom/window-maximize-buffer)
@@ -739,28 +762,22 @@ Open my =keymap.c= file of my redox keyboard.
 ** Inserting characters, words and strings
 Set multilingual text input to ~latin-prefix~ as the default input method in .org and .el files. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and this can easily be switched off by running ~toggle-input-method~ with the emacs hotkeys ~C-\~.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(setq default-input-method "latin-prefix") ;; FIXME: if I remove this line the following function will not run, I do not understand why...
+(setq default-input-method "latin-prefix")
 
-(defun my-switch-to-latin-prefix ()
-  "Switch to the Latin prefix input method in Org and .el files."
-  (when (and (stringp buffer-file-name)
-             (string-match "\\(\\.org\\|\\.el\\)\\'" buffer-file-name))
-    (activate-input-method "latin-prefix")))
-
-(add-hook 'org-mode-hook 'my-switch-to-latin-prefix)
-(add-hook 'emacs-lisp-mode-hook 'my-switch-to-latin-prefix)
+(add-hook 'org-mode-hook 'toggle-input-method)
+;;(add-hook 'emacs-lisp-mode-hook 'toggle-input-method)
 #+end_src
 
 Inserting often used characters and words can be done by this simple function. After inserting it will end in insert state of evil mode to continue the editing.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-insert-characters-and-text ()
-  "Inserts a selected special character at point and switches to insert state in Evil mode when in normal state."
+  "Inserts a character at point and switches to insert state in Evil mode when in normal state."
   (interactive)
   (let* ((characters '(
                        ("Äkta akta woord"   . "Äkta")
                        ("laboratory woord"  . "laboratory")
                        ("Emacs woord"       . "Emacs")
-                       ("℃ Graad Celsius"   . "℃")
+                       ("℃ Graad Celsius"  . "℃")
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
                        ("µm micro meter"    . "µm")
@@ -878,3 +895,4 @@ My configuration of Doom Emacs is partially based on these:
 - 🔗 https://gitlab.com/zzamboni/dot-doom
 - 🔗 https://systemcrafters.net/
 - 🔗 https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/doom/config.org
+
