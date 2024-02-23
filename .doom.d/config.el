@@ -30,18 +30,18 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-(defun set-line-number-color-according-to-evil-state ()
+(defun my-line-number-color-according-to-evil-state ()
   (when (and evil-mode (not buffer-read-only))
     (set-face-foreground 'line-number
                          (cond ((evil-insert-state-p) "#9f85dd")
                                ((evil-visual-state-p) "#fcbb4a")
                                (t "#b0bdb6")))))
 
-(add-hook 'doom-switch-buffer-hook 'set-line-number-color-according-to-evil-state)
-(add-hook 'doom-first-buffer-hook 'set-line-number-color-according-to-evil-state)
-(add-hook 'evil-insert-state-entry-hook 'set-line-number-color-according-to-evil-state)
-(add-hook 'evil-normal-state-entry-hook 'set-line-number-color-according-to-evil-state)
-(add-hook 'evil-visual-state-entry-hook 'set-line-number-color-according-to-evil-state)
+(add-hook 'doom-switch-buffer-hook 'my-line-number-color-according-to-evil-state)
+(add-hook 'doom-first-buffer-hook 'my-line-number-color-according-to-evil-state)
+(add-hook 'evil-insert-state-entry-hook 'my-line-number-color-according-to-evil-state)
+(add-hook 'evil-normal-state-entry-hook 'my-line-number-color-according-to-evil-state)
+(add-hook 'evil-visual-state-entry-hook 'my-line-number-color-according-to-evil-state)
 
 (custom-set-faces!
   '(line-number-current-line :foreground "#EF7168"))
@@ -53,12 +53,10 @@
   (interactive)
   (if (eq (car custom-enabled-themes) 'doom-tokyo-night)
       (progn
-        ;; Switch to my beach theme, to be able to work at the beach at bright light
         (load-theme 'leuven t)
         (set-frame-parameter (selected-frame) 'alpha '(100 100))
         (message "Theme switched for beach settings; in bright light conditions."))
     (progn
-      ;; Switch to my dark theme
       (load-theme 'doom-tokyo-night t)
       (set-frame-parameter (selected-frame) 'alpha '(85 80))
       (message "Theme switched to my dark theme."))))
@@ -73,11 +71,10 @@
 
 (unless (file-exists-p "~/.doom.d/scratch.org")
   (with-temp-file "~/.doom.d/scratch.org"
-    (insert "* ❗ A _temporary_ *org-mode* ~scratch buffer~ /for/ *hacking* ❗\n")))
+    (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n")))
 
 (eval-after-load 'org
   '(find-file "~/.doom.d/scratch.org"))
-;;(find-file "~/.doom.d/scratch.org")
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
@@ -111,9 +108,9 @@
 
 (map! :leader
       :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
-    (:prefix ("b") ;; Default Doom keybinding,
+    (:prefix ("b") ;; Default Doom keybinding
          :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
-    (:prefix ("c") ;; Default Doom keybinding,
+    (:prefix ("c") ;; Default Doom keybinding
         (:prefix ("h" . "ChatGPT, GPTel options")
             :desc "ChatGPT of selected region"   "a" #'gptel-send
             :desc "Open ChatGPT in new buffer"   "A" #'gptel
@@ -132,6 +129,7 @@
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
+        :desc "Org table to clipboard (csv)"     "e" #'my-export-org-table-as-csv-and-copy
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
@@ -140,7 +138,7 @@
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
-    (:prefix ("r" . "org-roam") ;; similar to Doom default, SPC n r. Slightly shorter as: SPC r
+    (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("c" . "Change to anoter notes dir")
             :desc "Goto default notes"           "d" #'my-org-roam-default
@@ -178,10 +176,6 @@
 
 (global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
 
-;;(org-babel-do-load-languages
-;; 'org-babel-load-languages
-;; '((sql . t)))
-
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
 (custom-set-faces
@@ -194,27 +188,36 @@
 
 (setq org-hide-emphasis-markers t)
 
-(setq org-ellipsis "⚡⚡⚡") ;; alternatives: ⤵↖↩ ⤵)⥆,⬎ ↴, ⬎,↻ ⤷
+(setq org-ellipsis "⚡⚡⚡")
 
 (use-package org-auto-tangle
-  :load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+  :load-path "site-lisp/org-auto-tangle/"
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
-(setq org-agenda-files
-  '("~/Stack/Command_line/RoamNotes/daily")) ;; Desktop normal location
-;;'("~/Shared_directory/RoamNotes/daily"))   ;; Virtual machine Arch dir
-;;'("~/Stack/Thinkpad/RoamNotes/daily"))     ;; Thinkpad
+(defun my-export-org-table-as-csv-and-copy ()
+  "Export the org-mode table at point as a CSV file in system memory and copy to clipboard."
+  (interactive)
+  (let ((file "/dev/shm/temp/wismij.csv"))
+    (org-table-export file "orgtbl-to-csv")
+    (with-temp-buffer
+      (insert-file-contents file)
+      (clipboard-kill-region (point-min) (point-max)))))
+
+(defvar my-roam-dir
+  (cond
+   ((string-equal system-name "linuxbox") "~/Stack/Command_line/RoamNotes")
+   ((string-equal system-name "ArchLinux") "~/Shared_directory/RoamNotes")
+   ((string-equal system-name "your-thinkpad") "~/Stack/Thinkpad/RoamNotes")
+   (t "~/Downloads"))) ; Default directory
 
 (use-package org-roam
-    :custom
-    (org-roam-directory "~/Stack/Command_line/RoamNotes")  ;; Desktop normal location
-;;  (org-roam-directory "~/Shared_directory/RoamNotes")    ;; Virtual machine Arch dir
-;;  (org-roam-directory "~/Stack/Thinkpad/RoamNotes")      ;; Thinkpad
-    (org-roam-dailies-directory "daily/")                  ;; the subdir for dailies in roam-dir
-    (org-roam-completion-everywhere t)
-    :config
-    (org-roam-db-autosync-enable))
+  :custom
+  (org-roam-directory my-roam-dir)
+  (org-roam-dailies-directory "daily/")
+  (org-roam-completion-everywhere t)
+  :config
+  (org-roam-db-autosync-enable))
 
 (setq org-roam-dailies-capture-templates
     (let ((head
@@ -297,20 +300,23 @@
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
     (message "Statistics about my second brain 🤓. Brain shelve: %s.
 
-             Total  Roam dir Daily dir
-org files    %d    %d        %d
-line numbers %d   %d        %d
-word count   %d  %d        %d"
++------------+-------+-------+-------+
+|            | Total |  Roam | Daily |
++------------+-------+-------+-------+
+|org files   | %5d | %5d | %5d |
+|line numbers| %5d | %5d | %5d |
+|word count  | %5d | %5d | %5d |
++------------+-------+-------+-------+"
              roam-dir
-             org-file-count-roam org-file-count-daily org-file-count-total
-             total-lines-org total-lines-daily (+ total-lines-org total-lines-daily)
-             total-words-org total-words-daily (+ total-words-org total-words-daily))))
+             org-file-count-total org-file-count-roam org-file-count-daily
+             (+ total-lines-org total-lines-daily) total-lines-org total-lines-daily
+             (+ total-words-org total-words-daily) total-words-org total-words-daily)))
 
 (use-package! websocket
     :after org-roam)
 
 (use-package! org-roam-ui
-    :after org-roam ;; or :after org
+    :after org-roam
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
@@ -448,7 +454,6 @@ word count   %d  %d        %d"
 (global-set-key (kbd "C-c k")      'my-insert-characters-and-text)
 (global-set-key (kbd "C-c i")      'insert-char)
 
-;;(setq fancy-splash-image "~/.doom.d/doom-emacs.png")
 (setq fancy-splash-image (if (zerop (random 2))
                            "~/.doom.d/doom-emacs.png"
                            "~/.doom.d/doom-emacs-stallman.png"))
