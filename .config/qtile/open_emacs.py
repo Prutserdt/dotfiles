@@ -8,7 +8,6 @@ import sys
 def is_emacsclient_running():
     try:
         subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs"])
-#       subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs*"])
 #       subprocess.check_output(["pgrep", "-f", "emacs*"])
         return True
     except subprocess.CalledProcessError:

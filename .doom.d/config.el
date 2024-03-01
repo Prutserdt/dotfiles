@@ -32,16 +32,28 @@
 
 (defun my-line-number-color-according-to-evil-state ()
   (when (and evil-mode (not buffer-read-only))
-    (set-face-foreground 'line-number
-                         (cond ((evil-insert-state-p) "#9f85dd")
-                               ((evil-visual-state-p) "#fcbb4a")
-                               (t "#b0bdb6")))))
+    (let ((font-weight (if (or (evil-insert-state-p) (evil-visual-state-p))
+                          'bold
+                        'normal))
+          (line-number-color (if (string= (buffer-name) "scratch.org")
+                                "#7BE3AB"
+;;                            (cond ((evil-insert-state-p) "#9f85dd")
+                              (cond ((evil-insert-state-p) "#EF7168")
+                                    ((evil-visual-state-p) "#fcbb4a")
+                                    (t "#b0bdb6"))))
+          (line-number-current-line-color (if (string= (buffer-name) "scratch.org")
+                                             "white"
+                                           "#EF7168")))
+      (set-face-foreground 'line-number line-number-color)
+      (set-face-foreground 'line-number-current-line line-number-current-line-color)
+      (set-face-attribute 'line-number nil :weight font-weight))))
 
-(add-hook 'doom-switch-buffer-hook 'my-line-number-color-according-to-evil-state)
-(add-hook 'doom-first-buffer-hook 'my-line-number-color-according-to-evil-state)
-(add-hook 'evil-insert-state-entry-hook 'my-line-number-color-according-to-evil-state)
-(add-hook 'evil-normal-state-entry-hook 'my-line-number-color-according-to-evil-state)
-(add-hook 'evil-visual-state-entry-hook 'my-line-number-color-according-to-evil-state)
+(dolist (hook '(doom-switch-buffer-hook
+                doom-first-buffer-hook
+                evil-insert-state-entry-hook
+                evil-normal-state-entry-hook
+                evil-visual-state-entry-hook))
+  (add-hook hook 'my-line-number-color-according-to-evil-state))
 
 (custom-set-faces!
   '(line-number-current-line :foreground "#EF7168"))
@@ -71,7 +83,7 @@
 
 (unless (file-exists-p "~/.doom.d/scratch.org")
   (with-temp-file "~/.doom.d/scratch.org"
-    (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n")))
+  (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n Just delete this text, doesn't need to sticky!")))
 
 (eval-after-load 'org
   '(find-file "~/.doom.d/scratch.org"))
@@ -86,13 +98,13 @@
   (setq vterm-toggle-fullscreen-p nil)
   (add-to-list 'display-buffer-alist
                '((lambda (buffer-or-name _)
-                     (let ((buffer (get-buffer buffer-or-name)))
-                       (with-current-buffer buffer
+                   (let ((buffer (get-buffer buffer-or-name)))
+                        (with-current-buffer buffer
                          (or (equal major-mode 'vterm-mode)
                              (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-                  (display-buffer-reuse-window display-buffer-at-bottom)
-                  (reusable-frames . visible)
-                  (window-height . 0.5))))
+                 (display-buffer-reuse-window display-buffer-at-bottom)
+                 (reusable-frames . visible)
+                 (window-height . 0.5))))
 
 (use-package! gptel
  :config
@@ -107,7 +119,8 @@
   (define-key evil-normal-state-map "[" 'previous-buffer))
 
 (map! :leader
-      :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
+;;    :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
+      :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "*scratch*"))
     (:prefix ("b") ;; Default Doom keybinding
          :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
     (:prefix ("c") ;; Default Doom keybinding
@@ -129,9 +142,12 @@
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
-        :desc "Org table to clipboard (csv)"     "e" #'my-export-org-table-as-csv-and-copy
+        (:prefix ("e" . "Excel table stuff")
+            :desc "Org table to clipboard"           "e" #' my-export-org-table-to-system-clipboard
+            :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
+        :desc "Insert key words"                 "i" #'my-insert-characters-and-text
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Switch dark/beach mode"           "s" #'my-beach-or-dark-theme-switch
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
@@ -195,20 +211,51 @@
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
-(defun my-export-org-table-as-csv-and-copy ()
+;;(defun my-export-org-table-as-csv-and-copy ()
+(defun my-export-org-table-to-system-clipboard ()
   "Export the org-mode table at point as a CSV file in system memory and copy to clipboard."
   (interactive)
-  (let ((file "/dev/shm/temp/wismij.csv"))
+  (let* ((temp-dir "/dev/shm/temp/")
+         (file (concat temp-dir "wismij.csv")))
+    (unless (file-directory-p temp-dir)
+      (make-directory temp-dir t))
     (org-table-export file "orgtbl-to-csv")
     (with-temp-buffer
       (insert-file-contents file)
-      (clipboard-kill-region (point-min) (point-max)))))
+      (clipboard-kill-region (point-min) (point-max))))
+    (my-convert-comma-to-tab-in-clipboard))
+
+(defun my-convert-tabs-to-org-table-in-clipboard ()
+  "Convert tabs to org table format in clipboard contents."
+  (interactive)
+  (with-temp-buffer
+    (clipboard-yank)
+    (goto-char (point-min))
+    (while (search-forward "\t" nil t)
+      (replace-match " | "))
+    (goto-char (point-min))
+    (insert "| ")
+    (while (search-forward "\n" nil t)
+      (replace-match " |\n| "))
+    (goto-char (point-max))
+    (insert " |")
+    (clipboard-kill-region (point-min) (point-max))))
+
+(defun my-convert-comma-to-tab-in-clipboard ()
+  "Convert commas to tabs in clipboard contents."
+  (interactive)
+  (with-temp-buffer
+    (clipboard-yank)
+    (goto-char (point-min))
+    (while (search-forward "," nil t)
+      (replace-match "\t" nil nil))
+    (clipboard-kill-region (point-min) (point-max))))
 
 (defvar my-roam-dir
   (cond
    ((string-equal system-name "linuxbox") "~/Stack/Command_line/RoamNotes")
    ((string-equal system-name "ArchLinux") "~/Shared_directory/RoamNotes")
-   ((string-equal system-name "your-thinkpad") "~/Stack/Thinkpad/RoamNotes")
+   ((string-equal system-name "archlinux") "~/Stack/Thinkpad/RoamNotes")
    (t "~/Downloads"))) ; Default directory
 
 (use-package org-roam
@@ -427,32 +474,16 @@
   "Inserts a character at point and switches to insert state in Evil mode when in normal state."
   (interactive)
   (let* ((characters '(
-                       ("Äkta akta woord"   . "Äkta")
-                       ("laboratory woord"  . "laboratory")
-                       ("Emacs woord"       . "Emacs")
-                       ("℃ Graad Celsius"  . "℃")
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
-                       ("µm micro meter"    . "µm")
-                       ("µS micro Siemens"  . "µS")
-                       ("Ä A trema"         . "Ä")
-                       ("à a accent grave"  . "à")
-                       ("á a accent aigu"   . "á")
-                       ("ä a trema"         . "ä")
-                       ("è e acent grave"   . "è")
-                       ("é e accent aigu"   . "é")
-                       ("ë e trema"         . "ë")
-                       ("ï i trema"         . "ï")
-                       ("string test"  . "dit is een test met string")
-                      ))
+                       ("Äkta akta woord"   . "Äkta")
+                       ("correct title"     . "The Äkta overlords")
+                       ("laboratory woord"  . "laboratory")))
          (chosen-character (cdr (assoc (completing-read "Select a character: " characters)
                                       characters))))
     (when chosen-character
       (evil-change-state 'insert)
       (insert chosen-character))))
-
-(global-set-key (kbd "C-c k")      'my-insert-characters-and-text)
-(global-set-key (kbd "C-c i")      'insert-char)
 
 (setq fancy-splash-image (if (zerop (random 2))
                            "~/.doom.d/doom-emacs.png"

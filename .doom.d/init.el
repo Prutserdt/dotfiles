@@ -17,7 +17,7 @@
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
-       workspaces          ; tab emulation, persistence & separate workspaces
+       ;;       workspaces          ; tab emulation, persistence & separate workspaces
 
        :editor
        (evil +everywhere)  ; come to the dark side, we have cookies
