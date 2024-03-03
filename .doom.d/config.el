@@ -37,8 +37,7 @@
                         'normal))
           (line-number-color (if (string= (buffer-name) "scratch.org")
                                 "#7BE3AB"
-;;                            (cond ((evil-insert-state-p) "#9f85dd")
-                              (cond ((evil-insert-state-p) "#EF7168")
+                              (cond ((evil-insert-state-p) "#EF7168") ;; previously "#9f85dd"
                                     ((evil-visual-state-p) "#fcbb4a")
                                     (t "#b0bdb6"))))
           (line-number-current-line-color (if (string= (buffer-name) "scratch.org")
@@ -120,18 +119,22 @@
 
 (map! :leader
 ;;    :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
-      :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "*scratch*"))
+      :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
+
     (:prefix ("b") ;; Default Doom keybinding
          :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
+
     (:prefix ("c") ;; Default Doom keybinding
         (:prefix ("h" . "ChatGPT, GPTel options")
-            :desc "ChatGPT of selected region"   "a" #'gptel-send
-            :desc "Open ChatGPT in new buffer"   "A" #'gptel
+            :desc "From point to bottom to ChatGPT" "a" #'my-region-select-gptel-send
+            :desc "ChatGPT of selected region"   "A" #'gptel-send
+            :desc "Open ChatGPT in new buffer"   "c" #'gptel
             :desc "gptel-menu"                   "m" #'gptel-menu
             :desc "API for LLM interaction"      "R" #'gptel-request
             :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
+
     (:prefix ("d" . "Prutserdt Bindings")
-        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
+        :desc "Vterm toggle"                     "SPC" #'vterm-toggle
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
@@ -143,17 +146,20 @@
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("e" . "Excel table stuff")
-            :desc "Org table to clipboard"           "e" #' my-export-org-table-to-system-clipboard
+            :desc "Org table to clipboard"       "e" #' my-export-org-table-to-system-clipboard
             :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
+        :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Switch dark/beach mode"           "s" #'my-beach-or-dark-theme-switch
+        :desc "Update emacs readme. Carefull!!"  "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
     (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
+
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("c" . "Change to anoter notes dir")
@@ -253,9 +259,9 @@
 
 (defvar my-roam-dir
   (cond
-   ((string-equal system-name "linuxbox") "~/Stack/Command_line/RoamNotes")
-   ((string-equal system-name "ArchLinux") "~/Shared_directory/RoamNotes")
-   ((string-equal system-name "archlinux") "~/Stack/Thinkpad/RoamNotes")
+   ((string-equal (system-name) "linuxbox") "~/Stack/Command_line/RoamNotes")
+   ((string-equal (system-name) "ArchLinux") "~/Shared_directory/RoamNotes")
+   ((string-equal (system-name) "archlinux") "~/Stack/Thinkpad/RoamNotes")
    (t "~/Downloads"))) ; Default directory
 
 (use-package org-roam
@@ -433,6 +439,59 @@
   "Open the README.org of my PowerStrike ESP32 project."
   (interactive)
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
+
+(defun my-emacs-config-download-overwrite ()
+;; Downloads and overwrites my local Emacs README.org file with my Github verstion and asks for confirmation and makes a backup file.
+  (interactive)
+  ;; Define file paths for the current local README.org, backup README.org, and online README.org
+  (let ((current-readme-org "~/.doom.d/README.org")
+        (backup-readme-org (concat "~/.doom.d/README_" (format-time-string "%Y-%m-%d") ".org"))
+        (online-readme-org "https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org"))
+    ;; Ask for confirmation before overwriting the local README.org file
+    (if (yes-or-no-p "Are you sure you want to overwrite README.org? ")
+        (progn
+          ;; Create a backup of the current local README.org file with a timestamp in the filename
+          (copy-file current-readme-org backup-readme-org t)
+          ;; Download and overwrite the local README.org file with the one from GitHub
+          (url-copy-file online-readme-org current-readme-org t)
+          ;; Display a message indicating that README.org has been updated and the backup file has been saved
+          (message "README.org updated and backup saved as %s" backup-readme-org))
+      ;; Display a message indicating that the operation has been aborted
+      (message "Operation aborted"))))
+
+;; This function selects text from the beginning of the line
+;; to the end of the buffer and then executes the command 'gptel-send'.
+(defun my-region-select-gptel-send ()
+  "Select text from beginning of line to end of buffer and run gptel-send."
+  (interactive)
+  ;; Save the current point position as the starting point of the selection
+  (beginning-of-line)
+  (let ((start (point)))
+    ;; Move the cursor to the end of the buffer
+    (goto-char (point-max))
+    ;; Remember the end of the selection
+    (setq my-end (point))
+    ;; Set the mark at the starting point
+    (goto-char start)
+    (set-mark (point))
+    ;; Move the cursor to the end of the buffer and execute 'gptel-send'
+    (goto-char my-end)
+    (call-interactively 'gptel-send)
+    ;; Deselect the region
+    (deactivate-mark)))
+
+(defun my-generate-org-links-to-pictures-subdir (dir)
+  "Create Org-mode links for displaying images in `nsxiv` of subdirectories chosen."
+  (interactive "DDirectory: ")
+  ;; Filter out non-hidden subdirectories in the specified directory
+  (dolist (subdir (seq-filter 'file-directory-p (directory-files dir t "^[^.].*\\.?$")))
+    ;; Check if the subdirectory contains image files (JPEG, JPG, PNG, GIF)
+    (when (seq-find (lambda (f) (member (file-name-extension f) '("jpeg" "jpg" "png" "gif")))
+                    (directory-files subdir t "^[^.].*\\(jpeg\\|jpg\\|png\\|gif\\)$"))
+      ;; Extract the last directory name from the full path, used for the hyperlink
+      (let ((last-dir (file-name-nondirectory (directory-file-name subdir))))
+        ;; Insert an Org-mode link with a shell command to display images using `nsxiv`
+        (insert (concat "[[shell: cd " subdir "; find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' | sort | nsxiv -ftio][" last-dir "]]\n"))))))
 
 (defun my-keyboard-reset ()
   "Change Esc/caps, right mod, right alt, for my redox keyboard."
