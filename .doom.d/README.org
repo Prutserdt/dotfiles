@@ -396,6 +396,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
+        :desc "Toggle hacking mode (3 windows)"  "h" #'my-toggle-hacking-layout
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
@@ -404,7 +405,8 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
-    (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
+
+    (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
 
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
@@ -776,7 +778,36 @@ Open my Arduino PowerStrike README.org file.
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 #+END_SRC
 
+*** elisp: window toggling
+I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window.
+
+=toggle-window-layout= checks if there is only one window open and, in that case, it calls the =my-3-window-layout= function to create the three-window layout. Otherwise, it simply deletes all other windows except the focused one.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-toggle-hacking-layout ()
+  (interactive)
+  (if (= (count-windows) 1)
+      (my-hacking-layout)
+    (delete-other-windows)
+    (kill-buffer "*Messages*")))
+#+end_src
+
+=my-3-window-layout= creates a layout with three windows: one large window on the left and two smaller windows on the right.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-hacking-layout ()
+  (interactive)
+;;  (delete-other-windows)
+  (split-window-right)
+  (switch-to-buffer "*Messages*")
+  (split-window-right)
+  (switch-to-buffer "scratch.org")
+  (+evil/window-move-right)
+  (+evil/window-move-right)
+  (windmove-left)
+  (balance-windows))
+#+end_src
+
 *** elisp: miscelaneous
+
 The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github source and overwrites the local README.org Emacs config file. Before the overwrite, it creates a backup of the current local README.org file with a timestamp in the filename.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-emacs-config-download-overwrite ()

@@ -149,6 +149,7 @@
             :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
+        :desc "Toggle hacking mode (3 windows)"  "h" #'my-toggle-hacking-layout
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
@@ -157,7 +158,8 @@
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
-    (:desc "Open my Emacs config" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
+
+    (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
 
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
@@ -438,6 +440,25 @@
   "Open the README.org of my PowerStrike ESP32 project."
   (interactive)
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
+
+(defun my-toggle-hacking-layout ()
+  (interactive)
+  (if (= (count-windows) 1)
+      (my-hacking-layout)
+    (delete-other-windows)
+    (kill-buffer "*Messages*")))
+
+(defun my-hacking-layout ()
+  (interactive)
+;;  (delete-other-windows)
+  (split-window-right)
+  (switch-to-buffer "*Messages*")
+  (split-window-right)
+  (switch-to-buffer "scratch.org")
+  (+evil/window-move-right)
+  (+evil/window-move-right)
+  (windmove-left)
+  (balance-windows))
 
 (defun my-emacs-config-download-overwrite ()
 ;; Downloads and overwrites my local Emacs README.org file with my Github verstion and asks for confirmation and makes a backup file.
