@@ -118,7 +118,6 @@
   (define-key evil-normal-state-map "[" 'previous-buffer))
 
 (map! :leader
-;;    :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
 
     (:prefix ("b") ;; Default Doom keybinding
@@ -146,7 +145,7 @@
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("e" . "Excel table stuff")
-            :desc "Org table to clipboard"       "e" #' my-export-org-table-to-system-clipboard
+            :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
             :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)

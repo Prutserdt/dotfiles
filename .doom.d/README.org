@@ -351,7 +351,7 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 #+END_SRC
 
 ** Custom keybindings
-Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add extra keybindings!
+Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add some extra!
 
 *** Evil keybindings
 I want to use the =undo-redo= package in Evil mode and therefore add the keybinding =U= here. Another addition to Evil mode is =[= and =]= to switch buffers.
@@ -365,7 +365,6 @@ I want to use the =undo-redo= package in Evil mode and therefore add the keybind
 The following are keybindings that are bound to my leader key, which is =space=, the default leader key of Doom Emacs Evil mode.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (map! :leader
-;;    :desc "Scratch buffer" "[" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
 
     (:prefix ("b") ;; Default Doom keybinding
@@ -393,7 +392,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         (:prefix ("e" . "Excel table stuff")
-            :desc "Org table to clipboard"       "e" #' my-export-org-table-to-system-clipboard
+            :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
             :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
@@ -443,7 +442,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
 #+end_src
 
 *** Emacs keybindings
-I want to use the escape key to exit keychords, similar to C-g. Let's see if this will give conflicts somewhere else, for now it seems to work 😌.
+I want to use the escape key to exit keychords, similar to C-g. Why is this not the default?
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 #+END_SRC
@@ -454,7 +453,6 @@ In Doom Emacs the =transpose-words= is using the keybinding Meta-t. For the opos
 #+END_SRC
 
 ** Org-mode configuration
-
 More eye candy by superstar bullets in org mode instead of the default ~*~. This requires (org +pretty) in ~init.el~.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
