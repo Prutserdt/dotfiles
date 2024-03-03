@@ -72,6 +72,31 @@
       (set-frame-parameter (selected-frame) 'alpha '(85 80))
       (message "Theme switched to my dark theme."))))
 
+(defvar modeline-hidden nil)
+
+(defun my-distractionfree-toggle ()
+  (interactive)
+
+  (if display-line-numbers-mode
+      (display-line-numbers-mode 0)
+      (display-line-numbers-mode 1))
+  (if (string= (face-attribute 'default :family) "Hack")
+    ;;(set-frame-font "Sitka Small" nil t)
+      (set-frame-font "Verdana" nil t)
+      (set-frame-font "Hack" nil t))
+
+  (if (equal fill-column 110)
+      (setq fill-column 140)
+      (setq fill-column 110))
+
+  (if modeline-hidden
+      (progn
+        (setq modeline-hidden nil)
+        (set-window-parameter nil 'mode-line-format t))
+    (progn
+      (setq modeline-hidden t)
+      (set-window-parameter nil 'mode-line-format 'none))))
+
 (setq! evil-want-Y-yank-to-eol nil)
 
 (setq evil-normal-state-cursor '(box "tomato")
@@ -112,6 +137,21 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 (setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 
+;; This function selects text from the beginning of the line
+;; to the end of the buffer and then executes the command 'gptel-send'.
+(defun my-region-select-gptel-send ()
+  "Select text from beginning of line to end of buffer and run gptel-send."
+  (interactive)
+  (beginning-of-line)      ; Save the current point position as the starting point of the selection
+  (let ((start (point)))
+    (goto-char (point-max)); Move the cursor to the end of the buffer
+    (setq my-end (point))  ; Remember the end of the selection
+    (goto-char start)      ; Set the mark at the starting point
+    (set-mark (point))
+    (goto-char my-end)     ; Move the cursor to the end of the buffer and execute 'gptel-send'
+    (call-interactively 'gptel-send)
+    (deactivate-mark)))    ; Deselect the region
+
 (after! evil
   (define-key evil-normal-state-map "U" 'undo-redo)
   (define-key evil-normal-state-map "]" 'next-buffer)
@@ -125,7 +165,7 @@
 
     (:prefix ("c") ;; Default Doom keybinding
         (:prefix ("h" . "ChatGPT, GPTel options")
-            :desc "From point to bottom to ChatGPT" "a" #'my-region-select-gptel-send
+            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
             :desc "ChatGPT of selected region"   "A" #'gptel-send
             :desc "Open ChatGPT in new buffer"   "c" #'gptel
             :desc "gptel-menu"                   "m" #'gptel-menu
@@ -143,18 +183,19 @@
             (:prefix ("b" . "Backup to cloud")
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
-        :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
+;;      :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
+        :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
         (:prefix ("e" . "Excel table stuff")
             :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
             :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
-        :desc "Toggle hacking mode (3 windows)"  "h" #'my-toggle-hacking-layout
+        :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Switch dark/beach mode"           "s" #'my-beach-or-dark-theme-switch
-        :desc "Update emacs readme. Carefull!!"  "o" #'my-emacs-config-download-overwrite
+        :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
@@ -377,6 +418,28 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
+(defun my-toggle-hacking-layout ()
+  (interactive)
+  (if (= (count-windows) 1)
+      (my-hacking-layout)
+    (delete-other-windows)
+    (kill-buffer "*Messages*")))
+
+(defun my-hacking-layout ()
+  (interactive)
+;;  (delete-other-windows)
+  (split-window-right)
+  (switch-to-buffer "*Messages*")
+  (split-window-right)
+  (switch-to-buffer "scratch.org")
+  (+evil/window-move-right)
+  (+evil/window-move-right)
+  (windmove-left)
+  (balance-windows)
+  (windmove-left)
+  (enlarge-window -30 t)
+  (windmove-right))
+
 (defvar data-bits nil
   "Number of data bits for the serial monitor")
 
@@ -441,25 +504,6 @@
   (interactive)
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 
-(defun my-toggle-hacking-layout ()
-  (interactive)
-  (if (= (count-windows) 1)
-      (my-hacking-layout)
-    (delete-other-windows)
-    (kill-buffer "*Messages*")))
-
-(defun my-hacking-layout ()
-  (interactive)
-;;  (delete-other-windows)
-  (split-window-right)
-  (switch-to-buffer "*Messages*")
-  (split-window-right)
-  (switch-to-buffer "scratch.org")
-  (+evil/window-move-right)
-  (+evil/window-move-right)
-  (windmove-left)
-  (balance-windows))
-
 (defun my-emacs-config-download-overwrite ()
 ;; Downloads and overwrites my local Emacs README.org file with my Github verstion and asks for confirmation and makes a backup file.
   (interactive)
@@ -478,27 +522,6 @@
           (message "README.org updated and backup saved as %s" backup-readme-org))
       ;; Display a message indicating that the operation has been aborted
       (message "Operation aborted"))))
-
-;; This function selects text from the beginning of the line
-;; to the end of the buffer and then executes the command 'gptel-send'.
-(defun my-region-select-gptel-send ()
-  "Select text from beginning of line to end of buffer and run gptel-send."
-  (interactive)
-  ;; Save the current point position as the starting point of the selection
-  (beginning-of-line)
-  (let ((start (point)))
-    ;; Move the cursor to the end of the buffer
-    (goto-char (point-max))
-    ;; Remember the end of the selection
-    (setq my-end (point))
-    ;; Set the mark at the starting point
-    (goto-char start)
-    (set-mark (point))
-    ;; Move the cursor to the end of the buffer and execute 'gptel-send'
-    (goto-char my-end)
-    (call-interactively 'gptel-send)
-    ;; Deselect the region
-    (deactivate-mark)))
 
 (defun my-generate-org-links-to-pictures-subdir (dir)
   "Create Org-mode links for displaying images in `nsxiv` of subdirectories chosen."

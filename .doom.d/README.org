@@ -281,6 +281,36 @@ An emergency switch to be used at very bright light conditions, for instance at 
       (message "Theme switched to my dark theme."))))
 #+end_src
 
+I am working on a new toggle that will switch to a distraction free mode, without line numbers and another font and other settings. This part is under construction.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+
+(defvar modeline-hidden nil)
+
+(defun my-distractionfree-toggle ()
+  (interactive)
+
+  (if display-line-numbers-mode
+      (display-line-numbers-mode 0)
+      (display-line-numbers-mode 1))
+  (if (string= (face-attribute 'default :family) "Hack")
+    ;;(set-frame-font "Sitka Small" nil t)
+      (set-frame-font "Verdana" nil t)
+      (set-frame-font "Hack" nil t))
+
+  (if (equal fill-column 110)
+      (setq fill-column 140)
+      (setq fill-column 110))
+
+  (if modeline-hidden
+      (progn
+        (setq modeline-hidden nil)
+        (set-window-parameter nil 'mode-line-format t))
+    (progn
+      (setq modeline-hidden t)
+      (set-window-parameter nil 'mode-line-format 'none))))
+#+end_src
+
+
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -350,6 +380,24 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 (setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 #+END_SRC
 
+An helper for my LLM (gpt-el). I am usually working with code at the bottom of a buffer and want to select the text from the cursor below to the bottom and send that region to the chatbot.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+;; This function selects text from the beginning of the line
+;; to the end of the buffer and then executes the command 'gptel-send'.
+(defun my-region-select-gptel-send ()
+  "Select text from beginning of line to end of buffer and run gptel-send."
+  (interactive)
+  (beginning-of-line)      ; Save the current point position as the starting point of the selection
+  (let ((start (point)))
+    (goto-char (point-max)); Move the cursor to the end of the buffer
+    (setq my-end (point))  ; Remember the end of the selection
+    (goto-char start)      ; Set the mark at the starting point
+    (set-mark (point))
+    (goto-char my-end)     ; Move the cursor to the end of the buffer and execute 'gptel-send'
+    (call-interactively 'gptel-send)
+    (deactivate-mark)))    ; Deselect the region
+#+end_src
+
 ** Custom keybindings
 Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add some extra!
 
@@ -372,7 +420,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
 
     (:prefix ("c") ;; Default Doom keybinding
         (:prefix ("h" . "ChatGPT, GPTel options")
-            :desc "From point to bottom to ChatGPT" "a" #'my-region-select-gptel-send
+            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
             :desc "ChatGPT of selected region"   "A" #'gptel-send
             :desc "Open ChatGPT in new buffer"   "c" #'gptel
             :desc "gptel-menu"                   "m" #'gptel-menu
@@ -390,18 +438,19 @@ The following are keybindings that are bound to my leader key, which is =space=,
             (:prefix ("b" . "Backup to cloud")
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
-        :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
+;;      :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
+        :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
         (:prefix ("e" . "Excel table stuff")
             :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
             :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
-        :desc "Toggle hacking mode (3 windows)"  "h" #'my-toggle-hacking-layout
+        :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Switch dark/beach mode"           "s" #'my-beach-or-dark-theme-switch
-        :desc "Update emacs readme. Carefull!!"  "o" #'my-emacs-config-download-overwrite
+        :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
@@ -699,6 +748,38 @@ Now that the websocket is setup the org-roam-ui can be set.
 #+END_SRC
 
 ** Custom code
+*** elisp: window toggling
+I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window.
+
+=toggle-window-layout= checks if there is only one window open and, in that case, it calls the =my-3-window-layout= function to create the three-window layout. Otherwise, it simply deletes all other windows except the focused one.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-toggle-hacking-layout ()
+  (interactive)
+  (if (= (count-windows) 1)
+      (my-hacking-layout)
+    (delete-other-windows)
+    (kill-buffer "*Messages*")))
+#+end_src
+
+=my-3-window-layout= creates a layout with three windows: one large window on the left and two smaller windows on the right.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-hacking-layout ()
+  (interactive)
+;;  (delete-other-windows)
+  (split-window-right)
+  (switch-to-buffer "*Messages*")
+  (split-window-right)
+  (switch-to-buffer "scratch.org")
+  (+evil/window-move-right)
+  (+evil/window-move-right)
+  (windmove-left)
+  (balance-windows)
+  (windmove-left)
+  (enlarge-window -30 t)
+  (windmove-right))
+#+end_src
+
+
 *** elisp: ESP32, Arduino and serial communication
 The following code will open ttyUSB0 and gives the options to cycle through baudrates.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -778,36 +859,7 @@ Open my Arduino PowerStrike README.org file.
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 #+END_SRC
 
-*** elisp: window toggling
-I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window.
-
-=toggle-window-layout= checks if there is only one window open and, in that case, it calls the =my-3-window-layout= function to create the three-window layout. Otherwise, it simply deletes all other windows except the focused one.
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-toggle-hacking-layout ()
-  (interactive)
-  (if (= (count-windows) 1)
-      (my-hacking-layout)
-    (delete-other-windows)
-    (kill-buffer "*Messages*")))
-#+end_src
-
-=my-3-window-layout= creates a layout with three windows: one large window on the left and two smaller windows on the right.
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-hacking-layout ()
-  (interactive)
-;;  (delete-other-windows)
-  (split-window-right)
-  (switch-to-buffer "*Messages*")
-  (split-window-right)
-  (switch-to-buffer "scratch.org")
-  (+evil/window-move-right)
-  (+evil/window-move-right)
-  (windmove-left)
-  (balance-windows))
-#+end_src
-
 *** elisp: miscelaneous
-
 The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github source and overwrites the local README.org Emacs config file. Before the overwrite, it creates a backup of the current local README.org file with a timestamp in the filename.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-emacs-config-download-overwrite ()
@@ -830,29 +882,6 @@ The =my-emacs-config-download-overwrite= function in the code snippet below is a
       (message "Operation aborted"))))
 #+end_src
 
-An helper for my LLM (gpt-el). I am usually working with code at the bottom of a buffer and want to select the text from the cursor below to the bottom and send that region to the chatbot.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;; This function selects text from the beginning of the line
-;; to the end of the buffer and then executes the command 'gptel-send'.
-(defun my-region-select-gptel-send ()
-  "Select text from beginning of line to end of buffer and run gptel-send."
-  (interactive)
-  ;; Save the current point position as the starting point of the selection
-  (beginning-of-line)
-  (let ((start (point)))
-    ;; Move the cursor to the end of the buffer
-    (goto-char (point-max))
-    ;; Remember the end of the selection
-    (setq my-end (point))
-    ;; Set the mark at the starting point
-    (goto-char start)
-    (set-mark (point))
-    ;; Move the cursor to the end of the buffer and execute 'gptel-send'
-    (goto-char my-end)
-    (call-interactively 'gptel-send)
-    ;; Deselect the region
-    (deactivate-mark)))
-#+end_src
 
 This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates links in an Org document to display images in subdirectories specified by the user. It will only include subdirectories containing image files (JPEG, JPG, PNG, GIF). The function goes through each subdirectory, checks for image files, and generates a link for displaying them in nsxiv image viewer.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
