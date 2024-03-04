@@ -224,21 +224,27 @@ By setting the line numbers to relative it makes jumping in texts easier, allowi
 (setq display-line-numbers-type 'relative)
 #+END_SRC
 
-To remember the current state (normal, insert or visual mode), we can customize the line number colors using Emacs Lisp. Here's the code that sets the line number color based on the Evil state. Also the line colors are changed when scratch.org is displayed to stand out from other buffers.
+To remember the current state (normal, insert or visual mode), we can customize the line number colors using Emacs Lisp. Here's the code that sets the line number color based on the Evil state. Also the line colors are changed when scratch.org is displayed to stand out from other buffers. I am giving the colors a name so that they can be used elsewhere.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defvar my-color-visual-state    "#765825") ;; dark yellow brown
+(defvar my-color-insert-state    "#3e6752") ;; pale grey green
+(defvar my-color-grey-green      "#505753") ;; grey green
+(defvar my-color-normal-state    "#453a39") ;; brown terra
+(defvar my-color-current-line    "#EF7168") ;; orange red
+
 (defun my-line-number-color-according-to-evil-state ()
   (when (and evil-mode (not buffer-read-only))
     (let ((font-weight (if (or (evil-insert-state-p) (evil-visual-state-p))
                           'bold
                         'normal))
           (line-number-color (if (string= (buffer-name) "scratch.org")
-                                "#7BE3AB"
-                              (cond ((evil-insert-state-p) "#EF7168") ;; previously "#9f85dd"
-                                    ((evil-visual-state-p) "#fcbb4a")
-                                    (t "#b0bdb6"))))
+                                my-color-current-line
+                              (cond ((evil-insert-state-p) my-color-insert-state)
+                                    ((evil-visual-state-p) my-color-visual-state)
+                                    (t my-color-normal-state))))
           (line-number-current-line-color (if (string= (buffer-name) "scratch.org")
-                                             "white"
-                                           "#EF7168")))
+                                           my-color-insert-state
+                                           my-color-current-line)))
       (set-face-foreground 'line-number line-number-color)
       (set-face-foreground 'line-number-current-line line-number-current-line-color)
       (set-face-attribute 'line-number nil :weight font-weight))))
@@ -283,7 +289,6 @@ An emergency switch to be used at very bright light conditions, for instance at 
 
 I am working on a new toggle that will switch to a distraction free mode, without line numbers and another font and other settings. This part is under construction.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-
 (defvar modeline-hidden nil)
 
 (defun my-distractionfree-toggle ()
@@ -292,6 +297,7 @@ I am working on a new toggle that will switch to a distraction free mode, withou
   (if display-line-numbers-mode
       (display-line-numbers-mode 0)
       (display-line-numbers-mode 1))
+
   (if (string= (face-attribute 'default :family) "Hack")
     ;;(set-frame-font "Sitka Small" nil t)
       (set-frame-font "Verdana" nil t)
@@ -309,7 +315,6 @@ I am working on a new toggle that will switch to a distraction free mode, withou
       (setq modeline-hidden t)
       (set-window-parameter nil 'mode-line-format 'none))))
 #+end_src
-
 
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
@@ -438,7 +443,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
             (:prefix ("b" . "Backup to cloud")
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
-;;      :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
         (:prefix ("e" . "Excel table stuff")
             :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
@@ -779,7 +783,6 @@ I want to quickly switch back and forth to my hacking layout. It puts the curren
   (windmove-right))
 #+end_src
 
-
 *** elisp: ESP32, Arduino and serial communication
 The following code will open ttyUSB0 and gives the options to cycle through baudrates.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -882,7 +885,6 @@ The =my-emacs-config-download-overwrite= function in the code snippet below is a
       (message "Operation aborted"))))
 #+end_src
 
-
 This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates links in an Org document to display images in subdirectories specified by the user. It will only include subdirectories containing image files (JPEG, JPG, PNG, GIF). The function goes through each subdirectory, checks for image files, and generates a link for displaying them in nsxiv image viewer.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-generate-org-links-to-pictures-subdir (dir)
@@ -950,7 +952,6 @@ Open my =keymap.c= file of my redox keyboard.
 Set multilingual text input to ~latin-prefix~ as the default input method in .org files. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and this can easily be switched off by running ~toggle-input-method~ with the emacs hotkeys ~C-\~.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq default-input-method "latin-prefix")
-
 (add-hook 'org-mode-hook 'toggle-input-method)
 #+end_src
 
@@ -1005,7 +1006,6 @@ For reference: the default doom-dashboard can be found here: =~/.emacs.d/modules
 (add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
 (add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
 #+END_SRC
-
 
 * Code snippets
 A code snippet is a piece of reusable code that can be inserted into a buffer using a predefined trigger or command.

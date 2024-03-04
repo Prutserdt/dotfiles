@@ -30,19 +30,25 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
+(defvar my-color-visual-state    "#765825") ;; dark yellow brown
+(defvar my-color-insert-state    "#3e6752") ;; pale grey green
+(defvar my-color-grey-green      "#505753") ;; grey green
+(defvar my-color-normal-state    "#453a39") ;; brown terra
+(defvar my-color-current-line    "#EF7168") ;; orange red
+
 (defun my-line-number-color-according-to-evil-state ()
   (when (and evil-mode (not buffer-read-only))
     (let ((font-weight (if (or (evil-insert-state-p) (evil-visual-state-p))
                           'bold
                         'normal))
           (line-number-color (if (string= (buffer-name) "scratch.org")
-                                "#7BE3AB"
-                              (cond ((evil-insert-state-p) "#EF7168") ;; previously "#9f85dd"
-                                    ((evil-visual-state-p) "#fcbb4a")
-                                    (t "#b0bdb6"))))
+                                my-color-current-line
+                              (cond ((evil-insert-state-p) my-color-insert-state)
+                                    ((evil-visual-state-p) my-color-visual-state)
+                                    (t my-color-normal-state))))
           (line-number-current-line-color (if (string= (buffer-name) "scratch.org")
-                                             "white"
-                                           "#EF7168")))
+                                           my-color-insert-state
+                                           my-color-current-line)))
       (set-face-foreground 'line-number line-number-color)
       (set-face-foreground 'line-number-current-line line-number-current-line-color)
       (set-face-attribute 'line-number nil :weight font-weight))))
@@ -80,6 +86,7 @@
   (if display-line-numbers-mode
       (display-line-numbers-mode 0)
       (display-line-numbers-mode 1))
+
   (if (string= (face-attribute 'default :family) "Hack")
     ;;(set-frame-font "Sitka Small" nil t)
       (set-frame-font "Verdana" nil t)
@@ -183,7 +190,6 @@
             (:prefix ("b" . "Backup to cloud")
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
-;;      :desc "redox kb reset xmod"              "d" #'my-keyboard-reset
         :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
         (:prefix ("e" . "Excel table stuff")
             :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
@@ -569,7 +575,6 @@
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
 (setq default-input-method "latin-prefix")
-
 (add-hook 'org-mode-hook 'toggle-input-method)
 
 (defun my-insert-characters-and-text ()
