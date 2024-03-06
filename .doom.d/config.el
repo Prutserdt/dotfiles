@@ -209,8 +209,10 @@
     (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
 
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
+        :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
+        :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
         :desc "Open random node"                 "a" #'org-roam-node-random
-        (:prefix ("c" . "Change to anoter notes dir")
+        (:prefix ("c" . "Change to another notes dir")
             :desc "Goto default notes"           "d" #'my-org-roam-default
             :desc "Goto Thinkpad notes"          "t" #'my-org-roam-thinkpad
             :desc "Goto work notes @ home"       "w" #'my-org-roam-work
@@ -322,14 +324,11 @@
 
 (setq org-roam-dailies-capture-templates
     (let ((head
-           (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
+           (concat "#+title: %<%Y-%m-%d (%A)>\n"
                     "* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
            "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag")))
-          ("t" "TODO van vandaag" item
-           "[ ] %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO van vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag"))))))
 
 (defun my-counsel-rg-roam-dir ()
     "Search using `counsel-rg` in the set org-roam-directory."
@@ -425,26 +424,29 @@
           org-roam-ui-open-on-start t))
 
 (defun my-toggle-hacking-layout ()
+  "Toggle between a complex hacking layout and a simpler single buffer layout."
   (interactive)
   (if (= (count-windows) 1)
-      (my-hacking-layout)
-    (delete-other-windows)
-    (kill-buffer "*Messages*")))
-
-(defun my-hacking-layout ()
-  (interactive)
-;;  (delete-other-windows)
-  (split-window-right)
-  (switch-to-buffer "*Messages*")
-  (split-window-right)
-  (switch-to-buffer "scratch.org")
-  (+evil/window-move-right)
-  (+evil/window-move-right)
-  (windmove-left)
-  (balance-windows)
-  (windmove-left)
-  (enlarge-window -30 t)
-  (windmove-right))
+      (progn
+        ;; Setting up complex hacking layout
+        (split-window-right)
+        (switch-to-buffer "*Messages*")
+        (split-window-right)
+        (switch-to-buffer "scratch.org")
+        (+evil/window-move-right)
+        (+evil/window-move-right)
+        (windmove-left)
+        (balance-windows)
+        (windmove-left)
+        (enlarge-window -30 t)
+        (windmove-right)
+        (message "Changed to complex hacking layout"))
+    (progn
+      ;; Restoring simpler single buffer layout
+      (windmove-left)
+      (evil-window-delete)
+      (delete-other-windows)
+      (message "Changed back to simpler layout"))))
 
 (defvar data-bits nil
   "Number of data bits for the serial monitor")

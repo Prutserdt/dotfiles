@@ -462,8 +462,10 @@ The following are keybindings that are bound to my leader key, which is =space=,
     (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
 
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
+        :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
+        :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
         :desc "Open random node"                 "a" #'org-roam-node-random
-        (:prefix ("c" . "Change to anoter notes dir")
+        (:prefix ("c" . "Change to another notes dir")
             :desc "Goto default notes"           "d" #'my-org-roam-default
             :desc "Goto Thinkpad notes"          "t" #'my-org-roam-thinkpad
             :desc "Goto work notes @ home"       "w" #'my-org-roam-work
@@ -620,14 +622,11 @@ For quick daily notes and a TODO list I am using roam-dailies and in the next co
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-roam-dailies-capture-templates
     (let ((head
-           (concat "#+title: %<%Y-%m-%d (%A)>\n#+startup: showall\n"
+           (concat "#+title: %<%Y-%m-%d (%A)>\n"
                     "* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
            "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag")))
-          ("t" "TODO van vandaag" item
-           "[ ] %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("TODO van vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag"))))))
 #+END_SRC
 
 To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory. This function is used in the  [[#custom-keybindings][Custom keybindings]].
@@ -753,34 +752,32 @@ Now that the websocket is setup the org-roam-ui can be set.
 
 ** Custom code
 *** elisp: window toggling
-I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window.
-
-=toggle-window-layout= checks if there is only one window open and, in that case, it calls the =my-3-window-layout= function to create the three-window layout. Otherwise, it simply deletes all other windows except the focused one.
+I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window, =my-toggle-window-layout= does exactly that.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-toggle-hacking-layout ()
+  "Toggle between a complex hacking layout and a simpler single buffer layout."
   (interactive)
   (if (= (count-windows) 1)
-      (my-hacking-layout)
-    (delete-other-windows)
-    (kill-buffer "*Messages*")))
-#+end_src
-
-=my-3-window-layout= creates a layout with three windows: one large window on the left and two smaller windows on the right.
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-hacking-layout ()
-  (interactive)
-;;  (delete-other-windows)
-  (split-window-right)
-  (switch-to-buffer "*Messages*")
-  (split-window-right)
-  (switch-to-buffer "scratch.org")
-  (+evil/window-move-right)
-  (+evil/window-move-right)
-  (windmove-left)
-  (balance-windows)
-  (windmove-left)
-  (enlarge-window -30 t)
-  (windmove-right))
+      (progn
+        ;; Setting up complex hacking layout
+        (split-window-right)
+        (switch-to-buffer "*Messages*")
+        (split-window-right)
+        (switch-to-buffer "scratch.org")
+        (+evil/window-move-right)
+        (+evil/window-move-right)
+        (windmove-left)
+        (balance-windows)
+        (windmove-left)
+        (enlarge-window -30 t)
+        (windmove-right)
+        (message "Changed to complex hacking layout"))
+    (progn
+      ;; Restoring simpler single buffer layout
+      (windmove-left)
+      (evil-window-delete)
+      (delete-other-windows)
+      (message "Changed back to simpler layout"))))
 #+end_src
 
 *** elisp: ESP32, Arduino and serial communication
