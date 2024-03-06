@@ -259,8 +259,11 @@
   '(org-document-title ((t (:inherit org-level-1 :height 1.6)))))
 
 (setq org-hide-emphasis-markers t)
-
 (setq org-ellipsis "⚡⚡⚡")
+(setq org-startup-with-inline-images t)
+;;(setq org-hide-block-startup t)
+;;(setq org-startup-folded "fold")
+(setq org-hidden-keywords '(title))
 
 (use-package org-auto-tangle
   :load-path "site-lisp/org-auto-tangle/"
@@ -586,8 +589,7 @@
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
                        ("Äkta akta woord"   . "Äkta")
-                       ("correct title"     . "The Äkta overlords")
-                       ("laboratory woord"  . "laboratory")))
+                       ("Correct title"     . "The Äkta overlords")))
          (chosen-character (cdr (assoc (completing-read "Select a character: " characters)
                                       characters))))
     (when chosen-character

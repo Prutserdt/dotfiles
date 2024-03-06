@@ -1,10 +1,6 @@
-#+TITLE: My configuration of
-#+STARTUP: showeverything
-#+STARTUP: inlineimages
+#+TITLE: My configuration of Doom Emacs
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
-
-#+CAPTION: Doom Emacs
 #+ATTR_HTML: :alt Doom Emacs :title Doom Emacs :align center
 [[file:doom-emacs-stallman.png]]
 
@@ -526,14 +522,14 @@ Setting the size of the headers in org mode and the document titled, ordered by 
   '(org-document-title ((t (:inherit org-level-1 :height 1.6)))))
 #+END_SRC
 
-Hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+.
+Some preferences that I like: hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+. Show a custom folding character, in my case three time lightning ⚡⚡⚡ and by default I want all of my org files to show images as default and hide the =#+TITLE= keyword.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-hide-emphasis-markers t)
-#+END_SRC
-
-Show a custom folding character, in my case three time lightning ⚡⚡⚡.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-ellipsis "⚡⚡⚡")
+(setq org-startup-with-inline-images t)
+;;(setq org-hide-block-startup t)
+;;(setq org-startup-folded "fold")
+(setq org-hidden-keywords '(title))
 #+END_SRC
 
 Automatically tangling by the org-auto-tangle package.
@@ -751,7 +747,7 @@ Now that the websocket is setup the org-roam-ui can be set.
 #+END_SRC
 
 ** Custom code
-*** elisp: window toggling
+*** Window toggling
 I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window, =my-toggle-window-layout= does exactly that.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-toggle-hacking-layout ()
@@ -780,7 +776,7 @@ I want to quickly switch back and forth to my hacking layout. It puts the curren
       (message "Changed back to simpler layout"))))
 #+end_src
 
-*** elisp: ESP32, Arduino and serial communication
+*** ESP32, Arduino and serial communication
 The following code will open ttyUSB0 and gives the options to cycle through baudrates.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defvar data-bits nil
@@ -859,7 +855,7 @@ Open my Arduino PowerStrike README.org file.
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 #+END_SRC
 
-*** elisp: miscelaneous
+*** Miscelaneous
 The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github source and overwrites the local README.org Emacs config file. Before the overwrite, it creates a backup of the current local README.org file with a timestamp in the filename.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-emacs-config-download-overwrite ()
@@ -961,8 +957,7 @@ Inserting often used characters and words can be done by this simple function. A
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
                        ("Äkta akta woord"   . "Äkta")
-                       ("correct title"     . "The Äkta overlords")
-                       ("laboratory woord"  . "laboratory")))
+                       ("Correct title"     . "The Äkta overlords")))
          (chosen-character (cdr (assoc (completing-read "Select a character: " characters)
                                       characters))))
     (when chosen-character
