@@ -4,10 +4,10 @@ remove Lock = Caps_Lock
 keysym Escape = Caps_Lock
 keysym Caps_Lock = Escape
 add Lock = Caps_Lock
-remove mod4 = Super_R
-add mod3 = Super_R
+!remove mod4 = Super_R
+!add mod3 = Super_R
 ! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift, uncomment next lines if needed.
 !remove mod1 = ISO_Level3_Shift
 !add mod5 = ISO_Level3_Shift
-remove mod1 = Alt_R
-add mod5 = Alt_R
+!!remove mod1 = Alt_R
+!!add mod5 = Alt_R

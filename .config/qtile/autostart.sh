@@ -9,8 +9,10 @@ picom -b &
 emacs --daemon &
 nm-applet &
 thunar --daemon &
-sleep 0.5
-xmodmap $HOME/.config/kbswitch &
+sleep 0.2
+xmodmap $HOME/.config/rdxswitch
+sleep 0.2
+xmodmap $HOME/.config/kbswitch
 #signal-desktop --start-in-tray --use-tray-icon &
 #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
 ## Next section is for my virtual machine. Uncomment all below and remove the part on the top.
