@@ -1371,6 +1371,9 @@ The same thing for the alt key. Let's use the Alt-left and Alt-right.
 !!add mod5 = Alt_R
 #+END_SRC
 
+
+
+
 ** incrMonitorBrightness.sh
 Increase the monitor brightness by xrandr and also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
 
@@ -1539,20 +1542,73 @@ Open the text file in emacs and remove the left part of the lines up to the emoj
 Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
 
 ** rdxswitch
+
+
+#+BEGIN_SRC sh :tangle keyboard-config.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+xmodmap -e "remove mod4 = Super_R"
+
+case "$system_name" in
+    archlinux)
+        keycode=107
+        ;;
+    linuxbox)
+        keycode=134
+        ;;
+    ,*)
+        notify-send -t 60000 "Unknown system name: $system_name"
+        exit 1
+        ;;
+esac
+
+xmodmap -e "keycode $keycode = Super_R"
+xmodmap -e "add mod3 = Super_R"
+xmodmap -e "remove mod1 = Alt_R"
+xmodmap -e "add mod5 = Alt_R"
+
+xset r rate 300 80
+#+end_src
+
+
+
+
+
+NOTE: onderstaande is oud en ga ik weghalen!
+
 These settings are used in combination with an xmodmap command and are restoring the keysetting that I use for my Redox keyboard. I run it by the alias ~r~ in my terminal which will execute ~xmodmap ~/.config/rdxswitch~. This is needed when keyboards are swapped.
 
-My Redox firmware has the escape button to the left of the 'A' button, like it should be!. When previously a keyboard with other mapping is used, and the escape/capslock is changed then it is in the wrong position and this can be corrected by this setting
+
+I like to use the Super-R button but this is handled different on my systems. On my Redox keyboard I put in in my firmware and it can be used by keycode 134 and in my thinkpad I will use the printscreen button as the Super-R button (keycode 134). This switching is automated according to the system name.
+
+
+
 #+BEGIN_SRC sh :tangle rdxswitch :padline no :eval no
 ! NOTE: This file is generated from ~/.config/README.org
 !       Please only edit that file and org-babel-tangle (emacs)
+remove mod4 = Super_R
+keycode 134 = Super_R
+
+if [ "$system_name" = "archlinux" ]; then
+    keycode 107 = Super_R
+elif [ "$system_name" = "linuxbox" ]; then
+    keycode 134 = Super_R
+else
+    notify-send -t 60000 "Unknown system name: $system_name"
+    exit 1
+fi
+
+add mod3 = Super_R
+remove mod1 = Alt_R
+add mod5 = Alt_R
+#+END_SRC
+
+
+NOTE:this is old and will be removed, it is already removed from my code..
+#+BEGIN_SRC sh
 !remove Lock = Caps_Lock
 !keysym Escape = Escape
 !keysym Caps_Lock = Caps_Lock
 !add Lock = Caps_Lock
-#+END_SRC
-
-W/ith my custom redox build there is a Super-R.  Remove right super key and make it another mod key (for opening apps)
-#+BEGIN_SRC sh :tangle rdxswitch :padline no :eval no
 remove mod4 = Super_R
 ! add the keycode that you are going to use for the Super_R. For Redox keyboard: keycode 134
 keycode 134 = Super_R

@@ -10,7 +10,8 @@ emacs --daemon &
 nm-applet &
 thunar --daemon &
 sleep 0.2
-xmodmap $HOME/.config/rdxswitch
+$HOME/.config/keyboard-config.sh &
+#xmodmap $HOME/.config/rdxswitch
 sleep 0.2
 xmodmap $HOME/.config/kbswitch
 #signal-desktop --start-in-tray --use-tray-icon &

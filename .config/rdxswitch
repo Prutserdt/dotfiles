@@ -1,15 +1,17 @@
 ! NOTE: This file is generated from ~/.config/README.org
 !       Please only edit that file and org-babel-tangle (emacs)
-!remove Lock = Caps_Lock
-!keysym Escape = Escape
-!keysym Caps_Lock = Caps_Lock
-!add Lock = Caps_Lock
 remove mod4 = Super_R
-! add the keycode that you are going to use for the Super_R. For Redox keyboard: keycode 134
 keycode 134 = Super_R
-! add the keycode that you are going to use for the Super_R. PrtSc: keycode 107 (Lenode Thinkpad X270)
-!keycode 107 = Super_R
-! Connect mod3 to be Super_R:
+
+if [ "$system_name" = "archlinux" ]; then
+    keycode 107 = Super_R
+elif [ "$system_name" = "linuxbox" ]; then
+    keycode 134 = Super_R
+else
+    notify-send -t 60000 "Unknown system name: $system_name"
+    exit 1
+fi
+
 add mod3 = Super_R
 remove mod1 = Alt_R
 add mod5 = Alt_R
