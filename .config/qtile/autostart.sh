@@ -3,14 +3,14 @@
 #       Please only edit that file and org-babel-tangle (Emacs)
 
 setxkbmap us &&
-xmodmap $HOME/.config/rdxwitch &&
-xmodmap $HOME/.config/kbswitch &&
 $HOME/.config/notify-log.sh $HOME/.config/notify.log && # writing notification to a logfile
-xset r rate 300 80 &
+#xset r rate 300 80 &
 picom -b &
 emacs --daemon &
 nm-applet &
 thunar --daemon &
+sleep 0.5
+xmodmap $HOME/.config/kbswitch &
 #signal-desktop --start-in-tray --use-tray-icon &
 #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
 ## Next section is for my virtual machine. Uncomment all below and remove the part on the top.

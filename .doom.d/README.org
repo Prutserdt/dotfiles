@@ -1050,6 +1050,8 @@ $0
 
 Remark: Github cannot handle a code block inside a codeblock. The line ~#+BEGIN_SRC python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
 
+
+
 * Credits
 My configuration of Doom Emacs is partially based on these:
 - 🔗 https://github.com/doomemacs/doomemacs

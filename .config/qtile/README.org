@@ -41,6 +41,7 @@ My configuration requires some modules to be loaded. These are all default confi
 import psutil
 import subprocess
 import os
+import socket
 
 from typing import List
 from libqtile import bar, layout, widget, hook
@@ -169,15 +170,21 @@ def reset_margin(self):
     self.group.layout_all()
 #+END_SRC
 
-The status of the battery of a laptop can be monitored by uncommenting the next part.
-#+BEGIN_SRC python :tangle config.py
+FIXME: testen en uitwerken...
 
-# uncomment for battery, for my Lenovo laptop
-# def get_battery_status():
-#     battery = check_output(['acpi'])
-#     battery = battery.decode("utf-8")
-#     battery = battery.strip()
-#    return battery
+
+If my The status of the battery of a laptop can be monitored by uncommenting the next part.
+
+The following part is system specific. Is my system name is =archlinux= then my computer is a laptop and I want to show battery information in my top screen. If my computer is a desktop, and not named =archlinux= then I do not want to show the battery information.
+#+BEGIN_SRC python :tangle config.py
+# Define get_battery_status() function if system name is ArchLinux
+if socket.gethostname().lower() in ["archlinux"]:
+    def get_battery_status():
+        battery = check_output(['acpi'])
+        return battery.decode("utf-8").strip()
+
+# Check if system name is ArchLinux to include the Battery widget
+battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if socket.gethostname().lower() in ["archlinux"] else []
 #+END_SRC
 
 ** Keybindings: Qtile specific
@@ -364,7 +371,6 @@ floating_theme = {"border_width": 3,
 ** Layouts
 I mainly use the MonadThreeCol layout, which is similar to DWM's centered master and can switch to tall and wide mode and use gaps or no gaps for these layouts.
 Make sure that networkmanager is installed and that nm-applet is part of the autostart.sh, no need to add extras to the top bar.
-
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 layouts = [
    layout.MonadThreeCol(**layout_theme),
@@ -400,18 +406,13 @@ screens = [
                     foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
-                # uncomment for battery, Lenovo Thinkpad
-                #widget.Battery(
-                #    battery=1,
-                #    format='{char} {percent:2.0%}',
-                #    update_interval=30,
-                #),
+            ] + battery_widget + [
                 widget.OpenWeather(
-                    app_key = "4cf3731a25d1d1f4e4a00207afd451a2",
-                    cityid = "2759661",
-                    format = '{main_temp}°C {icon}',
+                    app_key="4cf3731a25d1d1f4e4a00207afd451a2",
+                    cityid="2759661",
+                    format='{main_temp}°C {icon}',
                     foreground="#888888",
-                    metric = True,
+                    metric=True,
                     mouse_callbacks={"Button1": lazy.spawn("xdg-open https://buienradar.nl"), "Button3": lazy.spawn("xdg-open https://openweathermap.org/city/2759661")}
                 ),
                 widget.Volume(foreground="#d75f5f"),
@@ -564,14 +565,14 @@ Again a note is added and this time to ~autostart.sh~ to *not* edit this file di
 The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started. nm-applet is the NetworkManager applet. Signal is also opened in the tray with the icon.
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
 setxkbmap us &&
-xmodmap $HOME/.config/rdxwitch &&
-xmodmap $HOME/.config/kbswitch &&
 $HOME/.config/notify-log.sh $HOME/.config/notify.log && # writing notification to a logfile
-xset r rate 300 80 &
+#xset r rate 300 80 &
 picom -b &
 emacs --daemon &
 nm-applet &
 thunar --daemon &
+sleep 0.5
+xmodmap $HOME/.config/kbswitch &
 #signal-desktop --start-in-tray --use-tray-icon &
 #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
 ## Next section is for my virtual machine. Uncomment all below and remove the part on the top.

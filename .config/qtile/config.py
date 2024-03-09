@@ -4,6 +4,7 @@
 import psutil
 import subprocess
 import os
+import socket
 
 from typing import List
 from libqtile import bar, layout, widget, hook
@@ -113,12 +114,14 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
-# uncomment for battery, for my Lenovo laptop
-# def get_battery_status():
-#     battery = check_output(['acpi'])
-#     battery = battery.decode("utf-8")
-#     battery = battery.strip()
-#    return battery
+# Define get_battery_status() function if system name is ArchLinux
+if socket.gethostname().lower() in ["archlinux"]:
+    def get_battery_status():
+        battery = check_output(['acpi'])
+        return battery.decode("utf-8").strip()
+
+# Check if system name is ArchLinux to include the Battery widget
+battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if socket.gethostname().lower() in ["archlinux"] else []
 
 keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
@@ -305,18 +308,13 @@ screens = [
                     foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
-                # uncomment for battery, Lenovo Thinkpad
-                #widget.Battery(
-                #    battery=1,
-                #    format='{char} {percent:2.0%}',
-                #    update_interval=30,
-                #),
+            ] + battery_widget + [
                 widget.OpenWeather(
-                    app_key = "4cf3731a25d1d1f4e4a00207afd451a2",
-                    cityid = "2759661",
-                    format = '{main_temp}°C {icon}',
+                    app_key="4cf3731a25d1d1f4e4a00207afd451a2",
+                    cityid="2759661",
+                    format='{main_temp}°C {icon}',
                     foreground="#888888",
-                    metric = True,
+                    metric=True,
                     mouse_callbacks={"Button1": lazy.spawn("xdg-open https://buienradar.nl"), "Button3": lazy.spawn("xdg-open https://openweathermap.org/city/2759661")}
                 ),
                 widget.Volume(foreground="#d75f5f"),
