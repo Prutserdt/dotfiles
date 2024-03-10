@@ -313,8 +313,8 @@
 (defvar my-roam-dir
   (cond
    ((string-equal (system-name) "linuxbox") "~/Stack/Command_line/RoamNotes")
-   ((string-equal (system-name) "ArchLinux") "~/Shared_directory/RoamNotes")
-   ((string-equal (system-name) "archlinux") "~/Stack/Thinkpad/RoamNotes")
+   ((string-equal (system-name) "work") "~/Shared_directory/RoamNotes")
+   ((string-equal (system-name) "thinkpad") "~/Stack/Thinkpad/RoamNotes")
    (t "~/Downloads"))) ; Default directory
 
 (use-package org-roam

@@ -114,14 +114,14 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
-# Define get_battery_status() function if system name is ArchLinux
-if socket.gethostname().lower() in ["archlinux"]:
+# Define get_battery_status() function if hostname is "thinkpad" or "work"
+if socket.gethostname().lower() in ["thinkpad", "work"]:
     def get_battery_status():
         battery = check_output(['acpi'])
         return battery.decode("utf-8").strip()
 
-# Check if system name is ArchLinux to include the Battery widget
-battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if socket.gethostname().lower() in ["archlinux"] else []
+# Include the Battery widget if hostname is "thinkpad" or "work"
+battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if socket.gethostname().lower() in ["thinkpad", "work"] else []
 
 keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),

@@ -27,6 +27,24 @@
 * Introduction
 [[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org Emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]], a small script named [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
 
+FIXME: onderstaande is klad
+
+verander de naam van mijn systemen.
+mijn desktop, genaamd linuxbox, ga ik NIET veranderen. wel:
+
+omschrijving        system-name oud     system-name nieuw
+Virtual box Arch    ArchLinux
+Thinkpad Arch       archlinux
+
+icefly@linuxbox
+icefly@thinkpad
+icefly@work
+
+#+begin_src shell
+sudo hostnamectl set-hostname yolo
+#+end_src
+
+
 * Config.py
 This is the configuration file of Qtile.
 ** Imports
@@ -170,13 +188,12 @@ def reset_margin(self):
     self.group.layout_all()
 #+END_SRC
 
-FIXME: testen en uitwerken...
-
-
 If my The status of the battery of a laptop can be monitored by uncommenting the next part.
 
 The following part is system specific. Is my system name is =archlinux= then my computer is a laptop and I want to show battery information in my top screen. If my computer is a desktop, and not named =archlinux= then I do not want to show the battery information.
-#+BEGIN_SRC python :tangle config.py
+
+FIXME: REMOVE LATER, LEAVE FOR NOW...
+#+BEGIN_SRC python
 # Define get_battery_status() function if system name is ArchLinux
 if socket.gethostname().lower() in ["archlinux"]:
     def get_battery_status():
@@ -185,7 +202,21 @@ if socket.gethostname().lower() in ["archlinux"]:
 
 # Check if system name is ArchLinux to include the Battery widget
 battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if socket.gethostname().lower() in ["archlinux"] else []
-#+END_SRC
+#+end_src
+
+NEW:
+#+BEGIN_SRC python :tangle config.py :results none :eval never
+# Define get_battery_status() function if hostname is "thinkpad" or "work"
+if socket.gethostname().lower() in ["thinkpad", "work"]:
+    def get_battery_status():
+        battery = check_output(['acpi'])
+        return battery.decode("utf-8").strip()
+
+# Include the Battery widget if hostname is "thinkpad" or "work"
+battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if socket.gethostname().lower() in ["thinkpad", "work"] else []
+#+end_src
+
+
 
 ** Keybindings: Qtile specific
 My left super key bindings are all related to Qtile, for instance moving windows around.
