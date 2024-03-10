@@ -114,14 +114,17 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
-# Define get_battery_status() function if hostname is "thinkpad" or "work"
-if socket.gethostname().lower() in ["thinkpad", "work"]:
+# Check if hostname is "thinkpad" or "work"
+is_thinkpad_or_work = socket.gethostname().lower() in ["thinkpad", "work"]
+
+# Define get_battery_status() function
+if is_thinkpad_or_work:
     def get_battery_status():
         battery = check_output(['acpi'])
         return battery.decode("utf-8").strip()
 
-# Include the Battery widget if hostname is "thinkpad" or "work"
-battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if socket.gethostname().lower() in ["thinkpad", "work"] else []
+# Include the Battery widget based on the condition
+battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if is_thinkpad_or_work else []
 
 keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
@@ -250,10 +253,19 @@ groups.append(
     ])
 )
 
+#NOTE: modified:
+is_thinkpad = socket.gethostname().lower() in ["thinkpad"]
+
 keys.extend([
-        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')),
-        #Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1")), # For Thinkpad
+    Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')) if not is_thinkpad else Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
 ])
+
+# FIXME, onderstaande later weghalen.
+# keys.extend([
+#         Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')),
+#         #Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1")), # For Thinkpad
+# ]
+            )
 
 layout_theme = {"border_width": 2,
                 "border_focus":  "#d75f5f",
