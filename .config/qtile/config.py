@@ -253,19 +253,21 @@ groups.append(
     ])
 )
 
-#NOTE: modified:
 is_thinkpad = socket.gethostname().lower() in ["thinkpad"]
 
-keys.extend([
-    Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')) if not is_thinkpad else Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
-])
+if is_thinkpad:
+    keys.extend([
+        Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
+    ])
+else:
+    keys.extend([
+        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
+    ])
 
-# FIXME, onderstaande later weghalen.
-# keys.extend([
-#         Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')),
-#         #Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1")), # For Thinkpad
-# ]
-#           )
+#NOTE: modified:
+#keys.extend([
+#    Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')) if not is_thinkpad else Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
+#])
 
 layout_theme = {"border_width": 2,
                 "border_focus":  "#d75f5f",
