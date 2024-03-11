@@ -205,9 +205,8 @@
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Write this buffer to file"        "w" #'write-file)
-
-    (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
-
+;;    (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
+    (:desc "Open files in emacs" "e" #'my-searchable-files-list)
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
         :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
@@ -243,6 +242,20 @@
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
+
+(defun my-searchable-files-list ()
+  (interactive)
+  (let ((files '(
+                 "~/.doom.d/README.org"
+                 "~/.xinitrc"
+                 "~/.config/README.org"
+                 "~/.config/qtile/README.org"
+                 )))  ; Add your list of files here
+
+    ;; Convert relative paths to absolute paths
+    (setq files (mapcar 'expand-file-name files))
+
+    (find-file (completing-read "Searchable Files: " files))))
 
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 

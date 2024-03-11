@@ -1,8 +1,6 @@
 #!/bin/bash
 xmodmap -e "remove mod4 = Super_R"
 
-system_name="archlinux"
-
 case "$system_name" in
     archlinux)
         keycode=107

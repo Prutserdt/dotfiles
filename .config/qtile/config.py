@@ -80,6 +80,7 @@ def monwide(qtile):
 def Max(qtile):
     qtile.cmd_to_layout_index(3) # Max
 
+
 # Define a global variable to track the current layout
 current_layout = 0  # threecol is the default layout
 
@@ -123,8 +124,13 @@ if is_thinkpad_or_work:
         battery = check_output(['acpi'])
         return battery.decode("utf-8").strip()
 
-# Include the Battery widget based on the condition
-battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if is_thinkpad_or_work else []
+battery_widget = [
+    widget.Battery(
+        battery=1,
+        format='{char} {percent:2.0%}',
+        update_interval=30
+    )
+] if is_thinkpad_or_work else []
 
 keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
@@ -206,7 +212,12 @@ keys = [
     Key([aR], "i", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/i3/config')}")),
     Key([aR], "n", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.newsboat/config')}")),
     Key([aR], "p", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Code/git/PowerStrike_code/README.org')}")),
-    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
+
+
+#    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
+    Key([aR], "q", lazy.spawn(expanduser("~/.config/emacs_open_file.sh"))),
+
+
     Key([aR], "r", lazy.spawn(f"python3 {emacs_script} {expanduser('~/README.org')}")), # github readme
     Key([aR], "s", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/README.org')}")),  # shell scripts readme
     Key([aR, "shift"], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/textfiles')}")),
@@ -255,19 +266,11 @@ groups.append(
 
 is_thinkpad = socket.gethostname().lower() in ["thinkpad"]
 
-if is_thinkpad:
-    keys.extend([
-        Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
-    ])
-else:
-    keys.extend([
-        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
-    ])
-
-#NOTE: modified:
-#keys.extend([
-#    Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')) if not is_thinkpad else Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
-#])
+keys.extend([
+    Key([], "XF86Favorites" if is_thinkpad else "XF86Calculator",
+        lazy.group["scratchpad"].dropdown_toggle("1"),
+        lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
+])
 
 layout_theme = {"border_width": 2,
                 "border_focus":  "#d75f5f",

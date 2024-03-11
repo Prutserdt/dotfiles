@@ -1,11 +1,6 @@
-#+TITLE: My configuration of
-#+STARTUP: show everything
-#+STARTUP: inlineimages
+#+TITLE: My configuration of Qtile Window Manager
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
-
-#+CAPTION: Qtile
-#+ATTR_HTML: :alt Qtile :title Qtile :align center :width 400px
 [[file:Qtile.png]]
 
 * Table of contents :toc:
@@ -132,6 +127,7 @@ def monwide(qtile):
 def Max(qtile):
     qtile.cmd_to_layout_index(3) # Max
 
+
 # Define a global variable to track the current layout
 current_layout = 0  # threecol is the default layout
 
@@ -183,12 +179,16 @@ if is_thinkpad_or_work:
         battery = check_output(['acpi'])
         return battery.decode("utf-8").strip()
 
-# Include the Battery widget based on the condition
-battery_widget = [widget.Battery(battery=1, format='{char} {percent:2.0%}', update_interval=30)] if is_thinkpad_or_work else []
+battery_widget = [
+    widget.Battery(
+        battery=1,
+        format='{char} {percent:2.0%}',
+        update_interval=30
+    )
+] if is_thinkpad_or_work else []
+
 
 #+end_src
-
-
 
 ** Keybindings: Qtile specific
 My left super key bindings are all related to Qtile, for instance moving windows around.
@@ -223,16 +223,6 @@ keys = [
     Key([mL], 'a', increase_margin,                     desc="Increase gaps"),
     Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
     Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
-#+END_SRC
-
-The next code block example is about keychording, a concept used in Emacs that can select functions by typing separate characters, and no more need to keep modifyer keys pressed. I am not using it for the moment, since it can be a bit confusing and not clear enough when the keychord mode is selected. I keep this here just for future reference.
-#+BEGIN_SRC :results none :eval never
- KeyChord([mL], "m", [      # testje, keychording werkt!! :-)
-     Key([], "u",lazy.spawn("amixer -q set Master 5%+")),
-     Key([], "i",lazy.spawn("amixer -q set Master 5%-")),
-     ],
-     mode="Margins" # als je mode kiest dan moet je eruit met escape....
-     ),
 #+END_SRC
 
 ** Keybindings: Audio, monitor brightness and print
@@ -295,7 +285,12 @@ The right alt key is used to open text files in Emacs.
     Key([aR], "i", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/i3/config')}")),
     Key([aR], "n", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.newsboat/config')}")),
     Key([aR], "p", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Code/git/PowerStrike_code/README.org')}")),
-    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
+
+
+#    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
+    Key([aR], "q", lazy.spawn(expanduser("~/.config/emacs_open_file.sh"))),
+
+
     Key([aR], "r", lazy.spawn(f"python3 {emacs_script} {expanduser('~/README.org')}")), # github readme
     Key([aR], "s", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/README.org')}")),  # shell scripts readme
     Key([aR, "shift"], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/textfiles')}")),
@@ -348,19 +343,11 @@ groups.append(
 
 is_thinkpad = socket.gethostname().lower() in ["thinkpad"]
 
-if is_thinkpad:
-    keys.extend([
-        Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
-    ])
-else:
-    keys.extend([
-        Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
-    ])
-
-#NOTE: modified:
-#keys.extend([
-#    Key([], "XF86Calculator", lazy.group["scratchpad"].dropdown_toggle("1"), lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"')) if not is_thinkpad else Key([], "XF86Favorites", lazy.group["scratchpad"].dropdown_toggle("1"))
-#])
+keys.extend([
+    Key([], "XF86Favorites" if is_thinkpad else "XF86Calculator",
+        lazy.group["scratchpad"].dropdown_toggle("1"),
+        lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
+])
 
 layout_theme = {"border_width": 2,
                 "border_focus":  "#d75f5f",
@@ -536,8 +523,8 @@ The script is using two funtions, the first one is checking if emacs is already 
 #+BEGIN_SRC python :tangle open_emacs.py :eval never
 def is_emacsclient_running():
     try:
-        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs"])
-#       subprocess.check_output(["pgrep", "-f", "emacs*"])
+#        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs"])
+       subprocess.check_output(["pgrep", "-f", "emacs*"])
         return True
     except subprocess.CalledProcessError:
         return False
