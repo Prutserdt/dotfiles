@@ -11,7 +11,6 @@ from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from os.path import expanduser
-# from subprocess imprt check_output  # uncomment for battery, Lenovo Thinkpad
 
 class ScrollableTextWidget(widget.base._TextBox):
     def __init__(self, file_path, **config):

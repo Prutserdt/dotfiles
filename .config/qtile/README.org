@@ -43,7 +43,6 @@ from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from os.path import expanduser
-# from subprocess imprt check_output  # uncomment for battery, Lenovo Thinkpad
 #+END_SRC
 
 The following class is that makes my notifications scrollable in the top bar when a notification is displayed.
@@ -166,9 +165,7 @@ def reset_margin(self):
     self.group.layout_all()
 #+END_SRC
 
-If my The status of the battery of a laptop can be monitored by uncommenting the next part.
-
-The following part is about system specificity. Is my hostname is =thinkpad= or =work= then my computer is a laptop and I want to show battery information in my top screen. If my computer is a desktop, and not named by that way then I do not want to show the battery information.
+The following part is about system specificity. If my hostname is =thinkpad= or =work= then my computer is a laptop and I want to show battery information in my top bar. If my computer is a desktop this is not needed of course.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 # Check if hostname is "thinkpad" or "work"
 is_thinkpad_or_work = socket.gethostname().lower() in ["thinkpad", "work"]
@@ -186,8 +183,6 @@ battery_widget = [
         update_interval=30
     )
 ] if is_thinkpad_or_work else []
-
-
 #+end_src
 
 ** Keybindings: Qtile specific
