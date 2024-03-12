@@ -54,7 +54,7 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github
 # Keyboard related
 alias k='xmodmap $HOME/.config/kbswitch && xset r rate 300 80'      # Change modkeys, Caps/Esc and fast key repeats
 #alias r='xmodmap $HOME/.config/rdxswitch && xset r rate 300 80'     # old, changed to a script, see next line..
-alias r='xmodmap $HOME/.config/keyboard-config.sh'     # Change to redox kb, alt-r modkeys, and fast key repeats
+alias r='$HOME/.config/keyboard-config.sh'     # Change to redox kb, alt-r modkeys, and fast key repeats
 
 # emacs
 alias em="/usr/bin/emacs -nw"                   #emacs commandline
