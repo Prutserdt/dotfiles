@@ -561,14 +561,13 @@ Again a note is added and this time to ~autostart.sh~ to *not* edit this file di
 
 The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started. nm-applet is the NetworkManager applet. Signal is also opened in the tray with the icon.
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
-$HOME/.config/keyboard_config.sh &
 $HOME/.config/escape_caps_toggle.sh &
+$HOME/.config/keyboard_config.sh &
 setxkbmap us &
 $HOME/.config/notify-log.sh $HOME/.config/notify.log & # writing notification to a logfile
 emacs --daemon &
 nm-applet &
 thunar --daemon &
-#xmodmap $HOME/.config/rdxswitch
 picom -b &
 #signal-desktop --start-in-tray --use-tray-icon &
 #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage

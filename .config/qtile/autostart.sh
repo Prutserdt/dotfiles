@@ -2,14 +2,13 @@
 # NOTE: This file is generated from ~/.config/qtile/README.org
 #       Please only edit that file and org-babel-tangle (Emacs)
 
-$HOME/.config/keyboard_config.sh &
 $HOME/.config/escape_caps_toggle.sh &
+$HOME/.config/keyboard_config.sh &
 setxkbmap us &
 $HOME/.config/notify-log.sh $HOME/.config/notify.log & # writing notification to a logfile
 emacs --daemon &
 nm-applet &
 thunar --daemon &
-#xmodmap $HOME/.config/rdxswitch
 picom -b &
 #signal-desktop --start-in-tray --use-tray-icon &
 #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
