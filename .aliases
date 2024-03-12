@@ -52,9 +52,9 @@ alias dotfiles='$HOME/.config/dotfiles.sh'                                  # Do
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github simplification
 
 # Keyboard related
-alias k='xmodmap $HOME/.config/kbswitch && xset r rate 300 80'      # Change modkeys, Caps/Esc and fast key repeats
-#alias r='xmodmap $HOME/.config/rdxswitch && xset r rate 300 80'     # old, changed to a script, see next line..
-alias r='$HOME/.config/keyboard-config.sh'     # Change to redox kb, alt-r modkeys, and fast key repeats
+alias e='$HOME/.config/escape_caps_toggle.sh'
+alias r='echo this alias,named r, does not exist anymore, stop using it!!'     # obsoleter alias!
+alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on hostname
 
 # emacs
 alias em="/usr/bin/emacs -nw"                   #emacs commandline

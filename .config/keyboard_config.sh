@@ -10,7 +10,7 @@ xmodmap -e "remove mod4 = Super_R"
 # Select keycode for Super_R based on hostname
 case "$hostname" in
     work)
-        keycode=107    # Use keycode 107 for work system
+        keycode=107    # Use keycode 107 for work system... to be tested!!! should not work
         notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     linuxbox)
@@ -18,7 +18,7 @@ case "$hostname" in
         notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     thinkpad)
-        keycode=107    # Use keycode 107 for thinkpad system
+        keycode=107    # Use keycode 107 for thinkpad system, this is the printscreen button :-)
         notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     *)

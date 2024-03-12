@@ -12,15 +12,5 @@
 remove mod4 = Super_R
 add mod3 = Super_R
 
-! Alt_R key is set to mod5, this is a hotkey to open textfiles in dwm
-! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift
-!remove mod1 = ISO_Level3_Shift
-!add mod5 = ISO_Level3_Shift
 remove mod1 = Alt_R
 add mod5 = Alt_R
-
-! Caps_Lock becomes the Escape key and vice versa. (Handy for vim)
-!remove Lock = Caps_Lock
-!keysym Escape = Caps_Lock
-!keysym Caps_Lock = Escape
-!add Lock = Caps_Lock

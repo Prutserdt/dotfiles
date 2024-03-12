@@ -32,13 +32,13 @@
   - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dotfilessh][dotfiles.sh]]
   - [[#emacs][emacs]]
-  - [[#kbswitch][kbswitch]]
+  - [[#escape_caps_togglesh][escape_caps_toggle.sh]]
   - [[#incrmonitorbrightnesssh][incrMonitorBrightness.sh]]
+  - [[#keyboard_configsh][keyboard_config.sh]]
   - [[#nightcolordownsh][nightColorDown.sh]]
   - [[#nightcolorupsh][nightColorUp.sh]]
   - [[#notify-logsh][notify-log.sh]]
   - [[#unicode][unicode]]
-  - [[#rdxswitch][rdxswitch]]
   - [[#resetrgbsh][resetRGB.sh]]
   - [[#screenshot2textsh][screenshot2text.sh]]
   - [[#stack_startupsh-1][stack_startup.sh]]
@@ -1342,34 +1342,32 @@ Please write a shell script that will open ~/.doom.d/README.org in emacs. It sho
 emacsclient -r ~/.doom.d/README.org
 #+END_SRC
 
-** kbswitch
-These settings are used in combination with an xmodmap command and can be used when a normy keyboard is used. It will swap Escape/CapsLock, change the super key to super left and super right and the same for the alt key (switch to alt-left and alt-right)
-I run it by the alias ~~k~~ in my terminal which will execute ~xmodmap ~/.config/kbswitch~.
+** escape_caps_toggle.sh
+A quite complex script to toggle the Escape and Caps lock keys, this can be toggled back and forth.
+This is set to =e= in .aliases.
+#+BEGIN_SRC sh :tangle escape_caps_toggle.sh :padline no :eval no :tangle-mode (identity #o755)
+# Get current key mappings
+esc_key=$(xmodmap -pke | grep -P "keycode\s+9 =.+" | awk '{print $4}')
+caps_lock_key=$(xmodmap -pke | grep -P "keycode\s+66 =.+" | awk '{print $4}')
 
-Swap the Escape with the Capslock.
-#+BEGIN_SRC sh :tangle kbswitch :padline no :eval no
-! NOTE: This file is generated from ~/.config/README.org
-!       Please only edit that file and org-babel-tangle (emacs)
-remove Lock = Caps_Lock
-keysym Escape = Caps_Lock
-keysym Caps_Lock = Escape
-add Lock = Caps_Lock
-#+END_SRC
-
-Change the setting so that the left and right super keys are both functional. More modifiers is better...
-#+BEGIN_SRC sh :tangle kbswitch :padline no :eval no
-!remove mod4 = Super_R
-!add mod3 = Super_R
-#+END_SRC
-
-The same thing for the alt key. Let's use the Alt-left and Alt-right.
-#+BEGIN_SRC sh :tangle kbswitch :padline no :eval no
-! In Manjaro 2022 the Alt_R key is ISO_Level3_Shift, uncomment next lines if needed.
-!remove mod1 = ISO_Level3_Shift
-!add mod5 = ISO_Level3_Shift
-!!remove mod1 = Alt_R
-!!add mod5 = Alt_R
-#+END_SRC
+# Toggle key mappings
+if [ "$esc_key" == "Escape" ]; then
+    # Right setting for redox (other way around)
+    notify-send -t 60000 "Esc/Caps is swapped! Escape is now: $esc_key"
+    xmodmap -e "remove lock = Caps_Lock"
+    xmodmap -e 'keycode 9 = Caps_Lock'
+    xmodmap -e 'keycode 66 = Escape'
+    xmodmap -e 'add lock = Caps_Lock'
+else
+    # "Wrong" setting for my redox keyboard
+    notify-send -t 60000 "Esc/Caps is swapped! Escape is now: $esc_key"
+    xmodmap -e "remove lock = Caps_Lock"
+    xmodmap -e 'keycode 9 = Escape'
+    xmodmap -e 'clear lock'
+    xmodmap -e 'keycode 66 = Caps_Lock'
+    xmodmap -e 'add lock = Caps_Lock'
+fi
+#+end_src
 
 ** incrMonitorBrightness.sh
 Increase the monitor brightness by xrandr and also make the color less red. It's sister, [[decrMonitorBrightness.sh]], is a similar script doing the oposite.
@@ -1410,6 +1408,53 @@ else
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
 #+END_SRC
+
+** keyboard_config.sh
+This script modifies the key layout depending on the hostname. The Escape and Caps Lock are not touched and can be changed by the shell script [[escape_caps_swap.sh]].
+under construction...
+it is now coupled to my alias =r=. this should probably be renamed to =k=!
+#+BEGIN_SRC sh :tangle keyboard_config.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+
+hostname=$(uname -n)
+
+# Remove Super_R key from mod4 modifier
+xmodmap -e "remove mod4 = Super_R"
+
+# Select keycode for Super_R based on hostname
+case "$hostname" in
+    work)
+        keycode=107    # Use keycode 107 for work system... to be tested!!! should not work
+        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        ;;
+    linuxbox)
+        keycode=134    # Use keycode 134 for linuxbox system
+        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        ;;
+    thinkpad)
+        keycode=107    # Use keycode 107 for thinkpad system, this is the printscreen button :-)
+        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        ;;
+    ,*)
+        # Display a notification for unknown hostnames and exit with an error
+        notify-send -t 60000 "Unknown hostname: $hostname"
+        exit 1
+        ;;
+esac
+
+# Map the selected keycode to Super_R and add it to mod3 modifier
+xmodmap -e "keycode $keycode = Super_R"
+xmodmap -e "add mod3 = Super_R"
+
+# Remove Alt_R from mod1 modifier and add it to mod5
+xmodmap -e "remove mod1 = Alt_R"
+xmodmap -e "add mod5 = Alt_R"
+
+# Set key auto-repeat rate to 300 delay and 80 rate
+xset r rate 300 80
+#+end_src
 
 ** nightColorDown.sh
 A script to make the screen more reddish. See the related [[nightColorUp.sh]], [[resetRGB.sh]] and also [[decrMonitorBrightness.sh]] [[incrMonitorBrightness.sh]].
@@ -1538,128 +1583,6 @@ wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
 Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
 
-** rdxswitch
-
-under construction, right now playing with this script to modify some keys dependent on my hostname.
-
-#+BEGIN_SRC sh :tangle keyboard-config.sh :padline no :eval no :tangle-mode (identity #o755)
-#!/bin/bash
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-
-hostname=$(uname -n)
-
-# Remove Super_R key from mod4 modifier
-xmodmap -e "remove mod4 = Super_R"
-
-# Select keycode for Super_R based on hostname
-case "$hostname" in
-    work)
-        keycode=107    # Use keycode 107 for work system
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
-        ;;
-    linuxbox)
-        keycode=134    # Use keycode 134 for linuxbox system
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
-        ;;
-    thinkpad)
-        keycode=107    # Use keycode 107 for thinkpad system
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
-        ;;
-    ,*)
-        # Display a notification for unknown hostnames and exit with an error
-        notify-send -t 60000 "Unknown hostname: $hostname"
-        exit 1
-        ;;
-esac
-
-# Map the selected keycode to Super_R and add it to mod3 modifier
-xmodmap -e "keycode $keycode = Super_R"
-xmodmap -e "add mod3 = Super_R"
-
-# Remove Alt_R from mod1 modifier and add it to mod5
-xmodmap -e "remove mod1 = Alt_R"
-xmodmap -e "add mod5 = Alt_R"
-
-# Set key auto-repeat rate to 300 delay and 80 rate
-xset r rate 300 80
-#+end_src
-
-
-NOTE: onderstaande is oud en ga ik weghalen!
-
-#+BEGIN_SRC sh
-xmodmap -e "remove mod4 = Super_R"
-
-case "$system_name" in
-    archlinux)
-        keycode=107
-        ;;
-    linuxbox)
-        keycode=134
-        ;;
-    ,*)
-        notify-send -t 60000 "Unknown system name: $system_name"
-        exit 1
-        ;;
-esac
-
-xmodmap -e "keycode $keycode = Super_R"
-xmodmap -e "add mod3 = Super_R"
-xmodmap -e "remove mod1 = Alt_R"
-xmodmap -e "add mod5 = Alt_R"
-
-xset r rate 300 80
-#+end_src
-
-
-
-
-
-
-These settings are used in combination with an xmodmap command and are restoring the keysetting that I use for my Redox keyboard. I run it by the alias ~r~ in my terminal which will execute ~xmodmap ~/.config/rdxswitch~. This is needed when keyboards are swapped.
-
-
-I like to use the Super-R button but this is handled different on my systems. On my Redox keyboard I put in in my firmware and it can be used by keycode 134 and in my thinkpad I will use the printscreen button as the Super-R button (keycode 134). This switching is automated according to the system name.
-
-
-
-#+BEGIN_SRC sh
-! NOTE: This file is generated from ~/.config/README.org
-!       Please only edit that file and org-babel-tangle (emacs)
-remove mod4 = Super_R
-keycode 134 = Super_R
-
-if [ "$system_name" = "archlinux" ]; then
-    keycode 107 = Super_R
-elif [ "$system_name" = "linuxbox" ]; then
-    keycode 134 = Super_R
-else
-    notify-send -t 60000 "Unknown system name: $system_name"
-    exit 1
-fi
-
-add mod3 = Super_R
-remove mod1 = Alt_R
-add mod5 = Alt_R
-#+END_SRC
-
-
-#+BEGIN_SRC sh
-!remove Lock = Caps_Lock
-!keysym Escape = Escape
-!keysym Caps_Lock = Caps_Lock
-!add Lock = Caps_Lock
-remove mod4 = Super_R
-! add the keycode that you are going to use for the Super_R. For Redox keyboard: keycode 134
-keycode 134 = Super_R
-! add the keycode that you are going to use for the Super_R. PrtSc: keycode 107 (Lenode Thinkpad X270)
-!keycode 107 = Super_R
-! Connect mod3 to be Super_R:
-add mod3 = Super_R
-remove mod1 = Alt_R
-add mod5 = Alt_R
-#+END_SRC
 
 ** resetRGB.sh
 Reset the gamma settings (RGB) to a default value of 1:1:1. Related to the shell scripts [[nightColorUp.sh]] and [[nightColorDown.sh]].
