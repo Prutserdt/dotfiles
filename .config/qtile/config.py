@@ -115,7 +115,8 @@ def reset_margin(self):
     self.group.layout_all()
 
 # Check if hostname is "thinkpad" or "work"
-is_thinkpad_or_work = socket.gethostname().lower() in ["thinkpad", "work"]
+#is_thinkpad_or_work = socket.gethostname().lower() in ["thinkpad", "work"]
+is_thinkpad_or_work = socket.gethostname() in ["thinkpad", "work"]
 
 # Define get_battery_status() function
 if is_thinkpad_or_work:
