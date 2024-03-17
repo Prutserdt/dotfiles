@@ -130,12 +130,10 @@
   (add-to-list 'display-buffer-alist
                '((lambda (buffer-or-name _)
                    (let ((buffer (get-buffer buffer-or-name)))
-                        (with-current-buffer buffer
-                         (or (equal major-mode 'vterm-mode)
-                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-                 (display-buffer-reuse-window display-buffer-at-bottom)
-                 (reusable-frames . visible)
-                 (window-height . 0.5))))
+                     (with-current-buffer buffer
+                       (or (equal major-mode 'vterm-mode)
+                           (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+           (display-buffer-reuse-window display-buffer-same-window))))
 
 (use-package! gptel
  :config
@@ -178,7 +176,7 @@
             :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
 
     (:prefix ("d" . "Prutserdt Bindings")
-        :desc "Vterm toggle"                   "SPC" #'my-vterm-toggle-maximized
+        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
@@ -242,11 +240,6 @@
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
-
-(defun my-vterm-toggle-maximized ()
-  (interactive)
-  (vterm-toggle)
-  (doom/window-maximize-buffer))
 
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 

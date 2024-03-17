@@ -360,13 +360,14 @@ I like to use Vterm as a scratch terminal, this can be done by the vterm-toggle 
   (add-to-list 'display-buffer-alist
                '((lambda (buffer-or-name _)
                    (let ((buffer (get-buffer buffer-or-name)))
-                        (with-current-buffer buffer
-                         (or (equal major-mode 'vterm-mode)
-                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-                 (display-buffer-reuse-window display-buffer-at-bottom)
-                 (reusable-frames . visible)
-                 (window-height . 0.5))))
+                     (with-current-buffer buffer
+                       (or (equal major-mode 'vterm-mode)
+                           (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+           (display-buffer-reuse-window display-buffer-same-window))))
+
+
 #+END_SRC
+
 
 ** ChatGPT in emacs
 In this elisp code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
@@ -426,7 +427,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
 
     (:prefix ("d" . "Prutserdt Bindings")
-        :desc "Vterm toggle"                   "SPC" #'my-vterm-toggle-maximized
+        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
@@ -490,14 +491,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
         :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
-#+end_src
-
-I prefer vterm to be opened maximized
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-vterm-toggle-maximized ()
-  (interactive)
-  (vterm-toggle)
-  (doom/window-maximize-buffer))
 #+end_src
 
 *** Emacs keybindings
