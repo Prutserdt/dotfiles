@@ -16,11 +16,10 @@
   - [[#groups][Groups]]
   - [[#layouts][Layouts]]
   - [[#some-hooks][Some hooks]]
-- [[#emacs-python-script][Emacs Python script]]
 - [[#the-autostartsh-script][The autostart.sh script]]
 
 * Introduction
-[[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org Emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]], a small script named [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
+[[http://www.qtile.org/][Qtile]] is a full-featured, hackable tiling window manager written and configured in Python. In this README.org Emacs document my configuration of Qtile is described and it is used as the source to create the Qtile configuration file [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/config.py][config.py]] and the shell script [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/autostart.sh][autostart.sh]].
 
 * Config.py
 This is the configuration file of Qtile.
@@ -203,6 +202,7 @@ keys = [
     #Hotkeys to move windows around, resize windows and choose layouts
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
     Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
+    Key([mL], "l", lazy.spawn("xset dpms force suspend"),desc="make screen dark"),
     Key([mL, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
     Key([mL, "shift"], "l", lazy.layout.shuffle_right(),desc="Move window to the right"),
     Key([mL, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
@@ -234,8 +234,7 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
     # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-#FIXME: the keyboard_config.sh should be used here..
-#Key([], "XF86Launch8", lazy.spawn('xmodmap $HOME/.config/kbswitch && xset r rate 300 80'), lazy.spawn('notify-send -t 6000 "⌨️Keyboard settings changed (kbswitch)"')),
+    Key([], "XF86Launch8", lazy.spawn('$HOME/.config/keyboard_config.sh')),
     Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
     Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
     Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
@@ -247,7 +246,7 @@ Right super key to open applications. Shift is used to update the application.
     # Open applications
     Key([mR], "a",
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
-        lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),
+        lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org"),
         desc="Open in emacs: run het python aandelen script en open het aandelen log"),
     Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))), # browser via dmenu, related to 'urls'
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
@@ -271,32 +270,24 @@ Right super key to open applications. Shift is used to update the application.
 #+END_SRC
 
 ** Keybingings: Text files
-The right alt key is used to open text files in Emacs.
+The right alt key is used to open text files in Emacs. NOTE: if emacs is not open in a window this will not work, first open emacs!
 #+BEGIN_SRC python :tangle config.py :results none :eval never
-    # Open text files in emacs
-    Key([aR], "a", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}")),
-    Key([aR], "b", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
-    Key([aR], "c", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/commands.org')}")),
-    Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
-    Key([aR], "e", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.doom.d/README.org')}")),
-    Key([aR], "i", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/i3/config')}")),
-    Key([aR], "n", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.newsboat/config')}")),
-    Key([aR], "p", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Code/git/PowerStrike_code/README.org')}")),
-
-
-#    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
-    Key([aR], "q", lazy.spawn(expanduser("~/.config/emacs_open_file.sh"))),
-
-
-    Key([aR], "r", lazy.spawn(f"python3 {emacs_script} {expanduser('~/README.org')}")), # github readme
-    Key([aR], "s", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/README.org')}")),  # shell scripts readme
-    Key([aR, "shift"], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/textfiles')}")),
-    Key([aR], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/directories')}")),  # related to dmenuthunar.sh
-    Key([aR], "u", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/unicode')}")),  # related to dmenuunicode.sh
-    Key([aR], "v", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.vimrc')}")),
+    # Open text files in emacs, note
+    Key([aR], "a", lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
+    Key([aR], "b", lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
+    Key([aR], "c", lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
+#    Key([aR], "c", lazy.spawn("emacsclient -n ~/Stack/Command_line/commands.org")),
+#   Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
+    Key([aR], "e", lazy.spawn("emacsclient -n ~/.doom.d/README.org")),
+    Key([aR], "q", lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
+    Key([aR], "r", lazy.spawn("emacsclient -n ~/README.org")), # github readme
+    Key([aR], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh
+    Key([aR, "shift"], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/textfiles")),
+    Key([aR], "u", lazy.spawn("emacsclient -n ~/.config/unicode")),  # related to dmenuunicode.sh
+    Key([aR], "v", lazy.spawn("emacsclient -n ~/.vimrc")),
     Key([aR], "w", lazy.spawn(expanduser("~/.config/wololo.sh"))),
-    Key([aR], "x", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.xinitrc')}")),
-    Key([aR], "z", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.zshrc')}")),
+    Key([aR], "x", lazy.spawn("emacsclient -n ~/.xinitrc")),
+    Key([aR], "z", lazy.spawn("emacsclient -n ~/.zshrc")),
 ]
 #+END_SRC
 
@@ -474,7 +465,6 @@ def start_once():
     home = os.path.expanduser("~")
     subprocess.call([home + "/.config/qtile/autostart.sh"])
     home = os.path.expanduser("~")
-#    subprocess.call([expanduser("~/.config/qtile/autostart.sh")])
 
 # swallow window when starting application from terminal
 @hook.subscribe.client_new
@@ -502,54 +492,6 @@ def _unswallow(window):
 wmname = "LG3D"
 #+END_SRC
 
-* Emacs Python script
-The next piece of code is written to a separate script, named [[https://github.com/Prutserdt/dotfiles/blob/master/.config/qtile/open_emacs.py][open_emacs.py]], and is used to open text files in emacs. A note is added to ~open_emacs.py~ which reminds *not* to edit this file directly.
-#+BEGIN_SRC python :tangle open_emacs.py :results none :eval never
-# NOTE: This file is generated from ~/.config/qtile/README.org
-#       Please only edit that file and org-babel-tangle (Emacs)
-#+END_SRC
-
-First the required libraries are imported.
-#+BEGIN_SRC python :tangle open_emacs.py :eval never
-#!/usr/bin/env python3
-import subprocess
-import sys
-#+END_SRC
-
-The script is using two funtions, the first one is checking if emacs is already running
-#+BEGIN_SRC python :tangle open_emacs.py :eval never
-def is_emacsclient_running():
-    try:
-#        subprocess.check_output(["pgrep", "-f", "emacsclient -c -a emacs"])
-       subprocess.check_output(["pgrep", "-f", "emacs*"])
-        return True
-    except subprocess.CalledProcessError:
-        return False
-#+END_SRC
-
-The second function is to open a files with Emacs. If the client is running then is should open the current emacsclient and else open a separate emacsclient.
-#+BEGIN_SRC python :tangle open_emacs.py :eval never
-def open_file_with_emacs(FILENAME):
-    if is_emacsclient_running():
-        subprocess.run(["emacsclient", "-n", FILENAME])
-    else:
-        subprocess.run(["emacsclient", "-c", "-a", "emacs", FILENAME])
-#        subprocess.run(["emacs", FILENAME])
-    # Send a message to Emacs and notify-send what was done
-    subprocess.run(["emacsclient", "-e", f'(message "Emacs opened {FILENAME}")'])
-    subprocess.run(["notify-send", f"Emacs opened '{FILENAME}'"])
-#+END_SRC
-
-The code execution starts here and the code will only run if the filename is a single one (sys.argv !=2).
-#+BEGIN_SRC python :tangle open_emacs.py :eval never
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit(1)
-
-    FILENAME = sys.argv[1]
-    open_file_with_emacs(FILENAME)
-#+END_SRC
-
 * The autostart.sh script
 This shell script is called in the config.py script and is autostarting some services when Qtile starts. In my case this is hostname dependent.The us keyboard map is selected and my Alt/Super/Escape keys are changed. With ~xset~ the keyrepeats are increased. Picom is handling the transparancy and the Emacs daemon is started. nm-applet is the NetworkManager applet.
 #+BEGIN_SRC sh :tangle autostart.sh :eval no :tangle-mode (identity #o755)
@@ -574,34 +516,29 @@ if [ "$hostname" = "work" ]; then
     VBoxClient --clipboard &&
     VBoxClient --draganddrop
     xrandr --output Virtual-1 --mode 1920x1080; feh --bg-fill ~/Stack/Afbeeldingen/Wallpapers/default.jpg
-    #NOTE: het werkt nu, alleen escape/caps nog niet.
 fi
 
 if [ "$hostname" = "linuxbox" ]; then
     $HOME/.config/escape_caps_toggle.sh &
     $HOME/.config/keyboard_config.sh &
     setxkbmap us &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log & # writing notification to a logfile
+    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
     thunar --daemon &
     picom -b &
     #signal-desktop --start-in-tray --use-tray-icon &
     #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
-    #NOTE: nog testen...
 fi
 
 if [ "$hostname" = "thinkpad" ]; then
     $HOME/.config/escape_caps_toggle.sh &
     $HOME/.config/keyboard_config.sh &
     setxkbmap us &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log & # writing notification to a logfile
+    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
     thunar --daemon &
     picom -b &
-    #signal-desktop --start-in-tray --use-tray-icon &
-    #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
-    #NOTE: nog testen...
 fi
 #+end_src

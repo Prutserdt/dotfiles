@@ -146,6 +146,7 @@ keys = [
     #Hotkeys to move windows around, resize windows and choose layouts
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
     Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
+    Key([mL], "l", lazy.spawn("xset dpms force suspend"),desc="make screen dark"),
     Key([mL, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
     Key([mL, "shift"], "l", lazy.layout.shuffle_right(),desc="Move window to the right"),
     Key([mL, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
@@ -173,8 +174,7 @@ keys = [
     # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-#FIXME: the keyboard_config.sh should be used here..
-#Key([], "XF86Launch8", lazy.spawn('xmodmap $HOME/.config/kbswitch && xset r rate 300 80'), lazy.spawn('notify-send -t 6000 "⌨️Keyboard settings changed (kbswitch)"')),
+    Key([], "XF86Launch8", lazy.spawn('$HOME/.config/keyboard_config.sh')),
     Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
     Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
     Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
@@ -182,7 +182,7 @@ keys = [
     # Open applications
     Key([mR], "a",
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
-        lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}"),
+        lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org"),
         desc="Open in emacs: run het python aandelen script en open het aandelen log"),
     Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))), # browser via dmenu, related to 'urls'
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
@@ -204,30 +204,22 @@ keys = [
     Key([mR], "v", lazy.spawn("alacritty -e vim")),
     Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
 
-    # Open text files in emacs
-    Key([aR], "a", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Documenten/Aandelen/aandelen_log.org')}")),
-    Key([aR], "b", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
-    Key([aR], "c", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/commands.org')}")),
-    Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
-    Key([aR], "e", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.doom.d/README.org')}")),
-    Key([aR], "i", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/i3/config')}")),
-    Key([aR], "n", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.newsboat/config')}")),
-    Key([aR], "p", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Code/git/PowerStrike_code/README.org')}")),
-
-
-#    Key([aR], "q", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/qtile/README.org')}")),
-    Key([aR], "q", lazy.spawn(expanduser("~/.config/emacs_open_file.sh"))),
-
-
-    Key([aR], "r", lazy.spawn(f"python3 {emacs_script} {expanduser('~/README.org')}")), # github readme
-    Key([aR], "s", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/README.org')}")),  # shell scripts readme
-    Key([aR, "shift"], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/textfiles')}")),
-    Key([aR], "t", lazy.spawn(f"python3 {emacs_script} {expanduser('~/Stack/Command_line/directories')}")),  # related to dmenuthunar.sh
-    Key([aR], "u", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.config/unicode')}")),  # related to dmenuunicode.sh
-    Key([aR], "v", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.vimrc')}")),
+    # Open text files in emacs, note
+    Key([aR], "a", lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
+    Key([aR], "b", lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
+    Key([aR], "c", lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
+#    Key([aR], "c", lazy.spawn("emacsclient -n ~/Stack/Command_line/commands.org")),
+#   Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
+    Key([aR], "e", lazy.spawn("emacsclient -n ~/.doom.d/README.org")),
+    Key([aR], "q", lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
+    Key([aR], "r", lazy.spawn("emacsclient -n ~/README.org")), # github readme
+    Key([aR], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh
+    Key([aR, "shift"], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/textfiles")),
+    Key([aR], "u", lazy.spawn("emacsclient -n ~/.config/unicode")),  # related to dmenuunicode.sh
+    Key([aR], "v", lazy.spawn("emacsclient -n ~/.vimrc")),
     Key([aR], "w", lazy.spawn(expanduser("~/.config/wololo.sh"))),
-    Key([aR], "x", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.xinitrc')}")),
-    Key([aR], "z", lazy.spawn(f"python3 {emacs_script} {expanduser('~/.zshrc')}")),
+    Key([aR], "x", lazy.spawn("emacsclient -n ~/.xinitrc")),
+    Key([aR], "z", lazy.spawn("emacsclient -n ~/.zshrc")),
 ]
 
 groups = [Group(i) for i in "1234"]
@@ -391,7 +383,6 @@ def start_once():
     home = os.path.expanduser("~")
     subprocess.call([home + "/.config/qtile/autostart.sh"])
     home = os.path.expanduser("~")
-#    subprocess.call([expanduser("~/.config/qtile/autostart.sh")])
 
 # swallow window when starting application from terminal
 @hook.subscribe.client_new

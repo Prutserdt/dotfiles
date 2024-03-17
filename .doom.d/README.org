@@ -380,10 +380,8 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 (setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 #+END_SRC
 
-An helper for my LLM (gpt-el). I am usually working with code at the bottom of a buffer and want to select the text from the cursor below to the bottom and send that region to the chatbot.
+An helper for my LLM (gptel). I am usually working with code at the bottom of a buffer and want to select the text from the cursor below to the bottom and send that region to the chatbot.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;; This function selects text from the beginning of the line
-;; to the end of the buffer and then executes the command 'gptel-send'.
 (defun my-region-select-gptel-send ()
   "Select text from beginning of line to end of buffer and run gptel-send."
   (interactive)
@@ -428,7 +426,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
 
     (:prefix ("d" . "Prutserdt Bindings")
-        :desc "Vterm toggle"                     "SPC" #'vterm-toggle
+        :desc "Vterm toggle"                   "SPC" #'my-vterm-toggle-maximized
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
@@ -452,9 +450,11 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
+        :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file)
-;;    (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
-    (:desc "Open files in emacs" "e" #'my-searchable-files-list)
+
+    (:desc "Open files in emacs" "e" #'recentf-open-files)
+
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
         :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
@@ -492,22 +492,12 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 #+end_src
 
-NOTE: My list of files that I will feed into emacs to show.
-hmmm, probably SPC F R is already giving me things I need....
+I prefer vterm to be opened maximized
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-searchable-files-list ()
+(defun my-vterm-toggle-maximized ()
   (interactive)
-  (let ((files '(
-                 "~/.doom.d/README.org"
-                 "~/.xinitrc"
-                 "~/.config/README.org"
-                 "~/.config/qtile/README.org"
-                 )))  ; Add your list of files here
-
-    ;; Convert relative paths to absolute paths
-    (setq files (mapcar 'expand-file-name files))
-
-    (find-file (completing-read "Searchable Files: " files))))
+  (vterm-toggle)
+  (doom/window-maximize-buffer))
 #+end_src
 
 *** Emacs keybindings
@@ -785,11 +775,8 @@ I want to quickly switch back and forth to my hacking layout. It puts the curren
         (windmove-right)
         (message "Changed to complex hacking layout"))
     (progn
-      ;; Restoring simpler single buffer layout
-      (windmove-left)
-      (evil-window-delete)
-      (delete-other-windows)
-      (message "Changed back to simpler layout"))))
+      ;; Restore to a simple single buffer layout
+        (doom/window-maximize-buffer))))
 #+end_src
 
 *** ESP32, Arduino and serial communication
@@ -958,10 +945,10 @@ Open my =keymap.c= file of my redox keyboard.
 #+END_SRC
 
 ** Inserting characters, words and strings
-Set multilingual text input to ~latin-prefix~ as the default input method in .org files. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and this can easily be switched off by running ~toggle-input-method~ with the emacs hotkeys ~C-\~.
+Set multilingual text input to ~latin-prefix~ as the default input method in .org files. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and this can easily be switched off by running ~toggle-input-method~ with the emacs hotkeys ~C-\~. I uncommented the 'toggle-input-method and now it is not switched on by default.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq default-input-method "latin-prefix")
-(add-hook 'org-mode-hook 'toggle-input-method)
+;;(add-hook 'org-mode-hook 'toggle-input-method)
 #+end_src
 
 Inserting often used characters and words can be done by this simple function. After inserting it will end in insert state of evil mode to continue the editing.
@@ -1065,8 +1052,6 @@ $0
 #+END_SRC
 
 Remark: Github cannot handle a code block inside a codeblock. The line ~#+BEGIN_SRC python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
-
-
 
 * Credits
 My configuration of Doom Emacs is partially based on these:

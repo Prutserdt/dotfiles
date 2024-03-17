@@ -19,33 +19,28 @@ if [ "$hostname" = "work" ]; then
     VBoxClient --clipboard &&
     VBoxClient --draganddrop
     xrandr --output Virtual-1 --mode 1920x1080; feh --bg-fill ~/Stack/Afbeeldingen/Wallpapers/default.jpg
-    #NOTE: het werkt nu, alleen escape/caps nog niet.
 fi
 
 if [ "$hostname" = "linuxbox" ]; then
     $HOME/.config/escape_caps_toggle.sh &
     $HOME/.config/keyboard_config.sh &
     setxkbmap us &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log & # writing notification to a logfile
+    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
     thunar --daemon &
     picom -b &
     #signal-desktop --start-in-tray --use-tray-icon &
     #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
-    #NOTE: nog testen...
 fi
 
 if [ "$hostname" = "thinkpad" ]; then
     $HOME/.config/escape_caps_toggle.sh &
     $HOME/.config/keyboard_config.sh &
     setxkbmap us &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log & # writing notification to a logfile
+    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
     thunar --daemon &
     picom -b &
-    #signal-desktop --start-in-tray --use-tray-icon &
-    #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
-    #NOTE: nog testen...
 fi

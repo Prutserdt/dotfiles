@@ -144,8 +144,6 @@
   (setq! gptel-api-key (string-trim (buffer-string)))))
 (setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 
-;; This function selects text from the beginning of the line
-;; to the end of the buffer and then executes the command 'gptel-send'.
 (defun my-region-select-gptel-send ()
   "Select text from beginning of line to end of buffer and run gptel-send."
   (interactive)
@@ -180,7 +178,7 @@
             :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
 
     (:prefix ("d" . "Prutserdt Bindings")
-        :desc "Vterm toggle"                     "SPC" #'vterm-toggle
+        :desc "Vterm toggle"                   "SPC" #'my-vterm-toggle-maximized
         (:prefix ("a" . "Arduino IDE")
             :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
@@ -204,9 +202,11 @@
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
+        :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file)
-;;    (:desc "Open Emacs config, one window" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir))))
-    (:desc "Open files in emacs" "e" #'my-searchable-files-list)
+
+    (:desc "Open files in emacs" "e" #'recentf-open-files)
+
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
         :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
@@ -243,19 +243,10 @@
         :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 
-(defun my-searchable-files-list ()
+(defun my-vterm-toggle-maximized ()
   (interactive)
-  (let ((files '(
-                 "~/.doom.d/README.org"
-                 "~/.xinitrc"
-                 "~/.config/README.org"
-                 "~/.config/qtile/README.org"
-                 )))  ; Add your list of files here
-
-    ;; Convert relative paths to absolute paths
-    (setq files (mapcar 'expand-file-name files))
-
-    (find-file (completing-read "Searchable Files: " files))))
+  (vterm-toggle)
+  (doom/window-maximize-buffer))
 
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 
@@ -458,11 +449,8 @@
         (windmove-right)
         (message "Changed to complex hacking layout"))
     (progn
-      ;; Restoring simpler single buffer layout
-      (windmove-left)
-      (evil-window-delete)
-      (delete-other-windows)
-      (message "Changed back to simpler layout"))))
+      ;; Restore to a simple single buffer layout
+        (doom/window-maximize-buffer))))
 
 (defvar data-bits nil
   "Number of data bits for the serial monitor")
@@ -593,7 +581,7 @@
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
 (setq default-input-method "latin-prefix")
-(add-hook 'org-mode-hook 'toggle-input-method)
+;;(add-hook 'org-mode-hook 'toggle-input-method)
 
 (defun my-insert-characters-and-text ()
   "Inserts a character at point and switches to insert state in Evil mode when in normal state."
