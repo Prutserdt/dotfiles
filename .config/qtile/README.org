@@ -166,7 +166,7 @@ def reset_margin(self):
 
 The following part is about system specificity. If my hostname is =thinkpad= or =work= then my computer is a laptop and I want to show battery information in my top bar. If my computer is a desktop this is not needed of course.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
-# Check if hostname is "thinkpad" or "work"
+# eck if hostname is "thinkpad" or "work"
 #is_thinkpad_or_work = socket.gethostname().lower() in ["thinkpad", "work"]
 is_thinkpad_or_work = socket.gethostname() in ["thinkpad", "work"]
 
@@ -256,10 +256,13 @@ Right super key to open applications. Shift is used to update the application.
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
-    Key([mR], "k", lazy.spawn("keepass")),
-    Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
+#   Key([mR], "k", lazy.spawn("keepass")), #right gui button is at k key, so impossible for me now
+#   Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))), # impossible on current qmk keyboard
+
+    Key([mR, "shift"], "l", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
-    Key([mR], "p", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
+    Key([mR], "p", lazy.spawn("keepass")),
+#   Key([mR], "p", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
     Key([mR, "shift"], "p", lazy.spawn(expanduser("~/.config/dm_move_images.sh"))), # show location of picture in google maps
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
@@ -294,7 +297,7 @@ The right alt key is used to open text files in Emacs. NOTE: if emacs is not ope
 ** Groups
 The workspaces are described here, which are called Groups in Qtile. I don't need more then four groups so I limited it to that.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
-groups = [Group(i) for i in "1234"]
+groups = [Group(i) for i in "1245"]
 
 for i in groups:
     keys.extend(

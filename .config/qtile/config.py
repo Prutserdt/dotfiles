@@ -114,7 +114,7 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
-# Check if hostname is "thinkpad" or "work"
+# eck if hostname is "thinkpad" or "work"
 #is_thinkpad_or_work = socket.gethostname().lower() in ["thinkpad", "work"]
 is_thinkpad_or_work = socket.gethostname() in ["thinkpad", "work"]
 
@@ -192,10 +192,13 @@ keys = [
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
-    Key([mR], "k", lazy.spawn("keepass")),
-    Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
+#   Key([mR], "k", lazy.spawn("keepass")), #right gui button is at k key, so impossible for me now
+#   Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))), # impossible on current qmk keyboard
+
+    Key([mR, "shift"], "l", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
-    Key([mR], "p", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
+    Key([mR], "p", lazy.spawn("keepass")),
+#   Key([mR], "p", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
     Key([mR, "shift"], "p", lazy.spawn(expanduser("~/.config/dm_move_images.sh"))), # show location of picture in google maps
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
@@ -222,7 +225,7 @@ keys = [
     Key([aR], "z", lazy.spawn("emacsclient -n ~/.zshrc")),
 ]
 
-groups = [Group(i) for i in "1234"]
+groups = [Group(i) for i in "1245"]
 
 for i in groups:
     keys.extend(

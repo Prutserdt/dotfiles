@@ -368,7 +368,6 @@ I like to use Vterm as a scratch terminal, this can be done by the vterm-toggle 
 
 #+END_SRC
 
-
 ** ChatGPT in emacs
 In this elisp code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
 A chatGPT key can be generated here: https://platform.openai.com/account/api-keys.
@@ -408,6 +407,7 @@ I want to use the =undo-redo= package in Evil mode and therefore add the keybind
   (define-key evil-normal-state-map "]" 'next-buffer)
   (define-key evil-normal-state-map "[" 'previous-buffer))
 #+end_src
+NOTE to self: the [ and ] collide with certain buffers, for instance in vterm. It is probably better to learn the SPC-b-n and SPC-b-p to cycle through buffers and get this in my muscle memory...
 
 The following are keybindings that are bound to my leader key, which is =space=, the default leader key of Doom Emacs Evil mode.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
