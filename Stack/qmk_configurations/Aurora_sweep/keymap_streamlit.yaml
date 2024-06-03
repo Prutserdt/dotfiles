@@ -1,0 +1,204 @@
+layout: {qmk_keyboard: splitkb/aurora/sweep/rev1, qmk_layout: LAYOUT_split_3x5_2}
+layers:
+  QWERTY:
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - {t: A, h: SHIFT}
+  - {t: S, h: LCTL}
+  - {t: D, h: LGUI}
+  - {t: F, h: LALT}
+  - G
+  - H
+  - {t: J, h: RCTL}
+  - {t: K, h: RGUI}
+  - {t: L, h: RALT}
+  - {t: ;, h: SHIFT}
+  - Z
+  - X
+  - C
+  - V
+  - B
+  - N
+  - M
+  - ','
+  - .
+  - /
+  - {t: BSPC, h: ARROWS}
+  - {t: DEL, h: mouse}
+  - {t: Enter, h: FUNC}
+  - {t: SPC, h: NMBRS}
+  ARROWS:
+  - F16
+  - F17
+  - F18
+  - BRID
+  - BRIU
+  - PRSCR
+  - CALC
+  - VOLM
+  - VOLD
+  - VOLU
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - LEFT
+  - DOWN
+  - UP
+  - RIGHT
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - Caps
+  - FirmV
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - Ins
+  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+
+  MOUSE:
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - accel0
+  - SCRleft
+  - SCRup
+  - SCRdn
+  - SCRright
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - accel1
+  - MSLEFT
+  - MSDOWN
+  - MSUP
+  - MSRIGHT
+  - {t: ▽, type: trans}
+  - BTN6
+  - BTN7
+  - BTN8
+  - {t: ▽, type: trans}
+  - accel
+  - BTN1
+  - BTN2
+  - BTN3
+  - BTN4
+  - BTN5
+  - {t: ▽, type: trans}
+  - {type: held}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+
+  FUNC:
+  - F1
+  - F2
+  - F3
+  - F4
+  - F5
+  - F6
+  - F7
+  - F8
+  - F9
+  - F10
+  - F11
+  - F12
+  - F13
+  - F14
+  - F15
+  - F16
+  - F17
+  - F18
+  - F19
+  - F20
+  - F21
+  - F22
+  - F23
+  - F24
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {type: held}
+  - {t: ▽, type: trans}
+
+  NMBRS:
+  - '!'
+  - '@'
+  - '#'
+  - '$'
+  - '%'
+  - '^'
+  - '&'
+  - '*'
+  - '('
+  - ')'
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 0
+  - '~`'
+  - "|"
+  - '"'
+  - '+='
+  - '_-'
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {type: held}
+
+combos:
+  - {p: [0, 1], k: "rec1", l: ["QWERTY"]}
+  - {p: [1, 2], k: "rec2", l: ["QWERTY"]}
+  - {p: [10, 11], k: "stop", l: ["QWERTY"]}
+  - {p: [12, 13], k: "ESC", l: ["QWERTY"]}
+  - {p: [13, 14], k: "TAB", l: ["QWERTY"]}
+  - {p: [20, 21], k: "play1", l: ["QWERTY"]}
+  - {p: [21, 22], k: "play2", l: ["QWERTY"]}
+  - {p: [2, 12], k: "dd", l: ["QWERTY"]}
+  - {p: [3, 13], k: "Copy", l: ["QWERTY"]}
+  - {p: [4, 14], k: "Undo", l: ["QWERTY"]}
+  - {p: [13, 23], k: "Paste", l: ["QWERTY"]}
+  - {p: [14, 24], k: "Redo", l: ["QWERTY"]}
+  - {p: [7, 8], k: "[", l: ["QWERTY"]}
+  - {p: [8, 9], k: "]", l: ["QWERTY"]}
+  - {p: [9, 19], k: "Puke", l: ["QWERTY"]}
+  - {p: [23, 24], k: "Caps", l: ["QWERTY"]}
+  - {p: [5, 15], k: "Yank", l: ["QWERTY"]}
+  - {p: [15, 16], k: "Home", l: ["QWERTY"]}
+  - {p: [16, 17], k: "PGDN", l: ["QWERTY"]}
+  - {p: [17, 18], k: "PGUP", l: ["QWERTY"]}
+  - {p: [18, 19], k: "Home", l: ["QWERTY"]}
+  - {p: [30, 31], k: "KB reset", l: ["QWERTY"]}
