@@ -8,8 +8,7 @@ My config of qtile, a hackable tiling window manager written in Python, can be f
 #+ATTR_HTML: :alt windowmanager :title windowmanager :align left
 [[https://github.com/Prutserdt/dotfiles/raw/master/qtile.jpg]]
 
-The qmk configurations of the ortholinear ergonomic split keyboards Redox and Gergo are living [[https://github.com/Prutserdt/dotfiles/tree/master/Stack/qmk_configurations][here]].
-My old dwm and i3 gaps config file and surf and st builds are still a part of this repo although I do not use them anymore.
+My qmk configurations of Aurora Sweep, Redox and Gergo are living [[https://github.com/Prutserdt/dotfiles/tree/master/Stack/qmk_configurations][here]].
 
 * Managing my dotfiles
 The ~dotfiles~ command is an [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] which runs a simple [[https://github.com/Prutserdt/dotfiles/blob/master/.config/dotfiles.sh][bash script]] and push/pulls to this github repo and uses the [[https://github.com/Prutserdt/dotfiles/blob/master/.aliases][alias]] ~config~.
