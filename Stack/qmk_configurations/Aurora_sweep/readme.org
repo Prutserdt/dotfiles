@@ -12,7 +12,7 @@ This is my personal QMK configuration of the [[https://splitkb.com/products/auro
 [[file:my_keymap.png]]
 
 Note, this keymap picture is visualized by https://keymap-drawer.streamlit.app/. Make sure that first a ferris sweep keymap.json is generated from https://config.qmk.fm/#/ferris/sweep/LAYOUT_split_3x5_2
-After parsing the json in the streamlit app the yamlfile keymap_streamlit.yaml should be pasted in and the keymap picture can be generated.
+After parsing the json in the streamlit app [[https://github.com/Prutserdt/dotfiles/blob/master/Stack/qmk_configurations/Aurora_sweep/keymap_streamlit.yaml][this yaml-file]] should be pasted in and the keymap picture can be generated.
 
 Please make sure to add the following line to the config.h file in the splitkb/aurora/sweep/rev1 directory or uncomment it in the config.h. If it is not there then it will not work!
 
