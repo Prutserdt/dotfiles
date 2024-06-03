@@ -192,9 +192,9 @@ keys = [
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
-#   Key([mR], "k", lazy.spawn("keepass")), #right gui button is at k key, so impossible for me now
+#   Key([mR], "k", lazy.spawn("keepass")), #right gui button is at k key, impossible keycombo on my custom sweep keymap
 #   Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))), # impossible on current qmk keyboard
-
+#   does not work for me, accidentally triggered on my
     Key([mR, "shift"], "l", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR], "p", lazy.spawn("keepass")),
