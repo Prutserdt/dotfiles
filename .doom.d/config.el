@@ -182,6 +182,7 @@
             :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
             :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
+        :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
         (:prefix ("c" . "Cloud stuff")
             (:prefix ("b" . "Backup to cloud")
             :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
@@ -196,7 +197,6 @@
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
-        :desc "Switch dark/beach mode"           "s" #'my-beach-or-dark-theme-switch
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
@@ -582,7 +582,10 @@
   (let* ((characters '(
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
-                       ("Äkta akta woord"   . "Äkta")
+                       ("¹ Tot de macht 1"  . "¹")
+                       ("² Tot de macht 2"  . "²")
+                       ("³ Tot de macht 3"  . "³")
+                       ("Ä A met trema"     . "Ä")
                        ("Correct title"     . "The Äkta overlords")))
          (chosen-character (cdr (assoc (completing-read "Select a character: " characters)
                                       characters))))

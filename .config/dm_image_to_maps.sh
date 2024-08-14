@@ -3,7 +3,8 @@
 #       Please only edit that file and org-babel-tangle (emacs)
 
 # Use dmenu to select the directory containing your images
-selected_directory=$(find "$HOME/Stack/Afbeeldingen/Vakantie" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures to select in google maps:")
+#selected_directory=$(find "$HOME/Stack/Afbeeldingen/Vakantie" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures to select in google maps:")
+selected_directory=$(find "$HOME/Downloads" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures to select in google maps:")
 
 # Check if a directory was selected
 if [ -n "$selected_directory" ]; then

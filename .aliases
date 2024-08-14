@@ -9,8 +9,8 @@
 #             created by Prutserdt
 
 # General
-
 alias a='alias'                 # prints out the list of aliases
+alias b='blobdrop'              # Drag and drop directly from the terminal
 alias .1='cd ..'
 alias .2='cd ../.. && pwd'
 alias .3='cd ../../.. && pwd'
@@ -25,15 +25,12 @@ alias ZQ="exit"                 # Exiting quickly, the Vim way
 alias c='printf "\e[H\e[2J"'    # Clear screen, CTL-L for scrollback
 alias cls="c;ls"                # Clear screen, scrollback and 'ls --color=auto'
 alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
-#alias rm='rm -i'                # Ask for permission, for safety
+#alias rm='rm -i'               # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
-#alias mv='mv -i'                # Ask for permission, for safety
-#alias u="echo running the alias: sudo pacman -Syu | lolcat && sudo pacman -Syu | lolcat"     # not all output on screen
+#alias mv='mv -i'               # Ask for permission, for safety
 alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat"  # pacman update
 
 # Search
-#alias h="$HOME/.histfile | fzf"    # Fuzzy find history
-#alias h="$HOME/.zsh_history | fzf" # Fuzzy find history
 alias h="history | fzf"             # Fuzzy find history
 alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # Search and execute
 alias fzlog='fzf < $HOME/i3_log/"$(ls -Art $HOME/i3_log | tail -n1)"' # Fuzzy find in the most recent i3_log file
@@ -44,11 +41,17 @@ alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 # nsxiv
 # Thumbnail mode current directory. Sort by name and give output if files are selected (m)
 alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | nsxiv -ftio"
-# Including underlaying subdirectories
+# Thumbnail mode of current directory including underlaying subdirectories
 alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| nsxiv -ftio"
+# Move pics. Select a picture by marking (m) and then it will be removed to the direcory 'Minder_en_dubbelop', and echo some info
+alias sm="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | nsxiv -tio | xargs -I {} sh -c 'echo Moving {}; mv {} Minder_en_dubbelop/'"
+# Show gps location of pic in maps. Select a picture by marking (m) and then it will be removed to the direcory 'Minder_en_dubbelop', and echo some info
+#alias sg='image_files=$(find . -maxdepth 1 -type f -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" -o -iname "*.gif" | sort) && selected_image=$(echo "$image_files" | nsxiv -ftio) && [ -n "$selected_image" ] && exif_info=$(exiftool "$selected_image" | grep "GPS Position") && [ -n "$exif_info" ] && gps_position=$(echo "$exif_info" | awk -F ": " "{print $2}" | tr -d " " | sed "s/deg/°/g") && maps_url="https://www.google.com/maps/place/$gps_position" && xdg-open "$maps_url" && notify-send -t 60000 "Google maps opened with GPS location: $gps_position"'
+# onderstaande voegt een error message toe, maar lijkt niet meer te werken:
+alias sg='image_files=$(find . -maxdepth 1 -type f -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" -o -iname "*.gif" | sort) && selected_image=$(echo "$image_files" | nsxiv -ftio) && [ -n "$selected_image" ] && exif_info=$(exiftool "$selected_image" | grep "GPS Position") && [ -n "$exif_info" ] && gps_position=$(echo "$exif_info" | awk -F ": " "{print $2}" | tr -d " " | sed "s/deg/°/g") && maps_url="https://www.google.com/maps/place/$gps_position" && xdg-open "$maps_url" && notify-send -t 60000 "Google maps opened with GPS location: $gps_position" || echo "Sorry, there is no exif data in the picture"'
 
 # Dotfiles
-alias dotfiles='$HOME/.config/dotfiles.sh'                                  # Dotfiles repository Github
+alias dotfiles='$HOME/.config/dotfiles.sh'                              # Dotfiles repository Github
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github simplification
 
 # Keyboard related
@@ -56,9 +59,9 @@ alias e='$HOME/.config/escape_caps_toggle.sh'
 alias r='echo this alias,named r, does not exist anymore, stop using it!!'     # obsoleter alias!
 alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on hostname
 
-# emacs
-alias em="/usr/bin/emacs -nw"                   #emacs commandline
-#alias emacs="emacsclient -c -a 'emacs'"         #emacs graphically
+# emacs commandline
+alias em="/usr/bin/emacs -nw"
+#alias emacs="emacsclient -c -a 'emacs'"  #emacs graphically
 alias doomsync="~/.emacs.d/bin/doom sync"
 alias doomdoctor="~/.emacs.d/bin/doom doctor"
 alias doomupgrade="~/.emacs.d/bin/doom upgrade"
@@ -106,4 +109,4 @@ alias dmenuupdate='$HOME/.config/dmenuUpdate.sh'    # Update the application lis
 alias ze="vim $HOME/.zshrc"                         # edit the .zshrc file
 alias zs="source $HOME/.zshrc"                      # source the .zshrc 
 
-alias eric6_browser="/usr/bin/eric7_browser"        # my appimage needs eric6_browser, hacky solution...
+alias eric6_browser="/usr/bin/eric7_browser"        # one of my appimages needs eric6_browser, hacky solution...

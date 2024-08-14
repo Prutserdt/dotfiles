@@ -1,8 +1,5 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; NOTE: This file is generated from ~/.doom.d/README.org
-;;      Please only edit that file and org-babel-tangle (emacs)
-
 (doom! :completion
        company             ; the ultimate code completion backend
        vertico             ; the search engine of the future

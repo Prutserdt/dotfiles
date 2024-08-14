@@ -605,7 +605,8 @@ A script that will select an image, convert GPS information and feed it into goo
 #       Please only edit that file and org-babel-tangle (emacs)
 
 # Use dmenu to select the directory containing your images
-selected_directory=$(find "$HOME/Stack/Afbeeldingen/Vakantie" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures to select in google maps:")
+#selected_directory=$(find "$HOME/Stack/Afbeeldingen/Vakantie" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures to select in google maps:")
+selected_directory=$(find "$HOME/Downloads" -maxdepth 2 -type d | sort -r | dmenu -c -bw 2 -l 40 -i -p "Select a directory for pictures to select in google maps:")
 
 # Check if a directory was selected
 if [ -n "$selected_directory" ]; then
@@ -656,6 +657,30 @@ if [ -n "$selected_directory" ]; then
 fi
 #+end_src
 
+
+
+onderstaande is een meer simpele versie
+#+begin_src bash
+cd /home/icefly/Downloads/2024_Vietnam
+image_files=$(find . -maxdepth 1 -type f -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" -o -iname "*.gif" | sort) && selected_image=$(echo "$image_files" | nsxiv -ftio) && [ -n "$selected_image" ] && exif_info=$(exiftool "$selected_image" | grep "GPS Position") && [ -n "$exif_info" ] && gps_position=$(echo "$exif_info" | awk -F ": " "{print $2}" | tr -d " " | sed "s/deg/°/g") && maps_url="https://www.google.com/maps/place/$gps_position" && xdg-open "$maps_url" && notify-send -t 60000 "Google maps opened with GPS location: $gps_position" || echo "no exif data in picture"
+#+end_src
+
+#+RESULTS:
+: Opening in existing browser session.
+
+Dit werkt niet altijd
+
+Dit is een voorbeeld van een webpagina die niet altijd werkt
+
+https://www.google.com/maps/place//@51.986432,5.9113472,13z/data=!3m1!4b1?entry=ttu
+
+
+
+
+
+
+
+
 ** Get gps coordinates in Google maps format for all .jpg files in directory
 #+begin_src  shell :results output
 #!/bin/bash
@@ -691,7 +716,7 @@ done
 #+end_src
 
 #+RESULTS:
-: Working Directory: /home/icefly/Stack/Afbeeldingen
+: Working Directory: /home/icefly/Stack/Afbeeldingen/
 
 ** dm_move_images
 A script that will select images and move them to a subdirectory. This script required dmenu, zenity, and nsxiv.
