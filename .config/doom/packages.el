@@ -1,6 +1,6 @@
 ;; -*- no-byte-compile: t; -*-
 
-;; NOTE: This file is generated from ~/.doom.d/README.org
+;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
 (package! visual-fill-column)

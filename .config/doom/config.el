@@ -1,4 +1,4 @@
-;; NOTE: This file is generated from ~/.doom.d/README.org
+;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
 (setq doom-theme 'doom-tokyo-night)
@@ -112,12 +112,12 @@
 
 (setq evil-goggles-duration 1.0)
 
-(unless (file-exists-p "~/.doom.d/scratch.org")
-  (with-temp-file "~/.doom.d/scratch.org"
+(unless (file-exists-p "~/.config/doom/scratch.org")
+  (with-temp-file "~/.config/doom/scratch.org"
   (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n Just delete this text, doesn't need to sticky!")))
 
 (eval-after-load 'org
-  '(find-file "~/.doom.d/scratch.org"))
+  '(find-file "~/.config/doom/scratch.org"))
 
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c-mode))
 
@@ -513,8 +513,8 @@
 ;; Downloads and overwrites my local Emacs README.org file with my Github verstion and asks for confirmation and makes a backup file.
   (interactive)
   ;; Define file paths for the current local README.org, backup README.org, and online README.org
-  (let ((current-readme-org "~/.doom.d/README.org")
-        (backup-readme-org (concat "~/.doom.d/README_" (format-time-string "%Y-%m-%d") ".org"))
+  (let ((current-readme-org "~/.config/doom/README.org")
+        (backup-readme-org (concat "~/.config/doom/README_" (format-time-string "%Y-%m-%d") ".org"))
         (online-readme-org "https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org"))
     ;; Ask for confirmation before overwriting the local README.org file
     (if (yes-or-no-p "Are you sure you want to overwrite README.org? ")
@@ -594,8 +594,8 @@
       (insert chosen-character))))
 
 (setq fancy-splash-image (if (zerop (random 2))
-                           "~/.doom.d/doom-emacs.png"
-                           "~/.doom.d/doom-emacs-stallman.png"))
+                           "~/.config/doom/doom-emacs.png"
+                           "~/.config/doom/doom-emacs-stallman.png"))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
 (add-hook! '+doom-dashboard-functions :append

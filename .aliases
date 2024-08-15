@@ -62,13 +62,18 @@ alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on host
 # emacs commandline
 alias em="/usr/bin/emacs -nw"
 #alias emacs="emacsclient -c -a 'emacs'"  #emacs graphically
-alias doomsync="~/.emacs.d/bin/doom sync"
-alias doomdoctor="~/.emacs.d/bin/doom doctor"
-alias doomupgrade="~/.emacs.d/bin/doom upgrade"
-alias doombuild="~/.emacs.d/bin/doom build"
-alias doompurge="~/.emacs.d/bin/doom purge"
-alias doomhelp="~/.emacs.d/bin/doom help"
-
+#alias doomsync="~/.emacs.d/bin/doom sync"
+#alias doomdoctor="~/.emacs.d/bin/doom doctor"
+#alias doomupgrade="~/.emacs.d/bin/doom upgrade"
+#alias doombuild="~/.emacs.d/bin/doom build"
+#alias doompurge="~/.emacs.d/bin/doom purge"
+#alias doomhelp="~/.emacs.d/bin/doom help"
+alias doomsync="~/.config/emacs/bin/doom sync"
+alias doomdoctor="~/.config/emacs/bin/doom doctor"
+alias doomupgrade="~/.config/emacs/bin/doom upgrade"
+alias doombuild="~/.config/emacs/bin/doom build"
+alias doompurge="~/.config/emacs/bin/doom purge"
+alias doomhelp="~/.config/emacs/bin/doom help"
 # Jump to directories
 alias db="cd $HOME/Stack/Documenten/Studie/MSQL_developer_LOI/Business_intelligence_en_databasetechnologie"
 alias dh="cd $HOME/"

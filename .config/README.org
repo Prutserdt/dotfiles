@@ -1360,11 +1360,11 @@ esac
 ** emacs
 A script to quickly open a file in emacs. I want to use emacs by using emacsclient. This should first check if =emacs --daemon= is running and if so then run =emacsclient -c filename=.
 
-Please write a shell script that will open ~/.doom.d/README.org in emacs. It should first check if the daemon is running (emacs --daemon) and if it is not running then first start it and then open the file in emacs by running emacsclient -c ~/.doom.d/README.org.
+Please write a shell script that will open ~/.config/doom/README.org in emacs. It should first check if the daemon is running (emacs --daemon) and if it is not running then first start it and then open the file in emacs by running emacsclient -c ~/.config/doom/README.org.
 
 #+BEGIN_SRC bash :tangle emacs_open_file.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
-emacsclient -r ~/.doom.d/README.org
+emacsclient -r ~/.config/doom/README.org
 #+END_SRC
 
 ** escape_caps_toggle.sh

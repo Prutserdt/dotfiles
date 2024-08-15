@@ -213,7 +213,7 @@ keys = [
     Key([aR], "c", lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
 #    Key([aR], "c", lazy.spawn("emacsclient -n ~/Stack/Command_line/commands.org")),
 #   Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
-    Key([aR], "e", lazy.spawn("emacsclient -n ~/.doom.d/README.org")),
+    Key([aR], "e", lazy.spawn("emacsclient -n ~/.config/doom/README.org")),
     Key([aR], "q", lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn("emacsclient -n ~/README.org")), # github readme
     Key([aR], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh

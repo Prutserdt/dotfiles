@@ -24,7 +24,7 @@
 - [[#credits][Credits]]
 
 * About this config
-This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.emacs.d/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs after modifying this README.org!
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.config/emacs/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs after modifying this README.org!
 NOTE: if the startup is slow then it has nothing to do with the configuration but the daemon is probably not running. Start it by entering ~emacs --daemon~ to the terminal. After that it should open much snapier.
 
 * init.el
@@ -34,7 +34,7 @@ This file controls what Doom modules are enabled and what order they load in and
 #+END_SRC
 
 Add a note to ~init.el~ to highlight that this file should not be edited directly.#+BEGIN_SRC emacs-lisp :tangle init.el :results silent
-;; NOTE: This file is generated from ~/.doom.d/README.org
+;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
@@ -108,7 +108,7 @@ Here the packages are defined which should be installed. This is an addition to 
 
 Again a NOTE is added to ~packages.el~ to *not* edit this file.
 #+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
-;; NOTE: This file is generated from ~/.doom.d/README.org
+;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
@@ -162,7 +162,7 @@ My custom configurations are set here. For instance theme settings, image to the
 
 Let's remind the reader of ~config.el~ to not edit this file directly.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;; NOTE: This file is generated from ~/.doom.d/README.org
+;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 #+END_SRC
 
@@ -331,12 +331,12 @@ Flashing of yanked text is already set out of the box in Doom Emacs. I'm kinda s
 ** General settings
 I want to use an org file as a permanent scratch buffer. If it does not exist then it should be created. I changed the visualiszation of this particular file by changing the line colors, that is added in  =my-line-number-color-according-to-evil-state=.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(unless (file-exists-p "~/.doom.d/scratch.org")
-  (with-temp-file "~/.doom.d/scratch.org"
+(unless (file-exists-p "~/.config/doom/scratch.org")
+  (with-temp-file "~/.config/doom/scratch.org"
   (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n Just delete this text, doesn't need to sticky!")))
 
 (eval-after-load 'org
-  '(find-file "~/.doom.d/scratch.org"))
+  '(find-file "~/.config/doom/scratch.org"))
 #+end_src
 
 Arduino .ino files are a type of C++ code. Let's help Emacs remember this by setting it as a major mode.
@@ -858,8 +858,8 @@ The =my-emacs-config-download-overwrite= function in the code snippet below is a
 ;; Downloads and overwrites my local Emacs README.org file with my Github verstion and asks for confirmation and makes a backup file.
   (interactive)
   ;; Define file paths for the current local README.org, backup README.org, and online README.org
-  (let ((current-readme-org "~/.doom.d/README.org")
-        (backup-readme-org (concat "~/.doom.d/README_" (format-time-string "%Y-%m-%d") ".org"))
+  (let ((current-readme-org "~/.config/doom/README.org")
+        (backup-readme-org (concat "~/.config/doom/README_" (format-time-string "%Y-%m-%d") ".org"))
         (online-readme-org "https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org"))
     ;; Ask for confirmation before overwriting the local README.org file
     (if (yes-or-no-p "Are you sure you want to overwrite README.org? ")
@@ -968,8 +968,8 @@ Inserting often used characters and words can be done by this simple function. A
 A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq fancy-splash-image (if (zerop (random 2))
-                           "~/.doom.d/doom-emacs.png"
-                           "~/.doom.d/doom-emacs-stallman.png"))
+                           "~/.config/doom/doom-emacs.png"
+                           "~/.config/doom/doom-emacs-stallman.png"))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
 (add-hook! '+doom-dashboard-functions :append
