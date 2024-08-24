@@ -58,3 +58,5 @@ Check if the .hex file is created in your directory and then flash it to the key
 ~qmk flash -kl splitkb_aurora_sweep_rev1_vial-minimal-personal.hex~.
 
 Now the keyboard can be configured by vial. My keymap is attached as vial_layout_sweep.vil.
+
+[[file:vial_keymap.png]]
