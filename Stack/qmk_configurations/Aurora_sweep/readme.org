@@ -19,3 +19,42 @@ Please make sure to add the following line to the config.h file in the splitkb/a
 #define SPLIT_USB_DETECT
 
 The tenting solution is simply using a phone stand, as sugggested in this [[https://www.reddit.com/r/ErgoMechKeyboards/comments/13rfp7l/comment/l3l135m/?context=3][post]].
+
+* Alternative configuration, vial
+
+Clone the vial-qmk.git of splitkb, it will be cloned in the current directory, for instance ~cd ~/Downloads; git clone https://github.com/splitkb/vial-qmk.git~.
+Now go to the ~/Downloads/vial-qmk/splitkb/aurora/sweep/rev1 directory and add to rules.mk: =BOOTLOADER = caterina= (for pro micro) and to config.h: =#define SPLIT_USB_DETECT=.
+Compiling and flashing is performed from the cloned directory (~/Downloads/vial-qmk).
+I like to use the mouse and use dynamic macros and customize further via vial. This is possible on a pro micro if other options are disabled.
+Copy the =~/Downloads/vial-qmk/keyboards/splitkb/aurora/sweep/keymaps/vial-minimal= to another directory, for example vial-minimal_personal, and modify rules.mk in that directory to:
+
+#+begin_src
+VIA_ENABLE = yes
+VIAL_ENABLE = yes
+
+ENCODER_MAP_ENABLE = no
+
+# A default 32u4 build is more than 8k oversized,
+# so we have to disable some less-common / expert-level features.
+GRAVE_ESC_ENABLE = no
+SPACE_CADET_ENABLE = no
+MAGIC_ENABLE = no
+KEY_OVERRIDE_ENABLE = no
+MOUSEKEY_ENABLE = yes
+COMBO_ENABLE = no
+QMK_SETTINGS = no
+DYANMIC_MACRO_ENABLE = yes
+CONSOLE_ENABLE = no
+COMMAND_ENABLE = no
+UNICODE_ENABLE = no
+OLED_ENABLE = no
+
+SRC+=oneshot_shim.c
+#+end_src
+
+Now it is ready to compile and flash. Go to ~cd /Downloads/vial-qmk~ and compile by:
+~qmk compile -kb splitkb/aurora/sweep -km vial-minimal-personal~.
+Check if the .hex file is created in your directory and then flash it to the keyboard by
+~qmk flash -kl splitkb_aurora_sweep_rev1_vial-minimal-personal.hex~.
+
+Now the keyboard can be configured by vial. My keymap is attached as vial_layout_sweep.vil.

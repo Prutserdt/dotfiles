@@ -124,7 +124,7 @@ temp_asset_allocation_df = pd.DataFrame(asset_values_dict)
 asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])
 # Sortt by euros, descencding
 asset_allocation_df = asset_allocation_df.sort_values(by=eur_col, ascending=False)
-#print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
+print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
 asset_allocation_df = pd.DataFrame(asset_allocation_df, columns=[omschr_col, eur_col, asset_allocation_col, a_min_huis_col])
 
 kapitaal = asset_allocation_df[eur_col].sum()  # Calculate the sum of all of the allocations (kapitaal is Dutch for Capital)
@@ -132,7 +132,7 @@ kapitaal = asset_allocation_df[eur_col].sum()  # Calculate the sum of all of the
 asset_allocation_df[asset_allocation_col] = (asset_allocation_df[eur_col] / kapitaal * 100).astype(int) # Calculate values for column asset_allocation_col, % of total)
 asset_allocation_df[a_min_huis_col] = (asset_allocation_df[eur_col] / (kapitaal - huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
 asset_allocation_df.loc[asset_allocation_df[a_min_huis_col] > 100, a_min_huis_col] = "*"  # If >100% then replace by asterix
-#print('=' * 40  + "\n", asset_allocation_temp_asset_allocation_df)                      # Only for debugging
+print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 asset_values_dict = {
