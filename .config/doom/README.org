@@ -1,3 +1,9 @@
+:PROPERTIES:
+:GPTEL_MODEL: gpt-3.5-turbo
+:GPTEL_BACKEND: ChatGPT
+:GPTEL_SYSTEM: You are a large language model living in Emacs and a helpful assistant. Respond concisely.
+:GPTEL_BOUNDS: nil
+:END:
 #+TITLE: My configuration of Doom Emacs
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
@@ -377,8 +383,11 @@ A chatGPT key can be generated here: https://platform.openai.com/account/api-key
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
-(setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
+(setq gpt-openai-engine "gpt-4") ;; "gpt-4"does not work yet
+;;(setq gpt-openai-engine "gpt-4o") ;; "gpt-4"does not work yet
+;;(setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 #+END_SRC
+                 :models '("gpt-3.5-turbo" "gpt-4")))
 
 An helper for my LLM (gptel). I am usually working with code at the bottom of a buffer and want to select the text from the cursor below to the bottom and send that region to the chatbot.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent

@@ -25,15 +25,16 @@ alias ZQ="exit"                 # Exiting quickly, the Vim way
 alias c='printf "\e[H\e[2J"'    # Clear screen, CTL-L for scrollback
 alias cls="c;ls"                # Clear screen, scrollback and 'ls --color=auto'
 alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
-#alias rm='rm -i'               # Ask for permission, for safety
+alias rm='rm -i'               # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
-#alias mv='mv -i'               # Ask for permission, for safety
-alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat"  # pacman update
+alias mv='mv -i'               # Ask for permission, for safety
+#alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat"  # pacman update
+#alias u="echo the following command by using the alias 'u': sudo pacman -Syu && sudo pacman -Syu"  # pacman update
+alias u="echo You used an alias to run the following command | lolcat && echo sudo pacman -Syu | lolcat && sudo pacman -Syu"  # pacman update
 
 # Search
 alias h="history | fzf"             # Fuzzy find history
 alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # Search and execute
-alias fzlog='fzf < $HOME/i3_log/"$(ls -Art $HOME/i3_log | tail -n1)"' # Fuzzy find in the most recent i3_log file
 
 #check vulnerabilities microcode
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
@@ -61,19 +62,14 @@ alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on host
 
 # emacs commandline
 alias em="/usr/bin/emacs -nw"
-#alias emacs="emacsclient -c -a 'emacs'"  #emacs graphically
-#alias doomsync="~/.emacs.d/bin/doom sync"
-#alias doomdoctor="~/.emacs.d/bin/doom doctor"
-#alias doomupgrade="~/.emacs.d/bin/doom upgrade"
-#alias doombuild="~/.emacs.d/bin/doom build"
-#alias doompurge="~/.emacs.d/bin/doom purge"
-#alias doomhelp="~/.emacs.d/bin/doom help"
+alias emacs="emacsclient -c -a 'emacs'"  #emacs graphically
 alias doomsync="~/.config/emacs/bin/doom sync"
 alias doomdoctor="~/.config/emacs/bin/doom doctor"
 alias doomupgrade="~/.config/emacs/bin/doom upgrade"
 alias doombuild="~/.config/emacs/bin/doom build"
 alias doompurge="~/.config/emacs/bin/doom purge"
 alias doomhelp="~/.config/emacs/bin/doom help"
+
 # Jump to directories
 alias db="cd $HOME/Stack/Documenten/Studie/MSQL_developer_LOI/Business_intelligence_en_databasetechnologie"
 alias dh="cd $HOME/"
@@ -85,30 +81,8 @@ alias da="cd $HOME/Stack/Afbeeldingen"
 alias dv="cd $HOME/Stack/Afbeeldingen/Vakantie"
 alias dw="cd $HOME/Stack/Afbeeldingen/Wallpapers"
 alias daa="cd $HOME/Stack/Documenten/Aandelen"
-alias de="cd $HOME/Stack/Documenten/Studie/C_programming_training_Dartmouth"
-alias dp="cd $HOME/Stack/Code/git/PowerStrike_code"
-alias dm="cd $HOME/Stack/Muziek/MP3"
 alias dr="cd $HOME/qmk_firmware/keyboards/redox/keymaps/Prutserdt"
 alias dg="cd $HOME/qmk_firmware/keyboards/gergo/keymaps/Prutserdt"
-# Jump to suckless dirs, d+xx/d+sxx (xx=application,sxx=application in Stack backups)
-alias dss="cd $HOME/Stack/suckless"
-alias ddw="cd $HOME/.config/suckless/dwm"
-alias dsdw="cd $HOME/Stack/suckless/dwm"
-alias ddm="cd $HOME/.config/suckless/dmenu"
-alias dsdm="cd $HOME/Stack/suckless/dmenu"
-
-# dwm. dwm requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
-alias dwmbackup='$HOME/.config/dwmbackup.sh'        # Make the current dwm the stable version
-alias dwmvanilla='$HOME/.config/dwmvanilla.sh'      # Go back to vanilla dwm. DESTROYS CURRENT dwm!
-alias dwmstable='$HOME/.config/dwmstable.sh'        # Go back to stable dwm. DESTROYS CURRENT dwm!
-alias dwmpatch='$HOME/.config/dwmpatch.sh'          # Restore dwmstable and run the patch on it
-
-# dmenu. dmenu requires: #PATH="$HOME/bin:$PATH", added to top of .zshrc
-alias dmenubackup='$HOME/.config/dmenubackup.sh'    # Make the current dmenu the stable version
-alias dmenuvanilla='$HOME/.config/dmenuvanilla.sh'  # Go back to vanilla st. DESTROYS CURRENT dmenu!
-alias dmenustable='$HOME/.config/dmenustable.sh'    # Go back to stable dmenu. DESTROYS CURRENT dmenu!
-alias dmenupatch='$HOME/.config/dmenupatch.sh'      # Run the dwmpatch command to test the patch
-alias dmenuupdate='$HOME/.config/dmenuUpdate.sh'    # Update the application list for dmenu
 
 # zsh
 alias ze="vim $HOME/.zshrc"                         # edit the .zshrc file

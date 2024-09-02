@@ -140,7 +140,9 @@
 (with-temp-buffer
   (insert-file-contents "~/Stack/Code/OpenAI/api_key")
   (setq! gptel-api-key (string-trim (buffer-string)))))
-(setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
+(setq gpt-openai-engine "gpt-4") ;; "gpt-4"does not work yet
+;;(setq gpt-openai-engine "gpt-4o") ;; "gpt-4"does not work yet
+;;(setq gpt-openai-engine "gpt-4-1106-preview") ;; "gpt-4"does not work yet
 
 (defun my-region-select-gptel-send ()
   "Select text from beginning of line to end of buffer and run gptel-send."

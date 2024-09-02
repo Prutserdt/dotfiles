@@ -230,10 +230,6 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
     Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "🔇 Volume muting toggled"')),
     Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(["shift"], "Print", lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
-    # The following hotkeys of my Redox keyboard are free to be used..!
-    # Key([], "XF86Launch5", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-    # Key([], "XF86Launch6", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
-    # Key([], "XF86Launch7", lazy.spawn(''), lazy.spawn('notify-send -t 6000 ""')),
     Key([], "XF86Launch8", lazy.spawn('$HOME/.config/keyboard_config.sh')),
     Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
     Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
@@ -256,13 +252,10 @@ Right super key to open applications. Shift is used to update the application.
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
-#   Key([mR], "k", lazy.spawn("keepass")), #right gui button is at k key, impossible keycombo on my custom sweep keymap
-#   Key([mR, "shift"], "k", lazy.spawn(expanduser("~/.config/dmenukill.sh"))), # impossible on current qmk keyboard
-#   does not work for me, accidentally triggered on my
-    Key([mR, "shift"], "l", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
+    Key([mR], "l", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
+    Key([mR, "shift"], "m", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
     Key([mR], "p", lazy.spawn("keepass")),
-#   Key([mR], "p", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
     Key([mR, "shift"], "p", lazy.spawn(expanduser("~/.config/dm_move_images.sh"))), # show location of picture in google maps
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
@@ -280,8 +273,6 @@ The right alt key is used to open text files in Emacs. NOTE: if emacs is not ope
     Key([aR], "a", lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
     Key([aR], "b", lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
     Key([aR], "c", lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
-#    Key([aR], "c", lazy.spawn("emacsclient -n ~/Stack/Command_line/commands.org")),
-#   Key([aR], "d", lazy.spawn(expanduser("~/.config/dmenuemacs.sh"))),
     Key([aR], "e", lazy.spawn("emacsclient -n ~/.config/doom/README.org")),
     Key([aR], "q", lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
     Key([aR], "r", lazy.spawn("emacsclient -n ~/README.org")), # github readme
