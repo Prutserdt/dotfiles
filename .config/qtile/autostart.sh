@@ -5,7 +5,7 @@
 hostname=$(uname -n)
 
 if [ "$hostname" = "work" ]; then
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log & # writing notification to a logfile
+    $HOME/.config/notify-log.sh $HOME/.config/notify.log &  # writing notification to a logfile
     sleep 1
     $HOME/.config/escape_caps_toggle.sh &
     sleep 0.2

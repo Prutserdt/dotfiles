@@ -12,72 +12,24 @@ from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, Sc
 from libqtile.lazy import lazy
 from os.path import expanduser
 
-class ScrollableTextWidget(widget.base._TextBox):
-    def __init__(self, file_path, **config):
-        super().__init__(text="", **config)
-        self.file_path = file_path
-        self.lines = []
-        self.current_line_index = -1  # Start with the last line
-
-    def load_file(self):
-        try:
-            with open(self.file_path, "r") as file:
-                self.lines = file.readlines()
-        except FileNotFoundError:
-            self.lines = []
-
-    def scroll(self, direction):
-        if direction == "up":
-            self.current_line_index = max(self.current_line_index - 1, -len(self.lines))
-        elif direction == "down":
-            self.current_line_index = min(self.current_line_index + 1, -1)
-        self.update_text()
-
-    def update_text(self):
-        if self.lines:
-            self.text = self.lines[self.current_line_index].strip()
-        else:
-            self.text = "No notifications"
-
-    def button_press(self, x, y, button):
-        if button == 4:
-            self.scroll("up")
-        elif button == 5:
-            self.scroll("down")
-
-    def poll(self):
-        self.load_file()
-        self.update_text()
-
-def open_last_notification(qtile):
-    try:
-        with open(expanduser("~/.config/notify.log"), "r") as file:
-            lines = file.readlines()
-            if lines:
-                notification = lines[-1].strip()
-                qtile.cmd_spawn(["notify-send", notification])  #
-    except FileNotFoundError:
-        pass
-
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
 aR = "mod5"                       # Right alt key, dedicated to opening of files
 
 # Declare the variable for the file path
-emacs_script = expanduser("~/.config/qtile/open_emacs.py")
 home = os.path.expanduser("~")
 
 def threecol(qtile):
-    qtile.cmd_to_layout_index(0) # monadthreecolumn
+    qtile.cmd_to_layout_index(0)  # monadthreecolumn
 
 def montall(qtile):
-    qtile.cmd_to_layout_index(1) # monadtall
+    qtile.cmd_to_layout_index(1)  # monadtall
 
 def monwide(qtile):
-    qtile.cmd_to_layout_index(2) # monadwide
+    qtile.cmd_to_layout_index(2)  # monadwide
 
 def Max(qtile):
-    qtile.cmd_to_layout_index(3) # Max
+    qtile.cmd_to_layout_index(3)  # Max
 
 
 # Define a global variable to track the current layout
@@ -114,8 +66,7 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
-# eck if hostname is "thinkpad" or "work"
-#is_thinkpad_or_work = socket.gethostname().lower() in ["thinkpad", "work"]
+# Check if hostname is "thinkpad" or "work"
 is_thinkpad_or_work = socket.gethostname() in ["thinkpad", "work"]
 
 # Define get_battery_status() function
@@ -146,7 +97,6 @@ keys = [
     #Hotkeys to move windows around, resize windows and choose layouts
     Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
     Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
-    Key([mL], "l", lazy.spawn("xset dpms force suspend"),desc="make screen dark"),
     Key([mL, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
     Key([mL, "shift"], "l", lazy.layout.shuffle_right(),desc="Move window to the right"),
     Key([mL, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
@@ -158,7 +108,6 @@ keys = [
     Key([mL], "y", lazy.function(Max),                  desc="Layout: max"),
     Key([mL], "u", lazy.function(threecol),             desc="Layout: Threecolumn  without margins"),
     Key([mL], "i", lazy.function(monwide),              desc="Layout: MonadWide no margins"),
-    Key([mL], "n", lazy.function(open_last_notification)),
     Key([mL], "o", lazy.function(montall),              desc="Layout: MonadTall no margins"),
     Key([mL], 'a', increase_margin,                     desc="Increase gaps"),
     Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
@@ -180,8 +129,8 @@ keys = [
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
         lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org"),
         desc="Open in emacs: run het python aandelen script en open het aandelen log"),
-    Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))), # browser via dmenu, related to 'urls'
-    Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
+    Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))),  # browser via dmenu, related to 'urls'
+    Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))),  # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
     Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
@@ -190,23 +139,24 @@ keys = [
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
     Key([mR], "l", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
-    Key([mR, "shift"], "m", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))), # show location of picture in google maps
+    Key([mR, "shift"], "m", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))),
+    # show location of picture in google maps
     Key([mR], "p", lazy.spawn("keepass")),
-    Key([mR, "shift"], "p", lazy.spawn(expanduser("~/.config/dm_move_images.sh"))), # show location of picture in google maps
+    Key([mR, "shift"], "p", lazy.spawn(expanduser("~/.config/dm_move_images.sh"))),  # show location of picture in google maps
     Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
     Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
-    Key([mR], "t", lazy.spawn(expanduser("~/.config/dmenuthunar.sh"))), # related to 'directories'
-    Key([mR], "u", lazy.spawn(expanduser("~/.config/dmenuunicode.sh"))), # related to 'unicode'
+    Key([mR], "t", lazy.spawn(expanduser("~/.config/dmenuthunar.sh"))),  # related to 'directories'
+    Key([mR], "u", lazy.spawn(expanduser("~/.config/dmenuunicode.sh"))),  # related to 'unicode'
     Key([mR], "v", lazy.spawn("alacritty -e vim")),
     Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
 
     # Open text files in emacs, note
     Key([aR], "a", lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
-    Key([aR], "b", lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")), # related to dmenuinternet.sh
+    Key([aR], "b", lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")),  # related to dmenuinternet.sh
     Key([aR], "c", lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
     Key([aR], "e", lazy.spawn("emacsclient -n ~/.config/doom/README.org")),
     Key([aR], "q", lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
-    Key([aR], "r", lazy.spawn("emacsclient -n ~/README.org")), # github readme
+    Key([aR], "r", lazy.spawn("emacsclient -n ~/README.org")),  # github readme
     Key([aR], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh
     Key([aR, "shift"], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/textfiles")),
     Key([aR], "u", lazy.spawn("emacsclient -n ~/.config/unicode")),  # related to dmenuunicode.sh
@@ -231,7 +181,7 @@ for i in groups:
             Key(
                 [mL, "shift"],
                 i.name,
-                lazy.window.togroup(i.name,switch_group=True), #True=follow window
+                lazy.window.togroup(i.name,switch_group=True),  #True=follow window
                 desc="Move and follow the focused window to group {}".format(i.name),
             ),
             # Exactly the same as above, but don't follow the moved window to group
@@ -261,7 +211,7 @@ keys.extend([
 
 layout_theme = {"border_width": 2,
                 "border_focus":  "#d75f5f",
-                "border_normal": "#282C35", #966363
+                "border_normal": "#282C35",
                 "min_ratio": 0.05, "max_ratio": 0.9,
                 "new_client_position":'bottom',
                 }
@@ -274,7 +224,7 @@ layout_theme_max = {"border_width": 0,
 
 # A separate theme for floating mode, different color, thicker border width
 floating_theme = {"border_width": 3,
-                "border_focus": "#98BE65",  #98C379= groen
+                "border_focus": "#98BE65",
                 "border_normal": "#006553",
                 }
 
@@ -307,9 +257,6 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Notify(foreground="#ff966c"),
-                ScrollableTextWidget(
-                    file_path="~/.config/notify.log",
-                    foreground="#ff966c"),  # Use the widget here
                 widget.Systray(),
                 widget.QuickExit(foreground="#888888"),
             ] + battery_widget + [
@@ -364,7 +311,7 @@ auto_fullscreen = False
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 
-auto_minimize = True # for steam games
+auto_minimize = True  # for steam games
 
 @hook.subscribe.layout_change
 def update_current_layout(layout):
