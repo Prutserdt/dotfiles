@@ -6,9 +6,6 @@
 !(_)_/\_\_|  \___||___/\___/ \__,_|_|  \___\___||___/
 !                                                    
 ! Modified by Prutserdt
-!
-!! Transparency (0-1):
-! *.alpha:0.5 
 
 !! Set a default font and font size as below:
 *.font: hack:size=13
