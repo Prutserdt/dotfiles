@@ -25,12 +25,10 @@ alias ZQ="exit"                 # Exiting quickly, the Vim way
 alias c='printf "\e[H\e[2J"'    # Clear screen, CTL-L for scrollback
 alias cls="c;ls"                # Clear screen, scrollback and 'ls --color=auto'
 alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
-alias rm='rm -i'               # Ask for permission, for safety
+alias rm='rm -i'                # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
-alias mv='mv -i'               # Ask for permission, for safety
-#alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat"  # pacman update
-#alias u="echo the following command by using the alias 'u': sudo pacman -Syu && sudo pacman -Syu"  # pacman update
-alias u="echo You used an alias to run the following command | lolcat && echo sudo pacman -Syu | lolcat && sudo pacman -Syu"  # pacman update
+alias mv='mv -i'                # Ask for permission, for safety
+alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat --freq=0.05 --spread=1000"  # pacman update
 
 # Search
 alias h="history | fzf"             # Fuzzy find history
@@ -57,7 +55,6 @@ alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' # Github
 
 # Keyboard related
 alias e='$HOME/.config/escape_caps_toggle.sh'
-alias r='echo this alias,named r, does not exist anymore, stop using it!!'     # obsoleter alias!
 alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on hostname
 
 # emacs commandline

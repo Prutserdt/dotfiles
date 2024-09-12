@@ -5,7 +5,7 @@
 
 (doom! :completion
        company             ; the ultimate code completion backend
-       vertico             ; the search engine of the future
+;;     vertico             ; the search engine of the future
        (ivy +childframe)   ; a search engine for love and life
 
        :ui

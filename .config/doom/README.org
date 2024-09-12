@@ -45,7 +45,7 @@ NOTES: some packages that should be installed on the system are, =python-pytest=
 
 (doom! :completion
        company             ; the ultimate code completion backend
-       vertico             ; the search engine of the future
+;;     vertico             ; the search engine of the future
        (ivy +childframe)   ; a search engine for love and life
 
        :ui
@@ -614,10 +614,12 @@ For quick daily notes and a TODO list I am using roam-dailies and in the next co
 (setq org-roam-dailies-capture-templates
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n"
-                    "* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
+                    "* TODO van vandaag [/]\n")))
+                    ;;"* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
            "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head (""))))))
+           ;;:if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag"))))))
 #+END_SRC
 
 To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory. This function is used in the  [[#custom-keybindings][Custom keybindings]].

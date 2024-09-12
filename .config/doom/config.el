@@ -320,10 +320,12 @@
 (setq org-roam-dailies-capture-templates
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n"
-                    "* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
+                    "* TODO van vandaag [/]\n")))
+                    ;;"* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
            "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag"))))))
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head (""))))))
+           ;;:if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag"))))))
 
 (defun my-counsel-rg-roam-dir ()
     "Search using `counsel-rg` in the set org-roam-directory."
