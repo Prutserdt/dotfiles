@@ -1,3 +1,7 @@
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+
 # Get current key mappings
 esc_key=$(xmodmap -pke | grep -P "keycode\s+9 =.+" | awk '{print $4}')
 caps_lock_key=$(xmodmap -pke | grep -P "keycode\s+66 =.+" | awk '{print $4}')

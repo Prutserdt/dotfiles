@@ -453,13 +453,13 @@ if [ "$hostname" = "work" ]; then
 fi
 
 if [ "$hostname" = "linuxbox" ]; then
-    $HOME/.config/escape_caps_toggle.sh &
-    $HOME/.config/keyboard_config.sh &
     setxkbmap us &
     $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
     thunar --daemon &
+    sleep 1
+    $HOME/.config/keyboard_config.sh &
     picom -b &
     #signal-desktop --start-in-tray --use-tray-icon &
     #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage

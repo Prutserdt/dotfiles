@@ -24,7 +24,7 @@
 - [[#credits][Credits]]
 
 * About this config
-This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.doom.d/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.config/emacs/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs after modifying this README.org!
+This is my personal [[https://github.com/hlissner/doom-emacs][Doom Emacs]] config. Nothing much to see here. Just started this journey in the winter of 2022 and learning [[https://www.gnu.org/software/emacs/][Emacs]] and [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] along the way. The Emacs Lisp files [[https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/init.el][init.el]], [[https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/packages.el][packages.el]] and [[https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/config.el][config.el]] are generated from [[https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/README.org][this README.org file]] by tangling in Emacs: ~M-x~ ~org-babel-tangle~. Remember to run =~/.config/emacs/bin/doom sync= in the terminal, or ~M-x~ ~doom/reload~ in Doom Emacs after modifying this README.org!
 NOTE: if the startup is slow then it has nothing to do with the configuration but the daemon is probably not running. Start it by entering ~emacs --daemon~ to the terminal. After that it should open much snapier.
 
 * init.el
@@ -402,6 +402,12 @@ I want to use the =undo-redo= package in Evil mode and therefore add the keybind
   (define-key evil-normal-state-map "U" 'undo-redo)
   (define-key evil-normal-state-map "]" 'next-buffer)
   (define-key evil-normal-state-map "[" 'previous-buffer))
+
+;;FIXME dit is een test voor jump to functionaliteit. Dit kan al door gi en '' te gebruiken. C-o zou werken met onderstaande command. Nog testen
+(evil-add-command-properties #'foo :jump t)
+
+
+
 #+end_src
 NOTE to self: the [ and ] collide with certain buffers, for instance in vterm. It is probably better to learn the SPC-b-n and SPC-b-p to cycle through buffers and get this in my muscle memory...
 
@@ -598,6 +604,7 @@ This Emacs configuration is used on three different systems. I am using system s
    (t "~/Downloads"))) ; Default directory
 #+end_src
 
+
 Here the correct directories are set including the daily sub directory, completion of the note titles everywhere and autosyncing the roam files to a sql database for very quick search results.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package org-roam
@@ -712,13 +719,13 @@ Show information about the org-roam files and list the amount of org files, the 
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
     (message "Statistics about my second brain 🤓. Brain shelve: %s.
 
-+------------+-------+-------+-------+
-|            | Total |  Roam | Daily |
-+------------+-------+-------+-------+
-|org files   | %5d | %5d | %5d |
-|line numbers| %5d | %5d | %5d |
++------------+--------+--------+-------+
+|            | Total  | Roam   | Daily |
++------------+--------+--------+-------+
+|org files   |  %5d |  %5d | %5d |
+|line numbers|  %5d |  %5d | %5d |
 |word count  | %5d | %5d | %5d |
-+------------+-------+-------+-------+"
++------------+--------+--------+-------+"
              roam-dir
              org-file-count-total org-file-count-roam org-file-count-daily
              (+ total-lines-org total-lines-daily) total-lines-org total-lines-daily
@@ -858,7 +865,7 @@ The =my-emacs-config-download-overwrite= function in the code snippet below is a
   ;; Define file paths for the current local README.org, backup README.org, and online README.org
   (let ((current-readme-org "~/.config/doom/README.org")
         (backup-readme-org (concat "~/.config/doom/README_" (format-time-string "%Y-%m-%d") ".org"))
-        (online-readme-org "https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org"))
+        (online-readme-org "https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/README.org"))
     ;; Ask for confirmation before overwriting the local README.org file
     (if (yes-or-no-p "Are you sure you want to overwrite README.org? ")
         (progn
@@ -1045,7 +1052,7 @@ $0
 #+END_SR${1:C}
 #+END_SRC
 
-Remark: Github cannot handle a code block inside a codeblock. The line ~#+BEGIN_SRC python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org][raw README.org]] file for that.
+Remark: Github cannot handle a code block inside a codeblock. The line ~#+BEGIN_SRC python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.config/doom/README.org][raw README.org]] file for that.
 
 * Credits
 My configuration of Doom Emacs is partially based on these:

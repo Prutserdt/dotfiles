@@ -155,6 +155,9 @@
   (define-key evil-normal-state-map "]" 'next-buffer)
   (define-key evil-normal-state-map "[" 'previous-buffer))
 
+;;FIXME dit is een test voor jump to functionaliteit. Dit kan al door gi en '' te gebruiken. C-o zou werken met onderstaande command. Nog testen
+(evil-add-command-properties #'foo :jump t)
+
 (map! :leader
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
 
@@ -397,13 +400,13 @@
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
     (message "Statistics about my second brain 🤓. Brain shelve: %s.
 
-+------------+-------+-------+-------+
-|            | Total |  Roam | Daily |
-+------------+-------+-------+-------+
-|org files   | %5d | %5d | %5d |
-|line numbers| %5d | %5d | %5d |
++------------+--------+--------+-------+
+|            | Total  | Roam   | Daily |
++------------+--------+--------+-------+
+|org files   |  %5d |  %5d | %5d |
+|line numbers|  %5d |  %5d | %5d |
 |word count  | %5d | %5d | %5d |
-+------------+-------+-------+-------+"
++------------+--------+--------+-------+"
              roam-dir
              org-file-count-total org-file-count-roam org-file-count-daily
              (+ total-lines-org total-lines-daily) total-lines-org total-lines-daily
@@ -512,7 +515,7 @@
   ;; Define file paths for the current local README.org, backup README.org, and online README.org
   (let ((current-readme-org "~/.config/doom/README.org")
         (backup-readme-org (concat "~/.config/doom/README_" (format-time-string "%Y-%m-%d") ".org"))
-        (online-readme-org "https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.doom.d/README.org"))
+        (online-readme-org "https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/README.org"))
     ;; Ask for confirmation before overwriting the local README.org file
     (if (yes-or-no-p "Are you sure you want to overwrite README.org? ")
         (progn

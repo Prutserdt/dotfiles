@@ -1371,6 +1371,10 @@ emacsclient -r ~/.config/doom/README.org
 A quite complex script to toggle the Escape and Caps lock keys, this can be toggled back and forth.
 This is set to =e= in .aliases.
 #+BEGIN_SRC sh :tangle escape_caps_toggle.sh :padline no :eval no :tangle-mode (identity #o755)
+#!/bin/bash
+# NOTE: This file is generated from ~/.config/README.org
+#       Please only edit that file and org-babel-tangle (emacs)
+
 # Get current key mappings
 esc_key=$(xmodmap -pke | grep -P "keycode\s+9 =.+" | awk '{print $4}')
 caps_lock_key=$(xmodmap -pke | grep -P "keycode\s+66 =.+" | awk '{print $4}')
