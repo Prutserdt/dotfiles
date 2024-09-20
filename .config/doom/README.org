@@ -462,11 +462,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
         :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
         :desc "Open random node"                 "a" #'org-roam-node-random
-        (:prefix ("c" . "Change to another notes dir")
-            :desc "Goto default notes"           "d" #'my-org-roam-default
-            :desc "Goto Thinkpad notes"          "t" #'my-org-roam-thinkpad
-            :desc "Goto work notes @ home"       "w" #'my-org-roam-work
-            :desc "Goto work notes @ work"       "W" #'my-org-roam-at-work-about-work)
         (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
@@ -481,7 +476,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
         :desc "Find node"                        "f" #'org-roam-node-find
         :desc "Find ref"                         "F" #'org-roam-ref-find
-        :desc "Show graph"                       "g" #'org-roam-graph
         :desc "Insert node"                      "i" #'org-roam-node-insert
         :desc "Message: show roam dir info"      "m" #'my-show-org-roam-directory-info
         :desc "Capture to node"                  "n" #'org-roam-capture
@@ -609,7 +603,7 @@ Here the correct directories are set including the daily sub directory, completi
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package org-roam
   :custom
-  (org-roam-directory my-roam-dir)
+  (org-roam-directory "~/Stack/Command_line/RoamNotes")
   (org-roam-dailies-directory "daily/")
   (org-roam-completion-everywhere t)
   :config
@@ -635,52 +629,6 @@ To perform a quick word search through all of my notes I use the rip-grep (rg) p
     "Search using `counsel-rg` in the set org-roam-directory."
     (interactive)
     (counsel-rg nil org-roam-directory))
-#+END_SRC
-
-Switching to one of my roam directories is managed in the =my-org-roam-switch= function.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-switch (roam-dir)
-  "Switch to the roam notes in the specified directory. Not working standalone "
-  (interactive "DSet Roam Directory:")
-  (if (string= org-roam-directory roam-dir)
-      (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
-    (progn
-      (setq org-roam-directory roam-dir)
-      (setq org-roam-dailies-directory "daily/")
-      (org-roam-db-sync)
-      (message (format "Switched to %s" roam-dir)))))
-#+END_SRC
-
-Switch to the default roam-notes.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-default ()
-  "Switch to my default desktop roam notes. This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Stack/Command_line/RoamNotes"))
-#+END_SRC
-
-Switch to the roam-notes of my Thinkpad on my desktop.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-thinkpad ()
-  "Switch to the roam notes of my Thinkpad, on my desktop. This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Stack/Thinkpad/RoamNotes"))
-#+END_SRC
-
-Switch to the roam-notes of my work on my desktop/Thinkpad.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-work ()
-  "Switch to the roam notes of my work (not at work). This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Stack/VBox_Arch/RoamNotes"))
-#+END_SRC
-
-Switch to the work notes on my Virtual box distro at my work.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-org-roam-at-work-about-work ()
-  "Switch to the work roam notes on VirtualBox (at work). This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 #+END_SRC
 
 Show information about the org-roam files and list the amount of org files, the amount of lines and words in the org-roam directory and daily subdirectory as well.
@@ -717,7 +665,7 @@ Show information about the org-roam files and list the amount of org files, the 
         (insert-file-contents (expand-file-name file roam-dir))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
-    (message "Statistics about my second brain 🤓. Brain shelve: %s.
+    (message "Statistics about my second brain 🤓.Brain shelve: %s.
 
 +------------+--------+--------+-------+
 |            | Total  | Roam   | Daily |

@@ -2,7 +2,6 @@
 #+auto_tangle: t
 #+AUTHOR: Prutserdt
 [[file:Qtile.png]]
-
 * Table of contents :toc:
 - [[#introduction][Introduction]]
 - [[#configpy][Config.py]]

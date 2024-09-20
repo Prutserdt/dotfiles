@@ -207,11 +207,6 @@
         :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
         :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
         :desc "Open random node"                 "a" #'org-roam-node-random
-        (:prefix ("c" . "Change to another notes dir")
-            :desc "Goto default notes"           "d" #'my-org-roam-default
-            :desc "Goto Thinkpad notes"          "t" #'my-org-roam-thinkpad
-            :desc "Goto work notes @ home"       "w" #'my-org-roam-work
-            :desc "Goto work notes @ work"       "W" #'my-org-roam-at-work-about-work)
         (:prefix ("d" . "dailies")
             :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
@@ -226,7 +221,6 @@
             :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
         :desc "Find node"                        "f" #'org-roam-node-find
         :desc "Find ref"                         "F" #'org-roam-ref-find
-        :desc "Show graph"                       "g" #'org-roam-graph
         :desc "Insert node"                      "i" #'org-roam-node-insert
         :desc "Message: show roam dir info"      "m" #'my-show-org-roam-directory-info
         :desc "Capture to node"                  "n" #'org-roam-capture
@@ -314,7 +308,7 @@
 
 (use-package org-roam
   :custom
-  (org-roam-directory my-roam-dir)
+  (org-roam-directory "~/Stack/Command_line/RoamNotes")
   (org-roam-dailies-directory "daily/")
   (org-roam-completion-everywhere t)
   :config
@@ -334,37 +328,6 @@
     "Search using `counsel-rg` in the set org-roam-directory."
     (interactive)
     (counsel-rg nil org-roam-directory))
-
-(defun my-org-roam-switch (roam-dir)
-  "Switch to the roam notes in the specified directory. Not working standalone "
-  (interactive "DSet Roam Directory:")
-  (if (string= org-roam-directory roam-dir)
-      (message (format "Roam directory not changed because it is already set to '%s'" roam-dir))
-    (progn
-      (setq org-roam-directory roam-dir)
-      (setq org-roam-dailies-directory "daily/")
-      (org-roam-db-sync)
-      (message (format "Switched to %s" roam-dir)))))
-
-(defun my-org-roam-default ()
-  "Switch to my default desktop roam notes. This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Stack/Command_line/RoamNotes"))
-
-(defun my-org-roam-thinkpad ()
-  "Switch to the roam notes of my Thinkpad, on my desktop. This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Stack/Thinkpad/RoamNotes"))
-
-(defun my-org-roam-work ()
-  "Switch to the roam notes of my work (not at work). This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Stack/VBox_Arch/RoamNotes"))
-
-(defun my-org-roam-at-work-about-work ()
-  "Switch to the work roam notes on VirtualBox (at work). This uses the Elisp function my-org-roam-switch."
-  (interactive)
-  (my-org-roam-switch "~/Shared_directory/RoamNotes"))
 
 (defun my-show-org-roam-directory-info ()
   "Show info of current org-roam dir and 'daily' subdirectory."
@@ -398,7 +361,7 @@
         (insert-file-contents (expand-file-name file roam-dir))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
-    (message "Statistics about my second brain 🤓. Brain shelve: %s.
+    (message "Statistics about my second brain 🤓.Brain shelve: %s.
 
 +------------+--------+--------+-------+
 |            | Total  | Roam   | Daily |
