@@ -207,7 +207,6 @@ Right super key to open applications. Shift is used to update the application.
     Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
 #+END_SRC
 
-
 ** Keybingings: Text files
 The right alt key is used to open text files in Emacs. NOTE: if emacs is not open in a window this will not work, first open emacs!
 #+BEGIN_SRC python :tangle config.py :results none :eval never

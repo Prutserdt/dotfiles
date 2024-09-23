@@ -155,7 +155,7 @@
   (define-key evil-normal-state-map "]" 'next-buffer)
   (define-key evil-normal-state-map "[" 'previous-buffer))
 
-;;FIXME dit is een test voor jump to functionaliteit. Dit kan al door gi en '' te gebruiken. C-o zou werken met onderstaande command. Nog testen
+;FIXME dit is een test voor jump to functionaliteit. Dit al door gi en '' te gebruiken. C-o zou werken met onderstaande command. Nog testen
 (evil-add-command-properties #'foo :jump t)
 
 (map! :leader
@@ -208,7 +208,6 @@
         :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("d" . "dailies")
-            :desc "Find daily dir"               "-" #'org-roam-find-directory
             :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
             :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
@@ -222,6 +221,7 @@
         :desc "Find node"                        "f" #'org-roam-node-find
         :desc "Find ref"                         "F" #'org-roam-ref-find
         :desc "Insert node"                      "i" #'org-roam-node-insert
+        :desc "Goto the last note"               "l" #'my-open-latest-org-roam-daily
         :desc "Message: show roam dir info"      "m" #'my-show-org-roam-directory-info
         :desc "Capture to node"                  "n" #'org-roam-capture
         :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
@@ -303,7 +303,7 @@
   (cond
    ((string-equal (system-name) "linuxbox") "~/Stack/Command_line/RoamNotes")
    ((string-equal (system-name) "work") "~/Shared_directory/RoamNotes")
-   ((string-equal (system-name) "thinkpad") "~/Stack/Thinkpad/RoamNotes")
+   ((string-equal (system-name) "thinkpad") "~/Stack/Command_line/RoamNotes")
    (t "~/Downloads"))) ; Default directory
 
 (use-package org-roam
@@ -361,7 +361,8 @@
         (insert-file-contents (expand-file-name file roam-dir))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
-    (message "Statistics about my second brain 🤓.Brain shelve: %s.
+    (message "Statistics about my second brain 🤓.
+Brain shelve: %s.
 
 +------------+--------+--------+-------+
 |            | Total  | Roam   | Daily |
@@ -374,6 +375,13 @@
              org-file-count-total org-file-count-roam org-file-count-daily
              (+ total-lines-org total-lines-daily) total-lines-org total-lines-daily
              (+ total-words-org total-words-daily) total-words-org total-words-daily)))
+
+(defun my-open-latest-org-roam-daily ()
+  (interactive)
+  (let ((my-org-roam-daily-dir "~/Stack/Command_line/RoamNotes/daily/")
+        (files (directory-files "~/Stack/Command_line/RoamNotes/daily/" nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
+    (when files
+      (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-daily-dir)))))
 
 (use-package! websocket
     :after org-roam)

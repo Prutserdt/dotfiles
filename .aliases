@@ -28,7 +28,8 @@ alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
 alias rm='rm -i'                # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
 alias mv='mv -i'                # Ask for permission, for safety
-alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat --freq=0.05 --spread=1000"  # pacman update
+alias u="echo Running the alias 'u':  sudo pacman -Syu && sudo pacman -Syu"  # pacman update
+#alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat --freq=0.05 --spread=1000"  # pacman update
 
 # Search
 alias h="history | fzf"             # Fuzzy find history
