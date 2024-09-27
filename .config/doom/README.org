@@ -439,8 +439,9 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
         (:prefix ("e" . "Excel table stuff")
-            :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
-            :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
+            :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
+            :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
+            :desc "Clipb.: exl to org"           "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
@@ -594,7 +595,6 @@ This Emacs configuration is used on three different systems. I am using system s
    ((string-equal (system-name) "thinkpad") "~/Stack/Command_line/RoamNotes")
    (t "~/Downloads"))) ; Default directory
 #+end_src
-
 
 Here the correct directories are set including the daily sub directory, completion of the note titles everywhere and autosyncing the roam files to a sql database for very quick search results.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -911,6 +911,7 @@ Inserting often used characters and words can be done by this simple function. A
   "Inserts a character at point and switches to insert state in Evil mode when in normal state."
   (interactive)
   (let* ((characters '(
+                       ("Note: Ctrl-\ to toggle-input-method" . "")
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
                        ("¹ Tot de macht 1"  . "¹")
@@ -948,10 +949,6 @@ For reference: the default doom-dashboard can be found here: =~/.emacs.d/modules
 (defun +doom-dashboard-setup-modified-keymap ()
   (setq +doom-dashboard-mode-map (make-sparse-keymap))
   (map! :map +doom-dashboard-mode-map
-        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
-        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
-        :desc "Change font(temporary)" :ng "f" #'menu-set-font
-        :desc "Change theme(temporary)" :ng "t" #'consult-theme
         :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
         :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
 (add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))

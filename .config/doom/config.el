@@ -187,8 +187,9 @@
             :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
         (:prefix ("e" . "Excel table stuff")
-            :desc "Org table to clipboard"       "e" #'my-export-org-table-to-system-clipboard
-            :desc "Clipboard: tab to org-table format" "o" #'my-convert-tabs-to-org-table-in-clipboard)
+            :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
+            :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
+            :desc "Clipb.: exl to org"           "o" #'my-convert-tabs-to-org-table-in-clipboard)
         (:prefix ("f" . "Financial stuff")
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
@@ -551,6 +552,7 @@ Brain shelve: %s.
   "Inserts a character at point and switches to insert state in Evil mode when in normal state."
   (interactive)
   (let* ((characters '(
+                       ("Note: Ctrl-\ to toggle-input-method" . "")
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
                        ("¹ Tot de macht 1"  . "¹")
@@ -580,10 +582,6 @@ Brain shelve: %s.
 (defun +doom-dashboard-setup-modified-keymap ()
   (setq +doom-dashboard-mode-map (make-sparse-keymap))
   (map! :map +doom-dashboard-mode-map
-        :desc "Increase font size(temporary)" :ng "+" #'doom/increase-font-size
-        :desc "Decrease font size(temporary)" :ng "-" #'doom/decrease-font-size
-        :desc "Change font(temporary)" :ng "f" #'menu-set-font
-        :desc "Change theme(temporary)" :ng "t" #'consult-theme
         :desc "Open my Emacs config; README.org" :ng "e" (cmd! (find-file (expand-file-name "README.org" doom-user-dir)))
         :desc "Exiting via Evil-mode" :ng "ZZ" #'save-buffers-kill-terminal))
 (add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))

@@ -18,7 +18,8 @@ if [ "$hostname" = "work" ]; then
     notify-send -t 60000 "autostart, found hostname: $hostname. Script continued."
     VBoxClient --clipboard &&
     VBoxClient --draganddrop
-    xrandr --output Virtual-1 --mode 1920x1080; feh --bg-fill ~/Stack/Afbeeldingen/Wallpapers/default.jpg
+    xrandr --output Virtual-1 --mode 1920x1080; feh --bg-fill ~/Stack/Afbeeldingen/Wallpapers/default.jpg &
+    syncthing &
 fi
 
 if [ "$hostname" = "linuxbox" ]; then
@@ -30,6 +31,7 @@ if [ "$hostname" = "linuxbox" ]; then
     sleep 1
     $HOME/.config/keyboard_config.sh &
     picom -b &
+    syncthing &
     #signal-desktop --start-in-tray --use-tray-icon &
     #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
 fi
@@ -43,4 +45,5 @@ if [ "$hostname" = "thinkpad" ]; then
     nm-applet &
     thunar --daemon &
     picom -b &
+    syncthing &
 fi
