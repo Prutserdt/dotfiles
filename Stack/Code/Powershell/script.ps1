@@ -2,7 +2,7 @@
 copy "c:\Users\Public\Pictures\Desktop_bio.jpg" "c:\Users\Public\Pictures\Desktop_bio_backup.jpg"
 
 # Source the picture that will become the new desktop background
-$url ="https://art.ngfiles.com/images/832000/832240_kincaid1_pwned.png?f1551138718"
+$url ="https://i.imgflip.com/1aypjs.jpg"
 
 # Destation file
 $dest ="c:\Users\Public\Pictures\Desktop_bio.jpg"
