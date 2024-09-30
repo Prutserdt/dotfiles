@@ -406,7 +406,7 @@ I want to use the =undo-redo= package in Evil mode and therefore add the keybind
 (evil-add-command-properties #'foo :jump t)
 #+end_src
 
-NOTE to self: the [ and ] collide with certain buffers, for instance in vterm. It is probably better to learn the SPC-b-n and SPC-b-p to cycle through buffers and get this in my muscle memory...
+NOTE to self: the [ and ] collide with certain buffers, for instance in vterm. It is probably better to learn the SPC-b-n and SPC-b-p to cycle through buffers and get this in my muscle memory.
 
 The following are keybindings that are bound to my leader key, which is =space=, the default leader key of Doom Emacs Evil mode.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
