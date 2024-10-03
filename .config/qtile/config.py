@@ -137,7 +137,6 @@ keys = [
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
-    Key([mR], "l", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
     Key([mR], "m", lazy.spawn("mousepad")),
     Key([mR, "shift"], "m", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))),
     # show location of picture in google maps
@@ -149,6 +148,7 @@ keys = [
     Key([mR], "u", lazy.spawn(expanduser("~/.config/dmenuunicode.sh"))),  # related to 'unicode'
     Key([mR], "v", lazy.spawn("alacritty -e vim")),
     Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
+    Key([mR], "delete", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
 
     # Open text files in emacs, note
     Key([aR], "a", lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),

@@ -17,7 +17,6 @@ In this org file the arduino script for my digispark is described and several pa
 * My current Digispark .ino script and Powershell payload
 
 ** Digispark script (Powershell.ino)
-
 A script that will open powershell and run a payload from a server. The powershell script "script.ps1" can be found in the code block below the next. When the Powershell.ino script is executed the red led is switched on and the Digispark can be removed.
 
 #+begin_src C :tangle Powershell.ino
@@ -54,7 +53,6 @@ void loop() {
 ** My payload (script.ps1)
 The next code block is my current script that is deployed by my Digispark and hosted on Github.
 
-
 #+begin_src shell :tangle script.ps1
 # Create a backup of the current desktop background!
 copy "c:\Users\Public\Pictures\Desktop_bio.jpg" "c:\Users\Public\Pictures\Desktop_bio_backup.jpg"
@@ -77,13 +75,11 @@ Invoke-WebRequest -Uri $url -OutFile $dest
 #copy "c:\Users\Public\Pictures\Desktop_bio_backup.jpg" "c:\Users\Public\Pictures\Desktop_bio.jpg"
 #+end_src
 
-
 * Old files
 
 ** Digispark scripts
 
 *** Rickroll
-
 #+begin_src C
  //This DigiSpark script opens up Rick Astley's - Never Gonna Give You Up and also a fake Windows update screen and then maximizes it using F11
 #include "DigiKeyboard.h"
