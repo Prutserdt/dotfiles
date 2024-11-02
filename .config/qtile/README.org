@@ -126,6 +126,11 @@ battery_widget = [
         update_interval=30
     )
 ] if is_thinkpad_or_work else []
+
+
+import subprocess
+import sys
+
 #+end_src
 
 ** Keybindings: Qtile specific
@@ -189,7 +194,12 @@ Right super key to open applications. Shift is used to update the application.
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))),  # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("/usr/bin/emacsclient -c")), # use in case of problems
+    #Key([mR], "e", lazy.spawn("/usr/bin/emacs")), # use in case of problems
+    #Key([mR], "e", lazy.function(run_emacs)), # use in case of problems
+    Key([mR], "e", lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
+    Key([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),

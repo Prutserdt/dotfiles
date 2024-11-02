@@ -5,7 +5,10 @@
 
 (use-package rainbow-delimiters)
 
-(set-frame-font "Hack 12" t t)
+;; FIXME: if the error is solved on all of my systems then this can be removed
+;;(set-frame-font "Hack 12" t t) ;; This line was causing
+;;https://discourse.doomemacs.org/t/tiny-display-when-starting-doom-solved/3534
+(set-face-attribute 'default nil :height 130)
 (setq default-frame-alist '((font . "Hack 13")))
 
 (define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
@@ -23,6 +26,12 @@
   (visual-fill-column-mode))
 
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
+
+(add-hook 'vterm-mode-hook
+          (lambda ()
+            (setq-local fill-column 110)
+            (visual-fill-column-mode)
+            (setq-local visual-fill-column-center-text t)))
 
 (set-frame-parameter (selected-frame) 'alpha '(85 80))
 (add-to-list 'default-frame-alist '(alpha 85 80))
@@ -181,10 +190,6 @@
             :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
-        (:prefix ("c" . "Cloud stuff")
-            (:prefix ("b" . "Backup to cloud")
-            :desc "Thinkpad backup to cloud"     "t" #'doom/tangle
-            :desc "VBox Arch backup to cloud"    "v" #'doom/tangle))
         :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
         (:prefix ("e" . "Excel table stuff")
             :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
@@ -200,38 +205,42 @@
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
         :desc "Visualized undo: vundo"           "v" #'vundo
-        :desc "Write this buffer to file"        "w" #'write-file)
+        :desc "Write this buffer to file"        "w" #'write-file
+        :desc "pdf remove password"              "z" 'my-pdf-password-removal)
 
     (:desc "Open files in emacs" "e" #'recentf-open-files)
 
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
-        :desc "Previous note (from a note)"      "<" #'org-roam-dailies-goto-previous-note
-        :desc "Next note (from a note)"          ">" #'org-roam-dailies-goto-next-note
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("d" . "dailies")
-            :desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
+            :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
+            :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
+            ;;:desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
             :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
-            :desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
+            ;;:desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
+            :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
             :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
+            :desc "Select dailies calendar"      "o" #'org-roam-dailies-goto-date
             :desc "Goto today"                   "t" #'org-roam-dailies-goto-today
             :desc "Capture today"                "T" #'org-roam-dailies-capture-today
             :desc "Goto yesterday"               "y" #'org-roam-dailies-goto-yesterday
             :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
+        :desc "Database sync"                    "D" #'org-roam-db-sync
         :desc "Find node"                        "f" #'org-roam-node-find
         :desc "Find ref"                         "F" #'org-roam-ref-find
         :desc "Insert node"                      "i" #'org-roam-node-insert
-        :desc "Goto the last note"               "l" #'my-open-latest-org-roam-daily
+        ;;:desc "Goto the last note"               "l" #'my-open-latest-org-roam-daily
         :desc "Message: show roam dir info"      "m" #'my-show-org-roam-directory-info
         :desc "Capture to node"                  "n" #'org-roam-capture
-        :desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
+        ;;:desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-        :desc "Search Roam dir"                  "s" #'my-counsel-rg-roam-dir
-        :desc "Sync database"                    "S" #'org-roam-db-sync
-        :desc "Goto today"                       "t" #'org-roam-dailies-goto-today
-        :desc "Capture today"                    "T" #'org-roam-dailies-capture-today
+        :desc "Search text"                      "s" #'my-search-roam-files
+        :desc "Search filename"                  "S" #'my-search-roam-filename
+        ;;:desc "Goto today"                       "t" #'org-roam-dailies-goto-today
+        ;;:desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
@@ -319,16 +328,20 @@
     (let ((head
            (concat "#+title: %<%Y-%m-%d (%A)>\n"
                     "* TODO van vandaag [/]\n")))
-                    ;;"* Aantekeningen van vandaag\n\n* TODO van vandaag [/]\n")))
          `(("a" "Aantekeningen van vandaag" entry
            "* %<%H:%M> %?"
            :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head (""))))))
-           ;;:if-new (file+head+olp "%<%Y-%m-%d>.org" ,head ("Aantekeningen van vandaag"))))))
 
-(defun my-counsel-rg-roam-dir ()
+;;(defun my-counsel-rg-roam-dir ()
+(defun my-search-roam-files ()
     "Search using `counsel-rg` in the set org-roam-directory."
     (interactive)
     (counsel-rg nil org-roam-directory))
+
+(defun my-search-roam-filename ()
+    "Search filenames using `counsel-find-file` in the set org-roam-directory."
+    (interactive)
+    (counsel-find-file org-roam-directory))
 
 (defun my-show-org-roam-directory-info ()
   "Show info of current org-roam dir and 'daily' subdirectory."

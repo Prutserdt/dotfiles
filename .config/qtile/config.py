@@ -83,6 +83,10 @@ battery_widget = [
     )
 ] if is_thinkpad_or_work else []
 
+
+import subprocess
+import sys
+
 keys = [
     Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
     Key([mL], "space", lazy.layout.swap_main(),         desc="Make main window of selected window"),
@@ -133,7 +137,12 @@ keys = [
     Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))),  # copy/paste clipoard
     Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
     Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
+    #Key([mR], "e", lazy.spawn("/usr/bin/emacsclient -c")), # use in case of problems
+    #Key([mR], "e", lazy.spawn("/usr/bin/emacs")), # use in case of problems
+    #Key([mR], "e", lazy.function(run_emacs)), # use in case of problems
+    Key([mR], "e", lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
+    Key([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),

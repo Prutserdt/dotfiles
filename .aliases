@@ -29,7 +29,7 @@ alias rm='rm -i'                # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
 alias mv='mv -i'                # Ask for permission, for safety
 alias u="echo Running the alias 'u':  sudo pacman -Syu && sudo pacman -Syu"  # pacman update
-#alias u="echo running an alias, piping to lolcat: sudo pacman -Syu | lolcat && script -qc 'sudo pacman -Syu' /dev/null | lolcat --freq=0.05 --spread=1000"  # pacman update
+#alias u="echo Running the alias 'u': sudo pacman -Syu --ignore virtualbox --ignore virtualbox-ext-oracle --ignore virtualbox-host-dkms && sudo pacman -Syu --ignore virtualbox --ignore virtualbox-ext-oracle --ignore virtualbox-host-dkms"  # pacman update for virtualbox image
 
 # Search
 alias h="history | fzf"             # Fuzzy find history
@@ -60,7 +60,8 @@ alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on host
 
 # emacs commandline
 alias em="/usr/bin/emacs -nw"
-alias emacs="emacsclient -c -a 'emacs'"  #emacs graphically
+#alias emacs="emacsclient -c -a 'emacs'"  # emacs graphically
+alias emacs="/usr/bin/emacs"  # In case of problems choose this option
 alias doomsync="~/.config/emacs/bin/doom sync"
 alias doomdoctor="~/.config/emacs/bin/doom doctor"
 alias doomupgrade="~/.config/emacs/bin/doom upgrade"
@@ -69,7 +70,6 @@ alias doompurge="~/.config/emacs/bin/doom purge"
 alias doomhelp="~/.config/emacs/bin/doom help"
 
 # Jump to directories
-alias db="cd $HOME/Stack/Documenten/Studie/MSQL_developer_LOI/Business_intelligence_en_databasetechnologie"
 alias dh="cd $HOME/"
 alias dc="cd $HOME/.config"
 alias dq="cd $HOME/.config/qtile"
@@ -78,7 +78,6 @@ alias ds="cd $HOME/Stack"
 alias da="cd $HOME/Stack/Afbeeldingen"
 alias dv="cd $HOME/Stack/Afbeeldingen/Vakantie"
 alias dw="cd $HOME/Stack/Afbeeldingen/Wallpapers"
-alias daa="cd $HOME/Stack/Documenten/Aandelen"
 alias dr="cd $HOME/qmk_firmware/keyboards/redox/keymaps/Prutserdt"
 alias dg="cd $HOME/qmk_firmware/keyboards/gergo/keymaps/Prutserdt"
 
