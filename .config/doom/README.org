@@ -595,8 +595,25 @@ This function will convert the content of the clipboard. It will change the comm
 ~Org-roam~ is a plain text knowledge management system that borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
 In the code block below the directory is set where the atomic files will be stored and also the dailies directory is set here.
 
+FIXME: rewrite this text:
 This Emacs configuration is used on three different systems. I am using system specific directories for org-roam and the following function automatically switch to the correct directory. 😀
+
+Here the correct directories are set including the daily sub directory, completion of the note titles everywhere and autosyncing the roam files to a sql database for very quick search results.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(use-package org-roam
+  :custom
+  (org-roam-directory (if (string-equal system-name "work")
+                         "~/Shared_directory/RoamNotes"
+                       "~/Stack/Command_line/RoamNotes"))
+  (org-roam-dailies-directory "daily/")
+  (org-roam-completion-everywhere t)
+  :config
+  (org-roam-db-autosync-enable))
+#+end_src
+
+
+FIXME: onderstaande verwijderen als bovenstaande aanpassing werkt voor al mijn systemen!
+#+BEGIN_SRC emacs-lisp
 (defvar my-roam-dir
   (cond
    ((string-equal (system-name) "linuxbox") "~/Stack/Command_line/RoamNotes")
@@ -605,8 +622,7 @@ This Emacs configuration is used on three different systems. I am using system s
    (t "~/Downloads"))) ; Default directory
 #+end_src
 
-Here the correct directories are set including the daily sub directory, completion of the note titles everywhere and autosyncing the roam files to a sql database for very quick search results.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+#+BEGIN_SRC emacs-lisp
 (use-package org-roam
   :custom
   (org-roam-directory "~/Stack/Command_line/RoamNotes")
@@ -615,6 +631,16 @@ Here the correct directories are set including the daily sub directory, completi
   :config
   (org-roam-db-autosync-enable))
 #+end_src
+
+
+
+
+
+
+
+
+
+
 
 For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as already set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent

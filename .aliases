@@ -60,8 +60,8 @@ alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on host
 
 # emacs commandline
 alias em="/usr/bin/emacs -nw"
-#alias emacs="emacsclient -c -a 'emacs'"  # emacs graphically
-alias emacs="/usr/bin/emacs"  # In case of problems choose this option
+#alias emacs="emacsclient -c -a 'emacs'"  # Works on my thinkpad
+alias emacs="/usr/bin/emacs"  # Works on my desktop
 alias doomsync="~/.config/emacs/bin/doom sync"
 alias doomdoctor="~/.config/emacs/bin/doom doctor"
 alias doomupgrade="~/.config/emacs/bin/doom upgrade"

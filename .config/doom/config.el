@@ -309,16 +309,11 @@
       (replace-match "\t" nil nil))
     (clipboard-kill-region (point-min) (point-max))))
 
-(defvar my-roam-dir
-  (cond
-   ((string-equal (system-name) "linuxbox") "~/Stack/Command_line/RoamNotes")
-   ((string-equal (system-name) "work") "~/Shared_directory/RoamNotes")
-   ((string-equal (system-name) "thinkpad") "~/Stack/Command_line/RoamNotes")
-   (t "~/Downloads"))) ; Default directory
-
 (use-package org-roam
   :custom
-  (org-roam-directory "~/Stack/Command_line/RoamNotes")
+  (org-roam-directory (if (string-equal system-name "work")
+                         "~/Shared_directory/RoamNotes"
+                       "~/Stack/Command_line/RoamNotes"))
   (org-roam-dailies-directory "daily/")
   (org-roam-completion-everywhere t)
   :config
