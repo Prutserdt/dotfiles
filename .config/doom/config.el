@@ -315,7 +315,6 @@
                          "~/Shared_directory/RoamNotes"
                        "~/Stack/Command_line/RoamNotes"))
   (org-roam-dailies-directory "daily/")
-  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (org-roam-completion-everywhere t)
   :config
   (org-roam-db-autosync-enable))
@@ -379,6 +378,7 @@ Brain shelve: %s.
 
 (defun my-open-latest-org-roam-daily ()
   (interactive)
+  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (let ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
     (when files
       (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-dailies-dir)))))

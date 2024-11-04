@@ -606,7 +606,6 @@ Here the correct directories are set including the daily sub directory, completi
                          "~/Shared_directory/RoamNotes"
                        "~/Stack/Command_line/RoamNotes"))
   (org-roam-dailies-directory "daily/")
-  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (org-roam-completion-everywhere t)
   :config
   (org-roam-db-autosync-enable))
@@ -684,6 +683,7 @@ This function will open the last org roam daily file based on the filename (YYYY
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-open-latest-org-roam-daily ()
   (interactive)
+  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (let ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
     (when files
       (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-dailies-dir)))))
@@ -699,25 +699,6 @@ FIXME: oude code checken of bovenstaande werkt en dan volgende verwijderen.
     (when files
       (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-daily-dir)))))
 #+end_src
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
