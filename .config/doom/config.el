@@ -232,7 +232,7 @@
         :desc "Find ref"                         "F" #'org-roam-ref-find
         :desc "Insert node"                      "i" #'org-roam-node-insert
         ;;:desc "Goto the last note"               "l" #'my-open-latest-org-roam-daily
-        :desc "Message: show roam dir info"      "m" #'my-show-org-roam-directory-info
+        :desc "Message: show roam dir info"      "m" #'my-org-roam-info
         :desc "Capture to node"                  "n" #'org-roam-capture
         ;;:desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
@@ -315,17 +315,10 @@
                          "~/Shared_directory/RoamNotes"
                        "~/Stack/Command_line/RoamNotes"))
   (org-roam-dailies-directory "daily/")
+  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (org-roam-completion-everywhere t)
   :config
   (org-roam-db-autosync-enable))
-
-(setq org-roam-dailies-capture-templates
-    (let ((head
-           (concat "#+title: %<%Y-%m-%d (%A)>\n"
-                    "* TODO van vandaag [/]\n")))
-         `(("a" "Aantekeningen van vandaag" entry
-           "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head (""))))))
 
 ;;(defun my-counsel-rg-roam-dir ()
 (defun my-search-roam-files ()
@@ -338,12 +331,11 @@
     (interactive)
     (counsel-find-file org-roam-directory))
 
-(defun my-show-org-roam-directory-info ()
+(defun my-org-roam-info ()
   "Show info of current org-roam dir and 'daily' subdirectory."
   (interactive)
-  (let* ((roam-dir org-roam-directory)
-         (daily-dir (expand-file-name "daily" roam-dir))
-         (all-files-roam (directory-files roam-dir nil))
+  (let* ((daily-dir (expand-file-name "daily" org-roam-directory))
+         (all-files-roam (directory-files org-roam-directory nil))
          (org-files-roam (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
          (non-org-files-roam (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
          (all-files-daily (directory-files daily-dir nil))
@@ -367,7 +359,7 @@
     ;; Calculate lines and words for org files in the main directory
     (dolist (file org-files-roam)
       (with-temp-buffer
-        (insert-file-contents (expand-file-name file roam-dir))
+        (insert-file-contents (expand-file-name file org-roam-directory))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
     (message "Statistics about my second brain 🤓.
@@ -380,17 +372,16 @@ Brain shelve: %s.
 |line numbers|  %5d |  %5d | %5d |
 |word count  | %5d | %5d | %5d |
 +------------+--------+--------+-------+"
-             roam-dir
+             org-roam-directory
              org-file-count-total org-file-count-roam org-file-count-daily
              (+ total-lines-org total-lines-daily) total-lines-org total-lines-daily
              (+ total-words-org total-words-daily) total-words-org total-words-daily)))
 
 (defun my-open-latest-org-roam-daily ()
   (interactive)
-  (let ((my-org-roam-daily-dir "~/Stack/Command_line/RoamNotes/daily/")
-        (files (directory-files "~/Stack/Command_line/RoamNotes/daily/" nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
+  (let ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
     (when files
-      (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-daily-dir)))))
+      (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-dailies-dir)))))
 
 (use-package! websocket
     :after org-roam)

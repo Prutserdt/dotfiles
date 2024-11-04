@@ -484,7 +484,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Find ref"                         "F" #'org-roam-ref-find
         :desc "Insert node"                      "i" #'org-roam-node-insert
         ;;:desc "Goto the last note"               "l" #'my-open-latest-org-roam-daily
-        :desc "Message: show roam dir info"      "m" #'my-show-org-roam-directory-info
+        :desc "Message: show roam dir info"      "m" #'my-org-roam-info
         :desc "Capture to node"                  "n" #'org-roam-capture
         ;;:desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
@@ -606,52 +606,11 @@ Here the correct directories are set including the daily sub directory, completi
                          "~/Shared_directory/RoamNotes"
                        "~/Stack/Command_line/RoamNotes"))
   (org-roam-dailies-directory "daily/")
+  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (org-roam-completion-everywhere t)
   :config
   (org-roam-db-autosync-enable))
 #+end_src
-
-
-FIXME: onderstaande verwijderen als bovenstaande aanpassing werkt voor al mijn systemen!
-#+BEGIN_SRC emacs-lisp
-(defvar my-roam-dir
-  (cond
-   ((string-equal (system-name) "linuxbox") "~/Stack/Command_line/RoamNotes")
-   ((string-equal (system-name) "work") "~/Shared_directory/RoamNotes")
-   ((string-equal (system-name) "thinkpad") "~/Stack/Command_line/RoamNotes")
-   (t "~/Downloads"))) ; Default directory
-#+end_src
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-roam
-  :custom
-  (org-roam-directory "~/Stack/Command_line/RoamNotes")
-  (org-roam-dailies-directory "daily/")
-  (org-roam-completion-everywhere t)
-  :config
-  (org-roam-db-autosync-enable))
-#+end_src
-
-
-
-
-
-
-
-
-
-
-
-For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as already set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(setq org-roam-dailies-capture-templates
-    (let ((head
-           (concat "#+title: %<%Y-%m-%d (%A)>\n"
-                    "* TODO van vandaag [/]\n")))
-         `(("a" "Aantekeningen van vandaag" entry
-           "* %<%H:%M> %?"
-           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head (""))))))
-#+END_SRC
 
 To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -672,12 +631,11 @@ The amount of hits of the function described above can be overwhelming sometimes
 
 Show information about the org-roam files and list the amount of org files, the amount of lines and words in the org-roam directory and daily subdirectory as well.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-show-org-roam-directory-info ()
+(defun my-org-roam-info ()
   "Show info of current org-roam dir and 'daily' subdirectory."
   (interactive)
-  (let* ((roam-dir org-roam-directory)
-         (daily-dir (expand-file-name "daily" roam-dir))
-         (all-files-roam (directory-files roam-dir nil))
+  (let* ((daily-dir (expand-file-name "daily" org-roam-directory))
+         (all-files-roam (directory-files org-roam-directory nil))
          (org-files-roam (cl-remove-if-not #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
          (non-org-files-roam (cl-remove-if #'(lambda (file) (string-match-p "\\.org$" file)) all-files-roam))
          (all-files-daily (directory-files daily-dir nil))
@@ -701,7 +659,7 @@ Show information about the org-roam files and list the amount of org files, the 
     ;; Calculate lines and words for org files in the main directory
     (dolist (file org-files-roam)
       (with-temp-buffer
-        (insert-file-contents (expand-file-name file roam-dir))
+        (insert-file-contents (expand-file-name file org-roam-directory))
         (setq total-lines-org (+ total-lines-org (count-lines (point-min) (point-max))))
         (setq total-words-org (+ total-words-org (count-words (point-min) (point-max))))))
     (message "Statistics about my second brain 🤓.
@@ -714,14 +672,26 @@ Brain shelve: %s.
 |line numbers|  %5d |  %5d | %5d |
 |word count  | %5d | %5d | %5d |
 +------------+--------+--------+-------+"
-             roam-dir
+             org-roam-directory
              org-file-count-total org-file-count-roam org-file-count-daily
              (+ total-lines-org total-lines-daily) total-lines-org total-lines-daily
              (+ total-words-org total-words-daily) total-words-org total-words-daily)))
 #+END_SRC
 
 This function will open the last org roam daily file based on the filename (YYYY-MM-DD).
+
+
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-open-latest-org-roam-daily ()
+  (interactive)
+  (let ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
+    (when files
+      (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-dailies-dir)))))
+#+end_src
+
+
+FIXME: oude code checken of bovenstaande werkt en dan volgende verwijderen.
+#+BEGIN_SRC emacs-lisp
 (defun my-open-latest-org-roam-daily ()
   (interactive)
   (let ((my-org-roam-daily-dir "~/Stack/Command_line/RoamNotes/daily/")
@@ -729,6 +699,32 @@ This function will open the last org roam daily file based on the filename (YYYY
     (when files
       (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-daily-dir)))))
 #+end_src
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ** Org-Roam-ui configuration
 ~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes and therefore a websocket package is needed.
@@ -855,6 +851,8 @@ Open my Arduino PowerStrike README.org file.
 #+END_SRC
 
 *** Miscelaneous
+NOTE: nomineren om te verwijderen dit:
+
 The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github source and overwrites the local README.org Emacs config file. Before the overwrite, it creates a backup of the current local README.org file with a timestamp in the filename so it is easy to revert back.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-emacs-config-download-overwrite ()

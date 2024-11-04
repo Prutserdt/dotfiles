@@ -1362,6 +1362,7 @@ A script to quickly open a file in emacs. I want to use emacs by using emacsclie
 #+BEGIN_SRC bash :tangle run_emacs.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
 
+notify-send -t 60000 "script gestart... als ik dit lees gaat iets mis...."
 # Get the hostname
 hostname=$(uname -n)
 
@@ -1373,13 +1374,14 @@ else
     # Check the hostname and start Emacs accordingly
     if [[ "$hostname" == "work" || "$hostname" == "thinkpad" ]]; then
         notify-send -t 60000 "Emacs is not running, starting the daemon followed by emacsclient"
-        /usr/bin/emacs --daemon
-        emacsclient -c -n
+        #/usr/bin/emacs --daemon
+        #emacsclient -c -n
+        emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
     elif [[ "$hostname" == "linuxbox" ]]; then
         #FIXME: dit werkt op mijn linuxbox, /usr/bin/emacs
         notify-send -t 60000 "Linuxbox. Emacs is not running, starting emacsclient"
-        /usr/bin/emacs --daemon  # Works on my desktop
-        emacsclient -c -n        # Works on my desktop
+        /usr/bin/emacs
+        #emacsclient -c -n        # Works on my desktop
     fi
 fi
 #+END_SRC
