@@ -16,7 +16,7 @@
   - [[#custom-keybindings][Custom keybindings]]
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
-  - [[#org-roam-ui-configuration][Org-Roam-ui configuration]]
+  - [[#org-roam-ui-configuration][Org-roam-ui configuration]]
   - [[#custom-code][Custom code]]
   - [[#inserting-characters-words-and-strings][Inserting characters, words and strings]]
   - [[#splash-screen][Splash screen]]
@@ -180,9 +180,6 @@ Elisp is parentheses galore! The package rainbow-delimiters is matching the colo
 
 A *superior* font is set here.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;; FIXME: if the error is solved on all of my systems then this can be removed
-;;(set-frame-font "Hack 12" t t) ;; This line was causing
-;;https://discourse.doomemacs.org/t/tiny-display-when-starting-doom-solved/3534
 (set-face-attribute 'default nil :height 130)
 (setq default-frame-alist '((font . "Hack 13")))
 #+END_SRC
@@ -559,7 +556,7 @@ A function to copy an org-table at point and make it in the right format (tab se
     (my-convert-comma-to-tab-in-clipboard))
 #+end_src
 
-This function will convert the content of the clipboard from a tab separated format (excel data) to an org-table format (adding | characters). This is particular handy for copying data from excel to org-mode. FIXME: not working perfectly, it adds one line at the bottom containing (| |), not a big problem but should be solved.
+This function will convert the content of the clipboard from a tab separated format (excel data) to an org-table format (adding | characters). This is particular handy for copying data from excel to org-mode. FIXME: this is not working perfectly at the moment since it adds one line at the bottom containing (| |), not a big problem but should be solved.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-convert-tabs-to-org-table-in-clipboard ()
   "Convert tabs to org table format in clipboard contents."
@@ -593,12 +590,20 @@ This function will convert the content of the clipboard. It will change the comm
 
 ** Org-roam configuration
 ~Org-roam~ is a plain text knowledge management system that borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
-In the code block below the directory is set where the atomic files will be stored and also the dailies directory is set here.
 
-FIXME: rewrite this text:
-This Emacs configuration is used on three different systems. I am using system specific directories for org-roam and the following function automatically switch to the correct directory. 😀
+For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as already set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(setq org-roam-dailies-capture-templates
+    (let ((head
+           (concat "#+title: %<%Y-%m-%d (%A)>\n"
+                    "* TODO van vandaag [/]\n")))
+         `(("a" "Aantekeningen van vandaag" entry
+           "* %<%H:%M> %?"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head (""))))))
+#+END_SRC
 
-Here the correct directories are set including the daily sub directory, completion of the note titles everywhere and autosyncing the roam files to a sql database for very quick search results.
+In the code block below the directory is set where the atomic files will be stored and also the dailies directory is set here. This Emacs configuration is used on several systems. I am using system a specific directory at work and my other systems are using another directory.
+Also the daily sub directory is set and auto-completion of the note titles everywhere and autosyncing the roam files to a sql database for swift search results.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package org-roam
   :custom
@@ -678,8 +683,6 @@ Brain shelve: %s.
 #+END_SRC
 
 This function will open the last org roam daily file based on the filename (YYYY-MM-DD).
-
-
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-open-latest-org-roam-daily ()
   (interactive)
@@ -689,25 +692,7 @@ This function will open the last org roam daily file based on the filename (YYYY
       (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-dailies-dir)))))
 #+end_src
 
-
-FIXME: oude code checken of bovenstaande werkt en dan volgende verwijderen.
-#+BEGIN_SRC emacs-lisp
-(defun my-open-latest-org-roam-daily ()
-  (interactive)
-  (let ((my-org-roam-daily-dir "~/Stack/Command_line/RoamNotes/daily/")
-        (files (directory-files "~/Stack/Command_line/RoamNotes/daily/" nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
-    (when files
-      (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-daily-dir)))))
-#+end_src
-
-
-
-
-
-
-
-
-** Org-Roam-ui configuration
+** Org-roam-ui configuration
 ~org-roam-ui~ is a graphical front end for org-roam. It will open a browser for exploring and interacting with your org-roam notes and therefore a websocket package is needed.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (use-package! websocket
@@ -832,8 +817,6 @@ Open my Arduino PowerStrike README.org file.
 #+END_SRC
 
 *** Miscelaneous
-NOTE: nomineren om te verwijderen dit:
-
 The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github source and overwrites the local README.org Emacs config file. Before the overwrite, it creates a backup of the current local README.org file with a timestamp in the filename so it is easy to revert back.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-emacs-config-download-overwrite ()

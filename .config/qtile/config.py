@@ -142,7 +142,7 @@ keys = [
     #Key([mR], "e", lazy.spawn("/usr/bin/emacs")), # use in case of problems
     #Key([mR], "e", lazy.function(run_emacs)), # use in case of problems
     Key([mR], "e", lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
-    Key([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
+    #Key([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key([mR], "f", lazy.spawn("firefox")),
     Key([mR], "g", lazy.spawn("gimp")),
     Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),

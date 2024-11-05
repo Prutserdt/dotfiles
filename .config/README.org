@@ -1361,8 +1361,6 @@ esac
 A script to quickly open a file in emacs. I want to use emacs by using emacsclient. This should first check if =emacs --daemon= is running and if so then run =emacsclient -c -n=.
 #+BEGIN_SRC bash :tangle run_emacs.sh :padline no :eval no :tangle-mode (identity #o755)
 #!/bin/bash
-
-notify-send -t 60000 "script gestart... als ik dit lees gaat iets mis...."
 # Get the hostname
 hostname=$(uname -n)
 
@@ -1378,7 +1376,6 @@ else
         #emacsclient -c -n
         emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
     elif [[ "$hostname" == "linuxbox" ]]; then
-        #FIXME: dit werkt op mijn linuxbox, /usr/bin/emacs
         notify-send -t 60000 "Linuxbox. Emacs is not running, starting emacsclient"
         /usr/bin/emacs
         #emacsclient -c -n        # Works on my desktop
@@ -1386,6 +1383,7 @@ else
 fi
 #+END_SRC
 
+alias emacs="/usr/bin/emacs"  # Works on my desktop
 FIXME: Volgende even bewaren, en als alles werkt op al mijn systemen dan pas weghalen.
 #+BEGIN_SRC bash
 #!/bin/bash

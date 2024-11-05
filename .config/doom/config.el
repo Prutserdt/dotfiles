@@ -5,9 +5,6 @@
 
 (use-package rainbow-delimiters)
 
-;; FIXME: if the error is solved on all of my systems then this can be removed
-;;(set-frame-font "Hack 12" t t) ;; This line was causing
-;;https://discourse.doomemacs.org/t/tiny-display-when-starting-doom-solved/3534
 (set-face-attribute 'default nil :height 130)
 (setq default-frame-alist '((font . "Hack 13")))
 
@@ -308,6 +305,14 @@
     (while (search-forward "," nil t)
       (replace-match "\t" nil nil))
     (clipboard-kill-region (point-min) (point-max))))
+
+(setq org-roam-dailies-capture-templates
+    (let ((head
+           (concat "#+title: %<%Y-%m-%d (%A)>\n"
+                    "* TODO van vandaag [/]\n")))
+         `(("a" "Aantekeningen van vandaag" entry
+           "* %<%H:%M> %?"
+           :if-new (file+head+olp "%<%Y-%m-%d>.org" ,head (""))))))
 
 (use-package org-roam
   :custom

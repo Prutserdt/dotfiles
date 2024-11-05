@@ -1,6 +1,4 @@
 #!/bin/bash
-
-notify-send -t 60000 "script gestart... als ik dit lees gaat iets mis...."
 # Get the hostname
 hostname=$(uname -n)
 
@@ -16,7 +14,6 @@ else
         #emacsclient -c -n
         emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
     elif [[ "$hostname" == "linuxbox" ]]; then
-        #FIXME: dit werkt op mijn linuxbox, /usr/bin/emacs
         notify-send -t 60000 "Linuxbox. Emacs is not running, starting emacsclient"
         /usr/bin/emacs
         #emacsclient -c -n        # Works on my desktop
