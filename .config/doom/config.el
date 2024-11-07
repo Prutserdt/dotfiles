@@ -86,6 +86,8 @@
 
 (defvar modeline-hidden nil)
 
+(setq-default mode-line-format (default-value 'mode-line-format))
+
 (defun my-distractionfree-toggle ()
   (interactive)
 
@@ -97,13 +99,9 @@
       (setq fill-column 140)
       (setq fill-column 110))
 
-  (if modeline-hidden
-      (progn
-        (setq modeline-hidden nil)
-        (set-window-parameter nil 'mode-line-format t))
-    (progn
-      (setq modeline-hidden t)
-      (set-window-parameter nil 'mode-line-format 'none))))
+  (if (equal mode-line-format nil)
+      (setq mode-line-format (default-value 'mode-line-format))
+    (setq mode-line-format nil)))
 
 (setq! evil-want-Y-yank-to-eol nil)
 
