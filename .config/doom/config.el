@@ -194,6 +194,7 @@
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
+        :desc "Keyboard reset"                   "k" #'my-keyboard-reset
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
@@ -517,7 +518,8 @@ Brain shelve: %s.
 (defun my-keyboard-reset ()
   "Right meta/super/control for my Sweep keyboard. Plus quick key repeats."
   (interactive)
-  (shell-command "e && k && notify-send -t 6000 'The keyboard was reset by Emacs'"))
+  (comint-send-string (get-buffer-process (shell)) "e\nk\nexit\n")
+  (kill-buffer (current-buffer)))
 
 (defun my-redox-directory ()
   "Open the keymap.c file of my Redox qmk firmware."

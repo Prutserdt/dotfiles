@@ -52,7 +52,7 @@ NOTES: some packages that should be installed on the system are, =python-pytest=
 
 (doom! :completion
        company             ; the ultimate code completion backend
-;;     vertico             ; the search engine of the future
+       ;;(vertico +icons)    ; the search engine of the future
        (ivy +childframe)   ; a search engine for love and life
 
        :ui
@@ -61,6 +61,7 @@ NOTES: some packages that should be installed on the system are, =python-pytest=
        (emoji +unicode)    ; ð
        hl-todo             ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        modeline            ; snazzy, Atom-inspired modeline, plus API
+       nav-flash           ; blink the current line after jumping
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
@@ -83,16 +84,20 @@ NOTES: some packages that should be installed on the system are, =python-pytest=
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-
+       ;;grammar           ; tasing grammar mistake every you make
        :tools
        debugger            ; stepping through code, to help you add bugs
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
+       pdf                          ; pdf enhancements
        lsp                 ; M-x vscode
 
        :lang
        emacs-lisp          ; drown in parentheses
-       (org +pretty +roam2); organize your plain life in plain text
+       (org                ; organize your plain life in plain text
+        +pretty            ; pretty is better than ugly
+        +roam2             ; wander around notes
+        +dragndrop)         ; drop files/images into org
        (python +lsp +pyenv); beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
@@ -233,6 +238,7 @@ By setting the line numbers to relative it makes jumping in texts easier, allowi
 #+END_SRC
 
 To remember the current state (normal, insert or visual mode), we can customize the line number colors using Emacs Lisp. Here's the code that sets the line number color based on the Evil state. Also the line colors are changed when scratch.org is displayed to stand out from other buffers. I am giving the colors a name so that they can be used elsewhere.
+A side note: for some reason I sometimes trigger "emacs state" accidentally. This can be escaped by M-x =evil-exit-emacs-state= or C-z.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defvar my-color-visual-state    "#765825") ;; dark yellow brown
 (defvar my-color-insert-state    "#3e6752") ;; pale grey green
@@ -453,6 +459,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
         :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
         :desc "Insert key words"                 "i" #'my-insert-characters-and-text
+        :desc "Keyboard reset"                   "k" #'my-keyboard-reset
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
@@ -873,7 +880,8 @@ Remap my keyboard with xmodmap. Right now I'm running two shell aliases.
 (defun my-keyboard-reset ()
   "Right meta/super/control for my Sweep keyboard. Plus quick key repeats."
   (interactive)
-  (shell-command "e && k && notify-send -t 6000 'The keyboard was reset by Emacs'"))
+  (comint-send-string (get-buffer-process (shell)) "e\nk\nexit\n")
+  (kill-buffer (current-buffer)))
 #+END_SRC
 
 Open my Redox keyboard QMK directory.
@@ -955,7 +963,7 @@ A useless but pretty Emacs welcome screen is created including an image and some
 #+END_SRC
 
 A function is created to make a special keymap for the splash screen.
-For reference: the default doom-dashboard can be found here: =~/.emacs.d/modules/ui/doom-dashboard/config.el=.
+For reference: the default doom-dashboard can be found here: =~/.config/emacs/modules/ui/doom-dashboard/config.el=.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun +doom-dashboard-setup-modified-keymap ()
   (setq +doom-dashboard-mode-map (make-sparse-keymap))
