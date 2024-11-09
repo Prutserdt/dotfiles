@@ -17,7 +17,14 @@
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-roam-ui configuration]]
-  - [[#custom-functions][Custom functions]]
+  - [[#layout-with-messages-and-scratch-buffers][Layout with messages and scratch buffers]]
+  - [[#esp32-arduino-and-serial-communication][ESP32, Arduino and serial communication]]
+  - [[#download-emacs-configuration][Download Emacs configuration]]
+  - [[#nsxiv-create-org-link-to-open-pictures-via-a-shell-script][NSXIV: create org link to open pictures via a shell script]]
+  - [[#thunar-link-to-cloud][Thunar, link to cloud]]
+  - [[#show-asset-allocation][Show asset allocation]]
+  - [[#keyboard-functions][Keyboard functions]]
+  - [[#remove-pdf-password][Remove pdf password]]
   - [[#inserting-characters-words-and-strings][Inserting characters, words and strings]]
   - [[#splash-screen][Splash screen]]
 - [[#code-snippets][Code snippets]]
@@ -580,7 +587,7 @@ This function will convert the content of the clipboard. It will change the comm
 ** Org-roam configuration
 ~Org-roam~ is a plain text knowledge management system that borrows principles from the Zettelkasten method, providing a solution for non-hierarchical note-taking. It should also work as a plug-and-play solution for anyone already using Org-mode for their personal wiki.
 
-For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as already set in the previous code block, and the notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
+For quick daily notes and a TODO list I am using roam-dailies and in the next code block two templates are created that are helping to write notes/TODOS. This is based on [[https://org-roam.discourse.group/t/daily-task-management-with-org-agenda-and-org-roam-dailies/989/16][a thread]]. My daily notes are written in the =/daily= directory in =RoamNotes=, as set in the code block below this one. The daily notes are placed in an org file with the name of the day, for example /2025-01-30.org/.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-roam-dailies-capture-templates
     (let ((head
@@ -698,8 +705,7 @@ Now that the websocket is setup the org-roam-ui can be set.
           org-roam-ui-open-on-start t))
 #+END_SRC
 
-** Custom functions
-*** Window toggling
+** Layout with messages and scratch buffers
 I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window, =my-toggle-window-layout= does exactly that.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-toggle-hacking-layout ()
@@ -725,7 +731,7 @@ I want to quickly switch back and forth to my hacking layout. It puts the curren
         (doom/window-maximize-buffer))))
 #+end_src
 
-*** ESP32, Arduino and serial communication
+** ESP32, Arduino and serial communication
 The following code will open ttyUSB0 and gives the options to cycle through baudrates.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defvar data-bits nil
@@ -804,7 +810,7 @@ Open my Arduino PowerStrike README.org file.
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 #+END_SRC
 
-*** Download Emacs configuration
+** Download Emacs configuration
 The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github and overwrites the local README.org Emacs config file and creates a backup with  a timestamp in the filename.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-emacs-config-download-overwrite ()
@@ -821,7 +827,7 @@ The =my-emacs-config-download-overwrite= function in the code snippet below is a
       (message "Operation aborted"))))
 #+end_src
 
-*** NSXIV: create org link to open pictures via a shell script
+** NSXIV: create org link to open pictures via a shell script
 This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates links in an Org document to display images of subdirectories specified by the user. It will only include subdirectories containing image files (JPEG, JPG, PNG, GIF). The function goes through each subdirectory, checks for image files, and generates org links that will run a shell script that runs nsxiv to view the images.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-generate-org-links-to-pictures-subdir (dir)
@@ -836,7 +842,7 @@ This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates li
         (insert (concat "[[shell: cd " subdir "; find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' | sort | nsxiv -ftio][" last-dir "]]\n"))))))
 #+end_src
 
-*** Thunar, link to cloud
+** Thunar, link to cloud
 Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be in the =myThunarCloud= textfile of course 😀.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-thunar-cloud-connection ()
@@ -847,7 +853,7 @@ Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be i
   (shell-command (string-trim (buffer-string)))))
 #+END_SRC
 
-*** Show asset allocation
+** Show asset allocation
 Show a map of my asset allocation in time by running a Python script.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-asset-allocation-in-time ()
@@ -861,7 +867,7 @@ Show a map of my asset allocation in time by running a Python script.
     (message (concat "Python script executed: " script-path))))
 #+END_SRC
 
-*** Keyboard functions
+** Keyboard functions
 Remap my keyboard with xmodmap. Right now I'm running two shell aliases.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-keyboard-reset ()
@@ -886,7 +892,7 @@ Open my =keymap.c= file of my redox keyboard.
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 #+END_SRC
 
-*** Remove pdf password
+** Remove pdf password
 Sometimes pdf files are password protected and it should be removed. The following will help to find the pdf and will save it as *_password_removed.pdf.
 #+begin_src emacs-lisp
 (defun my-pdf-password-removal ()
