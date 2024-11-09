@@ -210,10 +210,8 @@
         (:prefix ("d" . "dailies")
             :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
             :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
-            ;;:desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
             :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
-            ;;:desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
             :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
             :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
@@ -226,16 +224,12 @@
         :desc "Find node"                        "f" #'org-roam-node-find
         :desc "Find ref"                         "F" #'org-roam-ref-find
         :desc "Insert node"                      "i" #'org-roam-node-insert
-        ;;:desc "Goto the last note"               "l" #'my-open-latest-org-roam-daily
         :desc "Message: show roam dir info"      "m" #'my-org-roam-info
         :desc "Capture to node"                  "n" #'org-roam-capture
-        ;;:desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search text"                      "s" #'my-search-roam-files
         :desc "Search filename"                  "S" #'my-search-roam-filename
-        ;;:desc "Goto today"                       "t" #'org-roam-dailies-goto-today
-        ;;:desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
@@ -255,8 +249,6 @@
 (setq org-hide-emphasis-markers t)
 (setq org-ellipsis "⚡⚡⚡")
 (setq org-startup-with-inline-images t)
-;;(setq org-hide-block-startup t)
-;;(setq org-startup-folded "fold")
 (setq org-hidden-keywords '(title))
 
 (use-package org-auto-tangle
@@ -264,7 +256,6 @@
   :defer t
   :hook (org-mode . org-auto-tangle-mode))
 
-;;(defun my-export-org-table-as-csv-and-copy ()
 (defun my-export-org-table-to-system-clipboard ()
   "Export the org-mode table at point as a CSV file in system memory and copy to clipboard."
   (interactive)
@@ -322,7 +313,6 @@
   :config
   (org-roam-db-autosync-enable))
 
-;;(defun my-counsel-rg-roam-dir ()
 (defun my-search-roam-files ()
     "Search using `counsel-rg` in the set org-roam-directory."
     (interactive)
@@ -334,7 +324,7 @@
     (counsel-find-file org-roam-directory))
 
 (defun my-org-roam-info ()
-  "Show info of current org-roam dir and 'daily' subdirectory."
+  "Show info of current org-roam dir and `daily` subdirectory."
   (interactive)
   (let* ((daily-dir (expand-file-name "daily" org-roam-directory))
          (all-files-roam (directory-files org-roam-directory nil))
@@ -398,7 +388,7 @@ Brain shelve: %s.
           org-roam-ui-open-on-start t))
 
 (defun my-toggle-hacking-layout ()
-  "Toggle between a complex hacking layout and a simpler single buffer layout."
+  "Toggle between a single buffer screen and layout with message window and scratch buffer."
   (interactive)
   (if (= (count-windows) 1)
       (progn
@@ -484,41 +474,28 @@ Brain shelve: %s.
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 
 (defun my-emacs-config-download-overwrite ()
-;; Downloads and overwrites my local Emacs README.org file with my Github verstion and asks for confirmation and makes a backup file.
+  "Use Github version of my Doom Emacs config, the README.org, and make backup."
   (interactive)
-  ;; Define file paths for the current local README.org, backup README.org, and online README.org
   (let ((current-readme-org "~/.config/doom/README.org")
         (backup-readme-org (concat "~/.config/doom/README_" (format-time-string "%Y-%m-%d") ".org"))
-        (online-readme-org "https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/README.org"))
-    ;; Ask for confirmation before overwriting the local README.org file
+        (online-readme-org "https://raw.githubusercontent.com/Prutserdt/dotfiles/refs/heads/master/.config/doom/README.org"))
     (if (yes-or-no-p "Are you sure you want to overwrite README.org? ")
         (progn
-          ;; Create a backup of the current local README.org file with a timestamp in the filename
           (copy-file current-readme-org backup-readme-org t)
-          ;; Download and overwrite the local README.org file with the one from GitHub
           (url-copy-file online-readme-org current-readme-org t)
-          ;; Display a message indicating that README.org has been updated and the backup file has been saved
           (message "README.org updated and backup saved as %s" backup-readme-org))
-      ;; Display a message indicating that the operation has been aborted
       (message "Operation aborted"))))
 
 (defun my-generate-org-links-to-pictures-subdir (dir)
-  "Create Org-mode links for displaying images in `nsxiv` of subdirectories chosen."
+  "Create Org-mode links for displaying images in `nsxiv` of subdirectories."
   (interactive "DDirectory: ")
-  ;; Filter out non-hidden subdirectories in the specified directory
   (dolist (subdir (seq-filter 'file-directory-p (directory-files dir t "^[^.].*\\.?$")))
-    ;; Check if the subdirectory contains image files (JPEG, JPG, PNG, GIF)
     (when (seq-find (lambda (f) (member (file-name-extension f) '("jpeg" "jpg" "png" "gif")))
                     (directory-files subdir t "^[^.].*\\(jpeg\\|jpg\\|png\\|gif\\)$"))
       ;; Extract the last directory name from the full path, used for the hyperlink
       (let ((last-dir (file-name-nondirectory (directory-file-name subdir))))
         ;; Insert an Org-mode link with a shell command to display images using `nsxiv`
         (insert (concat "[[shell: cd " subdir "; find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' | sort | nsxiv -ftio][" last-dir "]]\n"))))))
-
-(defun my-keyboard-reset ()
-  "Change Esc/caps, right mod, right alt, for my redox keyboard."
-  (interactive)
-  (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
 
 (defun my-thunar-cloud-connection ()
   "Connect my cloud to Thunar filebrowser."
@@ -536,6 +513,11 @@ Brain shelve: %s.
     (shell-command (concat "python3 " script-path)
                    "*Python Output*")
     (message (concat "Python script executed: " script-path))))
+
+(defun my-keyboard-reset ()
+  "Right meta/super/control for my Sweep keyboard. Plus quick key repeats."
+  (interactive)
+  (shell-command "e && k && notify-send -t 6000 'The keyboard was reset by Emacs'"))
 
 (defun my-redox-directory ()
   "Open the keymap.c file of my Redox qmk firmware."

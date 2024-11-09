@@ -17,7 +17,7 @@
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-roam-ui configuration]]
-  - [[#custom-code][Custom code]]
+  - [[#custom-functions][Custom functions]]
   - [[#inserting-characters-words-and-strings][Inserting characters, words and strings]]
   - [[#splash-screen][Splash screen]]
 - [[#code-snippets][Code snippets]]
@@ -462,10 +462,8 @@ The following are keybindings that are bound to my leader key, which is =space=,
         (:prefix ("d" . "dailies")
             :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
             :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
-            ;;:desc "Goto previous note"           "b" #'org-roam-dailies-goto-previous-note
             :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
-            ;;:desc "Goto next note"               "f" #'org-roam-dailies-goto-next-note
             :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
             :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
@@ -478,16 +476,12 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Find node"                        "f" #'org-roam-node-find
         :desc "Find ref"                         "F" #'org-roam-ref-find
         :desc "Insert node"                      "i" #'org-roam-node-insert
-        ;;:desc "Goto the last note"               "l" #'my-open-latest-org-roam-daily
         :desc "Message: show roam dir info"      "m" #'my-org-roam-info
         :desc "Capture to node"                  "n" #'org-roam-capture
-        ;;:desc "Select dailies calendar"          "o" #'org-roam-dailies-goto-date
         :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
         :desc "Search text"                      "s" #'my-search-roam-files
         :desc "Search filename"                  "S" #'my-search-roam-filename
-        ;;:desc "Goto today"                       "t" #'org-roam-dailies-goto-today
-        ;;:desc "Capture today"                    "T" #'org-roam-dailies-capture-today
         :desc "UI in browser"                    "u" #'org-roam-ui-mode))
 #+end_src
 
@@ -524,8 +518,6 @@ Some preferences that I like: hide the emphasis markup for: /italic/, *bold*, ~c
 (setq org-hide-emphasis-markers t)
 (setq org-ellipsis "⚡⚡⚡")
 (setq org-startup-with-inline-images t)
-;;(setq org-hide-block-startup t)
-;;(setq org-startup-folded "fold")
 (setq org-hidden-keywords '(title))
 #+END_SRC
 
@@ -539,7 +531,6 @@ Automatically tangling by the org-auto-tangle package.
 
 A function to copy an org-table at point and make it in the right format (tab separated columns) to be pasted into excel. First the table is converted and saved as a csv file to a temporary RAM file, pasted into the clipboard in csv format and then converted to be tab separated.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;;(defun my-export-org-table-as-csv-and-copy ()
 (defun my-export-org-table-to-system-clipboard ()
   "Export the org-mode table at point as a CSV file in system memory and copy to clipboard."
   (interactive)
@@ -616,7 +607,6 @@ Also the daily sub directory is set and auto-completion of the note titles every
 
 To perform a quick word search through all of my notes I use the rip-grep (rg) package called counsel-rg and I set it up to search through the RoamNotes directory.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;;(defun my-counsel-rg-roam-dir ()
 (defun my-search-roam-files ()
     "Search using `counsel-rg` in the set org-roam-directory."
     (interactive)
@@ -634,7 +624,7 @@ The amount of hits of the function described above can be overwhelming sometimes
 Show information about the org-roam files and list the amount of org files, the amount of lines and words in the org-roam directory and daily subdirectory as well.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-org-roam-info ()
-  "Show info of current org-roam dir and 'daily' subdirectory."
+  "Show info of current org-roam dir and `daily` subdirectory."
   (interactive)
   (let* ((daily-dir (expand-file-name "daily" org-roam-directory))
          (all-files-roam (directory-files org-roam-directory nil))
@@ -708,12 +698,12 @@ Now that the websocket is setup the org-roam-ui can be set.
           org-roam-ui-open-on-start t))
 #+END_SRC
 
-** Custom code
+** Custom functions
 *** Window toggling
 I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window, =my-toggle-window-layout= does exactly that.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-toggle-hacking-layout ()
-  "Toggle between a complex hacking layout and a simpler single buffer layout."
+  "Toggle between a single buffer screen and layout with message window and scratch buffer."
   (interactive)
   (if (= (count-windows) 1)
       (progn
@@ -814,37 +804,30 @@ Open my Arduino PowerStrike README.org file.
   (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 #+END_SRC
 
-*** Miscelaneous
-The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github source and overwrites the local README.org Emacs config file. Before the overwrite, it creates a backup of the current local README.org file with a timestamp in the filename so it is easy to revert back.
+*** Download Emacs configuration
+The =my-emacs-config-download-overwrite= function in the code snippet below is an interactive Emacs Lisp function that downloads my README.org file from Github and overwrites the local README.org Emacs config file and creates a backup with  a timestamp in the filename.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-emacs-config-download-overwrite ()
-;; Downloads and overwrites my local Emacs README.org file with my Github verstion and asks for confirmation and makes a backup file.
+  "Use Github version of my Doom Emacs config, the README.org, and make backup."
   (interactive)
-  ;; Define file paths for the current local README.org, backup README.org, and online README.org
   (let ((current-readme-org "~/.config/doom/README.org")
         (backup-readme-org (concat "~/.config/doom/README_" (format-time-string "%Y-%m-%d") ".org"))
-        (online-readme-org "https://github.com/Prutserdt/dotfiles/blob/master/.config/doom/README.org"))
-    ;; Ask for confirmation before overwriting the local README.org file
+        (online-readme-org "https://raw.githubusercontent.com/Prutserdt/dotfiles/refs/heads/master/.config/doom/README.org"))
     (if (yes-or-no-p "Are you sure you want to overwrite README.org? ")
         (progn
-          ;; Create a backup of the current local README.org file with a timestamp in the filename
           (copy-file current-readme-org backup-readme-org t)
-          ;; Download and overwrite the local README.org file with the one from GitHub
           (url-copy-file online-readme-org current-readme-org t)
-          ;; Display a message indicating that README.org has been updated and the backup file has been saved
           (message "README.org updated and backup saved as %s" backup-readme-org))
-      ;; Display a message indicating that the operation has been aborted
       (message "Operation aborted"))))
 #+end_src
 
-This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates links in an Org document to display images in subdirectories specified by the user. It will only include subdirectories containing image files (JPEG, JPG, PNG, GIF). The function goes through each subdirectory, checks for image files, and generates a link for displaying them in nsxiv image viewer.
+*** NSXIV: create org link to open pictures via a shell script
+This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates links in an Org document to display images of subdirectories specified by the user. It will only include subdirectories containing image files (JPEG, JPG, PNG, GIF). The function goes through each subdirectory, checks for image files, and generates org links that will run a shell script that runs nsxiv to view the images.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-generate-org-links-to-pictures-subdir (dir)
-  "Create Org-mode links for displaying images in `nsxiv` of subdirectories chosen."
+  "Create Org-mode links for displaying images in `nsxiv` of subdirectories."
   (interactive "DDirectory: ")
-  ;; Filter out non-hidden subdirectories in the specified directory
   (dolist (subdir (seq-filter 'file-directory-p (directory-files dir t "^[^.].*\\.?$")))
-    ;; Check if the subdirectory contains image files (JPEG, JPG, PNG, GIF)
     (when (seq-find (lambda (f) (member (file-name-extension f) '("jpeg" "jpg" "png" "gif")))
                     (directory-files subdir t "^[^.].*\\(jpeg\\|jpg\\|png\\|gif\\)$"))
       ;; Extract the last directory name from the full path, used for the hyperlink
@@ -853,14 +836,7 @@ This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates li
         (insert (concat "[[shell: cd " subdir "; find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' | sort | nsxiv -ftio][" last-dir "]]\n"))))))
 #+end_src
 
-Remap my keyboard with xmodmap
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-keyboard-reset ()
-  "Change Esc/caps, right mod, right alt, for my redox keyboard."
-  (interactive)
-  (shell-command "xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/rdxswitch && xmodmap $HOME/.config/kbswitch && xset r rate 300 80 && notify-send -t 6000 'The keyboard was reset by Emacs'"))
-#+END_SRC
-
+*** Thunar, link to cloud
 Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be in the =myThunarCloud= textfile of course 😀.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-thunar-cloud-connection ()
@@ -871,6 +847,7 @@ Connect my cloud to the Thunar filemanager. NOTE: the thunar command should be i
   (shell-command (string-trim (buffer-string)))))
 #+END_SRC
 
+*** Show asset allocation
 Show a map of my asset allocation in time by running a Python script.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-asset-allocation-in-time ()
@@ -882,6 +859,15 @@ Show a map of my asset allocation in time by running a Python script.
     (shell-command (concat "python3 " script-path)
                    "*Python Output*")
     (message (concat "Python script executed: " script-path))))
+#+END_SRC
+
+*** Keyboard functions
+Remap my keyboard with xmodmap. Right now I'm running two shell aliases.
+#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
+(defun my-keyboard-reset ()
+  "Right meta/super/control for my Sweep keyboard. Plus quick key repeats."
+  (interactive)
+  (shell-command "e && k && notify-send -t 6000 'The keyboard was reset by Emacs'"))
 #+END_SRC
 
 Open my Redox keyboard QMK directory.
@@ -900,9 +886,11 @@ Open my =keymap.c= file of my redox keyboard.
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 #+END_SRC
 
+*** Remove pdf password
 Sometimes pdf files are password protected and it should be removed. The following will help to find the pdf and will save it as *_password_removed.pdf.
 #+begin_src emacs-lisp
 (defun my-pdf-password-removal ()
+  "Remove password of pdf and save under another name."
   (interactive)
   (let* ((pdf-file (read-file-name "PDF file: "))
          (dir (file-name-directory pdf-file))
