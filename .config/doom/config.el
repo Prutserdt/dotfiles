@@ -199,25 +199,24 @@
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-        :desc "Plak keuze uit kill ring"         "p" #'counsel-yank-pop
+        :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
+        :desc "Run ~/Download/test_code.py"      "p" #'my-run-python-code-in-new-frame
         :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "pdf remove password"              "z" 'my-pdf-password-removal)
-
     (:desc "Open files in emacs" "e" #'recentf-open-files)
-
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("d" . "dailies")
             :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
             :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
-            :desc "Open new daily"               "d" #'org-roam-dailies-capture-today
             :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
             :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
             :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
             :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
             :desc "Select dailies calendar"      "o" #'org-roam-dailies-goto-date
-            :desc "Goto today"                   "t" #'org-roam-dailies-goto-today
+           ;:desc "Goto today"                   "t" #'org-roam-dailies-goto-today
+            :desc "Goto today, paste previous"   "t" #'my-goto-today-paste-previous-daily
             :desc "Capture today"                "T" #'org-roam-dailies-capture-today
             :desc "Goto yesterday"               "y" #'org-roam-dailies-goto-yesterday
             :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
@@ -377,6 +376,39 @@ Brain shelve: %s.
     (when files
       (find-file (expand-file-name (car (last (sort files #'string<))) my-org-roam-dailies-dir)))))
 
+(defun my-goto-today-paste-previous-daily ()
+  "Create a new daily containg previous daily note data"
+  (interactive)
+
+  ; Go to today's daily note
+  (org-roam-dailies-goto-today)
+
+  ; Set the dailies directory
+  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
+
+  ; Get the list of files in the org-roam-dailies directory named YYYY-MM-DD.org
+  (let* ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$"))
+         ; Filter only the daily notes files
+         (last-file (car (last (sort files #'string<))))
+         ; Get the last daily note file
+         (file-path (expand-file-name last-file my-org-roam-dailies-dir)))
+
+    ; If we found a daily note file
+    (when last-file
+      ; Open the file in a hidden buffer
+      (with-current-buffer (find-file-noselect file-path)
+        ; Save the position to preserve point position
+        (save-excursion
+          ; Go to the beginning of the buffer
+          (goto-char (point-min))
+          ; Skip the first header lines
+          (forward-line 5)
+          ; Copy the content of the daily note from there
+          (copy-region-as-kill (point) (point-max)))))
+
+    ; Paste the copied content in the current buffer
+    (yank)))
+
 (use-package! websocket
     :after org-roam)
 
@@ -410,70 +442,6 @@ Brain shelve: %s.
       ;; Restore to a simple single buffer layout
         (doom/window-maximize-buffer))))
 
-(defvar data-bits nil
-  "Number of data bits for the serial monitor")
-
-(defvar my-serial-current-index 0
-  "Current index of the baudrate in the list")
-
-(defvar my-serial-baudrates '(300 600 1200 2400 4800 9600 19200 38400 57600 115200 230400 460800 57600 921600 1000000 2000000 3000000)
-  "List of baudrates to cycle through")
-
-(defvar my-serial-process nil
-  "Serial process")
-
-(defun my-serial-next-baudrate ()
-  "Switch to the next baudrate in the list"
-  (interactive)
-  (when my-serial-process
-    (delete-process my-serial-process))
-  (setq my-serial-current-index (mod (1+ my-serial-current-index)
-                                     (length my-serial-baudrates)))
-  (let* ((baudrate (nth my-serial-current-index my-serial-baudrates))
-         (command (concat "screen /dev/ttyUSB0 " (number-to-string baudrate))))
-    (setq my-serial-process (start-process "serial-terminal" nil shell-file-name "-c" command))
-    (message "Switched to baudrate: %s" baudrate)))
-
-(defun my-serial-ttyUSB0 (data-bits)
-  "Serial monitor to ttyUSB0 using baudrates in a cycle with specified data bits"
-  (interactive "sEnter 7 or 8 for data bits: ")
-  (when (not (or (string= data-bits "7") (string= data-bits "8")))
-    (error "Invalid data bits specified. Please enter 7 or 8."))
-  (split-window-horizontally)
-  (my-serial-next-baudrate)
-  (switch-to-buffer "/dev/ttyUSB0")
-  (windmove-right)
-  (setq my-serial-process-filter
-        (lambda (proc str)
-          (process-send-string proc (concat "sb " data-bits "\n"))))
-  (set-process-filter my-serial-process my-serial-process-filter)
-  (process-send-string my-serial-process (concat "sb " data-bits "\n")))
-
-(global-set-key (kbd "C-c C-g") 'my-serial-next-baudrate)
-(global-set-key (kbd "C-c C-m") 'my-serial-ttyUSB0)
-
-(defun my-PowerStrike-testing-upload ()
-    "My IDE of arduino Powerstrike uploading to ESP32."
-    (interactive)
-    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
-    (doom/window-maximize-buffer)
-    (split-window-horizontally)
-    (switch-to-buffer "*Async Shell Command*")
-    (windmove-right))
-
-(defun my-serial-ttyUSB0-115200 ()
-   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
-    (interactive)
-    (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200)
-    (switch-to-buffer "/dev/ttyUSB0")
-    (windmove-right))
-
-(defun my-PowerStrike-README-org-file ()
-  "Open the README.org of my PowerStrike ESP32 project."
-  (interactive)
-  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
-
 (defun my-emacs-config-download-overwrite ()
   "Use Github version of my Doom Emacs config, the README.org, and make backup."
   (interactive)
@@ -498,12 +466,13 @@ Brain shelve: %s.
         ;; Insert an Org-mode link with a shell command to display images using `nsxiv`
         (insert (concat "[[shell: cd " subdir "; find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' | sort | nsxiv -ftio][" last-dir "]]\n"))))))
 
-(defun my-thunar-cloud-connection ()
-  "Connect my cloud to Thunar filebrowser."
+(defun my-run-python-code-in-new-frame ()
+  "Run a test python script in a name frame (window)."
   (interactive)
-  (with-temp-buffer
-  (insert-file-contents "~/Stack/Command_line/myThunarCloud")
-  (shell-command (string-trim (buffer-string)))))
+  (let ((new-frame (make-frame)))
+    (with-selected-frame new-frame
+      (vterm)
+      (async-shell-command "python3 ~/Downloads/test_code.py" "*test_code output*"))))
 
 (defun my-asset-allocation-in-time ()
   "Show my asset allocation vs time in a chart. Done by running a Python script."
@@ -518,7 +487,7 @@ Brain shelve: %s.
 (defun my-keyboard-reset ()
   "Right meta/super/control for my Sweep keyboard. Plus quick key repeats."
   (interactive)
-  (comint-send-string (get-buffer-process (shell)) "e\nk\nexit\n")
+  (comint-send-string (get-buffer-process (shell)) "e\nk\nq\n")
   (kill-buffer (current-buffer)))
 
 (defun my-redox-directory ()
@@ -538,14 +507,16 @@ Brain shelve: %s.
   "Inserts a character at point and switches to insert state in Evil mode when in normal state."
   (interactive)
   (let* ((characters '(
-                       ("Note: Ctrl-\ to toggle-input-method" . "")
+                       ("K€ KEuro"          . "K€")
+                       ("€ Euro"            . "€")
                        ("° Graad"           . "°")
                        ("µ micro"           . "µ")
                        ("¹ Tot de macht 1"  . "¹")
                        ("² Tot de macht 2"  . "²")
                        ("³ Tot de macht 3"  . "³")
                        ("Ä A met trema"     . "Ä")
-                       ("Correct title"     . "The Äkta overlords")))
+                       ("Correct title"     . "The Äkta overlords")
+                       ("Note: Ctrl \\ to toggle-input-method" . "")))
          (chosen-character (cdr (assoc (completing-read "Select a character: " characters)
                                       characters))))
     (when chosen-character

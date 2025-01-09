@@ -62,7 +62,7 @@ def read_csv_and_add_to_dataframe(filename, delimiter, column1, column2):
         The dataframe containing the data from the CSV file.
     """
     try:
-        #print(filename)
+        print(filename)
         global asset_allocation_df  # This dataframe will be used outside of this def, so make it global
         temp_asset_allocation_df = pd.read_csv(filename, thousands=r'.', sep=delimiter, usecols=[column1, column2])
         temp_asset_allocation_df.columns = [omschr_col, eur_col]
@@ -71,7 +71,7 @@ def read_csv_and_add_to_dataframe(filename, delimiter, column1, column2):
         temp_asset_allocation_df[eur_col] = [x.replace(",", ".") for x in temp_asset_allocation_df[eur_col]]
         temp_asset_allocation_df[eur_col] = temp_asset_allocation_df[eur_col].astype(float).apply(int)
         asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])
-        #print('=' * 40 + "\n", temp_asset_allocation_df)
+        print('=' * 40 + "\n", temp_asset_allocation_df)
         return temp_asset_allocation_df
     except FileNotFoundError:
         error_message = f"File '{filename}' not found."   
@@ -124,7 +124,7 @@ temp_asset_allocation_df = pd.DataFrame(asset_values_dict)
 asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])
 # Sortt by euros, descencding
 asset_allocation_df = asset_allocation_df.sort_values(by=eur_col, ascending=False)
-#print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
+print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
 asset_allocation_df = pd.DataFrame(asset_allocation_df, columns=[omschr_col, eur_col, asset_allocation_col, a_min_huis_col])
 
 kapitaal = asset_allocation_df[eur_col].sum()  # Calculate the sum of all of the allocations (kapitaal is Dutch for Capital)
@@ -132,7 +132,7 @@ kapitaal = asset_allocation_df[eur_col].sum()  # Calculate the sum of all of the
 asset_allocation_df[asset_allocation_col] = (asset_allocation_df[eur_col] / kapitaal * 100).astype(int) # Calculate values for column asset_allocation_col, % of total)
 asset_allocation_df[a_min_huis_col] = (asset_allocation_df[eur_col] / (kapitaal - huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
 asset_allocation_df.loc[asset_allocation_df[a_min_huis_col] > 100, a_min_huis_col] = "*"  # If >100% then replace by asterix
-#print('=' * 40  + "\n", asset_allocation_temp_asset_allocation_df)                      # Only for debugging
+print('=' * 40  + "\n", asset_allocation_df)                      # Only for debugging
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 asset_values_dict = {
@@ -142,7 +142,7 @@ asset_values_dict = {
     a_min_huis_col: ["", "", ""]}
 temp_asset_allocation_df = pd.DataFrame(asset_values_dict)       # Add the list to a new temporary dataframe
 asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])   # Add the temp_asset_allocation_df dataframe
-#print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
+print('=' * 40 + "\n", asset_allocation_df)  # Only for debugging
 
 asset_allocation_df[omschr_col] = asset_allocation_df[omschr_col].apply(lambda x: x[:20]) # Slim the "omschr_col" to 20 characters
 
@@ -150,7 +150,7 @@ datum = time.strptime(time.ctime(os.path.getctime(file_degiro))) # Search date o
 t_stamp =   str(time.strftime("%Y", datum) + "-" + str(time.strftime("%m", datum)) + "-" +  str(time.strftime("%d", datum))) # Create a timestap (YYYYMMDD)
 
 title = ("\n" '*** <' + t_stamp + "> Assets(zonder huis): " + (kapitaal - huis).astype(str) + " Euro.\n\n")
-#print('\n\n') # Only for debugging
+print('\n\n') # Only for debugging
 
 # Create a title for the org table, with three stars for level three heading
 org_table_name=('#+Name: tbl_', str(t_stamp), '\n')
@@ -165,7 +165,7 @@ for i in range(3):
 sorted_list = '|'.join((sorted_list.splitlines(True)))
 separator= ('|-|-|-|-|') # separator for Emacs org mode (tables)
 
-#print ('\n' + sorted_list + '\n')
+print ('\n' + sorted_list + '\n')
 # Combineer de introductieregels met het dataframe
 data = title + org_table_name + separator + '\n' + sorted_list + '\n' + separator # Combineren van introductieregels+dataframe
 
@@ -180,7 +180,7 @@ replacements = [
 ]
 
 data = replace_data(data, replacements)
-#print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
+print('=' * 40 + "\n", "nieuwe data ---> clipboard:", data, sep="\n")  # Only for debugging
 
 pyperclip.copy(data)
 

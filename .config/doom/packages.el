@@ -5,15 +5,9 @@
 
 (package! visual-fill-column)
 
-(package! web-mode)
-
-(package! arduino-cli-mode)
-(package! arduino-mode)
-
 (package! org-babel-eval-in-repl)
 (package! eval-in-repl)
 (package! jupyter)
-(package! phpactor)
 
 (package! org-auto-tangle)
 
