@@ -201,6 +201,7 @@
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
         :desc "Run ~/Download/test_code.py"      "p" #'my-run-python-code-in-new-frame
+        :desc "Molecular structure from Smiles"  "s" #'my-obabel-render-image-and-show
         :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "pdf remove password"              "z" 'my-pdf-password-removal)

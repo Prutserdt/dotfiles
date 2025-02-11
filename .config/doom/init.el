@@ -18,7 +18,7 @@
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
-       ;;       workspaces          ; tab emulation, persistence & separate workspaces
+       ;;workspaces        ; tab emulation, persistence & separate workspaces
 
        :editor
        (evil +everywhere)  ; come to the dark side, we have cookies
@@ -38,19 +38,21 @@
        :checkers
        syntax              ; tasing you for every semicolon you forget
        ;;grammar           ; tasing grammar mistake every you make
+
        :tools
        debugger            ; stepping through code, to help you add bugs
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
-       pdf                          ; pdf enhancements
+       pdf                 ; pdf enhancements
        lsp                 ; M-x vscode
+       evil-magit          ; An evil porcelain for Emacs
 
        :lang
        emacs-lisp          ; drown in parentheses
        (org                ; organize your plain life in plain text
         +pretty            ; pretty is better than ugly
         +roam2             ; wander around notes
-        +dragndrop)         ; drop files/images into org
+        +dragndrop)        ; drop files/images into org
        (python +lsp +pyenv); beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
