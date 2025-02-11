@@ -550,7 +550,9 @@ Brain shelve: %s.
     (forward-line) ; Move to the next line
     (insert (format "[[file:%s]]" output-file))
     (newline)
-    (previous-line)))
+    (previous-line)
+    (sleep-for 0.5)
+    (execute-kbd-macro (kbd "RET"))
 
 (setq fancy-splash-image (if (zerop (random 2))
                            "~/.config/doom/doom-emacs.png"
