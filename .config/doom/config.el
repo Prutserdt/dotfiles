@@ -201,7 +201,9 @@
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
         :desc "Run ~/Download/test_code.py"      "p" #'my-run-python-code-in-new-frame
-        :desc "Molecular structure from Smiles"  "s" #'my-obabel-render-image-and-show
+        (:prefix ("s" . "SMILES chemistry")
+            :desc "Insert image from Smiles"     "i" #'my-obabel-smiles-insert-image
+            :desc "Show image"                   "s" #'my-obabel-smiles-show-image)
         :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "pdf remove password"              "z" 'my-pdf-password-removal)
@@ -523,6 +525,32 @@ Brain shelve: %s.
     (when chosen-character
       (evil-change-state 'insert)
       (insert chosen-character))))
+
+(defun my-obabel-smiles-show-image ()
+  "Show molecular structure from SMILES at point"
+  (interactive)
+  (let ((smiles (thing-at-point 'line)))
+    (let ((output-file "/dev/shm/temp/output_file.png"))
+      (shell-command (concat "obabel -xb -:" (shell-quote-argument smiles) " -O " (shell-quote-argument output-file) " -xp 400 &"))
+      (sleep-for 0.5)
+      (shell-command (concat "nsxiv " (shell-quote-argument output-file)))))
+    (sleep-for 1)
+    (doom/window-maximize-buffer))
+
+(defun my-obabel-smiles-insert-image (output-file)
+  "Insert image of molecular structure from SMILES at point and save the image"
+  (interactive "FOutput file location:")
+  (let ((smiles (thing-at-point 'line)))
+    ;; Generate image from SMILES using Open Babel
+    (shell-command
+     (concat "obabel -xb -:" (shell-quote-argument smiles)
+             " -O " (shell-quote-argument output-file)
+             " -xp 400 &"))
+    (doom/window-maximize-buffer) ; Maximize buffer window
+    (forward-line) ; Move to the next line
+    (insert (format "[[file:%s]]" output-file))
+    (newline)
+    (previous-line)))
 
 (setq fancy-splash-image (if (zerop (random 2))
                            "~/.config/doom/doom-emacs.png"

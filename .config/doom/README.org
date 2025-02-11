@@ -25,7 +25,7 @@
   - [[#keyboard-functions][Keyboard functions]]
   - [[#remove-pdf-password][Remove pdf password]]
   - [[#inserting-characters-words-and-strings][Inserting characters, words and strings]]
-  - [[#render-image-of-smiles][Render image of SMILES]]
+  - [[#handling-the-smiles-in-chemistry][Handling the SMILES in chemistry]]
   - [[#splash-screen][Splash screen]]
 - [[#code-snippets][Code snippets]]
 - [[#credits][Credits]]
@@ -456,7 +456,9 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
         :desc "Run ~/Download/test_code.py"      "p" #'my-run-python-code-in-new-frame
-        :desc "Molecular structure from Smiles"  "s" #'my-obabel-render-image-and-show
+        (:prefix ("s" . "SMILES chemistry")
+            :desc "Insert image from Smiles"     "i" #'my-obabel-smiles-insert-image
+            :desc "Show image"                   "s" #'my-obabel-smiles-show-image)
         :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "pdf remove password"              "z" 'my-pdf-password-removal)
@@ -894,21 +896,40 @@ Inserting often used characters and words can be done by this simple function. A
       (insert chosen-character))))
 #+end_src
 
-** Render image of SMILES
-This function will render an image from point by open-babel and SMILES code. Go to a line with a single SMILES line and run this functin to display a picture of the molecular structure with nsxiv inside of Emacs. The image is temporarily stored in the systems RAM.
-#+begin_src elisp :results none
-(defun my-obabel-render-image-and-show ()
-  "Show molecular structure from SMILES code at point"
+** Handling the SMILES in chemistry
+The Simplified Molecular Input Line Entry System (SMILES) can be comfortably used inside emacs with the help of the shell package =openbabel=.
+
+This function will render an image from point by open-babel and SMILES code. Go to a line with a single SMILES line and run this function to display a picture of the molecular structure with nsxiv inside of Emacs from the shell. The image is temporarily stored in the systems RAM.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-obabel-smiles-show-image ()
+  "Show molecular structure from SMILES at point"
   (interactive)
   (let ((smiles (thing-at-point 'line)))
-    ;;(let ((output-file "/home/icefly/Downloads/output_file.png"))
-    (let ((output-file "/dev/shm/temp/"))
-      ;;(shell-command (concat "obabel -xb -:" (shell-quote-argument smiles) " -O " (shell-quote-argument output-file) " -xp 400 &") "/obabel-output/")
+    (let ((output-file "/dev/shm/temp/output_file.png"))
       (shell-command (concat "obabel -xb -:" (shell-quote-argument smiles) " -O " (shell-quote-argument output-file) " -xp 400 &"))
       (sleep-for 0.5)
       (shell-command (concat "nsxiv " (shell-quote-argument output-file)))))
     (sleep-for 1)
     (doom/window-maximize-buffer))
+#+end_src
+
+A function that will convert a SMILES string (at point) to an image and paste it below that line.
+This uses the package =open babel= and the save location should be entered. It is in dark mode and at a fixed size of 400 pixels wide.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-obabel-smiles-insert-image (output-file)
+  "Insert image of molecular structure from SMILES at point and save the image"
+  (interactive "FOutput file location:")
+  (let ((smiles (thing-at-point 'line)))
+    ;; Generate image from SMILES using Open Babel
+    (shell-command
+     (concat "obabel -xb -:" (shell-quote-argument smiles)
+             " -O " (shell-quote-argument output-file)
+             " -xp 400 &"))
+    (doom/window-maximize-buffer) ; Maximize buffer window
+    (forward-line) ; Move to the next line
+    (insert (format "[[file:%s]]" output-file))
+    (newline)
+    (previous-line)))
 #+end_src
 
 ** Splash screen
