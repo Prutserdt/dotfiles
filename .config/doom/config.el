@@ -200,7 +200,7 @@
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
-        :desc "Run ~/Download/test_code.py"      "p" #'my-run-python-code-in-new-frame
+        :desc "Run python async"                 "p" #'my-run-python-code-in-new-frame-select-manually
         (:prefix ("s" . "SMILES chemistry")
             :desc "Insert image from Smiles"     "i" #'my-obabel-smiles-insert-image
             :desc "Show image"                   "s" #'my-obabel-smiles-show-image)
@@ -469,6 +469,21 @@ Brain shelve: %s.
         ;; Insert an Org-mode link with a shell command to display images using `nsxiv`
         (insert (concat "[[shell: cd " subdir "; find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' | sort | nsxiv -ftio][" last-dir "]]\n"))))))
 
+(defun my-run-python-code-in-new-frame-select-manually ()
+  "Run a Python script in a new frame after selecting it manually."
+  (interactive)
+  (let ((file-path (read-file-name "Select a Python file: "))
+        (new-frame (make-frame))
+        (new-frame-name "my-python-frame"))
+    (select-frame-set-input-focus new-frame)
+    (if (equal (selected-frame) new-frame)
+        (progn
+          (vterm)
+          (async-shell-command (format "python3 %s" file-path) "*test_code output*")
+          (pop-to-buffer "*test_code output*"))
+      (message "Failed to select the new frame")
+      (delete-frame new-frame))))
+
 (defun my-run-python-code-in-new-frame ()
   "Run a test python script in a name frame (window)."
   (interactive)
@@ -476,6 +491,15 @@ Brain shelve: %s.
     (with-selected-frame new-frame
       (vterm)
       (async-shell-command "python3 ~/Downloads/test_code.py" "*test_code output*"))))
+
+(defun my-run-python-code-results-to-clipboard-test ()
+  "Run a selected Python script in the current directory and copy the output to clipboard."
+  (interactive)
+  (let* ((directory default-directory)
+         (file-path (read-file-name "Select a Python file: " directory nil t "\.py"))
+         (output (shell-command-to-string (concat "python " file-path))))
+    (kill-new output)
+    (message "Output copied to Emacs kill-ring and can be pasted now.")))
 
 (defun my-asset-allocation-in-time ()
   "Show my asset allocation vs time in a chart. Done by running a Python script."
@@ -552,7 +576,7 @@ Brain shelve: %s.
     (newline)
     (previous-line)
     (sleep-for 0.5)
-    (execute-kbd-macro (kbd "RET"))
+    (execute-kbd-macro (kbd "RET"))))
 
 (setq fancy-splash-image (if (zerop (random 2))
                            "~/.config/doom/doom-emacs.png"
