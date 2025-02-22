@@ -142,9 +142,10 @@ asset_values_dict = {
     a_min_huis_col: ["", "", ""]}
 temp_asset_allocation_df = pd.DataFrame(asset_values_dict)       # Add the list to a new temporary dataframe
 asset_allocation_df = pd.concat([asset_allocation_df, temp_asset_allocation_df])   # Add the temp_asset_allocation_df dataframe
+
 #print("before rewrite NT", asset_allocation_df['Omschrijving        ']) # Only for debugging
-asset_allocation_df['Omschrijving        '] = asset_allocation_df['Omschrijving        '].replace("Northern Trust Wld Custom Eq I", "NT Wld Custom Eq I ")
-#print("after rewrite NT", asset_allocation_df['Omschrijving        ']) # Only for debugging
+asset_allocation_df['Omschrijving        '] = asset_allocation_df['Omschrijving        '].str.replace("Northern Trust", "NT")
+asset_allocation_df['Omschrijving        '] = asset_allocation_df['Omschrijving        '].str.replace("Eq I", "Eq I ")
 
 asset_allocation_df[omschr_col] = asset_allocation_df[omschr_col].apply(lambda x: x[:20]) # Slim the "omschr_col" to 20 characters
 
@@ -179,6 +180,7 @@ replacements = [
     ('||||',               '|-|-|-|-|\n\n|-|-|-|-|'),
     ('|Overwaarde',        '|-|-|-|-|\n| Overwaarde '),
     ('|VANECK',            'VANECK'),
+    ('|| NT',            '|NT'),
     ('- huis',             '- huis|')
 ]
 
