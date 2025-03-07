@@ -14,23 +14,23 @@ from libqtile.lazy import lazy
 from os.path import expanduser
 from libqtile.scripts.main import VERSION
 
-mL = "mod4"                     # Left super key, dedicated to the windowmanager
-mR = "mod3"                     # Right super key, dedicated to open applications
-aR = "mod5"                     # Right alt key, dedicated to opening of files
+mL = "mod4"                         # Left super key, dedicated to the windowmanager
+mR = "mod3"                         # Right super key, dedicated to open applications
+aR = "mod5"                         # Right alt key, dedicated to opening of files
 
-home = os.path.expanduser("~")  # Declare the variable for the file path
+home = os.path.expanduser("~")      # Declare the variable for the file path
 
 def threecol(qtile):
-    qtile.cmd_to_layout_index(0)# monadthreecolumn
+    qtile.cmd_to_layout_index(0)    # monadthreecolumn
 
 def montall(qtile):
-    qtile.cmd_to_layout_index(1)# monadtall
+    qtile.cmd_to_layout_index(1)    # monadtall
 
 def monwide(qtile):
-    qtile.cmd_to_layout_index(2)# monadwide
+    qtile.cmd_to_layout_index(2)    # monadwide
 
 def Max(qtile):
-    qtile.cmd_to_layout_index(3)# Max
+    qtile.cmd_to_layout_index(3)    # Max
 
 # Define a global variable to track the current layout
 current_layout = 0  # threecol is the default layout
@@ -422,7 +422,9 @@ for i in groups:
             Key(
                 [mL, "shift"],
                 i.name,
-                lazy.window.togroup(i.name,switch_group=True),  #True=follow window
+                lazy.window.togroup(
+                    i.name,
+                    switch_group=True),  #True=follow window
                 desc="Move and follow the focused window to group {}".format(i.name),
             ),
             # Exactly the same as above, but don't follow the moved window to group
@@ -437,7 +439,12 @@ for i in groups:
 
 groups.append(
     ScratchPad("scratchpad", [
-        DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,
+        DropDown("1",
+                 "qalculate-gtk",
+                 x=0.0,
+                 y=0.0,
+                 width=0.2,
+                 height=0.3,
                  on_focus_lost_hide=False),
     ])
 )
@@ -445,7 +452,8 @@ groups.append(
 is_thinkpad = socket.gethostname().lower() in ["thinkpad"]
 
 keys.extend([
-    Key([], "XF86Favorites" if is_thinkpad else "XF86Calculator",
+    Key([],
+        "XF86Favorites" if is_thinkpad else "XF86Calculator",
         lazy.group["scratchpad"].dropdown_toggle("1"),
         lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
 ])
@@ -490,7 +498,6 @@ screens = [
                 widget.Spacer(),
                 widget.GroupBox(
                     inactive= "333333",
-                    #active= "#d75f5f",
                     active= "888888",
                     disable_drag=True,
                     highlight_method='line',
@@ -537,12 +544,14 @@ mouse = [
     Drag(
         [mL],
         "Button1",
-        lazy.window.set_position_floating(), start=lazy.window.get_position()
+        lazy.window.set_position_floating(),
+        start=lazy.window.get_position()
         ),
     Drag(
         [mL],
         "Button3",
-        lazy.window.set_size_floating(), start=lazy.window.get_size()
+        lazy.window.set_size_floating(),
+        start=lazy.window.get_size()
         ),
     Click(
         [mL],
@@ -606,5 +615,4 @@ def _unswallow(window):
     if hasattr(window, 'parent'):
         window.parent.minimized = False
 
-#wmname = "LG3D"
 wmname = f"Qtile {VERSION}"
