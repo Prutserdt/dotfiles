@@ -14,25 +14,23 @@ from libqtile.lazy import lazy
 from os.path import expanduser
 from libqtile.scripts.main import VERSION
 
-mL = "mod4"                       # Left super key, dedicated to the windowmanager
-mR = "mod3"                       # Right super key, dedicated to open applications
-aR = "mod5"                       # Right alt key, dedicated to opening of files
+mL = "mod4"                     # Left super key, dedicated to the windowmanager
+mR = "mod3"                     # Right super key, dedicated to open applications
+aR = "mod5"                     # Right alt key, dedicated to opening of files
 
-# Declare the variable for the file path
-home = os.path.expanduser("~")
+home = os.path.expanduser("~")  # Declare the variable for the file path
 
 def threecol(qtile):
-    qtile.cmd_to_layout_index(0)  # monadthreecolumn
+    qtile.cmd_to_layout_index(0)# monadthreecolumn
 
 def montall(qtile):
-    qtile.cmd_to_layout_index(1)  # monadtall
+    qtile.cmd_to_layout_index(1)# monadtall
 
 def monwide(qtile):
-    qtile.cmd_to_layout_index(2)  # monadwide
+    qtile.cmd_to_layout_index(2)# monadwide
 
 def Max(qtile):
-    qtile.cmd_to_layout_index(3)  # Max
-
+    qtile.cmd_to_layout_index(3)# Max
 
 # Define a global variable to track the current layout
 current_layout = 0  # threecol is the default layout
@@ -41,14 +39,14 @@ current_layout = 0  # threecol is the default layout
 def toggle_max_and_bar(qtile):
     global current_layout
 
-    if current_layout == 3:  # If Max is currently selected
-        qtile.cmd_to_layout_index(0)  # Switch to threecol layout
-        qtile.cmd_hide_show_bar()  # Show the bar
-        current_layout = 0  # Update the current layout
+    if current_layout == 3:         # If Max is currently selected
+        qtile.cmd_to_layout_index(0)# Switch to threecol layout
+        qtile.cmd_hide_show_bar()   # Show the bar
+        current_layout = 0          # Update the current layout
     else:
-        qtile.cmd_to_layout_index(3)  # Switch to Max layout
-        qtile.cmd_hide_show_bar()  # Hide the bar
-        current_layout = 3  # Update the current layout
+        qtile.cmd_to_layout_index(3)# Switch to Max layout
+        qtile.cmd_hide_show_bar()   # Hide the bar
+        current_layout = 3          # Update the current layout
 
 @lazy.layout.function
 def increase_margin(self):
