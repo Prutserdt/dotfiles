@@ -5,12 +5,14 @@ import psutil
 import subprocess
 import os
 import socket
+import sys
 
 from typing import List
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from os.path import expanduser
+from libqtile.scripts.main import VERSION
 
 mL = "mod4"                       # Left super key, dedicated to the windowmanager
 mR = "mod3"                       # Right super key, dedicated to open applications
@@ -83,96 +85,328 @@ battery_widget = [
     )
 ] if is_thinkpad_or_work else []
 
-
-import subprocess
-import sys
-
 keys = [
-    Key([mL], "Return", lazy.spawn("alacritty"),        desc="Launch terminal in new window"),
-    Key([mL], "space", lazy.layout.swap_main(),         desc="Make main window of selected window"),
-    Key([mL], "b", lazy.hide_show_bar(position="top"),  desc="Toggle the bar"),
-    Key([mL], "c", lazy.spawncmd(),                     desc="Spawn a command using a prompt widget"),
-    Key([mL], "f", lazy.function(toggle_max_and_bar), desc="Toggle layout and bar"),
-    Key([mL], "r", lazy.spawncmd(),                     desc="Prompt commands from taskbar"),
-    Key([mL], "t", lazy.window.toggle_floating(),       desc="Toggle floating state"),
-    Key([mL], "q", lazy.window.kill(),                  desc="Kill focused window"),
-    Key([mL,  "control"], "r", lazy.reload_config(),    desc="Reload the Qtile configuration"),
-    Key([mL,  "shift"], "q", lazy.spawn(expanduser("~/.config/exitqtile.sh")), desc="Shutdown Qtile by a shellscript with dmenu options"),
+    Key(
+        [mL],
+        "Return",
+        lazy.spawn("alacritty"),
+        desc="Launch terminal in new window"),
+    Key(
+        [mL],
+        "space",
+        lazy.layout.swap_main(),
+        desc="Make main window of selected window"),
+    Key(
+        [mL],
+        "b",
+        lazy.hide_show_bar(position="top"),
+        desc="Toggle the bar"),
+    Key(
+        [mL],
+        "c",
+        lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget"),
+    Key(
+        [mL],
+        "f",
+        lazy.function(toggle_max_and_bar),
+        desc="Toggle layout and bar"),
+    Key(
+        [mL],
+        "r",
+        lazy.spawncmd(),
+        desc="Prompt commands from taskbar"),
+    Key(
+        [mL],
+        "t",
+        lazy.window.toggle_floating(),
+        desc="Toggle floating state"),
+    Key(
+        [mL],
+        "q",
+        lazy.window.kill(),
+        desc="Kill focused window"),
+    Key(
+        [mL, "control"],
+        "r",
+        lazy.reload_config(),
+        desc="Reload the Qtile configuration"),
+    Key(
+        [mL, "shift"],
+        "q",
+        lazy.spawn(expanduser("~/.config/exitqtile.sh")),
+        desc="Shutdown Qtile by a shellscript with dmenu options"),
+
     #Hotkeys to move windows around, resize windows and choose layouts
-    Key([mL], "j", lazy.layout.down(),                  desc="Move window focus down"),
-    Key([mL], "k", lazy.layout.up(),                    desc="Move window focus up"),
-    Key([mL, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mL, "shift"], "l", lazy.layout.shuffle_right(),desc="Move window to the right"),
-    Key([mL, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key([mL, "shift"], "k", lazy.layout.shuffle_up(),   desc="Move window up"),
-    Key([mL, "control"], "h", lazy.layout.grow(),       desc="Grow the selected window"),
-    Key([mL, "control"], "j", lazy.layout.shrink_main(),desc="Shrink the main window"),
-    Key([mL, "control"], "k", lazy.layout.grow_main(),  desc="Grow the main window"),
-    Key([mL, "control"], "l", lazy.layout.shrink(),     desc="Shrink the selected window"),
-    Key([mL], "y", lazy.function(Max),                  desc="Layout: max"),
-    Key([mL], "u", lazy.function(threecol),             desc="Layout: Threecolumn  without margins"),
-    Key([mL], "i", lazy.function(monwide),              desc="Layout: MonadWide no margins"),
-    Key([mL], "o", lazy.function(montall),              desc="Layout: MonadTall no margins"),
-    Key([mL], 'a', increase_margin,                     desc="Increase gaps"),
-    Key([mL, "shift"], "a", decrease_margin,            desc="Decrease gaps"),
-    Key([mL], "m", reset_margin,                        desc="Reset gaps to zero"),
+    Key(
+        [mL],
+        "j",
+        lazy.layout.down(),
+        desc="Move window focus down"),
+    Key(
+        [mL],
+        "k",
+        lazy.layout.up(),
+        desc="Move window focus up"),
+    Key([mL, "shift"],
+        "h",
+        lazy.layout.shuffle_left(),
+        desc="Move window to the left"),
+    Key(
+        [mL, "shift"],
+        "l",
+        lazy.layout.shuffle_right(),
+        desc="Move window to the right"),
+    Key(
+        [mL, "shift"],
+        "j",
+        lazy.layout.shuffle_down(),
+        desc="Move window down"),
+    Key(
+        [mL, "shift"],
+        "k",
+        lazy.layout.shuffle_up(),
+        desc="Move window up"),
+    Key(
+        [mL, "control"],
+        "h",
+        lazy.layout.grow(),
+        desc="Grow the selected window"),
+    Key(
+        [mL, "control"],
+        "j",
+        lazy.layout.shrink_main(),
+        desc="Shrink the main window"),
+    Key(
+        [mL, "control"],
+        "k",
+        lazy.layout.grow_main(),
+        desc="Grow the main window"),
+    Key(
+        [mL, "control"],
+        "l",
+        lazy.layout.shrink(),
+        desc="Shrink the selected window"),
+    Key(
+        [mL],
+        "y",
+        lazy.function(Max),
+        desc="Layout: max"),
+    Key(
+        [mL],
+        "u",
+        lazy.function(threecol),
+        desc="Layout: Threecolumn  without margins"),
+    Key(
+        [mL],
+        "i",
+        lazy.function(monwide),
+        desc="Layout: MonadWide no margins"),
+    Key(
+        [mL],
+        "o",
+        lazy.function(montall),
+        desc="Layout: MonadTall no margins"),
+    Key(
+        [mL],
+        'a',
+        increase_margin,
+        desc="Increase gaps"),
+    Key(
+        [mL, "shift"],
+        "a",
+        decrease_margin,
+        desc="Decrease gaps"),
+    Key(
+        [mL],
+        "m",
+        reset_margin,
+        desc="Reset gaps to zero"),
 
     # Hotkeys for audio and printscreen
-    Key([], "XF86AudioRaiseVolume", lazy.spawn('amixer -q set Master 5%+'), lazy.spawn('notify-send -t 6000 " 🔊 Volume increased"')),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -q set Master 5%-"), lazy.spawn('notify-send -t 6000 "🔈 Volume decreased"')),
-    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle"), lazy.spawn('notify-send -t 6000 "🔇 Volume muting toggled"')),
-    Key([], "Print", lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")), lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
-    Key(["shift"], "Print", lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
-    Key([], "XF86Launch8", lazy.spawn('$HOME/.config/keyboard_config.sh')),
-    Key([], "XF86Launch9", lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
-    Key([], "XF86MonBrightnessUp", lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
-    Key([], "XF86MonBrightnessDown", lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
+    Key(
+        [],
+        "XF86AudioRaiseVolume",
+        lazy.spawn('amixer -q set Master 5%+'),
+        lazy.spawn('notify-send -t 6000 " 🔊 Volume increased"')),
+    Key(
+        [],
+        "XF86AudioLowerVolume",
+        lazy.spawn("amixer -q set Master 5%-"),
+        lazy.spawn('notify-send -t 6000 "🔈 Volume decreased"')),
+    Key(
+        [],
+        "XF86AudioMute",
+        lazy.spawn("amixer -q set Master toggle"),
+        lazy.spawn('notify-send -t 6000 "🔇 Volume muting toggled"')),
+    Key(
+        [],
+        "Print",
+        lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")),
+        lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
+    Key(
+        ["shift"],
+        "Print",
+        lazy.spawn(expanduser("~/.config/screenshot2text.sh"))),
+    Key(
+        [],
+        "XF86Launch8",
+        lazy.spawn('$HOME/.config/keyboard_config.sh')),
+    Key(
+        [],
+        "XF86Launch9",
+        lazy.spawn(expanduser("~/.config/resetRGB.sh"))),
+    Key(
+        [],
+        "XF86MonBrightnessUp",
+        lazy.spawn(expanduser("~/.config/incrMonitorBrightness.sh"))),
+    Key(
+        [],
+        "XF86MonBrightnessDown",
+        lazy.spawn(expanduser("~/.config/decrMonitorBrightness.sh"))),
 
     # Open applications
-    Key([mR], "a",
+    Key([mR],
+        "a",
         lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
         lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org"),
         desc="Open in emacs: run het python aandelen script en open het aandelen log"),
-    Key([mR], "b", lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))),  # browser via dmenu, related to 'urls'
-    Key([mR], "c", lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))),  # copy/paste clipoard
-    Key([mR], "d", lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
-    Key([mR, "shift"], "d", lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
+    Key(
+        [mR],
+        "b",
+        lazy.spawn(expanduser("~/.config/dmenuinternet.sh"))), # browser via dmenu, related to 'urls'
+    Key(
+        [mR],
+        "c",
+        lazy.spawn(expanduser("~/.config/clipboard_dm.sh"))), # copy/paste clipoard
+    Key(
+        [mR],
+        "d",
+        lazy.spawn(expanduser("~/.config/dmenuapps.sh"))),
+    Key(
+        [mR, "shift"],
+        "d",
+        lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
     #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
     #Key([mR], "e", lazy.spawn("/usr/bin/emacsclient -c")), # use in case of problems
     #Key([mR], "e", lazy.spawn("/usr/bin/emacs")), # use in case of problems
     #Key([mR], "e", lazy.function(run_emacs)), # use in case of problems
-    Key([mR], "e", lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
+    Key(
+        [mR],
+        "e",
+        lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
     #Key([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
-    Key([mR], "f", lazy.spawn("firefox")),
-    Key([mR], "g", lazy.spawn("gimp")),
-    Key([mR], "h", lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
-    Key([mR], "m", lazy.spawn("mousepad")),
-    Key([mR, "shift"], "m", lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))),
+    Key(
+        [mR],
+        "f",
+        lazy.spawn("firefox")),
+    Key(
+        [mR],
+        "g",
+        lazy.spawn("gimp")),
+    Key(
+        [mR],
+        "h",
+        lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
+    Key(
+        [mR],
+        "m",
+        lazy.spawn("mousepad")),
+    Key(
+        [mR, "shift"],
+        "m",
+        lazy.spawn(expanduser("~/.config/dm_image_to_maps.sh"))),
     # show location of picture in google maps
-    Key([mR], "p", lazy.spawn("keepass")),
-    Key([mR, "shift"], "p", lazy.spawn(expanduser("~/.config/dm_move_images.sh"))),  # show location of picture in google maps
-    Key([mR], "s", lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
-    Key([mR, "shift"], "s", lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
-    Key([mR], "t", lazy.spawn(expanduser("~/.config/dmenuthunar.sh"))),  # related to 'directories'
-    Key([mR], "u", lazy.spawn(expanduser("~/.config/dmenuunicode.sh"))),  # related to 'unicode'
-    Key([mR], "v", lazy.spawn("alacritty -e vim")),
-    Key([mR], "w", lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
-    Key([mR], "delete", lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
+    Key(
+        [mR],
+        "p",
+        lazy.spawn("keepass")),
+    Key(
+        [mR, "shift"],
+        "p",
+        lazy.spawn(expanduser("~/.config/dm_move_images.sh"))),  # show location of picture in google maps
+    Key(
+        [mR],
+        "s",
+        lazy.spawn("xfce4-screenshooter -s " + expanduser("~~/Downloads"))),
+    Key(
+        [mR, "shift"],
+        "s",
+        lazy.spawn("signal-desktop --start-in-tray --use-tray-icon")),
+    Key(
+        [mR],
+        "t",
+        lazy.spawn(expanduser("~/.config/dmenuthunar.sh"))),  # related to 'directories'
+    Key(
+        [mR],
+        "u",
+        lazy.spawn(expanduser("~/.config/dmenuunicode.sh"))),  # related to 'unicode'
+    Key(
+        [mR],
+        "v",
+        lazy.spawn("alacritty -e vim")),
+    Key(
+        [mR],
+        "w",
+        lazy.spawn(expanduser("~/.config/dmenuwallpaper.sh"))),
+    Key(
+        [mR],
+        "delete",
+        lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
 
     # Open text files in emacs, note
-    Key([aR], "a", lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
-    Key([aR], "b", lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")),  # related to dmenuinternet.sh
-    Key([aR], "c", lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
-    Key([aR], "e", lazy.spawn("emacsclient -n ~/.config/doom/README.org")),
-    Key([aR], "q", lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
-    Key([aR], "r", lazy.spawn("emacsclient -n ~/README.org")),  # github readme
-    Key([aR], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh
-    Key([aR, "shift"], "t", lazy.spawn("emacsclient -n ~/Stack/Command_line/textfiles")),
-    Key([aR], "u", lazy.spawn("emacsclient -n ~/.config/unicode")),  # related to dmenuunicode.sh
-    Key([aR], "v", lazy.spawn("emacsclient -n ~/.vimrc")),
-    Key([aR], "w", lazy.spawn(expanduser("~/.config/wololo.sh"))),
-    Key([aR], "x", lazy.spawn("emacsclient -n ~/.xinitrc")),
-    Key([aR], "z", lazy.spawn("emacsclient -n ~/.zshrc")),
+    Key(
+        [aR],
+        "a",
+        lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
+    Key(
+        [aR],
+        "b",
+        lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")),  # related to dmenuinternet.sh
+    Key(
+        [aR],
+        "c",
+        lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
+    Key(
+        [aR],
+        "e",
+        lazy.spawn("emacsclient -n ~/.config/doom/README.org")),
+    Key(
+        [aR],
+        "q",
+        lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
+    Key(
+        [aR],
+        "r",
+        lazy.spawn("emacsclient -n ~/README.org")),  # github readme
+    Key(
+        [aR],
+        "t",
+        lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh
+    Key(
+        [aR, "shift"],
+        "t",
+        lazy.spawn("emacsclient -n ~/Stack/Command_line/textfiles")),
+    Key(
+        [aR],
+        "u",
+        lazy.spawn("emacsclient -n ~/.config/unicode")),  # related to dmenuunicode.sh
+    Key(
+        [aR],
+        "v",
+        lazy.spawn("emacsclient -n ~/.vimrc")),
+    Key(
+        [aR],
+        "w",
+        lazy.spawn(expanduser("~/.config/wololo.sh"))),
+    Key(
+        [aR],
+        "x",
+        lazy.spawn("emacsclient -n ~/.xinitrc")),
+    Key(
+        [aR],
+        "z",
+        lazy.spawn("emacsclient -n ~/.zshrc")),
 ]
 
 groups = [Group(i) for i in "1245"]
@@ -181,7 +415,7 @@ for i in groups:
     keys.extend(
         [
             Key(
-                [mL],      # mL + letter of group = switch to group
+                [mL],      # mL + number of group --> switch to group
                 i.name,
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
@@ -255,32 +489,43 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.GroupBox(foreground="#555555"),
-                widget.CurrentLayout(foreground="#777777"),
-                widget.Prompt(foreground="#777777"),
-                widget.WindowName(),
+                widget.Spacer(),
+                widget.GroupBox(
+                    inactive= "333333",
+                    #active= "#d75f5f",
+                    active= "888888",
+                    disable_drag=True,
+                    highlight_method='line',
+                    highlight_color=['000000','d75f5f']),
+                widget.WindowName(
+                    foreground="#555555"),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.Notify(foreground="#ff966c"),
+                widget.Notify(
+                    foreground="#ff966c"),
                 widget.Systray(),
-                widget.QuickExit(foreground="#888888"),
-            ] + battery_widget + [
+                widget.QuickExit(
+                    foreground="#888888"),
+            ]   + battery_widget +
+            [
                 widget.OpenWeather(
                     app_key="4cf3731a25d1d1f4e4a00207afd451a2",
                     cityid="2759661",
-                    format='{main_temp}°C {icon}',
+                    format='{main_temp:.1f} °C {icon}',
                     foreground="#888888",
                     metric=True,
                     mouse_callbacks={"Button1": lazy.spawn("xdg-open https://buienradar.nl"), "Button3": lazy.spawn("xdg-open https://openweathermap.org/city/2759661")}
                 ),
-                widget.Volume(foreground="#d75f5f"),
-                widget.Clock(format="%d%b%y %H:%M",
-                             foreground="#888888",
-                             mouse_callbacks={"Button1": lazy.spawn("xdg-open https://www.timeanddate.com/calendar/")}
+                widget.Volume(
+                    foreground="#d75f5f"),
+                widget.Clock(
+                    format="%d%b%y %H:%M",
+                    foreground="#888888",
+                    mouse_callbacks={"Button1": lazy.spawn("xdg-open https://www.timeanddate.com/calendar/")}
                 ),
             ],
             24,
@@ -291,13 +536,19 @@ screens = [
 
 # Drag floating layouts.
 mouse = [
-    Drag([mL], "Button1",
+    Drag(
+        [mL],
+        "Button1",
         lazy.window.set_position_floating(), start=lazy.window.get_position()
         ),
-    Drag([mL], "Button3",
+    Drag(
+        [mL],
+        "Button3",
         lazy.window.set_size_floating(), start=lazy.window.get_size()
         ),
-    Click([mL], "Button2",
+    Click(
+        [mL],
+        "Button2",
         lazy.window.bring_to_front()
         ),
 ]
@@ -357,4 +608,5 @@ def _unswallow(window):
     if hasattr(window, 'parent'):
         window.parent.minimized = False
 
-wmname = "LG3D"
+#wmname = "LG3D"
+wmname = f"Qtile {VERSION}"
