@@ -486,7 +486,9 @@ for i in groups:
             Key(
                 [mL, "shift"],
                 i.name,
-                lazy.window.togroup(i.name,switch_group=True),  #True=follow window
+                lazy.window.togroup(
+                    i.name,
+                    switch_group=True),  #True=follow window
                 desc="Move and follow the focused window to group {}".format(i.name),
             ),
             # Exactly the same as above, but don't follow the moved window to group
@@ -501,7 +503,12 @@ for i in groups:
 
 groups.append(
     ScratchPad("scratchpad", [
-        DropDown("1", "qalculate-gtk", x=0.0, y=0.0, width=0.2, height=0.3,
+        DropDown("1",
+                 "qalculate-gtk",
+                 x=0.0,
+                 y=0.0,
+                 width=0.2,
+                 height=0.3,
                  on_focus_lost_hide=False),
     ])
 )
@@ -509,7 +516,8 @@ groups.append(
 is_thinkpad = socket.gethostname().lower() in ["thinkpad"]
 
 keys.extend([
-    Key([], "XF86Favorites" if is_thinkpad else "XF86Calculator",
+    Key([],
+        "XF86Favorites" if is_thinkpad else "XF86Calculator",
         lazy.group["scratchpad"].dropdown_toggle("1"),
         lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
 ])
@@ -558,7 +566,6 @@ screens = [
                 widget.Spacer(),
                 widget.GroupBox(
                     inactive= "333333",
-                    #active= "#d75f5f",
                     active= "888888",
                     disable_drag=True,
                     highlight_method='line',
@@ -605,12 +612,14 @@ mouse = [
     Drag(
         [mL],
         "Button1",
-        lazy.window.set_position_floating(), start=lazy.window.get_position()
+        lazy.window.set_position_floating(),
+        start=lazy.window.get_position()
         ),
     Drag(
         [mL],
         "Button3",
-        lazy.window.set_size_floating(), start=lazy.window.get_size()
+        lazy.window.set_size_floating(),
+        start=lazy.window.get_size()
         ),
     Click(
         [mL],
@@ -679,7 +688,6 @@ def _unswallow(window):
     if hasattr(window, 'parent'):
         window.parent.minimized = False
 
-#wmname = "LG3D"
 wmname = f"Qtile {VERSION}"
 #+END_SRC
 
