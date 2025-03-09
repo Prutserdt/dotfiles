@@ -520,7 +520,8 @@ Setting the size of the headers in org mode and the document titled, ordered by 
 Some preferences that I like: hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+. Show a custom folding character, in my case three time lightning ⚡⚡⚡ and by default I want all of my org files to show images as default and hide the =#+TITLE= keyword.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-hide-emphasis-markers t)
-(setq org-ellipsis "⚡⚡⚡")
+;;(setq org-ellipsis "⚡⚡⚡")
+(setq org-ellipsis " ▼ ") ; Use a different symbol
 (setq org-startup-with-inline-images t)
 (setq org-hidden-keywords '(title))
 #+END_SRC

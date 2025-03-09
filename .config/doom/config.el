@@ -250,7 +250,8 @@
   '(org-document-title ((t (:inherit org-level-1 :height 1.6)))))
 
 (setq org-hide-emphasis-markers t)
-(setq org-ellipsis "⚡⚡⚡")
+;;(setq org-ellipsis "⚡⚡⚡")
+(setq org-ellipsis " ▼ ") ; Use a different symbol
 (setq org-startup-with-inline-images t)
 (setq org-hidden-keywords '(title))
 

@@ -285,15 +285,15 @@ keys = [
         [mR, "shift"],
         "d",
         lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
-    #Key([mR], "e", lazy.spawn("/usr/bin/emacsclient -c")), # use in case of problems
-    #Key([mR], "e", lazy.spawn("/usr/bin/emacs")), # use in case of problems
-    #Key([mR], "e", lazy.function(run_emacs)), # use in case of problems
     Key(
         [mR],
         "e",
+        #lazy.spawn("emacsclient -c -n -a 'emacs'")),
+        #lazy.spawn("/usr/bin/emacsclient -c")),
+        #lazy.spawn("/usr/local/bin/emacs --daemon")),
+        #lazy.spawn("/usr/bin/emacs")),
         lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
-    #Key([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
+    #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key(
         [mR],
         "f",

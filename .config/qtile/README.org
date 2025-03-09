@@ -46,7 +46,7 @@ from libqtile.scripts.main import VERSION
 #+END_SRC
 
 ** Variables
-Some variables are declared. The left super key, right super key and right alt key are used for keybindings. Also a variable is used to refer to my open_emacs.py script and home.
+Some variables are declared. The left super key, right super key and right alt key are used for keybindings.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 mL = "mod4"                         # Left super key, dedicated to the windowmanager
 mR = "mod3"                         # Right super key, dedicated to open applications
@@ -341,15 +341,15 @@ Right super key to open applications. Shift is used to update the application.
         [mR, "shift"],
         "d",
         lazy.spawn(expanduser("~/.config/dmenuUpdate.sh"))),
-    #Key([mR], "e", lazy.spawn("emacsclient -c -n -a 'emacs'")),
-    #Key([mR], "e", lazy.spawn("/usr/bin/emacsclient -c")), # use in case of problems
-    #Key([mR], "e", lazy.spawn("/usr/bin/emacs")), # use in case of problems
-    #Key([mR], "e", lazy.function(run_emacs)), # use in case of problems
     Key(
         [mR],
         "e",
+        #lazy.spawn("emacsclient -c -n -a 'emacs'")),
+        #lazy.spawn("/usr/bin/emacsclient -c")),
+        #lazy.spawn("/usr/local/bin/emacs --daemon")),
+        #lazy.spawn("/usr/bin/emacs")),
         lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
-    #Key([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
+    #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key(
         [mR],
         "f",
