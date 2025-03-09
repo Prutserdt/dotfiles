@@ -42,7 +42,7 @@ if [ -n "$selected_directory" ]; then
                 # Open the URL in the default web browser
                 xdg-open "$maps_url"
 
-                notify-send -t 60000 "Google maps opened with GPS location: $gps_position"
+                notify-send -t 1000 "Google maps opened with GPS location: $gps_position"
             else
                 # No GPS information found
                 zenity --info --title="No GPS Information" --text="The selected picture does not contain GPS information."

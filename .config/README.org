@@ -79,7 +79,7 @@ clipboard_dir="/dev/shm/temp/clipboard"
 # Create the directory if it doesn't exist
 mkdir -p "$clipboard_dir"
 
-notify-send -t 60000 "Clipboard management opened"
+notify-send -t 1000 "Clipboard management opened"
 
 # Go to a RAM directory, is dit wel nodig:
 cd /dev/shm
@@ -90,7 +90,7 @@ while true; do
 
     # Check if Escape was pressed or dmenu was closed
     if [[ -z "$selected_action" ]]; then
-        notify-send -t 60000 "Exiting clipboard menu"
+        notify-send -t 1000 "Exiting clipboard menu"
         exit 0
     fi
 
@@ -107,7 +107,7 @@ while true; do
             # List saved clipboard files using dmenu and choose a file
             selected_file=$(ls "$clipboard_dir" | dmenu -c -bw 2 -l 30 -p "Choose a file to show:")
 
-            notify-send -t 60000 "Viewing $selected_file"
+            notify-send -t 1000 "Viewing $selected_file"
             # Check if the selected file exists
             if [[ -f "$clipboard_dir/$selected_file" ]]; then
                 # Read the content of the selected file
@@ -118,7 +118,7 @@ while true; do
 
                 # Show the content in dmenu with the number
                 echo -n "$clipboard_content" | dmenu -c -bw 2 -l 60 -p "Clipboard Content (File $filename_number):"
-                notify-send -t 60000 "Back to clipboard menu"
+                notify-send -t 1000 "Back to clipboard menu"
             else
                 notify-send "File Not Found" "The selected file does not exist."
             fi
@@ -245,9 +245,9 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of all of the installed applications is located in ~~/.cache/dmenu_run~ which is piped into dmenu. If this list is not already generated then run the shell script that is described in this org document called [[dmenuUpdate.sh]].
 #+BEGIN_SRC bash :tangle dmenuapps.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenuapps.sh" &&
 chosen=$(cat $HOME/.cache/dmenu_run | dmenu -c -bw 2 -l 40 -i -p 'run: ') &&
-notify-send -t 60000 "Starting application: " "$chosen" &&
+#notify-send "Starting application: " "$chosen" &&
+notify-send -t 1000 "Starting application: " "$chosen" &&
 $chosen
 #+END_SRC
 
@@ -263,17 +263,17 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 The *_stable name will be the new stable version of dmenu.
 #+BEGIN_SRC bash :tangle dmenubackup.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenubackup.sh" &&
+notify-send -t 1000 "Running dmenubackup.sh" &&
 echo -n "Are you sure you want to make a backup of the current dmenu version? (y/n) "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
     mkdir $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
     cp -r $HOME/.config/suckless/dmenu/* ~/Stack/Dotfiles/dmenu/dmenu-distrotube_stable &&
-    notify-send -t 60000 "Thank you. A backup of dmenu was made to"
+    notify-send -t 1000 "Thank you. A backup of dmenu was made to"
 else
     echo No
-    notify-send -t 60000 "Exiting dmenubackup.sh" "No backup was made"
+    notify-send -t 1000 "Exiting dmenubackup.sh" "No backup was made"
 fi
 #+END_SRC
 
@@ -290,7 +290,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 My list of textfiles is piped into dmenu and the selected one is opened in a new instance of emacs or on the already opened emacs client. Note: the 'textfile' is a textfiles that consists of a list of filenames including the directory location.
 #+BEGIN_SRC bash :tangle dmenuemacs.sh  :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenuemacs.sh" &&
+notify-send -t 1000 "Running dmenuemacs.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/textfiles | dmenu -c -bw 2 -l 40 -i -p 'Open textfiles: ')
 [ -z "$chosen" ] && exit
 #+END_SRC
@@ -318,11 +318,11 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 My list of bookmarks ~~urls~ is piped into dmenu and the selected url is opened in the default browser application (~xdg-open~).
 #+BEGIN_SRC bash :tangle dmenuinternet.sh  :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenuinternet.sh" &&
+notify-send -t 1000 "Running dmenuinternet.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/urls | dmenu -c -bw 2 -l 40 -i -p 'Open website: ')
 [ -z "$chosen" ] && exit
 xdg-open $chosen &&
-notify-send -t 60000 "Opening webpage: " "$chosen"
+notify-send -t 1000 "Opening webpage: " "$chosen"
 #+END_SRC
 
 ** dmenukill.sh
@@ -337,7 +337,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A notification is send and the system processess, fetched by running =ps -a iu=, are piped into dmenu.
 #+BEGIN_SRC bash :tangle dmenukill.sh  :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenukill.sh, a script to kill processes!" &&
+notify-send -t 1000 "Running dmenukill.sh, a script to kill processes!" &&
 chosen="$(ps -a -u $USER |dmenu -c -bw 2 -l 40 -p "Delete process:"| awk '{print $1}')"
 [ -z "$chosen" ] && exit
 selected_option=$(echo -e "d Delete process\nc Copy process name\np Copy PID\ne Exit" | dmenu -c -bw 2 -l 4 -p "Choose an option:")
@@ -350,18 +350,18 @@ When the process is selected by the user then a menu with four options is create
 case "$selected_option" in
     "d Delete process")
         kill "$chosen"
-        notify-send -t 60000 "The process '$process_name' with PID '$chosen' was killed!"
+        notify-send -t 1000 "The process '$process_name' with PID '$chosen' was killed!"
         ;;
     "c Copy process name")
         echo "$process_name" | xclip -selection clipboard
-        notify-send -t 60000 "Process name '$process_name', coupled to PID '$chosen', was copied to clipboard!"
+        notify-send -t 1000 "Process name '$process_name', coupled to PID '$chosen', was copied to clipboard!"
         ;;
     "p Copy PID")
         echo "$chosen" | xclip -selection clipboard
-        notify-send -t 60000 "Selected PID '$chosen', coupled to process name '$process_name', was copied to clipboard!"
+        notify-send -t 1000 "Selected PID '$chosen', coupled to process name '$process_name', was copied to clipboard!"
         ;;
     "e Exit")
-        notify-send -t 60000 "Exiting dmenukill.sh"
+        notify-send -t 1000 "Exiting dmenukill.sh"
         exit
         ;;
 esac
@@ -383,7 +383,7 @@ This script will delete all of the current dmenu files. It will build from the s
 3: Run the patch
 
 #+BEGIN_SRC bash :tangle dmenupatch.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenupatch.sh" &&
+notify-send -t 1000 "Running dmenupatch.sh" &&
 echo -n "Are you sure you want to patch the current dmenu version? This will first:
 RESTORE TO THE STABLE VERSION OF DMENU and after that make clean install on the .diff file in the direcotory ~/Stack/Dotfiles/dmenu/patches/test. Yes or no? (y/n) "
 read answer
@@ -398,10 +398,10 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm $HOME/.config/suckless/dmenu/config.h &&
     patch -p1 < $HOME/Stack/Dotfiles/dmenu/patches/test/*.diff &&
     make clean install
-    notify-send -t 60000 "dmenu was patched"
+    notify-send -t 1000 "dmenu was patched"
 else
     echo No
-    notify-send -t 60000 "Exited dmenupatch.sh. Nothing was changed"
+    notify-send -t 1000 "Exited dmenupatch.sh. Nothing was changed"
 fi
 #+END_SRC
 
@@ -418,7 +418,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 This script gives yes/no option to make a local backup of dmenu.
 This script can be called by the .bashrc alias dmenustable.
 #+BEGIN_SRC bash :tangle dmenustable.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenustable" &&
+notify-send -t 1000 "Running dmenustable" &&
 echo -n "Are you sure you want to restore to the stable version and DELETE the current dmenu version? (y/n) "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -427,10 +427,10 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     cp -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_stable/* ~/.config/suckless/dmenu &&
     cd $HOME/.config/suckless/dmenu &&
     clear && ls -al
-    notify-send -t 60000 "The stable version of dmenu was placed back" "Please run sudo make clean install"
+    notify-send -t 1000 "The stable version of dmenu was placed back" "Please run sudo make clean install"
 else
     echo No
-    notify-send -t 60000 "Exited dmenustable.sh. Nothing was changed"
+    notify-send -t 1000 "Exited dmenustable.sh. Nothing was changed"
 fi
 #+END_SRC
 
@@ -449,10 +449,10 @@ If the bookmarks are not visible in Thunar then please generate them with [[thun
 This requires the dmenu patch: center, which gives the dmenu -c option.
 After Thunar is launched there is a microbreak and then F3 is pressed to open l3ts
 #+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenuthunar.sh" &&
+notify-send -t 1000 "Running dmenuthunar.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -i -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
-notify-send -t 60000 "Directory opened in Thunar: " "$chosen" &&
+notify-send -t 1000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen & sleep .3 && xdotool key F3
 #+END_SRC
 
@@ -468,10 +468,10 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 A list of unicode is piped into dmenu, up to a list of 45 lines. Then via ~awk~ the output is piped into the system clipboard and the output is pasted out directly. The backspace is added to remove the nextline. If the unicode file is missing then generate it by [[unicode]].
 #+BEGIN_SRC bash :tangle dmenuunicode.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenuunicode.sh" &&
+notify-send -t 1000 "Running dmenuunicode.sh" &&
 cat $HOME/.config/unicode | dmenu -c -bw 2 -l 40 -i -p 'Emoji picker: '| awk '{print $1}'| xclip -selection clipboard &&
 xdotool key "ctrl+v" "BackSpace" &&
-notify-send -t 60000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
+notify-send -t 1000 "Emoji in clipboard: " "$(xclip -o -selection clipboard)"
 #+END_SRC
 Remark: the center patch of dmenu is needed for the -c option.
 
@@ -487,7 +487,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
 #+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755) :eval never
-#notify-send -t 60000 "Running dmenuUpdate.sh" &&
+notify-send -t 1000 "Running dmenuUpdate.sh" &&
 rm $HOME/'.cache/dmenu_run' &
 ls /usr/bin/* > $HOME/.cache/dmenu_run &&
 #+END_SRC
@@ -500,7 +500,7 @@ for f in $FILES
 do
     sed -i '1 i '$f  $HOME/.cache/dmenu_run
 done
-notify-send -t 60000 "A new list of installed applications is made 😃"
+notify-send -t 1000 "A new list of installed applications is made 😃"
 #+END_SRC
 
 ** dmenuvanilla.sh
@@ -515,7 +515,7 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 First give the option to opt out and wait for the user to continue or not.
 #+BEGIN_SRC bash :tangle dmenuvanilla.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running dmenuvanilla.sh" &&
+notify-send -t 1000 "Running dmenuvanilla.sh" &&
 echo -n "Are you sure you want to restore to vanilla dmenu and DELETE the current dmenu version? (y/n) "
 read answer
 #+END_SRC
@@ -528,10 +528,10 @@ if [ "$answer" != "${Ganswer#[Yy]}" ] ;then
     cp -r $HOME/Stack/Dotfiles/dmenu/dmenu-distrotube_14JAN22/* ~/.config/suckless/dmenu &&
     cd $HOME/.config/suckless/dmenu &&
     clear && ls -al
-    notify-send -t 60000 "The vanilla version of dmenu was restored. Please run sudo make clean instsall" &&
+    notify-send -t 1000 "The vanilla version of dmenu was restored. Please run sudo make clean instsall" &&
 else
     echo No
-    notify-send -t 60000 "Exited dmenuvanilla.sh. Nothing was changed. "
+    notify-send -t 1000 "Exited dmenuvanilla.sh. Nothing was changed. "
 fi
 #+END_SRC
 
@@ -551,7 +551,7 @@ The --bg-fill option makes sure that the image is stretched to the dimensions of
 #+BEGIN_SRC bash :tangle dmenuwallpaper.sh :padline no :tangle-mode (identity #o755) :eval never
 notify-send  "Running dmenuwallpaper.sh" &&
 ls $HOME/Stack/Afbeeldingen/Wallpapers/*.* | dmenu -c -bw 2 -l 40 -i -p 'Wallpaper: ' | awk '{print $1}'| xclip -selection clipboard && feh --bg-fill "$(xclip -o -selection clipboard)" &&
-notify-send -t 60000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
+notify-send -t 1000 "Wallpaper changed to: " "$(xclip -o -selection clipboard | cut -c 44-)"
 #+END_SRC
 
 ** exitqtile.sh
@@ -566,7 +566,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 
 Echo out the options and run the ~killall qtile~ command, or not.
 #+BEGIN_SRC sh :tangle exitqtile.sh :padline no :eval no :tangle-mode (identity #o755)
-notify-send -t 60000 "Do you want to leave the system?"
+notify-send -t 1000 "Do you want to leave the system?"
 choices=("Close Window Manager" "Reboot" "Shutdown")
 colors="-nb #FFFFFF -nf #000000 -sb #DC5A5A -sf  #FFFFFF"  # Pale red background outside, red inside
 chosen=$(printf '%s\n' "${choices[@]}" | dmenu -c -l "${#choices[@]}" $colors)
@@ -576,17 +576,17 @@ case "$chosen" in
     "Close Window Manager")
         # Command to close the window manager (qtile in this case)
         killall qtile
-        notify-send -t 60000 "Closing down qtile!"
+        notify-send -t 1000 "Closing down qtile!"
         ;;
     "Reboot")
         # Command to reboot the system
         systemctl reboot
-        notify-send -t 60000 "Rebooting the system!"
+        notify-send -t 1000 "Rebooting the system!"
         ;;
     "Shutdown")
         # Command to shut down the system
         systemctl poweroff
-        notify-send -t 60000 "Shutting down the system!"
+        notify-send -t 1000 "Shutting down the system!"
         ;;
     ,*)
         echo "No option selected."
@@ -644,7 +644,7 @@ if [ -n "$selected_directory" ]; then
                 # Open the URL in the default web browser
                 xdg-open "$maps_url"
 
-                notify-send -t 60000 "Google maps opened with GPS location: $gps_position"
+                notify-send -t 1000 "Google maps opened with GPS location: $gps_position"
             else
                 # No GPS information found
                 zenity --info --title="No GPS Information" --text="The selected picture does not contain GPS information."
@@ -662,7 +662,7 @@ fi
 onderstaande is een meer simpele versie
 #+begin_src bash
 cd /home/icefly/Downloads/2024_Vietnam
-image_files=$(find . -maxdepth 1 -type f -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" -o -iname "*.gif" | sort) && selected_image=$(echo "$image_files" | nsxiv -ftio) && [ -n "$selected_image" ] && exif_info=$(exiftool "$selected_image" | grep "GPS Position") && [ -n "$exif_info" ] && gps_position=$(echo "$exif_info" | awk -F ": " "{print $2}" | tr -d " " | sed "s/deg/°/g") && maps_url="https://www.google.com/maps/place/$gps_position" && xdg-open "$maps_url" && notify-send -t 60000 "Google maps opened with GPS location: $gps_position" || echo "no exif data in picture"
+image_files=$(find . -maxdepth 1 -type f -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" -o -iname "*.gif" | sort) && selected_image=$(echo "$image_files" | nsxiv -ftio) && [ -n "$selected_image" ] && exif_info=$(exiftool "$selected_image" | grep "GPS Position") && [ -n "$exif_info" ] && gps_position=$(echo "$exif_info" | awk -F ": " "{print $2}" | tr -d " " | sed "s/deg/°/g") && maps_url="https://www.google.com/maps/place/$gps_position" && xdg-open "$maps_url" && notify-send -t 1000 "Google maps opened with GPS location: $gps_position" || echo "no exif data in picture"
 #+end_src
 
 #+RESULTS:
@@ -1235,10 +1235,10 @@ dir="$HOME/Applications" # directory
 appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
 
 if [ -n "$appimage" ]; then
-    notify-send -t 60000 "Starting the Stack .AppImage..." && #send notification
+    notify-send -t 1000 "Starting the Stack .AppImage..." && #send notification
     "$appimage"  # Execute the file
 else
-    notify-send -t 60000 "No .AppImage file containing 'stack' in its name was found in $dir"
+    notify-send -t 1000 "No .AppImage file containing 'stack' in its name was found in $dir"
 fi
 #+END_SRC
 
@@ -1272,11 +1272,11 @@ When the brightness reaches 0.1 then it should not be any lower, therefore and i
 #+BEGIN_SRC sh :tangle decrMonitorBrightness.sh :padline no :eval no :tangle-mode (identity #o755)
 if [[ "$currentBrightness" == "0.10" ]] ; then
     echo "The current brightness is 0.1 and should not be any lower!"
-    notify-send -t 60000 "🔆 Brightness minimum reached!: ️" "$currentBrightness"
+    notify-send -t 1000 "🔆 Brightness minimum reached!: ️" "$currentBrightness"
 else
     newBrightness=$(echo $currentBrightness-0.1| bc -l)
     xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
-    notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    notify-send -t 1000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
 #+END_SRC
@@ -1295,7 +1295,7 @@ Two functions are declared; one to push to git and one to pull. The push functio
 #+BEGIN_SRC sh :tangle dotfiles.sh :padline no :eval no :tangle-mode (identity #o755)
 # ~/.config/dotfiles.sh
 
-notify-send -t 60000 "Running dotfiles.sh" &&
+notify-send -t 1000 "Running dotfiles.sh" &&
 function Push()
 {
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v;
@@ -1371,19 +1371,20 @@ hostname=$(uname -n)
 
 # Check if Emacs process is running
 if pgrep -x "emacs" > /dev/null; then
-    notify-send -t 60000 "Since Emacs is already running, only starting emacsclient -c -n"
+    notify-send -t 1000 "Since Emacs is already running, only starting emacsclient -c -n"
     emacsclient -c -n
 else
     # Check the hostname and start Emacs accordingly
     if [[ "$hostname" == "work" || "$hostname" == "thinkpad" ]]; then
-        notify-send -t 60000 "Emacs is not running, starting the daemon followed by emacsclient"
+        notify-send -t 1000 "Emacs is not running, starting the daemon followed by emacsclient"
         #/usr/bin/emacs --daemon
         #emacsclient -c -n
         emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
     elif [[ "$hostname" == "linuxbox" ]]; then
-        notify-send -t 60000 "Linuxbox. Emacs is not running, starting emacsclient"
-        /usr/bin/emacs
+        notify-send -t 1000 "Linuxbox. Emacs is not running, starting emacsclient"
+        #/usr/bin/emacs
         #emacsclient -c -n        # Works on my desktop
+        /usr/local/bin/emacs
     fi
 fi
 #+END_SRC
@@ -1394,10 +1395,10 @@ FIXME: Volgende even bewaren, en als alles werkt op al mijn systemen dan pas weg
 #!/bin/bash
 #Check if Emacs is running
 if pgrep -x "emacs" > /dev/null; then
-   notify-send -t 60000 "Since emacs is already running only start emacsclient -c -n"
+   notify-send -t 1000 "Since emacs is already running only start emacsclient -c -n"
    emacsclient -c -n
 else
-   notify-send -t 60000 "Emacs is not running, starting the daemon followed by emacsclient"
+   notify-send -t 1000 "Emacs is not running, starting the daemon followed by emacsclient"
    #/usr/bin/emacs --daemon  # Works on my desktop
    #emacsclient -c -n        # Works on my desktop
    emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
@@ -1419,14 +1420,14 @@ caps_lock_key=$(xmodmap -pke | grep -P "keycode\s+66 =.+" | awk '{print $4}')
 # Toggle key mappings
 if [ "$esc_key" == "Escape" ]; then
     # Right setting for redox (other way around)
-    notify-send -t 60000 "Esc/Caps is swapped! Escape is now: $esc_key"
+    notify-send -t 1000 "Esc/Caps is swapped! Escape is now: $esc_key"
     xmodmap -e "remove lock = Caps_Lock"
     xmodmap -e 'keycode 9 = Caps_Lock'
     xmodmap -e 'keycode 66 = Escape'
     xmodmap -e 'add lock = Caps_Lock'
 else
     # "Wrong" setting for my redox keyboard
-    notify-send -t 60000 "Esc/Caps is swapped! Escape is now: $esc_key"
+    notify-send -t 1000 "Esc/Caps is swapped! Escape is now: $esc_key"
     xmodmap -e "remove lock = Caps_Lock"
     xmodmap -e 'keycode 9 = Escape'
     xmodmap -e 'clear lock'
@@ -1466,11 +1467,11 @@ When the brightness reaches 1 then it should not be any lower, therefore and if-
 if [[ "$currentBrightness" == "1.0" ]] ; then
     echo "niets doen, want grens van 1.0 bereikt"
     xrandr --output $monitor --brightness 1.0 --gamma "1:1:1"
-    notify-send -t 60000 "🔆 Brightness maximum already reached! ⚠"
+    notify-send -t 1000 "🔆 Brightness maximum already reached! ⚠"
 else
     newBrightness=$(echo $currentBrightness+0.1| bc -l)
     xrandr --output $monitor --brightness $newBrightness --gamma "$new_gamma_value"
-    notify-send -t 60000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
+    notify-send -t 1000 "🔆 Brightness set to: $newBrightness RGB set to: $new_gamma_value"️
     echo "Brightness changed from $currentBrightness  to $newBrightness. RGB change from $gamma_value to $new_gamma_value"
 fi
 #+END_SRC
@@ -1493,19 +1494,19 @@ xmodmap -e "remove mod4 = Super_R"
 case "$hostname" in
     work)
         keycode=107    # Use keycode 107 for work system... to be tested!!! should not work
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        notify-send -t 1000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     linuxbox)
         keycode=134    # Use keycode 134 for linuxbox system
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        notify-send -t 1000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     thinkpad)
         keycode=107    # Use keycode 107 for thinkpad system, this is the printscreen button :-)
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        notify-send -t 1000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     ,*)
         # Display a notification for unknown hostnames and exit with an error
-        notify-send -t 60000 "Unknown hostname: $hostname"
+        notify-send -t 1000 "Unknown hostname: $hostname"
         exit 1
         ;;
 esac
@@ -1551,7 +1552,7 @@ Apply the new gamma values. The awk connected part makes shure that the right ou
 #+BEGIN_SRC sh :tangle nightColorDown.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
 echo "New gamma value, after xrandr: $new_gamma_value"
-notify-send -t 60000 "🔆 Red decreased to: " "$new_gamma_value"️
+notify-send -t 1000 "🔆 Red decreased to: " "$new_gamma_value"️
 #+END_SRC
 
 ** nightColorUp.sh
@@ -1583,7 +1584,7 @@ Apply the new gamma values. The awk connected part makes shure that the right ou
 #+BEGIN_SRC sh :tangle nightColorUp.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma "$new_gamma_value"
 echo "New gamma value, after xrandr: $new_gamma_value"
-notify-send -t 60000 "🔆 Red increased to: " "$new_gamma_value"️
+notify-send -t 1000 "🔆 Red increased to: " "$new_gamma_value"️
 #+END_SRC
 
 ** notify-log.sh
@@ -1663,7 +1664,7 @@ Any script should start with a directive, first a shebang ~#!~ and in this case 
 Apply the new gamma values. The awk connected part makes shure that the right output is selected, then the script will work on any connnected display.
 #+BEGIN_SRC sh :tangle resetRGB.sh :padline no :eval no :tangle-mode (identity #o755)
 xrandr --output $(xrandr | awk '/ connected/ {print $1}') --gamma 1:1:1
-notify-send -t 60000 "🔆 RGB reset!"
+notify-send -t 1000 "🔆 RGB reset!"
 #+END_SRC
 
 ** screenshot2text.sh
@@ -1674,7 +1675,7 @@ A script that makes a screenshot and magically converts it to text in the system
 ramdir="/dev/shm/temp"
 mkdir $ramdir &
 
-notify-send -t 60000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text"
+notify-send -t 1000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text"
 
 screenshot_pic="$ramdir/wismij.jpg"
 screenshot_txt="$ramdir/wismij"
@@ -1684,7 +1685,7 @@ tesseract $screenshot_pic $screenshot_txt
 
 cat $screenshot_txt.txt | xclip -sel clip
 
-notify-send -t 60000 "Text created from screenshot" "$(cat $screenshot_txt.txt)"
+notify-send -t 1000 "Text created from screenshot" "$(cat $screenshot_txt.txt)"
 #+end_src
 
 
@@ -1704,7 +1705,7 @@ mkdir $ramdir &
 
 The screenshot program xfce4-screenshooter ~-r~ flag will select a region to be captured by mouse and the ~-s~ flag will save to the path. Here the links to the picture and textfile are created and the screenshot is saved as 'wismij.jpg' =(wismij is Dutch for EraseMe)=. NOTE: the next screenshot will overwrite the jpg and txt file.
 #+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 60000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text"
+notify-send -t 1000 "Running screenshot2text" "Select an area with mouse 🐭 to convert to text"
 screenshot_pic="$ramdir/wismij.jpg"
 screenshot_txt="$ramdir/wismij"
 xfce4-screenshooter -r -s $screenshot_pic
@@ -1718,7 +1719,7 @@ tesseract $screenshot_pic $screenshot_txt
 Finally the textfile is catted and piped to the system clipboard with xclip. The -sel flag selects the X selection to use and ~clip~ stands for clipboard, where the text will be stored. Ready to be pasted when needed.
 #+BEGIN_SRC bash :tangle screenshot2text.sh :padline no :tangle-mode (identity #o755) :eval never
 cat $screenshot_txt.txt | xclip -sel clip
-notify-send -t 60000 "Text created from screenshot" "$(cat $screenshot_txt.txt)"
+notify-send -t 1000 "Text created from screenshot" "$(cat $screenshot_txt.txt)"
 #+END_SRC
 
 ** stack_startup.sh
@@ -1737,10 +1738,10 @@ dir="$HOME/Applications" # directory
 appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
 
 if [ -n "$appimage" ]; then
-    notify-send -t 60000 "Starting the Stack .AppImage..." && #send notification
+    notify-send -t 1000 "Starting the Stack .AppImage..." && #send notification
     "$appimage"  # Execute the file
 else
-    notify-send -t 60000 "No .AppImage file containing 'stack' in its name was found in $dir"
+    notify-send -t 1000 "No .AppImage file containing 'stack' in its name was found in $dir"
 fi
 #+END_SRC
 

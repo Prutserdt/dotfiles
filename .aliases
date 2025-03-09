@@ -18,6 +18,8 @@ alias .4='cd ../../../.. && pwd'
 alias ls='ls --color=auto'      # Colored output when possible
 alias l='ls -alh'               # Lazy man's ls
 alias la='ls -lAFh'             # Long list
+#alias lsd='ls -d */'           # Only dirs
+alias lsd='find . -type d'     # Only dirs, incl. hidden
 alias diff="diff --color=auto"
 alias q="exit"                  # Exiting quickly
 alias ZZ="exit"                 # Exiting quickly, the Vim way
@@ -59,9 +61,9 @@ alias e='$HOME/.config/escape_caps_toggle.sh'
 alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on hostname
 
 # emacs commandline
-alias em="/usr/bin/emacs -nw"
-#alias emacs="emacsclient -c -a 'emacs'"  # Works on my thinkpad
-alias emacs="/usr/bin/emacs"  # Works on my desktop
+#alias em="/usr/bin/emacs -nw" 
+alias emacs="emacsclient -c -a 'emacs'"  # Works on my thinkpad
+#alias emacs="/usr/bin/emacs"  # Works on my desktop
 alias doomsync="~/.config/emacs/bin/doom sync"
 alias doomdoctor="~/.config/emacs/bin/doom doctor"
 alias doomupgrade="~/.config/emacs/bin/doom upgrade"

@@ -3,7 +3,7 @@
 #!/bin/bash
 # ~/.config/dotfiles.sh
 
-notify-send -t 60000 "Running dotfiles.sh" &&
+notify-send -t 1000 "Running dotfiles.sh" &&
 function Push()
 {
 /usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME add -u :/ -v;

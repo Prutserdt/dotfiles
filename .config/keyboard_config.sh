@@ -11,19 +11,19 @@ xmodmap -e "remove mod4 = Super_R"
 case "$hostname" in
     work)
         keycode=107    # Use keycode 107 for work system... to be tested!!! should not work
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        notify-send -t 1000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     linuxbox)
         keycode=134    # Use keycode 134 for linuxbox system
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        notify-send -t 1000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     thinkpad)
         keycode=107    # Use keycode 107 for thinkpad system, this is the printscreen button :-)
-        notify-send -t 60000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        notify-send -t 1000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
         ;;
     *)
         # Display a notification for unknown hostnames and exit with an error
-        notify-send -t 60000 "Unknown hostname: $hostname"
+        notify-send -t 1000 "Unknown hostname: $hostname"
         exit 1
         ;;
 esac

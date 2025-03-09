@@ -510,11 +510,10 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.Notify(
-                    foreground="#ff966c"),
+# aangepast <2025-03-08 Sat>, ik gebruik nu notification-daemon
+#                widget.Notify(
+#                    foreground="#ff966c"),
                 widget.Systray(),
-                widget.QuickExit(
-                    foreground="#888888"),
             ]   + battery_widget +
             [
                 widget.OpenWeather(
@@ -527,6 +526,9 @@ screens = [
                 ),
                 widget.Volume(
                     foreground="#d75f5f"),
+                widget.QuickExit(
+                    default_text="  🛑",
+                    foreground="#888888"),
                 widget.Clock(
                     format="%d%b%y %H:%M",
                     foreground="#888888",

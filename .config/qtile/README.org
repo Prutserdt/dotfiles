@@ -578,11 +578,10 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.Notify(
-                    foreground="#ff966c"),
+# aangepast <2025-03-08 Sat>, ik gebruik nu notification-daemon
+#                widget.Notify(
+#                    foreground="#ff966c"),
                 widget.Systray(),
-                widget.QuickExit(
-                    foreground="#888888"),
             ]   + battery_widget +
             [
                 widget.OpenWeather(
@@ -595,6 +594,9 @@ screens = [
                 ),
                 widget.Volume(
                     foreground="#d75f5f"),
+                widget.QuickExit(
+                    default_text="  🛑",
+                    foreground="#888888"),
                 widget.Clock(
                     format="%d%b%y %H:%M",
                     foreground="#888888",
@@ -702,6 +704,7 @@ hostname=$(uname -n)
 
 if [ "$hostname" = "work" ]; then
     $HOME/.config/notify-log.sh $HOME/.config/notify.log &  # writing notification to a logfile
+    /usr/lib/notification-daemon-1.0/notification-daemon &
     sleep 1
     $HOME/.config/escape_caps_toggle.sh &
     sleep 0.2
@@ -720,6 +723,7 @@ fi
 
 if [ "$hostname" = "linuxbox" ]; then
     setxkbmap us &
+    /usr/lib/notification-daemon-1.0/notification-daemon &
     $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
@@ -735,6 +739,7 @@ fi
 if [ "$hostname" = "thinkpad" ]; then
     $HOME/.config/escape_caps_toggle.sh &
     $HOME/.config/keyboard_config.sh &
+    /usr/lib/notification-daemon-1.0/notification-daemon &
     setxkbmap us &
     $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
@@ -744,4 +749,3 @@ if [ "$hostname" = "thinkpad" ]; then
     syncthing &
 fi
 #+end_src
-
