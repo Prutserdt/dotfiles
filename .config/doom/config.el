@@ -84,24 +84,51 @@
       (set-frame-parameter (selected-frame) 'alpha '(85 80))
       (message "Theme switched to my dark theme."))))
 
+(defun my-transparency-toggle ()
+  "Switch transparency back and forth."
+  (interactive)
+
+  (if (equal (frame-parameter (selected-frame) 'alpha) '(100 100))
+      (progn
+        (set-frame-parameter (selected-frame) 'alpha '(85 80))
+        (add-to-list 'default-frame-alist '(alpha 85 80)))
+    (set-frame-parameter (selected-frame) 'alpha '(100 100))))
+
 (defvar modeline-hidden nil)
 
 (setq-default mode-line-format (default-value 'mode-line-format))
 
-(defun my-distractionfree-toggle ()
+(defun my-modeline-toggle ()
+  "Switch modeline on/off."
   (interactive)
-
-  (if display-line-numbers-mode
-      (display-line-numbers-mode 0)
-      (display-line-numbers-mode 1))
-
-  (if (equal fill-column 110)
-      (setq fill-column 140)
-      (setq fill-column 110))
 
   (if (equal mode-line-format nil)
       (setq mode-line-format (default-value 'mode-line-format))
     (setq mode-line-format nil)))
+
+(defun my-line-numbers-toggle ()
+  "Switch line numbers on/off."
+  (interactive)
+
+  (if display-line-numbers-mode
+      (display-line-numbers-mode 0)
+    (display-line-numbers-mode 1)))
+
+(defun my-distractionfree-toggle ()
+  "Switch from my normal environment to distraction free and back."
+  (interactive)
+
+  (my-line-numbers-toggle)
+  (my-modeline-toggle)
+  (my-transparency-toggle))
+
+(defun my-column-weidth-toggle ()
+  "Toggle the weidth of the characters."
+  (interactive)
+
+  (if (equal fill-column 110)
+      (setq fill-column 140)
+    (setq fill-column 110)))
 
 (setq! evil-want-Y-yank-to-eol nil)
 
@@ -185,7 +212,12 @@
             :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
-        :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
+        (:prefix ("d" . "Distraction free")
+            :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
+            :desc "Transparency togglee"         "t" #'my-transparency-toggle
+            :desc "Modeline toggle"              "m" #'my-modeline-toggle
+            :desc "Line numbers toggle"          "l" #'my-line-numbers-toggle
+            :desc "Column weidth toggle"         "c" #'my-column-weidth-toggle)
         (:prefix ("e" . "Excel table stuff")
             :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
             :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
@@ -207,7 +239,9 @@
         :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "pdf remove password"              "z" 'my-pdf-password-removal)
+
     (:desc "Open files in emacs" "e" #'recentf-open-files)
+
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("d" . "dailies")

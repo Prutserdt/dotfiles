@@ -9,6 +9,7 @@
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
   - [[#theming-and-graphical-settings][Theming and graphical settings]]
+  - [[#distractionsdistraction-free][Distractions/distraction free]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
   - [[#vterm-toggle][Vterm-toggle]]
@@ -291,27 +292,70 @@ An emergency switch to be used at very bright light conditions, for instance at 
       (message "Theme switched to my dark theme."))))
 #+END_SRC
 
-Distraction free mode, towards even more less distractions by removing the line numbers, removing the modeline and setting the width a bit wider.
+** Distractions/distraction free
+For more (or less) focus the distractions on the screen can be toggled of all together or separately one by one.
+
+Switch the transparency on or off.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-transparency-toggle ()
+  "Switch transparency back and forth."
+  (interactive)
+
+  (if (equal (frame-parameter (selected-frame) 'alpha) '(100 100))
+      (progn
+        (set-frame-parameter (selected-frame) 'alpha '(85 80))
+        (add-to-list 'default-frame-alist '(alpha 85 80)))
+    (set-frame-parameter (selected-frame) 'alpha '(100 100))))
+#+end_src
+
+Modeline toggle.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defvar modeline-hidden nil)
 
 (setq-default mode-line-format (default-value 'mode-line-format))
 
-(defun my-distractionfree-toggle ()
+(defun my-modeline-toggle ()
+  "Switch modeline on/off."
   (interactive)
-
-  (if display-line-numbers-mode
-      (display-line-numbers-mode 0)
-      (display-line-numbers-mode 1))
-
-  (if (equal fill-column 110)
-      (setq fill-column 140)
-      (setq fill-column 110))
 
   (if (equal mode-line-format nil)
       (setq mode-line-format (default-value 'mode-line-format))
     (setq mode-line-format nil)))
-#+END_SRC
+#+end_src
+
+A toggle for the line numbers.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-line-numbers-toggle ()
+  "Switch line numbers on/off."
+  (interactive)
+
+  (if display-line-numbers-mode
+      (display-line-numbers-mode 0)
+    (display-line-numbers-mode 1)))
+#+end_src
+
+A combination of the previous three toggles that are applied all at once.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-distractionfree-toggle ()
+  "Switch from my normal environment to distraction free and back."
+  (interactive)
+
+  (my-line-numbers-toggle)
+  (my-modeline-toggle)
+  (my-transparency-toggle))
+#+end_src
+
+This toggle will increase/decrease the weidth of the text. Not really much to do with distractions, but I placed it here anyway.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-column-weidth-toggle ()
+  "Toggle the weidth of the characters."
+  (interactive)
+
+  (if (equal fill-column 110)
+      (setq fill-column 140)
+    (setq fill-column 110)))
+#+end_src
+
 
 ** Evil mode configuration
 The default setting of Evil mode in Doom Emacs is to use Y in normal mode to yank the whole line from the cursor position. This is obviously the *incorrect* way and is reverted here to copy the whole line, regardless of cursor position.
@@ -438,7 +482,12 @@ The following are keybindings that are bound to my leader key, which is =space=,
             :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
             :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
-        :desc "Toggle distraction free"          "d" #'my-distractionfree-toggle
+        (:prefix ("d" . "Distraction free")
+            :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
+            :desc "Transparency togglee"         "t" #'my-transparency-toggle
+            :desc "Modeline toggle"              "m" #'my-modeline-toggle
+            :desc "Line numbers toggle"          "l" #'my-line-numbers-toggle
+            :desc "Column weidth toggle"         "c" #'my-column-weidth-toggle)
         (:prefix ("e" . "Excel table stuff")
             :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
             :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
@@ -460,7 +509,9 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "pdf remove password"              "z" 'my-pdf-password-removal)
+
     (:desc "Open files in emacs" "e" #'recentf-open-files)
+
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
         (:prefix ("d" . "dailies")
