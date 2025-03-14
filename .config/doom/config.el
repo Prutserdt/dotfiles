@@ -122,8 +122,8 @@
   (my-modeline-toggle)
   (my-transparency-toggle))
 
-(defun my-column-weidth-toggle ()
-  "Toggle the weidth of the characters."
+(defun my-column-width-toggle ()
+  "Toggle the width of the characters."
   (interactive)
 
   (if (equal fill-column 110)
@@ -169,7 +169,7 @@
 (setq gpt-openai-engine "gpt-4")
 
 (defun my-region-select-gptel-send ()
-  "Select text from beginning of line to end of buffer and run gptel-send."
+  "Select text at point to the end of buffer and send this to the LLM (gptel-send). The output will be generated at the bottom of the buffer."
   (interactive)
   (beginning-of-line)      ; Save the current point position as the starting point of the selection
   (let ((start (point)))
@@ -191,6 +191,7 @@
 
 (map! :leader
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
+
 
     (:prefix ("b") ;; Default Doom keybinding
          :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
@@ -217,7 +218,7 @@
             :desc "Transparency togglee"         "t" #'my-transparency-toggle
             :desc "Modeline toggle"              "m" #'my-modeline-toggle
             :desc "Line numbers toggle"          "l" #'my-line-numbers-toggle
-            :desc "Column weidth toggle"         "c" #'my-column-weidth-toggle)
+            :desc "Column width toggle"          "c" #'my-column-width-toggle)
         (:prefix ("e" . "Excel table stuff")
             :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
             :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
@@ -230,15 +231,18 @@
         :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
         :desc "Reload Doom: doom/reload"         "r" #'doom/reload
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
-        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+        (:prefix ("p" . "pdf helpers")
+            :desc "Select pdf to org buffer"     "b" #'my-open-pdf-as-org-text
+            :desc "Select pdf ocrtext to org buffer" "o" #'my-open-pdf-to-org-as-text-with-ocr
+            :desc "Remove password from pdf"     "z" 'my-pdf-password-removal)
         :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
-        :desc "Run python async"                 "p" #'my-run-python-code-in-new-frame-select-manually
+        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
         (:prefix ("s" . "SMILES chemistry")
-            :desc "Insert image from Smiles"     "i" #'my-obabel-smiles-insert-image
-            :desc "Show image"                   "s" #'my-obabel-smiles-show-image)
+            :desc "Insert image under Smiles"    "i" #'my-obabel-smiles-insert-image
+            :desc "Show image in sxiv"           "s" #'my-obabel-smiles-show-image)
         :desc "Visualized undo: vundo"           "v" #'vundo
         :desc "Write this buffer to file"        "w" #'write-file
-        :desc "pdf remove password"              "z" 'my-pdf-password-removal)
+        :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually)
 
     (:desc "Open files in emacs" "e" #'recentf-open-files)
 
@@ -541,7 +545,7 @@ Brain shelve: %s.
   (interactive)
   (let ((script-path "~/Stack/Documenten/Aandelen/Plotten_AA_in_de_tijd.py"))
     (setq default-directory (file-name-directory script-path))
-    (shell-command (concat "notify-send -t 6000 'Displaying my AA plot: " script-path "'"))
+    (shell-command (concat "notify-send -t 1000 'Displaying my AA plot: " script-path "'"))
     (shell-command (concat "python3 " script-path)
                    "*Python Output*")
     (message (concat "Python script executed: " script-path))))
@@ -561,6 +565,46 @@ Brain shelve: %s.
   "Open the keymap.c file of my Redox qmk firmware."
   (interactive)
   (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
+
+(defun my-open-pdf-as-org-text (pdf-file)
+  "Insert text from a PDF file into a new Org mode buffer using pdftotext."
+  (interactive "fSelect PDF file: ")
+  (let ((buf (generate-new-buffer "*PDF Text*")))
+    (with-current-buffer buf
+      (org-mode)
+      (start-process
+       "pdftotext" buf "pdftotext" pdf-file "-"))
+    (switch-to-buffer buf)))
+
+(defun my-open-pdf-to-org-as-text-with-ocr ()
+  "Convert a PDF with OCR and open the text in a new Org mode buffer."
+  (interactive)
+  (let ((pdf-file (read-file-name "Select PDF file: "))
+        (ocr-output (make-temp-file "ocr-output" nil ".pdf"))
+        (text-output (make-temp-file "ocr-text" nil ".txt")))
+    (shell-command (format "ocrmypdf -l eng %s %s" pdf-file ocr-output))
+    (shell-command (format "pdftotext %s %s" ocr-output text-output))
+    (with-temp-buffer
+      (insert-file-contents text-output)
+      (org-mode)
+      (switch-to-buffer (current-buffer))
+      (rename-buffer "*OCR Output*" t))
+    (delete-file ocr-output)
+    (delete-file text-output)
+    (message "Text extracted from %s" pdf-file)))
+
+(defun my-pdf-password-removal ()
+  "Remove password of pdf and save under another name."
+  (interactive)
+  (let* ((pdf-file (read-file-name "PDF file: "))
+         (dir (file-name-directory pdf-file))
+         (base-name (file-name-base pdf-file))
+         (pass-ps (concat dir base-name ".ps"))
+         (password-removed-pdf (concat dir base-name "_password_removed.pdf")))
+    (shell-command (format "pdftops %s %s" (shell-quote-argument pdf-file) (shell-quote-argument pass-ps)))
+    (shell-command (format "ps2pdf %s %s" (shell-quote-argument pass-ps) (shell-quote-argument password-removed-pdf)))
+    (delete-file pass-ps)
+    (message "PDF file converted to unlocked PDF: %s" password-removed-pdf)))
 
 (setq default-input-method "latin-prefix")
 ;;(add-hook 'org-mode-hook 'toggle-input-method)
@@ -586,10 +630,14 @@ Brain shelve: %s.
       (insert chosen-character))))
 
 (defun my-obabel-smiles-show-image ()
-  "Show molecular structure from SMILES at point"
+  "Show molecular structure from SMILES at point. This requires the command line program 'obable'  and 'nsxiv'. The image is shown in a terminal in emacs"
   (interactive)
-  (let ((smiles (thing-at-point 'line)))
-    (let ((output-file "/dev/shm/temp/output_file.png"))
+  (let ((temp-dir "/dev/shm/temp")
+        (smiles (thing-at-point 'line)))
+    ;; Create the temp directory if it doesn't exist
+    (unless (file-exists-p temp-dir)
+      (make-directory temp-dir t))
+    (let ((output-file (expand-file-name "output_file.png" temp-dir)))
       (shell-command (concat "obabel -xb -:" (shell-quote-argument smiles) " -O " (shell-quote-argument output-file) " -xp 400 &"))
       (sleep-for 0.5)
       (shell-command (concat "nsxiv " (shell-quote-argument output-file)))))
@@ -597,7 +645,7 @@ Brain shelve: %s.
     (doom/window-maximize-buffer))
 
 (defun my-obabel-smiles-insert-image (output-file)
-  "Insert image of molecular structure from SMILES at point and save the image"
+  "Insert image of molecular structure from a text line consisting of SMILES code at point, and paste the image the line below that. This requires the command line package 'obabel' and the image needs to be saved somewhere."
   (interactive "FOutput file location:")
   (let ((smiles (thing-at-point 'line)))
     ;; Generate image from SMILES using Open Babel
@@ -634,3 +682,67 @@ Brain shelve: %s.
 (add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
 (add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
 (add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
+
+(defvar data-bits nil
+  "Number of data bits for the serial monitor")
+
+(defvar my-serial-current-index 0
+  "Current index of the baudrate in the list")
+
+(defvar my-serial-baudrates '(300 600 1200 2400 4800 9600 19200 38400 57600 115200 230400 460800 57600 921600 1000000 2000000 3000000)
+  "List of baudrates to cycle through")
+
+(defvar my-serial-process nil
+  "Serial process")
+
+(defun my-serial-next-baudrate ()
+  "Switch to the next baudrate in the list"
+  (interactive)
+  (when my-serial-process
+    (delete-process my-serial-process))
+  (setq my-serial-current-index (mod (1+ my-serial-current-index)
+                                     (length my-serial-baudrates)))
+  (let* ((baudrate (nth my-serial-current-index my-serial-baudrates))
+         (command (concat "screen /dev/ttyUSB0 " (number-to-string baudrate))))
+    (setq my-serial-process (start-process "serial-terminal" nil shell-file-name "-c" command))
+    (message "Switched to baudrate: %s" baudrate)))
+
+(defun my-serial-ttyUSB0 (data-bits)
+  "Serial monitor to ttyUSB0 using baudrates in a cycle with specified data bits"
+  (interactive "sEnter 7 or 8 for data bits: ")
+  (when (not (or (string= data-bits "7") (string= data-bits "8")))
+    (error "Invalid data bits specified. Please enter 7 or 8."))
+  (split-window-horizontally)
+  (my-serial-next-baudrate)
+  (switch-to-buffer "/dev/ttyUSB0")
+  (windmove-right)
+  (setq my-serial-process-filter
+        (lambda (proc str)
+          (process-send-string proc (concat "sb " data-bits "\n"))))
+  (set-process-filter my-serial-process my-serial-process-filter)
+  (process-send-string my-serial-process (concat "sb " data-bits "\n")))
+
+(global-set-key (kbd "C-c C-g") 'my-serial-next-baudrate)
+(global-set-key (kbd "C-c C-m") 'my-serial-ttyUSB0)
+
+(defun my-PowerStrike-testing-upload ()
+    "My IDE of arduino Powerstrike uploading to ESP32."
+    (interactive)
+    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
+    (doom/window-maximize-buffer)
+    (split-window-horizontally)
+    (switch-to-buffer "*Async Shell Command*")
+    (windmove-right))
+
+(defun my-serial-ttyUSB0-115200 ()
+   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
+    (interactive)
+    (split-window-horizontally)
+    (serial-term "/dev/ttyUSB0" 115200)
+    (switch-to-buffer "/dev/ttyUSB0")
+    (windmove-right))
+
+(defun my-PowerStrike-README-org-file ()
+  "Open the README.org of my PowerStrike ESP32 project."
+  (interactive)
+  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
