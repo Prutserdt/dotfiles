@@ -30,3 +30,5 @@ fi
 
 export NNN_BMS='h:~;r=~/qmk_firmware/keyboards/redox/keymaps/Prutserdt'
 PATH="$HOME/.local/bin:$PATH"
+
+. "$HOME/.local/bin/env"

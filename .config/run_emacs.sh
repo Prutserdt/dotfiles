@@ -17,7 +17,6 @@ else
         notify-send -t 1000 "Linuxbox. Emacs is not running, starting emacsclient"
         #/usr/bin/emacs
         #emacsclient -c -n        # Works on my desktop
-        #/usr/local/bin/emacs
-        /usr/local/bin/emacs --daemon
+        /usr/local/bin/emacs
     fi
 fi

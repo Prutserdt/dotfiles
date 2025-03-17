@@ -487,19 +487,20 @@ Any script should start with a directive, first a shebang ~#!~ and to be POSIX c
 
 First the old list of applications ~dmenu_run~ is deleted the names of the applications in ~/usr/bin~ are written in a new ~dmenu_run~ file.
 #+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755) :eval never
-notify-send -t 1000 "Running dmenuUpdate.sh" &&
-rm $HOME/'.cache/dmenu_run' &
-ls /usr/bin/* > $HOME/.cache/dmenu_run &&
+notify-send -t 1000 "Running dmenuUpdate.sh"
+rm "$HOME/.cache/dmenu_run"
+ls /usr/bin/* > "$HOME/.cache/dmenu_run"
 #+END_SRC
 
 Appimages are not part of ~/usr/bin~ and all of the appimages from $HOME/Applications are added to the ~dmenu_run~ list. These Appimages are writen to the top of the list.
 #+BEGIN_SRC bash :tangle dmenuUpdate.sh :padline no :tangle-mode (identity #o755) :eval never
-shopt -s nullglob # When AppImages aren't present then the loop will not be run
-FILES=$HOME/Applications/*.AppImage
-for f in $FILES
-do
-    sed -i '1 i '$f  $HOME/.cache/dmenu_run
+shopt -s nullglob  # Set nullglob before file assignment
+FILES="$HOME/Applications/"*.AppImage
+
+for f in $FILES; do
+    sed -i "1 i $f" "$HOME/.cache/dmenu_run"
 done
+
 notify-send -t 1000 "A new list of installed applications is made 😃"
 #+END_SRC
 

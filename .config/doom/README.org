@@ -13,7 +13,7 @@
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
   - [[#vterm-toggle][Vterm-toggle]]
-  - [[#chatgpt-in-emacs][ChatGPT in emacs]]
+  - [[#llms-in-emacs][LLMs in emacs]]
   - [[#custom-keybindings][Custom keybindings]]
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
@@ -412,7 +412,7 @@ I like to use Vterm as a scratch terminal, this can be done by the vterm-toggle 
            (display-buffer-reuse-window display-buffer-same-window))))
 #+END_SRC
 
-** ChatGPT in emacs
+** LLMs in emacs
 In this elisp code, `with-temp-buffer` creates a temporary buffer for reading the contents of the file. `insert-file-contents` reads the contents of the file into the buffer. `string-trim` removes any whitespace characters at the beginning and end of the buffer's contents, and the resulting string is set to the variable `gptel-api-key`.
 A chatGPT key can be generated here: https://platform.openai.com/account/api-keys.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -442,6 +442,35 @@ An helper for my LLM (gptel). I am usually working with code at the bottom of a 
 
 ** Custom keybindings
 Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add some extra!
+
+*** Smart parens
+The =smartparens= package in Emacs is designed to enhance editing parentheses and other paired structures (like brackets and quotes). I am adding the '=' and '~' signs to it, but only for org mode. Both are used for outlining in org mode and this shows the application of mode specific keybindings.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(require 'smartparens)
+
+;; Enable smartparens only in org mode
+(sp-local-pair 'org-mode "=" "=" :post-handlers '(:add ("||_" "SPC")))
+(sp-local-pair 'org-mode "~" "~" :post-handlers '(:add ("||_" "SPC")))
+
+(defun sp-insert-equal ()
+  "Insert '==' and place the cursor in the middle."
+  (interactive)
+  (insert "==")
+  (backward-char 1))
+
+(defun sp-insert-tilde ()
+  "Insert '~~' and place the cursor in the middle."
+  (interactive)
+  (insert "~~")
+  (backward-char 1))
+
+;; Bind the functions to the = and ~ keys in org mode
+(with-eval-after-load 'smartparens
+  (define-key smartparens-mode-map (kbd "=") 'sp-insert-equal)
+  (define-key smartparens-mode-map (kbd "~") 'sp-insert-tilde))
+
+(add-hook 'org-mode-hook 'smartparens-mode)
+#+END_SRC
 
 *** Evil keybindings
 I want to use the =undo-redo= package in Evil mode and therefore add the keybinding =U= here. Another addition to Evil mode is =[= and =]= to switch buffers.

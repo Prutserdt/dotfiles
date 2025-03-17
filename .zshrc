@@ -84,3 +84,5 @@ source $HOME/.aliases
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 #source $HOME/.config/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh # if cloned in ~/.config
+
+. "$HOME/.local/bin/env"

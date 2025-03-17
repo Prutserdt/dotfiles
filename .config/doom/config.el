@@ -181,6 +181,31 @@
     (call-interactively 'gptel-send)
     (deactivate-mark)))    ; Deselect the region
 
+(require 'smartparens)
+
+;; Enable smartparens only in org mode
+(sp-local-pair 'org-mode "=" "=" :post-handlers '(:add ("||_" "SPC")))
+(sp-local-pair 'org-mode "~" "~" :post-handlers '(:add ("||_" "SPC")))
+
+(defun sp-insert-equal ()
+  "Insert '==' and place the cursor in the middle."
+  (interactive)
+  (insert "==")
+  (backward-char 1))
+
+(defun sp-insert-tilde ()
+  "Insert '~~' and place the cursor in the middle."
+  (interactive)
+  (insert "~~")
+  (backward-char 1))
+
+;; Bind the functions to the = and ~ keys in org mode
+(with-eval-after-load 'smartparens
+  (define-key smartparens-mode-map (kbd "=") 'sp-insert-equal)
+  (define-key smartparens-mode-map (kbd "~") 'sp-insert-tilde))
+
+(add-hook 'org-mode-hook 'smartparens-mode)
+
 (after! evil
   (define-key evil-normal-state-map "U" 'undo-redo)
   (define-key evil-normal-state-map "]" 'next-buffer)
