@@ -154,6 +154,8 @@ The vterm-toggle package.
 A chatgpt package gptel.
 #+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! gptel)
+(package! python-mode)
+;;(package! harper-ls) ;; is deze wel nodig na mijn harper install?
 #+END_SRC
 
 ~org-roam~ is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem. ~org-roam-ui~ is a frontend for exploring and interacting with your org-roam notes.
@@ -174,6 +176,10 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 ** Theming and graphical settings
 Setting the *superior* tokyo-night theme.😎
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+;;(with-eval-after-load 'eglot
+;;  (add-to-list 'eglot-server-programs
+;;               '(text-mode . ("harper-ls" "--stdio"))))
+
 (setq doom-theme 'doom-tokyo-night)
 #+END_SRC
 
@@ -444,7 +450,7 @@ An helper for my LLM (gptel). I am usually working with code at the bottom of a 
 Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add some extra!
 
 *** Smart parens
-The =smartparens= package in Emacs is designed to enhance editing parentheses and other paired structures (like brackets and quotes). I am adding the '=' and '~' signs to it, but only for org mode. Both are used for outlining in org mode and this shows the application of mode specific keybindings.
+The =smartparens= package in Emacs is designed to enhance editing parentheses and other paired structures (like brackets and quotes). I am adding the '=' and '~' signs to it, but only for org mode, therefore it is a mode specific keybindings (sp-local-pair)'.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (require 'smartparens)
 
@@ -882,6 +888,25 @@ This Emacs Lisp function, =my-generate-org-links-to-pictures-subdir=, creates li
 #+END_SRC
 
 ** Run Python py
+This will run the current buffer as Python code in an asynchronous way. NOTE: the file should be saved prior to running!
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-run-python-buffer ()
+  "Run the current buffer as a Python script and display output in a new buffer."
+  (interactive)
+  (let ((python-script (buffer-file-name))
+        (output-buffer "*Python Output*"))
+    (if python-script
+        (progn
+          (with-current-buffer (get-buffer-create output-buffer)
+            (read-only-mode -1)
+            (erase-buffer)
+            (insert (format "Running %s...\n\n" python-script))
+            (display-buffer (current-buffer)))
+          (start-process "python-process" output-buffer "python" python-script))
+      (message "Buffer is not visiting a file."))))
+#+end_src
+
+
 This function prompts the user to select a Python file, opens a new frame, runs the Python script in a vterm buffer in the new frame, and displays the output in a separate buffer named "/test_code output/".
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-run-python-code-in-new-frame-select-manually ()

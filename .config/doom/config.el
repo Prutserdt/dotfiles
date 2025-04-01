@@ -1,6 +1,10 @@
 ;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
+;;(with-eval-after-load 'eglot
+;;  (add-to-list 'eglot-server-programs
+;;               '(text-mode . ("harper-ls" "--stdio"))))
+
 (setq doom-theme 'doom-tokyo-night)
 
 (use-package rainbow-delimiters)
@@ -532,6 +536,21 @@ Brain shelve: %s.
       (let ((last-dir (file-name-nondirectory (directory-file-name subdir))))
         ;; Insert an Org-mode link with a shell command to display images using `nsxiv`
         (insert (concat "[[shell: cd " subdir "; find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' | sort | nsxiv -ftio][" last-dir "]]\n"))))))
+
+(defun my-run-python-buffer ()
+  "Run the current buffer as a Python script and display output in a new buffer."
+  (interactive)
+  (let ((python-script (buffer-file-name))
+        (output-buffer "*Python Output*"))
+    (if python-script
+        (progn
+          (with-current-buffer (get-buffer-create output-buffer)
+            (read-only-mode -1)
+            (erase-buffer)
+            (insert (format "Running %s...\n\n" python-script))
+            (display-buffer (current-buffer)))
+          (start-process "python-process" output-buffer "python" python-script))
+      (message "Buffer is not visiting a file."))))
 
 (defun my-run-python-code-in-new-frame-select-manually ()
   "Run a Python script in a new frame after selecting it manually."
