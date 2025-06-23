@@ -20,6 +20,12 @@ case "$hostname" in
     thinkpad)
         keycode=107    # Use keycode 107 for thinkpad system, this is the printscreen button :-)
         notify-send -t 1000 "keyboard-config.sh script, found hostname: $hostname. Script continued."
+        # escape/capslock is changed here, this is needed here
+        #
+        xmodmap -e "remove Lock = Caps_Lock"
+        xmodmap -e "keysym Escape = Caps_Lock"
+        xmodmap -e "keysym Caps_Lock = Escape"
+        xmodmap -e "add Lock = Caps_Lock"
         ;;
     *)
         # Display a notification for unknown hostnames and exit with an error

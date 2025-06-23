@@ -11,6 +11,7 @@ from typing import List
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
+
 from os.path import expanduser
 from libqtile.scripts.main import VERSION
 
@@ -83,6 +84,26 @@ battery_widget = [
     )
 ] if is_thinkpad_or_work else []
 
+def toggle_mute():
+    # Check the current mute status
+    mute_status = subprocess.run(
+        ['amixer', 'get', 'Master'],
+        stdout=subprocess.PIPE,
+        text=True
+    ).stdout
+
+    # Toggle mute
+    subprocess.run(['amixer', '-q', 'set', 'Master', 'toggle'])
+
+
+    # Send notification based on current state
+    if "off" in mute_status:
+        return "🔊 Volume unmuted"
+    else:
+        return "🔇 Volume muted"
+
+    os.system(f'notify-send -t 6000 "{message}"')
+
 keys = [
     Key(
         [mL],
@@ -109,6 +130,11 @@ keys = [
         "f",
         lazy.function(toggle_max_and_bar),
         desc="Toggle layout and bar"),
+    Key(
+        [mL],
+        "l",
+        lazy.spawn(expanduser("i3lock -i /home/icefly/Stack/Afbeeldingen/Wallpapers/thomas_thiemeyer_Voyage1920x1080-3261363968.jpg -F")),
+        desc="Lock the screen"),
     Key(
         [mL],
         "r",
@@ -237,6 +263,11 @@ keys = [
         "XF86AudioMute",
         lazy.spawn("amixer -q set Master toggle"),
         lazy.spawn('notify-send -t 6000 "🔇 Volume muting toggled"')),
+# FIXME: this should be changed!
+#    Key(
+#        [],
+#        "XF86AudioMute",
+#        lazy.function(toggle_mute)),
     Key(
         [],
         "Print",
@@ -291,8 +322,8 @@ keys = [
         #lazy.spawn("emacsclient -c -n -a 'emacs'")),
         #lazy.spawn("/usr/bin/emacsclient -c")),
         #lazy.spawn("/usr/local/bin/emacs --daemon")),
-        #lazy.spawn("/usr/bin/emacs")),
-        lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
+        lazy.spawn("/usr/bin/emacs")), # works currently on my desktop
+        #lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
     #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key(
         [mR],

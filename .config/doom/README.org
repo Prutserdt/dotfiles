@@ -15,6 +15,7 @@
   - [[#vterm-toggle][Vterm-toggle]]
   - [[#llms-in-emacs][LLMs in emacs]]
   - [[#custom-keybindings][Custom keybindings]]
+  - [[#jumping-around][Jumping around..]]
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-roam-ui configuration]]
@@ -386,7 +387,7 @@ I want to use an org file as a permanent scratch buffer. If it does not exist th
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (unless (file-exists-p "~/.config/doom/scratch.org")
   (with-temp-file "~/.config/doom/scratch.org"
-  (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n Just delete this text, doesn't need to sticky!")))
+  (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n Just delete this text, this doesn't need to be sticky!")))
 
 (eval-after-load 'org
   '(find-file "~/.config/doom/scratch.org"))
@@ -497,7 +498,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
 (map! :leader
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
 
-
     (:prefix ("b") ;; Default Doom keybinding
          :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
 
@@ -538,6 +538,7 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         (:prefix ("p" . "pdf helpers")
             :desc "Select pdf to org buffer"     "b" #'my-open-pdf-as-org-text
+            :desc "Convert image to pdf"         "i" #'my-image-to-pdf
             :desc "Select pdf ocrtext to org buffer" "o" #'my-open-pdf-to-org-as-text-with-ocr
             :desc "Remove password from pdf"     "z" 'my-pdf-password-removal)
         :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
@@ -550,6 +551,13 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually)
 
     (:desc "Open files in emacs" "e" #'recentf-open-files)
+
+    (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
+            :desc "jump backward one step"       "j" #'evil-jump-backward
+            :desc "jump forward one step"        "k" #'evil-jump-forward
+; FIXME: the jump forward to end does not seem to work yet...
+            :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
+            :desc "jump list"                    "l" #'+ivy/jump-list)
 
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
@@ -588,6 +596,18 @@ I want to use the escape key to exit keychords, similar to C-g. Why is this not 
 In Doom Emacs the =transpose-words= is using the keybinding Meta-t. For the oposite transposition I will use the keybinding Meta-T.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
+#+END_SRC
+
+** Jumping around..
+FIXME: De onderstaande functie verbeteren.
+Jump right forward to the last jump in the jump-list
+
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(defun my-evil-jump-forward-to-end ()
+  "Jump right to the most forward evil-jump."
+  (interactive)
+  (with-temp-buffer
+            (+ivy/jump-list)))
 #+END_SRC
 
 ** Org-mode configuration
@@ -785,8 +805,7 @@ I want to be able to open a new daily and place the content of the last daily in
   (org-roam-dailies-goto-today)
 
   ; Set the dailies directory
-  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
-
+  (setq my-org-roam-dailies-dir (concat org-roam-directory "/" org-roam-dailies-directory))
   ; Get the list of files in the org-roam-dailies directory named YYYY-MM-DD.org
   (let* ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$"))
          ; Filter only the daily notes files
@@ -1037,6 +1056,21 @@ Sometimes pdf files are password protected and it should be removed. The followi
     (delete-file pass-ps)
     (message "PDF file converted to unlocked PDF: %s" password-removed-pdf)))
 #+END_SRC
+
+Convert images to pdfs.
+#+begin_src emacs-lisp
+(defun my-image-to-pdf ()
+  "Convert an image file to a PDF and save as pdf, then open the PDF."
+  (interactive)
+  (let* ((image-file (read-file-name "Image file: "))
+         (dir (file-name-directory image-file))
+         (base-name (file-name-base image-file))
+         (pdf-file (concat dir base-name ".pdf")))
+    (shell-command (format "convert %s %s" (shell-quote-argument image-file) (shell-quote-argument pdf-file)))
+    (message "Image converted to PDF: %s" pdf-file)
+    (find-file pdf-file)
+    (pdf-view-mode)))  ;; Open the PDF file in pdf-view-mode
+#+end_src
 
 ** Inserting characters, words and strings
 Set multilingual text input to ~latin-prefix~ as the default input method in .org files. This will modify ~Ol'e~ input to ~Olé~, ~//~ to ~°~ and =~e= to ~€~. Sometimes this is not the desired behaviour and this can easily be switched off by running ~toggle-input-method~ with the emacs hotkeys ~C-\~. I uncommented the 'toggle-input-method and now it is not switched on by default.

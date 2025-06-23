@@ -144,7 +144,7 @@
 
 (unless (file-exists-p "~/.config/doom/scratch.org")
   (with-temp-file "~/.config/doom/scratch.org"
-  (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n Just delete this text, doesn't need to sticky!")))
+  (insert "* ❗ An _org-mode_ ~scratch buffer~ /for/ *hacking* ❗\n Just delete this text, this doesn't need to be sticky!")))
 
 (eval-after-load 'org
   '(find-file "~/.config/doom/scratch.org"))
@@ -221,7 +221,6 @@
 (map! :leader
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
 
-
     (:prefix ("b") ;; Default Doom keybinding
          :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
 
@@ -262,6 +261,7 @@
         :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
         (:prefix ("p" . "pdf helpers")
             :desc "Select pdf to org buffer"     "b" #'my-open-pdf-as-org-text
+            :desc "Convert image to pdf"         "i" #'my-image-to-pdf
             :desc "Select pdf ocrtext to org buffer" "o" #'my-open-pdf-to-org-as-text-with-ocr
             :desc "Remove password from pdf"     "z" 'my-pdf-password-removal)
         :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
@@ -274,6 +274,13 @@
         :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually)
 
     (:desc "Open files in emacs" "e" #'recentf-open-files)
+
+    (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
+            :desc "jump backward one step"       "j" #'evil-jump-backward
+            :desc "jump forward one step"        "k" #'evil-jump-forward
+; FIXME: the jump forward to end does not seem to work yet...
+            :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
+            :desc "jump list"                    "l" #'+ivy/jump-list)
 
     (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
         :desc "Open random node"                 "a" #'org-roam-node-random
@@ -305,6 +312,12 @@
 (global-set-key (kbd "<escape>")      'keyboard-escape-quit)
 
 (global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
+
+(defun my-evil-jump-forward-to-end ()
+  "Jump right to the most forward evil-jump."
+  (interactive)
+  (with-temp-buffer
+            (+ivy/jump-list)))
 
 (setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 
@@ -455,8 +468,7 @@ Brain shelve: %s.
   (org-roam-dailies-goto-today)
 
   ; Set the dailies directory
-  (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
-
+  (setq my-org-roam-dailies-dir (concat org-roam-directory "/" org-roam-dailies-directory))
   ; Get the list of files in the org-roam-dailies directory named YYYY-MM-DD.org
   (let* ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$"))
          ; Filter only the daily notes files
