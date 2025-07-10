@@ -435,6 +435,8 @@ fi
 #+END_SRC
 
 ** dmenuthunar.sh
+FIXME: I migrated to PCManFM... need to chang the names etc...
+
 A dmenu script to give some directory options to open in the file manager Thunar.
 
 Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
@@ -449,11 +451,30 @@ If the bookmarks are not visible in Thunar then please generate them with [[thun
 This requires the dmenu patch: center, which gives the dmenu -c option.
 After Thunar is launched there is a microbreak and then F3 is pressed to open l3ts
 #+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755) :eval never
+notify-send -t 1000 "Running dmenu-pcmanfm.sh" &&
+chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -i -p 'PCManFM open dir: ')
+[ -z "$chosen" ] && exit
+notify-send -t 1000 "Directory opened in PCManFM: " "$chosen" &&
+pcmanfm "$chosen"
+#+end_src
+
+The old version, used for Thunar
+#+BEGIN_SRC bash :eval never
 notify-send -t 1000 "Running dmenuthunar.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -i -p 'Thunar open dir: ')
 [ -z "$chosen" ] && exit
 notify-send -t 1000 "Directory opened in Thunar: " "$chosen" &&
 thunar $chosen & sleep .3 && xdotool key F3
+#+END_SRC
+
+FIXME: ik wil gtk-3 gebruiken als bookmarks denk ik... Maar ik heb nu gewoon copy/paste aanpassen gedaan.
+
+#+BEGIN_SRC emacs-lisp :results none
+(find-file "~/.config/gtk-3.0/bookmarks")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :results none
+(find-file "~/Stack/Command_line/directories")
 #+END_SRC
 
 ** dmenuunicode.sh

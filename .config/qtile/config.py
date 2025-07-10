@@ -102,7 +102,7 @@ def toggle_mute():
     else:
         return "🔇 Volume muted"
 
-    os.system(f'notify-send -t 6000 "{message}"')
+    os.system(f'notify-send -t 1000 "{message}"')
 
 keys = [
     Key(
@@ -252,17 +252,17 @@ keys = [
         [],
         "XF86AudioRaiseVolume",
         lazy.spawn('amixer -q set Master 5%+'),
-        lazy.spawn('notify-send -t 6000 " 🔊 Volume increased"')),
+        lazy.spawn('notify-send -t 1000 " 🔊 Volume increased"')),
     Key(
         [],
         "XF86AudioLowerVolume",
         lazy.spawn("amixer -q set Master 5%-"),
-        lazy.spawn('notify-send -t 6000 "🔈 Volume decreased"')),
+        lazy.spawn('notify-send -t 1000 "🔈 Volume decreased"')),
     Key(
         [],
         "XF86AudioMute",
         lazy.spawn("amixer -q set Master toggle"),
-        lazy.spawn('notify-send -t 6000 "🔇 Volume muting toggled"')),
+        lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
 # FIXME: this should be changed!
 #    Key(
 #        [],
@@ -272,7 +272,7 @@ keys = [
         [],
         "Print",
         lazy.spawn("xfce4-screenshooter -r -s " + expanduser("~/Downloads")),
-        lazy.spawn('notify-send -t 6000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
+        lazy.spawn('notify-send -t 1000 "Running xfce4-screenshooter, please select area with your mouse to make a screenshot"')),
     Key(
         ["shift"],
         "Print",
@@ -486,7 +486,7 @@ keys.extend([
     Key([],
         "XF86Favorites" if is_thinkpad else "XF86Calculator",
         lazy.group["scratchpad"].dropdown_toggle("1"),
-        lazy.spawn('notify-send -t 60000 " Running qalculate-gtk"'))
+        lazy.spawn('notify-send -t 1000 " Running qalculate-gtk"'))
 ])
 
 layout_theme = {"border_width": 2,

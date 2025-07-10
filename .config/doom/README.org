@@ -15,7 +15,7 @@
   - [[#vterm-toggle][Vterm-toggle]]
   - [[#llms-in-emacs][LLMs in emacs]]
   - [[#custom-keybindings][Custom keybindings]]
-  - [[#jumping-around][Jumping around..]]
+  - [[#jumping-around][Jumping around]]
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-roam-ui configuration]]
@@ -50,7 +50,6 @@ Add a note to ~init.el~ to highlight that this file should not be edited directl
 #+END_SRC
 
 The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-modules~ and can be added to the list of modules listed below. Online module info can also be found [[https://github.com/doomemacs/doomemacs/blob/master/docs/modules.org][here]].
-NOTES: some packages that should be installed on the system are, =python-pytest= and =python-nose=.
 #+BEGIN_SRC emacs-lisp :tangle init.el :results silent
 
 (doom! :completion
@@ -161,7 +160,7 @@ A chatgpt package gptel.
 
 ~org-roam~ is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem. ~org-roam-ui~ is a frontend for exploring and interacting with your org-roam notes.
 #+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
-(unpin! org-roam) ; unpinning is necessary for Room emacs according to de developer of org-roam-ui
+(unpin! org-roam) ; unpinning is necessary for Roam emacs according to de developer of org-roam-ui
 (package! org-roam-ui)
 #+END_SRC
 
@@ -224,7 +223,6 @@ To align the Emacs window with text in the middle of the screen  visual-fill is 
 #+END_SRC
 
 Get a glimpse of the desktop background by setting a low transparency for Emacs.
-NOTE: when this part is placed at the start of ~config.el~ then transparency does not work.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (set-frame-parameter (selected-frame) 'alpha '(85 80))
 (add-to-list 'default-frame-alist '(alpha 85 80))
@@ -301,7 +299,7 @@ An emergency switch to be used at very bright light conditions, for instance at 
 #+END_SRC
 
 ** Distractions/distraction free
-For more (or less) focus the distractions on the screen can be toggled of all together or separately one by one.
+For more focus the distractions on the screen can be toggled of all together or separately one by one.
 
 Switch the transparency on or off.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -598,9 +596,8 @@ In Doom Emacs the =transpose-words= is using the keybinding Meta-t. For the opos
 (global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
 #+END_SRC
 
-** Jumping around..
-FIXME: De onderstaande functie verbeteren.
-Jump right forward to the last jump in the jump-list
+** Jumping around
+Jump right forward to the last jump in the jump-list. FIXME: improve this function! Barely working...
 
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-evil-jump-forward-to-end ()

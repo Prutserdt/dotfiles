@@ -16,7 +16,7 @@ if [ "$hostname" = "work" ]; then
     nm-applet &
     thunar --daemon &
     picom -b &
-    notify-send -t 60000 "autostart, found hostname: $hostname. Script continued."
+    notify-send -t 2000 "autostart, found hostname: $hostname. Script continued."
     VBoxClient --clipboard &&
     VBoxClient --draganddrop
     xrandr --output Virtual-1 --mode 1920x1080; feh --bg-fill ~/Stack/Afbeeldingen/Wallpapers/default.jpg &
