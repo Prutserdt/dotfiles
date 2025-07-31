@@ -5,7 +5,6 @@
 hostname=$(uname -n)
 
 if [ "$hostname" = "work" ]; then
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log &  # writing notification to a logfile
     /usr/lib/notification-daemon-1.0/notification-daemon &
     sleep 1
     $HOME/.config/escape_caps_toggle.sh &
@@ -26,15 +25,13 @@ fi
 if [ "$hostname" = "linuxbox" ]; then
     setxkbmap us &
     /usr/lib/notification-daemon-1.0/notification-daemon &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
-    emacs --daemon &
+    /usr/bin/emacs --daemon &
     nm-applet &
-    thunar --daemon &
     sleep 1
     $HOME/.config/keyboard_config.sh &
     picom -b &
     syncthing &
-    #signal-desktop --start-in-tray --use-tray-icon &
+    #signal-desktop --start-in-tray --use-tray-icon
     #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
 fi
 
@@ -43,7 +40,6 @@ if [ "$hostname" = "thinkpad" ]; then
     $HOME/.config/keyboard_config.sh &
     /usr/lib/notification-daemon-1.0/notification-daemon &
     setxkbmap us &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
     thunar --daemon &

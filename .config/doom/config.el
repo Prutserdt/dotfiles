@@ -1,6 +1,130 @@
 ;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
+(after! evil
+  (define-key evil-normal-state-map "U" 'undo-redo)
+  (define-key evil-normal-state-map "]" 'next-buffer)
+  (define-key evil-normal-state-map "[" 'previous-buffer))
+
+(map! :leader
+      :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
+
+    (:prefix ("b") ;; Default Doom keybinding
+         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
+
+    (:prefix ("c") ;; Default Doom keybinding
+        (:prefix ("h" . "ChatGPT, GPTel options")
+            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
+            :desc "ChatGPT of selected region"   "A" #'gptel-send
+            :desc "Open ChatGPT in new buffer"   "c" #'gptel
+            :desc "gptel-menu"                   "m" #'gptel-menu
+            :desc "API for LLM interaction"      "R" #'gptel-request
+            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
+
+    (:prefix ("d" . "Prutserdt Bindings")
+        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
+        :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
+        (:prefix ("d" . "Distraction free")
+            :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
+            :desc "Transparency togglee"         "t" #'my-transparency-toggle
+            :desc "Modeline toggle"              "m" #'my-modeline-toggle
+            :desc "Line numbers toggle"          "l" #'my-line-numbers-toggle
+            :desc "Column width toggle"          "c" #'my-column-width-toggle)
+        (:prefix ("e" . "Excel table stuff")
+            :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
+            :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
+            :desc "Clipb.: exl to org"           "o" #'my-convert-tabs-to-org-table-in-clipboard)
+        (:prefix ("f" . "Financial stuff")
+            :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
+        :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
+        :desc "Insert key words"                 "i" #'my-insert-characters-and-text
+        :desc "Keyboard reset"                   "k" #'my-keyboard-reset
+        :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
+        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+        (:prefix ("o" . "org mode")
+            :desc "Fold all"                     "f" #'org-fold-hide-sublevels
+            :desc "Unfold all"                   "u" #'org-fold-show-all)
+        (:prefix ("p" . "pdf helpers")
+            :desc "Select pdf to org buffer"     "b" #'my-open-pdf-as-org-text
+            :desc "Convert image to pdf"         "i" #'my-image-to-pdf
+            :desc "Select pdf ocrtext to org buffer" "o" #'my-open-pdf-to-org-as-text-with-ocr
+            :desc "Remove password from pdf"     "z" 'my-pdf-password-removal)
+        :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
+        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+        (:prefix ("s" . "SMILES chemistry")
+            :desc "Insert image under Smiles"    "i" #'my-obabel-smiles-insert-image
+            :desc "Show image in sxiv"           "s" #'my-obabel-smiles-show-image)
+        :desc "Update emacs README.org!!!"       "u" #'my-emacs-config-download-overwrite
+        :desc "Visualized undo: vundo"           "v" #'vundo
+        :desc "Write this buffer to file"        "w" #'write-file
+        :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually
+        :desc "Escape evil mode"                 "Z" #'evil-escape)
+
+    (:desc "Open files in emacs" "e" #'recentf-open-files)
+
+    (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
+            :desc "jump backward one step"       "j" #'evil-jump-backward
+            :desc "jump forward one step"        "k" #'evil-jump-forward
+; FIXME: the jump forward to end does not seem to work yet...
+            :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
+            :desc "jump list"                    "l" #'+ivy/jump-list)
+
+    (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
+        :desc "Open random node"                 "a" #'org-roam-node-random
+        (:prefix ("d" . "dailies")
+            :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
+            :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
+            :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
+            :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
+            :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
+            :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
+            :desc "Select dailies calendar"      "o" #'org-roam-dailies-goto-date
+           ;:desc "Goto today"                   "t" #'org-roam-dailies-goto-today
+            :desc "Goto today, paste previous"   "t" #'my-goto-today-paste-previous-daily
+            :desc "Capture today"                "T" #'org-roam-dailies-capture-today
+            :desc "Goto yesterday"               "y" #'org-roam-dailies-goto-yesterday
+            :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
+        :desc "Database sync"                    "D" #'org-roam-db-sync
+        :desc "Find node"                        "f" #'org-roam-node-find
+        :desc "Find ref"                         "F" #'org-roam-ref-find
+        :desc "Insert node"                      "i" #'org-roam-node-insert
+        :desc "Message: show roam dir info"      "m" #'my-org-roam-info
+        :desc "Capture to node"                  "n" #'org-roam-capture
+        :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
+        :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
+        :desc "Search text"                      "s" #'my-search-roam-files
+        :desc "Search filename"                  "S" #'my-search-roam-filename
+        :desc "UI in browser"                    "u" #'org-roam-ui-mode))
+
+(global-set-key (kbd "<escape>")      'keyboard-escape-quit)
+
+(global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
+
+(require 'smartparens)
+
+;; Enable smartparens only in org mode
+(sp-local-pair 'org-mode "=" "=" :post-handlers '(:add ("||_" "SPC")))
+(sp-local-pair 'org-mode "~" "~" :post-handlers '(:add ("||_" "SPC")))
+
+(defun sp-insert-equal ()
+  "Insert '==' and place the cursor in the middle."
+  (interactive)
+  (insert "==")
+  (backward-char 1))
+
+(defun sp-insert-tilde ()
+  "Insert '~~' and place the cursor in the middle."
+  (interactive)
+  (insert "~~")
+  (backward-char 1))
+
+;; Bind the functions to the = and ~ keys in org mode
+(with-eval-after-load 'smartparens
+  (define-key smartparens-mode-map (kbd "=") 'sp-insert-equal)
+  (define-key smartparens-mode-map (kbd "~") 'sp-insert-tilde))
+
+(add-hook 'org-mode-hook 'smartparens-mode)
+
 ;;(with-eval-after-load 'eglot
 ;;  (add-to-list 'eglot-server-programs
 ;;               '(text-mode . ("harper-ls" "--stdio"))))
@@ -185,134 +309,6 @@
     (call-interactively 'gptel-send)
     (deactivate-mark)))    ; Deselect the region
 
-(require 'smartparens)
-
-;; Enable smartparens only in org mode
-(sp-local-pair 'org-mode "=" "=" :post-handlers '(:add ("||_" "SPC")))
-(sp-local-pair 'org-mode "~" "~" :post-handlers '(:add ("||_" "SPC")))
-
-(defun sp-insert-equal ()
-  "Insert '==' and place the cursor in the middle."
-  (interactive)
-  (insert "==")
-  (backward-char 1))
-
-(defun sp-insert-tilde ()
-  "Insert '~~' and place the cursor in the middle."
-  (interactive)
-  (insert "~~")
-  (backward-char 1))
-
-;; Bind the functions to the = and ~ keys in org mode
-(with-eval-after-load 'smartparens
-  (define-key smartparens-mode-map (kbd "=") 'sp-insert-equal)
-  (define-key smartparens-mode-map (kbd "~") 'sp-insert-tilde))
-
-(add-hook 'org-mode-hook 'smartparens-mode)
-
-(after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo)
-  (define-key evil-normal-state-map "]" 'next-buffer)
-  (define-key evil-normal-state-map "[" 'previous-buffer))
-
-;FIXME dit is een test voor jump to functionaliteit. Dit al door gi en '' te gebruiken. C-o zou werken met onderstaande command. Nog testen
-(evil-add-command-properties #'foo :jump t)
-
-(map! :leader
-      :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
-
-    (:prefix ("b") ;; Default Doom keybinding
-         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
-
-    (:prefix ("c") ;; Default Doom keybinding
-        (:prefix ("h" . "ChatGPT, GPTel options")
-            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
-            :desc "ChatGPT of selected region"   "A" #'gptel-send
-            :desc "Open ChatGPT in new buffer"   "c" #'gptel
-            :desc "gptel-menu"                   "m" #'gptel-menu
-            :desc "API for LLM interaction"      "R" #'gptel-request
-            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
-
-    (:prefix ("d" . "Prutserdt Bindings")
-        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
-        (:prefix ("a" . "Arduino IDE")
-            :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
-            :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
-            :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
-            :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
-        :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
-        (:prefix ("d" . "Distraction free")
-            :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
-            :desc "Transparency togglee"         "t" #'my-transparency-toggle
-            :desc "Modeline toggle"              "m" #'my-modeline-toggle
-            :desc "Line numbers toggle"          "l" #'my-line-numbers-toggle
-            :desc "Column width toggle"          "c" #'my-column-width-toggle)
-        (:prefix ("e" . "Excel table stuff")
-            :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
-            :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
-            :desc "Clipb.: exl to org"           "o" #'my-convert-tabs-to-org-table-in-clipboard)
-        (:prefix ("f" . "Financial stuff")
-            :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
-        :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
-        :desc "Insert key words"                 "i" #'my-insert-characters-and-text
-        :desc "Keyboard reset"                   "k" #'my-keyboard-reset
-        :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
-        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
-        :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
-        (:prefix ("p" . "pdf helpers")
-            :desc "Select pdf to org buffer"     "b" #'my-open-pdf-as-org-text
-            :desc "Convert image to pdf"         "i" #'my-image-to-pdf
-            :desc "Select pdf ocrtext to org buffer" "o" #'my-open-pdf-to-org-as-text-with-ocr
-            :desc "Remove password from pdf"     "z" 'my-pdf-password-removal)
-        :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
-        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-        (:prefix ("s" . "SMILES chemistry")
-            :desc "Insert image under Smiles"    "i" #'my-obabel-smiles-insert-image
-            :desc "Show image in sxiv"           "s" #'my-obabel-smiles-show-image)
-        :desc "Visualized undo: vundo"           "v" #'vundo
-        :desc "Write this buffer to file"        "w" #'write-file
-        :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually)
-
-    (:desc "Open files in emacs" "e" #'recentf-open-files)
-
-    (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
-            :desc "jump backward one step"       "j" #'evil-jump-backward
-            :desc "jump forward one step"        "k" #'evil-jump-forward
-; FIXME: the jump forward to end does not seem to work yet...
-            :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
-            :desc "jump list"                    "l" #'+ivy/jump-list)
-
-    (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
-        :desc "Open random node"                 "a" #'org-roam-node-random
-        (:prefix ("d" . "dailies")
-            :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
-            :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
-            :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
-            :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
-            :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
-            :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
-            :desc "Select dailies calendar"      "o" #'org-roam-dailies-goto-date
-           ;:desc "Goto today"                   "t" #'org-roam-dailies-goto-today
-            :desc "Goto today, paste previous"   "t" #'my-goto-today-paste-previous-daily
-            :desc "Capture today"                "T" #'org-roam-dailies-capture-today
-            :desc "Goto yesterday"               "y" #'org-roam-dailies-goto-yesterday
-            :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
-        :desc "Database sync"                    "D" #'org-roam-db-sync
-        :desc "Find node"                        "f" #'org-roam-node-find
-        :desc "Find ref"                         "F" #'org-roam-ref-find
-        :desc "Insert node"                      "i" #'org-roam-node-insert
-        :desc "Message: show roam dir info"      "m" #'my-org-roam-info
-        :desc "Capture to node"                  "n" #'org-roam-capture
-        :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
-        :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-        :desc "Search text"                      "s" #'my-search-roam-files
-        :desc "Search filename"                  "S" #'my-search-roam-filename
-        :desc "UI in browser"                    "u" #'org-roam-ui-mode))
-
-(global-set-key (kbd "<escape>")      'keyboard-escape-quit)
-
-(global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
-
 (defun my-evil-jump-forward-to-end ()
   "Jump right to the most forward evil-jump."
   (interactive)
@@ -330,8 +326,8 @@
   '(org-document-title ((t (:inherit org-level-1 :height 1.6)))))
 
 (setq org-hide-emphasis-markers t)
-;;(setq org-ellipsis "⚡⚡⚡")
-(setq org-ellipsis " ▼ ") ; Use a different symbol
+(with-eval-after-load 'org
+  (setq org-ellipsis " ▼ ")) ; Use a different symbol for . And ⚡⚡⚡became boring.
 (setq org-startup-with-inline-images t)
 (setq org-hidden-keywords '(title))
 
@@ -738,67 +734,3 @@ Brain shelve: %s.
 (add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
 (add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
 (add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
-
-(defvar data-bits nil
-  "Number of data bits for the serial monitor")
-
-(defvar my-serial-current-index 0
-  "Current index of the baudrate in the list")
-
-(defvar my-serial-baudrates '(300 600 1200 2400 4800 9600 19200 38400 57600 115200 230400 460800 57600 921600 1000000 2000000 3000000)
-  "List of baudrates to cycle through")
-
-(defvar my-serial-process nil
-  "Serial process")
-
-(defun my-serial-next-baudrate ()
-  "Switch to the next baudrate in the list"
-  (interactive)
-  (when my-serial-process
-    (delete-process my-serial-process))
-  (setq my-serial-current-index (mod (1+ my-serial-current-index)
-                                     (length my-serial-baudrates)))
-  (let* ((baudrate (nth my-serial-current-index my-serial-baudrates))
-         (command (concat "screen /dev/ttyUSB0 " (number-to-string baudrate))))
-    (setq my-serial-process (start-process "serial-terminal" nil shell-file-name "-c" command))
-    (message "Switched to baudrate: %s" baudrate)))
-
-(defun my-serial-ttyUSB0 (data-bits)
-  "Serial monitor to ttyUSB0 using baudrates in a cycle with specified data bits"
-  (interactive "sEnter 7 or 8 for data bits: ")
-  (when (not (or (string= data-bits "7") (string= data-bits "8")))
-    (error "Invalid data bits specified. Please enter 7 or 8."))
-  (split-window-horizontally)
-  (my-serial-next-baudrate)
-  (switch-to-buffer "/dev/ttyUSB0")
-  (windmove-right)
-  (setq my-serial-process-filter
-        (lambda (proc str)
-          (process-send-string proc (concat "sb " data-bits "\n"))))
-  (set-process-filter my-serial-process my-serial-process-filter)
-  (process-send-string my-serial-process (concat "sb " data-bits "\n")))
-
-(global-set-key (kbd "C-c C-g") 'my-serial-next-baudrate)
-(global-set-key (kbd "C-c C-m") 'my-serial-ttyUSB0)
-
-(defun my-PowerStrike-testing-upload ()
-    "My IDE of arduino Powerstrike uploading to ESP32."
-    (interactive)
-    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
-    (doom/window-maximize-buffer)
-    (split-window-horizontally)
-    (switch-to-buffer "*Async Shell Command*")
-    (windmove-right))
-
-(defun my-serial-ttyUSB0-115200 ()
-   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
-    (interactive)
-    (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200)
-    (switch-to-buffer "/dev/ttyUSB0")
-    (windmove-right))
-
-(defun my-PowerStrike-README-org-file ()
-  "Open the README.org of my PowerStrike ESP32 project."
-  (interactive)
-  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))

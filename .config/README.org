@@ -1404,26 +1404,9 @@ else
         emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
     elif [[ "$hostname" == "linuxbox" ]]; then
         notify-send -t 1000 "Linuxbox. Emacs is not running, starting emacsclient"
-        #/usr/bin/emacs
-        #emacsclient -c -n        # Works on my desktop
-        /usr/local/bin/emacs
+        /usr/bin/emacs --daemon
+        emacsclient -c -n
     fi
-fi
-#+END_SRC
-
-alias emacs="/usr/bin/emacs"  # Works on my desktop
-FIXME: Volgende even bewaren, en als alles werkt op al mijn systemen dan pas weghalen.
-#+BEGIN_SRC bash
-#!/bin/bash
-#Check if Emacs is running
-if pgrep -x "emacs" > /dev/null; then
-   notify-send -t 1000 "Since emacs is already running only start emacsclient -c -n"
-   emacsclient -c -n
-else
-   notify-send -t 1000 "Emacs is not running, starting the daemon followed by emacsclient"
-   #/usr/bin/emacs --daemon  # Works on my desktop
-   #emacsclient -c -n        # Works on my desktop
-   emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
 fi
 #+END_SRC
 

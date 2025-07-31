@@ -17,7 +17,6 @@ from libqtile.scripts.main import VERSION
 
 mL = "mod4"                         # Left super key, dedicated to the windowmanager
 mR = "mod3"                         # Right super key, dedicated to open applications
-aR = "mod5"                         # Right alt key, dedicated to opening of files
 
 home = os.path.expanduser("~")      # Declare the variable for the file path
 
@@ -78,31 +77,30 @@ if is_thinkpad_or_work:
 
 battery_widget = [
     widget.Battery(
-        battery=1,
+       #battery=0, # Thinkpad batteries can be 0 or 1!
+        battery=1,  # Thinkpad batteries can be  0 or 1!
         format='{char} {percent:2.0%}',
         update_interval=30
     )
 ] if is_thinkpad_or_work else []
 
 def toggle_mute():
-    # Check the current mute status
-    mute_status = subprocess.run(
-        ['amixer', 'get', 'Master'],
-        stdout=subprocess.PIPE,
-        text=True
-    ).stdout
+       try:
+           mute_status = subprocess.run(
+               ['amixer', 'get', 'Master'],
+               stdout=subprocess.PIPE,
+               text=True,
+               check=True
+           ).stdout
+           subprocess.run(['amixer', '-q', 'set', 'Master', 'toggle'], check=True)
 
-    # Toggle mute
-    subprocess.run(['amixer', '-q', 'set', 'Master', 'toggle'])
+           message = "🔊 Volume unmuted" if "off" in mute_status else "🔇 Volume muted"
 
-
-    # Send notification based on current state
-    if "off" in mute_status:
-        return "🔊 Volume unmuted"
-    else:
-        return "🔇 Volume muted"
-
-    os.system(f'notify-send -t 1000 "{message}"')
+           os.system(f'notify-send -t 1000 "{message}"')
+           return message
+       except subprocess.CalledProcessError as e:
+           print("Error occurred:", e)
+           return "Error"
 
 keys = [
     Key(
@@ -258,16 +256,17 @@ keys = [
         "XF86AudioLowerVolume",
         lazy.spawn("amixer -q set Master 5%-"),
         lazy.spawn('notify-send -t 1000 "🔈 Volume decreased"')),
-    Key(
+    Key (
         [],
         "XF86AudioMute",
         lazy.spawn("amixer -q set Master toggle"),
-        lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
-# FIXME: this should be changed!
-#    Key(
-#        [],
-#        "XF86AudioMute",
-#        lazy.function(toggle_mute)),
+
+    lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
+    # FIXME: toggle_mute werkt nog niet...
+    # Key(
+    #     [],
+    #     "XF86AudioMute",
+    #     lazy.function(toggle_mute)),
     Key(
         [],
         "Print",
@@ -319,10 +318,16 @@ keys = [
     Key(
         [mR],
         "e",
+        lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
+        #Keylazy.function(run_emacs)), # check bash shell for functionality
         #lazy.spawn("emacsclient -c -n -a 'emacs'")),
+        #lazy.spawn("emacsclient -c -n -a '/usr/bin/emacs'")), # works on my desktop
+        #lazy.spawn('pgrep -u "$USER" -f "emacs --daemon" > /dev/null || emacs --daemon; emacsclient -c -n')), # does not work on my desktop
+        #lazy.spawn('pgrep -u "$USER" -f "emacs --daemon" > /dev/null || emacs --daemon; emacsclient -c -n -a "/usr/bin/emacs"')), # does not work on my desktop
+        #lazy.spawn("bash -c 'pgrep -u \"$USER\" -f \"emacs --daemon\" > /dev/null || emacs --daemon; emacsclient -c -n -a \"/usr/bin/emacs\"'")),
         #lazy.spawn("/usr/bin/emacsclient -c")),
         #lazy.spawn("/usr/local/bin/emacs --daemon")),
-        lazy.spawn("/usr/bin/emacs")), # works currently on my desktop
+        #lazy.spawn("/usr/bin/emacs")), # works currently on my desktop
         #lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
     #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key(
@@ -382,60 +387,6 @@ keys = [
         [mR],
         "delete",
         lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
-
-    # Open text files in emacs, note
-    Key(
-        [aR],
-        "a",
-        lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
-    Key(
-        [aR],
-        "b",
-        lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")),  # related to dmenuinternet.sh
-    Key(
-        [aR],
-        "c",
-        lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
-    Key(
-        [aR],
-        "e",
-        lazy.spawn("emacsclient -n ~/.config/doom/README.org")),
-    Key(
-        [aR],
-        "q",
-        lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
-    Key(
-        [aR],
-        "r",
-        lazy.spawn("emacsclient -n ~/README.org")),  # github readme
-    Key(
-        [aR],
-        "t",
-        lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh
-    Key(
-        [aR, "shift"],
-        "t",
-        lazy.spawn("emacsclient -n ~/Stack/Command_line/textfiles")),
-    Key(
-        [aR],
-        "u",
-        lazy.spawn("emacsclient -n ~/.config/unicode")),  # related to dmenuunicode.sh
-    Key(
-        [aR],
-        "v",
-        lazy.spawn("emacsclient -n ~/.vimrc")),
-    Key(
-        [aR],
-        "w",
-        lazy.spawn(expanduser("~/.config/wololo.sh"))),
-    Key(
-        [aR],
-        "x",
-        lazy.spawn("emacsclient -n ~/.xinitrc")),
-    Key(
-        [aR],
-        "z",
-        lazy.spawn("emacsclient -n ~/.zshrc")),
 ]
 
 groups = [Group(i) for i in "1245"]

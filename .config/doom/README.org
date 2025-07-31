@@ -8,18 +8,19 @@
 - [[#initel][init.el]]
 - [[#packagesel][packages.el]]
 - [[#configel][config.el]]
+  - [[#custom-keybindings][Custom keybindings]]
+  - [[#smart-parens][Smart parens]]
   - [[#theming-and-graphical-settings][Theming and graphical settings]]
   - [[#distractionsdistraction-free][Distractions/distraction free]]
   - [[#evil-mode-configuration][Evil mode configuration]]
   - [[#general-settings][General settings]]
   - [[#vterm-toggle][Vterm-toggle]]
   - [[#llms-in-emacs][LLMs in emacs]]
-  - [[#custom-keybindings][Custom keybindings]]
   - [[#jumping-around][Jumping around]]
   - [[#org-mode-configuration][Org-mode configuration]]
   - [[#org-roam-configuration][Org-roam configuration]]
   - [[#org-roam-ui-configuration][Org-roam-ui configuration]]
-  - [[#layout-with-messages-and-scratch-buffers][Layout with messages and scratch buffers]]
+  - [[#layout-for-hacking-code-scratch-buffer-and-emacs-messages][Layout for hacking code (scratch buffer and emacs messages)]]
   - [[#download-emacs-configuration][Download Emacs configuration]]
   - [[#nsxiv-create-org-link-to-open-pictures-via-a-shell-script][NSXIV: create org link to open pictures via a shell script]]
   - [[#run-python-py][Run Python py]]
@@ -29,7 +30,6 @@
   - [[#inserting-characters-words-and-strings][Inserting characters, words and strings]]
   - [[#handling-the-smiles-in-chemistry][Handling the SMILES in chemistry]]
   - [[#splash-screen][Splash screen]]
-  - [[#esp32-arduino-and-serial-communication][ESP32, Arduino and serial communication]]
 - [[#code-snippets][Code snippets]]
 - [[#credits][Credits]]
 
@@ -66,6 +66,8 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        nav-flash           ; blink the current line after jumping
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
+;; toegevoegd 21JUL25:
+       smooth-scroll     ; So smooth you won't believe it's not butter
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
        ;;workspaces        ; tab emulation, persistence & separate workspaces
 
@@ -102,7 +104,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
         +pretty            ; pretty is better than ugly
         +roam2             ; wander around notes
         +dragndrop)        ; drop files/images into org
-       (python +lsp +pyenv); beautiful is better than ugly
+      (python +lsp +pyenv); beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
 
@@ -112,7 +114,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
 
        :config
        (default +bindings +smartparens)
-       )
+)
 #+END_SRC
 
 NOTE: some packages should be installed on the system: =sudo pacman -S python-pytest python-nose=
@@ -171,6 +173,152 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 ;; NOTE: This file is generated from ~/.config/doom/README.org
 ;;      Please only edit that file and org-babel-tangle (emacs)
+#+END_SRC
+
+** Custom keybindings
+Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add some extra!
+
+I want to use the =undo-redo= package in Evil mode and therefore add the keybinding =U= here. Another addition to Evil mode is =[= and =]= to switch buffers.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(after! evil
+  (define-key evil-normal-state-map "U" 'undo-redo)
+  (define-key evil-normal-state-map "]" 'next-buffer)
+  (define-key evil-normal-state-map "[" 'previous-buffer))
+#+END_SRC
+
+NOTE to self: the [ and ] collide with certain buffers, for instance in vterm. It is probably better to learn the SPC-b-n and SPC-b-p to cycle through buffers and get this in my muscle memory.
+
+The following are keybindings that are bound to my leader key, which is =space=, the default leader key of Doom Emacs Evil mode.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(map! :leader
+      :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
+
+    (:prefix ("b") ;; Default Doom keybinding
+         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
+
+    (:prefix ("c") ;; Default Doom keybinding
+        (:prefix ("h" . "ChatGPT, GPTel options")
+            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
+            :desc "ChatGPT of selected region"   "A" #'gptel-send
+            :desc "Open ChatGPT in new buffer"   "c" #'gptel
+            :desc "gptel-menu"                   "m" #'gptel-menu
+            :desc "API for LLM interaction"      "R" #'gptel-request
+            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
+
+    (:prefix ("d" . "Prutserdt Bindings")
+        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
+        :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
+        (:prefix ("d" . "Distraction free")
+            :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
+            :desc "Transparency togglee"         "t" #'my-transparency-toggle
+            :desc "Modeline toggle"              "m" #'my-modeline-toggle
+            :desc "Line numbers toggle"          "l" #'my-line-numbers-toggle
+            :desc "Column width toggle"          "c" #'my-column-width-toggle)
+        (:prefix ("e" . "Excel table stuff")
+            :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
+            :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
+            :desc "Clipb.: exl to org"           "o" #'my-convert-tabs-to-org-table-in-clipboard)
+        (:prefix ("f" . "Financial stuff")
+            :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
+        :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
+        :desc "Insert key words"                 "i" #'my-insert-characters-and-text
+        :desc "Keyboard reset"                   "k" #'my-keyboard-reset
+        :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
+        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
+        (:prefix ("o" . "org mode")
+            :desc "Fold all"                     "f" #'org-fold-hide-sublevels
+            :desc "Unfold all"                   "u" #'org-fold-show-all)
+        (:prefix ("p" . "pdf helpers")
+            :desc "Select pdf to org buffer"     "b" #'my-open-pdf-as-org-text
+            :desc "Convert image to pdf"         "i" #'my-image-to-pdf
+            :desc "Select pdf ocrtext to org buffer" "o" #'my-open-pdf-to-org-as-text-with-ocr
+            :desc "Remove password from pdf"     "z" 'my-pdf-password-removal)
+        :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
+        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
+        (:prefix ("s" . "SMILES chemistry")
+            :desc "Insert image under Smiles"    "i" #'my-obabel-smiles-insert-image
+            :desc "Show image in sxiv"           "s" #'my-obabel-smiles-show-image)
+        :desc "Update emacs README.org!!!"       "u" #'my-emacs-config-download-overwrite
+        :desc "Visualized undo: vundo"           "v" #'vundo
+        :desc "Write this buffer to file"        "w" #'write-file
+        :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually
+        :desc "Escape evil mode"                 "Z" #'evil-escape)
+
+    (:desc "Open files in emacs" "e" #'recentf-open-files)
+
+    (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
+            :desc "jump backward one step"       "j" #'evil-jump-backward
+            :desc "jump forward one step"        "k" #'evil-jump-forward
+; FIXME: the jump forward to end does not seem to work yet...
+            :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
+            :desc "jump list"                    "l" #'+ivy/jump-list)
+
+    (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
+        :desc "Open random node"                 "a" #'org-roam-node-random
+        (:prefix ("d" . "dailies")
+            :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
+            :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
+            :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
+            :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
+            :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
+            :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
+            :desc "Select dailies calendar"      "o" #'org-roam-dailies-goto-date
+           ;:desc "Goto today"                   "t" #'org-roam-dailies-goto-today
+            :desc "Goto today, paste previous"   "t" #'my-goto-today-paste-previous-daily
+            :desc "Capture today"                "T" #'org-roam-dailies-capture-today
+            :desc "Goto yesterday"               "y" #'org-roam-dailies-goto-yesterday
+            :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
+        :desc "Database sync"                    "D" #'org-roam-db-sync
+        :desc "Find node"                        "f" #'org-roam-node-find
+        :desc "Find ref"                         "F" #'org-roam-ref-find
+        :desc "Insert node"                      "i" #'org-roam-node-insert
+        :desc "Message: show roam dir info"      "m" #'my-org-roam-info
+        :desc "Capture to node"                  "n" #'org-roam-capture
+        :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
+        :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
+        :desc "Search text"                      "s" #'my-search-roam-files
+        :desc "Search filename"                  "S" #'my-search-roam-filename
+        :desc "UI in browser"                    "u" #'org-roam-ui-mode))
+#+END_SRC
+
+*** Emacs keybindings
+I want to use the escape key to exit keychords, similar to C-g. Why is this not the default?
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(global-set-key (kbd "<escape>")      'keyboard-escape-quit)
+#+END_SRC
+
+In Doom Emacs the =transpose-words= is using the keybinding Meta-t. For the oposite transposition I will use the keybinding Meta-T.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
+#+END_SRC
+
+** Smart parens
+The =smartparens= package in Emacs is designed to enhance editing parentheses and other paired structures (like brackets and quotes). I am adding the '=' and '~' signs to it, but only for org mode, therefore it is a mode specific keybindings (sp-local-pair)'.
+#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
+(require 'smartparens)
+
+;; Enable smartparens only in org mode
+(sp-local-pair 'org-mode "=" "=" :post-handlers '(:add ("||_" "SPC")))
+(sp-local-pair 'org-mode "~" "~" :post-handlers '(:add ("||_" "SPC")))
+
+(defun sp-insert-equal ()
+  "Insert '==' and place the cursor in the middle."
+  (interactive)
+  (insert "==")
+  (backward-char 1))
+
+(defun sp-insert-tilde ()
+  "Insert '~~' and place the cursor in the middle."
+  (interactive)
+  (insert "~~")
+  (backward-char 1))
+
+;; Bind the functions to the = and ~ keys in org mode
+(with-eval-after-load 'smartparens
+  (define-key smartparens-mode-map (kbd "=") 'sp-insert-equal)
+  (define-key smartparens-mode-map (kbd "~") 'sp-insert-tilde))
+
+(add-hook 'org-mode-hook 'smartparens-mode)
 #+END_SRC
 
 ** Theming and graphical settings
@@ -445,157 +593,6 @@ An helper for my LLM (gptel). I am usually working with code at the bottom of a 
     (deactivate-mark)))    ; Deselect the region
 #+END_SRC
 
-** Custom keybindings
-Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add some extra!
-
-*** Smart parens
-The =smartparens= package in Emacs is designed to enhance editing parentheses and other paired structures (like brackets and quotes). I am adding the '=' and '~' signs to it, but only for org mode, therefore it is a mode specific keybindings (sp-local-pair)'.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(require 'smartparens)
-
-;; Enable smartparens only in org mode
-(sp-local-pair 'org-mode "=" "=" :post-handlers '(:add ("||_" "SPC")))
-(sp-local-pair 'org-mode "~" "~" :post-handlers '(:add ("||_" "SPC")))
-
-(defun sp-insert-equal ()
-  "Insert '==' and place the cursor in the middle."
-  (interactive)
-  (insert "==")
-  (backward-char 1))
-
-(defun sp-insert-tilde ()
-  "Insert '~~' and place the cursor in the middle."
-  (interactive)
-  (insert "~~")
-  (backward-char 1))
-
-;; Bind the functions to the = and ~ keys in org mode
-(with-eval-after-load 'smartparens
-  (define-key smartparens-mode-map (kbd "=") 'sp-insert-equal)
-  (define-key smartparens-mode-map (kbd "~") 'sp-insert-tilde))
-
-(add-hook 'org-mode-hook 'smartparens-mode)
-#+END_SRC
-
-*** Evil keybindings
-I want to use the =undo-redo= package in Evil mode and therefore add the keybinding =U= here. Another addition to Evil mode is =[= and =]= to switch buffers.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo)
-  (define-key evil-normal-state-map "]" 'next-buffer)
-  (define-key evil-normal-state-map "[" 'previous-buffer))
-
-;FIXME dit is een test voor jump to functionaliteit. Dit al door gi en '' te gebruiken. C-o zou werken met onderstaande command. Nog testen
-(evil-add-command-properties #'foo :jump t)
-#+END_SRC
-
-NOTE to self: the [ and ] collide with certain buffers, for instance in vterm. It is probably better to learn the SPC-b-n and SPC-b-p to cycle through buffers and get this in my muscle memory.
-
-The following are keybindings that are bound to my leader key, which is =space=, the default leader key of Doom Emacs Evil mode.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(map! :leader
-      :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
-
-    (:prefix ("b") ;; Default Doom keybinding
-         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
-
-    (:prefix ("c") ;; Default Doom keybinding
-        (:prefix ("h" . "ChatGPT, GPTel options")
-            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
-            :desc "ChatGPT of selected region"   "A" #'gptel-send
-            :desc "Open ChatGPT in new buffer"   "c" #'gptel
-            :desc "gptel-menu"                   "m" #'gptel-menu
-            :desc "API for LLM interaction"      "R" #'gptel-request
-            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
-
-    (:prefix ("d" . "Prutserdt Bindings")
-        :desc "Vterm toggle"                   "SPC" #'vterm-toggle
-        (:prefix ("a" . "Arduino IDE")
-            :desc "ESP32 PWRSTRK upload"         "p" #'my-PowerStrike-upload
-            :desc "README.org, het epistel"      "r" #'my-PowerStrike-README-org-file
-            :desc "ESP32 serial"                 "s" #'my-serial-ttyUSB0-115200
-            :desc "ESP32 PWRSTRK testing upload" "t" #'my-PowerStrike-testing-upload)
-        :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
-        (:prefix ("d" . "Distraction free")
-            :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
-            :desc "Transparency togglee"         "t" #'my-transparency-toggle
-            :desc "Modeline toggle"              "m" #'my-modeline-toggle
-            :desc "Line numbers toggle"          "l" #'my-line-numbers-toggle
-            :desc "Column width toggle"          "c" #'my-column-width-toggle)
-        (:prefix ("e" . "Excel table stuff")
-            :desc "At point org tbl to exl"      "a" #'my-export-org-table-to-system-clipboard
-            :desc "Clipb.: org to exl"           "e" #'my-convert-tabs-to-org-table-in-clipboard
-            :desc "Clipb.: exl to org"           "o" #'my-convert-tabs-to-org-table-in-clipboard)
-        (:prefix ("f" . "Financial stuff")
-            :desc "Show my capital"              "c" #'my-asset-allocation-in-time)
-        :desc "Toggle hacking mode"              "h" #'my-toggle-hacking-layout
-        :desc "Insert key words"                 "i" #'my-insert-characters-and-text
-        :desc "Keyboard reset"                   "k" #'my-keyboard-reset
-        :desc "Watch images via org links"       "l" #'my-generate-org-links-to-pictures-subdir
-        :desc "Reload Doom: doom/reload"         "r" #'doom/reload
-        :desc "Update emacs README.org!!!"       "o" #'my-emacs-config-download-overwrite
-        (:prefix ("p" . "pdf helpers")
-            :desc "Select pdf to org buffer"     "b" #'my-open-pdf-as-org-text
-            :desc "Convert image to pdf"         "i" #'my-image-to-pdf
-            :desc "Select pdf ocrtext to org buffer" "o" #'my-open-pdf-to-org-as-text-with-ocr
-            :desc "Remove password from pdf"     "z" 'my-pdf-password-removal)
-        :desc "Plak keuze uit kill ring"         "P" #'counsel-yank-pop
-        :desc "Tangling: org-babel-tangle"       "t" #'org-babel-tangle
-        (:prefix ("s" . "SMILES chemistry")
-            :desc "Insert image under Smiles"    "i" #'my-obabel-smiles-insert-image
-            :desc "Show image in sxiv"           "s" #'my-obabel-smiles-show-image)
-        :desc "Visualized undo: vundo"           "v" #'vundo
-        :desc "Write this buffer to file"        "w" #'write-file
-        :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually)
-
-    (:desc "Open files in emacs" "e" #'recentf-open-files)
-
-    (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
-            :desc "jump backward one step"       "j" #'evil-jump-backward
-            :desc "jump forward one step"        "k" #'evil-jump-forward
-; FIXME: the jump forward to end does not seem to work yet...
-            :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
-            :desc "jump list"                    "l" #'+ivy/jump-list)
-
-    (:prefix ("r" . "org-roam") ;; Similar to the Doom default, SPC n r, but shorter
-        :desc "Open random node"                 "a" #'org-roam-node-random
-        (:prefix ("d" . "dailies")
-            :desc "Previous daily (from daily)"  "<" #'org-roam-dailies-goto-previous-note
-            :desc "Next daily (from daily)"      ">" #'org-roam-dailies-goto-next-note
-            :desc "Capture date"                 "D" #'org-roam-dailies-capture-date
-            :desc "Goto the last daily"          "l" #'my-open-latest-org-roam-daily
-            :desc "Goto tomorrow"                "m" #'org-roam-dailies-goto-tomorrow
-            :desc "Capture tomorrow"             "M" #'org-roam-dailies-capture-tomorrow
-            :desc "Select dailies calendar"      "o" #'org-roam-dailies-goto-date
-           ;:desc "Goto today"                   "t" #'org-roam-dailies-goto-today
-            :desc "Goto today, paste previous"   "t" #'my-goto-today-paste-previous-daily
-            :desc "Capture today"                "T" #'org-roam-dailies-capture-today
-            :desc "Goto yesterday"               "y" #'org-roam-dailies-goto-yesterday
-            :desc "Capture yesterday"            "Y" #'org-roam-dailies-capture-yesterday)
-        :desc "Database sync"                    "D" #'org-roam-db-sync
-        :desc "Find node"                        "f" #'org-roam-node-find
-        :desc "Find ref"                         "F" #'org-roam-ref-find
-        :desc "Insert node"                      "i" #'org-roam-node-insert
-        :desc "Message: show roam dir info"      "m" #'my-org-roam-info
-        :desc "Capture to node"                  "n" #'org-roam-capture
-        :desc "Toggle roam buffer"               "r" #'org-roam-buffer-toggle
-        :desc "Launch roam buffer"               "R" #'org-roam-buffer-display-dedicated
-        :desc "Search text"                      "s" #'my-search-roam-files
-        :desc "Search filename"                  "S" #'my-search-roam-filename
-        :desc "UI in browser"                    "u" #'org-roam-ui-mode))
-#+END_SRC
-
-*** Emacs keybindings
-I want to use the escape key to exit keychords, similar to C-g. Why is this not the default?
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(global-set-key (kbd "<escape>")      'keyboard-escape-quit)
-#+END_SRC
-
-In Doom Emacs the =transpose-words= is using the keybinding Meta-t. For the oposite transposition I will use the keybinding Meta-T.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(global-set-key (kbd "M-T") (lambda () (interactive) (transpose-words -1)))
-#+END_SRC
-
 ** Jumping around
 Jump right forward to the last jump in the jump-list. FIXME: improve this function! Barely working...
 
@@ -624,11 +621,11 @@ Setting the size of the headers in org mode and the document titled, ordered by 
   '(org-document-title ((t (:inherit org-level-1 :height 1.6)))))
 #+END_SRC
 
-Some preferences that I like: hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+. Show a custom folding character, in my case three time lightning ⚡⚡⚡ and by default I want all of my org files to show images as default and hide the =#+TITLE= keyword.
+Some preferences that I like: hide the emphasis markup for: /italic/, *bold*, ~code~, _underscore_, =verbatim= and +strikethrough+. Show ▼ for folded sections in org. By default I want all of my org files to show images as default and hide the =#+TITLE= keyword.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-hide-emphasis-markers t)
-;;(setq org-ellipsis "⚡⚡⚡")
-(setq org-ellipsis " ▼ ") ; Use a different symbol
+(with-eval-after-load 'org
+  (setq org-ellipsis " ▼ ")) ; Use a different symbol for . And ⚡⚡⚡became boring.
 (setq org-startup-with-inline-images t)
 (setq org-hidden-keywords '(title))
 #+END_SRC
@@ -845,8 +842,8 @@ Now that the websocket is setup the org-roam-ui can be set.
           org-roam-ui-open-on-start t))
 #+END_SRC
 
-** Layout with messages and scratch buffers
-I want to quickly switch back and forth to my hacking layout. It puts the current buffer in the middle with a left Messages window and at the right my scratch.org window, =my-toggle-window-layout= does exactly that.
+** Layout for hacking code (scratch buffer and emacs messages)
+This code defines a function to quickly toggle between a single buffer and a more complex hacking layout featuring the messages window on the left and a scratch buffer on the right. The function =my-toggle-hacking-layout= facilitates seamless transitions, enhancing your coding efficiency.
 #+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
 (defun my-toggle-hacking-layout ()
   "Toggle between a single buffer screen and layout with message window and scratch buffer."
@@ -1140,7 +1137,6 @@ A function that will convert a SMILES string in a line (at point) to an image an
     (execute-kbd-macro (kbd "RET"))))
 #+END_SRC
 
-
 ** Splash screen
 A useless but pretty Emacs welcome screen is created including an image and some text based on the default Doom emacs welcome screen.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
@@ -1169,83 +1165,6 @@ For reference: the default doom-dashboard can be found here: =~/.config/emacs/mo
 (add-transient-hook! #'+doom-dashboard-mode (+doom-dashboard-setup-modified-keymap))
 (add-transient-hook! #'+doom-dashboard-mode :append (+doom-dashboard-setup-modified-keymap))
 (add-hook! 'doom-init-ui-hook :append (+doom-dashboard-setup-modified-keymap))
-#+END_SRC
-
-** ESP32, Arduino and serial communication
-The following code will open ttyUSB0 and gives the options to cycle through baudrates.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defvar data-bits nil
-  "Number of data bits for the serial monitor")
-
-(defvar my-serial-current-index 0
-  "Current index of the baudrate in the list")
-
-(defvar my-serial-baudrates '(300 600 1200 2400 4800 9600 19200 38400 57600 115200 230400 460800 57600 921600 1000000 2000000 3000000)
-  "List of baudrates to cycle through")
-
-(defvar my-serial-process nil
-  "Serial process")
-
-(defun my-serial-next-baudrate ()
-  "Switch to the next baudrate in the list"
-  (interactive)
-  (when my-serial-process
-    (delete-process my-serial-process))
-  (setq my-serial-current-index (mod (1+ my-serial-current-index)
-                                     (length my-serial-baudrates)))
-  (let* ((baudrate (nth my-serial-current-index my-serial-baudrates))
-         (command (concat "screen /dev/ttyUSB0 " (number-to-string baudrate))))
-    (setq my-serial-process (start-process "serial-terminal" nil shell-file-name "-c" command))
-    (message "Switched to baudrate: %s" baudrate)))
-
-(defun my-serial-ttyUSB0 (data-bits)
-  "Serial monitor to ttyUSB0 using baudrates in a cycle with specified data bits"
-  (interactive "sEnter 7 or 8 for data bits: ")
-  (when (not (or (string= data-bits "7") (string= data-bits "8")))
-    (error "Invalid data bits specified. Please enter 7 or 8."))
-  (split-window-horizontally)
-  (my-serial-next-baudrate)
-  (switch-to-buffer "/dev/ttyUSB0")
-  (windmove-right)
-  (setq my-serial-process-filter
-        (lambda (proc str)
-          (process-send-string proc (concat "sb " data-bits "\n"))))
-  (set-process-filter my-serial-process my-serial-process-filter)
-  (process-send-string my-serial-process (concat "sb " data-bits "\n")))
-
-(global-set-key (kbd "C-c C-g") 'my-serial-next-baudrate)
-(global-set-key (kbd "C-c C-m") 'my-serial-ttyUSB0)
-#+end_src
-
-A piece of custom lisp code to debug/upload my test Arduino code to a ESP32 processor and move windows around to make Emacs a comfy IDE. Remark: (interactive) is needed to be able to run with hotkeys.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-PowerStrike-testing-upload ()
-    "My IDE of arduino Powerstrike uploading to ESP32."
-    (interactive)
-    (async-shell-command "arduino --board esp32:esp32:esp32 --port /dev/ttyUSB0 --upload ~/Stack/Code/git/PowerStrike_code/testing/testing.ino")
-    (doom/window-maximize-buffer)
-    (split-window-horizontally)
-    (switch-to-buffer "*Async Shell Command*")
-    (windmove-right))
-#+END_SRC
-
-Another piece of custom Elisp code. Again Emacs is used as a comfortable IDE, here the serial output of ttyUSBo at 115200 baudrate is spit into an emacs buffer.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-serial-ttyUSB0-115200 ()
-   "Serial monitor to ttyUSB0 115200 baudrate is shown in a split window to the left."
-    (interactive)
-    (split-window-horizontally)
-    (serial-term "/dev/ttyUSB0" 115200)
-    (switch-to-buffer "/dev/ttyUSB0")
-    (windmove-right))
-#+END_SRC
-
-Open my Arduino PowerStrike README.org file.
-#+BEGIN_SRC emacs-lisp :tangle config.el  :results silent
-(defun my-PowerStrike-README-org-file ()
-  "Open the README.org of my PowerStrike ESP32 project."
-  (interactive)
-  (find-file (expand-file-name "README.org" "~/Stack/Code/git/PowerStrike_code")))
 #+END_SRC
 
 * Code snippets
@@ -1297,7 +1216,7 @@ $0
 #+END_SR${1:C}
 #+END_SRC
 
-Remark: Github cannot handle a code block inside a codeblock. The line ~#+BEGIN_SRC python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.config/doom/README.org][raw README.org]] file for that.
+Remark: Github cannot handle the visualization of a code block inside a codeblock. The line ~#+BEGIN_SRC python :tangle ${2:wismij}.py :results output~ under the line ~# --~ is actually in this README.org file but not showing on the Github page. Also the bottom line ~#+end_sr${1:c}~ is not showing on the github page. Check the [[https://raw.githubusercontent.com/Prutserdt/dotfiles/master/.config/doom/README.org][raw README.org]] file for that.
 
 * Credits
 My configuration of Doom Emacs is partially based on these:

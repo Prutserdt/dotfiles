@@ -11,7 +11,6 @@
   - [[#keybindings-qtile-specific][Keybindings: Qtile specific]]
   - [[#keybindings-audio-monitor-brightness-and-print][Keybindings: Audio, monitor brightness and print]]
   - [[#keybindings-applications-and-files-connected-to-these-hotkeys][Keybindings: Applications (and files connected to these hotkeys)]]
-  - [[#keybingings-text-files][Keybingings: Text files]]
   - [[#groups][Groups]]
   - [[#layouts][Layouts]]
   - [[#some-hooks][Some hooks]]
@@ -51,7 +50,6 @@ Some variables are declared. The left super key, right super key and right alt k
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 mL = "mod4"                         # Left super key, dedicated to the windowmanager
 mR = "mod3"                         # Right super key, dedicated to open applications
-aR = "mod5"                         # Right alt key, dedicated to opening of files
 
 home = os.path.expanduser("~")      # Declare the variable for the file path
 #+END_SRC
@@ -122,7 +120,8 @@ if is_thinkpad_or_work:
 
 battery_widget = [
     widget.Battery(
-        battery=1,
+       #battery=0, # Thinkpad batteries can be 0 or 1!
+        battery=1,  # Thinkpad batteries can be  0 or 1!
         format='{char} {percent:2.0%}',
         update_interval=30
     )
@@ -130,27 +129,25 @@ battery_widget = [
 #+end_src
 
 FIXME: dit werkt nog niet... niet gebruikt op dit moment..
+Deze functie werkt wel in python maar niet in qtile...
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 def toggle_mute():
-    # Check the current mute status
-    mute_status = subprocess.run(
-        ['amixer', 'get', 'Master'],
-        stdout=subprocess.PIPE,
-        text=True
-    ).stdout
+       try:
+           mute_status = subprocess.run(
+               ['amixer', 'get', 'Master'],
+               stdout=subprocess.PIPE,
+               text=True,
+               check=True
+           ).stdout
+           subprocess.run(['amixer', '-q', 'set', 'Master', 'toggle'], check=True)
 
-    # Toggle mute
-    subprocess.run(['amixer', '-q', 'set', 'Master', 'toggle'])
+           message = "🔊 Volume unmuted" if "off" in mute_status else "🔇 Volume muted"
 
-
-    # Send notification based on current state
-    if "off" in mute_status:
-        return "🔊 Volume unmuted"
-    else:
-        return "🔇 Volume muted"
-
-    os.system(f'notify-send -t 1000 "{message}"')
-
+           os.system(f'notify-send -t 1000 "{message}"')
+           return message
+       except subprocess.CalledProcessError as e:
+           print("Error occurred:", e)
+           return "Error"
 #+end_src
 
 ** Keybindings: Qtile specific
@@ -314,16 +311,17 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
         "XF86AudioLowerVolume",
         lazy.spawn("amixer -q set Master 5%-"),
         lazy.spawn('notify-send -t 1000 "🔈 Volume decreased"')),
-    Key(
+    Key (
         [],
         "XF86AudioMute",
         lazy.spawn("amixer -q set Master toggle"),
-        lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
-# FIXME: this should be changed!
-#    Key(
-#        [],
-#        "XF86AudioMute",
-#        lazy.function(toggle_mute)),
+
+    lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
+    # FIXME: toggle_mute werkt nog niet...
+    # Key(
+    #     [],
+    #     "XF86AudioMute",
+    #     lazy.function(toggle_mute)),
     Key(
         [],
         "Print",
@@ -379,10 +377,16 @@ Right super key to open applications. Shift is used to update the application.
     Key(
         [mR],
         "e",
+        lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
+        #Keylazy.function(run_emacs)), # check bash shell for functionality
         #lazy.spawn("emacsclient -c -n -a 'emacs'")),
+        #lazy.spawn("emacsclient -c -n -a '/usr/bin/emacs'")), # works on my desktop
+        #lazy.spawn('pgrep -u "$USER" -f "emacs --daemon" > /dev/null || emacs --daemon; emacsclient -c -n')), # does not work on my desktop
+        #lazy.spawn('pgrep -u "$USER" -f "emacs --daemon" > /dev/null || emacs --daemon; emacsclient -c -n -a "/usr/bin/emacs"')), # does not work on my desktop
+        #lazy.spawn("bash -c 'pgrep -u \"$USER\" -f \"emacs --daemon\" > /dev/null || emacs --daemon; emacsclient -c -n -a \"/usr/bin/emacs\"'")),
         #lazy.spawn("/usr/bin/emacsclient -c")),
         #lazy.spawn("/usr/local/bin/emacs --daemon")),
-        lazy.spawn("/usr/bin/emacs")), # works currently on my desktop
+        #lazy.spawn("/usr/bin/emacs")), # works currently on my desktop
         #lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
     #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key(
@@ -442,64 +446,6 @@ Right super key to open applications. Shift is used to update the application.
         [mR],
         "delete",
         lazy.spawn(expanduser("~/.config/dmenukill.sh"))),
-#+END_SRC
-
-** Keybingings: Text files
-The right alt key is used to open text files in Emacs. NOTE: if emacs is not open in a window this will not work, first open emacs!
-#+BEGIN_SRC python :tangle config.py :results none :eval never
-    # Open text files in emacs, note
-    Key(
-        [aR],
-        "a",
-        lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org")),
-    Key(
-        [aR],
-        "b",
-        lazy.spawn("emacsclient -n ~/Stack/Command_line/urls')}")),  # related to dmenuinternet.sh
-    Key(
-        [aR],
-        "c",
-        lazy.spawn("emacsclient -n ~/.config/README.org")),  # shell scripts readme
-    Key(
-        [aR],
-        "e",
-        lazy.spawn("emacsclient -n ~/.config/doom/README.org")),
-    Key(
-        [aR],
-        "q",
-        lazy.spawn("emacsclient -n ~/.config/qtile/README.org")),
-    Key(
-        [aR],
-        "r",
-        lazy.spawn("emacsclient -n ~/README.org")),  # github readme
-    Key(
-        [aR],
-        "t",
-        lazy.spawn("emacsclient -n ~/Stack/Command_line/directories")),  # related to dmenuthunar.sh
-    Key(
-        [aR, "shift"],
-        "t",
-        lazy.spawn("emacsclient -n ~/Stack/Command_line/textfiles")),
-    Key(
-        [aR],
-        "u",
-        lazy.spawn("emacsclient -n ~/.config/unicode")),  # related to dmenuunicode.sh
-    Key(
-        [aR],
-        "v",
-        lazy.spawn("emacsclient -n ~/.vimrc")),
-    Key(
-        [aR],
-        "w",
-        lazy.spawn(expanduser("~/.config/wololo.sh"))),
-    Key(
-        [aR],
-        "x",
-        lazy.spawn("emacsclient -n ~/.xinitrc")),
-    Key(
-        [aR],
-        "z",
-        lazy.spawn("emacsclient -n ~/.zshrc")),
 ]
 #+END_SRC
 
@@ -738,7 +684,6 @@ This shell script is called in the config.py script and is autostarting some ser
 hostname=$(uname -n)
 
 if [ "$hostname" = "work" ]; then
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log &  # writing notification to a logfile
     /usr/lib/notification-daemon-1.0/notification-daemon &
     sleep 1
     $HOME/.config/escape_caps_toggle.sh &
@@ -759,15 +704,13 @@ fi
 if [ "$hostname" = "linuxbox" ]; then
     setxkbmap us &
     /usr/lib/notification-daemon-1.0/notification-daemon &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
-    emacs --daemon &
+    /usr/bin/emacs --daemon &
     nm-applet &
-    thunar --daemon &
     sleep 1
     $HOME/.config/keyboard_config.sh &
     picom -b &
     syncthing &
-    #signal-desktop --start-in-tray --use-tray-icon &
+    #signal-desktop --start-in-tray --use-tray-icon
     #$HOME/.config/stack_startup.sh & # Shell script to search for current Stack AppImage
 fi
 
@@ -776,7 +719,6 @@ if [ "$hostname" = "thinkpad" ]; then
     $HOME/.config/keyboard_config.sh &
     /usr/lib/notification-daemon-1.0/notification-daemon &
     setxkbmap us &
-    $HOME/.config/notify-log.sh $HOME/.config/notify.log &
     emacs --daemon &
     nm-applet &
     thunar --daemon &

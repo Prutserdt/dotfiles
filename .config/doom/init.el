@@ -17,6 +17,8 @@
        nav-flash           ; blink the current line after jumping
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
+;; toegevoegd 21JUL25:
+       smooth-scroll     ; So smooth you won't believe it's not butter
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
        ;;workspaces        ; tab emulation, persistence & separate workspaces
 
@@ -53,7 +55,7 @@
         +pretty            ; pretty is better than ugly
         +roam2             ; wander around notes
         +dragndrop)        ; drop files/images into org
-       (python +lsp +pyenv); beautiful is better than ugly
+      (python +lsp +pyenv); beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
 
@@ -63,4 +65,4 @@
 
        :config
        (default +bindings +smartparens)
-       )
+)

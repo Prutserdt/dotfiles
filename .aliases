@@ -61,12 +61,12 @@ alias e='$HOME/.config/escape_caps_toggle.sh'
 alias k='$HOME/.config/keyboard_config.sh'     # Change layout dependent on hostname
 
 # emacs commandline
-#alias em="/usr/bin/emacs -nw"
-#alias emacs="/usr/bin/emacs"  # Works on my desktop
+alias emacs="/usr/bin/emacs"
 #alias emacs="emacsclient -c -a 'emacs'"  # Works on my thinkpad
 #alias emacs="emacsclient -c -a 'emacs'"  # Works on my thinkpad and desktop
-alias emacs="emacs --init-directory ~/emacs"                    # vanilla
-alias doom="emacs --init-directory ~/.config/emacs"             # doom
+alias emacsvanilla="emacs --init-directory ~/emacs"             # vanilla
+#alias doom="emacs --init-directory ~/.config/emacs"             # doom
+alias doom='pgrep -u "$USER" -f "emacs --daemon" > /dev/null || emacs --daemon; emacsclient -c -n' # doom
 alias em="emacs --init-directory ~/.config/emacs -nw"           # doom, terminal
 alias spacemacs="emacs --init-directory ~/.config/spacemacs"    # spacemacs
 alias doomsync="~/.config/emacs/bin/doom sync"
