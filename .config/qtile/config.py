@@ -296,9 +296,14 @@ keys = [
     # Open applications
     Key([mR],
         "a",
-        lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
+        #lazy.spawn("emacs --eval '(load \"" + expanduser("~/Stack/Documenten/Aandelen/aandelen.el") + "\")'"),
+        #lazy.spawn("emacs --script " + expanduser("~/Stack/Documenten/Aandelen/aandelen.el")),
         lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org"),
-        desc="Open in emacs: run het python aandelen script en open het aandelen log"),
+        #lazy.spawn(expanduser("~/run_aandelen.sh")),
+        desc="Open in emacs: run the elisp script and open the aandelen log"),
+        # lazy.spawn("python " + expanduser("~/.config/aandelen.py")),
+        # lazy.spawn("emacsclient -n ~/Stack/Documenten/Aandelen/aandelen_log.org"),
+        # desc="Open in emacs: run het python aandelen script en open het aandelen log"),
     Key(
         [mR],
         "b",
@@ -342,6 +347,10 @@ keys = [
         [mR],
         "h",
         lazy.spawn(expanduser("~/.config/bitcoin_notification.py"))),
+#    Key(
+        # [mR],
+        # # "j",
+        #lazy.spawn(expanduser("~/.config/wololo.sh"))),
     Key(
         [mR],
         "m",

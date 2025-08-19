@@ -7,6 +7,7 @@ import os
 import pyperclip
 import time
 import pandas as pd
+import numpy as np
 from PyQt5.QtWidgets import (QLineEdit, QDialog, QDialogButtonBox, QFormLayout, QApplication, QMessageBox)
 
 class InputDialog(QDialog):
@@ -129,10 +130,11 @@ asset_allocation_df = pd.DataFrame(asset_allocation_df, columns=[omschr_col, eur
 
 kapitaal = asset_allocation_df[eur_col].sum()  # Calculate the sum of all of the allocations (kapitaal is Dutch for Capital)
 # AA-berekening en de kolommen AA, en AA-huis omzetten naar integer
-asset_allocation_df[asset_allocation_col] = (asset_allocation_df[eur_col] / kapitaal * 100).astype(int) # Calculate values for column asset_allocation_col, % of total)
-asset_allocation_df[a_min_huis_col] = (asset_allocation_df[eur_col] / (kapitaal - huis) * 100).astype(int) # Calculate percentage, not taking into account the surplus value of the house
-asset_allocation_df.loc[asset_allocation_df[a_min_huis_col] > 100, a_min_huis_col] = "*"  # If >100% then replace by asterix
-#print('=' * 40  + "\n", asset_allocation_temp_asset_allocation_df)                      # Only for debugging
+
+asset_allocation_df[asset_allocation_col] = np.ceil(asset_allocation_df[eur_col] / kapitaal * 100).astype(int)
+
+asset_allocation_df[a_min_huis_col] = np.ceil(asset_allocation_df[eur_col] / (kapitaal - huis) * 100).astype(int)  # Calculate percentage, not considering surplus value of the house
+asset_allocation_df.loc[asset_allocation_df[a_min_huis_col] > 100, a_min_huis_col] = "*"  # If >100% then replace by asterisk
 
 # Nieuw dataframe aanmaken met streepjes en totale assets enz
 asset_values_dict = {

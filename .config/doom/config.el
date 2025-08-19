@@ -23,6 +23,8 @@
 
     (:prefix ("d" . "Prutserdt Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
+;;      :desc "Run aandelen elisp script"        "a" #'my-beach-or-dark-theme-switch
+;;        :desc "Run aandelen elisp script"        "a" (lambda () (interactive) (load-file "~/Stack/Documenten/Aandelen/aandelen.el"))
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
         (:prefix ("d" . "Distraction free")
             :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
