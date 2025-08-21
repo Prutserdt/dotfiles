@@ -21,10 +21,10 @@
             :desc "API for LLM interaction"      "R" #'gptel-request
             :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
 
-    (:prefix ("d" . "Prutserdt Bindings")
+    (:prefix ("a" . "Personal Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
 ;;      :desc "Run aandelen elisp script"        "a" #'my-beach-or-dark-theme-switch
-;;        :desc "Run aandelen elisp script"        "a" (lambda () (interactive) (load-file "~/Stack/Documenten/Aandelen/aandelen.el"))
+        :desc "Run aandelen elisp script"        "a" (lambda () (interactive) (load-file "~/Stack/Documenten/Aandelen/aandelen.el"))
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
         (:prefix ("d" . "Distraction free")
             :desc "Toggle distraction free"      "d" #'my-distractionfree-toggle
@@ -133,7 +133,7 @@
 
 (setq doom-theme 'doom-tokyo-night)
 
-(use-package rainbow-delimiters)
+;;(use-package rainbow-delimiters)
 
 (set-face-attribute 'default nil :height 130)
 (setq default-frame-alist '((font . "Hack 13")))
@@ -317,7 +317,8 @@
   (with-temp-buffer
             (+ivy/jump-list)))
 
-(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+;;(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
+(setq org-modern-star '( "◉" "○" "✿" "✸" "⁖" ))
 
 (custom-set-faces
   '(org-level-1 ((t (:inherit outline-1 :height 1.5))))
