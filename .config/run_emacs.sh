@@ -14,8 +14,8 @@ else
         #emacsclient -c -n
         emacsclient -c -a "emacs" # Works on my thinkpad and Virtualbox image
     elif [[ "$hostname" == "linuxbox" ]]; then
-        notify-send -t 1000 "Linuxbox. Emacs is not running, starting emacsclient"
-        /usr/bin/emacs --daemon
+        notify-send -t 1000 "Linuxbox. Emacs is not running, starting daemon followed by emacsclient"
+        emacs -daemon
         emacsclient -c -n
     fi
 fi
