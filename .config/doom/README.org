@@ -54,7 +54,6 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
 
 (doom! :completion
        company             ; the ultimate code completion backend
-       ;;(vertico +icons)    ; the search engine of the future
        (ivy +childframe)   ; a search engine for love and life
 
        :ui
@@ -66,10 +65,8 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        nav-flash           ; blink the current line after jumping
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-;; toegevoegd 21JUL25:
        smooth-scroll     ; So smooth you won't believe it's not butter
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
-       ;;workspaces        ; tab emulation, persistence & separate workspaces
 
        :editor
        (evil +everywhere)  ; come to the dark side, we have cookies
@@ -96,7 +93,7 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
        lookup              ; navigate your code and its documentation
        pdf                 ; pdf enhancements
        lsp                 ; M-x vscode
-       evil-magit          ; An evil porcelain for Emacs
+       ;;evil-magit        ; An evil porcelain for Emacs
 
        :lang
        emacs-lisp          ; drown in parentheses
@@ -104,13 +101,12 @@ The list of available modules can be checked in Doom Emacs by ~M-x~ ~Doom/help-m
         +pretty            ; pretty is better than ugly
         +roam2             ; wander around notes
         +dragndrop)        ; drop files/images into org
-      (python +lsp +pyenv); beautiful is better than ugly
+      (python +lsp +pyenv) ; beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
 
        :os
-       tty                 ; ?test, zou terminal experience moeten verbeteren,
-                           ;kijken of dit een verbetering geeft..
+       tty                 ; zou terminal experience moeten verbeteren...
 
        :config
        (default +bindings +smartparens)
@@ -207,7 +203,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
 
     (:prefix ("a" . "Personal Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
-;;      :desc "Run aandelen elisp script"        "a" #'my-beach-or-dark-theme-switch
         :desc "Run aandelen elisp script"        "a" (lambda () (interactive) (load-file "~/Stack/Documenten/Aandelen/aandelen.el"))
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
         (:prefix ("d" . "Distraction free")
@@ -251,7 +246,6 @@ The following are keybindings that are bound to my leader key, which is =space=,
     (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
             :desc "jump backward one step"       "j" #'evil-jump-backward
             :desc "jump forward one step"        "k" #'evil-jump-forward
-; FIXME: the jump forward to end does not seem to work yet...
             :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
             :desc "jump list"                    "l" #'+ivy/jump-list)
 
@@ -326,10 +320,6 @@ The =smartparens= package in Emacs is designed to enhance editing parentheses an
 ** Theming and graphical settings
 Setting the *superior* tokyo-night theme.😎
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;;(with-eval-after-load 'eglot
-;;  (add-to-list 'eglot-server-programs
-;;               '(text-mode . ("harper-ls" "--stdio"))))
-
 (setq doom-theme 'doom-tokyo-night)
 #+END_SRC
 
@@ -340,10 +330,9 @@ Elisp is parentheses galore! The package rainbow-delimiters is matching the colo
 ;;(use-package rainbow-delimiters)
 #+END_SRC
 
-A *superior* font is set here.
+A *superior* font is set here for all the text.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(set-face-attribute 'default nil :height 130)
-(setq default-frame-alist '((font . "Hack 13")))
+(set-face-attribute 'default nil :height 130 :font "Hack 13")
 #+END_SRC
 
 Make the highlighting global for the hl-words TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW with ~hl-todo-mode~.
@@ -361,6 +350,7 @@ To align the Emacs window with text in the middle of the screen  visual-fill is 
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 
 (defun my-prog-mode-hook ()
+  "FIXME omschrijving toevoegen"
   (setq-local fill-column 140)
   (toggle-truncate-lines 0)
   (visual-fill-column-mode))
@@ -396,6 +386,7 @@ A side note: for some reason I sometimes trigger "emacs state" accidentally. Thi
 (defvar my-color-current-line    "#EF7168") ;; orange red
 
 (defun my-line-number-color-according-to-evil-state ()
+  "Change the color of line numbers according to the evil state: normal, insert and visual plus separate color for scratch.org"
   (when (and evil-mode (not buffer-read-only))
     (let ((font-weight (if (or (evil-insert-state-p) (evil-visual-state-p))
                           'bold
@@ -610,9 +601,7 @@ Jump right forward to the last jump in the jump-list. FIXME: improve this functi
 
 ** Org-mode configuration
 More eye candy by superstar bullets in org mode instead of the default ~*~. This requires (org +pretty) in ~init.el~.
-FIXME: org-superstart does not work anymore it is now org-modern-star
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;;(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 (setq org-modern-star '( "◉" "○" "✿" "✸" "⁖" ))
 #+END_SRC
 
@@ -631,7 +620,7 @@ Some preferences that I like: hide the emphasis markup for: /italic/, *bold*, ~c
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (setq org-hide-emphasis-markers t)
 (with-eval-after-load 'org
-  (setq org-ellipsis " ▼ ")) ; Use a different symbol for . And ⚡⚡⚡became boring.
+  (setq org-ellipsis " ▼ "))
 (setq org-startup-with-inline-images t)
 (setq org-hidden-keywords '(title))
 #+END_SRC
@@ -788,6 +777,7 @@ Brain shelve: %s.
 This function will open the last org roam daily file based on the filename (YYYY-MM-DD).
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (defun my-open-latest-org-roam-daily ()
+  "Open the last org roam daily file based on date in roam filename"
   (interactive)
   (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (let ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
@@ -988,22 +978,6 @@ Remap my keyboard with xmodmap. Right now I'm running two shell aliases plus the
   (interactive)
   (comint-send-string (get-buffer-process (shell)) "e\nk\nq\n")
   (kill-buffer (current-buffer)))
-#+END_SRC
-
-Open my Redox keyboard QMK directory.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-redox-directory ()
-  "Open the keymap.c file of my Redox qmk firmware."
-  (interactive)
-  (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
-#+END_SRC
-
-Open my =keymap.c= file of my redox keyboard.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-(defun my-redox-config-qmk-file ()
-  "Open the keymap.c file of my Redox qmk firmware."
-  (interactive)
-  (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 #+END_SRC
 
 ** PDF helpers

@@ -43,19 +43,6 @@
   - [[#screenshot2textsh][screenshot2text.sh]]
   - [[#stack_startupsh-1][stack_startup.sh]]
   - [[#thunarbookmarkssh][thunarBookmarks.sh]]
-- [[#unused-scripts][Unused scripts]]
-  - [[#aandelensh][aandelen.sh]]
-  - [[#dwmbackupsh][dwmbackup.sh]]
-  - [[#dwmbarsh][dwmbar.sh]]
-  - [[#dwmpatchsh][dwmpatch.sh]]
-  - [[#dwmstablesh][dwmstable.sh]]
-  - [[#dwmvanillash][dwmvanilla.sh]]
-  - [[#exitdwmsh][exitdwm.sh]]
-  - [[#updatebarsh][updatebar.sh]]
-  - [[#wololosh][wololo.sh]]
-- [[#tips-and-tricks][Tips and tricks]]
-  - [[#fetch-all-scrips-of-config-by-this-code-block][Fetch all scrips of ~/.config by this code block]]
-  - [[#some-notes-about-the-code-blocks-and-tangling][Some notes about the code blocks and tangling.]]
 
 * About this document
 This document is a note-to-self about my scripts on my GNU/Linux system and is my attempt at [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] in [[https://www.gnu.org/software/emacs/][Emacs]] using org-mode. This README.org is the source file and is converted to the individual shell scripts by tangling in Emacs: ~M-x~ ~org-babel-tangle~.
@@ -277,7 +264,6 @@ else
 fi
 #+END_SRC
 
-
 ** dmenuemacs.sh
 Bookmarkst to textfiles picked by dmenu.
 
@@ -435,11 +421,9 @@ fi
 #+END_SRC
 
 ** dmenuthunar.sh
-FIXME: I migrated to PCManFM... need to chang the names etc...
+A dmenu script to open directories in pcmanfm. Yes, the name is incorrect and thunar is not used, but I keep it like this for now.
 
-A dmenu script to give some directory options to open in the file manager Thunar.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
+This script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755) :eval never
 #!/bin/sh
 # NOTE: This file is generated from ~/.config/README.org
@@ -458,23 +442,13 @@ notify-send -t 1000 "Directory opened in PCManFM: " "$chosen" &&
 pcmanfm "$chosen"
 #+end_src
 
-The old version, used for Thunar
-#+BEGIN_SRC bash :eval never
-notify-send -t 1000 "Running dmenuthunar.sh" &&
-chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -i -p 'Thunar open dir: ')
-[ -z "$chosen" ] && exit
-notify-send -t 1000 "Directory opened in Thunar: " "$chosen" &&
-thunar $chosen & sleep .3 && xdotool key F3
-#+END_SRC
-
-FIXME: ik wil gtk-3 gebruiken als bookmarks denk ik... Maar ik heb nu gewoon copy/paste aanpassen gedaan.
-
-#+BEGIN_SRC emacs-lisp :results none
-(find-file "~/.config/gtk-3.0/bookmarks")
-#+END_SRC
-
+I am currently creating the directories file located here:
 #+BEGIN_SRC emacs-lisp :results none
 (find-file "~/Stack/Command_line/directories")
+#+END_SRC
+And copy the content of this gtk directory to hte directories file(with slight modifications):
+#+BEGIN_SRC emacs-lisp :results none
+(find-file "~/.config/gtk-3.0/bookmarks")
 #+END_SRC
 
 ** dmenuunicode.sh
@@ -1783,303 +1757,3 @@ while read -r dir; do
     echo "file://$dir" >> $BOOKMARKS_FILE
 done < $DIR_FILE
 #+END_SRC
-
-* Unused scripts
-Note: the following code blocks are not being tangled and not part of my current system.
-
-** aandelen.sh
-My shell script which extracts information from a portfolio and calculates percentages and pastes the information to the system clipboards.
-
-#+BEGIN_SRC bash :eval never
-	#!/bin/sh
-	#~/.config/aandelen.sh
-	#                       _      _                  _
-	#  __ _  __ _ _ __   __| | ___| | ___ _ __    ___| |__
-	# / _` |/ _` | '_ \ / _` |/ _ \ |/ _ \ '_ \  / __| '_ \
-	#| (_| | (_| | | | | (_| |  __/ |  __/ | | |_\__ \ | | |
-	# \__,_|\__,_|_| |_|\__,_|\___|_|\___|_| |_(_)___/_| |_|
-	#
-	# Automating some routines :-)
-	# Opens up a mark down file and places data to clipboard.
-	# This clipboard data consists of my current stock portfolio, which is taken
-	# from ~/Downloads/Portfolio.csv, which is sorted by stock size, then the
-	# percentage is calculated and some other stuff.
-	#
-	# Open markdown file in the terminal
-	alacritty -e vim $HOME/Stack/Documenten/Aandelen/aandelen_log.md &
-	# make directory in ram memory of user
-	# df -T # to see the ram memory usage
-	mkdir $XDG_RUNTIME_DIR/temp &
-	# Fetch data from the .csv: two columns, stock name and size and sorth them by
-	# size and write to TempSorted
-	cat $HOME/Downloads/Portfolio.csv | sed "1,2 d" | cut -d , -f 1,7 | sed 's/"//'| sort -r -t ',' --key=6 > $XDG_RUNTIME_DIR/temp/TempSorted &&
-	# Take only the size of stocks and calculate percentage and add this in brackets to a temp file
-	cat $XDG_RUNTIME_DIR/temp/TempSorted | cut -d , -f 2 | awk '{a[NR] = $1; sum+= $1 } END {for (i = 1; i <= NR; i++) printf "%s %1.1f %\n", a[i],(100 * a[i])/sum}' > $XDG_RUNTIME_DIR/temp/TempPerc &&
-	# Write only the stockname to temp file
-	cat $XDG_RUNTIME_DIR/temp/TempSorted | cut -d , -f 1  > $XDG_RUNTIME_DIR/temp/TempName &&
-	# Combine TempPerc and TempName
-	paste $XDG_RUNTIME_DIR/temp/TempPerc $XDG_RUNTIME_DIR/temp/TempName > $XDG_RUNTIME_DIR/temp/TempMerged &&
-	# Add a line for markdown formatting
-	echo '================================================================================' > $XDG_RUNTIME_DIR/temp/TempLine1 &&
-	# Fetch the date of the portfolio.csv file and write to TempDate
-	date +%d%h%y -r $HOME/Downloads/Portfolio.csv >> $XDG_RUNTIME_DIR/temp/TempDate && # find date of .csv file and write to temp file
-	# Write text to TempLine2a
-	echo ', portfolio:' > $XDG_RUNTIME_DIR/temp/TempLine2a &&
-	# Calculate the sum of all stocks and write in TempTotal
-	cat $XDG_RUNTIME_DIR/temp/TempPerc | cut -d , -f 1 | awk '{n += $1}; END{print n}' > $XDG_RUNTIME_DIR/temp/TempTotal &&
-	# Again some text is written, this time to TempLine2b
-	echo 'euro, winst:  euro.' > $XDG_RUNTIME_DIR/temp/TempLine2b &&
-	# Text of three temp files are combined in one single line: TempLine2New
-	paste $XDG_RUNTIME_DIR/temp/TempDate $XDG_RUNTIME_DIR/temp/TempLine2a $XDG_RUNTIME_DIR/temp/TempTotal $XDG_RUNTIME_DIR/temp/TempLine2b > $XDG_RUNTIME_DIR/temp/TempLine2New &&
-	# Text of four temp files are combined to the final temp file: TempNieuw
-	cat $XDG_RUNTIME_DIR/temp/TempLine1 $XDG_RUNTIME_DIR/temp/TempLine2New $XDG_RUNTIME_DIR/temp/TempLine1 $XDG_RUNTIME_DIR/temp/TempMerged > $XDG_RUNTIME_DIR/temp/TempNieuw &&
-	# Placing the TempNieuw data in the clipboard memory
-	cat $XDG_RUNTIME_DIR/temp/TempNieuw | xclip -sel clip &&
-	# Remove the created temp files
-	rm $XDG_RUNTIME_DIR/temp/Temp*
-#+END_SRC
-
-** dwmbackup.sh
-#+BEGIN_SRC bash :eval never
-	#!/bin/bash
-	# ~/.config/dwmbackup.sh
-	#     _                    _                _                     _
-	#  __| |_      ___ __ ___ | |__   __ _  ___| | ___   _ _ __   ___| |__
-	# / _` \ \ /\ / / '_ ` _ \| '_ \ / _` |/ __| |/ / | | | '_ \ / __| '_ \
-	#| (_| |\ V  V /| | | | | | |_) | (_| | (__|   <| |_| | |_) |\__ \ | | |
-	# \__,_| \_/\_/ |_| |_| |_|_.__/ \__,_|\___|_|\_\\__,_| .__(_)___/_| |_|
-	#                                                     |_|
-	#                                                   Created by Prutserdt
-	#
-	# This script gives yes/no option to mak a local backup of dwmm.
-	# This shell script can be called by the .bashrc alias dwmbackup.
-	echo -n "Are you sure you want to make a backup of the current dwm system? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/Stack/Dotfiles/dwm/dwm-6.2_stable/* &&
-	    cp -r ~/.config/suckless/dwm/* ~/Stack/Dotfiles/dwm/dwm-6.2_stable
-	#    rm -r ~/Stack/suckless/dwm/dwm-6.2_stable/* &&
-	#    cp -r ~/suckless/dwm/* ~/Stack/suckless/dwm/dwm-6.2_stable
-	else
-	    echo No
-	fi
-#+END_SRC
-
-** dwmbar.sh
-#+BEGIN_SRC bash :eval never
-	#!/bin/sh
-	#~/.config/dwmbar.sh
-	#     _                    _                    _
-	#  __| |_      ___ __ ___ | |__   __ _ _ __ ___| |__
-	# / _` \ \ /\ / / '_ ` _ \| '_ \ / _` | '__/ __| '_ \
-	#| (_| |\ V  V /| | | | | | |_) | (_| | | _\__ \ | | |
-	# \__,_| \_/\_/ |_| |_| |_|_.__/ \__,_|_|(_)___/_| |_|
-	#                                 Created by Prutserdt
-	#
-	# Update dwm status bar every minute and give as output
-	# updatebar.sh
-	while true
-	do
-	$HOME/.config/updatebar.sh
-	  sleep 60
-	done
-#+END_SRC
-
-** dwmpatch.sh
-#+BEGIN_SRC bash :eval never
-	#!/bin/bash
-	# ~/.config/dwmpatch.sh
-	#     _                                _       _           _
-	#  __| |_      ___ __ ___  _ __   __ _| |_ ___| |__    ___| |__
-	# / _` \ \ /\ / / '_ ` _ \| '_ \ / _` | __/ __| '_ \  / __| '_ \
-	#| (_| |\ V  V /| | | | | | |_) | (_| | || (__| | | |_\__ \ | | |
-	# \__,_| \_/\_/ |_| |_| |_| .__/ \__,_|\__\___|_| |_(_)___/_| |_|
-	#                         |_|                Created by Prutserdt
-	#
-	# This script gives yes/no option to mak a local backup of dwmm.
-	#
-	# Patch automation. THIS WIL DELETE ALL dwm DIRECTORY FILES!
-	# 1: delete files in test directory and restore the stable dwm verstion.
-	# 2: write the diff filename to the diff_log
-	# 3: Run the patch
-	#
-	# This shell script can be called by the .bashrc alias dwmbackup.
-	echo -n "Are you sure you want to patch the current dwm system? This will
-	first: RESTORE TO THE STABLE DWM and after that make clean install on the .diff
-	file in the direcotory ~/Stack/Dotfiles/suckless/dwm/patches/test. Yes or no? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dwm &&
-	    mkdir ~/.config/suckless/dwm &&
-	    mkdir ~/.config/suckless/dwm/log &&
-	    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm &&
-	    cd ~/.config/suckless/dwm &&
-	    clear && ls -al &&
-	    ls ~/Stack/Dotfiles/suckless/dwm/patches/test/*.diff >> ~/.config/suckless/dwm/log/diff_log &&
-	    cp -r ~/.config/suckless/dwm/config.h ~/.config/suckless/dwm/config.def.h &&
-	    rm ~/.config/suckless/dwm/config.h &&
-	    patch -p1 < ~/Stack/Dotfiles/suckless/dwm/patches/test/*.diff &&
-	    make clean install
-	#    rm -r ~/suckless/dwm &&
-	#    mkdir ~/suckless/dwm &&
-	#    mkdir ~/suckless/dwm/log &&
-	#    cp -r ~/Stack/suckless/dwm/dwm-6.2_stable/* ~/suckless/dwm &&
-	#    cd ~/suckless/dwm &&
-	#    clear && ls -al &&
-	#    ls ~/Stack/suckless/dwm/patches/test/*.diff >> ~/suckless/dwm/log/diff_log &&
-	#    cp -r ~/suckless/dwm/config.h ~/suckless/dwm/config.def.h &&
-	#    rm ~/suckless/dwm/config.h &&
-	#    patch -p1 < ~/Stack/suckless/dwm/patches/test/*.diff &&
-	#    make clean install
-	else
-	    echo No
-	fi
-#+END_SRC
-
-** dwmstable.sh
-#+BEGIN_SRC bash :eval never
-	#!/bin/bash
-	# ~/.config/dwmstable.sh
-	#     _                        _        _     _            _
-	#  __| |_      ___ __ ___  ___| |_ __ _| |__ | | ___   ___| |__
-	# / _` \ \ /\ / / '_ ` _ \/ __| __/ _` | '_ \| |/ _ \ / __| '_ \
-	#| (_| |\ V  V /| | | | | \__ \ || (_| | |_) | |  __/_\__ \ | | |
-	# \__,_| \_/\_/ |_| |_| |_|___/\__\__,_|_.__/|_|\___(_)___/_| |_|
-	#                                            Created by Prutserdt
-	#
-	# This script gives yes/no option to mak a local backup of dwmm.
-	# This script can be called by the .bashrc alias dwmbackup.
-	echo -n "Are you sure you want to restore to the stable version and DELETE
-	the current dwm version? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dwm &&
-	    mkdir ~/.config/suckless/dwm &&
-	    mkdir ~/.config/suckless/dwm/log &&
-	    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_stable/* ~/.config/suckless/dwm &&
-	    cd ~/.config/suckless/dwm && # does not change directory, also not after
-	    #entering 'sleep 5' in front of this. strange
-	    clear && ls -al
-	else
-	    echo No
-	fi
-#+END_SRC
-
-** dwmvanilla.sh
-#+BEGIN_SRC bash :eval never
-	#!/bin/bash
-	# ~/.config/dwmvanilla.sh
-	#    _                                    _ _ _             _
-	# __| |_      ___ __ _____   ____ _ _ __ (_) | | __ _   ___| |__
-	#/ _` \ \ /\ / / '_ ` _ \ \ / / _` | '_ \| | | |/ _` | / __| '_ \
-	# (_| |\ V  V /| | | | | \ V / (_| | | | | | | | (_| |_\__ \ | | |
-	#\__,_| \_/\_/ |_| |_| |_|\_/ \__,_|_| |_|_|_|_|\__,_(_)___/_| |_|
-	#                                             Created by Prutserdt
-	#
-	# This script gives yes/no option to restore to vanilla dwmm.
-	# This script can be called by the .bashrc alias dwmbackup.
-	echo -n "Are you sure you want to restore to vanilla dwm and DELETE the current dwm system? (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	    rm -r ~/.config/suckless/dwm &&
-	    mkdir ~/.config/suckless/dwm &&
-	    cp -r ~/Stack/Dotfiles/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/.config/suckless/dwm &&
-	    cd ~/.config/suckless/dwm &&
-	    clear && ls -al
-	#    rm -r ~/suckless/dwm &&
-	#    mkdir ~/suckless/dwm &&
-	#    cp -r ~/Stack/suckless/dwm/dwm-6.2_20200512_vanilla/* ~/suckless/dwm &&
-	#    cd ~/suckless/dwm &&
-	#    clear && ls -al
-	else
-	    echo No
-	fi
-#+END_SRC
-
-** exitdwm.sh
-#+BEGIN_SRC bash :eval never
-	#!/bin/bash
-	# ~/.config/exitdwm.sh
-	#           _ _      _                          _
-	#  _____  _(_) |_ __| |_      ___ __ ___    ___| |__
-	# / _ \ \/ / | __/ _` \ \ /\ / / '_ ` _ \  / __| '_ \
-	#|  __/>  <| | || (_| |\ V  V /| | | | | |_\__ \ | | |
-	# \___/_/\_\_|\__\__,_| \_/\_/ |_| |_| |_(_)___/_| |_|
-	#                                 Created by Prutserdt
-	#
-	# This script gives yes/no option before exiting dwm.
-	# It is set in config.h of dwm.
-	echo -n "Do you wish to violently exit DWM now and    kill em all?   (y/n) "
-	read answer
-	# if echo "$answer" | grep -iq "^y" ;then
-	if [ "$answer" != "${answer#[Yy]}" ] ;then
-	   killall dwm
-	else
-	    echo No
-	fi
-#+END_SRC
-
-** updatebar.sh
-#+BEGIN_SRC bash :eval never
-	#!/bin/sh
-	#~/.config/updatebar.sh
-	#                 _       _       _                    _
-	# _   _ _ __   __| | __ _| |_ ___| |__   __ _ _ __ ___| |__
-	#| | | | '_ \ / _` |/ _` | __/ _ \ '_ \ / _` | '__/ __| '_ \
-	#| |_| | |_) | (_| | (_| | ||  __/ |_) | (_| | | _\__ \ | | |
-	# \__,_| .__/ \__,_|\__,_|\__\___|_.__/ \__,_|_|(_)___/_| |_|
-	#      |_|                               Created by Prutserdt
-	#
-	# Outputs mute icon, master volume, date and time
-	# This script is called after booting by another script: ~/.config/dwmbar.sh
-	# This script is also called after using volume/mute keys, see dwm config.h
-	mute="$(amixer get Master | tail -n1 | sed -r "s/.*\[(.*)].*/\1/")"
-	if [ $mute = "off" ]; then
-	xsetroot -name " 🔇`amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/"`% `date +"%d%h%y %H:%M"`"
-	else
-	xsetroot -name " 🔉`amixer get Master | tail -n1 | sed -r "s/.*\[(.*)%\].*/\1/"`% `date +"%d%h%y %H:%M"`"
-	fi
-#+END_SRC
-
-** wololo.sh
-Simple cheat code for 0ad. Does not properly work.
-
-#+BEGIN_SRC bash :eval never
-	#!/bin/sh
-	#~/.config/wololo.sh
-	#               _       _            _
-	#__      _____ | | ___ | | ___   ___| |__
-	#\ \ /\ / / _ \| |/ _ \| |/ _ \ / __| '_ \
-	# \ V  V / (_) | | (_) | | (_) |\__ \ | | |
-	#  \_/\_/ \___/|_|\___/|_|\___(_)___/_| |_|
-	#                      Created by Prutserdt
-	#
-	# Script to cheat in 0 ad
-	sleep 1 && xdotool type wololo && sleep 1 && xdotool key 0xff0d
-#+END_SRC
-
-* Tips and tricks
-** Fetch all scrips of ~/.config by this code block
-The next code block will give the output of all of the ~*.sh~ scripts of the ~~/.config~ as separate code blocks. Very handy to import all of 'em.
-
-#+name: fetch-shell-scripts
-#+BEGIN_SRC bash :results raw output :eval never
-cd $HOME/.config;
-for f in *.sh; do
-  echo "** $f"
-  echo "#+BEGIN_SRC bash " # \ escape voor " character
-  paste /dev/null - < "$f" #Geeft de inhoud van de php file
-  echo "#+END_SRC"
-  echo ""
-done
-#+END_SRC
-
-** Some notes about the code blocks and tangling.
-Shell scripts need to be executable, and during tangling a flag should be added to keep the file executable, ~tangle:mode (identity #o755).~
-For example: ~#+BEGIN_SRC python :tangle aandelen.py :padline no :eval no :tangle-mode (identity #o755)~.
-
-To make the tangling process easier I am using the [[https://github.com/yilkalargaw/org-auto-tangle][org-auto-tangle]] package to automate tangling when the file is saved. Therefore in this org file the header contains ~#+auto_tangle: t.

@@ -23,7 +23,6 @@
 
     (:prefix ("a" . "Personal Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
-;;      :desc "Run aandelen elisp script"        "a" #'my-beach-or-dark-theme-switch
         :desc "Run aandelen elisp script"        "a" (lambda () (interactive) (load-file "~/Stack/Documenten/Aandelen/aandelen.el"))
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
         (:prefix ("d" . "Distraction free")
@@ -67,7 +66,6 @@
     (:prefix ("j" . "Jump around");; An addition to the default Doom keybinding (j is not present!)
             :desc "jump backward one step"       "j" #'evil-jump-backward
             :desc "jump forward one step"        "k" #'evil-jump-forward
-; FIXME: the jump forward to end does not seem to work yet...
             :desc "jump forward completely"      "K" #'my-evil-jump-forward-to-end
             :desc "jump list"                    "l" #'+ivy/jump-list)
 
@@ -127,16 +125,11 @@
 
 (add-hook 'org-mode-hook 'smartparens-mode)
 
-;;(with-eval-after-load 'eglot
-;;  (add-to-list 'eglot-server-programs
-;;               '(text-mode . ("harper-ls" "--stdio"))))
-
 (setq doom-theme 'doom-tokyo-night)
 
 ;;(use-package rainbow-delimiters)
 
-(set-face-attribute 'default nil :height 130)
-(setq default-frame-alist '((font . "Hack 13")))
+(set-face-attribute 'default nil :height 130 :font "Hack 13")
 
 (define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
     (lambda () (hl-todo-mode 1)))
@@ -148,6 +141,7 @@
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 
 (defun my-prog-mode-hook ()
+  "FIXME omschrijving toevoegen"
   (setq-local fill-column 140)
   (toggle-truncate-lines 0)
   (visual-fill-column-mode))
@@ -173,6 +167,7 @@
 (defvar my-color-current-line    "#EF7168") ;; orange red
 
 (defun my-line-number-color-according-to-evil-state ()
+  "Change the color of line numbers according to the evil state: normal, insert and visual plus separate color for scratch.org"
   (when (and evil-mode (not buffer-read-only))
     (let ((font-weight (if (or (evil-insert-state-p) (evil-visual-state-p))
                           'bold
@@ -317,7 +312,6 @@
   (with-temp-buffer
             (+ivy/jump-list)))
 
-;;(setq org-superstar-headline-bullets-list '("◉" "○" "✿" "✸" "⁖" ))
 (setq org-modern-star '( "◉" "○" "✿" "✸" "⁖" ))
 
 (custom-set-faces
@@ -330,7 +324,7 @@
 
 (setq org-hide-emphasis-markers t)
 (with-eval-after-load 'org
-  (setq org-ellipsis " ▼ ")) ; Use a different symbol for . And ⚡⚡⚡became boring.
+  (setq org-ellipsis " ▼ "))
 (setq org-startup-with-inline-images t)
 (setq org-hidden-keywords '(title))
 
@@ -453,6 +447,7 @@ Brain shelve: %s.
              (+ total-words-org total-words-daily) total-words-org total-words-daily)))
 
 (defun my-open-latest-org-roam-daily ()
+  "Open the last org roam daily file based on date in roam filename"
   (interactive)
   (setq my-org-roam-dailies-dir (concat org-roam-directory org-roam-dailies-directory))
   (let ((files (directory-files my-org-roam-dailies-dir nil "^[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}\\.org$")))
@@ -610,16 +605,6 @@ Brain shelve: %s.
   (interactive)
   (comint-send-string (get-buffer-process (shell)) "e\nk\nq\n")
   (kill-buffer (current-buffer)))
-
-(defun my-redox-directory ()
-  "Open the keymap.c file of my Redox qmk firmware."
-  (interactive)
-  (find-file (expand-file-name "" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
-
-(defun my-redox-config-qmk-file ()
-  "Open the keymap.c file of my Redox qmk firmware."
-  (interactive)
-  (find-file (expand-file-name "keymap.c" "~/qmk_firmware/keyboards/redox/keymaps/Prutserdt")))
 
 (defun my-open-pdf-as-org-text (pdf-file)
   "Insert text from a PDF file into a new Org mode buffer using pdftotext."

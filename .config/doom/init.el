@@ -5,7 +5,6 @@
 
 (doom! :completion
        company             ; the ultimate code completion backend
-       ;;(vertico +icons)    ; the search engine of the future
        (ivy +childframe)   ; a search engine for love and life
 
        :ui
@@ -17,10 +16,8 @@
        nav-flash           ; blink the current line after jumping
        ophints             ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
-;; toegevoegd 21JUL25:
        smooth-scroll     ; So smooth you won't believe it's not butter
        vi-tilde-fringe     ; fringe tildes to mark beyond EOB
-       ;;workspaces        ; tab emulation, persistence & separate workspaces
 
        :editor
        (evil +everywhere)  ; come to the dark side, we have cookies
@@ -47,7 +44,7 @@
        lookup              ; navigate your code and its documentation
        pdf                 ; pdf enhancements
        lsp                 ; M-x vscode
-       evil-magit          ; An evil porcelain for Emacs
+       ;;evil-magit        ; An evil porcelain for Emacs
 
        :lang
        emacs-lisp          ; drown in parentheses
@@ -55,13 +52,12 @@
         +pretty            ; pretty is better than ugly
         +roam2             ; wander around notes
         +dragndrop)        ; drop files/images into org
-      (python +lsp +pyenv); beautiful is better than ugly
+      (python +lsp +pyenv) ; beautiful is better than ugly
                            ; +pyright. Tried pyright, could not get it to work on all of my machines
        sh                  ; she sells {ba,z,fi}sh shells on the C xor
 
        :os
-       tty                 ; ?test, zou terminal experience moeten verbeteren,
-                           ;kijken of dit een verbetering geeft..
+       tty                 ; zou terminal experience moeten verbeteren...
 
        :config
        (default +bindings +smartparens)
