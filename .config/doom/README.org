@@ -153,7 +153,6 @@ A chatgpt package gptel.
 #+BEGIN_SRC emacs-lisp :tangle packages.el :results silent
 (package! gptel)
 (package! python-mode)
-;;(package! harper-ls) ;; is deze wel nodig na mijn harper install?
 #+END_SRC
 
 ~org-roam~ is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem. ~org-roam-ui~ is a frontend for exploring and interacting with your org-roam notes.
@@ -174,34 +173,19 @@ Let's remind the reader of ~config.el~ to not edit this file directly.
 ** Custom keybindings
 Emacs uses a lot of keybindings and Doom Emacs adds even more on top of it, much of them are Evil mode which is VIM emulation. Now let's add some extra!
 
-I want to use the =undo-redo= package in Evil mode and therefore add the keybinding =U= here. Another addition to Evil mode is =[= and =]= to switch buffers.
+I want to use the =undo-redo= package in Evil mode and therefore add the keybinding =U= here.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo)
-  (define-key evil-normal-state-map "]" 'next-buffer)
-  (define-key evil-normal-state-map "[" 'previous-buffer))
+  (define-key evil-normal-state-map "U" 'undo-redo))
 #+END_SRC
-
-NOTE to self: the [ and ] collide with certain buffers, for instance in vterm. It is probably better to learn the SPC-b-n and SPC-b-p to cycle through buffers and get this in my muscle memory.
 
 The following are keybindings that are bound to my leader key, which is =space=, the default leader key of Doom Emacs Evil mode.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (map! :leader
+      :desc "Unbind SPC SPC" "SPC" nil
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
 
-    (:prefix ("b") ;; Default Doom keybinding
-         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
-
-    (:prefix ("c") ;; Default Doom keybinding
-        (:prefix ("h" . "ChatGPT, GPTel options")
-            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
-            :desc "ChatGPT of selected region"   "A" #'gptel-send
-            :desc "Open ChatGPT in new buffer"   "c" #'gptel
-            :desc "gptel-menu"                   "m" #'gptel-menu
-            :desc "API for LLM interaction"      "R" #'gptel-request
-            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
-
-    (:prefix ("a" . "Personal Bindings")
+      (:prefix ("SPC" . "Personal Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         :desc "Run aandelen elisp script"        "a" (lambda () (interactive) (load-file "~/Stack/Documenten/Aandelen/aandelen.el"))
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
@@ -240,6 +224,18 @@ The following are keybindings that are bound to my leader key, which is =space=,
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually
         :desc "Escape evil mode"                 "Z" #'evil-escape)
+
+    (:prefix ("b") ;; Default Doom keybinding
+         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
+
+    (:prefix ("c") ;; Default Doom keybinding
+        (:prefix ("h" . "ChatGPT, GPTel options")
+            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
+            :desc "ChatGPT of selected region"   "A" #'gptel-send
+            :desc "Open ChatGPT in new buffer"   "c" #'gptel
+            :desc "gptel-menu"                   "m" #'gptel-menu
+            :desc "API for LLM interaction"      "R" #'gptel-request
+            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
 
     (:desc "Open files in emacs" "e" #'recentf-open-files)
 
@@ -323,13 +319,6 @@ Setting the *superior* tokyo-night theme.😎
 (setq doom-theme 'doom-tokyo-night)
 #+END_SRC
 
-FIXME: the rainbow-delimiters package caused issues and I removed it after manually adding it and it is now in custom.el. I will remove it once this is working as intended on all my machines.
-
-Elisp is parentheses galore! The package rainbow-delimiters is matching the colors of parenthesis and this helps navigating code. Also handy for other languages.
-#+BEGIN_SRC emacs-lisp :tangle config.el :results silent
-;;(use-package rainbow-delimiters)
-#+END_SRC
-
 A *superior* font is set here for all the text.
 #+BEGIN_SRC emacs-lisp :tangle config.el :results silent
 (set-face-attribute 'default nil :height 130 :font "Hack 13")
@@ -350,7 +339,7 @@ To align the Emacs window with text in the middle of the screen  visual-fill is 
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 
 (defun my-prog-mode-hook ()
-  "FIXME omschrijving toevoegen"
+  "Set fill-column and visual-fill settings for programming modes. This function configures the fill-column to 140 for programming files, enables visual-fill-column-mode, and ensures text wrapping is enabled by toggling truncate-lines off."
   (setq-local fill-column 140)
   (toggle-truncate-lines 0)
   (visual-fill-column-mode))

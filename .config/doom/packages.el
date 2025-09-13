@@ -15,7 +15,6 @@
 
 (package! gptel)
 (package! python-mode)
-;;(package! harper-ls) ;; is deze wel nodig na mijn harper install?
 
 (unpin! org-roam) ; unpinning is necessary for Roam emacs according to de developer of org-roam-ui
 (package! org-roam-ui)

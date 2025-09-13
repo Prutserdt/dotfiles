@@ -2,26 +2,13 @@
 ;;      Please only edit that file and org-babel-tangle (emacs)
 
 (after! evil
-  (define-key evil-normal-state-map "U" 'undo-redo)
-  (define-key evil-normal-state-map "]" 'next-buffer)
-  (define-key evil-normal-state-map "[" 'previous-buffer))
+  (define-key evil-normal-state-map "U" 'undo-redo))
 
 (map! :leader
+      :desc "Unbind SPC SPC" "SPC" nil
       :desc "Scratch buffer" "[" (lambda () (interactive) (switch-to-buffer "scratch.org"))
 
-    (:prefix ("b") ;; Default Doom keybinding
-         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
-
-    (:prefix ("c") ;; Default Doom keybinding
-        (:prefix ("h" . "ChatGPT, GPTel options")
-            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
-            :desc "ChatGPT of selected region"   "A" #'gptel-send
-            :desc "Open ChatGPT in new buffer"   "c" #'gptel
-            :desc "gptel-menu"                   "m" #'gptel-menu
-            :desc "API for LLM interaction"      "R" #'gptel-request
-            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
-
-    (:prefix ("a" . "Personal Bindings")
+      (:prefix ("SPC" . "Personal Bindings")
         :desc "Vterm toggle"                   "SPC" #'vterm-toggle
         :desc "Run aandelen elisp script"        "a" (lambda () (interactive) (load-file "~/Stack/Documenten/Aandelen/aandelen.el"))
         :desc "Beach mode/dark mode toggle"      "b" #'my-beach-or-dark-theme-switch
@@ -60,6 +47,18 @@
         :desc "Write this buffer to file"        "w" #'write-file
         :desc "Run python async"                 "z" #'my-run-python-code-in-new-frame-select-manually
         :desc "Escape evil mode"                 "Z" #'evil-escape)
+
+    (:prefix ("b") ;; Default Doom keybinding
+         :desc "Switch to another buffer"        "b" #'counsel-switch-buffer)
+
+    (:prefix ("c") ;; Default Doom keybinding
+        (:prefix ("h" . "ChatGPT, GPTel options")
+            :desc "At point to bottom ChatGPT"   "a" #'my-region-select-gptel-send
+            :desc "ChatGPT of selected region"   "A" #'gptel-send
+            :desc "Open ChatGPT in new buffer"   "c" #'gptel
+            :desc "gptel-menu"                   "m" #'gptel-menu
+            :desc "API for LLM interaction"      "R" #'gptel-request
+            :desc "gptel-rewrite-menu"           "r" #'gptel-rewrite-menu))
 
     (:desc "Open files in emacs" "e" #'recentf-open-files)
 
@@ -127,8 +126,6 @@
 
 (setq doom-theme 'doom-tokyo-night)
 
-;;(use-package rainbow-delimiters)
-
 (set-face-attribute 'default nil :height 130 :font "Hack 13")
 
 (define-globalized-minor-mode my-global-hl-todo-mode hl-todo-mode
@@ -141,7 +138,7 @@
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 
 (defun my-prog-mode-hook ()
-  "FIXME omschrijving toevoegen"
+  "Set fill-column and visual-fill settings for programming modes. This function configures the fill-column to 140 for programming files, enables visual-fill-column-mode, and ensures text wrapping is enabled by toggling truncate-lines off."
   (setq-local fill-column 140)
   (toggle-truncate-lines 0)
   (visual-fill-column-mode))
