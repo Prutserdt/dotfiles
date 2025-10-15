@@ -66,6 +66,13 @@ def reset_margin(self):
     self.margin = 0
     self.group.layout_all()
 
+# Path to my API key file
+api_key_path = os.path.expanduser('~/Stack/Command_line/openweather_api_key')
+
+# Read the API key
+with open(api_key_path, 'r') as file:
+    api_key = file.read().strip()
+
 # Check if hostname is "thinkpad" or "work"
 is_thinkpad_or_work = socket.gethostname() in ["thinkpad", "work"]
 
@@ -501,14 +508,11 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-# aangepast <2025-03-08 Sat>, ik gebruik nu notification-daemon
-#                widget.Notify(
-#                    foreground="#ff966c"),
                 widget.Systray(),
             ]   + battery_widget +
             [
                 widget.OpenWeather(
-                    app_key="4cf3731a25d1d1f4e4a00207afd451a2",
+                    app_key=api_key,
                     cityid="2759661",
                     format='{main_temp:.1f} °C {icon}',
                     foreground="#888888",

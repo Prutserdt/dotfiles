@@ -107,6 +107,19 @@ def reset_margin(self):
     self.group.layout_all()
 #+END_SRC
 
+
+Refering to my openweather api key that is residing on my system and is used in the top bar.
+#+BEGIN_SRC python :tangle config.py :eval never
+
+# Path to my API key file
+api_key_path = os.path.expanduser('~/Stack/Command_line/openweather_api_key')
+
+# Read the API key
+with open(api_key_path, 'r') as file:
+    api_key = file.read().strip()
+#+END_SRC
+
+
 The following part is about system specificity. If my hostname is =thinkpad= or =work= then my computer is a laptop and I want to show battery information in my top bar. If my computer is a desktop this is not needed of course.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
 # Check if hostname is "thinkpad" or "work"
@@ -568,14 +581,11 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-# aangepast <2025-03-08 Sat>, ik gebruik nu notification-daemon
-#                widget.Notify(
-#                    foreground="#ff966c"),
                 widget.Systray(),
             ]   + battery_widget +
             [
                 widget.OpenWeather(
-                    app_key="4cf3731a25d1d1f4e4a00207afd451a2",
+                    app_key=api_key,
                     cityid="2759661",
                     format='{main_temp:.1f} °C {icon}',
                     foreground="#888888",
