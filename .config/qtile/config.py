@@ -91,24 +91,6 @@ battery_widget = [
     )
 ] if is_thinkpad_or_work else []
 
-def toggle_mute():
-       try:
-           mute_status = subprocess.run(
-               ['amixer', 'get', 'Master'],
-               stdout=subprocess.PIPE,
-               text=True,
-               check=True
-           ).stdout
-           subprocess.run(['amixer', '-q', 'set', 'Master', 'toggle'], check=True)
-
-           message = "🔊 Volume unmuted" if "off" in mute_status else "🔇 Volume muted"
-
-           os.system(f'notify-send -t 1000 "{message}"')
-           return message
-       except subprocess.CalledProcessError as e:
-           print("Error occurred:", e)
-           return "Error"
-
 keys = [
     Key(
         [mL],
@@ -263,17 +245,11 @@ keys = [
         "XF86AudioLowerVolume",
         lazy.spawn("amixer -q set Master 5%-"),
         lazy.spawn('notify-send -t 1000 "🔈 Volume decreased"')),
-    Key (
-        [],
-        "XF86AudioMute",
-        lazy.spawn("amixer -q set Master toggle"),
-
-    lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
-    # FIXME: toggle_mute werkt nog niet...
-    # Key(
-    #     [],
-    #     "XF86AudioMute",
-    #     lazy.function(toggle_mute)),
+     Key (
+         [],
+         "XF86AudioMute",
+         lazy.spawn("amixer -q set Master toggle"),
+        lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
     Key(
         [],
         "Print",
@@ -341,7 +317,7 @@ keys = [
         #lazy.spawn("/usr/local/bin/emacs --daemon")),
         #lazy.spawn("/usr/bin/emacs")), # works currently on my desktop
         #lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
-    #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
+        #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key(
         [mR],
         "f",

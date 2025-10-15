@@ -107,7 +107,6 @@ def reset_margin(self):
     self.group.layout_all()
 #+END_SRC
 
-
 Refering to my openweather api key that is residing on my system and is used in the top bar.
 #+BEGIN_SRC python :tangle config.py :eval never
 
@@ -118,7 +117,6 @@ api_key_path = os.path.expanduser('~/Stack/Command_line/openweather_api_key')
 with open(api_key_path, 'r') as file:
     api_key = file.read().strip()
 #+END_SRC
-
 
 The following part is about system specificity. If my hostname is =thinkpad= or =work= then my computer is a laptop and I want to show battery information in my top bar. If my computer is a desktop this is not needed of course.
 #+BEGIN_SRC python :tangle config.py :results none :eval never
@@ -139,28 +137,6 @@ battery_widget = [
         update_interval=30
     )
 ] if is_thinkpad_or_work else []
-#+end_src
-
-FIXME: dit werkt nog niet... niet gebruikt op dit moment..
-Deze functie werkt wel in python maar niet in qtile...
-#+BEGIN_SRC python :tangle config.py :results none :eval never
-def toggle_mute():
-       try:
-           mute_status = subprocess.run(
-               ['amixer', 'get', 'Master'],
-               stdout=subprocess.PIPE,
-               text=True,
-               check=True
-           ).stdout
-           subprocess.run(['amixer', '-q', 'set', 'Master', 'toggle'], check=True)
-
-           message = "🔊 Volume unmuted" if "off" in mute_status else "🔇 Volume muted"
-
-           os.system(f'notify-send -t 1000 "{message}"')
-           return message
-       except subprocess.CalledProcessError as e:
-           print("Error occurred:", e)
-           return "Error"
 #+end_src
 
 ** Keybindings: Qtile specific
@@ -324,17 +300,11 @@ Hotkeys to control the volume, muting, printscreen, OCR from printscreen and cha
         "XF86AudioLowerVolume",
         lazy.spawn("amixer -q set Master 5%-"),
         lazy.spawn('notify-send -t 1000 "🔈 Volume decreased"')),
-    Key (
-        [],
-        "XF86AudioMute",
-        lazy.spawn("amixer -q set Master toggle"),
-
-    lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
-    # FIXME: toggle_mute werkt nog niet...
-    # Key(
-    #     [],
-    #     "XF86AudioMute",
-    #     lazy.function(toggle_mute)),
+     Key (
+         [],
+         "XF86AudioMute",
+         lazy.spawn("amixer -q set Master toggle"),
+        lazy.spawn('notify-send -t 1000 "🔇 Volume muting toggled"')),
     Key(
         [],
         "Print",
@@ -406,7 +376,7 @@ Right super key to open applications. Shift is used to update the application.
         #lazy.spawn("/usr/local/bin/emacs --daemon")),
         #lazy.spawn("/usr/bin/emacs")), # works currently on my desktop
         #lazy.spawn(expanduser("~/.config/run_emacs.sh"))),
-    #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
+        #Keylazy.function(run_emacs)), # use in case of problems([mR], "E", lazy.spawn(expanduser("~/.config/run_emacs_new_frame.sh"))),
     Key(
         [mR],
         "f",
