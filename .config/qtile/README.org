@@ -477,7 +477,9 @@ for i in groups:
 groups.append(
     ScratchPad("scratchpad", [
         DropDown("1",
-                 "qalculate-gtk",
+                 "env GTK_THEME=Adwaita:dark qalculate-gtk",
+                 #"qalculate-gtk",
+                 #"GTK_THEME=Adwaita:dark qalculate-gtk",
                  x=0.0,
                  y=0.0,
                  width=0.2,

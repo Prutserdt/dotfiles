@@ -16,6 +16,7 @@ alias .2='cd ../.. && pwd'
 alias .3='cd ../../.. && pwd'
 alias .4='cd ../../../.. && pwd'
 alias ls='ls --color=auto'      # Colored output when possible
+alias f='echo "This is alias f. Command: find . -maxdepth 1 -type f. Number of files in directory: "; find . -maxdepth 1 -type f | wc -l'
 alias l='ls -alh'               # Lazy man's ls
 alias la='ls -lAFh'             # Long list
 #alias lsd='ls -d */'           # Only dirs
@@ -33,6 +34,7 @@ alias mv='mv -i'                # Ask for permission, for safety
 alias u="echo Running the alias 'u':  sudo pacman -Syu && sudo pacman -Syu"  # pacman update
 #alias u="echo Running the alias 'u': sudo pacman -Syu --ignore virtualbox --ignore virtualbox-ext-oracle --ignore virtualbox-host-dkms && sudo pacman -Syu --ignore virtualbox --ignore virtualbox-ext-oracle --ignore virtualbox-host-dkms"  # pacman update for virtualbox image
 
+alias thunar='env GTK_THEME=Adwaita:dark thunar' # Force a dark themed thunar
 # Search
 alias h="history | fzf"             # Fuzzy find history
 alias hx='eval $(history | sed "s/^ *[0-9]* *//g" | fzf --tac --tiebreak=index)' # Search and execute
