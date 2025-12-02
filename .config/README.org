@@ -28,7 +28,6 @@
   - [[#bitcoin_notificationpy][bitcoin_notification.py]]
   - [[#bitcoin_email_botpy][bitcoin_email_bot.py]]
   - [[#copy_with_datesh][copy_with_date.sh]]
-  - [[#stack_startupsh][stack_startup.sh]]
   - [[#decrmonitorbrightnesssh][decrMonitorBrightness.sh]]
   - [[#dotfilessh][dotfiles.sh]]
   - [[#emacs][emacs]]
@@ -41,7 +40,7 @@
   - [[#unicode][unicode]]
   - [[#resetrgbsh][resetRGB.sh]]
   - [[#screenshot2textsh][screenshot2text.sh]]
-  - [[#stack_startupsh-1][stack_startup.sh]]
+  - [[#stack_startupsh][stack_startup.sh]]
   - [[#thunarbookmarkssh][thunarBookmarks.sh]]
 
 * About this document
@@ -421,7 +420,7 @@ fi
 #+END_SRC
 
 ** dmenuthunar.sh
-A dmenu script to open directories in pcmanfm. Yes, the name is incorrect and thunar is not used, but I keep it like this for now.
+A dmenu script to open directories in pcmanfm. The name is incorrect and thunar is not used, but I keep it like this for now.
 
 This script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
 #+BEGIN_SRC bash :tangle dmenuthunar.sh :padline no :tangle-mode (identity #o755) :eval never
@@ -439,14 +438,15 @@ notify-send -t 1000 "Running dmenu-pcmanfm.sh" &&
 chosen=$(cat $HOME/Stack/Command_line/directories | dmenu -c -bw 2 -l 40 -i -p 'PCManFM open dir: ')
 [ -z "$chosen" ] && exit
 notify-send -t 1000 "Directory opened in PCManFM: " "$chosen" &&
-pcmanfm "$chosen"
+#pcmanfm "$chosen"
+env GTK_THEME=Adwaita:dark pcmanfm "$chosen" # Forcing the dark theme
 #+end_src
 
 I am currently creating the directories file located here:
 #+BEGIN_SRC emacs-lisp :results none
 (find-file "~/Stack/Command_line/directories")
 #+END_SRC
-And copy the content of this gtk directory to hte directories file(with slight modifications):
+And copy the content of this gtk directory to the directories file(with slight modifications):
 #+BEGIN_SRC emacs-lisp :results none
 (find-file "~/.config/gtk-3.0/bookmarks")
 #+END_SRC
@@ -1185,7 +1185,6 @@ print("Info van coingecko, time:", fetch_coingecko_info[1])
 send_email()
 #+END_SRC
 
-
 ** copy_with_date.sh
 FIXME: this does not work in Thunar, very weird!!!!
 
@@ -1217,29 +1216,6 @@ cp "$FILE" "$DEST_DIR/$NEW_FILENAME"
 5. Click "OK" to save the custom action.
 Now, whenever you want to copy a file in Thunar, you can use the "Copy with Date" option from the right-click context menu. This will create a copy of the file with the current date appended to the filename in the same directory.
 FIXME: does NOT work.... No addition to Thunar after right click...
-
-** stack_startup.sh
-A script to run the latest AppImage of Stack. Note: make sure that only one version is in the directory! It is used in my qtile configuration autostart shell script.
-
-Any script should start with a directive, first a shebang ~#!~ and to be POSIX compliant I choose ~sh~ here.
-#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755) :eval never
-#!/bin/sh
-# NOTE: This file is generated from ~/.config/README.org
-#       Please only edit that file and org-babel-tangle (emacs)
-#+END_SRC
-
-First the directory of my AppImages is set and then the name of the AppImage is retrieved. A if-then-else statement that will choose to run the program or not and send the appropriate notification.
-#+BEGIN_SRC bash :tangle stack_startup.sh :padline no :tangle-mode (identity #o755) :eval never
-dir="$HOME/Applications" # directory
-appimage=$(find "$dir" -name "*stack*.AppImage" -print -quit)
-
-if [ -n "$appimage" ]; then
-    notify-send -t 1000 "Starting the Stack .AppImage..." && #send notification
-    "$appimage"  # Execute the file
-else
-    notify-send -t 1000 "No .AppImage file containing 'stack' in its name was found in $dir"
-fi
-#+END_SRC
 
 ** decrMonitorBrightness.sh
 Decrease the monitor brightness by xrandr and also make the color more red. It's brother, [[incrMonitorBrightness.sh]], is a similar script doing the oposite.
@@ -1637,7 +1613,6 @@ wget https://unicode.org/Public/emoji/15.0/emoji-test.txt
 
 Open the text file in emacs and remove the left part of the lines up to the emoji visual block selection and deletion. After that the empty lines were removed by ~:g/^$/d~. The document was saved as ~~/.config/unicode~.
 Or copy an existing lists online, like this one of [[https://github.com/LukeSmithxyz/voidrice/blob/master/.local/share/larbs/emoji][Luke Smith]].
-
 
 ** resetRGB.sh
 Reset the gamma settings (RGB) to a default value of 1:1:1. Related to the shell scripts [[nightColorUp.sh]] and [[nightColorDown.sh]].

@@ -31,6 +31,11 @@ alias cl="c;l"                  # Clear screen, scrollback  and 'ls -alh'
 #alias rm='rm -i'                # Ask for permission, for safety
 alias cp='cp -i'                # Ask for permission, for safety
 alias mv='mv -i'                # Ask for permission, for safety
+#
+
+#env GTK_THEME=Adwaita:dark pcmanfm "$chosen"
+alias pcmanfm='env GTK_THEME=Adwaita:dark pcmanfm "$chosen"'
+
 alias u="echo Running the alias 'u':  sudo pacman -Syu && sudo pacman -Syu"  # pacman update
 #alias u="echo Running the alias 'u': sudo pacman -Syu --ignore virtualbox --ignore virtualbox-ext-oracle --ignore virtualbox-host-dkms && sudo pacman -Syu --ignore virtualbox --ignore virtualbox-ext-oracle --ignore virtualbox-host-dkms"  # pacman update for virtualbox image
 
@@ -48,7 +53,9 @@ alias s="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname 
 # Thumbnail mode of current directory including underlaying subdirectories
 alias S="find . -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| nsxiv -ftio"
 # Move pics. Select a picture by marking (m) and then it will be removed to the direcory 'Minder_en_dubbelop', and echo some info
-alias sm="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | nsxiv -tio | xargs -I {} sh -c 'echo Moving {}; mv {} Minder_en_dubbelop/'"
+#alias sm="find . -maxdepth 1 -type f -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif'| sort | nsxiv -tio | xargs -I {} sh -c 'echo Moving {}; mv {} Minder_en_dubbelop/'"
+alias am="find . -maxdepth 1 -type f \( -iname '*.jpeg' -o -iname '*.jpg' -o -iname '*.png' -o -iname '*.gif' \) | sort | nsxiv -tio | while IFS= read -r file; do echo "Moving $file"; mv "$file" Minder_en_dubbelop/; done"
+
 # Show gps location of pic in maps. Select a picture by marking (m) and then it will be removed to the direcory 'Minder_en_dubbelop', and echo some info
 #alias sg='image_files=$(find . -maxdepth 1 -type f -iname "*.jpeg" -o -iname "*.jpg" -o -iname "*.png" -o -iname "*.gif" | sort) && selected_image=$(echo "$image_files" | nsxiv -ftio) && [ -n "$selected_image" ] && exif_info=$(exiftool "$selected_image" | grep "GPS Position") && [ -n "$exif_info" ] && gps_position=$(echo "$exif_info" | awk -F ": " "{print $2}" | tr -d " " | sed "s/deg/°/g") && maps_url="https://www.google.com/maps/place/$gps_position" && xdg-open "$maps_url" && notify-send -t 60000 "Google maps opened with GPS location: $gps_position"'
 # onderstaande voegt een error message toe, maar lijkt niet meer te werken:
